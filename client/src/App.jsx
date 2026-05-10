@@ -1,0 +1,76 @@
+import { BrowserRouter, Routes, Route, Navigate } from 'react-router-dom'
+import { AuthProvider } from './context/AuthContext'
+import ProtectedRoute from './components/ProtectedRoute'
+import Login from './pages/Login'
+import Register from './pages/Register'
+import JoinTeam from './pages/JoinTeam'
+import CoachDashboard from './pages/CoachDashboard'
+import AthleteDashboard from './pages/AthleteDashboard'
+import Survey from './pages/Survey'
+import BlueprintBuilder from './pages/BlueprintBuilder'
+import BlueprintDetail from './pages/BlueprintDetail'
+import AthletePlan from './pages/AthletePlan'
+
+export default function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <Routes>
+          <Route path="/login" element={<Login />} />
+          <Route path="/register" element={<Register />} />
+          <Route path="/join/:code" element={<JoinTeam />} />
+          <Route
+            path="/coach"
+            element={
+              <ProtectedRoute requiredRole="coach">
+                <CoachDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/athlete"
+            element={
+              <ProtectedRoute requiredRole="athlete">
+                <AthleteDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/survey"
+            element={
+              <ProtectedRoute requiredRole="athlete">
+                <Survey />
+              </ProtectedRoute>
+            }
+          />
+          {/* Blueprint routes — /blueprints/new must come before /blueprints/:id */}
+          <Route
+            path="/blueprints/new"
+            element={
+              <ProtectedRoute requiredRole="coach">
+                <BlueprintBuilder />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/blueprints/:id"
+            element={
+              <ProtectedRoute requiredRole="coach">
+                <BlueprintDetail />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/plan"
+            element={
+              <ProtectedRoute requiredRole="athlete">
+                <AthletePlan />
+              </ProtectedRoute>
+            }
+          />
+          <Route path="*" element={<Navigate to="/login" replace />} />
+        </Routes>
+      </AuthProvider>
+    </BrowserRouter>
+  )
+}
