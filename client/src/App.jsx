@@ -10,6 +10,10 @@ import Survey from './pages/Survey'
 import BlueprintBuilder from './pages/BlueprintBuilder'
 import BlueprintDetail from './pages/BlueprintDetail'
 import AthletePlan from './pages/AthletePlan'
+import WorkoutLog from './pages/WorkoutLog'
+import AccountabilityDashboard from './pages/AccountabilityDashboard'
+import Messages from './pages/Messages'
+import AthleteProfile from './pages/AthleteProfile'
 
 export default function App() {
   return (
@@ -45,6 +49,14 @@ export default function App() {
           />
           {/* Blueprint routes — /blueprints/new must come before /blueprints/:id */}
           <Route
+            path="/accountability"
+            element={
+              <ProtectedRoute requiredRole="coach">
+                <AccountabilityDashboard />
+              </ProtectedRoute>
+            }
+          />
+          <Route
             path="/blueprints/new"
             element={
               <ProtectedRoute requiredRole="coach">
@@ -65,6 +77,30 @@ export default function App() {
             element={
               <ProtectedRoute requiredRole="athlete">
                 <AthletePlan />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/log"
+            element={
+              <ProtectedRoute requiredRole="athlete">
+                <WorkoutLog />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/messages"
+            element={
+              <ProtectedRoute>
+                <Messages />
+              </ProtectedRoute>
+            }
+          />
+          <Route
+            path="/athletes/:id"
+            element={
+              <ProtectedRoute requiredRole="coach">
+                <AthleteProfile />
               </ProtectedRoute>
             }
           />

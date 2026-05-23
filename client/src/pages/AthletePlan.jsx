@@ -9,22 +9,33 @@ function calcCurrentWeek(startsOn, numWeeks) {
   return Math.min(Math.max(week, 1), numWeeks)
 }
 
+const LOG_STATUS = {
+  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
+  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
+  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+}
+
 export default function AthletePlan() {
   const navigate = useNavigate()
   const [plan, setPlan] = useState(undefined)
+  const [logs, setLogs] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentWeek, setCurrentWeek] = useState(1)
 
   useEffect(() => {
-    api.get('/api/blueprints/my-plan')
-      .then(res => {
-        const p = res.data.plan
-        setPlan(p)
-        if (p) setCurrentWeek(calcCurrentWeek(p.starts_on, p.num_weeks))
-      })
-      .catch(() => setPlan(null))
-      .finally(() => setLoading(false))
+    Promise.all([
+      api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
+      api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
+    ]).then(([planData, logsData]) => {
+      setPlan(planData)
+      setLogs(logsData)
+      if (planData) setCurrentWeek(calcCurrentWeek(planData.starts_on, planData.num_weeks))
+    }).finally(() => setLoading(false))
   }, [])
+
+  function getLog(weekId, sessionIndex) {
+    return logs.find(l => l.blueprint_week_id === weekId && l.session_index === sessionIndex) || null
+  }
 
   if (loading) return <div style={styles.center}>Loading…</div>
 
@@ -85,15 +96,31 @@ export default function AthletePlan() {
                   <p style={styles.emptyWeek}>No sessions scheduled this week.</p>
                 ) : (
                   <div style={styles.sessionList}>
-                    {week.sessions.map((s, i) => (
-                      <div key={i} style={styles.sessionCard}>
-                        <div style={styles.sessionHeader}>
-                          <span style={styles.sessionDay}>{s.day || `Session ${i + 1}`}</span>
-                          <span style={styles.sessionFocus}>{s.focus}</span>
+                    {week.sessions.map((s, i) => {
+                      const logged = getLog(week.id, i)
+                      const statusInfo = logged ? LOG_STATUS[logged.status] : null
+                      return (
+                        <div key={i} style={styles.sessionCard}>
+                          <div style={styles.sessionHeader}>
+                            <span style={styles.sessionDay}>{s.day || `Session ${i + 1}`}</span>
+                            <span style={styles.sessionFocus}>{s.focus}</span>
+                            {logged ? (
+                              <span style={{ ...styles.logBadge, color: statusInfo.color, background: statusInfo.bg }}>
+                                {statusInfo.label}{logged.effort ? ` · ${logged.effort}` : ''}
+                              </span>
+                            ) : (
+                              <button
+                                style={styles.logBtn}
+                                onClick={() => navigate('/log', { state: { weekId: week.id, sessionIndex: i, focus: s.focus, day: s.day, description: s.description } })}
+                              >
+                                Log session →
+                              </button>
+                            )}
+                          </div>
+                          {s.description && <p style={styles.sessionDesc}>{s.description}</p>}
                         </div>
-                        {s.description && <p style={styles.sessionDesc}>{s.description}</p>}
-                      </div>
-                    ))}
+                      )
+                    })}
                   </div>
                 )}
               </>
@@ -142,10 +169,12 @@ const styles = {
   emptyWeek: { color: '#aaa', fontSize: 14, textAlign: 'center', padding: '20px 0' },
   sessionList: { display: 'flex', flexDirection: 'column', gap: 12 },
   sessionCard: { background: '#fff', border: '1px solid #e5e5e5', borderRadius: 8, padding: 16 },
-  sessionHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 },
+  sessionHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' },
   sessionDay: { fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', background: '#f0f0f0', padding: '3px 8px', borderRadius: 4 },
   sessionFocus: { fontSize: 15, fontWeight: 700 },
   sessionDesc: { fontSize: 14, color: '#444', margin: 0, lineHeight: 1.5 },
+  logBtn: { marginLeft: 'auto', padding: '5px 12px', fontSize: 12, fontWeight: 600, borderRadius: 5, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' },
+  logBadge: { marginLeft: 'auto', fontSize: 12, fontWeight: 600, padding: '4px 10px', borderRadius: 5, whiteSpace: 'nowrap' },
   weekDots: { display: 'flex', justifyContent: 'center', gap: 8 },
   dot: { width: 10, height: 10, borderRadius: '50%', background: '#ddd', border: 'none', cursor: 'pointer', padding: 0 },
   dotActive: { background: '#1a1a1a', transform: 'scale(1.3)' },

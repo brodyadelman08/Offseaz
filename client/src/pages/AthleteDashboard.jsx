@@ -74,6 +74,19 @@ export default function AthleteDashboard() {
             )}
           </div>
 
+          {/* Messages card */}
+          <div style={{ ...styles.card, marginTop: 16 }}>
+            <div style={styles.surveyPending}>
+              <div>
+                <p style={styles.surveyPendingTitle}>Messages</p>
+                <p style={styles.surveyPendingSub}>View announcements and messages from your coach.</p>
+              </div>
+              <button style={styles.actionBtn} onClick={() => navigate('/messages')}>
+                View →
+              </button>
+            </div>
+          </div>
+
           {/* Training plan card */}
           <div style={{ ...styles.card, marginTop: 16 }}>
             {plan ? (

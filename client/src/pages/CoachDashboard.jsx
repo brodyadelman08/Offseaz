@@ -8,6 +8,22 @@ function isNew(dateStr) {
   return Date.now() - new Date(dateStr).getTime() < 24 * 60 * 60 * 1000
 }
 
+function timeAgo(dateStr) {
+  const diff = Date.now() - new Date(dateStr).getTime()
+  const mins = Math.floor(diff / 60000)
+  if (mins < 1) return 'just now'
+  if (mins < 60) return `${mins}m ago`
+  const hrs = Math.floor(mins / 60)
+  if (hrs < 24) return `${hrs}h ago`
+  return `${Math.floor(hrs / 24)}d ago`
+}
+
+const ACTIVITY_STATUS = {
+  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
+  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
+  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+}
+
 function truncate(str, n = 80) {
   if (!str) return '—'
   return str.length > n ? str.slice(0, n) + '…' : str
@@ -20,6 +36,7 @@ export default function CoachDashboard() {
   const [teamName, setTeamName] = useState('')
   const [athletes, setAthletes] = useState([])
   const [blueprints, setBlueprints] = useState([])
+  const [activityLogs, setActivityLogs] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
@@ -29,10 +46,12 @@ export default function CoachDashboard() {
       api.get('/api/teams/mine').then(r => r.data.team).catch(() => null),
       api.get('/api/survey/team').then(r => r.data.athletes).catch(() => []),
       api.get('/api/blueprints').then(r => r.data.blueprints).catch(() => []),
-    ]).then(([teamData, athletesData, blueprintsData]) => {
+      api.get('/api/workouts/team').then(r => r.data.logs).catch(() => []),
+    ]).then(([teamData, athletesData, blueprintsData, logsData]) => {
       setTeam(teamData)
       setAthletes(athletesData)
       setBlueprints(blueprintsData)
+      setActivityLogs(logsData)
     }).finally(() => setLoading(false))
   }, [])
 
@@ -65,6 +84,17 @@ export default function CoachDashboard() {
       </div>
 
       <p style={styles.welcome}>Welcome, {profile?.full_name || 'Coach'}</p>
+
+      {team && (
+        <div style={styles.navBtnRow}>
+          <button style={styles.accountabilityBtn} onClick={() => navigate('/accountability')}>
+            Accountability →
+          </button>
+          <button style={styles.accountabilityBtn} onClick={() => navigate('/messages')}>
+            Messages →
+          </button>
+        </div>
+      )}
 
       {loading ? (
         <p>Loading…</p>
@@ -113,7 +143,7 @@ export default function CoachDashboard() {
                   </thead>
                   <tbody>
                     {athletes.map(a => (
-                      <tr key={a.id} style={styles.tr}>
+                      <tr key={a.id} style={{ ...styles.tr, cursor: 'pointer' }} onClick={() => navigate(`/athletes/${a.id}`)}>
                         <td style={styles.td}>{a.full_name}</td>
                         <td style={styles.td}>{a.survey?.sport || '—'}</td>
                         <td style={styles.td}>{a.survey?.position || '—'}</td>
@@ -165,6 +195,37 @@ export default function CoachDashboard() {
               </div>
             )}
           </div>
+
+          {/* Recent Activity feed */}
+          <div style={{ ...styles.card, marginTop: 20 }}>
+            <h2 style={styles.cardTitle}>Recent Activity</h2>
+            {activityLogs.length === 0 ? (
+              <p style={{ ...styles.empty, marginTop: 12 }}>No sessions logged yet.</p>
+            ) : (
+              <div style={styles.activityList}>
+                {activityLogs.map(log => {
+                  const s = ACTIVITY_STATUS[log.status]
+                  return (
+                    <div key={log.id} style={styles.activityRow}>
+                      <div style={styles.activityLeft}>
+                        <span style={styles.activityName}>{log.athlete_name}</span>
+                        <span style={styles.activityFocus}>{log.session_focus || 'Session'}</span>
+                        {log.week_number && (
+                          <span style={styles.activityWeek}>Wk {log.week_number}</span>
+                        )}
+                      </div>
+                      <div style={styles.activityRight}>
+                        <span style={{ ...styles.activityBadge, color: s.color, background: s.bg }}>
+                          {s.label}{log.effort ? ` · ${log.effort}` : ''}
+                        </span>
+                        <span style={styles.activityTime}>{timeAgo(log.logged_at)}</span>
+                      </div>
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </div>
         </>
       ) : (
         <div style={styles.card}>
@@ -203,6 +264,8 @@ const styles = {
   inviteBox: { display: 'flex', alignItems: 'center', gap: 10, background: '#fff', border: '1px solid #ddd', borderRadius: 6, padding: '8px 12px' },
   inviteText: { flex: 1, fontSize: 13, wordBreak: 'break-all' },
   copyBtn: { fontSize: 12, padding: '4px 10px', borderRadius: 4, border: '1px solid #ccc', background: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' },
+  navBtnRow: { display: 'flex', gap: 10, marginBottom: 24, flexWrap: 'wrap' },
+  accountabilityBtn: { display: 'inline-flex', alignItems: 'center', padding: '10px 18px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: '2px solid #1a1a1a', background: '#1a1a1a', color: '#fff', cursor: 'pointer' },
   createBtn: { fontSize: 13, padding: '7px 14px', borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer', fontWeight: 600 },
   form: { display: 'flex', flexDirection: 'column', gap: 12 },
   input: { padding: '10px 12px', fontSize: 15, borderRadius: 6, border: '1px solid #ccc' },
@@ -221,4 +284,13 @@ const styles = {
   blueprintCard: { display: 'flex', flexDirection: 'column', gap: 6, padding: 16, borderRadius: 8, border: '1px solid #e5e5e5', background: '#fff', cursor: 'pointer', textAlign: 'left' },
   bpTitle: { fontSize: 14, fontWeight: 700, color: '#1a1a1a' },
   bpMeta: { fontSize: 12, color: '#888' },
+  activityList: { display: 'flex', flexDirection: 'column', marginTop: 12 },
+  activityRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f0f0f0', gap: 12 },
+  activityLeft: { display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 },
+  activityName: { fontSize: 14, fontWeight: 600, color: '#1a1a1a', whiteSpace: 'nowrap' },
+  activityFocus: { fontSize: 13, color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  activityWeek: { fontSize: 11, color: '#aaa', whiteSpace: 'nowrap' },
+  activityRight: { display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 },
+  activityBadge: { fontSize: 12, fontWeight: 600, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },
+  activityTime: { fontSize: 12, color: '#aaa', whiteSpace: 'nowrap' },
 }
