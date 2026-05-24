@@ -1,11 +1,14 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
 
 export default function JoinTeam() {
   const { code } = useParams()
   const { session, profile, loading } = useAuth()
+  const { mode, toggle } = useTheme()
   const navigate = useNavigate()
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
@@ -37,22 +40,108 @@ export default function JoinTeam() {
       })
   }, [loading, session, profile, code, navigate])
 
-  if (loading || status === 'joining') {
-    return <div style={styles.center}>Joining team…</div>
-  }
+  return (
+    <div style={styles.page}>
+      <button onClick={toggle} style={styles.themeBtn} title="Toggle theme">
+        {mode === 'dark' ? '☀' : '☾'}
+      </button>
 
-  if (error) {
-    return (
-      <div style={styles.center}>
-        <p style={styles.error}>{error}</p>
+      <div style={styles.content}>
+        <Wordmark size={40} />
+        {error ? (
+          <div style={styles.errorCard}>
+            <p style={styles.errorIcon}>⚠️</p>
+            <p style={styles.errorText}>{error}</p>
+            <button style={styles.backBtn} onClick={() => navigate('/athlete')}>
+              Go to dashboard
+            </button>
+          </div>
+        ) : (
+          <div style={styles.joinCard}>
+            <div style={styles.spinner} />
+            <p style={styles.joiningText}>Joining your team…</p>
+          </div>
+        )}
       </div>
-    )
-  }
-
-  return null
+    </div>
+  )
 }
 
 const styles = {
-  center: { display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 120, fontSize: 16 },
-  error: { color: '#c0392b' },
+  page: {
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'var(--bg)',
+    position: 'relative',
+  },
+  themeBtn: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    background: 'none',
+    border: '1px solid var(--border)',
+    borderRadius: 8,
+    width: 36,
+    height: 36,
+    fontSize: 16,
+    cursor: 'pointer',
+    color: 'var(--text-2)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 32,
+  },
+  joinCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 16,
+    padding: '40px 60px',
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 16,
+  },
+  spinner: {
+    width: 36,
+    height: 36,
+    border: '3px solid var(--border)',
+    borderTopColor: '#308EBD',
+    borderRadius: '50%',
+    animation: 'spin 0.8s linear infinite',
+  },
+  joiningText: {
+    fontSize: 16,
+    color: 'var(--text-2)',
+  },
+  errorCard: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 12,
+    padding: '40px 48px',
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 16,
+    textAlign: 'center',
+  },
+  errorIcon: { fontSize: 36, margin: 0 },
+  errorText: { color: '#c73820', fontSize: 15, margin: 0 },
+  backBtn: {
+    marginTop: 8,
+    padding: '9px 20px',
+    fontSize: 14,
+    fontWeight: 600,
+    borderRadius: 8,
+    border: 'none',
+    background: '#308EBD',
+    color: '#fff',
+    cursor: 'pointer',
+  },
 }

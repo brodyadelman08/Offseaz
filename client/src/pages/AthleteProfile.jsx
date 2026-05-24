@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
+
+const ORANGE = '#F75709'
 
 function calcCurrentWeek(startsOn, numWeeks) {
   const msPerWeek = 7 * 24 * 60 * 60 * 1000
@@ -29,6 +33,7 @@ const LOG_STATUS = {
 export default function AthleteProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { mode, toggle } = useTheme()
   const [athlete, setAthlete] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
@@ -48,23 +53,35 @@ export default function AthleteProfile() {
   const currentWeek = plan ? calcCurrentWeek(plan.starts_on, plan.num_weeks) : null
 
   const surveyFields = [
-    { key: 'goals',           label: 'Goals' },
-    { key: 'weaknesses',      label: 'Weaknesses' },
-    { key: 'injury_history',  label: 'Injury History' },
+    { key: 'goals',          label: 'Goals' },
+    { key: 'weaknesses',     label: 'Weaknesses' },
+    { key: 'injury_history', label: 'Injury History' },
   ]
 
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => navigate('/coach')}>← Back to dashboard</button>
-
       {/* Header */}
       <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <Wordmark size={20} />
+          <span style={styles.roleChip}>Coach</span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button style={styles.backBtn} onClick={() => navigate('/coach')}>← Dashboard</button>
+        </div>
+      </div>
+
+      {/* Athlete header */}
+      <div style={styles.athleteHeader}>
         <div style={styles.avatar}>{initials(athlete.full_name)}</div>
         <div>
-          <h1 style={styles.name}>{athlete.full_name}</h1>
+          <h1 style={styles.athleteName}>{athlete.full_name}</h1>
           {survey && (
             <p style={styles.subline}>
-              {[survey.sport, survey.position, survey.time_per_week ? `${survey.time_per_week}h/week` : null]
+              {[survey.sport, survey.position, survey.time_per_week ? `${survey.time_per_week} days/wk` : null]
                 .filter(Boolean).join(' · ')}
             </p>
           )}
@@ -76,7 +93,7 @@ export default function AthleteProfile() {
 
       {/* Survey card */}
       <div style={styles.card}>
-        <p style={styles.cardTitle}>Athlete Survey</p>
+        <p style={styles.cardLabel}>Athlete Survey</p>
         {!survey ? (
           <p style={styles.empty}>Survey not completed yet.</p>
         ) : (
@@ -104,8 +121,8 @@ export default function AthleteProfile() {
 
       {/* Plan card */}
       {plan && (
-        <div style={{ ...styles.card, marginTop: 16 }}>
-          <p style={styles.cardTitle}>Current Plan</p>
+        <div style={{ ...styles.card, marginTop: 14 }}>
+          <p style={styles.cardLabel}>Current Plan</p>
           <p style={styles.planName}>{plan.title}</p>
           {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
           <p style={styles.planMeta}>
@@ -116,9 +133,9 @@ export default function AthleteProfile() {
       )}
 
       {/* Log history */}
-      <div style={{ ...styles.card, marginTop: 16 }}>
+      <div style={{ ...styles.card, marginTop: 14 }}>
         <div style={styles.logHeader}>
-          <p style={styles.cardTitle}>Session Log</p>
+          <p style={styles.cardLabel}>Session Log</p>
           {logs.length > 0 && (
             <span style={styles.logCount}>{logs.length} session{logs.length !== 1 ? 's' : ''}</span>
           )}
@@ -131,7 +148,7 @@ export default function AthleteProfile() {
             {logs.map((log, i) => {
               const s = LOG_STATUS[log.status] || LOG_STATUS.skipped
               return (
-                <div key={log.id} style={{ ...styles.logRow, borderTop: i > 0 ? '1px solid #f0f0f0' : 'none' }}>
+                <div key={log.id} style={{ ...styles.logRow, borderTop: i > 0 ? '1px solid var(--border-light)' : 'none' }}>
                   <div style={styles.logTop}>
                     <span style={{ ...styles.logBadge, color: s.color, background: s.bg }}>
                       {s.label}
@@ -140,7 +157,7 @@ export default function AthleteProfile() {
                       <span style={styles.logFocus}>{log.session_focus}</span>
                     )}
                     {log.effort != null && (
-                      <span style={styles.logEffort}>· {log.effort}</span>
+                      <span style={styles.logEffort}>· {log.effort}/10</span>
                     )}
                     {log.week_number != null && (
                       <span style={styles.logWeek}>Wk {log.week_number}</span>
@@ -159,39 +176,45 @@ export default function AthleteProfile() {
 }
 
 const styles = {
-  center:       { display: 'flex', justifyContent: 'center', paddingTop: 100, fontSize: 15, color: '#888' },
-  container:    { maxWidth: 680, margin: '0 auto', padding: '32px 20px' },
-  backLink:     { background: 'none', border: 'none', color: '#555', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 24, display: 'block' },
+  center: { display: 'flex', justifyContent: 'center', paddingTop: 100, fontSize: 15, color: 'var(--text-2)' },
+  container: { maxWidth: 700, margin: '0 auto', padding: '0 20px 60px' },
 
-  header:       { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
-  avatar:       { width: 52, height: 52, borderRadius: '50%', background: '#1a1a1a', color: '#fff', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  name:         { fontSize: 24, fontWeight: 700, margin: '0 0 4px' },
-  subline:      { fontSize: 14, color: '#555', margin: '0 0 2px' },
-  surveyDate:   { fontSize: 12, color: '#aaa', margin: 0 },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
 
-  card:         { background: '#f9f9f9', border: '1px solid #e5e5e5', borderRadius: 10, padding: 24 },
-  cardTitle:    { fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: '.5px', margin: '0 0 16px' },
-  empty:        { color: '#aaa', fontSize: 14, margin: 0 },
+  athleteHeader: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
+  avatar: { width: 52, height: 52, borderRadius: '50%', background: ORANGE, color: '#fff', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  athleteName: { fontSize: 24, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
+  subline: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 2px' },
+  surveyDate: { fontSize: 12, color: 'var(--text-3)', margin: 0 },
 
-  surveyField:  { marginBottom: 16 },
-  fieldLabel:   { fontSize: 11, fontWeight: 700, color: '#aaa', textTransform: 'uppercase', letterSpacing: '.4px', margin: '0 0 4px' },
-  fieldValue:   { fontSize: 14, color: '#222', lineHeight: 1.6, margin: 0 },
-  pillRow:      { display: 'flex', flexWrap: 'wrap', gap: 6 },
-  pill:         { fontSize: 12, fontWeight: 600, background: '#e5e5e5', color: '#444', padding: '3px 10px', borderRadius: 12 },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
+  cardLabel: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 16px' },
+  empty: { color: 'var(--text-3)', fontSize: 14, margin: 0 },
 
-  planName:     { fontSize: 17, fontWeight: 700, margin: '0 0 4px' },
-  planDesc:     { fontSize: 14, color: '#555', margin: '0 0 6px' },
-  planMeta:     { fontSize: 13, color: '#999', margin: 0 },
+  surveyField: { marginBottom: 16 },
+  fieldLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.4, margin: '0 0 4px' },
+  fieldValue: { fontSize: 14, color: 'var(--text)', lineHeight: 1.6, margin: 0 },
+  pillRow: { display: 'flex', flexWrap: 'wrap', gap: 6 },
+  pill: { fontSize: 12, fontWeight: 600, background: 'var(--border)', color: 'var(--text-2)', padding: '3px 10px', borderRadius: 12 },
 
-  logHeader:    { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  logCount:     { fontSize: 13, color: '#aaa' },
-  logList:      { display: 'flex', flexDirection: 'column' },
-  logRow:       { padding: '12px 0' },
-  logTop:       { display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
-  logBadge:     { fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },
-  logFocus:     { fontSize: 14, fontWeight: 600, color: '#1a1a1a' },
-  logEffort:    { fontSize: 13, color: '#555' },
-  logWeek:      { fontSize: 11, color: '#aaa', background: '#f0f0f0', padding: '2px 6px', borderRadius: 3 },
-  logDate:      { fontSize: 12, color: '#aaa', marginLeft: 'auto' },
-  logNote:      { fontSize: 13, color: '#666', fontStyle: 'italic', margin: '6px 0 0', lineHeight: 1.5 },
+  planName: { fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
+  planDesc: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 6px' },
+  planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
+
+  logHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
+  logCount: { fontSize: 13, color: 'var(--text-3)' },
+  logList: { display: 'flex', flexDirection: 'column' },
+  logRow: { padding: '12px 0' },
+  logTop: { display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
+  logBadge: { fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },
+  logFocus: { fontSize: 14, fontWeight: 600, color: 'var(--text)' },
+  logEffort: { fontSize: 13, color: 'var(--text-2)' },
+  logWeek: { fontSize: 11, color: 'var(--text-3)', background: 'var(--border)', padding: '2px 6px', borderRadius: 3 },
+  logDate: { fontSize: 12, color: 'var(--text-3)', marginLeft: 'auto' },
+  logNote: { fontSize: 13, color: 'var(--text-2)', fontStyle: 'italic', margin: '6px 0 0', lineHeight: 1.5 },
 }

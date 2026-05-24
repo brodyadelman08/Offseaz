@@ -1,16 +1,22 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
+
+const ORANGE = '#F75709'
 
 const TEMPLATES = [
   {
     label: 'Start fresh',
     description: 'Build your own plan from scratch',
+    icon: '✏️',
     data: null,
   },
   {
     label: '4-Week General Conditioning',
     description: 'Mixed fitness foundation — a balanced starting block',
+    icon: '🏃',
     data: {
       title: '4-Week General Conditioning',
       description: 'A balanced 4-week block covering strength, conditioning, and mobility.',
@@ -26,6 +32,7 @@ const TEMPLATES = [
   {
     label: '6-Week Strength Block',
     description: 'Progressive overload — built to add weight every week',
+    icon: '💪',
     data: {
       title: '6-Week Strength Block',
       description: 'A classic 6-week progressive overload program targeting main lifts.',
@@ -43,6 +50,7 @@ const TEMPLATES = [
   {
     label: '2-Week Peaking',
     description: 'Pre-season ramp — sharpen speed and explosiveness',
+    icon: '⚡',
     data: {
       title: '2-Week Peaking',
       description: 'Sharpen explosiveness and sport readiness in the final 2 weeks before the season.',
@@ -69,7 +77,8 @@ function blankSession() {
 
 export default function BlueprintBuilder() {
   const navigate = useNavigate()
-  const [step, setStep] = useState(0) // 0 = template picker, 1 = plan info, 2+ = weeks
+  const { mode, toggle } = useTheme()
+  const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
@@ -80,12 +89,8 @@ export default function BlueprintBuilder() {
     weeks: makeWeeks(4),
   })
 
-  // step 0 = template picker
-  // step 1 = plan info
-  // step 2..(num_weeks+1) = week editors
-  // step num_weeks+2 = review
-  const totalSteps = form.num_weeks + 2 // plan info + N weeks + review
-  const weekStep = step - 1 // which week we're editing (0-indexed), only valid when step >= 2
+  const totalSteps = form.num_weeks + 2
+  const isReviewStep = step === totalSteps
 
   function selectTemplate(tpl) {
     if (!tpl.data) {
@@ -159,17 +164,38 @@ export default function BlueprintBuilder() {
   }
 
   const canAdvancePlanInfo = form.title.trim().length > 0
+  const progressPct = step === 0 ? 0 : Math.round((step / totalSteps) * 100)
 
-  // ─── Template picker (step 0) ───────────────────────────────────────────────
+  // ── Template picker ───────────────────────────────────────────────────────────
   if (step === 0) {
     return (
       <div style={styles.container}>
-        <button style={styles.backLink} onClick={() => navigate('/coach')}>← Back to dashboard</button>
+        <div style={styles.header}>
+          <div style={styles.headerLeft}>
+            <Wordmark size={20} />
+            <span style={styles.roleChip}>Coach</span>
+          </div>
+          <div style={styles.headerRight}>
+            <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+              {mode === 'dark' ? '☀' : '☾'}
+            </button>
+            <button style={styles.backBtn} onClick={() => navigate('/coach')}>← Dashboard</button>
+          </div>
+        </div>
+
         <h1 style={styles.pageTitle}>Create Blueprint</h1>
-        <p style={styles.pageDesc}>Start from scratch or pick a template to pre-fill your plan.</p>
+        <p style={styles.pageDesc}>Start from scratch or choose a template to pre-fill your plan.</p>
+
         <div style={styles.templateGrid}>
           {TEMPLATES.map(tpl => (
-            <button key={tpl.label} style={styles.templateCard} onClick={() => selectTemplate(tpl)}>
+            <button
+              key={tpl.label}
+              style={styles.templateCard}
+              onClick={() => selectTemplate(tpl)}
+              onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
+              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+            >
+              <span style={styles.templateIcon}>{tpl.icon}</span>
               <span style={styles.templateLabel}>{tpl.label}</span>
               <span style={styles.templateDesc}>{tpl.description}</span>
             </button>
@@ -179,13 +205,22 @@ export default function BlueprintBuilder() {
     )
   }
 
-  // ─── Progress bar (steps 1+) ─────────────────────────────────────────────────
-  const progressPct = Math.round((step / (totalSteps)) * 100)
-  const isReviewStep = step === totalSteps
-
+  // ── Steps 1+ ─────────────────────────────────────────────────────────────────
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => setStep(s => s - 1)}>← Back</button>
+      <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <Wordmark size={20} />
+          <span style={styles.roleChip}>Coach</span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button style={styles.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
+        </div>
+      </div>
+
       <div style={styles.progressWrap}>
         <span style={styles.progressLabel}>
           {isReviewStep ? 'Review' : step === 1 ? 'Plan info' : `Week ${step - 1} of ${form.num_weeks}`}
@@ -193,11 +228,11 @@ export default function BlueprintBuilder() {
         <div style={styles.progressBar}>
           <div style={{ ...styles.progressFill, width: `${progressPct}%` }} />
         </div>
+        <span style={styles.progressPct}>{progressPct}%</span>
       </div>
 
       <div style={styles.card}>
-
-        {/* ── Step 1: Plan info ── */}
+        {/* Step 1: Plan info */}
         {step === 1 && (
           <>
             <h2 style={styles.stepTitle}>Plan details</h2>
@@ -230,9 +265,9 @@ export default function BlueprintBuilder() {
           </>
         )}
 
-        {/* ── Steps 2..N+1: Week editors ── */}
+        {/* Steps 2..N+1: Week editors */}
         {step >= 2 && !isReviewStep && (() => {
-          const wi = step - 2 // week index
+          const wi = step - 2
           const week = form.weeks[wi]
           return (
             <>
@@ -247,7 +282,7 @@ export default function BlueprintBuilder() {
               />
 
               <div style={styles.sessionsHeader}>
-                <span style={styles.label}>Sessions</span>
+                <label style={{ ...styles.label, marginTop: 0 }}>Sessions</label>
                 <button style={styles.addBtn} onClick={() => addSession(wi)}>+ Add session</button>
               </div>
 
@@ -273,7 +308,7 @@ export default function BlueprintBuilder() {
                     <button style={styles.removeBtn} onClick={() => removeSession(wi, si)}>✕</button>
                   </div>
                   <textarea
-                    style={{ ...styles.textarea, marginTop: 6 }}
+                    style={{ ...styles.textarea, marginTop: 8 }}
                     value={s.description}
                     onChange={e => setSessionField(wi, si, 'description', e.target.value)}
                     placeholder="Describe the session… (exercises, sets, reps, notes)"
@@ -285,7 +320,7 @@ export default function BlueprintBuilder() {
           )
         })()}
 
-        {/* ── Review step ── */}
+        {/* Review step */}
         {isReviewStep && (
           <>
             <h2 style={styles.stepTitle}>Review your blueprint</h2>
@@ -305,22 +340,26 @@ export default function BlueprintBuilder() {
                 ))}
               </div>
             ))}
-            {error && <p style={styles.error}>{error}</p>}
+            {error && <div style={styles.errorBox}>{error}</div>}
           </>
         )}
 
         <div style={styles.actions}>
           {isReviewStep ? (
             <button style={styles.primaryBtn} onClick={handleSubmit} disabled={submitting}>
-              {submitting ? 'Saving…' : 'Save blueprint'}
+              {submitting ? 'Saving…' : 'Save blueprint →'}
             </button>
           ) : (
             <button
-              style={{ ...styles.primaryBtn, ...(step === 1 && !canAdvancePlanInfo ? styles.disabledBtn : {}) }}
+              style={{
+                ...styles.primaryBtn,
+                opacity: step === 1 && !canAdvancePlanInfo ? 0.4 : 1,
+                cursor: step === 1 && !canAdvancePlanInfo ? 'not-allowed' : 'pointer',
+              }}
               onClick={() => (step !== 1 || canAdvancePlanInfo) && setStep(s => s + 1)}
               disabled={step === 1 && !canAdvancePlanInfo}
             >
-              {step === form.num_weeks + 1 ? 'Review plan' : 'Next →'}
+              {step === form.num_weeks + 1 ? 'Review plan →' : 'Next →'}
             </button>
           )}
         </div>
@@ -330,41 +369,55 @@ export default function BlueprintBuilder() {
 }
 
 const styles = {
-  container: { maxWidth: 660, margin: '0 auto', padding: '32px 20px' },
-  backLink: { background: 'none', border: 'none', color: '#555', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 20, display: 'block' },
-  pageTitle: { fontSize: 26, fontWeight: 700, marginBottom: 6 },
-  pageDesc: { color: '#666', fontSize: 14, marginBottom: 28 },
-  templateGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 14 },
-  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: 20, borderRadius: 10, border: '2px solid #e5e5e5', background: '#fff', cursor: 'pointer', textAlign: 'left' },
-  templateLabel: { fontSize: 15, fontWeight: 700 },
-  templateDesc: { fontSize: 13, color: '#666' },
+  container: { maxWidth: 680, margin: '0 auto', padding: '0 20px 60px' },
+
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+
+  pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
+  pageDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 28 },
+
+  templateGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
+  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, padding: 20, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.15s' },
+  templateIcon: { fontSize: 24 },
+  templateLabel: { fontSize: 15, fontWeight: 700, color: 'var(--text)' },
+  templateDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
+
   progressWrap: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 },
-  progressLabel: { fontSize: 13, color: '#888', whiteSpace: 'nowrap' },
-  progressBar: { flex: 1, height: 4, background: '#e5e5e5', borderRadius: 2 },
-  progressFill: { height: '100%', background: '#1a1a1a', borderRadius: 2, transition: 'width 0.3s' },
-  card: { background: '#fff', border: '1px solid #e5e5e5', borderRadius: 12, padding: 28 },
-  stepTitle: { fontSize: 20, fontWeight: 700, marginBottom: 20 },
-  label: { display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6, marginTop: 16 },
-  input: { width: '100%', padding: '10px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', boxSizing: 'border-box' },
-  textarea: { width: '100%', padding: '10px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' },
-  sessionsHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, marginBottom: 8 },
-  addBtn: { fontSize: 13, padding: '6px 12px', borderRadius: 6, border: '1px solid #1a1a1a', background: '#fff', cursor: 'pointer', fontWeight: 600 },
-  emptyMsg: { color: '#aaa', fontSize: 13, padding: '12px 0' },
-  sessionRow: { border: '1px solid #e5e5e5', borderRadius: 8, padding: 12, marginBottom: 10, background: '#fafafa' },
+  progressLabel: { fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap', minWidth: 80 },
+  progressBar: { flex: 1, height: 4, background: 'var(--border)', borderRadius: 2 },
+  progressFill: { height: '100%', background: ORANGE, borderRadius: 2, transition: 'width 0.3s' },
+  progressPct: { fontSize: 12, color: 'var(--text-3)', whiteSpace: 'nowrap', minWidth: 32, textAlign: 'right' },
+
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 28 },
+  stepTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
+  label: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, marginTop: 16 },
+  input: { width: '100%', padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', boxSizing: 'border-box', outline: 'none' },
+  textarea: { width: '100%', padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
+
+  sessionsHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, marginBottom: 10 },
+  addBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: `1px solid ${ORANGE}`, background: 'transparent', color: ORANGE, cursor: 'pointer', fontWeight: 600 },
+  emptyMsg: { color: 'var(--text-3)', fontSize: 13, padding: '10px 0' },
+  sessionRow: { border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 10, background: 'var(--card-inner)' },
   sessionTopRow: { display: 'flex', gap: 8, alignItems: 'center' },
-  removeBtn: { background: 'none', border: 'none', color: '#aaa', cursor: 'pointer', fontSize: 16, padding: '0 4px', flexShrink: 0 },
+  removeBtn: { background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 16, padding: '0 4px', flexShrink: 0 },
+
   actions: { display: 'flex', justifyContent: 'flex-end', marginTop: 28 },
-  primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer' },
-  disabledBtn: { opacity: 0.4, cursor: 'not-allowed' },
-  error: { color: '#c0392b', fontSize: 13, marginTop: 12 },
-  reviewMeta: { fontSize: 16, marginBottom: 6 },
-  reviewDesc: { color: '#666', fontSize: 14, marginBottom: 16 },
-  reviewWeek: { borderTop: '1px solid #e5e5e5', paddingTop: 14, marginTop: 14 },
-  reviewWeekTitle: { fontWeight: 700, fontSize: 14, marginBottom: 4 },
-  reviewObjective: { color: '#555', fontSize: 13, marginBottom: 8, fontStyle: 'italic' },
-  reviewEmpty: { color: '#aaa', fontSize: 13 },
+  primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginTop: 16 },
+
+  reviewMeta: { fontSize: 16, color: 'var(--text)', marginBottom: 6 },
+  reviewDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 16 },
+  reviewWeek: { borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 14 },
+  reviewWeekTitle: { fontWeight: 700, fontSize: 14, color: 'var(--text)', marginBottom: 4 },
+  reviewObjective: { color: 'var(--text-2)', fontSize: 13, marginBottom: 8, fontStyle: 'italic' },
+  reviewEmpty: { color: 'var(--text-3)', fontSize: 13 },
   reviewSession: { marginBottom: 8 },
-  reviewDay: { fontSize: 12, fontWeight: 700, color: '#888', marginRight: 8 },
-  reviewFocus: { fontSize: 13, fontWeight: 600 },
-  reviewSessionDesc: { fontSize: 13, color: '#555', margin: '2px 0 0 0' },
+  reviewDay: { fontSize: 11, fontWeight: 700, color: ORANGE, marginRight: 8 },
+  reviewFocus: { fontSize: 13, fontWeight: 600, color: 'var(--text)' },
+  reviewSessionDesc: { fontSize: 13, color: 'var(--text-2)', margin: '2px 0 0 0', lineHeight: 1.5 },
 }

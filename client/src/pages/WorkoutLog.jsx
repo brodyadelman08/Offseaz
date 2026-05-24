@@ -1,18 +1,22 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
 
+const BLUE = '#308EBD'
+
 const STATUS_OPTIONS = [
-  { value: 'completed', label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
-  { value: 'partial', label: 'Partial', color: '#b45309', bg: '#fef3c7' },
-  { value: 'skipped', label: 'Skipped', color: '#888', bg: '#f0f0f0' },
+  { value: 'completed', label: '✓ Completed', color: '#2e7d32', bg: '#e8f5e9', activeBg: '#2e7d32' },
+  { value: 'partial',   label: '◑ Partial',   color: '#b45309', bg: '#fef3c7', activeBg: '#b45309' },
+  { value: 'skipped',   label: '✕ Skipped',   color: '#888',    bg: '#f0f0f0', activeBg: '#555' },
 ]
 
 export default function WorkoutLog() {
   const navigate = useNavigate()
   const { state } = useLocation()
+  const { mode, toggle } = useTheme()
 
-  // Redirect if accessed directly without state
   if (!state?.weekId) {
     navigate('/plan', { replace: true })
     return null
@@ -51,7 +55,23 @@ export default function WorkoutLog() {
 
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => navigate('/plan')}>← Back to plan</button>
+      {/* Header */}
+      <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <Wordmark size={20} />
+          <span style={styles.roleChip}>Athlete</span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button style={styles.backBtn} onClick={() => navigate('/plan')}>
+            ← Back to plan
+          </button>
+        </div>
+      </div>
+
+      <h1 style={styles.pageTitle}>Log Session</h1>
 
       {/* Session preview */}
       <div style={styles.previewCard}>
@@ -73,7 +93,11 @@ export default function WorkoutLog() {
                 type="button"
                 style={{
                   ...styles.statusBtn,
-                  ...(status === opt.value ? { borderColor: '#1a1a1a', background: '#1a1a1a', color: '#fff' } : {}),
+                  ...(status === opt.value ? {
+                    borderColor: opt.activeBg,
+                    background: opt.activeBg,
+                    color: '#fff',
+                  } : {}),
                 }}
                 onClick={() => setStatus(opt.value)}
               >
@@ -83,10 +107,13 @@ export default function WorkoutLog() {
           </div>
         </div>
 
-        {/* Effort selector — hidden when skipped */}
+        {/* Effort selector */}
         {status && status !== 'skipped' && (
           <div>
-            <p style={styles.fieldLabel}>Effort level</p>
+            <p style={styles.fieldLabel}>
+              Effort level
+              <span style={styles.effortHint}> · how hard did you push? (1 = easy, 10 = max)</span>
+            </p>
             <div style={styles.effortRow}>
               {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
                 <button
@@ -94,7 +121,7 @@ export default function WorkoutLog() {
                   type="button"
                   style={{
                     ...styles.effortBtn,
-                    ...(effort === n ? { background: '#1a1a1a', color: '#fff', borderColor: '#1a1a1a' } : {}),
+                    ...(effort === n ? { background: BLUE, color: '#fff', borderColor: BLUE } : {}),
                   }}
                   onClick={() => setEffort(n)}
                 >
@@ -107,7 +134,9 @@ export default function WorkoutLog() {
 
         {/* Note */}
         <div>
-          <p style={styles.fieldLabel}>Notes <span style={styles.optional}>(optional)</span></p>
+          <p style={styles.fieldLabel}>
+            Notes <span style={styles.optional}>(optional)</span>
+          </p>
           <textarea
             style={styles.textarea}
             placeholder="How did it feel? Anything to note…"
@@ -117,10 +146,10 @@ export default function WorkoutLog() {
           />
         </div>
 
-        {error && <p style={styles.error}>{error}</p>}
+        {error && <div style={styles.errorBox}>{error}</div>}
 
         <button style={styles.submitBtn} type="submit" disabled={submitting}>
-          {submitting ? 'Saving…' : 'Log this session'}
+          {submitting ? 'Saving…' : 'Log this session →'}
         </button>
       </form>
     </div>
@@ -128,21 +157,35 @@ export default function WorkoutLog() {
 }
 
 const styles = {
-  container: { maxWidth: 520, margin: '0 auto', padding: '32px 20px' },
-  backLink: { background: 'none', border: 'none', color: '#555', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 24, display: 'block' },
-  previewCard: { background: '#f9f9f9', border: '1px solid #e5e5e5', borderRadius: 10, padding: 20, marginBottom: 28 },
+  container: { maxWidth: 540, margin: '0 auto', padding: '0 20px 60px' },
+
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 28 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, background: BLUE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+
+  pageTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
+
+  previewCard: { background: 'var(--card)', border: '1px solid var(--border)', borderLeft: `3px solid ${BLUE}`, borderRadius: '0 12px 12px 0', padding: 20, marginBottom: 28 },
   previewHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 },
-  dayBadge: { fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase', background: '#f0f0f0', padding: '3px 8px', borderRadius: 4 },
-  focusText: { fontSize: 16, fontWeight: 700 },
-  previewDesc: { fontSize: 14, color: '#555', margin: 0, lineHeight: 1.5 },
-  form: { display: 'flex', flexDirection: 'column', gap: 24 },
-  fieldLabel: { fontSize: 14, fontWeight: 600, marginBottom: 10, margin: '0 0 10px' },
-  optional: { fontWeight: 400, color: '#aaa' },
+  dayBadge: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', background: 'rgba(48,142,189,0.1)', padding: '3px 8px', borderRadius: 4 },
+  focusText: { fontSize: 16, fontWeight: 700, color: 'var(--text)' },
+  previewDesc: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6 },
+
+  form: { display: 'flex', flexDirection: 'column', gap: 28 },
+  fieldLabel: { fontSize: 14, fontWeight: 600, color: 'var(--text)', margin: '0 0 12px' },
+  effortHint: { fontSize: 12, color: 'var(--text-3)', fontWeight: 400 },
+  optional: { fontWeight: 400, color: 'var(--text-3)' },
+
   statusRow: { display: 'flex', gap: 10 },
-  statusBtn: { flex: 1, padding: '10px 0', fontSize: 14, fontWeight: 600, borderRadius: 6, border: '2px solid #ddd', background: '#fff', cursor: 'pointer' },
+  statusBtn: { flex: 1, padding: '11px 0', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s' },
+
   effortRow: { display: 'flex', gap: 6, flexWrap: 'wrap' },
-  effortBtn: { width: 40, height: 40, fontSize: 14, fontWeight: 600, borderRadius: 6, border: '2px solid #ddd', background: '#fff', cursor: 'pointer' },
-  textarea: { width: '100%', padding: '10px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' },
-  error: { color: '#c0392b', fontSize: 13, margin: 0 },
-  submitBtn: { padding: '12px 0', fontSize: 15, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer' },
+  effortBtn: { width: 42, height: 42, fontSize: 14, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s' },
+
+  textarea: { width: '100%', padding: '11px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13 },
+  submitBtn: { padding: '13px 0', fontSize: 15, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
 }

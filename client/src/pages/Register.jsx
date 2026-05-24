@@ -2,9 +2,12 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
+import { Wordmark } from '../components/Wordmark'
+import { useTheme } from '../context/ThemeContext'
 
 export default function Register() {
   const navigate = useNavigate()
+  const { mode, toggle } = useTheme()
   const [searchParams] = useSearchParams()
   const inviteCode = searchParams.get('invite')
 
@@ -14,6 +17,8 @@ export default function Register() {
   const [role, setRole] = useState(inviteCode ? 'athlete' : '')
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(false)
+
+  const accentColor = role === 'athlete' ? '#308EBD' : '#F75709'
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -53,82 +58,264 @@ export default function Register() {
   }
 
   return (
-    <div style={styles.container}>
-      <h1 style={styles.title}>Offseaz</h1>
-      <form onSubmit={handleSubmit} style={styles.form}>
-        <h2 style={styles.heading}>Create account</h2>
-        {inviteCode && (
-          <p style={styles.inviteBanner}>You have an invite — joining as Athlete.</p>
-        )}
-        {error && <p style={styles.error}>{error}</p>}
+    <div style={styles.page}>
+      <button onClick={toggle} style={styles.themeBtn} title="Toggle theme">
+        {mode === 'dark' ? '☀' : '☾'}
+      </button>
 
-        <input
-          style={styles.input}
-          type="text"
-          placeholder="Full name"
-          value={fullName}
-          onChange={e => setFullName(e.target.value)}
-          required
-        />
-        <input
-          style={styles.input}
-          type="email"
-          placeholder="Email"
-          value={email}
-          onChange={e => setEmail(e.target.value)}
-          required
-        />
-        <input
-          style={styles.input}
-          type="password"
-          placeholder="Password (min 6 characters)"
-          value={password}
-          onChange={e => setPassword(e.target.value)}
-          required
-          minLength={6}
-        />
+      <div style={styles.content}>
+        <div style={styles.brand}>
+          <Wordmark size={52} />
+          <p style={styles.tagline}>The coach-first offseason training platform</p>
+        </div>
 
-        {!inviteCode && (
-          <div style={styles.roleRow}>
+        <div style={styles.card}>
+          <h2 style={styles.heading}>Create account</h2>
+          <p style={styles.subheading}>Join Offseaz today</p>
+
+          {inviteCode && (
+            <div style={styles.inviteBanner}>
+              🎯 You have a team invite — joining as an Athlete.
+            </div>
+          )}
+
+          {error && <div style={styles.errorBox}>{error}</div>}
+
+          <form onSubmit={handleSubmit} style={styles.form}>
+            <input
+              style={styles.input}
+              type="text"
+              placeholder="Full name"
+              value={fullName}
+              onChange={e => setFullName(e.target.value)}
+              required
+              autoComplete="name"
+            />
+            <input
+              style={styles.input}
+              type="email"
+              placeholder="Email address"
+              value={email}
+              onChange={e => setEmail(e.target.value)}
+              required
+              autoComplete="email"
+            />
+            <input
+              style={styles.input}
+              type="password"
+              placeholder="Password (min 6 characters)"
+              value={password}
+              onChange={e => setPassword(e.target.value)}
+              required
+              minLength={6}
+              autoComplete="new-password"
+            />
+
+            {!inviteCode && (
+              <div>
+                <p style={styles.roleLabel}>I am a…</p>
+                <div style={styles.roleRow}>
+                  <button
+                    type="button"
+                    style={{
+                      ...styles.roleCard,
+                      ...(role === 'coach' ? { borderColor: '#F75709', background: 'rgba(247,87,9,0.06)' } : {}),
+                    }}
+                    onClick={() => setRole('coach')}
+                  >
+                    <span style={{ fontSize: 24, marginBottom: 6 }}>🏆</span>
+                    <span style={{ ...styles.roleCardTitle, color: role === 'coach' ? '#F75709' : 'var(--text)' }}>
+                      Coach
+                    </span>
+                    <span style={styles.roleCardDesc}>Build plans, track athletes</span>
+                  </button>
+                  <button
+                    type="button"
+                    style={{
+                      ...styles.roleCard,
+                      ...(role === 'athlete' ? { borderColor: '#308EBD', background: 'rgba(48,142,189,0.06)' } : {}),
+                    }}
+                    onClick={() => setRole('athlete')}
+                  >
+                    <span style={{ fontSize: 24, marginBottom: 6 }}>⚡</span>
+                    <span style={{ ...styles.roleCardTitle, color: role === 'athlete' ? '#308EBD' : 'var(--text)' }}>
+                      Athlete
+                    </span>
+                    <span style={styles.roleCardDesc}>Follow your plan, log sessions</span>
+                  </button>
+                </div>
+              </div>
+            )}
+
             <button
-              type="button"
-              style={{ ...styles.roleBtn, ...(role === 'coach' ? styles.roleBtnActive : {}) }}
-              onClick={() => setRole('coach')}
+              style={{ ...styles.primaryBtn, background: accentColor }}
+              type="submit"
+              disabled={loading}
             >
-              Coach
+              {loading ? 'Creating account…' : 'Create account →'}
             </button>
-            <button
-              type="button"
-              style={{ ...styles.roleBtn, ...(role === 'athlete' ? styles.roleBtnActive : {}) }}
-              onClick={() => setRole('athlete')}
-            >
-              Athlete
-            </button>
-          </div>
-        )}
+          </form>
 
-        <button style={styles.button} type="submit" disabled={loading}>
-          {loading ? 'Creating account…' : 'Create account'}
-        </button>
-        <p style={styles.link}>
-          Already have an account? <Link to="/login">Sign in</Link>
-        </p>
-      </form>
+          <p style={styles.switchLink}>
+            Already have an account?{' '}
+            <Link to="/login" style={{ color: '#F75709', fontWeight: 600, textDecoration: 'none' }}>
+              Sign in
+            </Link>
+          </p>
+        </div>
+      </div>
     </div>
   )
 }
 
 const styles = {
-  container: { display: 'flex', flexDirection: 'column', alignItems: 'center', paddingTop: 80 },
-  title: { fontSize: 32, fontWeight: 700, marginBottom: 32 },
-  form: { display: 'flex', flexDirection: 'column', gap: 12, width: 320 },
-  heading: { fontSize: 20, fontWeight: 600, marginBottom: 4 },
-  input: { padding: '10px 12px', fontSize: 15, borderRadius: 6, border: '1px solid #ccc' },
-  button: { padding: '10px 0', fontSize: 15, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer' },
-  roleRow: { display: 'flex', gap: 10 },
-  roleBtn: { flex: 1, padding: '10px 0', fontSize: 15, borderRadius: 6, border: '2px solid #ccc', background: '#fff', cursor: 'pointer' },
-  roleBtnActive: { borderColor: '#1a1a1a', background: '#1a1a1a', color: '#fff' },
-  error: { color: '#c0392b', fontSize: 13 },
-  inviteBanner: { background: '#e8f5e9', color: '#2e7d32', padding: '8px 12px', borderRadius: 6, fontSize: 13 },
-  link: { textAlign: 'center', fontSize: 13 },
+  page: {
+    minHeight: '100vh',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    background: 'var(--bg)',
+    padding: '40px 20px',
+    position: 'relative',
+  },
+  themeBtn: {
+    position: 'absolute',
+    top: 20,
+    right: 20,
+    background: 'none',
+    border: '1px solid var(--border)',
+    borderRadius: 8,
+    width: 36,
+    height: 36,
+    fontSize: 16,
+    cursor: 'pointer',
+    color: 'var(--text-2)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+  },
+  content: {
+    width: '100%',
+    maxWidth: 420,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 40,
+  },
+  brand: {
+    textAlign: 'center',
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 10,
+  },
+  tagline: {
+    fontSize: 14,
+    color: 'var(--text-3)',
+    letterSpacing: 0.2,
+  },
+  card: {
+    width: '100%',
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 16,
+    padding: '32px 28px',
+    boxShadow: 'var(--shadow)',
+  },
+  heading: {
+    fontSize: 22,
+    fontWeight: 700,
+    color: 'var(--text)',
+    marginBottom: 4,
+  },
+  subheading: {
+    fontSize: 14,
+    color: 'var(--text-2)',
+    marginBottom: 24,
+  },
+  inviteBanner: {
+    background: 'rgba(48,142,189,0.1)',
+    border: '1px solid rgba(48,142,189,0.25)',
+    color: '#308EBD',
+    borderRadius: 8,
+    padding: '10px 14px',
+    fontSize: 13,
+    fontWeight: 600,
+    marginBottom: 16,
+  },
+  errorBox: {
+    background: 'rgba(199,56,32,0.08)',
+    border: '1px solid rgba(199,56,32,0.25)',
+    color: '#c73820',
+    borderRadius: 8,
+    padding: '10px 14px',
+    fontSize: 13,
+    marginBottom: 16,
+  },
+  form: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 12,
+  },
+  input: {
+    width: '100%',
+    padding: '11px 14px',
+    fontSize: 15,
+    borderRadius: 8,
+    border: '1px solid var(--input-border)',
+    background: 'var(--input-bg)',
+    color: 'var(--text)',
+    outline: 'none',
+  },
+  roleLabel: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: 'var(--text-2)',
+    marginBottom: 8,
+  },
+  roleRow: {
+    display: 'flex',
+    gap: 10,
+  },
+  roleCard: {
+    flex: 1,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    padding: '16px 10px',
+    borderRadius: 10,
+    border: '2px solid var(--border)',
+    background: 'var(--card-inner)',
+    cursor: 'pointer',
+    textAlign: 'center',
+    transition: 'border-color 0.15s, background 0.15s',
+  },
+  roleCardTitle: {
+    fontSize: 15,
+    fontWeight: 700,
+    marginBottom: 3,
+  },
+  roleCardDesc: {
+    fontSize: 12,
+    color: 'var(--text-3)',
+    lineHeight: 1.3,
+  },
+  primaryBtn: {
+    width: '100%',
+    padding: '12px 0',
+    fontSize: 15,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: 'none',
+    color: '#fff',
+    cursor: 'pointer',
+    marginTop: 4,
+    letterSpacing: 0.2,
+  },
+  switchLink: {
+    textAlign: 'center',
+    fontSize: 13,
+    color: 'var(--text-2)',
+    marginTop: 20,
+  },
 }

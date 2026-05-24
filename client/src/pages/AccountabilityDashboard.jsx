@@ -1,10 +1,14 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
 
+const ORANGE = '#F75709'
+
 const STATUS = {
-  logged:     { label: '✓ Logged',      color: '#2e7d32', bg: '#e8f5e9', border: '#2e7d32' },
-  notLogged:  { label: '✗ Not logged',  color: '#b45309', bg: '#fef3c7', border: '#d97706' },
+  logged:     { label: '✓ Logged',     color: '#2e7d32', bg: '#e8f5e9', border: '#2e7d32' },
+  notLogged:  { label: '✗ Not logged', color: '#b45309', bg: '#fef3c7', border: '#d97706' },
 }
 
 const LOG_STATUS = {
@@ -38,6 +42,7 @@ const FILTERS = [
 
 export default function AccountabilityDashboard() {
   const navigate = useNavigate()
+  const { mode, toggle } = useTheme()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
@@ -60,18 +65,36 @@ export default function AccountabilityDashboard() {
 
   const loggedCount    = athletes.filter(a => a.logged_this_week).length
   const notLoggedCount = athletes.length - loggedCount
-
   const filterCounts = { all: athletes.length, logged: loggedCount, notLogged: notLoggedCount }
 
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => navigate('/coach')}>← Back to dashboard</button>
+      {/* Header */}
+      <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <Wordmark size={20} />
+          <span style={styles.roleChip}>Coach</span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button style={styles.backBtn} onClick={() => navigate('/coach')}>
+            ← Dashboard
+          </button>
+        </div>
+      </div>
 
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Accountability</h1>
         {!loading && athletes.length > 0 && (
           <p style={styles.pageSubtitle}>
-            {loggedCount} of {athletes.length} logged this week
+            <span style={{ color: loggedCount > 0 ? '#2e7d32' : 'var(--text-3)', fontWeight: 700 }}>
+              {loggedCount}
+            </span>
+            {' of '}
+            <span style={{ fontWeight: 700, color: 'var(--text)' }}>{athletes.length}</span>
+            {' athletes logged this week'}
           </p>
         )}
       </div>
@@ -80,7 +103,8 @@ export default function AccountabilityDashboard() {
         <p style={styles.loadingText}>Loading…</p>
       ) : athletes.length === 0 ? (
         <div style={styles.emptyState}>
-          <p style={styles.emptyTitle}>No athletes yet</p>
+          <p style={{ fontSize: 40, marginBottom: 12 }}>📋</p>
+          <h2 style={styles.emptyTitle}>No athletes yet</h2>
           <p style={styles.emptyDesc}>Share your invite link so athletes can join your team.</p>
         </div>
       ) : (
@@ -90,11 +114,17 @@ export default function AccountabilityDashboard() {
             {FILTERS.map(f => (
               <button
                 key={f.key}
-                style={{ ...styles.filterBtn, ...(filter === f.key ? styles.filterBtnActive : {}) }}
+                style={{
+                  ...styles.filterBtn,
+                  ...(filter === f.key ? { borderColor: ORANGE, color: ORANGE } : {}),
+                }}
                 onClick={() => setFilter(f.key)}
               >
                 {f.label}
-                <span style={{ ...styles.filterCount, ...(filter === f.key ? styles.filterCountActive : {}) }}>
+                <span style={{
+                  ...styles.filterCount,
+                  ...(filter === f.key ? { background: ORANGE, color: '#fff' } : {}),
+                }}>
                   {filterCounts[f.key]}
                 </span>
               </button>
@@ -121,31 +151,25 @@ export default function AccountabilityDashboard() {
                     </div>
 
                     <div style={styles.statsRow}>
-                      <span style={styles.stat}>
-                        <span style={styles.statVal}>
-                          {a.sessions_this_week > 0 ? a.sessions_this_week : '—'}
-                        </span>
-                        <span style={styles.statLabel}> sessions this wk</span>
-                      </span>
-                      <span style={styles.statDivider}>·</span>
-                      <span style={styles.stat}>
-                        <span style={styles.statVal}>
+                      <div style={styles.statItem}>
+                        <span style={styles.statVal}>{a.sessions_this_week > 0 ? a.sessions_this_week : '—'}</span>
+                        <span style={styles.statLabel}>sessions this wk</span>
+                      </div>
+                      <div style={styles.statDivider} />
+                      <div style={styles.statItem}>
+                        <span style={{ ...styles.statVal, color: a.streak_weeks > 0 ? '#F0BE24' : 'var(--text)' }}>
                           {a.streak_weeks > 0 ? `${a.streak_weeks} wk` : '—'}
                         </span>
-                        <span style={styles.statLabel}> streak</span>
-                      </span>
-                      <span style={styles.statDivider}>·</span>
-                      <span style={styles.stat}>
-                        <span style={styles.statVal}>
-                          {a.avg_effort_this_week != null ? a.avg_effort_this_week : '—'}
-                        </span>
-                        <span style={styles.statLabel}> avg effort</span>
-                      </span>
+                        <span style={styles.statLabel}>streak 🔥</span>
+                      </div>
+                      <div style={styles.statDivider} />
+                      <div style={styles.statItem}>
+                        <span style={styles.statVal}>{a.avg_effort_this_week != null ? a.avg_effort_this_week : '—'}</span>
+                        <span style={styles.statLabel}>avg effort</span>
+                      </div>
                     </div>
 
-                    <p style={styles.lastLogged}>
-                      Last logged {timeAgo(a.last_logged_at)}
-                    </p>
+                    <p style={styles.lastLogged}>Last logged {timeAgo(a.last_logged_at)}</p>
                   </div>
                 )
               })}
@@ -189,49 +213,54 @@ export default function AccountabilityDashboard() {
 }
 
 const styles = {
-  container:        { maxWidth: 860, margin: '0 auto', padding: '32px 20px' },
-  backLink:         { background: 'none', border: 'none', color: '#555', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 20, display: 'block' },
-  pageHeader:       { marginBottom: 24 },
-  pageTitle:        { fontSize: 26, fontWeight: 700, margin: '0 0 4px' },
-  pageSubtitle:     { fontSize: 14, color: '#888', margin: 0 },
-  loadingText:      { color: '#aaa', fontSize: 15 },
+  container: { maxWidth: 900, margin: '0 auto', padding: '0 20px 60px' },
 
-  emptyState:       { textAlign: 'center', paddingTop: 60 },
-  emptyTitle:       { fontSize: 18, fontWeight: 700, marginBottom: 6 },
-  emptyDesc:        { color: '#777', fontSize: 14 },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
 
-  filterBar:        { display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' },
-  filterBtn:        { display: 'flex', alignItems: 'center', gap: 8, padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 6, border: '2px solid #e5e5e5', background: '#fff', cursor: 'pointer', color: '#555' },
-  filterBtnActive:  { borderColor: '#1a1a1a', color: '#1a1a1a' },
-  filterCount:      { fontSize: 12, fontWeight: 700, background: '#f0f0f0', color: '#888', borderRadius: 10, padding: '1px 7px' },
-  filterCountActive:{ background: '#1a1a1a', color: '#fff' },
-  emptyFilter:      { color: '#aaa', fontSize: 14, paddingTop: 8 },
+  pageHeader: { marginBottom: 24 },
+  pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' },
+  pageSubtitle: { fontSize: 14, color: 'var(--text-2)', margin: 0 },
+  loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
-  athleteGrid:      { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(340px, 1fr))', gap: 12, marginBottom: 32 },
-  athleteCard:      { background: '#fff', border: '1px solid #e5e5e5', borderLeft: '4px solid #e5e5e5', borderRadius: 8, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 },
-  cardTop:          { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
-  avatarRow:        { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 },
-  avatar:           { width: 36, height: 36, borderRadius: '50%', background: '#1a1a1a', color: '#fff', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  athleteName:      { fontSize: 15, fontWeight: 700, color: '#1a1a1a', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  statusBadge:      { fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 5, whiteSpace: 'nowrap', flexShrink: 0 },
+  emptyState: { textAlign: 'center', paddingTop: 60 },
+  emptyTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
+  emptyDesc: { color: 'var(--text-2)', fontSize: 14 },
 
-  statsRow:         { display: 'flex', alignItems: 'center', gap: 6, flexWrap: 'wrap' },
-  stat:             { fontSize: 13 },
-  statVal:          { fontWeight: 700, color: '#1a1a1a' },
-  statLabel:        { color: '#888' },
-  statDivider:      { color: '#ccc', fontSize: 12 },
-  lastLogged:       { fontSize: 12, color: '#aaa', margin: 0 },
+  filterBar: { display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' },
+  filterBtn: { display: 'flex', alignItems: 'center', gap: 8, padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', color: 'var(--text-2)', transition: 'border-color 0.15s, color 0.15s' },
+  filterCount: { fontSize: 12, fontWeight: 700, background: 'var(--border)', color: 'var(--text-3)', borderRadius: 10, padding: '1px 7px', transition: 'background 0.15s, color 0.15s' },
+  emptyFilter: { color: 'var(--text-3)', fontSize: 14, paddingTop: 8 },
 
-  feedSection:      { borderTop: '1px solid #e5e5e5', paddingTop: 24 },
-  feedTitle:        { fontSize: 17, fontWeight: 700, marginBottom: 14 },
-  emptyFeed:        { color: '#aaa', fontSize: 14 },
-  feedList:         { display: 'flex', flexDirection: 'column' },
-  feedRow:          { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid #f0f0f0', gap: 12 },
-  feedLeft:         { display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 },
-  feedName:         { fontSize: 14, fontWeight: 600, color: '#1a1a1a', whiteSpace: 'nowrap' },
-  feedFocus:        { fontSize: 13, color: '#555', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  feedWeek:         { fontSize: 11, color: '#aaa', whiteSpace: 'nowrap' },
-  feedRight:        { display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 },
-  feedBadge:        { fontSize: 12, fontWeight: 600, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },
-  feedTime:         { fontSize: 12, color: '#aaa', whiteSpace: 'nowrap' },
+  athleteGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12, marginBottom: 36 },
+  athleteCard: { background: 'var(--card)', border: '1px solid var(--border)', borderLeft: '4px solid', borderRadius: 10, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 },
+  cardTop: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
+  avatarRow: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 },
+  avatar: { width: 36, height: 36, borderRadius: '50%', background: ORANGE, color: '#fff', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  athleteName: { fontSize: 15, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  statusBadge: { fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 6, whiteSpace: 'nowrap', flexShrink: 0 },
+
+  statsRow: { display: 'flex', alignItems: 'center', gap: 12 },
+  statItem: { display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 },
+  statVal: { fontSize: 18, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
+  statLabel: { fontSize: 11, color: 'var(--text-3)', marginTop: 2 },
+  statDivider: { width: 1, height: 28, background: 'var(--border)' },
+  lastLogged: { fontSize: 12, color: 'var(--text-3)', margin: 0 },
+
+  feedSection: { borderTop: '1px solid var(--border)', paddingTop: 28 },
+  feedTitle: { fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 16 },
+  emptyFeed: { color: 'var(--text-3)', fontSize: 14 },
+  feedList: { display: 'flex', flexDirection: 'column' },
+  feedRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '10px 0', borderBottom: '1px solid var(--border-light)', gap: 12 },
+  feedLeft: { display: 'flex', alignItems: 'center', gap: 10, flexWrap: 'wrap', minWidth: 0 },
+  feedName: { fontSize: 14, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap' },
+  feedFocus: { fontSize: 13, color: 'var(--text-2)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  feedWeek: { fontSize: 11, color: 'var(--text-3)', whiteSpace: 'nowrap' },
+  feedRight: { display: 'flex', alignItems: 'center', gap: 10, flexShrink: 0 },
+  feedBadge: { fontSize: 12, fontWeight: 600, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },
+  feedTime: { fontSize: 12, color: 'var(--text-3)', whiteSpace: 'nowrap' },
 }

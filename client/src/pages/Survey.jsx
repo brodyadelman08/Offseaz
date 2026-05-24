@@ -1,6 +1,10 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
+
+const BLUE = '#308EBD'
 
 const EQUIPMENT_OPTIONS = [
   'Bodyweight only',
@@ -18,6 +22,7 @@ const TOTAL_STEPS = 4
 
 export default function Survey() {
   const navigate = useNavigate()
+  const { mode, toggle } = useTheme()
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -81,135 +86,144 @@ export default function Survey() {
   if (checkingExisting) return <div style={styles.center}>Loading…</div>
 
   return (
-    <div style={styles.container}>
-      <div style={styles.header}>
-        <h1 style={styles.brand}>Offseaz</h1>
-        <p style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</p>
+    <div style={styles.page}>
+      {/* Slim top bar */}
+      <div style={styles.topBar}>
+        <Wordmark size={20} />
+        <div style={styles.topBarRight}>
+          <span style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</span>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+        </div>
       </div>
 
+      {/* Progress bar */}
       <div style={styles.progressBar}>
         <div style={{ ...styles.progressFill, width: `${(step / TOTAL_STEPS) * 100}%` }} />
       </div>
 
-      <div style={styles.card}>
-        {step === 1 && (
-          <>
-            <h2 style={styles.stepTitle}>Your Sport</h2>
-            <p style={styles.stepDesc}>Tell us what sport you play and your position.</p>
-            <label style={styles.label}>Sport *</label>
-            <input
-              style={styles.input}
-              type="text"
-              placeholder="e.g. Basketball, Soccer, Football…"
-              value={form.sport}
-              onChange={e => set('sport', e.target.value)}
-              autoFocus
-            />
-            <label style={styles.label}>Position</label>
-            <input
-              style={styles.input}
-              type="text"
-              placeholder="e.g. Point Guard, Midfielder, QB…"
-              value={form.position}
-              onChange={e => set('position', e.target.value)}
-            />
-          </>
-        )}
-
-        {step === 2 && (
-          <>
-            <h2 style={styles.stepTitle}>Your Goals</h2>
-            <p style={styles.stepDesc}>What do you want to achieve this offseason?</p>
-            <label style={styles.label}>Goals</label>
-            <textarea
-              style={styles.textarea}
-              placeholder="e.g. Improve my speed, add 20 lbs to my bench, get leaner…"
-              value={form.goals}
-              onChange={e => set('goals', e.target.value)}
-              rows={4}
-            />
-            <label style={styles.label}>How many days per week can you train?</label>
-            <input
-              style={styles.input}
-              type="number"
-              min={1}
-              max={7}
-              placeholder="e.g. 4"
-              value={form.time_per_week}
-              onChange={e => set('time_per_week', e.target.value)}
-            />
-          </>
-        )}
-
-        {step === 3 && (
-          <>
-            <h2 style={styles.stepTitle}>Areas to Improve</h2>
-            <p style={styles.stepDesc}>Where do you most want to get better?</p>
-            <label style={styles.label}>Weaknesses</label>
-            <textarea
-              style={styles.textarea}
-              placeholder="e.g. Lateral quickness, upper body strength, conditioning…"
-              value={form.weaknesses}
-              onChange={e => set('weaknesses', e.target.value)}
-              rows={5}
-            />
-          </>
-        )}
-
-        {step === 4 && (
-          <>
-            <h2 style={styles.stepTitle}>Health & Equipment</h2>
-            <p style={styles.stepDesc}>Help your coach plan around your situation.</p>
-            <label style={styles.label}>Injury history</label>
-            <textarea
-              style={styles.textarea}
-              placeholder="Any past or current injuries your coach should know about? (Leave blank if none)"
-              value={form.injury_history}
-              onChange={e => set('injury_history', e.target.value)}
-              rows={3}
-            />
-            <label style={styles.label}>Available equipment</label>
-            <div style={styles.checkboxGrid}>
-              {EQUIPMENT_OPTIONS.map(item => (
-                <label key={item} style={styles.checkboxLabel}>
-                  <input
-                    type="checkbox"
-                    checked={form.equipment.includes(item)}
-                    onChange={() => toggleEquipment(item)}
-                    style={styles.checkbox}
-                  />
-                  {item}
-                </label>
-              ))}
-            </div>
-          </>
-        )}
-
-        {error && <p style={styles.error}>{error}</p>}
-
-        <div style={styles.actions}>
-          {step > 1 && (
-            <button style={styles.backBtn} onClick={() => setStep(s => s - 1)}>
-              Back
-            </button>
+      <div style={styles.container}>
+        <div style={styles.card}>
+          {step === 1 && (
+            <>
+              <h2 style={styles.stepTitle}>Your Sport</h2>
+              <p style={styles.stepDesc}>Tell us what sport you play and your position.</p>
+              <label style={styles.label}>Sport *</label>
+              <input
+                style={styles.input}
+                type="text"
+                placeholder="e.g. Basketball, Soccer, Football…"
+                value={form.sport}
+                onChange={e => set('sport', e.target.value)}
+                autoFocus
+              />
+              <label style={styles.label}>Position</label>
+              <input
+                style={styles.input}
+                type="text"
+                placeholder="e.g. Point Guard, Midfielder, QB…"
+                value={form.position}
+                onChange={e => set('position', e.target.value)}
+              />
+            </>
           )}
-          {step < TOTAL_STEPS ? (
-            <button
-              style={{ ...styles.nextBtn, ...(canAdvance() ? {} : styles.disabled) }}
-              onClick={() => canAdvance() && setStep(s => s + 1)}
-              disabled={!canAdvance()}
-            >
-              Next
-            </button>
-          ) : (
-            <button
-              style={styles.nextBtn}
-              onClick={handleSubmit}
-              disabled={submitting}
-            >
-              {submitting ? 'Submitting…' : 'Submit profile'}
-            </button>
+
+          {step === 2 && (
+            <>
+              <h2 style={styles.stepTitle}>Your Goals</h2>
+              <p style={styles.stepDesc}>What do you want to achieve this offseason?</p>
+              <label style={styles.label}>Goals</label>
+              <textarea
+                style={styles.textarea}
+                placeholder="e.g. Improve my speed, add 20 lbs to my bench, get leaner…"
+                value={form.goals}
+                onChange={e => set('goals', e.target.value)}
+                rows={4}
+              />
+              <label style={styles.label}>How many days per week can you train?</label>
+              <input
+                style={styles.input}
+                type="number"
+                min={1}
+                max={7}
+                placeholder="e.g. 4"
+                value={form.time_per_week}
+                onChange={e => set('time_per_week', e.target.value)}
+              />
+            </>
           )}
+
+          {step === 3 && (
+            <>
+              <h2 style={styles.stepTitle}>Areas to Improve</h2>
+              <p style={styles.stepDesc}>Where do you most want to get better?</p>
+              <label style={styles.label}>Weaknesses</label>
+              <textarea
+                style={styles.textarea}
+                placeholder="e.g. Lateral quickness, upper body strength, conditioning…"
+                value={form.weaknesses}
+                onChange={e => set('weaknesses', e.target.value)}
+                rows={5}
+              />
+            </>
+          )}
+
+          {step === 4 && (
+            <>
+              <h2 style={styles.stepTitle}>Health & Equipment</h2>
+              <p style={styles.stepDesc}>Help your coach plan around your situation.</p>
+              <label style={styles.label}>Injury history</label>
+              <textarea
+                style={styles.textarea}
+                placeholder="Any past or current injuries your coach should know about? (Leave blank if none)"
+                value={form.injury_history}
+                onChange={e => set('injury_history', e.target.value)}
+                rows={3}
+              />
+              <label style={styles.label}>Available equipment</label>
+              <div style={styles.checkboxGrid}>
+                {EQUIPMENT_OPTIONS.map(item => (
+                  <label key={item} style={styles.checkboxLabel}>
+                    <input
+                      type="checkbox"
+                      checked={form.equipment.includes(item)}
+                      onChange={() => toggleEquipment(item)}
+                      style={styles.checkbox}
+                    />
+                    {item}
+                  </label>
+                ))}
+              </div>
+            </>
+          )}
+
+          {error && <p style={styles.error}>{error}</p>}
+
+          <div style={styles.actions}>
+            {step > 1 && (
+              <button style={styles.backBtn} onClick={() => setStep(s => s - 1)}>
+                Back
+              </button>
+            )}
+            {step < TOTAL_STEPS ? (
+              <button
+                style={{ ...styles.nextBtn, opacity: canAdvance() ? 1 : 0.4, cursor: canAdvance() ? 'pointer' : 'not-allowed' }}
+                onClick={() => canAdvance() && setStep(s => s + 1)}
+                disabled={!canAdvance()}
+              >
+                Next →
+              </button>
+            ) : (
+              <button
+                style={styles.nextBtn}
+                onClick={handleSubmit}
+                disabled={submitting}
+              >
+                {submitting ? 'Submitting…' : 'Submit profile →'}
+              </button>
+            )}
+          </div>
         </div>
       </div>
     </div>
@@ -217,25 +231,29 @@ export default function Survey() {
 }
 
 const styles = {
-  center: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: 16 },
+  center: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', fontSize: 16, color: 'var(--text-2)' },
+  page: { minHeight: '100vh', background: 'var(--bg)' },
+
+  topBar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid var(--border)' },
+  topBarRight: { display: 'flex', alignItems: 'center', gap: 16 },
+  stepLabel: { fontSize: 13, color: 'var(--text-3)' },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+
+  progressBar: { height: 3, background: 'var(--border)' },
+  progressFill: { height: '100%', background: BLUE, transition: 'width 0.3s ease' },
+
   container: { maxWidth: 540, margin: '0 auto', padding: '32px 20px' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 12 },
-  brand: { fontSize: 22, fontWeight: 700 },
-  stepLabel: { fontSize: 13, color: '#888' },
-  progressBar: { height: 4, background: '#e5e5e5', borderRadius: 2, marginBottom: 28 },
-  progressFill: { height: '100%', background: '#1a1a1a', borderRadius: 2, transition: 'width 0.3s ease' },
-  card: { background: '#fff', border: '1px solid #e5e5e5', borderRadius: 12, padding: 28 },
-  stepTitle: { fontSize: 20, fontWeight: 700, marginBottom: 6 },
-  stepDesc: { fontSize: 14, color: '#666', marginBottom: 24 },
-  label: { display: 'block', fontSize: 13, fontWeight: 600, color: '#444', marginBottom: 6, marginTop: 16 },
-  input: { width: '100%', padding: '10px 12px', fontSize: 15, borderRadius: 6, border: '1px solid #ccc', boxSizing: 'border-box' },
-  textarea: { width: '100%', padding: '10px 12px', fontSize: 15, borderRadius: 6, border: '1px solid #ccc', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit' },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 32 },
+  stepTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
+  stepDesc: { fontSize: 14, color: 'var(--text-2)', marginBottom: 8 },
+  label: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, marginTop: 20 },
+  input: { width: '100%', padding: '11px 14px', fontSize: 15, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', boxSizing: 'border-box', outline: 'none' },
+  textarea: { width: '100%', padding: '11px 14px', fontSize: 15, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
   checkboxGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '10px 16px', marginTop: 4 },
-  checkboxLabel: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' },
-  checkbox: { width: 16, height: 16, cursor: 'pointer' },
-  actions: { display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 28 },
-  backBtn: { padding: '10px 20px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' },
-  nextBtn: { padding: '10px 24px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer' },
-  disabled: { opacity: 0.4, cursor: 'not-allowed' },
-  error: { color: '#c0392b', fontSize: 13, marginTop: 12 },
+  checkboxLabel: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer', color: 'var(--text)' },
+  checkbox: { width: 16, height: 16, cursor: 'pointer', accentColor: BLUE },
+  actions: { display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 32 },
+  backBtn: { padding: '10px 20px', fontSize: 14, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card-inner)', color: 'var(--text)', cursor: 'pointer', fontWeight: 500 },
+  nextBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  error: { color: '#c73820', fontSize: 13, marginTop: 16 },
 }

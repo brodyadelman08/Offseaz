@@ -1,10 +1,19 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
+
+const ORANGE = '#F75709'
+
+function today() {
+  return new Date().toISOString().split('T')[0]
+}
 
 export default function BlueprintDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { mode, toggle } = useTheme()
 
   const [blueprint, setBlueprint] = useState(null)
   const [assignments, setAssignments] = useState([])
@@ -18,10 +27,6 @@ export default function BlueprintDetail() {
   const [assigning, setAssigning] = useState(false)
   const [assignError, setAssignError] = useState('')
   const [assignSuccess, setAssignSuccess] = useState('')
-
-  function today() {
-    return new Date().toISOString().split('T')[0]
-  }
 
   useEffect(() => {
     Promise.all([
@@ -47,7 +52,6 @@ export default function BlueprintDetail() {
         starts_on: startsOn,
       })
       setAssignSuccess(assignTo === 'team' ? 'Plan assigned to entire team.' : 'Plan assigned to athlete.')
-      // Refresh assignments
       const res = await api.get(`/api/blueprints/${id}`)
       setAssignments(res.data.assignments || [])
     } catch (err) {
@@ -62,10 +66,24 @@ export default function BlueprintDetail() {
 
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => navigate('/coach')}>← Back to dashboard</button>
+      {/* Header */}
+      <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <Wordmark size={20} />
+          <span style={styles.roleChip}>Coach</span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button style={styles.backBtn} onClick={() => navigate('/coach')}>← Dashboard</button>
+        </div>
+      </div>
 
+      {/* Blueprint title */}
       <div style={styles.titleRow}>
         <div>
+          <p style={styles.breadcrumb}>Blueprint</p>
           <h1 style={styles.pageTitle}>{blueprint.title}</h1>
           {blueprint.description && <p style={styles.pageDesc}>{blueprint.description}</p>}
           <p style={styles.meta}>{blueprint.num_weeks} {blueprint.num_weeks === 1 ? 'week' : 'weeks'}</p>
@@ -74,7 +92,7 @@ export default function BlueprintDetail() {
 
       {/* Weeks accordion */}
       <div style={styles.card}>
-        <h2 style={styles.sectionTitle}>Plan content</h2>
+        <p style={styles.cardLabel}>Plan Content</p>
         {blueprint.weeks.map(week => (
           <div key={week.week_number} style={styles.weekBlock}>
             <button
@@ -108,8 +126,8 @@ export default function BlueprintDetail() {
       </div>
 
       {/* Assignment panel */}
-      <div style={{ ...styles.card, marginTop: 20 }}>
-        <h2 style={styles.sectionTitle}>Assign this plan</h2>
+      <div style={{ ...styles.card, marginTop: 16 }}>
+        <p style={styles.cardLabel}>Assign This Plan</p>
 
         <form onSubmit={handleAssign} style={styles.assignForm}>
           <div style={styles.radioGroup}>
@@ -119,8 +137,9 @@ export default function BlueprintDetail() {
                 value="team"
                 checked={assignTo === 'team'}
                 onChange={() => setAssignTo('team')}
+                style={{ accentColor: ORANGE }}
               />
-              Entire team
+              <span>Entire team</span>
             </label>
             <label style={styles.radioLabel}>
               <input
@@ -128,8 +147,9 @@ export default function BlueprintDetail() {
                 value="athlete"
                 checked={assignTo === 'athlete'}
                 onChange={() => setAssignTo('athlete')}
+                style={{ accentColor: ORANGE }}
               />
-              Specific athlete
+              <span>Specific athlete</span>
             </label>
           </div>
 
@@ -147,20 +167,22 @@ export default function BlueprintDetail() {
             </select>
           )}
 
-          <label style={styles.inputLabel}>Start date</label>
-          <input
-            style={styles.input}
-            type="date"
-            value={startsOn}
-            onChange={e => setStartsOn(e.target.value)}
-            required
-          />
+          <div>
+            <label style={styles.inputLabel}>Start date</label>
+            <input
+              style={styles.input}
+              type="date"
+              value={startsOn}
+              onChange={e => setStartsOn(e.target.value)}
+              required
+            />
+          </div>
 
-          {assignError && <p style={styles.error}>{assignError}</p>}
-          {assignSuccess && <p style={styles.success}>{assignSuccess}</p>}
+          {assignError && <div style={styles.errorBox}>{assignError}</div>}
+          {assignSuccess && <div style={styles.successBox}>{assignSuccess}</div>}
 
           <button style={styles.primaryBtn} type="submit" disabled={assigning}>
-            {assigning ? 'Assigning…' : 'Assign plan'}
+            {assigning ? 'Assigning…' : 'Assign plan →'}
           </button>
         </form>
 
@@ -175,9 +197,7 @@ export default function BlueprintDetail() {
                     {a.athlete_id ? ' (individual)' : ' (team)'}
                   </span>
                 </span>
-                <span style={styles.assignmentDate}>
-                  Starts {a.starts_on}
-                </span>
+                <span style={styles.assignmentDate}>Starts {a.starts_on}</span>
               </div>
             ))}
           </div>
@@ -188,38 +208,50 @@ export default function BlueprintDetail() {
 }
 
 const styles = {
-  center: { display: 'flex', justifyContent: 'center', paddingTop: 120, fontSize: 16 },
-  container: { maxWidth: 720, margin: '0 auto', padding: '32px 20px' },
-  backLink: { background: 'none', border: 'none', color: '#555', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 20, display: 'block' },
+  center: { display: 'flex', justifyContent: 'center', paddingTop: 120, fontSize: 15, color: 'var(--text-2)' },
+  container: { maxWidth: 740, margin: '0 auto', padding: '0 20px 60px' },
+
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+
   titleRow: { marginBottom: 24 },
-  pageTitle: { fontSize: 26, fontWeight: 700, marginBottom: 4 },
-  pageDesc: { color: '#555', fontSize: 15, marginBottom: 4 },
-  meta: { color: '#999', fontSize: 13 },
-  card: { background: '#f9f9f9', border: '1px solid #e5e5e5', borderRadius: 10, padding: 24 },
-  sectionTitle: { fontSize: 17, fontWeight: 700, marginBottom: 16 },
-  weekBlock: { borderBottom: '1px solid #e5e5e5' },
+  breadcrumb: { fontSize: 12, fontWeight: 600, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.6, margin: '0 0 6px' },
+  pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 4 },
+  pageDesc: { color: 'var(--text-2)', fontSize: 15, marginBottom: 4 },
+  meta: { color: 'var(--text-3)', fontSize: 13 },
+
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
+  cardLabel: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 16px' },
+
+  weekBlock: { borderBottom: '1px solid var(--border-light)' },
   weekToggle: { width: '100%', display: 'flex', alignItems: 'center', gap: 10, padding: '12px 0', background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left' },
-  weekLabel: { fontSize: 14, fontWeight: 700, minWidth: 60 },
-  weekObjective: { flex: 1, fontSize: 13, color: '#555', fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
-  weekChevron: { fontSize: 11, color: '#aaa' },
+  weekLabel: { fontSize: 14, fontWeight: 700, color: 'var(--text)', minWidth: 60 },
+  weekObjective: { flex: 1, fontSize: 13, color: 'var(--text-2)', fontStyle: 'italic', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  weekChevron: { fontSize: 11, color: 'var(--text-3)' },
   weekContent: { paddingBottom: 12 },
-  emptyWeek: { color: '#bbb', fontSize: 13, padding: '8px 0' },
-  sessionCard: { background: '#fff', border: '1px solid #e5e5e5', borderRadius: 8, padding: 12, marginBottom: 8 },
-  sessionMeta: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 4 },
-  sessionDay: { fontSize: 11, fontWeight: 700, color: '#888', textTransform: 'uppercase' },
-  sessionFocus: { fontSize: 14, fontWeight: 600 },
-  sessionDesc: { fontSize: 13, color: '#555', margin: 0 },
-  assignForm: { display: 'flex', flexDirection: 'column', gap: 12 },
+  emptyWeek: { color: 'var(--text-3)', fontSize: 13, padding: '8px 0' },
+  sessionCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 8, padding: 14, marginBottom: 8 },
+  sessionMeta: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 },
+  sessionDay: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase' },
+  sessionFocus: { fontSize: 14, fontWeight: 700, color: 'var(--text)' },
+  sessionDesc: { fontSize: 13, color: 'var(--text-2)', margin: 0, lineHeight: 1.5 },
+
+  assignForm: { display: 'flex', flexDirection: 'column', gap: 14 },
   radioGroup: { display: 'flex', gap: 24 },
-  radioLabel: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer' },
-  inputLabel: { fontSize: 13, fontWeight: 600, color: '#444', marginBottom: -4 },
-  input: { padding: '10px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', width: '100%', boxSizing: 'border-box' },
-  primaryBtn: { padding: '10px 24px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer', alignSelf: 'flex-start' },
-  error: { color: '#c0392b', fontSize: 13 },
-  success: { color: '#2e7d32', fontSize: 13 },
-  assignedLabel: { fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase', marginBottom: 8 },
-  assignmentRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderTop: '1px solid #f0f0f0', fontSize: 14 },
-  assignmentWho: { fontWeight: 600 },
-  assignmentType: { fontWeight: 400, color: '#888' },
-  assignmentDate: { color: '#888', fontSize: 13 },
+  radioLabel: { display: 'flex', alignItems: 'center', gap: 8, fontSize: 14, cursor: 'pointer', color: 'var(--text)' },
+  inputLabel: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6 },
+  input: { padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', width: '100%', boxSizing: 'border-box', outline: 'none' },
+  primaryBtn: { padding: '11px 24px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', alignSelf: 'flex-start', letterSpacing: 0.2 },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13 },
+  successBox: { background: '#e8f5e9', border: '1px solid #a5d6a7', color: '#2e7d32', borderRadius: 8, padding: '10px 14px', fontSize: 13 },
+
+  assignedLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 10 },
+  assignmentRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '8px 0', borderTop: '1px solid var(--border-light)', fontSize: 14 },
+  assignmentWho: { fontWeight: 600, color: 'var(--text)' },
+  assignmentType: { fontWeight: 400, color: 'var(--text-3)' },
+  assignmentDate: { color: 'var(--text-3)', fontSize: 13 },
 }

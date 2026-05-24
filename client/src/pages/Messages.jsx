@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
+
+const ORANGE = '#F75709'
+const BLUE = '#308EBD'
 
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -19,7 +24,7 @@ function CoachMessages() {
   const [messages, setMessages] = useState([])
   const [athletes, setAthletes] = useState([])
   const [loading, setLoading] = useState(true)
-  const [type, setType] = useState('group')      // 'group' | 'individual'
+  const [type, setType] = useState('group')
   const [recipientId, setRecipientId] = useState('')
   const [body, setBody] = useState('')
   const [sending, setSending] = useState(false)
@@ -62,20 +67,19 @@ function CoachMessages() {
 
   return (
     <>
-      {/* Compose */}
       <div style={styles.card}>
         <p style={styles.cardLabel}>Compose</p>
         <div style={styles.typeRow}>
           <button
             type="button"
-            style={{ ...styles.typeBtn, ...(type === 'group' ? styles.typeBtnActive : {}) }}
+            style={{ ...styles.typeBtn, ...(type === 'group' ? { ...styles.typeBtnActive, borderColor: ORANGE, background: ORANGE } : {}) }}
             onClick={() => { setType('group'); setRecipientId('') }}
           >
             Group announcement
           </button>
           <button
             type="button"
-            style={{ ...styles.typeBtn, ...(type === 'individual' ? styles.typeBtnActive : {}) }}
+            style={{ ...styles.typeBtn, ...(type === 'individual' ? { ...styles.typeBtnActive, borderColor: ORANGE, background: ORANGE } : {}) }}
             onClick={() => setType('individual')}
           >
             Individual message
@@ -106,17 +110,16 @@ function CoachMessages() {
             required
           />
 
-          {error && <p style={styles.error}>{error}</p>}
+          {error && <div style={styles.errorBox}>{error}</div>}
 
           <div style={styles.sendRow}>
-            <button style={styles.sendBtn} type="submit" disabled={sending}>
+            <button style={{ ...styles.sendBtn, background: ORANGE }} type="submit" disabled={sending}>
               {sending ? 'Sending…' : 'Send message →'}
             </button>
           </div>
         </form>
       </div>
 
-      {/* Sent history */}
       <div style={{ ...styles.card, marginTop: 16 }}>
         <div style={styles.historyHeader}>
           <p style={styles.cardLabel}>Sent</p>
@@ -132,7 +135,7 @@ function CoachMessages() {
         ) : (
           <div style={styles.msgList}>
             {messages.map(m => (
-              <div key={m.id} style={{ ...styles.msgCard, borderLeftColor: m.recipient_id ? '#6b7280' : '#1a1a1a' }}>
+              <div key={m.id} style={{ ...styles.msgCard, borderLeftColor: m.recipient_id ? '#6b7280' : ORANGE }}>
                 <div style={styles.msgMeta}>
                   <span style={styles.msgTo}>
                     To: {m.recipient_name ? m.recipient_name : 'Everyone'}
@@ -167,17 +170,25 @@ function AthleteMessages() {
       {loading ? (
         <p style={styles.empty}>Loading…</p>
       ) : messages.length === 0 ? (
-        <p style={styles.empty}>No messages yet. Your coach hasn't sent anything.</p>
+        <div style={styles.emptyState}>
+          <p style={{ fontSize: 32, marginBottom: 12 }}>💬</p>
+          <p style={styles.emptyTitle}>No messages yet</p>
+          <p style={styles.empty}>Your coach hasn't sent anything yet.</p>
+        </div>
       ) : (
         <div style={styles.msgList}>
           {messages.map(m => {
             const isIndividual = m.recipient_id != null
             return (
-              <div key={m.id} style={{ ...styles.msgCard, borderLeftColor: isIndividual ? '#6b7280' : '#1a1a1a' }}>
+              <div key={m.id} style={{ ...styles.msgCard, borderLeftColor: isIndividual ? BLUE : '#6b7280' }}>
                 <div style={styles.msgMeta}>
                   <span style={styles.msgSender}>{m.sender_name}</span>
-                  <span style={{ ...styles.msgTag, background: isIndividual ? '#f1f5f9' : '#f0f0f0', color: isIndividual ? '#475569' : '#555' }}>
-                    {isIndividual ? 'You' : 'Everyone'}
+                  <span style={{
+                    ...styles.msgTag,
+                    background: isIndividual ? 'rgba(48,142,189,0.1)' : 'var(--border)',
+                    color: isIndividual ? BLUE : 'var(--text-3)',
+                  }}>
+                    {isIndividual ? '⚡ You' : '📢 Everyone'}
                   </span>
                   <span style={styles.msgTime}>{timeAgo(m.sent_at)}</span>
                 </div>
@@ -195,14 +206,33 @@ function AthleteMessages() {
 
 export default function Messages() {
   const { profile } = useAuth()
+  const { mode, toggle } = useTheme()
   const navigate = useNavigate()
   const isCoach = profile?.role === 'coach'
+  const accent = isCoach ? ORANGE : BLUE
 
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => navigate(isCoach ? '/coach' : '/athlete')}>
-        ← Back to dashboard
-      </button>
+      <div style={styles.header}>
+        <div style={styles.headerLeft}>
+          <Wordmark size={20} />
+          <span style={{ ...styles.roleChip, background: accent }}>
+            {isCoach ? 'Coach' : 'Athlete'}
+          </span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button
+            style={styles.backBtn}
+            onClick={() => navigate(isCoach ? '/coach' : '/athlete')}
+          >
+            ← Dashboard
+          </button>
+        </div>
+      </div>
+
       <h1 style={styles.pageTitle}>Messages</h1>
 
       {isCoach ? <CoachMessages /> : <AthleteMessages />}
@@ -211,35 +241,44 @@ export default function Messages() {
 }
 
 const styles = {
-  container:      { maxWidth: 640, margin: '0 auto', padding: '32px 20px' },
-  backLink:       { background: 'none', border: 'none', color: '#555', fontSize: 14, cursor: 'pointer', padding: 0, marginBottom: 20, display: 'block' },
-  pageTitle:      { fontSize: 26, fontWeight: 700, marginBottom: 20 },
+  container: { maxWidth: 660, margin: '0 auto', padding: '0 20px 60px' },
 
-  card:           { background: '#f9f9f9', border: '1px solid #e5e5e5', borderRadius: 10, padding: 24 },
-  cardLabel:      { fontSize: 12, fontWeight: 700, color: '#888', textTransform: 'uppercase', letterSpacing: '.5px', margin: '0 0 14px' },
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
 
-  typeRow:        { display: 'flex', gap: 10, marginBottom: 14 },
-  typeBtn:        { flex: 1, padding: '9px 0', fontSize: 13, fontWeight: 600, borderRadius: 6, border: '2px solid #ddd', background: '#fff', cursor: 'pointer', color: '#555' },
-  typeBtnActive:  { borderColor: '#1a1a1a', background: '#1a1a1a', color: '#fff' },
+  pageTitle: { fontSize: 24, fontWeight: 700, color: 'var(--text)', marginBottom: 24 },
 
-  composeForm:    { display: 'flex', flexDirection: 'column', gap: 10 },
-  select:         { padding: '10px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', background: '#fff' },
-  textarea:       { padding: '10px 12px', fontSize: 14, borderRadius: 6, border: '1px solid #ccc', resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.5 },
-  error:          { color: '#c0392b', fontSize: 13, margin: 0 },
-  sendRow:        { display: 'flex', justifyContent: 'flex-end' },
-  sendBtn:        { padding: '10px 20px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer' },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
+  cardLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 14px' },
 
-  historyHeader:  { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
-  msgCount:       { fontSize: 13, color: '#aaa' },
+  typeRow: { display: 'flex', gap: 10, marginBottom: 14 },
+  typeBtn: { flex: 1, padding: '9px 0', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card-inner)', cursor: 'pointer', color: 'var(--text-2)', transition: 'all 0.15s' },
+  typeBtnActive: { color: '#fff' },
 
-  msgList:        { display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 },
-  msgCard:        { background: '#fff', border: '1px solid #e5e5e5', borderLeft: '4px solid #1a1a1a', borderRadius: '0 8px 8px 0', padding: '12px 16px' },
-  msgMeta:        { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 6, flexWrap: 'wrap' },
-  msgTo:          { fontSize: 13, fontWeight: 700, color: '#1a1a1a' },
-  msgSender:      { fontSize: 13, fontWeight: 700, color: '#1a1a1a' },
-  msgTag:         { fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10, textTransform: 'uppercase', letterSpacing: '.3px' },
-  msgTime:        { fontSize: 12, color: '#aaa', marginLeft: 'auto' },
-  msgBody:        { fontSize: 14, color: '#333', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' },
+  composeForm: { display: 'flex', flexDirection: 'column', gap: 10 },
+  select: { padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', width: '100%' },
+  textarea: { padding: '11px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.5, width: '100%', boxSizing: 'border-box', outline: 'none' },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13 },
+  sendRow: { display: 'flex', justifyContent: 'flex-end' },
+  sendBtn: { padding: '10px 20px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
 
-  empty:          { color: '#aaa', fontSize: 14 },
+  historyHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
+  msgCount: { fontSize: 13, color: 'var(--text-3)' },
+
+  msgList: { display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 },
+  msgCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderLeft: '3px solid', borderRadius: '0 10px 10px 0', padding: '12px 16px' },
+  msgMeta: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' },
+  msgTo: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },
+  msgSender: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },
+  msgTag: { fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10, textTransform: 'uppercase', letterSpacing: 0.3 },
+  msgTime: { fontSize: 12, color: 'var(--text-3)', marginLeft: 'auto' },
+  msgBody: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' },
+
+  emptyState: { textAlign: 'center', padding: '24px 0' },
+  emptyTitle: { fontSize: 16, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
+  empty: { color: 'var(--text-3)', fontSize: 14 },
 }

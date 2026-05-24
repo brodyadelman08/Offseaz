@@ -1,10 +1,15 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTheme } from '../context/ThemeContext'
+import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
+
+const BLUE = '#308EBD'
 
 export default function AthleteDashboard() {
   const { profile, signOut } = useAuth()
+  const { mode, toggle } = useTheme()
   const navigate = useNavigate()
   const [team, setTeam] = useState(null)
   const [survey, setSurvey] = useState(undefined)
@@ -45,27 +50,41 @@ export default function AthleteDashboard() {
 
   return (
     <div style={styles.container}>
+      {/* Header */}
       <div style={styles.header}>
-        <h1 style={styles.title}>Athlete Dashboard</h1>
-        <button onClick={signOut} style={styles.signOut}>Sign out</button>
+        <div style={styles.headerLeft}>
+          <Wordmark size={22} />
+          <span style={styles.roleChip}>Athlete</span>
+        </div>
+        <div style={styles.headerRight}>
+          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
+            {mode === 'dark' ? '☀' : '☾'}
+          </button>
+          <button onClick={signOut} style={styles.signOutBtn}>Sign out</button>
+        </div>
       </div>
 
-      <p style={styles.welcome}>Welcome, {profile?.full_name || 'Athlete'}</p>
+      <div style={styles.welcome}>
+        <h1 style={styles.welcomeTitle}>
+          Let's get to work, {profile?.full_name?.split(' ')[0] || 'Athlete'} ⚡
+        </h1>
+        <p style={styles.welcomeSub}>Stay consistent. Trust the process.</p>
+      </div>
 
       {loading ? (
-        <p>Loading…</p>
+        <p style={styles.loadingText}>Loading…</p>
       ) : (
         <>
           {/* Team card */}
           {team ? (
             <div style={styles.card}>
-              <p style={styles.label}>Your team</p>
+              <p style={styles.cardLabel}>Your Team</p>
               <p style={styles.teamName}>{team.name}</p>
             </div>
           ) : (
             <div style={styles.card}>
-              <p style={styles.label}>Join a team</p>
-              <p style={styles.noTeam}>Enter the code your coach shared with you.</p>
+              <p style={styles.cardLabel}>Join a Team</p>
+              <p style={styles.joinDesc}>Enter the code your coach shared with you.</p>
               <form onSubmit={handleJoinTeam} style={styles.joinForm}>
                 <input
                   style={styles.joinInput}
@@ -89,24 +108,24 @@ export default function AthleteDashboard() {
             </div>
           )}
 
-          {/* Survey status card */}
-          <div style={{ ...styles.card, marginTop: 16 }}>
+          {/* Survey card */}
+          <div style={{ ...styles.card, marginTop: 12 }}>
             {survey ? (
               <div style={styles.surveyComplete}>
-                <span style={styles.checkmark}>✓</span>
+                <div style={styles.checkmark}>✓</div>
                 <div>
                   <p style={styles.surveyCompleteTitle}>Profile complete</p>
                   <p style={styles.surveyCompleteSub}>
                     {survey.sport}{survey.position ? ` · ${survey.position}` : ''}
-                    {survey.time_per_week ? ` · ${survey.time_per_week}h/week` : ''}
+                    {survey.time_per_week ? ` · ${survey.time_per_week} days/wk` : ''}
                   </p>
                 </div>
               </div>
             ) : (
-              <div style={styles.surveyPending}>
+              <div style={styles.actionRow}>
                 <div>
-                  <p style={styles.surveyPendingTitle}>Complete your athlete profile</p>
-                  <p style={styles.surveyPendingSub}>Help your coach build the right plan for you.</p>
+                  <p style={styles.actionTitle}>Complete your athlete profile</p>
+                  <p style={styles.actionSub}>Help your coach build the right plan for you.</p>
                 </div>
                 <button style={styles.actionBtn} onClick={() => navigate('/survey')}>
                   Start survey →
@@ -116,11 +135,11 @@ export default function AthleteDashboard() {
           </div>
 
           {/* Messages card */}
-          <div style={{ ...styles.card, marginTop: 16 }}>
-            <div style={styles.surveyPending}>
+          <div style={{ ...styles.card, marginTop: 12 }}>
+            <div style={styles.actionRow}>
               <div>
-                <p style={styles.surveyPendingTitle}>Messages</p>
-                <p style={styles.surveyPendingSub}>View announcements and messages from your coach.</p>
+                <p style={styles.actionTitle}>Messages</p>
+                <p style={styles.actionSub}>View announcements and messages from your coach.</p>
               </div>
               <button style={styles.actionBtn} onClick={() => navigate('/messages')}>
                 View →
@@ -129,11 +148,11 @@ export default function AthleteDashboard() {
           </div>
 
           {/* Training plan card */}
-          <div style={{ ...styles.card, marginTop: 16 }}>
+          <div style={{ ...styles.card, marginTop: 12 }}>
             {plan ? (
-              <div style={styles.planRow}>
+              <div style={styles.actionRow}>
                 <div>
-                  <p style={styles.label}>Training plan</p>
+                  <p style={styles.cardLabel}>Training Plan</p>
                   <p style={styles.planTitle}>{plan.title}</p>
                   <p style={styles.planMeta}>{plan.num_weeks}-week plan</p>
                 </div>
@@ -142,7 +161,10 @@ export default function AthleteDashboard() {
                 </button>
               </div>
             ) : (
-              <p style={styles.noPlan}>Your coach is setting up your training plan. Check back soon.</p>
+              <div>
+                <p style={styles.cardLabel}>Training Plan</p>
+                <p style={styles.noPlan}>Your coach is setting up your training plan. Check back soon.</p>
+              </div>
             )}
           </div>
         </>
@@ -152,29 +174,42 @@ export default function AthleteDashboard() {
 }
 
 const styles = {
-  container: { maxWidth: 600, margin: '0 auto', padding: '40px 20px' },
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
-  title: { fontSize: 24, fontWeight: 700 },
-  signOut: { fontSize: 13, padding: '6px 12px', borderRadius: 6, border: '1px solid #ccc', background: '#fff', cursor: 'pointer' },
-  welcome: { color: '#555', marginBottom: 32 },
-  card: { background: '#f9f9f9', borderRadius: 10, padding: 24, border: '1px solid #e5e5e5' },
-  label: { fontSize: 12, fontWeight: 600, color: '#888', textTransform: 'uppercase', marginBottom: 6 },
-  teamName: { fontSize: 20, fontWeight: 600 },
-  noTeam: { color: '#555', fontSize: 14, marginBottom: 16 },
-  joinForm: { display: 'flex', gap: 8, marginTop: 4 },
-  joinInput: { flex: 1, padding: '10px 12px', fontSize: 15, fontFamily: 'monospace', letterSpacing: 2, borderRadius: 6, border: '1px solid #ccc', textTransform: 'uppercase' },
-  joinBtn: { padding: '10px 20px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' },
-  joinError: { color: '#c0392b', fontSize: 13, marginTop: 10 },
+  container: { maxWidth: 640, margin: '0 auto', padding: '0 20px 60px' },
+
+  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
+  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  roleChip: { fontSize: 11, fontWeight: 700, background: BLUE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
+  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
+  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  signOutBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+
+  welcome: { marginBottom: 28 },
+  welcomeTitle: { fontSize: 24, fontWeight: 700, color: 'var(--text)', marginBottom: 4 },
+  welcomeSub: { fontSize: 14, color: 'var(--text-2)', fontStyle: 'italic' },
+
+  loadingText: { color: 'var(--text-3)', fontSize: 15 },
+
+  card: { background: 'var(--card)', borderRadius: 12, padding: 24, border: '1px solid var(--border)' },
+  cardLabel: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 8px' },
+  teamName: { fontSize: 20, fontWeight: 700, color: 'var(--text)' },
+
+  joinDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 16 },
+  joinForm: { display: 'flex', gap: 8 },
+  joinInput: { flex: 1, padding: '10px 14px', fontSize: 16, fontFamily: 'monospace', letterSpacing: 3, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', textTransform: 'uppercase', outline: 'none' },
+  joinBtn: { padding: '10px 20px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' },
+  joinError: { color: '#c73820', fontSize: 13, marginTop: 10 },
+
   surveyComplete: { display: 'flex', alignItems: 'center', gap: 16 },
-  checkmark: { fontSize: 24, color: '#2e7d32', background: '#e8f5e9', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  surveyCompleteTitle: { fontWeight: 600, fontSize: 15, color: '#2e7d32', margin: 0 },
-  surveyCompleteSub: { fontSize: 13, color: '#666', margin: '4px 0 0' },
-  surveyPending: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
-  surveyPendingTitle: { fontWeight: 600, fontSize: 15, margin: 0 },
-  surveyPendingSub: { fontSize: 13, color: '#666', margin: '4px 0 0' },
-  planRow: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
-  planTitle: { fontWeight: 700, fontSize: 16, margin: '4px 0 2px' },
-  planMeta: { fontSize: 13, color: '#888', margin: 0 },
-  noPlan: { color: '#888', fontSize: 14 },
-  actionBtn: { padding: '10px 18px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 },
+  checkmark: { width: 40, height: 40, borderRadius: '50%', background: 'rgba(48,142,189,0.12)', color: BLUE, fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  surveyCompleteTitle: { fontWeight: 700, fontSize: 15, color: BLUE, margin: '0 0 2px' },
+  surveyCompleteSub: { fontSize: 13, color: 'var(--text-2)', margin: 0 },
+
+  actionRow: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
+  actionTitle: { fontWeight: 700, fontSize: 15, color: 'var(--text)', margin: '0 0 3px' },
+  actionSub: { fontSize: 13, color: 'var(--text-2)', margin: 0 },
+  actionBtn: { padding: '10px 18px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 },
+
+  planTitle: { fontWeight: 700, fontSize: 16, color: 'var(--text)', margin: '2px 0' },
+  planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
+  noPlan: { color: 'var(--text-3)', fontSize: 14 },
 }
