@@ -39,7 +39,7 @@ export default function Register() {
     }
 
     try {
-      await api.post('/api/auth/register', { role, full_name: fullName })
+      await api.post('/api/auth/register', { userId: data.user.id, role, full_name: fullName })
 
       if (inviteCode && role === 'athlete') {
         await api.post('/api/teams/join', { invite_code: inviteCode })
