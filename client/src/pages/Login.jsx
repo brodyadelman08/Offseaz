@@ -27,7 +27,8 @@ export default function Login() {
       const res = await api.get('/api/auth/profile')
       const role = res.data.profile?.role
       navigate(role === 'coach' ? '/coach' : '/athlete')
-    } catch {
+    } catch (err) {
+      console.error('Login error:', err)
       setError('Could not load profile. Please try again.')
       setLoading(false)
     }
