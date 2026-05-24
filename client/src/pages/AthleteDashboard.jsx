@@ -10,6 +10,9 @@ export default function AthleteDashboard() {
   const [survey, setSurvey] = useState(undefined)
   const [plan, setPlan] = useState(undefined)
   const [loading, setLoading] = useState(true)
+  const [joinCode, setJoinCode] = useState('')
+  const [joining, setJoining] = useState(false)
+  const [joinError, setJoinError] = useState('')
 
   useEffect(() => {
     Promise.all([
@@ -22,6 +25,23 @@ export default function AthleteDashboard() {
       setPlan(planData)
     }).finally(() => setLoading(false))
   }, [])
+
+  async function handleJoinTeam(e) {
+    e.preventDefault()
+    const code = joinCode.trim().toLowerCase()
+    if (!code) return
+    setJoinError('')
+    setJoining(true)
+    try {
+      const res = await api.post('/api/teams/join', { invite_code: code })
+      setTeam(res.data.team)
+      setJoinCode('')
+    } catch (err) {
+      setJoinError(err.response?.data?.error || 'Failed to join team. Check the code and try again.')
+    } finally {
+      setJoining(false)
+    }
+  }
 
   return (
     <div style={styles.container}>
@@ -44,7 +64,28 @@ export default function AthleteDashboard() {
             </div>
           ) : (
             <div style={styles.card}>
-              <p style={styles.noTeam}>You haven't joined a team yet. Ask your coach for an invite link.</p>
+              <p style={styles.label}>Join a team</p>
+              <p style={styles.noTeam}>Enter the code your coach shared with you.</p>
+              <form onSubmit={handleJoinTeam} style={styles.joinForm}>
+                <input
+                  style={styles.joinInput}
+                  type="text"
+                  placeholder="e.g. 2FB9A616"
+                  value={joinCode.toUpperCase()}
+                  onChange={e => setJoinCode(e.target.value)}
+                  maxLength={8}
+                  autoCapitalize="characters"
+                  spellCheck={false}
+                />
+                <button
+                  type="submit"
+                  style={styles.joinBtn}
+                  disabled={joining || !joinCode.trim()}
+                >
+                  {joining ? 'Joining…' : 'Join'}
+                </button>
+              </form>
+              {joinError && <p style={styles.joinError}>{joinError}</p>}
             </div>
           )}
 
@@ -119,7 +160,11 @@ const styles = {
   card: { background: '#f9f9f9', borderRadius: 10, padding: 24, border: '1px solid #e5e5e5' },
   label: { fontSize: 12, fontWeight: 600, color: '#888', textTransform: 'uppercase', marginBottom: 6 },
   teamName: { fontSize: 20, fontWeight: 600 },
-  noTeam: { color: '#555', fontSize: 14 },
+  noTeam: { color: '#555', fontSize: 14, marginBottom: 16 },
+  joinForm: { display: 'flex', gap: 8, marginTop: 4 },
+  joinInput: { flex: 1, padding: '10px 12px', fontSize: 15, fontFamily: 'monospace', letterSpacing: 2, borderRadius: 6, border: '1px solid #ccc', textTransform: 'uppercase' },
+  joinBtn: { padding: '10px 20px', fontSize: 14, fontWeight: 600, borderRadius: 6, border: 'none', background: '#1a1a1a', color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap' },
+  joinError: { color: '#c0392b', fontSize: 13, marginTop: 10 },
   surveyComplete: { display: 'flex', alignItems: 'center', gap: 16 },
   checkmark: { fontSize: 24, color: '#2e7d32', background: '#e8f5e9', borderRadius: '50%', width: 40, height: 40, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   surveyCompleteTitle: { fontWeight: 600, fontSize: 15, color: '#2e7d32', margin: 0 },
