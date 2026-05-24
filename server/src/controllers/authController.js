@@ -35,8 +35,29 @@ async function profile(req, res) {
     const data = await getProfile(req.user.id)
     res.json({ profile: data })
   } catch (err) {
+    if (err.code === 'PGRST116') {
+      // Profile row is missing — attempt to auto-create it from the
+      // user_metadata stored in Supabase auth at sign-up time.
+      const meta = req.user.user_metadata || {}
+      const role = meta.role
+      const full_name = meta.full_name || ''
+
+      if (!role || !['coach', 'athlete'].includes(role)) {
+        console.error('[authController] profile missing and no valid role in user_metadata | userId:', req.user.id)
+        return res.status(404).json({ error: 'Profile not found' })
+      }
+
+      try {
+        const created = await createProfile(req.user.id, role, full_name)
+        console.log('[authController] auto-created missing profile | userId:', req.user.id, '| role:', role)
+        return res.json({ profile: created })
+      } catch (createErr) {
+        console.error('[authController] auto-create profile failed:', createErr.message, '| userId:', req.user.id)
+        return res.status(500).json({ error: createErr.message })
+      }
+    }
+
     console.error('[authController] getProfile error:', err.message, '| code:', err.code, '| userId:', req.user.id)
-    if (err.code === 'PGRST116') return res.status(404).json({ error: 'Profile not found' })
     res.status(500).json({ error: err.message })
   }
 }
