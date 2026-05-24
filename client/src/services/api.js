@@ -1,8 +1,13 @@
 import axios from 'axios'
 import { supabase } from './supabase'
 
+const API_URL = import.meta.env.VITE_API_URL
+if (!API_URL) {
+  throw new Error('VITE_API_URL is not set. Add it to your .env file (local) or Vercel environment variables (production).')
+}
+
 const api = axios.create({
-  baseURL: import.meta.env.VITE_API_URL || 'http://localhost:3000',
+  baseURL: API_URL,
 })
 
 api.interceptors.request.use(async (config) => {
