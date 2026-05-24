@@ -1,7 +1,5 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
-import { useTheme } from '../context/ThemeContext'
-import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
 
 const BLUE = '#308EBD'
@@ -22,7 +20,6 @@ const TOTAL_STEPS = 4
 
 export default function Survey() {
   const navigate = useNavigate()
-  const { mode, toggle } = useTheme()
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -89,13 +86,8 @@ export default function Survey() {
     <div style={styles.page}>
       {/* Slim top bar */}
       <div style={styles.topBar}>
-        <Wordmark size={20} />
-        <div style={styles.topBarRight}>
-          <span style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</span>
-          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
-            {mode === 'dark' ? '☀' : '☾'}
-          </button>
-        </div>
+        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
+        <span style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</span>
       </div>
 
       {/* Progress bar */}
@@ -235,9 +227,8 @@ const styles = {
   page: { minHeight: '100vh', background: 'var(--bg)' },
 
   topBar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid var(--border)' },
-  topBarRight: { display: 'flex', alignItems: 'center', gap: 16 },
+  logo: { height: 28, display: 'block', mixBlendMode: 'screen' },
   stepLabel: { fontSize: 13, color: 'var(--text-3)' },
-  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
 
   progressBar: { height: 3, background: 'var(--border)' },
   progressFill: { height: '100%', background: BLUE, transition: 'width 0.3s ease' },

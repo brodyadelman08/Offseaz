@@ -1,14 +1,11 @@
 import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { useTheme } from '../context/ThemeContext'
-import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
 
 export default function JoinTeam() {
   const { code } = useParams()
   const { session, profile, loading } = useAuth()
-  const { mode, toggle } = useTheme()
   const navigate = useNavigate()
   const [status, setStatus] = useState('idle')
   const [error, setError] = useState('')
@@ -42,12 +39,8 @@ export default function JoinTeam() {
 
   return (
     <div style={styles.page}>
-      <button onClick={toggle} style={styles.themeBtn} title="Toggle theme">
-        {mode === 'dark' ? '☀' : '☾'}
-      </button>
-
       <div style={styles.content}>
-        <Wordmark size={40} />
+        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
         {error ? (
           <div style={styles.errorCard}>
             <p style={styles.errorIcon}>⚠️</p>
@@ -76,22 +69,7 @@ const styles = {
     background: 'var(--bg)',
     position: 'relative',
   },
-  themeBtn: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    background: 'none',
-    border: '1px solid var(--border)',
-    borderRadius: 8,
-    width: 36,
-    height: 36,
-    fontSize: 16,
-    cursor: 'pointer',
-    color: 'var(--text-2)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
+  logoHero: { height: 64, display: 'block', mixBlendMode: 'screen' },
   content: {
     display: 'flex',
     flexDirection: 'column',

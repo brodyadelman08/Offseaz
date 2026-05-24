@@ -1,6 +1,5 @@
 import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Wordmark } from './Wordmark'
 
 export default function ProtectedRoute({ children, requiredRole }) {
   const { session, profile, loading } = useAuth()
@@ -8,7 +7,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
   if (loading) {
     return (
       <div style={styles.loading}>
-        <Wordmark size={32} />
+        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
         <p style={styles.loadingText}>Loading…</p>
       </div>
     )
@@ -33,6 +32,7 @@ const styles = {
     gap: 16,
     background: 'var(--bg)',
   },
+  logo: { height: 48, display: 'block', mixBlendMode: 'screen' },
   loadingText: {
     fontSize: 14,
     color: 'var(--text-3)',

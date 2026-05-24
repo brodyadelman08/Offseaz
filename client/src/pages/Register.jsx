@@ -2,12 +2,9 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
-import { Wordmark } from '../components/Wordmark'
-import { useTheme } from '../context/ThemeContext'
 
 export default function Register() {
   const navigate = useNavigate()
-  const { mode, toggle } = useTheme()
   const [searchParams] = useSearchParams()
   const inviteCode = searchParams.get('invite')
 
@@ -59,13 +56,9 @@ export default function Register() {
 
   return (
     <div style={styles.page}>
-      <button onClick={toggle} style={styles.themeBtn} title="Toggle theme">
-        {mode === 'dark' ? '☀' : '☾'}
-      </button>
-
       <div style={styles.content}>
         <div style={styles.brand}>
-          <Wordmark size={52} />
+          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
 
@@ -119,7 +112,7 @@ export default function Register() {
                     type="button"
                     style={{
                       ...styles.roleCard,
-                      ...(role === 'coach' ? { borderColor: '#F75709', background: 'rgba(247,87,9,0.06)' } : {}),
+                      ...(role === 'coach' ? { borderColor: '#F75709', background: 'rgba(247,87,9,0.08)' } : {}),
                     }}
                     onClick={() => setRole('coach')}
                   >
@@ -133,7 +126,7 @@ export default function Register() {
                     type="button"
                     style={{
                       ...styles.roleCard,
-                      ...(role === 'athlete' ? { borderColor: '#308EBD', background: 'rgba(48,142,189,0.06)' } : {}),
+                      ...(role === 'athlete' ? { borderColor: '#308EBD', background: 'rgba(48,142,189,0.08)' } : {}),
                     }}
                     onClick={() => setRole('athlete')}
                   >
@@ -176,23 +169,6 @@ const styles = {
     justifyContent: 'center',
     background: 'var(--bg)',
     padding: '40px 20px',
-    position: 'relative',
-  },
-  themeBtn: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    background: 'none',
-    border: '1px solid var(--border)',
-    borderRadius: 8,
-    width: 36,
-    height: 36,
-    fontSize: 16,
-    cursor: 'pointer',
-    color: 'var(--text-2)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
   },
   content: {
     width: '100%',
@@ -207,7 +183,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
+  },
+  logoHero: {
+    height: 80,
+    display: 'block',
+    mixBlendMode: 'screen',
   },
   tagline: {
     fontSize: 14,
@@ -234,8 +215,8 @@ const styles = {
     marginBottom: 24,
   },
   inviteBanner: {
-    background: 'rgba(48,142,189,0.1)',
-    border: '1px solid rgba(48,142,189,0.25)',
+    background: 'rgba(48,142,189,0.12)',
+    border: '1px solid rgba(48,142,189,0.3)',
     color: '#308EBD',
     borderRadius: 8,
     padding: '10px 14px',
@@ -244,9 +225,9 @@ const styles = {
     marginBottom: 16,
   },
   errorBox: {
-    background: 'rgba(199,56,32,0.08)',
-    border: '1px solid rgba(199,56,32,0.25)',
-    color: '#c73820',
+    background: 'rgba(199,56,32,0.12)',
+    border: '1px solid rgba(199,56,32,0.3)',
+    color: '#ff6b4a',
     borderRadius: 8,
     padding: '10px 14px',
     fontSize: 13,

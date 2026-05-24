@@ -2,12 +2,9 @@ import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
-import { Wordmark } from '../components/Wordmark'
-import { useTheme } from '../context/ThemeContext'
 
 export default function Login() {
   const navigate = useNavigate()
-  const { mode, toggle } = useTheme()
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
   const [error, setError] = useState('')
@@ -42,13 +39,9 @@ export default function Login() {
 
   return (
     <div style={styles.page}>
-      <button onClick={toggle} style={styles.themeBtn} title="Toggle theme">
-        {mode === 'dark' ? '☀' : '☾'}
-      </button>
-
       <div style={styles.content}>
         <div style={styles.brand}>
-          <Wordmark size={52} />
+          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
 
@@ -99,24 +92,7 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     background: 'var(--bg)',
-    padding: '20px',
-    position: 'relative',
-  },
-  themeBtn: {
-    position: 'absolute',
-    top: 20,
-    right: 20,
-    background: 'none',
-    border: '1px solid var(--border)',
-    borderRadius: 8,
-    width: 36,
-    height: 36,
-    fontSize: 16,
-    cursor: 'pointer',
-    color: 'var(--text-2)',
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
+    padding: '40px 20px',
   },
   content: {
     width: '100%',
@@ -131,7 +107,12 @@ const styles = {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
-    gap: 10,
+    gap: 12,
+  },
+  logoHero: {
+    height: 80,
+    display: 'block',
+    mixBlendMode: 'screen',
   },
   tagline: {
     fontSize: 14,
@@ -158,9 +139,9 @@ const styles = {
     marginBottom: 24,
   },
   errorBox: {
-    background: 'rgba(199,56,32,0.08)',
-    border: '1px solid rgba(199,56,32,0.25)',
-    color: '#c73820',
+    background: 'rgba(199,56,32,0.12)',
+    border: '1px solid rgba(199,56,32,0.3)',
+    color: '#ff6b4a',
     borderRadius: 8,
     padding: '10px 14px',
     fontSize: 13,

@@ -1,4 +1,13 @@
-const LETTER_COLORS = ['#F75709', '#308EBD', '#F0BE24', '#F75709', '#308EBD', '#F0BE24', '#F75709']
+// O=orange, ff=white, s=blue, ea=white, z=yellow
+const LETTER_COLORS = [
+  '#F75709', // O
+  '#FFFFFF', // f
+  '#FFFFFF', // f
+  '#308EBD', // s
+  '#FFFFFF', // e
+  '#FFFFFF', // a
+  '#F0BE24', // z
+]
 
 export function Wordmark({ size = 28 }) {
   return (

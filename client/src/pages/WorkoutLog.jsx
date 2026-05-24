@@ -1,7 +1,5 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
-import { useTheme } from '../context/ThemeContext'
-import { Wordmark } from '../components/Wordmark'
 import api from '../services/api'
 
 const BLUE = '#308EBD'
@@ -15,7 +13,6 @@ const STATUS_OPTIONS = [
 export default function WorkoutLog() {
   const navigate = useNavigate()
   const { state } = useLocation()
-  const { mode, toggle } = useTheme()
 
   if (!state?.weekId) {
     navigate('/plan', { replace: true })
@@ -58,13 +55,10 @@ export default function WorkoutLog() {
       {/* Header */}
       <div style={styles.header}>
         <div style={styles.headerLeft}>
-          <Wordmark size={20} />
+          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
           <span style={styles.roleChip}>Athlete</span>
         </div>
         <div style={styles.headerRight}>
-          <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
-            {mode === 'dark' ? '☀' : '☾'}
-          </button>
           <button style={styles.backBtn} onClick={() => navigate('/plan')}>
             ← Back to plan
           </button>
@@ -161,9 +155,9 @@ const styles = {
 
   header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 28 },
   headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
+  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
   roleChip: { fontSize: 11, fontWeight: 700, background: BLUE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
   headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  iconBtn: { background: 'none', border: '1px solid var(--border)', borderRadius: 8, width: 34, height: 34, fontSize: 14, cursor: 'pointer', color: 'var(--text-2)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
 
   pageTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
