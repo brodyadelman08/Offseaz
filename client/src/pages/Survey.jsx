@@ -128,17 +128,16 @@ export default function Survey() {
               onChange={e => set('goals', e.target.value)}
               rows={4}
             />
-            <label style={styles.label}>Hours available per week</label>
-            <select
+            <label style={styles.label}>How many days per week can you train?</label>
+            <input
               style={styles.input}
+              type="number"
+              min={1}
+              max={7}
+              placeholder="e.g. 4"
               value={form.time_per_week}
               onChange={e => set('time_per_week', e.target.value)}
-            >
-              <option value="">Select…</option>
-              {Array.from({ length: 20 }, (_, i) => i + 1).map(n => (
-                <option key={n} value={n}>{n} {n === 1 ? 'hour' : 'hours'}</option>
-              ))}
-            </select>
+            />
           </>
         )}
 
