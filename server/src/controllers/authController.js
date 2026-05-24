@@ -24,7 +24,9 @@ async function profile(req, res) {
     const data = await getProfile(req.user.id)
     res.json({ profile: data })
   } catch (err) {
-    res.status(404).json({ error: 'Profile not found' })
+    console.error('[authController] getProfile error:', err.message, '| code:', err.code, '| userId:', req.user.id)
+    if (err.code === 'PGRST116') return res.status(404).json({ error: 'Profile not found' })
+    res.status(500).json({ error: err.message })
   }
 }
 

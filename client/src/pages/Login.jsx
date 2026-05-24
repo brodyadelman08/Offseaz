@@ -15,7 +15,7 @@ export default function Login() {
     setError('')
     setLoading(true)
 
-    const { error: authError } = await supabase.auth.signInWithPassword({ email, password })
+    const { data: authData, error: authError } = await supabase.auth.signInWithPassword({ email, password })
 
     if (authError) {
       setError(authError.message)
@@ -24,12 +24,15 @@ export default function Login() {
     }
 
     try {
-      const res = await api.get('/api/auth/profile')
+      const res = await api.get('/api/auth/profile', {
+        headers: { Authorization: `Bearer ${authData.session.access_token}` },
+      })
       const role = res.data.profile?.role
       navigate(role === 'coach' ? '/coach' : '/athlete')
     } catch (err) {
       console.error('Login error:', err)
-      setError('Could not load profile. Please try again.')
+      const msg = err.response?.data?.error || err.message || 'Could not load profile. Please try again.'
+      setError(msg)
       setLoading(false)
     }
   }
