@@ -1,190 +1,132 @@
-\# OFFSEAZ — CLAUDE.md
+# CLAUDE.md
 
+This file provides guidance to Claude Code (claude.ai/code) when working with code in this repository.
 
+## What this is
 
-\## What This Project Is
+Offseaz is a coach-first offseason athletic training platform. Coaches create teams, build training blueprints, and track athlete accountability. Athletes join via invite code, complete a needs-analysis survey, and follow their assigned plan. An automated weekly email summary goes to coaches every Sunday.
 
-Offseaz is a coach-first offseason athletic training platform.
+Two roles only: **coach** and **athlete**. No admin panel.
 
-It connects coaches and athletes between sports seasons.
+## Monorepo layout
 
-Coaches assign training plans, athletes log workouts, and
+```
+offseaz/
+  client/        Vite + React 19 SPA — deployed to Vercel (Root Directory: client/)
+  server/        Express 5 API       — deployed to Railway (Root Directory: server/)
+  railway.json   Railway build/start config
+  CLAUDE.md
+```
 
-coaches get automated visibility into who is working and
+## Commands
 
-who isn't — without chasing anyone.
+**Client** (from `client/`):
+```bash
+npm run dev      # Vite dev server on localhost:5173
+npm run build    # Production build → client/dist/
+npm run lint     # ESLint
+npm run preview  # Serve production build locally
+```
 
+**Server** (from `server/`):
+```bash
+npm run dev   # nodemon src/index.js (auto-restarts on change)
+npm start     # node src/index.js
+```
 
+No test runner is configured.
 
-\## Tech Stack
+## Environment variables
 
-\- Frontend: React (inside /client)
+**Client** — `client/.env` (gitignored, never committed):
+```
+VITE_API_URL=http://localhost:3000
+VITE_SUPABASE_URL=
+VITE_SUPABASE_ANON_KEY=
+```
+`VITE_*` variables are baked in at Vite build time. Changing them in Vercel requires a full redeploy with build cache cleared.
 
-\- Backend: Express + Node.js (inside /server)
+**Server** — `server/.env` (gitignored, never committed):
+```
+SUPABASE_URL=
+SUPABASE_SERVICE_ROLE_KEY=
+RESEND_API_KEY=
+RESEND_FROM=        # optional, defaults to onboarding@resend.dev
+CORS_ORIGIN=        # optional, defaults to * — set to Vercel URL in production
+PORT=               # set automatically by Railway
+```
 
-\- Database: Supabase
+## Deployment config
 
-\- Email: Resend (for automated weekly summaries)
+- **Railway**: Root Directory = `server/`. `railway.json` commands must NOT include `cd server &&` — Railway is already in that directory.
+- **Vercel**: Root Directory = `client/`. `client/vercel.json` must contain a catch-all SPA rewrite (`routes: [{ handle: "filesystem" }, { src: "/(.*)", dest: "/index.html" }]`) or any deep link returns Vercel's 404 before React Router loads.
 
-\- Hosting: Vercel (frontend) + Railway (backend)
+## Architecture
 
+### Auth flow
 
+1. Client calls `supabase.auth.signInWithPassword()` or `signUp()`. Supabase handles credentials.
+2. Every API request goes through `client/src/services/api.js` (an axios instance). A request interceptor attaches the session `access_token` as `Authorization: Bearer <token>`.
+3. On the server, `server/src/middleware/verifyToken.js` calls `supabaseAdmin.auth.getUser(token)` and populates `req.user` with the full Supabase user object (including `user_metadata`).
+4. `POST /api/auth/register` is the **one unprotected route** — it validates the caller via `supabaseAdmin.auth.admin.getUserById(userId)` instead of a JWT, because a session may not exist immediately after `signUp()` when email confirmation is enabled.
+5. On `GET /api/auth/profile`, if the profile row is missing (Supabase error `PGRST116`), the controller auto-creates it from `req.user.user_metadata` (set at sign-up via `options.data: { role, full_name }`). This self-heals accounts created before the profile row was written.
 
-\## User Roles — 2 Total
+### Role gating
 
-1\. Coach
+Roles are stored in the `profiles` table, not in the JWT. `AuthContext` fetches `/api/auth/profile` on session change and stores it in React state. `ProtectedRoute` reads `profile.role` to guard routes. After login, `Login.jsx` fetches the profile and navigates to `/coach` or `/athlete` based on role.
 
-2\. Athlete
+### Data model (key tables)
 
-No admin panel at MVP stage.
+| Table | Purpose |
+|---|---|
+| `profiles` | One row per user — `id` matches `auth.users.id`, stores `role` and `full_name` |
+| `teams` | Owned by a coach (`coach_id`); has an `invite_code` (8-char lowercase hex) |
+| `team_members` | Join table: `team_id` + `athlete_id` |
+| `surveys` | One per athlete; `completed_at` timestamp signals completion |
+| `blueprints` | Training plans; owned by a coach, assigned to an athlete |
+| `blueprint_weeks` | Child of blueprint; `sessions` is a JSONB array of session objects |
+| `workout_logs` | Athlete logs; references `blueprint_week_id` + `session_index` |
+| `weekly_summaries` | Written after each Sunday scheduler run |
 
+### Server structure
 
+Pattern: `routes/` → `controllers/` → `services/` → `config/supabase.js`
 
-\## MVP Features — 7 Total
+The admin Supabase client (`SUPABASE_SERVICE_ROLE_KEY`) bypasses RLS and is used for all server-side DB operations. Never use the anon key on the server.
 
-1\. Authentication — email login, two roles (coach + athlete),
+`server/src/scheduler.js` is `require()`d at the bottom of `index.js` **after** `app.listen()`. It registers a node-cron job (Sundays 8pm) that calls `runWeeklySummary()` — which queries all teams, computes accountability stats, sends emails via Resend, and inserts into `weekly_summaries`. A crash in the scheduler kills the process; Railway restarts it.
 
-&#x20;  team creation, shareable invite link
+### Client structure
 
-2\. Needs Analysis Survey — athlete fills out sport, position,
+- `AuthContext` (`client/src/context/AuthContext.jsx`) is the single source of truth for `session`, `profile`, and `loading`. Wrap order: `BrowserRouter` → `AuthProvider` → `Routes`.
+- All pages use **inline styles only** — `const styles = {}` objects at the bottom of each file. No CSS modules, no Tailwind.
+- `client/src/services/api.js` — the axios instance. Import this for all backend calls; never call the backend with raw `fetch`.
+- `client/src/services/supabase.js` — the Supabase browser client (anon key). Use this for auth operations only; data fetching goes through the Express API.
 
-&#x20;  goals, weaknesses, injury history, equipment, time per week.
+### Invite code join
 
-&#x20;  Auto-populates athlete profile. Coach sees all results on dashboard.
+Athletes join a team two ways:
+1. **URL**: `/join/:code` → `JoinTeam.jsx` auto-joins if logged in, redirects to `/register?invite=code` if not.
+2. **Dashboard input**: `AthleteDashboard.jsx` shows a code input for athletes without a team.
 
-3\. Blueprint System (Manual) — coach picks from templates or
+Both paths call `POST /api/teams/join` with `{ invite_code }`. The code is always sent lowercase (stored as lowercase hex); the dashboard input displays uppercase for readability.
 
-&#x20;  builds a weekly plan. Athletes see it week by week.
+## Key error codes to know
 
-4\. Workout Logging — completed/partial/skipped, effort rating,
+- **`PGRST116`** — Supabase "row not found". Treated as 404 in most controllers; triggers auto-create in the profile endpoint.
+- **`23505`** — Postgres unique constraint violation. Returned as 409 in register (duplicate profile) and join team (already a member).
 
-&#x20;  optional short note. Feeds coach dashboard immediately.
+## Brand colors (for UI work)
 
-5\. Accountability Dashboard — real-time activity feed, streak
+```
+Orange  #F75709  — coach-facing UI, primary buttons, CTAs
+Blue    #308EBD  — athlete-facing UI
+Yellow  #F0BE24  — badges, streaks, recognition only
+Black   #000000
+White   #FFFFFF
 
-&#x20;  tracking, effort visibility, automated weekly email summary to coach.
+Dark mode:  background #0F0F0F, cards #1A1A1A
+Light mode: background #FFFFFF, cards #F7F7F7
+```
 
-6\. Basic Messenger — coach sends group announcements or
-
-&#x20;  individual messages to athletes.
-
-7\. Athlete Profile — survey data plus session log history.
-
-
-
-\## What Is NOT In MVP
-
-\- Auto-generated blueprints
-
-\- Video or photo upload
-
-\- End-of-season reports
-
-\- Profile verification
-
-\- Group feed or peer comments
-
-\- Leaderboards or rankings
-
-\- Progress charts or trend analysis
-
-\- Athlete-to-athlete messaging
-
-\- Admin panel
-
-\- AI features of any kind
-
-
-
-\## Coach Flow — 11 Steps
-
-1\. Create account with email
-
-2\. Complete coach profile (school, sport, preferences)
-
-3\. Create team, receive shareable invite link
-
-4\. Send link to athletes
-
-5\. Athletes join, populate dashboard
-
-6\. Build weekly training plan (templates or manual)
-
-7\. Assign plan to team or individuals
-
-8\. Athletes begin logging workouts
-
-9\. Coach receives automated weekly summary
-
-10\. Coach monitors accountability dashboard
-
-11\. Coach sends messages via messenger
-
-
-
-\## Athlete Flow — 9 Steps
-
-1\. Receive invite link, create account
-
-2\. Complete onboarding walkthrough
-
-3\. Fill out Needs Analysis Survey
-
-4\. Profile auto-populated from survey
-
-5\. Coach notified of completed onboarding
-
-6\. View weekly training plan
-
-7\. Train
-
-8\. Log session (completed/partial/skipped, effort, note)
-
-9\. Receive messages from coach
-
-
-
-\## Rules For Every Session
-
-\- Always read this file before doing anything
-
-\- Build one feature at a time
-
-\- Never combine multiple features in one session
-
-\- Use plan mode for every new feature
-
-\- After each feature is complete and tested, stop.
-
-&#x20; User will /clear and start a new session for the next feature.
-
-\- Never delete working code to start over
-
-\- Always confirm before making large structural changes
-
-\- Keep the client and server folders completely separate
-
-\- All environment variables go in .env files, never hardcoded
-
-
-
-\## Build Order
-
-Phase 1 — Project setup and folder structure
-
-Phase 2 — Authentication (login, roles, team creation, invite link)
-
-Phase 3 — Needs Analysis Survey
-
-Phase 4 — Blueprint System
-
-Phase 5 — Workout Logging
-
-Phase 6 — Accountability Dashboard
-
-Phase 7 — Automated Weekly Summary Email
-
-Phase 8 — Basic Messenger
-
-Phase 9 — Athlete Profile
-
+Headings: Calibri or geometric sans-serif. Body: Inter or system-ui.
