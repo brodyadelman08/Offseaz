@@ -2,6 +2,7 @@ import { useEffect, useState } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
+import { AlertIcon } from '../components/Icons'
 
 export default function JoinTeam() {
   const { code } = useParams()
@@ -43,7 +44,7 @@ export default function JoinTeam() {
         <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
         {error ? (
           <div style={styles.errorCard}>
-            <p style={styles.errorIcon}>⚠️</p>
+            <AlertIcon size={36} color="#c73820" />
             <p style={styles.errorText}>{error}</p>
             <button style={styles.backBtn} onClick={() => navigate('/athlete')}>
               Go to dashboard
@@ -109,7 +110,6 @@ const styles = {
     borderRadius: 16,
     textAlign: 'center',
   },
-  errorIcon: { fontSize: 36, margin: 0 },
   errorText: { color: '#c73820', fontSize: 15, margin: 0 },
   backBtn: {
     marginTop: 8,

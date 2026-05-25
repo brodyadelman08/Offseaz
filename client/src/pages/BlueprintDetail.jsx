@@ -63,16 +63,9 @@ export default function BlueprintDetail() {
 
   return (
     <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={styles.roleChip}>Coach</span>
-        </div>
-        <div style={styles.headerRight}>
-          <button style={styles.backBtn} onClick={() => navigate('/coach')}>← Dashboard</button>
-        </div>
-      </div>
+      <button style={styles.backLink} onClick={() => navigate('/coach/blueprints')}>
+        ← Blueprints
+      </button>
 
       {/* Blueprint title */}
       <div style={styles.titleRow}>
@@ -202,15 +195,10 @@ export default function BlueprintDetail() {
 }
 
 const styles = {
-  center: { display: 'flex', justifyContent: 'center', paddingTop: 120, fontSize: 15, color: 'var(--text-2)' },
-  container: { maxWidth: 740, margin: '0 auto', padding: '0 20px 60px' },
+  center: { color: 'var(--text-3)', fontSize: 15 },
+  container: { maxWidth: 740, margin: '0 auto' },
 
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+  backLink: { display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px' },
 
   titleRow: { marginBottom: 24 },
   breadcrumb: { fontSize: 12, fontWeight: 600, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.6, margin: '0 0 6px' },

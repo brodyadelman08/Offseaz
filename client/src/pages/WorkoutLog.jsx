@@ -5,9 +5,9 @@ import api from '../services/api'
 const BLUE = '#308EBD'
 
 const STATUS_OPTIONS = [
-  { value: 'completed', label: '✓ Completed', color: '#2e7d32', bg: '#e8f5e9', activeBg: '#2e7d32' },
-  { value: 'partial',   label: '◑ Partial',   color: '#b45309', bg: '#fef3c7', activeBg: '#b45309' },
-  { value: 'skipped',   label: '✕ Skipped',   color: '#888',    bg: '#f0f0f0', activeBg: '#555' },
+  { value: 'completed', label: 'Completed',  color: '#2e7d32', bg: '#e8f5e9', activeBg: '#2e7d32' },
+  { value: 'partial',   label: 'Partial',    color: '#b45309', bg: '#fef3c7', activeBg: '#b45309' },
+  { value: 'skipped',   label: 'Skipped',    color: '#888',    bg: '#f0f0f0', activeBg: '#555' },
 ]
 
 export default function WorkoutLog() {
@@ -15,7 +15,7 @@ export default function WorkoutLog() {
   const { state } = useLocation()
 
   if (!state?.weekId) {
-    navigate('/plan', { replace: true })
+    navigate('/athlete/plan', { replace: true })
     return null
   }
 
@@ -43,7 +43,7 @@ export default function WorkoutLog() {
         effort: status === 'skipped' ? null : effort,
         note: note.trim() || null,
       })
-      navigate('/plan')
+      navigate('/athlete/plan')
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save log.')
       setSubmitting(false)
@@ -52,18 +52,9 @@ export default function WorkoutLog() {
 
   return (
     <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={styles.roleChip}>Athlete</span>
-        </div>
-        <div style={styles.headerRight}>
-          <button style={styles.backBtn} onClick={() => navigate('/plan')}>
-            ← Back to plan
-          </button>
-        </div>
-      </div>
+      <button style={styles.backBtn} onClick={() => navigate('/athlete/plan')}>
+        ← Back to plan
+      </button>
 
       <h1 style={styles.pageTitle}>Log Session</h1>
 
@@ -106,7 +97,7 @@ export default function WorkoutLog() {
           <div>
             <p style={styles.fieldLabel}>
               Effort level
-              <span style={styles.effortHint}> · how hard did you push? (1 = easy, 10 = max)</span>
+              <span style={styles.effortHint}> · 1 = easy, 10 = max effort</span>
             </p>
             <div style={styles.effortRow}>
               {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
@@ -143,7 +134,7 @@ export default function WorkoutLog() {
         {error && <div style={styles.errorBox}>{error}</div>}
 
         <button style={styles.submitBtn} type="submit" disabled={submitting}>
-          {submitting ? 'Saving…' : 'Log this session →'}
+          {submitting ? 'Saving…' : 'Log this session'}
         </button>
       </form>
     </div>
@@ -151,14 +142,20 @@ export default function WorkoutLog() {
 }
 
 const styles = {
-  container: { maxWidth: 540, margin: '0 auto', padding: '0 20px 60px' },
+  container: { maxWidth: 540, margin: '0 auto' },
 
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 28 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, background: BLUE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+  backBtn: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+    fontSize: 13,
+    fontWeight: 500,
+    color: 'var(--text-2)',
+    background: 'none',
+    border: 'none',
+    cursor: 'pointer',
+    padding: '0 0 20px',
+  },
 
   pageTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
 

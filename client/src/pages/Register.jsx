@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
+import { BarChartIcon, UserIcon } from '../components/Icons'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -116,7 +117,7 @@ export default function Register() {
                     }}
                     onClick={() => setRole('coach')}
                   >
-                    <span style={{ fontSize: 24, marginBottom: 6 }}>🏆</span>
+                    <BarChartIcon size={24} color={role === 'coach' ? '#F75709' : 'var(--text-3)'} />
                     <span style={{ ...styles.roleCardTitle, color: role === 'coach' ? '#F75709' : 'var(--text)' }}>
                       Coach
                     </span>
@@ -130,7 +131,7 @@ export default function Register() {
                     }}
                     onClick={() => setRole('athlete')}
                   >
-                    <span style={{ fontSize: 24, marginBottom: 6 }}>⚡</span>
+                    <UserIcon size={24} color={role === 'athlete' ? '#308EBD' : 'var(--text-3)'} />
                     <span style={{ ...styles.roleCardTitle, color: role === 'athlete' ? '#308EBD' : 'var(--text)' }}>
                       Athlete
                     </span>

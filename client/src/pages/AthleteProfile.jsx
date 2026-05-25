@@ -57,16 +57,9 @@ export default function AthleteProfile() {
 
   return (
     <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={styles.roleChip}>Coach</span>
-        </div>
-        <div style={styles.headerRight}>
-          <button style={styles.backBtn} onClick={() => navigate('/coach')}>← Dashboard</button>
-        </div>
-      </div>
+      <button style={styles.backLink} onClick={() => navigate('/coach/athletes')}>
+        ← Athletes
+      </button>
 
       {/* Athlete header */}
       <div style={styles.athleteHeader}>
@@ -170,15 +163,10 @@ export default function AthleteProfile() {
 }
 
 const styles = {
-  center: { display: 'flex', justifyContent: 'center', paddingTop: 100, fontSize: 15, color: 'var(--text-2)' },
-  container: { maxWidth: 700, margin: '0 auto', padding: '0 20px 60px' },
+  center: { color: 'var(--text-3)', fontSize: 15 },
+  container: { maxWidth: 700, margin: '0 auto' },
 
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+  backLink: { display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px' },
 
   athleteHeader: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
   avatar: { width: 52, height: 52, borderRadius: '50%', background: ORANGE, color: '#fff', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },

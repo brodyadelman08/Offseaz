@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import { DumbbellIcon } from '../components/Icons'
 
 const BLUE = '#308EBD'
 
@@ -45,22 +46,11 @@ export default function AthletePlan() {
 
   return (
     <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={styles.roleChip}>Athlete</span>
-        </div>
-        <div style={styles.headerRight}>
-          <button style={styles.backBtn} onClick={() => navigate('/athlete')}>
-            ← Dashboard
-          </button>
-        </div>
-      </div>
-
       {!plan ? (
         <div style={styles.emptyState}>
-          <p style={styles.emptyEmoji}>🏋️</p>
+          <div style={styles.emptyIcon}>
+            <DumbbellIcon size={36} color="var(--text-3)" />
+          </div>
           <h2 style={styles.emptyTitle}>No plan assigned yet</h2>
           <p style={styles.emptyDesc}>Your coach is working on your training plan. Check back soon.</p>
         </div>
@@ -70,7 +60,10 @@ export default function AthletePlan() {
             <h1 style={styles.planTitle}>{plan.title}</h1>
             {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
             <p style={styles.planMeta}>
-              {plan.num_weeks}-week plan · Started {new Date(plan.starts_on).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })}
+              {plan.num_weeks}-week plan · Started{' '}
+              {new Date(plan.starts_on).toLocaleDateString('en-US', {
+                month: 'short', day: 'numeric', year: 'numeric',
+              })}
             </p>
           </div>
 
@@ -108,7 +101,6 @@ export default function AthletePlan() {
                     <p style={styles.objectiveText}>{week.objective}</p>
                   </div>
                 )}
-
                 {week.sessions.length === 0 ? (
                   <p style={styles.emptyWeek}>No sessions scheduled this week.</p>
                 ) : (
@@ -128,11 +120,17 @@ export default function AthletePlan() {
                             ) : (
                               <button
                                 style={styles.logBtn}
-                                onClick={() => navigate('/log', {
-                                  state: { weekId: week.id, sessionIndex: i, focus: s.focus, day: s.day, description: s.description },
+                                onClick={() => navigate('/athlete/log', {
+                                  state: {
+                                    weekId: week.id,
+                                    sessionIndex: i,
+                                    focus: s.focus,
+                                    day: s.day,
+                                    description: s.description,
+                                  },
                                 })}
                               >
-                                Log session →
+                                Log session
                               </button>
                             )}
                           </div>
@@ -171,18 +169,11 @@ export default function AthletePlan() {
 }
 
 const styles = {
-  center: { display: 'flex', justifyContent: 'center', paddingTop: 120, fontSize: 15, color: 'var(--text-2)' },
-  container: { maxWidth: 660, margin: '0 auto', padding: '0 20px 60px' },
-
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, background: BLUE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+  center: { color: 'var(--text-3)', fontSize: 15 },
+  container: { maxWidth: 660, margin: '0 auto' },
 
   emptyState: { textAlign: 'center', paddingTop: 80 },
-  emptyEmoji: { fontSize: 48, marginBottom: 16 },
+  emptyIcon: { display: 'flex', justifyContent: 'center', marginBottom: 20 },
   emptyTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
   emptyDesc: { color: 'var(--text-2)', fontSize: 15 },
 
@@ -209,7 +200,7 @@ const styles = {
   sessionDay: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', background: 'rgba(48,142,189,0.1)', padding: '3px 8px', borderRadius: 4 },
   sessionFocus: { fontSize: 15, fontWeight: 700, color: 'var(--text)', flex: 1 },
   sessionDesc: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6 },
-  logBtn: { marginLeft: 'auto', padding: '6px 12px', fontSize: 12, fontWeight: 700, borderRadius: 6, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 },
+  logBtn: { marginLeft: 'auto', padding: '6px 14px', fontSize: 12, fontWeight: 700, borderRadius: 6, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 },
   logBadge: { marginLeft: 'auto', fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 5, whiteSpace: 'nowrap', flexShrink: 0 },
 
   weekDots: { display: 'flex', justifyContent: 'center', gap: 8 },

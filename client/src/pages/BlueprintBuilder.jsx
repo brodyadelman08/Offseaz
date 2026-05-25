@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 
@@ -8,13 +9,13 @@ const TEMPLATES = [
   {
     label: 'Start fresh',
     description: 'Build your own plan from scratch',
-    icon: '✏️',
+    Icon: PlusIcon,
     data: null,
   },
   {
     label: '4-Week General Conditioning',
     description: 'Mixed fitness foundation — a balanced starting block',
-    icon: '🏃',
+    Icon: CalendarIcon,
     data: {
       title: '4-Week General Conditioning',
       description: 'A balanced 4-week block covering strength, conditioning, and mobility.',
@@ -30,7 +31,7 @@ const TEMPLATES = [
   {
     label: '6-Week Strength Block',
     description: 'Progressive overload — built to add weight every week',
-    icon: '💪',
+    Icon: DumbbellIcon,
     data: {
       title: '6-Week Strength Block',
       description: 'A classic 6-week progressive overload program targeting main lifts.',
@@ -48,7 +49,7 @@ const TEMPLATES = [
   {
     label: '2-Week Peaking',
     description: 'Pre-season ramp — sharpen speed and explosiveness',
-    icon: '⚡',
+    Icon: BoltIcon,
     data: {
       title: '2-Week Peaking',
       description: 'Sharpen explosiveness and sport readiness in the final 2 weeks before the season.',
@@ -153,7 +154,7 @@ export default function BlueprintBuilder() {
     setSubmitting(true)
     try {
       const res = await api.post('/api/blueprints', form)
-      navigate(`/blueprints/${res.data.blueprint.id}`)
+      navigate(`/coach/blueprints/${res.data.blueprint.id}`)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save blueprint.')
       setSubmitting(false)
@@ -167,19 +168,6 @@ export default function BlueprintBuilder() {
   if (step === 0) {
     return (
       <div style={styles.container}>
-        <div style={styles.header}>
-          <div style={styles.headerLeft}>
-            <Wordmark size={20} />
-            <span style={styles.roleChip}>Coach</span>
-          </div>
-          <div style={styles.headerRight}>
-            <button onClick={toggle} style={styles.iconBtn} title="Toggle theme">
-              {mode === 'dark' ? '☀' : '☾'}
-            </button>
-            <button style={styles.backBtn} onClick={() => navigate('/coach')}>← Dashboard</button>
-          </div>
-        </div>
-
         <h1 style={styles.pageTitle}>Create Blueprint</h1>
         <p style={styles.pageDesc}>Start from scratch or choose a template to pre-fill your plan.</p>
 
@@ -192,7 +180,9 @@ export default function BlueprintBuilder() {
               onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
               onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
             >
-              <span style={styles.templateIcon}>{tpl.icon}</span>
+              <div style={styles.templateIconWrap}>
+                <tpl.Icon size={22} color={ORANGE} />
+              </div>
               <span style={styles.templateLabel}>{tpl.label}</span>
               <span style={styles.templateDesc}>{tpl.description}</span>
             </button>
@@ -205,24 +195,14 @@ export default function BlueprintBuilder() {
   // ── Steps 1+ ─────────────────────────────────────────────────────────────────
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={styles.roleChip}>Coach</span>
-        </div>
-        <div style={styles.headerRight}>
-          <button style={styles.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
-        </div>
-      </div>
-
       <div style={styles.progressWrap}>
-        <span style={styles.progressLabel}>
-          {isReviewStep ? 'Review' : step === 1 ? 'Plan info' : `Week ${step - 1} of ${form.num_weeks}`}
-        </span>
+        <button style={styles.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
         <div style={styles.progressBar}>
           <div style={{ ...styles.progressFill, width: `${progressPct}%` }} />
         </div>
-        <span style={styles.progressPct}>{progressPct}%</span>
+        <span style={styles.progressPct}>
+          {isReviewStep ? 'Review' : step === 1 ? 'Plan info' : `Wk ${step - 1}/${form.num_weeks}`}
+        </span>
       </div>
 
       <div style={styles.card}>
@@ -299,7 +279,7 @@ export default function BlueprintBuilder() {
                       onChange={e => setSessionField(wi, si, 'focus', e.target.value)}
                       placeholder="Focus (e.g. Upper Body Strength)"
                     />
-                    <button style={styles.removeBtn} onClick={() => removeSession(wi, si)}>✕</button>
+                    <button style={styles.removeBtn} onClick={() => removeSession(wi, si)}>×</button>
                   </div>
                   <textarea
                     style={{ ...styles.textarea, marginTop: 8 }}
@@ -341,7 +321,7 @@ export default function BlueprintBuilder() {
         <div style={styles.actions}>
           {isReviewStep ? (
             <button style={styles.primaryBtn} onClick={handleSubmit} disabled={submitting}>
-              {submitting ? 'Saving…' : 'Save blueprint →'}
+              {submitting ? 'Saving…' : 'Save blueprint'}
             </button>
           ) : (
             <button
@@ -353,7 +333,7 @@ export default function BlueprintBuilder() {
               onClick={() => (step !== 1 || canAdvancePlanInfo) && setStep(s => s + 1)}
               disabled={step === 1 && !canAdvancePlanInfo}
             >
-              {step === form.num_weeks + 1 ? 'Review plan →' : 'Next →'}
+              {step === form.num_weeks + 1 ? 'Review plan' : 'Next'}
             </button>
           )}
         </div>
@@ -363,29 +343,22 @@ export default function BlueprintBuilder() {
 }
 
 const styles = {
-  container: { maxWidth: 680, margin: '0 auto', padding: '0 20px 60px' },
-
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+  container: { maxWidth: 680, margin: '0 auto' },
 
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
   pageDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 28 },
 
   templateGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
-  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 8, padding: 20, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.15s' },
-  templateIcon: { fontSize: 24 },
+  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: 20, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.15s' },
+  templateIconWrap: { width: 40, height: 40, borderRadius: 10, background: 'rgba(247,87,9,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   templateLabel: { fontSize: 15, fontWeight: 700, color: 'var(--text)' },
   templateDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
 
   progressWrap: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 },
-  progressLabel: { fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap', minWidth: 80 },
+  backBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, whiteSpace: 'nowrap' },
   progressBar: { flex: 1, height: 4, background: 'var(--border)', borderRadius: 2 },
   progressFill: { height: '100%', background: ORANGE, borderRadius: 2, transition: 'width 0.3s' },
-  progressPct: { fontSize: 12, color: 'var(--text-3)', whiteSpace: 'nowrap', minWidth: 32, textAlign: 'right' },
+  progressPct: { fontSize: 12, color: 'var(--text-3)', whiteSpace: 'nowrap', minWidth: 60, textAlign: 'right' },
 
   card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 28 },
   stepTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
@@ -398,7 +371,7 @@ const styles = {
   emptyMsg: { color: 'var(--text-3)', fontSize: 13, padding: '10px 0' },
   sessionRow: { border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 10, background: 'var(--card-inner)' },
   sessionTopRow: { display: 'flex', gap: 8, alignItems: 'center' },
-  removeBtn: { background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 16, padding: '0 4px', flexShrink: 0 },
+  removeBtn: { background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 18, padding: '0 4px', flexShrink: 0 },
 
   actions: { display: 'flex', justifyContent: 'flex-end', marginTop: 28 },
   primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },

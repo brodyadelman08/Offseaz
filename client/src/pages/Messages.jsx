@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
+import { MessageIcon, BoltIcon, BroadcastIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE = '#308EBD'
@@ -70,14 +70,20 @@ function CoachMessages() {
         <div style={styles.typeRow}>
           <button
             type="button"
-            style={{ ...styles.typeBtn, ...(type === 'group' ? { ...styles.typeBtnActive, borderColor: ORANGE, background: ORANGE } : {}) }}
+            style={{
+              ...styles.typeBtn,
+              ...(type === 'group' ? { ...styles.typeBtnActive, borderColor: ORANGE, background: ORANGE } : {}),
+            }}
             onClick={() => { setType('group'); setRecipientId('') }}
           >
             Group announcement
           </button>
           <button
             type="button"
-            style={{ ...styles.typeBtn, ...(type === 'individual' ? { ...styles.typeBtnActive, borderColor: ORANGE, background: ORANGE } : {}) }}
+            style={{
+              ...styles.typeBtn,
+              ...(type === 'individual' ? { ...styles.typeBtnActive, borderColor: ORANGE, background: ORANGE } : {}),
+            }}
             onClick={() => setType('individual')}
           >
             Individual message
@@ -112,7 +118,7 @@ function CoachMessages() {
 
           <div style={styles.sendRow}>
             <button style={{ ...styles.sendBtn, background: ORANGE }} type="submit" disabled={sending}>
-              {sending ? 'Sending…' : 'Send message →'}
+              {sending ? 'Sending…' : 'Send message'}
             </button>
           </div>
         </form>
@@ -169,7 +175,7 @@ function AthleteMessages() {
         <p style={styles.empty}>Loading…</p>
       ) : messages.length === 0 ? (
         <div style={styles.emptyState}>
-          <p style={{ fontSize: 32, marginBottom: 12 }}>💬</p>
+          <MessageIcon size={32} color="var(--text-3)" />
           <p style={styles.emptyTitle}>No messages yet</p>
           <p style={styles.empty}>Your coach hasn't sent anything yet.</p>
         </div>
@@ -186,7 +192,10 @@ function AthleteMessages() {
                     background: isIndividual ? 'rgba(48,142,189,0.1)' : 'var(--border)',
                     color: isIndividual ? BLUE : 'var(--text-3)',
                   }}>
-                    {isIndividual ? '⚡ You' : '📢 Everyone'}
+                    {isIndividual
+                      ? <><BoltIcon size={11} color={BLUE} /> You</>
+                      : <><BroadcastIcon size={11} color="var(--text-3)" /> Everyone</>
+                    }
                   </span>
                   <span style={styles.msgTime}>{timeAgo(m.sent_at)}</span>
                 </div>
@@ -204,47 +213,20 @@ function AthleteMessages() {
 
 export default function Messages() {
   const { profile } = useAuth()
-  const navigate = useNavigate()
   const isCoach = profile?.role === 'coach'
-  const accent = isCoach ? ORANGE : BLUE
 
   return (
     <div style={styles.container}>
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={{ ...styles.roleChip, background: accent }}>
-            {isCoach ? 'Coach' : 'Athlete'}
-          </span>
-        </div>
-        <div style={styles.headerRight}>
-          <button
-            style={styles.backBtn}
-            onClick={() => navigate(isCoach ? '/coach' : '/athlete')}
-          >
-            ← Dashboard
-          </button>
-        </div>
-      </div>
-
       <h1 style={styles.pageTitle}>Messages</h1>
-
       {isCoach ? <CoachMessages /> : <AthleteMessages />}
     </div>
   )
 }
 
 const styles = {
-  container: { maxWidth: 660, margin: '0 auto', padding: '0 20px 60px' },
+  container: { maxWidth: 660, margin: '0 auto' },
 
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
-
-  pageTitle: { fontSize: 24, fontWeight: 700, color: 'var(--text)', marginBottom: 24 },
+  pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 24 },
 
   card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
   cardLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 14px' },
@@ -268,11 +250,11 @@ const styles = {
   msgMeta: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' },
   msgTo: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },
   msgSender: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },
-  msgTag: { fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10, textTransform: 'uppercase', letterSpacing: 0.3 },
+  msgTag: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 700, padding: '2px 8px', borderRadius: 10, textTransform: 'uppercase', letterSpacing: 0.3 },
   msgTime: { fontSize: 12, color: 'var(--text-3)', marginLeft: 'auto' },
   msgBody: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6, whiteSpace: 'pre-wrap' },
 
-  emptyState: { textAlign: 'center', padding: '24px 0' },
-  emptyTitle: { fontSize: 16, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
-  empty: { color: 'var(--text-3)', fontSize: 14 },
+  emptyState: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10, padding: '24px 0' },
+  emptyTitle: { fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: 0 },
+  empty: { color: 'var(--text-3)', fontSize: 14, margin: 0 },
 }

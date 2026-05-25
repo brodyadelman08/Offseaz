@@ -1,12 +1,13 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import { ClipboardIcon, FlameIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
+const YELLOW = '#F0BE24'
 
 const STATUS = {
-  logged:     { label: '✓ Logged',     color: '#2e7d32', bg: '#e8f5e9', border: '#2e7d32' },
-  notLogged:  { label: '✗ Not logged', color: '#b45309', bg: '#fef3c7', border: '#d97706' },
+  logged:    { label: 'Logged',     color: '#2e7d32', bg: '#e8f5e9', border: '#2e7d32' },
+  notLogged: { label: 'Not logged', color: '#b45309', bg: '#fef3c7', border: '#d97706' },
 }
 
 const LOG_STATUS = {
@@ -39,7 +40,6 @@ const FILTERS = [
 ]
 
 export default function AccountabilityDashboard() {
-  const navigate = useNavigate()
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
@@ -62,23 +62,10 @@ export default function AccountabilityDashboard() {
 
   const loggedCount    = athletes.filter(a => a.logged_this_week).length
   const notLoggedCount = athletes.length - loggedCount
-  const filterCounts = { all: athletes.length, logged: loggedCount, notLogged: notLoggedCount }
+  const filterCounts   = { all: athletes.length, logged: loggedCount, notLogged: notLoggedCount }
 
   return (
     <div style={styles.container}>
-      {/* Header */}
-      <div style={styles.header}>
-        <div style={styles.headerLeft}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
-          <span style={styles.roleChip}>Coach</span>
-        </div>
-        <div style={styles.headerRight}>
-          <button style={styles.backBtn} onClick={() => navigate('/coach')}>
-            ← Dashboard
-          </button>
-        </div>
-      </div>
-
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>Accountability</h1>
         {!loading && athletes.length > 0 && (
@@ -97,7 +84,7 @@ export default function AccountabilityDashboard() {
         <p style={styles.loadingText}>Loading…</p>
       ) : athletes.length === 0 ? (
         <div style={styles.emptyState}>
-          <p style={{ fontSize: 40, marginBottom: 12 }}>📋</p>
+          <ClipboardIcon size={40} color="var(--text-3)" />
           <h2 style={styles.emptyTitle}>No athletes yet</h2>
           <p style={styles.emptyDesc}>Share your invite link so athletes can join your team.</p>
         </div>
@@ -146,19 +133,29 @@ export default function AccountabilityDashboard() {
 
                     <div style={styles.statsRow}>
                       <div style={styles.statItem}>
-                        <span style={styles.statVal}>{a.sessions_this_week > 0 ? a.sessions_this_week : '—'}</span>
-                        <span style={styles.statLabel}>sessions this wk</span>
-                      </div>
-                      <div style={styles.statDivider} />
-                      <div style={styles.statItem}>
-                        <span style={{ ...styles.statVal, color: a.streak_weeks > 0 ? '#F0BE24' : 'var(--text)' }}>
-                          {a.streak_weeks > 0 ? `${a.streak_weeks} wk` : '—'}
+                        <span style={styles.statVal}>
+                          {a.sessions_this_week > 0 ? a.sessions_this_week : '—'}
                         </span>
-                        <span style={styles.statLabel}>streak 🔥</span>
+                        <span style={styles.statLabel}>this week</span>
                       </div>
                       <div style={styles.statDivider} />
                       <div style={styles.statItem}>
-                        <span style={styles.statVal}>{a.avg_effort_this_week != null ? a.avg_effort_this_week : '—'}</span>
+                        <span style={{
+                          ...styles.statVal,
+                          color: a.streak_weeks > 0 ? YELLOW : 'var(--text)',
+                        }}>
+                          {a.streak_weeks > 0 ? `${a.streak_weeks}w` : '—'}
+                        </span>
+                        <div style={styles.statLabelRow}>
+                          <span style={styles.statLabel}>streak</span>
+                          {a.streak_weeks > 0 && <FlameIcon size={11} color={YELLOW} />}
+                        </div>
+                      </div>
+                      <div style={styles.statDivider} />
+                      <div style={styles.statItem}>
+                        <span style={styles.statVal}>
+                          {a.avg_effort_this_week != null ? a.avg_effort_this_week : '—'}
+                        </span>
                         <span style={styles.statLabel}>avg effort</span>
                       </div>
                     </div>
@@ -207,30 +204,23 @@ export default function AccountabilityDashboard() {
 }
 
 const styles = {
-  container: { maxWidth: 900, margin: '0 auto', padding: '0 20px 60px' },
-
-  header: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '16px 0', borderBottom: '1px solid var(--border)', marginBottom: 32 },
-  headerLeft: { display: 'flex', alignItems: 'center', gap: 12 },
-  logo: { height: 32, display: 'block', mixBlendMode: 'screen' },
-  roleChip: { fontSize: 11, fontWeight: 700, background: ORANGE, color: '#fff', padding: '3px 8px', borderRadius: 20, letterSpacing: 0.5, textTransform: 'uppercase' },
-  headerRight: { display: 'flex', alignItems: 'center', gap: 10 },
-  backBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', fontWeight: 500 },
+  container: { maxWidth: 900, margin: '0 auto' },
 
   pageHeader: { marginBottom: 24 },
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' },
   pageSubtitle: { fontSize: 14, color: 'var(--text-2)', margin: 0 },
   loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
-  emptyState: { textAlign: 'center', paddingTop: 60 },
-  emptyTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
-  emptyDesc: { color: 'var(--text-2)', fontSize: 14 },
+  emptyState: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, paddingTop: 60 },
+  emptyTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: 0 },
+  emptyDesc: { color: 'var(--text-2)', fontSize: 14, margin: 0 },
 
   filterBar: { display: 'flex', gap: 8, marginBottom: 20, flexWrap: 'wrap' },
   filterBtn: { display: 'flex', alignItems: 'center', gap: 8, padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', color: 'var(--text-2)', transition: 'border-color 0.15s, color 0.15s' },
   filterCount: { fontSize: 12, fontWeight: 700, background: 'var(--border)', color: 'var(--text-3)', borderRadius: 10, padding: '1px 7px', transition: 'background 0.15s, color 0.15s' },
   emptyFilter: { color: 'var(--text-3)', fontSize: 14, paddingTop: 8 },
 
-  athleteGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(320px, 1fr))', gap: 12, marginBottom: 36 },
+  athleteGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(300px, 1fr))', gap: 12, marginBottom: 36 },
   athleteCard: { background: 'var(--card)', border: '1px solid var(--border)', borderLeft: '4px solid', borderRadius: 10, padding: '16px 18px', display: 'flex', flexDirection: 'column', gap: 10 },
   cardTop: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   avatarRow: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 },
@@ -242,6 +232,7 @@ const styles = {
   statItem: { display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 },
   statVal: { fontSize: 18, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
   statLabel: { fontSize: 11, color: 'var(--text-3)', marginTop: 2 },
+  statLabelRow: { display: 'flex', alignItems: 'center', gap: 3, marginTop: 2 },
   statDivider: { width: 1, height: 28, background: 'var(--border)' },
   lastLogged: { fontSize: 12, color: 'var(--text-3)', margin: 0 },
 
