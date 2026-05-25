@@ -1,8 +1,36 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import AvatarUpload from '../components/AvatarUpload'
+import { ChevronDownIcon, ChevronUpIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
+const BLUE   = '#308EBD'
+const YELLOW = '#F0BE24'
+
+const LIFTS = [
+  { key: 'bench_press',    label: 'Bench Press' },
+  { key: 'squat',          label: 'Squat' },
+  { key: 'deadlift',       label: 'Deadlift' },
+  { key: 'power_clean',    label: 'Power Clean' },
+  { key: 'overhead_press', label: 'Overhead Press' },
+]
+
+const LOG_STATUS = {
+  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
+  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
+  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+}
+
+function fmtDate(dateStr) {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
+}
+
+function fmtShortDate(dateStr) {
+  if (!dateStr) return ''
+  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: '2-digit' })
+}
 
 function calcCurrentWeek(startsOn, numWeeks) {
   const msPerWeek = 7 * 24 * 60 * 60 * 1000
@@ -11,33 +39,26 @@ function calcCurrentWeek(startsOn, numWeeks) {
   return Math.min(Math.max(week, 1), numWeeks)
 }
 
-function initials(name) {
-  if (!name) return '?'
-  const parts = name.trim().split(' ')
-  return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase()
-}
-
-function fmtDate(dateStr) {
-  if (!dateStr) return ''
-  return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
-}
-
-const LOG_STATUS = {
-  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
-  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
-  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
-}
-
 export default function AthleteProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
   const [athlete, setAthlete] = useState(null)
+  const [maxes, setMaxes] = useState(null)
   const [loading, setLoading] = useState(true)
   const [error, setError] = useState('')
+  const [historyOpen, setHistoryOpen] = useState(
+    Object.fromEntries(LIFTS.map(l => [l.key, false]))
+  )
 
   useEffect(() => {
-    api.get(`/api/athletes/${id}`)
-      .then(res => setAthlete(res.data.athlete))
+    Promise.all([
+      api.get(`/api/athletes/${id}`).then(r => r.data.athlete),
+      api.get(`/api/maxes/${id}`).then(r => r.data.maxes).catch(() => null),
+    ])
+      .then(([athleteData, maxesData]) => {
+        setAthlete(athleteData)
+        setMaxes(maxesData)
+      })
       .catch(err => setError(err.response?.data?.error || 'Could not load profile.'))
       .finally(() => setLoading(false))
   }, [id])
@@ -48,6 +69,7 @@ export default function AthleteProfile() {
 
   const { survey, plan, logs } = athlete
   const currentWeek = plan ? calcCurrentWeek(plan.starts_on, plan.num_weeks) : null
+  const hasAnyMax = maxes && LIFTS.some(l => maxes[l.key]?.current)
 
   const surveyFields = [
     { key: 'goals',          label: 'Goals' },
@@ -63,7 +85,13 @@ export default function AthleteProfile() {
 
       {/* Athlete header */}
       <div style={styles.athleteHeader}>
-        <div style={styles.avatar}>{initials(athlete.full_name)}</div>
+        <AvatarUpload
+          name={athlete.full_name}
+          avatarUrl={athlete.avatar_url}
+          size={56}
+          color={ORANGE}
+          editable={false}
+        />
         <div>
           <h1 style={styles.athleteName}>{athlete.full_name}</h1>
           {survey && (
@@ -91,7 +119,6 @@ export default function AthleteProfile() {
                 <p style={styles.fieldValue}>{survey[f.key]}</p>
               </div>
             ) : null)}
-
             {survey.equipment?.length > 0 && (
               <div style={styles.surveyField}>
                 <p style={styles.fieldLabel}>Equipment</p>
@@ -109,15 +136,83 @@ export default function AthleteProfile() {
       {/* Plan card */}
       {plan && (
         <div style={{ ...styles.card, marginTop: 14 }}>
-          <p style={styles.cardLabel}>Current Plan</p>
+          <p style={{ ...styles.cardLabel, color: BLUE }}>Current Plan</p>
           <p style={styles.planName}>{plan.title}</p>
           {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
           <p style={styles.planMeta}>
             {plan.num_weeks}-week plan · Started {fmtDate(plan.starts_on)}
-            {currentWeek && ` · Currently in Week ${currentWeek}`}
+            {currentWeek && ` · Week ${currentWeek}`}
           </p>
         </div>
       )}
+
+      {/* Lifting Maxes */}
+      <div style={{ ...styles.card, marginTop: 14 }}>
+        <p style={{ ...styles.cardLabel, color: YELLOW }}>Lifting Maxes</p>
+        {!hasAnyMax ? (
+          <p style={styles.empty}>No maxes logged yet.</p>
+        ) : (
+          <div style={styles.maxesGrid}>
+            {LIFTS.map(({ key, label }) => {
+              const liftData = maxes?.[key]
+              const current = liftData?.current
+              const history = liftData?.history || []
+              const isHistOpen = historyOpen[key]
+
+              return (
+                <div key={key} style={styles.liftCard}>
+                  <div style={styles.liftTop}>
+                    <span style={styles.liftLabel}>{label}</span>
+                    {current ? (
+                      <span style={styles.liftPR}>
+                        {current.weight_lbs} <span style={styles.liftUnit}>lbs</span>
+                      </span>
+                    ) : (
+                      <span style={styles.liftNone}>—</span>
+                    )}
+                  </div>
+
+                  {current ? (
+                    <p style={styles.liftDate}>Set {fmtShortDate(current.logged_at)}{current.notes ? ` · ${current.notes}` : ''}</p>
+                  ) : (
+                    <p style={styles.liftEmpty}>No data</p>
+                  )}
+
+                  {history.length > 1 && (
+                    <button
+                      style={styles.historyToggle}
+                      onClick={() => setHistoryOpen(prev => ({ ...prev, [key]: !prev[key] }))}
+                    >
+                      {isHistOpen
+                        ? <><ChevronUpIcon size={12} color="var(--text-3)" /> Hide</>
+                        : <><ChevronDownIcon size={12} color="var(--text-3)" /> History ({history.length})</>
+                      }
+                    </button>
+                  )}
+
+                  {isHistOpen && history.length > 0 && (
+                    <div style={styles.historyList}>
+                      {[...history].reverse().map(entry => (
+                        <div key={entry.id} style={styles.historyRow}>
+                          <span style={{
+                            ...styles.historyWeight,
+                            color: entry.id === current?.id ? ORANGE : 'var(--text)',
+                            fontWeight: entry.id === current?.id ? 700 : 600,
+                          }}>
+                            {entry.weight_lbs} lbs
+                            {entry.id === current?.id && <span style={styles.prTag}> PR</span>}
+                          </span>
+                          <span style={styles.historyDate}>{fmtShortDate(entry.logged_at)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
 
       {/* Log history */}
       <div style={{ ...styles.card, marginTop: 14 }}>
@@ -137,18 +232,10 @@ export default function AthleteProfile() {
               return (
                 <div key={log.id} style={{ ...styles.logRow, borderTop: i > 0 ? '1px solid var(--border-light)' : 'none' }}>
                   <div style={styles.logTop}>
-                    <span style={{ ...styles.logBadge, color: s.color, background: s.bg }}>
-                      {s.label}
-                    </span>
-                    {log.session_focus && (
-                      <span style={styles.logFocus}>{log.session_focus}</span>
-                    )}
-                    {log.effort != null && (
-                      <span style={styles.logEffort}>· {log.effort}/10</span>
-                    )}
-                    {log.week_number != null && (
-                      <span style={styles.logWeek}>Wk {log.week_number}</span>
-                    )}
+                    <span style={{ ...styles.logBadge, color: s.color, background: s.bg }}>{s.label}</span>
+                    {log.session_focus && <span style={styles.logFocus}>{log.session_focus}</span>}
+                    {log.effort != null && <span style={styles.logEffort}>· {log.effort}/10</span>}
+                    {log.week_number != null && <span style={styles.logWeek}>Wk {log.week_number}</span>}
                     <span style={styles.logDate}>{fmtDate(log.logged_at)}</span>
                   </div>
                   {log.note && <p style={styles.logNote}>"{log.note}"</p>}
@@ -165,11 +252,9 @@ export default function AthleteProfile() {
 const styles = {
   center: { color: 'var(--text-3)', fontSize: 15 },
   container: { maxWidth: 700, margin: '0 auto' },
-
   backLink: { display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px' },
 
   athleteHeader: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
-  avatar: { width: 52, height: 52, borderRadius: '50%', background: ORANGE, color: '#fff', fontSize: 18, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   athleteName: { fontSize: 24, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   subline: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 2px' },
   surveyDate: { fontSize: 12, color: 'var(--text-3)', margin: 0 },
@@ -187,6 +272,23 @@ const styles = {
   planName: { fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   planDesc: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 6px' },
   planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
+
+  maxesGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(160px, 1fr))', gap: 12 },
+  liftCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 5 },
+  liftTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
+  liftLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-2)', textTransform: 'uppercase', letterSpacing: 0.4 },
+  liftPR: { fontSize: 20, fontWeight: 700, color: ORANGE, lineHeight: 1 },
+  liftUnit: { fontSize: 11, fontWeight: 600, color: 'var(--text-3)' },
+  liftNone: { fontSize: 18, fontWeight: 700, color: 'var(--text-3)' },
+  liftDate: { fontSize: 11, color: 'var(--text-3)', margin: 0 },
+  liftEmpty: { fontSize: 12, color: 'var(--text-3)', margin: 0, fontStyle: 'italic' },
+
+  historyToggle: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', marginTop: 2 },
+  historyList: { borderTop: '1px solid var(--border-light)', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 },
+  historyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center' },
+  historyWeight: { fontSize: 13, lineHeight: 1.4 },
+  prTag: { fontSize: 10, fontWeight: 700, color: ORANGE, background: 'rgba(247,87,9,0.12)', padding: '1px 5px', borderRadius: 3 },
+  historyDate: { fontSize: 11, color: 'var(--text-3)' },
 
   logHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   logCount: { fontSize: 13, color: 'var(--text-3)' },

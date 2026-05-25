@@ -48,7 +48,7 @@ async function getTeamSurveys(coachId) {
     .from('team_members')
     .select(`
       athlete_id,
-      profiles!team_members_athlete_id_fkey ( id, full_name ),
+      profiles!team_members_athlete_id_fkey ( id, full_name, avatar_url ),
       survey_responses!survey_responses_athlete_id_fkey ( sport, position, goals, weaknesses, injury_history, equipment, time_per_week, completed_at )
     `)
     .eq('team_id', team.id)
@@ -59,6 +59,7 @@ async function getTeamSurveys(coachId) {
   return (members || []).map(m => ({
     id: m.profiles.id,
     full_name: m.profiles.full_name,
+    avatar_url: m.profiles.avatar_url || null,
     survey: m.survey_responses || null,
   }))
 }

@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { CheckIcon } from '../components/Icons'
+import AvatarUpload from '../components/AvatarUpload'
 
 const ORANGE = '#F75709'
 
@@ -72,7 +73,18 @@ export default function CoachAthletes() {
                     onMouseEnter={e => e.currentTarget.style.background = 'var(--border-light)'}
                     onMouseLeave={e => e.currentTarget.style.background = 'transparent'}
                   >
-                    <td style={{ ...styles.td, fontWeight: 600 }}>{a.full_name}</td>
+                    <td style={styles.td}>
+                      <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                        <AvatarUpload
+                          name={a.full_name}
+                          avatarUrl={a.avatar_url}
+                          size={32}
+                          color="#F75709"
+                          editable={false}
+                        />
+                        <span style={{ fontWeight: 600 }}>{a.full_name}</span>
+                      </div>
+                    </td>
                     <td style={styles.td}>{a.survey?.sport || '—'}</td>
                     <td style={styles.td}>{a.survey?.position || '—'}</td>
                     <td style={{ ...styles.td, maxWidth: 200 }}>{truncate(a.survey?.goals)}</td>

@@ -41,8 +41,12 @@ export function AuthProvider({ children }) {
     setProfile(null)
   }
 
+  function updateProfile(partial) {
+    setProfile(prev => prev ? { ...prev, ...partial } : prev)
+  }
+
   return (
-    <AuthContext.Provider value={{ session, profile, loading, signOut }}>
+    <AuthContext.Provider value={{ session, profile, loading, signOut, updateProfile }}>
       {children}
     </AuthContext.Provider>
   )

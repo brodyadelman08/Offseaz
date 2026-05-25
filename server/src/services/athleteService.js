@@ -27,7 +27,7 @@ async function getAthleteProfile(athleteId, coachId) {
   // Fetch profile name
   const { data: profile, error: profileError } = await supabaseAdmin
     .from('profiles')
-    .select('id, full_name')
+    .select('id, full_name, avatar_url')
     .eq('id', athleteId)
     .single()
 
@@ -74,6 +74,7 @@ async function getAthleteProfile(athleteId, coachId) {
   return {
     id: profile.id,
     full_name: profile.full_name,
+    avatar_url: profile.avatar_url || null,
     survey,
     plan: plan ? {
       title: plan.title,

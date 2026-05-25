@@ -5,6 +5,7 @@ import {
   GridIcon, UsersIcon, LayoutIcon, MessageIcon, BarChartIcon,
   HomeIcon, CalendarIcon, EditIcon, UserIcon, SignOutIcon,
 } from './Icons'
+import AvatarUpload from './AvatarUpload'
 
 const ORANGE  = '#F75709'
 const BLUE    = '#308EBD'
@@ -100,7 +101,13 @@ function DesktopSidebar({ nav, profile, signOut }) {
       {/* Bottom — user + sign out */}
       <div style={styles.bottomArea}>
         <div style={styles.userRow}>
-          <div style={styles.userDot} />
+          <AvatarUpload
+            name={profile?.full_name}
+            avatarUrl={profile?.avatar_url}
+            size={30}
+            color={ORANGE}
+            editable={false}
+          />
           <div style={styles.userInfo}>
             <span style={styles.userName}>{profile?.full_name || '—'}</span>
             <span style={styles.userRole}>
@@ -241,13 +248,6 @@ const styles = {
     alignItems: 'center',
     gap: 10,
     padding: '10px 16px 12px',
-  },
-  userDot: {
-    width: 28,
-    height: 28,
-    borderRadius: '50%',
-    background: ORANGE,
-    flexShrink: 0,
   },
   userInfo: {
     display: 'flex',

@@ -62,4 +62,24 @@ async function profile(req, res) {
   }
 }
 
-module.exports = { register, profile }
+async function updateAvatar(req, res) {
+  const { avatar_url } = req.body
+  if (!avatar_url) return res.status(400).json({ error: 'avatar_url is required' })
+
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('profiles')
+      .update({ avatar_url })
+      .eq('id', req.user.id)
+      .select()
+      .single()
+
+    if (error) throw error
+    res.json({ profile: data })
+  } catch (err) {
+    console.error('[updateAvatar] error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { register, profile, updateAvatar }
