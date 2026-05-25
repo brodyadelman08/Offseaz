@@ -41,7 +41,9 @@ export default function Login() {
     <div style={styles.page}>
       <div style={styles.content}>
         <div style={styles.brand}>
-          <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logoHero} />
+          <div style={styles.logoAccent}>
+            <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logoHero} />
+          </div>
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
 
@@ -108,6 +110,15 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     gap: 12,
+  },
+  logoAccent: {
+    background: 'linear-gradient(135deg, #F75709 0%, #308EBD 100%)',
+    borderRadius: 24,
+    padding: '22px 36px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    boxShadow: '0 8px 40px rgba(247,87,9,0.30), 0 2px 12px rgba(48,142,189,0.20)',
   },
   logoHero: {
     height: 72,

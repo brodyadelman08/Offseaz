@@ -6,7 +6,15 @@ import {
   HomeIcon, CalendarIcon, EditIcon, UserIcon, SignOutIcon,
 } from './Icons'
 
-const ORANGE = '#F75709'
+const ORANGE  = '#F75709'
+const BLUE    = '#308EBD'
+const YELLOW  = '#F0BE24'
+const ACCENTS    = [ORANGE, BLUE, YELLOW]
+const ACCENT_BG  = [
+  'rgba(247,87,9,0.10)',
+  'rgba(48,142,189,0.10)',
+  'rgba(240,190,36,0.10)',
+]
 const SIDEBAR_W = 240
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -64,21 +72,23 @@ function DesktopSidebar({ nav, profile, signOut }) {
 
       {/* Nav items */}
       <div style={styles.navList}>
-        {nav.map(({ path, label, Icon, exact }) => {
+        {nav.map(({ path, label, Icon, exact }, i) => {
           const active = isActive(path, exact)
+          const accent = ACCENTS[i % 3]
+          const accentBg = ACCENT_BG[i % 3]
           return (
             <button
               key={path}
               onClick={() => navigate(path)}
               style={{
                 ...styles.navItem,
-                ...(active ? styles.navItemActive : {}),
+                ...(active ? { background: accentBg } : {}),
               }}
               onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
               onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
             >
-              <div style={styles.navBorder(active)} />
-              <Icon size={18} color={active ? ORANGE : 'var(--text-3)'} />
+              <div style={styles.navBorder(active, accent)} />
+              <Icon size={18} color={active ? accent : 'var(--text-3)'} />
               <span style={{ ...styles.navLabel, color: active ? 'var(--text)' : 'var(--text-2)' }}>
                 {label}
               </span>
@@ -120,16 +130,17 @@ function BottomBar({ nav }) {
 
   return (
     <div style={styles.bottomBar}>
-      {nav.map(({ path, label, Icon, exact }) => {
+      {nav.map(({ path, label, Icon, exact }, i) => {
         const active = isActive(path, exact)
+        const accent = ACCENTS[i % 3]
         return (
           <button
             key={path}
             onClick={() => navigate(path)}
             style={styles.tabItem}
           >
-            <Icon size={22} color={active ? ORANGE : 'var(--text-3)'} />
-            <span style={{ ...styles.tabLabel, color: active ? ORANGE : 'var(--text-3)' }}>
+            <Icon size={22} color={active ? accent : 'var(--text-3)'} />
+            <span style={{ ...styles.tabLabel, color: active ? accent : 'var(--text-3)' }}>
               {label.split(' ')[0]}
             </span>
           </button>
@@ -204,10 +215,10 @@ const styles = {
     background: 'rgba(247,87,9,0.08)',
   },
 
-  navBorder: (active) => ({
+  navBorder: (active, color = ORANGE) => ({
     width: 3,
     alignSelf: 'stretch',
-    background: active ? ORANGE : 'transparent',
+    background: active ? color : 'transparent',
     flexShrink: 0,
     borderRadius: '0 2px 2px 0',
     marginRight: 13,

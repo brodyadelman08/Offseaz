@@ -5,6 +5,9 @@ import api from '../services/api'
 import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
+const BLUE   = '#308EBD'
+const YELLOW = '#F0BE24'
+const ACCENTS = [ORANGE, BLUE, YELLOW]
 
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -90,28 +93,28 @@ export default function CoachDashboard() {
         <>
           {/* Stats row */}
           <div style={styles.statsRow}>
-            <button style={styles.statCard} onClick={() => navigate('/coach/athletes')}>
-              <UsersIcon size={20} color={ORANGE} />
-              <span style={styles.statVal}>{athletes.length}</span>
-              <span style={styles.statLabel}>Athletes</span>
-            </button>
-            <button style={styles.statCard} onClick={() => navigate('/coach/blueprints')}>
-              <LayoutIcon size={20} color={ORANGE} />
-              <span style={styles.statVal}>{blueprints.length}</span>
-              <span style={styles.statLabel}>Blueprints</span>
-            </button>
-            <button style={styles.statCard} onClick={() => navigate('/coach/athletes')}>
-              <BarChartIcon size={20} color={ORANGE} />
-              <span style={styles.statVal}>{surveyedCount}</span>
-              <span style={styles.statLabel}>Surveyed</span>
-            </button>
+            {[
+              { Icon: UsersIcon,  val: athletes.length,   label: 'Athletes',   path: '/coach/athletes' },
+              { Icon: LayoutIcon, val: blueprints.length,  label: 'Blueprints', path: '/coach/blueprints' },
+              { Icon: BarChartIcon, val: surveyedCount,    label: 'Surveyed',   path: '/coach/athletes' },
+            ].map(({ Icon, val, label, path }, i) => (
+              <button
+                key={label}
+                style={{ ...styles.statCard, borderLeft: `3px solid ${ACCENTS[i]}` }}
+                onClick={() => navigate(path)}
+              >
+                <Icon size={20} color={ACCENTS[i]} />
+                <span style={styles.statVal}>{val}</span>
+                <span style={styles.statLabel}>{label}</span>
+              </button>
+            ))}
           </div>
 
           {/* Team + invite */}
           <div style={styles.card}>
             <div style={styles.cardHeader}>
               <div>
-                <p style={styles.cardLabel}>Your Team</p>
+                <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
                 <h2 style={styles.teamName}>{team.name}</h2>
               </div>
             </div>
@@ -120,8 +123,8 @@ export default function CoachDashboard() {
               <span style={styles.inviteText}>{inviteLink}</span>
               <button style={styles.copyBtn} onClick={handleCopy}>
                 {copied
-                  ? <><CheckIcon size={13} color={ORANGE} /> Copied</>
-                  : <><CopyIcon size={13} color={ORANGE} /> Copy</>
+                  ? <><CheckIcon size={13} color={BLUE} /> Copied</>
+                  : <><CopyIcon size={13} color={BLUE} /> Copy</>
                 }
               </button>
             </div>
@@ -130,7 +133,7 @@ export default function CoachDashboard() {
           {/* Recent Activity */}
           <div style={{ ...styles.card, marginTop: 14 }}>
             <div style={styles.sectionHeader}>
-              <p style={styles.cardLabel}>Recent Activity</p>
+              <p style={{ ...styles.cardLabel, color: YELLOW }}>Recent Activity</p>
               {activityLogs.length > 10 && (
                 <button
                   style={styles.viewAllBtn}
@@ -280,9 +283,9 @@ const styles = {
     fontSize: 13,
     padding: '5px 12px',
     borderRadius: 6,
-    border: `1px solid ${ORANGE}`,
+    border: `1px solid ${BLUE}`,
     background: 'transparent',
-    color: ORANGE,
+    color: BLUE,
     cursor: 'pointer',
     whiteSpace: 'nowrap',
     fontWeight: 600,
@@ -297,7 +300,7 @@ const styles = {
   viewAllBtn: {
     fontSize: 12,
     fontWeight: 600,
-    color: ORANGE,
+    color: BLUE,
     background: 'none',
     border: 'none',
     cursor: 'pointer',

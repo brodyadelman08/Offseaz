@@ -143,6 +143,7 @@ export default function AccountabilityDashboard() {
                         <span style={{
                           ...styles.statVal,
                           color: a.streak_weeks > 0 ? YELLOW : 'var(--text)',
+                          textShadow: a.streak_weeks > 0 ? '0 0 14px rgba(240,190,36,0.65)' : 'none',
                         }}>
                           {a.streak_weeks > 0 ? `${a.streak_weeks}w` : '—'}
                         </span>

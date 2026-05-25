@@ -4,8 +4,9 @@ import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { CheckCircleIcon, CalendarIcon, BoltIcon } from '../components/Icons'
 
-const BLUE = '#308EBD'
 const ORANGE = '#F75709'
+const BLUE   = '#308EBD'
+const YELLOW = '#F0BE24'
 
 export default function AthleteDashboard() {
   const { profile } = useAuth()
@@ -65,12 +66,12 @@ export default function AthleteDashboard() {
           {/* Team card */}
           {team ? (
             <div style={styles.card}>
-              <p style={styles.cardLabel}>Your Team</p>
+              <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
               <p style={styles.teamName}>{team.name}</p>
             </div>
           ) : (
             <div style={styles.card}>
-              <p style={styles.cardLabel}>Join a Team</p>
+              <p style={{ ...styles.cardLabel, color: BLUE }}>Join a Team</p>
               <p style={styles.joinDesc}>Enter the code your coach shared with you.</p>
               <form onSubmit={handleJoinTeam} style={styles.joinForm}>
                 <input
@@ -117,7 +118,7 @@ export default function AthleteDashboard() {
                   <p style={styles.actionTitle}>Complete your athlete profile</p>
                   <p style={styles.actionSub}>Help your coach build the right plan for you.</p>
                 </div>
-                <button style={styles.actionBtn} onClick={() => navigate('/survey')}>
+                <button style={{ ...styles.actionBtn, background: YELLOW, color: '#1a1a1a' }} onClick={() => navigate('/survey')}>
                   Start survey
                 </button>
               </div>
@@ -133,7 +134,7 @@ export default function AthleteDashboard() {
                   <p style={styles.planTitle}>{plan.title}</p>
                   <p style={styles.planMeta}>{plan.num_weeks}-week plan</p>
                 </div>
-                <button style={styles.actionBtn} onClick={() => navigate('/athlete/plan')}>
+                <button style={{ ...styles.actionBtn, background: BLUE }} onClick={() => navigate('/athlete/plan')}>
                   View plan
                 </button>
               </div>
@@ -194,7 +195,7 @@ const styles = {
     fontWeight: 700,
     borderRadius: 8,
     border: 'none',
-    background: ORANGE,
+    background: BLUE,
     color: '#fff',
     cursor: 'pointer',
     whiteSpace: 'nowrap',

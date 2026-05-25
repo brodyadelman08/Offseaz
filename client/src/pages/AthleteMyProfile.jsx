@@ -72,18 +72,18 @@ export default function AthleteMyProfile() {
 
       {/* Stats */}
       <div style={styles.statsRow}>
-        <div style={styles.statCard}>
+        <div style={{ ...styles.statCard, borderLeft: `3px solid ${ORANGE}` }}>
           <span style={styles.statVal}>{logs.length}</span>
           <span style={styles.statLabel}>Total sessions</span>
         </div>
-        <div style={styles.statCard}>
-          <span style={{ ...styles.statVal, color: completedSessions > 0 ? '#2e7d32' : 'var(--text)' }}>
+        <div style={{ ...styles.statCard, borderLeft: `3px solid ${BLUE}` }}>
+          <span style={{ ...styles.statVal, color: completedSessions > 0 ? BLUE : 'var(--text)' }}>
             {completedSessions}
           </span>
           <span style={styles.statLabel}>Completed</span>
         </div>
-        <div style={styles.statCard}>
-          <span style={{ ...styles.statVal, color: avgEffort ? BLUE : 'var(--text)' }}>
+        <div style={{ ...styles.statCard, borderLeft: `3px solid ${YELLOW}` }}>
+          <span style={{ ...styles.statVal, color: avgEffort ? YELLOW : 'var(--text)', textShadow: avgEffort ? '0 0 12px rgba(240,190,36,0.5)' : 'none' }}>
             {avgEffort ?? '—'}
           </span>
           <span style={styles.statLabel}>Avg effort</span>
@@ -95,7 +95,7 @@ export default function AthleteMyProfile() {
         <div style={styles.cardHeader}>
           <p style={styles.cardLabel}>Athlete Survey</p>
           <button style={styles.editBtn} onClick={() => navigate('/survey')}>
-            <EditIcon size={14} color={ORANGE} />
+            <EditIcon size={14} color={BLUE} />
             Retake
           </button>
         </div>
@@ -136,9 +136,9 @@ export default function AthleteMyProfile() {
       {plan && (
         <div style={{ ...styles.card, marginTop: 14 }}>
           <div style={styles.cardHeader}>
-            <p style={styles.cardLabel}>Current Plan</p>
+            <p style={{ ...styles.cardLabel, color: BLUE }}>Current Plan</p>
             <button style={styles.editBtn} onClick={() => navigate('/athlete/plan')}>
-              <CalendarIcon size={14} color={ORANGE} />
+              <CalendarIcon size={14} color={BLUE} />
               View plan
             </button>
           </div>
@@ -153,7 +153,7 @@ export default function AthleteMyProfile() {
       {/* Session log */}
       <div style={{ ...styles.card, marginTop: 14 }}>
         <div style={styles.cardHeader}>
-          <p style={styles.cardLabel}>Session Log</p>
+          <p style={{ ...styles.cardLabel, color: YELLOW }}>Session Log</p>
           {logs.length > 0 && (
             <span style={styles.logCount}>{logs.length} sessions</span>
           )}
@@ -264,9 +264,9 @@ const styles = {
     gap: 5,
     fontSize: 12,
     fontWeight: 600,
-    color: ORANGE,
+    color: BLUE,
     background: 'none',
-    border: `1px solid ${ORANGE}`,
+    border: `1px solid ${BLUE}`,
     borderRadius: 6,
     padding: '4px 10px',
     cursor: 'pointer',
