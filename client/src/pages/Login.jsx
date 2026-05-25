@@ -110,7 +110,7 @@ const styles = {
     gap: 12,
   },
   logoHero: {
-    height: 48,
+    height: 72,
     display: 'block',
   },
   tagline: {

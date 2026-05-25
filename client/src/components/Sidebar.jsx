@@ -172,7 +172,7 @@ const styles = {
     borderBottom: '1px solid var(--border)',
   },
   logo: {
-    height: 36,
+    height: 52,
     display: 'block',
     cursor: 'pointer',
   },
