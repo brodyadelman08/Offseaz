@@ -55,7 +55,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
       {/* Logo */}
       <div style={styles.logoArea}>
         <img
-          src="/OFFSEAZ_LOGO_PNG.png"
+          src="/Offseaz_logo__DARK_-removebg-preview.png"
           alt="Offseaz"
           style={styles.logo}
           onClick={() => navigate(nav[0].path)}
@@ -174,7 +174,6 @@ const styles = {
   logo: {
     height: 36,
     display: 'block',
-    mixBlendMode: 'screen',
     cursor: 'pointer',
   },
 

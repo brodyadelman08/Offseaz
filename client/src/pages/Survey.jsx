@@ -86,7 +86,7 @@ export default function Survey() {
     <div style={styles.page}>
       {/* Slim top bar */}
       <div style={styles.topBar}>
-        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
+        <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logo} />
         <span style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</span>
       </div>
 
@@ -227,7 +227,7 @@ const styles = {
   page: { minHeight: '100vh', background: 'var(--bg)' },
 
   topBar: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid var(--border)' },
-  logo: { height: 28, display: 'block', mixBlendMode: 'screen' },
+  logo: { height: 28, display: 'block' },
   stepLabel: { fontSize: 13, color: 'var(--text-3)' },
 
   progressBar: { height: 3, background: 'var(--border)' },

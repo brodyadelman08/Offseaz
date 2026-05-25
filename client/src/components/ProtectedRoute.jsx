@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
   if (loading) {
     return (
       <div style={styles.loading}>
-        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
+        <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logo} />
         <p style={styles.loadingText}>Loading…</p>
       </div>
     )
@@ -32,7 +32,7 @@ const styles = {
     gap: 16,
     background: 'var(--bg)',
   },
-  logo: { height: 48, display: 'block', mixBlendMode: 'screen' },
+  logo: { height: 48, display: 'block' },
   loadingText: {
     fontSize: 14,
     color: 'var(--text-3)',

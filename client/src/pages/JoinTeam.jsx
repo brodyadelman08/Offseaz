@@ -41,7 +41,7 @@ export default function JoinTeam() {
   return (
     <div style={styles.page}>
       <div style={styles.content}>
-        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
+        <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logoHero} />
         {error ? (
           <div style={styles.errorCard}>
             <AlertIcon size={36} color="#c73820" />
@@ -70,7 +70,7 @@ const styles = {
     background: 'var(--bg)',
     position: 'relative',
   },
-  logoHero: { height: 64, display: 'block', mixBlendMode: 'screen' },
+  logoHero: { height: 48, display: 'block' },
   content: {
     display: 'flex',
     flexDirection: 'column',
