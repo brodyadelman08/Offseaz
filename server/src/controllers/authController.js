@@ -62,19 +62,60 @@ async function profile(req, res) {
   }
 }
 
+const ALLOWED_MIME = {
+  'image/jpeg': 'jpg',
+  'image/png':  'png',
+  'image/webp': 'webp',
+}
+
 async function updateAvatar(req, res) {
-  const { avatar_url } = req.body
-  if (!avatar_url) return res.status(400).json({ error: 'avatar_url is required' })
+  const { dataUrl, mimeType } = req.body
+
+  if (!dataUrl || !mimeType) {
+    return res.status(400).json({ error: 'dataUrl and mimeType are required' })
+  }
+  if (!ALLOWED_MIME[mimeType]) {
+    return res.status(400).json({ error: 'Only JPEG, PNG, and WebP images are allowed' })
+  }
 
   try {
-    const { data, error } = await supabaseAdmin
+    // Decode base64 data URL → Buffer
+    const base64 = dataUrl.split(',')[1]
+    if (!base64) return res.status(400).json({ error: 'Invalid dataUrl format' })
+    const buffer = Buffer.from(base64, 'base64')
+
+    if (buffer.length > 4 * 1024 * 1024) {
+      return res.status(400).json({ error: 'Image must be under 4 MB' })
+    }
+
+    // Upload via service-role client — bypasses storage RLS entirely
+    const ext = ALLOWED_MIME[mimeType]
+    const path = `${req.user.id}/avatar.${ext}`
+
+    const { error: uploadError } = await supabaseAdmin.storage
+      .from('avatars')
+      .upload(path, buffer, { upsert: true, contentType: mimeType })
+
+    if (uploadError) {
+      console.error('[updateAvatar] storage upload failed:', uploadError.message)
+      throw uploadError
+    }
+
+    const { data: { publicUrl } } = supabaseAdmin.storage
+      .from('avatars')
+      .getPublicUrl(path)
+
+    // Append a cache-buster so browsers fetch the new image immediately
+    const avatar_url = `${publicUrl}?cb=${Date.now()}`
+
+    const { data, error: dbError } = await supabaseAdmin
       .from('profiles')
       .update({ avatar_url })
       .eq('id', req.user.id)
       .select()
       .single()
 
-    if (error) throw error
+    if (dbError) throw dbError
     res.json({ profile: data })
   } catch (err) {
     console.error('[updateAvatar] error:', err.message)
