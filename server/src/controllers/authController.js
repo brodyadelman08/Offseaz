@@ -123,4 +123,19 @@ async function updateAvatar(req, res) {
   }
 }
 
-module.exports = { register, profile, updateAvatar }
+async function updatePrivacy(req, res) {
+  const { privacy_team } = req.body
+  if (!['public', 'private'].includes(privacy_team)) {
+    return res.status(400).json({ error: 'privacy_team must be "public" or "private"' })
+  }
+  try {
+    const { updatePrivacy: svcUpdate } = require('../services/rosterService')
+    const data = await svcUpdate(req.user.id, privacy_team)
+    res.json({ profile: data })
+  } catch (err) {
+    console.error('[updatePrivacy] error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { register, profile, updateAvatar, updatePrivacy }

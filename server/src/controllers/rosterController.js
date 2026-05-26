@@ -1,0 +1,59 @@
+const { getProfile } = require('../services/authService')
+const {
+  getCoachRoster,
+  getAthleteRoster,
+  getTeammateProfile,
+} = require('../services/rosterService')
+
+/**
+ * GET /api/roster[?sort=name|position|joined]
+ * Coach  → full team roster with survey status + max highlights
+ * Athlete → privacy-filtered roster of teammates
+ */
+async function roster(req, res) {
+  try {
+    const profile = await getProfile(req.user.id)
+
+    if (profile.role === 'coach') {
+      const sort = ['name', 'position', 'joined'].includes(req.query.sort)
+        ? req.query.sort
+        : 'name'
+      const data = await getCoachRoster(req.user.id, sort)
+      return res.json({ roster: data })
+    }
+
+    if (profile.role === 'athlete') {
+      const { team, roster: data } = await getAthleteRoster(req.user.id)
+      return res.json({ team, roster: data })
+    }
+
+    res.status(403).json({ error: 'Forbidden' })
+  } catch (err) {
+    console.error('[rosterController] roster error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+/**
+ * GET /api/roster/:athleteId
+ * Athlete views a public teammate's full profile.
+ */
+async function teammateProfle(req, res) {
+  const { athleteId } = req.params
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'athlete') {
+      return res.status(403).json({ error: 'Only athletes can use this endpoint' })
+    }
+
+    const data = await getTeammateProfile(req.user.id, athleteId)
+    res.json({ athlete: data })
+  } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
+    if (err.status === 404) return res.status(404).json({ error: err.message })
+    console.error('[rosterController] teammateProfle error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { roster, teammateProfle }

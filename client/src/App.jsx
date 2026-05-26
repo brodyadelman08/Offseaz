@@ -24,6 +24,8 @@ import AthletePlan from './pages/AthletePlan'
 import WorkoutLog from './pages/WorkoutLog'
 import AthleteMyProfile from './pages/AthleteMyProfile'
 import AthleteOnboarding from './pages/AthleteOnboarding'
+import AthleteRoster from './pages/AthleteRoster'
+import AthleteTeammateProfile from './pages/AthleteTeammateProfile'
 
 // Smart redirect for /messages → role-based destination
 function MessagesRedirect() {
@@ -94,6 +96,8 @@ export default function App() {
               <Route path="plan" element={<AthletePlan />} />
               <Route path="log" element={<WorkoutLog />} />
               <Route path="messages" element={<Messages />} />
+              <Route path="roster" element={<AthleteRoster />} />
+              <Route path="roster/:athleteId" element={<AthleteTeammateProfile />} />
               <Route path="profile" element={<AthleteMyProfile />} />
             </Route>
 

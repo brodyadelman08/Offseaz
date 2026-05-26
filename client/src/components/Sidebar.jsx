@@ -44,6 +44,7 @@ const ATHLETE_NAV = [
   { path: '/athlete',          label: 'Home',        Icon: HomeIcon,     exact: true },
   { path: '/athlete/plan',     label: 'My Plan',     Icon: CalendarIcon, exact: false },
   { path: '/athlete/log',      label: 'Log Workout', Icon: EditIcon,     exact: false },
+  { path: '/athlete/roster',   label: 'Roster',      Icon: UsersIcon,    exact: false },
   { path: '/athlete/messages', label: 'Messages',    Icon: MessageIcon,  exact: false },
   { path: '/athlete/profile',  label: 'My Profile',  Icon: UserIcon,     exact: false },
 ]

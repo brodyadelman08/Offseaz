@@ -53,6 +53,7 @@ export default function AthleteMyProfile() {
     Object.fromEntries(LIFTS.map(l => [l.key, false]))
   )
   const [submitting, setSubmitting] = useState(null) // lift key being submitted
+  const [savingPrivacy, setSavingPrivacy] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -67,6 +68,19 @@ export default function AthleteMyProfile() {
       setMaxes(m)
     }).finally(() => setLoading(false))
   }, [])
+
+  async function handlePrivacyToggle() {
+    const newVal = profile?.privacy_team === 'private' ? 'public' : 'private'
+    setSavingPrivacy(true)
+    try {
+      await api.patch('/api/auth/privacy', { privacy_team: newVal })
+      updateProfile({ privacy_team: newVal })
+    } catch (err) {
+      console.error('Failed to update privacy:', err)
+    } finally {
+      setSavingPrivacy(false)
+    }
+  }
 
   async function handleLogMax(liftKey) {
     const form = logForms[liftKey]
@@ -323,6 +337,38 @@ export default function AthleteMyProfile() {
         </div>
       </div>
 
+      {/* Privacy settings */}
+      <div style={{ ...styles.card, marginTop: 14 }}>
+        <p style={{ ...styles.cardLabel, color: 'var(--text-3)' }}>Privacy</p>
+        <div style={styles.privacyRow}>
+          <div>
+            <p style={styles.privacyTitle}>
+              {profile?.privacy_team === 'private' ? 'Private' : 'Public to Team'}
+            </p>
+            <p style={styles.privacySub}>
+              {profile?.privacy_team === 'private'
+                ? 'Teammates can only see your name and avatar.'
+                : 'Teammates can view your survey, lifting PRs, and activity stats.'}
+            </p>
+          </div>
+          <button
+            style={{
+              ...styles.privacyBtn,
+              borderColor: profile?.privacy_team === 'private' ? BLUE : 'var(--border)',
+              color: profile?.privacy_team === 'private' ? BLUE : 'var(--text-2)',
+            }}
+            onClick={handlePrivacyToggle}
+            disabled={savingPrivacy}
+          >
+            {savingPrivacy
+              ? 'Saving…'
+              : profile?.privacy_team === 'private'
+                ? 'Make Public'
+                : 'Make Private'}
+          </button>
+        </div>
+      </div>
+
       {/* Session log */}
       <div style={{ ...styles.card, marginTop: 14 }}>
         <div style={styles.cardHeader}>
@@ -419,6 +465,22 @@ const styles = {
   historyWeight: { fontSize: 13, lineHeight: 1.4 },
   prTag: { fontSize: 10, fontWeight: 700, color: ORANGE, background: 'rgba(247,87,9,0.12)', padding: '1px 5px', borderRadius: 3 },
   historyDate: { fontSize: 11, color: 'var(--text-3)' },
+
+  // Privacy
+  privacyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 },
+  privacyTitle: { fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
+  privacySub: { fontSize: 13, color: 'var(--text-2)', margin: 0, lineHeight: 1.5 },
+  privacyBtn: {
+    flexShrink: 0,
+    padding: '8px 16px',
+    fontSize: 13,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: '1px solid var(--border)',
+    background: 'none',
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+  },
 
   // Session log
   logList: { display: 'flex', flexDirection: 'column' },
