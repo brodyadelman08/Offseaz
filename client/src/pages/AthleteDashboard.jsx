@@ -39,8 +39,8 @@ export default function AthleteDashboard() {
     }).finally(() => setLoading(false))
   }, [onboardingDone, navigate])
 
-  // Don't flash dashboard before the redirect fires
-  if (!onboardingDone) return null
+  // Show a minimal loading state while the redirect fires — prevents black screen
+  if (!onboardingDone) return <div style={{ color: 'var(--text-3)', fontSize: 15, padding: 32 }}>Loading…</div>
 
   async function handleJoinTeam(e) {
     e.preventDefault()
