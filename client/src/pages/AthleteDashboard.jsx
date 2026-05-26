@@ -18,6 +18,7 @@ export default function AthleteDashboard() {
   const [joinCode, setJoinCode] = useState('')
   const [joining, setJoining] = useState(false)
   const [joinError, setJoinError] = useState('')
+  const [joinSkipped, setJoinSkipped] = useState(false)
 
   // Redirect new athletes to the onboarding flow on first visit.
   // Once onboarding is marked done in localStorage it never fires again.
@@ -80,13 +81,23 @@ export default function AthleteDashboard() {
               <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
               <p style={styles.teamName}>{team.name}</p>
             </div>
+          ) : joinSkipped ? (
+            <div style={styles.card}>
+              <p style={{ ...styles.cardLabel, color: BLUE }}>Join a Team</p>
+              <p style={styles.joinDesc}>
+                No team yet.{' '}
+                <button style={styles.enterCodeLink} onClick={() => setJoinSkipped(false)}>
+                  Enter a code →
+                </button>
+              </p>
+            </div>
           ) : (
             <div style={styles.card}>
               <p style={{ ...styles.cardLabel, color: BLUE }}>Join a Team</p>
-              <p style={styles.joinDesc}>Enter the code your coach shared with you.</p>
-              <form onSubmit={handleJoinTeam} style={styles.joinForm}>
+              <p style={styles.joinPrompt}>Enter the code your coach shared with you</p>
+              <form onSubmit={handleJoinTeam} style={styles.joinFormStack}>
                 <input
-                  style={styles.joinInput}
+                  style={styles.joinInputLarge}
                   type="text"
                   placeholder="e.g. 2FB9A616"
                   value={joinCode.toUpperCase()}
@@ -97,13 +108,19 @@ export default function AthleteDashboard() {
                 />
                 <button
                   type="submit"
-                  style={styles.joinBtn}
+                  style={{ ...styles.joinBtnFull, opacity: joining || !joinCode.trim() ? 0.55 : 1 }}
                   disabled={joining || !joinCode.trim()}
                 >
-                  {joining ? 'Joining…' : 'Join'}
+                  {joining ? 'Joining…' : 'Join Team'}
                 </button>
               </form>
               {joinError && <p style={styles.joinError}>{joinError}</p>}
+              <div style={styles.skipWrap}>
+                <button style={styles.skipCodeBtn} type="button" onClick={() => setJoinSkipped(true)}>
+                  I don't have a code yet — skip for now
+                </button>
+                <p style={styles.skipCodeSub}>You can always join a team later from your profile.</p>
+              </div>
             </div>
           )}
 
@@ -185,33 +202,77 @@ const styles = {
   },
   teamName: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: 0 },
 
-  joinDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 16 },
-  joinForm: { display: 'flex', gap: 8 },
-  joinInput: {
-    flex: 1,
-    padding: '10px 14px',
-    fontSize: 16,
+  joinDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 0 },
+  enterCodeLink: {
+    background: 'none',
+    border: 'none',
+    color: BLUE,
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
+    padding: 0,
+    textDecoration: 'underline',
+  },
+
+  joinPrompt: {
+    fontSize: 17,
+    fontWeight: 700,
+    color: 'var(--text)',
+    margin: '0 0 14px',
+    lineHeight: 1.35,
+  },
+  joinFormStack: { display: 'flex', flexDirection: 'column', gap: 10 },
+  joinInputLarge: {
+    width: '100%',
+    padding: '14px 18px',
+    fontSize: 22,
     fontFamily: 'monospace',
-    letterSpacing: 3,
-    borderRadius: 8,
+    letterSpacing: 5,
+    textAlign: 'center',
+    borderRadius: 10,
     border: '1px solid var(--input-border)',
     background: 'var(--input-bg)',
     color: 'var(--text)',
     textTransform: 'uppercase',
     outline: 'none',
+    boxSizing: 'border-box',
   },
-  joinBtn: {
-    padding: '10px 20px',
-    fontSize: 14,
+  joinBtnFull: {
+    width: '100%',
+    padding: '13px 0',
+    fontSize: 15,
     fontWeight: 700,
-    borderRadius: 8,
+    borderRadius: 10,
     border: 'none',
     background: BLUE,
     color: '#fff',
     cursor: 'pointer',
-    whiteSpace: 'nowrap',
   },
-  joinError: { color: '#c73820', fontSize: 13, marginTop: 10 },
+  joinError: { color: '#c73820', fontSize: 13, marginTop: 4 },
+
+  skipWrap: {
+    marginTop: 6,
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 4,
+  },
+  skipCodeBtn: {
+    background: 'none',
+    border: 'none',
+    fontSize: 13,
+    fontWeight: 600,
+    color: 'var(--text-3)',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    padding: '4px 0',
+  },
+  skipCodeSub: {
+    fontSize: 12,
+    color: 'var(--text-3)',
+    margin: 0,
+    textAlign: 'center',
+  },
 
   surveyComplete: { display: 'flex', alignItems: 'center', gap: 14 },
   checkIcon: {

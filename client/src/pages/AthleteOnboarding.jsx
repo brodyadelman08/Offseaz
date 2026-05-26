@@ -213,11 +213,12 @@ export default function AthleteOnboarding() {
             ) : (
               <>
                 <p style={styles.stepDesc}>
-                  Enter the invite code your coach shared with you.
+                  Your coach will share a short 8-character code with you. If you don't have it yet, no worries — come back to it later and grow with your team!
                 </p>
-                <div style={styles.joinRow}>
+                <p style={styles.joinLabel}>Enter the code your coach shared with you</p>
+                <div style={styles.joinStack}>
                   <input
-                    style={styles.codeInput}
+                    style={styles.codeInputLarge}
                     type="text"
                     placeholder="e.g. 2FB9A616"
                     value={joinCode.toUpperCase()}
@@ -236,21 +237,24 @@ export default function AthleteOnboarding() {
                     disabled={joining || !joinCode.trim()}
                     onClick={handleJoin}
                   >
-                    {joining ? 'Joining…' : 'Join'}
+                    {joining ? 'Joining…' : 'Join Team'}
                   </button>
                 </div>
                 {joinError && <p style={styles.errorText}>{joinError}</p>}
+                <div style={styles.noCodeWrap}>
+                  <button style={styles.noCodeBtn} onClick={() => goStep(3)}>
+                    I don't have a code yet — skip for now
+                  </button>
+                  <p style={styles.noCodeSub}>You can always join a team later from your profile.</p>
+                </div>
               </>
             )}
 
             <div style={styles.navRow}>
               <button style={styles.backBtn} onClick={() => goStep(1)}>← Back</button>
-              <div style={styles.navRight}>
-                {currentTeam
-                  ? <button style={styles.primaryBtn} onClick={() => goStep(3)}>Continue →</button>
-                  : <button style={styles.skipLink} onClick={() => goStep(3)}>Skip for now →</button>
-                }
-              </div>
+              {currentTeam && (
+                <button style={styles.primaryBtn} onClick={() => goStep(3)}>Continue →</button>
+              )}
             </div>
           </div>
         )}
@@ -643,23 +647,54 @@ const styles = {
   },
 
   // Step 2 — join team
-  joinRow: {
-    display: 'flex',
-    gap: 10,
-    alignItems: 'stretch',
+  joinLabel: {
+    fontSize: 15,
+    fontWeight: 700,
+    color: 'var(--text)',
+    margin: 0,
   },
-  codeInput: {
-    flex: 1,
-    padding: '12px 16px',
-    fontSize: 20,
+  joinStack: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 10,
+  },
+  codeInputLarge: {
+    width: '100%',
+    padding: '16px 18px',
+    fontSize: 26,
     fontFamily: 'monospace',
-    letterSpacing: 4,
-    borderRadius: 10,
+    letterSpacing: 6,
+    textAlign: 'center',
+    borderRadius: 12,
     border: '1px solid var(--input-border)',
     background: 'var(--input-bg)',
     color: 'var(--text)',
     textTransform: 'uppercase',
     outline: 'none',
+    boxSizing: 'border-box',
+  },
+  noCodeWrap: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 5,
+    paddingTop: 4,
+  },
+  noCodeBtn: {
+    background: 'none',
+    border: 'none',
+    fontSize: 13,
+    fontWeight: 600,
+    color: 'var(--text-3)',
+    cursor: 'pointer',
+    textDecoration: 'underline',
+    padding: '4px 0',
+  },
+  noCodeSub: {
+    fontSize: 12,
+    color: 'var(--text-3)',
+    margin: 0,
+    textAlign: 'center',
   },
   errorText: {
     color: '#c73820',
