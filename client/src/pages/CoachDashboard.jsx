@@ -37,6 +37,7 @@ export default function CoachDashboard() {
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
   const [copied, setCopied] = useState(false)
+  const [copiedCode, setCopiedCode] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -71,6 +72,12 @@ export default function CoachDashboard() {
     navigator.clipboard.writeText(inviteLink)
     setCopied(true)
     setTimeout(() => setCopied(false), 2000)
+  }
+
+  function handleCopyCode() {
+    navigator.clipboard.writeText(team.invite_code)
+    setCopiedCode(true)
+    setTimeout(() => setCopiedCode(false), 2000)
   }
 
   const inviteLink = team ? `${window.location.origin}/join/${team.invite_code}` : null
@@ -118,7 +125,18 @@ export default function CoachDashboard() {
                 <h2 style={styles.teamName}>{team.name}</h2>
               </div>
             </div>
-            <p style={styles.fieldLabel}>Invite link</p>
+            <p style={styles.fieldLabel}>Invite Code</p>
+            <div style={styles.codeRow}>
+              <span style={styles.codeText}>{team.invite_code}</span>
+              <button style={styles.copyBtn} onClick={handleCopyCode}>
+                {copiedCode
+                  ? <><CheckIcon size={13} color={BLUE} /> Copied</>
+                  : <><CopyIcon size={13} color={BLUE} /> Copy Code</>
+                }
+              </button>
+            </div>
+
+            <p style={{ ...styles.fieldLabel, marginTop: 20 }}>Invite Link</p>
             <div style={styles.inviteBox}>
               <span style={styles.inviteText}>{inviteLink}</span>
               <button style={styles.copyBtn} onClick={handleCopy}>
@@ -260,6 +278,20 @@ const styles = {
     marginBottom: 8,
     marginTop: 0,
   },
+  codeRow: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 16,
+  },
+  codeText: {
+    fontFamily: 'monospace',
+    fontSize: 30,
+    fontWeight: 700,
+    letterSpacing: 5,
+    color: 'var(--text)',
+    lineHeight: 1,
+  },
+
   inviteBox: {
     display: 'flex',
     alignItems: 'center',
