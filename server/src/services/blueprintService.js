@@ -1,9 +1,9 @@
 const supabaseAdmin = require('../config/supabase')
 
-async function createBlueprint(coachId, teamId, { title, description, num_weeks, weeks }) {
+async function createBlueprint(coachId, teamId, { title, description, num_weeks, weeks, locked }) {
   const { data: blueprint, error: bpError } = await supabaseAdmin
     .from('blueprints')
-    .insert({ coach_id: coachId, team_id: teamId, title, description, num_weeks })
+    .insert({ coach_id: coachId, team_id: teamId, title, description, num_weeks, locked: locked ?? false })
     .select()
     .single()
 
@@ -173,6 +173,18 @@ async function getAthletePlan(athleteId) {
   }
 }
 
+async function toggleLock(blueprintId, locked) {
+  const { data, error } = await supabaseAdmin
+    .from('blueprints')
+    .update({ locked })
+    .eq('id', blueprintId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 module.exports = {
   createBlueprint,
   getBlueprintsByCoach,
@@ -180,4 +192,5 @@ module.exports = {
   getAssignments,
   assignBlueprint,
   getAthletePlan,
+  toggleLock,
 }

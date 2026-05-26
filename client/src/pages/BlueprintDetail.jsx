@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 
 const ORANGE = '#F75709'
+const GREEN  = '#2e7d32'
 
 function today() {
   return new Date().toISOString().split('T')[0]
@@ -24,6 +25,7 @@ export default function BlueprintDetail() {
   const [assigning, setAssigning] = useState(false)
   const [assignError, setAssignError] = useState('')
   const [assignSuccess, setAssignSuccess] = useState('')
+  const [locking, setLocking] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -36,6 +38,19 @@ export default function BlueprintDetail() {
     }).catch(() => navigate('/coach'))
     .finally(() => setLoading(false))
   }, [id, navigate])
+
+  async function handleLockToggle() {
+    if (locking) return
+    setLocking(true)
+    try {
+      const res = await api.patch(`/api/blueprints/${id}/lock`, { locked: !blueprint.locked })
+      setBlueprint(res.data.blueprint)
+    } catch (err) {
+      console.error('Lock toggle failed:', err)
+    } finally {
+      setLocking(false)
+    }
+  }
 
   async function handleAssign(e) {
     e.preventDefault()
@@ -69,11 +84,23 @@ export default function BlueprintDetail() {
 
       {/* Blueprint title */}
       <div style={styles.titleRow}>
-        <div>
+        <div style={{ flex: 1 }}>
           <p style={styles.breadcrumb}>Blueprint</p>
           <h1 style={styles.pageTitle}>{blueprint.title}</h1>
           {blueprint.description && <p style={styles.pageDesc}>{blueprint.description}</p>}
           <p style={styles.meta}>{blueprint.num_weeks} {blueprint.num_weeks === 1 ? 'week' : 'weeks'}</p>
+        </div>
+        <div style={styles.lockWrap}>
+          {blueprint.locked && (
+            <span style={styles.lockedBadge}>🔒 Locked</span>
+          )}
+          <button
+            style={{ ...styles.lockBtn, ...(blueprint.locked ? styles.lockBtnUnlock : {}) }}
+            onClick={handleLockToggle}
+            disabled={locking}
+          >
+            {locking ? '…' : blueprint.locked ? 'Unlock plan' : 'Lock plan'}
+          </button>
         </div>
       </div>
 
@@ -200,7 +227,11 @@ const styles = {
 
   backLink: { display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px' },
 
-  titleRow: { marginBottom: 24 },
+  titleRow: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
+  lockWrap: { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, paddingTop: 24, flexShrink: 0 },
+  lockedBadge: { fontSize: 12, fontWeight: 700, color: '#b45309', background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: 6, padding: '3px 10px' },
+  lockBtn: { padding: '8px 16px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: `1px solid ${ORANGE}`, background: 'transparent', color: ORANGE, cursor: 'pointer' },
+  lockBtnUnlock: { borderColor: GREEN, color: GREEN },
   breadcrumb: { fontSize: 12, fontWeight: 600, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.6, margin: '0 0 6px' },
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 4 },
   pageDesc: { color: 'var(--text-2)', fontSize: 15, marginBottom: 4 },

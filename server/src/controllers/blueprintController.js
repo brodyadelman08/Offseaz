@@ -7,16 +7,17 @@ const {
   getAssignments,
   assignBlueprint,
   getAthletePlan,
+  toggleLock,
 } = require('../services/blueprintService')
 
 async function create(req, res) {
-  const { title, description, num_weeks, weeks } = req.body
+  const { title, description, num_weeks, weeks, locked } = req.body
 
   if (!title || !title.trim()) {
     return res.status(400).json({ error: 'Title is required' })
   }
-  if (!num_weeks || num_weeks < 1 || num_weeks > 12) {
-    return res.status(400).json({ error: 'num_weeks must be between 1 and 12' })
+  if (!num_weeks || num_weeks < 1 || num_weeks > 16) {
+    return res.status(400).json({ error: 'num_weeks must be between 1 and 16' })
   }
 
   try {
@@ -35,6 +36,7 @@ async function create(req, res) {
       description: description || null,
       num_weeks: parseInt(num_weeks, 10),
       weeks: weeks || [],
+      locked: locked === true,
     })
 
     res.status(201).json({ blueprint })
@@ -133,4 +135,31 @@ async function myPlan(req, res) {
   }
 }
 
-module.exports = { create, list, detail, assign, myPlan }
+async function lock(req, res) {
+  const { id } = req.params
+  const { locked } = req.body
+
+  if (typeof locked !== 'boolean') {
+    return res.status(400).json({ error: 'locked must be a boolean' })
+  }
+
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can lock blueprints' })
+    }
+
+    const blueprint = await getBlueprintById(id)
+    if (blueprint.coach_id !== req.user.id) {
+      return res.status(403).json({ error: 'Not your blueprint' })
+    }
+
+    const updated = await toggleLock(id, locked)
+    res.json({ blueprint: updated })
+  } catch (err) {
+    if (err.code === 'PGRST116') return res.status(404).json({ error: 'Blueprint not found' })
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { create, list, detail, assign, myPlan, lock }

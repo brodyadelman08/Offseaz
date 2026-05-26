@@ -1,9 +1,145 @@
 import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon } from '../components/Icons'
+import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, TrophyIcon } from '../components/Icons'
 
-const ORANGE = '#F75709'
+const ORANGE  = '#F75709'
+const BLUE    = '#308EBD'
+const YELLOW  = '#F0BE24'
+
+// ─── Baseball template generator ─────────────────────────────────────────────
+
+const PHASE_PCTS    = [0.70, 0.75, 0.80, 0.85]
+const PHASE_LABELS  = ['Foundation', 'Development', 'Strength', 'Peak']
+
+function makeSession(day, focus, exercises) {
+  const description = exercises.map(e => {
+    const setsReps = e.warmup
+      ? `${e.warmup} warmup, ${e.sets}x${e.reps} working`
+      : `${e.sets}x${e.reps}`
+    const pctStr  = e.pct  ? ` @ ${Math.round(e.pct * 100)}%` : ''
+    const noteStr = e.note ? ` (${e.note})` : ''
+    return `${e.name}: ${setsReps}${pctStr}${noteStr}`
+  }).join('\n')
+  return { day, focus, description, exercises }
+}
+
+function sessions3Day(pct) {
+  return [
+    makeSession('Day 1', 'Full Body Strength', [
+      { name: 'Squat',               warmup: '2x5', sets: 3, reps: '5', pct, lift_key: 'squat' },
+      { name: 'Bench Press',                        sets: 3, reps: '8' },
+      { name: 'Barbell Row',                        sets: 3, reps: '8' },
+      { name: 'Core — Cherry Pickers',              sets: 4, reps: '15' },
+    ]),
+    makeSession('Day 2', 'Full Body Power', [
+      { name: 'Power Clean',         warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Deadlift',                  sets: 3, reps: '6', pct, lift_key: 'trap_bar_deadlift' },
+      { name: 'Pull-ups',                           sets: 3, reps: 'AMAP' },
+      { name: 'Hip Thrust',                         sets: 3, reps: '8' },
+      { name: 'Bird Dog Row',                       sets: 4, reps: '10' },
+    ]),
+    makeSession('Day 3', 'Full Body Accessory', [
+      { name: 'RDL',                                sets: 3, reps: '8' },
+      { name: 'Single Arm DB Row',                  sets: 3, reps: '12' },
+      { name: 'Bulgarian Split Squat',              sets: 3, reps: '6',  note: 'each leg' },
+      { name: 'Forearm Curls (Both Ways)',          sets: 3, reps: 'AMAP' },
+      { name: 'EXT/INT Rotation',                   sets: 3, reps: 'AMAP' },
+      { name: 'Calf Raises',                        sets: 3, reps: 'AMAP' },
+    ]),
+  ]
+}
+
+function sessions4Day(pct, phase) {
+  const p3 = phase >= 3
+  return [
+    makeSession('Day 1', 'Upper Building', [
+      { name: 'Hang Clean',                         sets: 3, reps: '8' },
+      { name: 'DB Bench',                           sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Tricep Pushdowns',                   sets: 2, reps: '8', note: '+ 1xAMAP' },
+      { name: 'Bench Curls',                        sets: 3, reps: '8' },
+      { name: 'Forearm Curls (Both Ways)',          sets: 3, reps: 'AMAP' },
+      { name: 'Lat Raises — Side, Front, Back',    sets: 3, reps: 'AMAP' },
+      { name: 'Core — Cherry Pickers',              sets: 4, reps: '15' },
+      { name: 'Sit-ups',                            sets: 4, reps: '12' },
+    ]),
+    makeSession('Day 2', 'Lower Building', [
+      { name: 'Reverse Lunge',                      sets: 3, reps: '5',  note: 'each leg' },
+      { name: 'Box Drop',                           sets: 3, reps: '3' },
+      { name: 'Bulgarian Split Squat',              sets: 3, reps: '6',  note: 'each leg' },
+      { name: 'Calf Raises',                        sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Hamstring Curls',                    sets: 3, reps: 'AMAP' },
+      { name: 'Leg Extensions',                     sets: 3, reps: 'AMAP' },
+      { name: 'Core — Tuck-Up',                     sets: 3, reps: 'AMAP' },
+      { name: 'EXT/INT Rotation',                   sets: 3, reps: 'AMAP' },
+    ]),
+    makeSession('Day 3', 'Upper Power', [
+      { name: 'Power Clean',         warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Pull-ups',                           sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Trap Bar Deadlift',                  sets: 3, reps: '6', pct, lift_key: 'trap_bar_deadlift' },
+      { name: 'Single Arm DB Row',                  sets: p3 ? 4 : 3, reps: '12' },
+      { name: 'Bird Dog Row',                       sets: 4, reps: '10' },
+      { name: 'Behind Pulldowns',                   sets: 3, reps: p3 ? '5' : '6' },
+      { name: 'Core — Bird Dogs',                   sets: 3, reps: '12' },
+      { name: 'Weighted Half Baby Kip-Ups',         sets: 3, reps: '12' },
+      { name: 'Rotate and Press',                   sets: 3, reps: '12' },
+      { name: 'Triceps',                            sets: 3, reps: '12' },
+    ]),
+    makeSession('Day 4', 'Lower Power', [
+      { name: 'Squat',               warmup: '2x5', sets: 3, reps: '5', pct, lift_key: 'squat' },
+      { name: 'Box Jump',                           sets: 3, reps: '3' },
+      { name: 'RDL',                                sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Weighted Hip Thrust',                sets: p3 ? 4 : 3, reps: '8' },
+      { name: 'Banded Pull-Aparts',                 sets: 3, reps: '15' },
+      { name: 'Back Extensions',                    sets: 3, reps: '12', note: 'drop set' },
+      { name: 'Core — EXT/INT Rotation',            sets: 3, reps: 'AMAP' },
+    ]),
+  ]
+}
+
+const SESSION_ARM_CARE = makeSession('Day 5', 'Arm Care & Conditioning', [
+  { name: 'Banded Pull-Aparts',    sets: 3, reps: '15' },
+  { name: 'Band External Rotation', sets: 3, reps: '15' },
+  { name: 'Reverse Flys',          sets: 3, reps: '15' },
+  { name: 'Core Work',             sets: 3, reps: 'AMAP' },
+  { name: '30-Yard Sprints',       sets: 10, reps: '1', note: 'full recovery between each' },
+])
+
+const SESSION_LIGHT_FB = makeSession('Day 6', 'Lighter Full Body & Weak Points', [
+  { name: 'Goblet Squat',  sets: 3, reps: '10' },
+  { name: 'Push-ups',      sets: 3, reps: 'AMAP' },
+  { name: 'Chin-ups',      sets: 3, reps: 'AMAP' },
+  { name: 'Single Leg RDL', sets: 3, reps: '8' },
+  { name: 'Core Circuit',  sets: 3, reps: 'AMAP' },
+])
+
+function generateBaseballWeeks(daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const phaseIdx    = Math.floor((w - 1) / 4)
+    const phase       = phaseIdx + 1
+    const pct         = PHASE_PCTS[phaseIdx]
+    const weekInPhase = ((w - 1) % 4) + 1
+
+    let sessions
+    if (daysPerWeek === 3) {
+      sessions = sessions3Day(pct)
+    } else {
+      sessions = sessions4Day(pct, phase)
+      if (daysPerWeek >= 5) sessions = [...sessions, SESSION_ARM_CARE]
+      if (daysPerWeek >= 6) sessions = [...sessions, SESSION_LIGHT_FB]
+    }
+
+    weeks.push({
+      week_number: w,
+      objective: `Phase ${phase} — ${PHASE_LABELS[phaseIdx]} (${Math.round(pct * 100)}% working max) · Week ${weekInPhase} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
+// ─── Static templates ─────────────────────────────────────────────────────────
 
 const TEMPLATES = [
   {
@@ -47,6 +183,13 @@ const TEMPLATES = [
     },
   },
   {
+    label: '⚾ Baseball — 16-Week Offseason',
+    description: '4-phase progressive program built for baseball athletes. Auto-calculates weights from logged maxes.',
+    Icon: TrophyIcon,
+    baseball: true,   // triggers day-count sub-picker
+    data: null,
+  },
+  {
     label: '2-Week Peaking',
     description: 'Pre-season ramp — sharpen speed and explosiveness',
     Icon: BoltIcon,
@@ -79,6 +222,7 @@ export default function BlueprintBuilder() {
   const [step, setStep] = useState(0)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+  const [baseballPicking, setBaseballPicking] = useState(false)
 
   const [form, setForm] = useState({
     title: '',
@@ -104,12 +248,24 @@ export default function BlueprintBuilder() {
     setStep(1)
   }
 
+  function selectBaseball(daysPerWeek) {
+    const weeks = generateBaseballWeeks(daysPerWeek)
+    setForm({
+      title: `Baseball — 16-Week Offseason (${daysPerWeek} Days/Week)`,
+      description: `16-week phase-based offseason program for baseball athletes. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.`,
+      num_weeks: 16,
+      weeks,
+    })
+    setBaseballPicking(false)
+    setStep(1)
+  }
+
   function setField(field, value) {
     setForm(prev => ({ ...prev, [field]: value }))
   }
 
   function setNumWeeks(n) {
-    const num = Math.min(12, Math.max(1, parseInt(n, 10) || 1))
+    const num = Math.min(16, Math.max(1, parseInt(n, 10) || 1))
     setForm(prev => ({ ...prev, num_weeks: num, weeks: makeWeeks(num, prev.weeks) }))
   }
 
@@ -166,6 +322,55 @@ export default function BlueprintBuilder() {
 
   // ── Template picker ───────────────────────────────────────────────────────────
   if (step === 0) {
+    // Baseball day-count sub-picker
+    if (baseballPicking) {
+      return (
+        <div style={styles.container}>
+          <button style={styles.textBackBtn} onClick={() => setBaseballPicking(false)}>← Back to templates</button>
+          <h1 style={styles.pageTitle}>⚾ Baseball — 16-Week Offseason</h1>
+          <p style={styles.pageDesc}>How many days per week will your athletes train?</p>
+
+          <div style={styles.dayGrid}>
+            {[3, 4, 5, 6].map(d => (
+              <button
+                key={d}
+                style={styles.dayCard}
+                onClick={() => selectBaseball(d)}
+                onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              >
+                <span style={styles.dayNumber}>{d}</span>
+                <span style={styles.dayLabel}>days / week</span>
+                <span style={styles.dayDesc}>{
+                  d === 3 ? 'Full Body split (3 sessions)' :
+                  d === 4 ? 'Upper/Lower split (4 sessions)' :
+                  d === 5 ? 'Upper/Lower + Arm Care' :
+                            'Upper/Lower + Arm Care + Light Day'
+                }</span>
+              </button>
+            ))}
+          </div>
+
+          <div style={styles.phaseInfo}>
+            <p style={styles.phaseInfoTitle}>Program Structure</p>
+            {[
+              { phase: 1, label: 'Foundation',  pct: '70%', weeks: '1–4' },
+              { phase: 2, label: 'Development', pct: '75%', weeks: '5–8' },
+              { phase: 3, label: 'Strength',    pct: '80%', weeks: '9–12' },
+              { phase: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
+            ].map(({ phase, label, pct, weeks }) => (
+              <div key={phase} style={styles.phaseRow}>
+                <span style={styles.phaseBadge}>Phase {phase}</span>
+                <span style={styles.phaseLabel}>{label}</span>
+                <span style={styles.phaseWeeks}>Weeks {weeks}</span>
+                <span style={styles.phasePct}>{pct} of max</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
     return (
       <div style={styles.container}>
         <h1 style={styles.pageTitle}>Create Blueprint</h1>
@@ -175,16 +380,25 @@ export default function BlueprintBuilder() {
           {TEMPLATES.map(tpl => (
             <button
               key={tpl.label}
-              style={styles.templateCard}
-              onClick={() => selectTemplate(tpl)}
-              onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              style={{
+                ...styles.templateCard,
+                ...(tpl.baseball ? styles.templateCardFeatured : {}),
+              }}
+              onClick={() => tpl.baseball ? setBaseballPicking(true) : selectTemplate(tpl)}
+              onMouseEnter={e => e.currentTarget.style.borderColor = tpl.baseball ? YELLOW : ORANGE}
+              onMouseLeave={e => e.currentTarget.style.borderColor = tpl.baseball ? `rgba(240,190,36,0.4)` : 'var(--border)'}
             >
-              <div style={styles.templateIconWrap}>
-                <tpl.Icon size={22} color={ORANGE} />
+              <div style={{
+                ...styles.templateIconWrap,
+                ...(tpl.baseball ? { background: 'rgba(240,190,36,0.12)' } : {}),
+              }}>
+                <tpl.Icon size={22} color={tpl.baseball ? YELLOW : ORANGE} />
               </div>
               <span style={styles.templateLabel}>{tpl.label}</span>
               <span style={styles.templateDesc}>{tpl.description}</span>
+              {tpl.baseball && (
+                <span style={styles.templateBadge}>16 weeks · 4 phases</span>
+              )}
             </button>
           ))}
         </div>
@@ -232,7 +446,7 @@ export default function BlueprintBuilder() {
               value={form.num_weeks}
               onChange={e => setNumWeeks(e.target.value)}
             >
-              {Array.from({ length: 12 }, (_, i) => i + 1).map(n => (
+              {Array.from({ length: 16 }, (_, i) => i + 1).map(n => (
                 <option key={n} value={n}>{n} {n === 1 ? 'week' : 'weeks'}</option>
               ))}
             </select>
@@ -353,6 +567,23 @@ const styles = {
   templateIconWrap: { width: 40, height: 40, borderRadius: 10, background: 'rgba(247,87,9,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   templateLabel: { fontSize: 15, fontWeight: 700, color: 'var(--text)' },
   templateDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
+  templateCardFeatured: { border: `2px solid rgba(240,190,36,0.4)`, background: 'rgba(240,190,36,0.04)' },
+  templateBadge: { fontSize: 11, fontWeight: 700, color: YELLOW, background: 'rgba(240,190,36,0.15)', borderRadius: 6, padding: '2px 8px', letterSpacing: 0.3 },
+
+  textBackBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px 0' },
+  dayGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 28 },
+  dayCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: 20, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.15s' },
+  dayNumber: { fontSize: 36, fontWeight: 800, color: 'var(--text)', lineHeight: 1 },
+  dayLabel: { fontSize: 13, fontWeight: 600, color: 'var(--text-2)' },
+  dayDesc: { fontSize: 12, color: 'var(--text-3)', lineHeight: 1.4 },
+
+  phaseInfo: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 },
+  phaseInfoTitle: { fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 0.5 },
+  phaseRow: { display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 8, marginBottom: 8, borderBottom: '1px solid var(--border)' },
+  phaseBadge: { fontSize: 11, fontWeight: 700, color: ORANGE, background: 'rgba(247,87,9,0.1)', borderRadius: 6, padding: '2px 8px', whiteSpace: 'nowrap' },
+  phaseLabel: { fontSize: 13, fontWeight: 600, color: 'var(--text)', flex: 1 },
+  phaseWeeks: { fontSize: 12, color: 'var(--text-2)', whiteSpace: 'nowrap' },
+  phasePct: { fontSize: 12, fontWeight: 700, color: ORANGE, whiteSpace: 'nowrap' },
 
   progressWrap: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 },
   backBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, whiteSpace: 'nowrap' },

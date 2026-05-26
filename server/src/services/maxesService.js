@@ -1,6 +1,6 @@
 const supabaseAdmin = require('../config/supabase')
 
-const VALID_LIFTS = ['bench_press', 'squat', 'deadlift', 'power_clean', 'overhead_press']
+const VALID_LIFTS = ['bench_press', 'squat', 'deadlift', 'trap_bar_deadlift', 'power_clean', 'overhead_press']
 
 async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   if (!VALID_LIFTS.includes(lift)) throw new Error(`Invalid lift: ${lift}`)

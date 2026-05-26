@@ -3,7 +3,70 @@ import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { DumbbellIcon } from '../components/Icons'
 
-const BLUE = '#308EBD'
+const BLUE   = '#308EBD'
+const ORANGE = '#F75709'
+
+const LIFT_LABELS = {
+  bench_press:       'Bench Press',
+  squat:             'Squat',
+  deadlift:          'Deadlift',
+  trap_bar_deadlift: 'Trap Bar Deadlift',
+  power_clean:       'Power Clean',
+  overhead_press:    'Overhead Press',
+}
+
+/** Round to nearest 5 lbs */
+function calcWeight(maxLbs, pct) {
+  return Math.round((maxLbs * pct) / 5) * 5
+}
+
+function ExerciseRow({ exercise, maxes }) {
+  const { name, sets, reps, pct, lift_key, warmup, note } = exercise
+  const maxEntry = lift_key ? maxes?.[lift_key]?.current : null
+  const maxLbs   = maxEntry?.weight_lbs
+
+  let weightLine = null
+  if (pct && lift_key) {
+    if (maxLbs) {
+      const w = calcWeight(maxLbs, pct)
+      weightLine = `at ${Math.round(pct * 100)}% of your max → ${w} lbs`
+    } else {
+      weightLine = `Log your ${LIFT_LABELS[lift_key] || lift_key} max to see your personalized weight`
+    }
+  }
+
+  const setsRepsStr = warmup
+    ? `${warmup} warmup, ${sets}×${reps} working`
+    : `${sets}×${reps}`
+
+  return (
+    <div style={exStyles.row}>
+      <div style={exStyles.left}>
+        <span style={exStyles.exerciseName}>{name}</span>
+        {note && <span style={exStyles.exerciseNote}> ({note})</span>}
+      </div>
+      <div style={exStyles.right}>
+        <span style={exStyles.setsReps}>{setsRepsStr}</span>
+        {weightLine && (
+          <span style={maxLbs ? exStyles.weightCalc : exStyles.weightPrompt}>
+            {weightLine}
+          </span>
+        )}
+      </div>
+    </div>
+  )
+}
+
+const exStyles = {
+  row:           { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, padding: '6px 0', borderBottom: '1px solid var(--border-light)' },
+  left:          { flex: 1 },
+  right:         { textAlign: 'right', flexShrink: 0 },
+  exerciseName:  { fontSize: 14, fontWeight: 600, color: 'var(--text)' },
+  exerciseNote:  { fontSize: 13, color: 'var(--text-3)' },
+  setsReps:      { display: 'block', fontSize: 13, color: 'var(--text-2)' },
+  weightCalc:    { display: 'block', fontSize: 12, fontWeight: 700, color: ORANGE, marginTop: 2 },
+  weightPrompt:  { display: 'block', fontSize: 11, color: 'var(--text-3)', fontStyle: 'italic', marginTop: 2, maxWidth: 200 },
+}
 
 function calcCurrentWeek(startsOn, numWeeks) {
   const msPerWeek = 7 * 24 * 60 * 60 * 1000
@@ -22,6 +85,7 @@ export default function AthletePlan() {
   const navigate = useNavigate()
   const [plan, setPlan] = useState(undefined)
   const [logs, setLogs] = useState([])
+  const [maxes, setMaxes] = useState({})
   const [loading, setLoading] = useState(true)
   const [currentWeek, setCurrentWeek] = useState(1)
 
@@ -29,9 +93,11 @@ export default function AthletePlan() {
     Promise.all([
       api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
       api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
-    ]).then(([planData, logsData]) => {
+      api.get('/api/maxes').then(r => r.data.maxes).catch(() => ({})),
+    ]).then(([planData, logsData, maxesData]) => {
       setPlan(planData)
       setLogs(logsData)
+      setMaxes(maxesData || {})
       if (planData) setCurrentWeek(calcCurrentWeek(planData.starts_on, planData.num_weeks))
     }).finally(() => setLoading(false))
   }, [])
@@ -134,7 +200,15 @@ export default function AthletePlan() {
                               </button>
                             )}
                           </div>
-                          {s.description && <p style={styles.sessionDesc}>{s.description}</p>}
+                          {s.exercises && s.exercises.length > 0 ? (
+                            <div style={styles.exerciseList}>
+                              {s.exercises.map((ex, ei) => (
+                                <ExerciseRow key={ei} exercise={ex} maxes={maxes} />
+                              ))}
+                            </div>
+                          ) : s.description ? (
+                            <p style={styles.sessionDesc}>{s.description}</p>
+                          ) : null}
                         </div>
                       )
                     })}
@@ -200,6 +274,7 @@ const styles = {
   sessionDay: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', background: 'rgba(48,142,189,0.1)', padding: '3px 8px', borderRadius: 4 },
   sessionFocus: { fontSize: 15, fontWeight: 700, color: 'var(--text)', flex: 1 },
   sessionDesc: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6 },
+  exerciseList: { marginTop: 4 },
   logBtn: { marginLeft: 'auto', padding: '6px 14px', fontSize: 12, fontWeight: 700, borderRadius: 6, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0 },
   logBadge: { marginLeft: 'auto', fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 5, whiteSpace: 'nowrap', flexShrink: 0 },
 
