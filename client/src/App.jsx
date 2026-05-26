@@ -23,6 +23,7 @@ import AthleteDashboard from './pages/AthleteDashboard'
 import AthletePlan from './pages/AthletePlan'
 import WorkoutLog from './pages/WorkoutLog'
 import AthleteMyProfile from './pages/AthleteMyProfile'
+import AthleteOnboarding from './pages/AthleteOnboarding'
 
 // Smart redirect for /messages → role-based destination
 function MessagesRedirect() {
@@ -49,6 +50,14 @@ export default function App() {
               element={
                 <ProtectedRoute requiredRole="athlete">
                   <Survey />
+                </ProtectedRoute>
+              }
+            />
+            <Route
+              path="/athlete/onboarding"
+              element={
+                <ProtectedRoute requiredRole="athlete">
+                  <AthleteOnboarding />
                 </ProtectedRoute>
               }
             />

@@ -19,7 +19,15 @@ export default function AthleteDashboard() {
   const [joining, setJoining] = useState(false)
   const [joinError, setJoinError] = useState('')
 
+  // Redirect new athletes to the onboarding flow on first visit.
+  // Once onboarding is marked done in localStorage it never fires again.
+  const [onboardingDone] = useState(() => !!localStorage.getItem('offseaz_onboarding_done'))
+
   useEffect(() => {
+    if (!onboardingDone) {
+      navigate('/athlete/onboarding', { replace: true })
+      return
+    }
     Promise.all([
       api.get('/api/teams/my-team').then(r => r.data.team).catch(() => null),
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
@@ -29,7 +37,10 @@ export default function AthleteDashboard() {
       setSurvey(surveyData)
       setPlan(planData)
     }).finally(() => setLoading(false))
-  }, [])
+  }, [onboardingDone, navigate])
+
+  // Don't flash dashboard before the redirect fires
+  if (!onboardingDone) return null
 
   async function handleJoinTeam(e) {
     e.preventDefault()
