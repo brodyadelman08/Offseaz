@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom' // still used for survey/plan navigation
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { CheckCircleIcon, CalendarIcon, BoltIcon } from '../components/Icons'
@@ -19,15 +19,7 @@ export default function AthleteDashboard() {
   const [joining, setJoining] = useState(false)
   const [joinError, setJoinError] = useState('')
 
-  // Redirect new athletes to the onboarding flow on first visit.
-  // Once onboarding is marked done in localStorage it never fires again.
-  const [onboardingDone] = useState(() => !!localStorage.getItem('offseaz_onboarding_done'))
-
   useEffect(() => {
-    if (!onboardingDone) {
-      navigate('/athlete/onboarding', { replace: true })
-      return
-    }
     Promise.all([
       api.get('/api/teams/my-team').then(r => r.data.team).catch(() => null),
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
@@ -37,10 +29,7 @@ export default function AthleteDashboard() {
       setSurvey(surveyData)
       setPlan(planData)
     }).finally(() => setLoading(false))
-  }, [onboardingDone, navigate])
-
-  // Show a minimal loading state while the redirect fires — prevents black screen
-  if (!onboardingDone) return <div style={{ color: 'var(--text-3)', fontSize: 15, padding: 32 }}>Loading…</div>
+  }, [])
 
   async function handleJoinTeam(e) {
     e.preventDefault()

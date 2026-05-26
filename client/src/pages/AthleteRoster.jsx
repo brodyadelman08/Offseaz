@@ -20,7 +20,9 @@ export default function AthleteRoster() {
         setTeam(r.data.team)
         setRoster(r.data.roster || [])
       })
-      .catch(() => {})
+      .catch(err => {
+        console.error('[AthleteRoster] failed to load roster:', err?.response?.data?.error || err.message)
+      })
       .finally(() => setLoading(false))
   }, [])
 

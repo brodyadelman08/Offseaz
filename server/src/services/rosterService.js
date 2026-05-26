@@ -89,49 +89,68 @@ async function getCoachRoster(coachId, sort = 'name') {
  * Returns the team roster from an athlete's perspective, with privacy filtering.
  * Private teammates: only name + avatar.
  * Public teammates: name, avatar, sport, position.
+ *
+ * Uses the same simple join pattern as getAthleteTeam (no FK hints) to avoid
+ * failures when FK constraint names differ across environments.
  */
 async function getAthleteRoster(athleteId) {
+  // Same reliable query used by getAthleteTeam
   const { data: membership, error: memberErr } = await supabaseAdmin
     .from('team_members')
-    .select('team_id')
+    .select('team_id, teams(id, name)')
     .eq('athlete_id', athleteId)
     .single()
 
   if (memberErr && memberErr.code !== 'PGRST116') throw memberErr
   if (!membership) return { team: null, roster: [] }
 
-  const [{ data: team }, { data: members, error: membersErr }] = await Promise.all([
-    supabaseAdmin.from('teams').select('id, name').eq('id', membership.team_id).single(),
-    supabaseAdmin
-      .from('team_members')
-      .select(`
-        profiles!team_members_athlete_id_fkey ( id, full_name, avatar_url, privacy_team ),
-        survey_responses!survey_responses_athlete_id_fkey ( sport, position )
-      `)
-      .eq('team_id', membership.team_id),
-  ])
+  const team = membership.teams || null
+
+  // Get all athlete_ids on the same team
+  const { data: memberRows, error: membersErr } = await supabaseAdmin
+    .from('team_members')
+    .select('athlete_id')
+    .eq('team_id', membership.team_id)
 
   if (membersErr) throw membersErr
 
-  // Include ALL members (including viewer — let client filter self out by id if desired)
-  const roster = (members || []).map(m => {
-    const p = m.profiles
+  const athleteIds = (memberRows || []).map(m => m.athlete_id)
+  if (athleteIds.length === 0) return { team, roster: [] }
+
+  // Fetch profiles and surveys with plain .in() — no FK hints needed
+  const [{ data: profileRows, error: profErr }, { data: surveyRows }] = await Promise.all([
+    supabaseAdmin
+      .from('profiles')
+      .select('id, full_name, avatar_url, privacy_team')
+      .in('id', athleteIds),
+    supabaseAdmin
+      .from('survey_responses')
+      .select('athlete_id, sport, position')
+      .in('athlete_id', athleteIds),
+  ])
+
+  if (profErr) throw profErr
+
+  const surveyMap = {}
+  for (const s of surveyRows || []) surveyMap[s.athlete_id] = s
+
+  const roster = (profileRows || []).map(p => {
     if (p.privacy_team === 'private') {
-      return { id: p.id, full_name: p.full_name, avatar_url: p.avatar_url, privacy: 'private' }
+      return { id: p.id, full_name: p.full_name, avatar_url: p.avatar_url || null, privacy: 'private' }
     }
+    const survey = surveyMap[p.id]
     return {
       id: p.id,
       full_name: p.full_name,
-      avatar_url: p.avatar_url,
+      avatar_url: p.avatar_url || null,
       privacy: 'public',
-      sport: m.survey_responses?.sport || null,
-      position: m.survey_responses?.position || null,
+      sport: survey?.sport || null,
+      position: survey?.position || null,
     }
   })
 
   roster.sort((a, b) => a.full_name.localeCompare(b.full_name))
-
-  return { team: team || null, roster }
+  return { team, roster }
 }
 
 // ─── Teammate profile (athlete views a public teammate) ────────────────────────
