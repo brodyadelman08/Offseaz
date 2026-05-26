@@ -165,7 +165,7 @@ export default function AthleteProfile() {
                     <span style={styles.liftLabel}>{label}</span>
                     {current ? (
                       <span style={styles.liftPR}>
-                        {current.weight_lbs} <span style={styles.liftUnit}>lbs</span>
+                        {current.weight_lbs} <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
                       </span>
                     ) : (
                       <span style={styles.liftNone}>—</span>
@@ -199,7 +199,7 @@ export default function AthleteProfile() {
                             color: entry.id === current?.id ? ORANGE : 'var(--text)',
                             fontWeight: entry.id === current?.id ? 700 : 600,
                           }}>
-                            {entry.weight_lbs} lbs
+                            {entry.weight_lbs} lbs{entry.reps > 1 ? ` x ${entry.reps}` : ''}
                             {entry.id === current?.id && <span style={styles.prTag}> PR</span>}
                           </span>
                           <span style={styles.historyDate}>{fmtShortDate(entry.logged_at)}</span>

@@ -16,7 +16,7 @@ async function getMyMaxes(req, res) {
 }
 
 async function addMax(req, res) {
-  const { lift, weight_lbs, notes } = req.body
+  const { lift, weight_lbs, reps, notes } = req.body
   if (!lift || weight_lbs == null) {
     return res.status(400).json({ error: 'lift and weight_lbs are required' })
   }
@@ -28,7 +28,7 @@ async function addMax(req, res) {
     if (profile.role !== 'athlete') {
       return res.status(403).json({ error: 'Only athletes can log maxes' })
     }
-    const max = await logMax(req.user.id, lift, weight_lbs, notes)
+    const max = await logMax(req.user.id, lift, weight_lbs, reps, notes)
     res.status(201).json({ max })
   } catch (err) {
     res.status(400).json({ error: err.message })

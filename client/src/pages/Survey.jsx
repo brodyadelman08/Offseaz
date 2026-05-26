@@ -87,7 +87,12 @@ export default function Survey() {
       {/* Slim top bar */}
       <div style={styles.topBar}>
         <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logo} />
-        <span style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</span>
+        <div style={{ display: 'flex', alignItems: 'center', gap: 16 }}>
+          <span style={styles.stepLabel}>Step {step} of {TOTAL_STEPS}</span>
+          <button style={styles.skipBtn} onClick={() => navigate('/athlete')}>
+            Skip for now
+          </button>
+        </div>
       </div>
 
       {/* Progress bar */}
@@ -247,4 +252,5 @@ const styles = {
   backBtn: { padding: '10px 20px', fontSize: 14, borderRadius: 8, border: '1px solid var(--border)', background: 'var(--card-inner)', color: 'var(--text)', cursor: 'pointer', fontWeight: 500 },
   nextBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
   error: { color: '#c73820', fontSize: 13, marginTop: 16 },
+  skipBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-3)', background: 'none', border: '1px solid var(--border)', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' },
 }

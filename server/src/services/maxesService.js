@@ -2,12 +2,12 @@ const supabaseAdmin = require('../config/supabase')
 
 const VALID_LIFTS = ['bench_press', 'squat', 'deadlift', 'power_clean', 'overhead_press']
 
-async function logMax(athleteId, lift, weight_lbs, notes) {
+async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   if (!VALID_LIFTS.includes(lift)) throw new Error(`Invalid lift: ${lift}`)
 
   const { data, error } = await supabaseAdmin
     .from('lifting_maxes')
-    .insert({ athlete_id: athleteId, lift, weight_lbs, notes: notes || null })
+    .insert({ athlete_id: athleteId, lift, weight_lbs, reps: reps || 1, notes: notes || null })
     .select()
     .single()
 
@@ -18,7 +18,7 @@ async function logMax(athleteId, lift, weight_lbs, notes) {
 async function getMaxesByAthlete(athleteId) {
   const { data, error } = await supabaseAdmin
     .from('lifting_maxes')
-    .select('id, lift, weight_lbs, notes, logged_at')
+    .select('id, lift, weight_lbs, reps, notes, logged_at')
     .eq('athlete_id', athleteId)
     .order('logged_at', { ascending: true })
 

@@ -46,7 +46,7 @@ export default function AthleteMyProfile() {
 
   // Per-lift form state: { bench_press: { open: false, weight: '', notes: '' }, ... }
   const [logForms, setLogForms] = useState(
-    Object.fromEntries(LIFTS.map(l => [l.key, { open: false, weight: '', notes: '' }]))
+    Object.fromEntries(LIFTS.map(l => [l.key, { open: false, weight: '', reps: '1', notes: '' }]))
   )
   // History expand state: { bench_press: false, ... }
   const [historyOpen, setHistoryOpen] = useState(
@@ -74,10 +74,10 @@ export default function AthleteMyProfile() {
     if (!w || w <= 0) return
     setSubmitting(liftKey)
     try {
-      await api.post('/api/maxes', { lift: liftKey, weight_lbs: w, notes: form.notes || null })
+      await api.post('/api/maxes', { lift: liftKey, weight_lbs: w, reps: parseInt(form.reps) || 1, notes: form.notes || null })
       const res = await api.get('/api/maxes')
       setMaxes(res.data.maxes)
-      setLogForms(prev => ({ ...prev, [liftKey]: { open: false, weight: '', notes: '' } }))
+      setLogForms(prev => ({ ...prev, [liftKey]: { open: false, weight: '', reps: '1', notes: '' } }))
     } catch (err) {
       console.error('Failed to log max:', err)
     } finally {
@@ -217,7 +217,7 @@ export default function AthleteMyProfile() {
                   <span style={styles.liftLabel}>{label}</span>
                   {current && (
                     <span style={styles.liftPR}>
-                      {current.weight_lbs} <span style={styles.liftUnit}>lbs</span>
+                      {current.weight_lbs} <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
                     </span>
                   )}
                 </div>
@@ -240,16 +240,27 @@ export default function AthleteMyProfile() {
                   </button>
                 ) : (
                   <div style={styles.logForm}>
-                    <input
-                      style={styles.weightInput}
-                      type="number"
-                      placeholder="Weight (lbs)"
-                      min="1"
-                      max="2000"
-                      step="0.5"
-                      value={form.weight}
-                      onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], weight: e.target.value } }))}
-                    />
+                    <div style={{ display: 'flex', gap: 6 }}>
+                      <input
+                        style={{ ...styles.weightInput, flex: 2 }}
+                        type="number"
+                        placeholder="Weight (lbs)"
+                        min="1"
+                        max="2000"
+                        step="0.5"
+                        value={form.weight}
+                        onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], weight: e.target.value } }))}
+                      />
+                      <input
+                        style={{ ...styles.weightInput, flex: 1 }}
+                        type="number"
+                        placeholder="Reps"
+                        min="1"
+                        max="100"
+                        value={form.reps}
+                        onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], reps: e.target.value } }))}
+                      />
+                    </div>
                     <input
                       style={styles.notesInput}
                       type="text"
@@ -267,7 +278,7 @@ export default function AthleteMyProfile() {
                       </button>
                       <button
                         style={styles.cancelBtn}
-                        onClick={() => setLogForms(prev => ({ ...prev, [key]: { open: false, weight: '', notes: '' } }))}
+                        onClick={() => setLogForms(prev => ({ ...prev, [key]: { open: false, weight: '', reps: '1', notes: '' } }))}
                       >
                         Cancel
                       </button>
@@ -298,7 +309,7 @@ export default function AthleteMyProfile() {
                           color: entry.id === current?.id ? ORANGE : 'var(--text)',
                           fontWeight: entry.id === current?.id ? 700 : 600,
                         }}>
-                          {entry.weight_lbs} lbs
+                          {entry.weight_lbs} lbs{entry.reps > 1 ? ` x ${entry.reps}` : ''}
                           {entry.id === current?.id && <span style={styles.prTag}> PR</span>}
                         </span>
                         <span style={styles.historyDate}>{fmtShortDate(entry.logged_at)}</span>
