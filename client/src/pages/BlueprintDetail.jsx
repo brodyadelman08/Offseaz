@@ -28,15 +28,20 @@ export default function BlueprintDetail() {
   const [locking, setLocking] = useState(false)
 
   useEffect(() => {
-    Promise.all([
-      api.get(`/api/blueprints/${id}`),
-      api.get('/api/survey/team'),
-    ]).then(([bpRes, teamRes]) => {
-      setBlueprint(bpRes.data.blueprint)
-      setAssignments(bpRes.data.assignments || [])
-      setAthletes(teamRes.data.athletes || [])
-    }).catch(() => navigate('/coach'))
-    .finally(() => setLoading(false))
+    // Blueprint fetch is critical — redirect if it fails
+    api.get(`/api/blueprints/${id}`)
+      .then(bpRes => {
+        setBlueprint(bpRes.data.blueprint)
+        setAssignments(bpRes.data.assignments || [])
+      })
+      .catch(() => navigate('/coach'))
+      .finally(() => setLoading(false))
+
+    // Athlete list is only needed for the "assign to specific athlete" dropdown
+    // If this fails, the page still works (team-wide assignment is unaffected)
+    api.get('/api/survey/team')
+      .then(teamRes => setAthletes(teamRes.data.athletes || []))
+      .catch(() => {})
   }, [id, navigate])
 
   async function handleLockToggle() {

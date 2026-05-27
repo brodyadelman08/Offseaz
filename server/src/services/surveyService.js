@@ -131,27 +131,39 @@ async function getTeamSurveys(coachId) {
   if (teamError && teamError.code !== 'PGRST116') throw teamError
   if (!team) return []
 
-  const { data: members, error: membersError } = await supabaseAdmin
+  // Get athlete_ids first (no FK joins — avoids PostgREST constraint name issues)
+  const { data: memberRows, error: membersError } = await supabaseAdmin
     .from('team_members')
-    .select(`
-      athlete_id,
-      profiles!team_members_athlete_id_fkey ( id, full_name, avatar_url ),
-      survey_responses!survey_responses_athlete_id_fkey (
-        sport, position, goals, weaknesses, injury_history, equipment,
-        time_per_week, primary_goal, experience_level, equipment_tier,
-        grade, age, height_feet, height_inches, weight_lbs, completed_at
-      )
-    `)
+    .select('athlete_id')
     .eq('team_id', team.id)
-    .order('survey_responses(completed_at)', { ascending: false, nullsFirst: false })
 
   if (membersError) throw membersError
+  if (!memberRows || memberRows.length === 0) return []
 
-  return (members || []).map(m => ({
-    id:         m.profiles.id,
-    full_name:  m.profiles.full_name,
-    avatar_url: m.profiles.avatar_url || null,
-    survey:     m.survey_responses || null,
+  const athleteIds = memberRows.map(m => m.athlete_id)
+
+  // Fetch profiles and surveys separately using .in() — no FK hints needed
+  const [{ data: profileRows, error: profError }, { data: surveyRows }] = await Promise.all([
+    supabaseAdmin
+      .from('profiles')
+      .select('id, full_name, avatar_url')
+      .in('id', athleteIds),
+    supabaseAdmin
+      .from('survey_responses')
+      .select('athlete_id, sport, position, goals, weaknesses, injury_history, equipment, time_per_week, primary_goal, experience_level, equipment_tier, grade, age, height_feet, height_inches, weight_lbs, completed_at')
+      .in('athlete_id', athleteIds),
+  ])
+
+  if (profError) throw profError
+
+  const surveyMap = {}
+  for (const s of surveyRows || []) surveyMap[s.athlete_id] = s
+
+  return (profileRows || []).map(p => ({
+    id:         p.id,
+    full_name:  p.full_name,
+    avatar_url: p.avatar_url || null,
+    survey:     surveyMap[p.id] || null,
   }))
 }
 

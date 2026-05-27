@@ -67,18 +67,39 @@ async function getBlueprintById(blueprintId) {
 }
 
 async function getAssignments(blueprintId) {
-  const { data, error } = await supabaseAdmin
+  const { data: rows, error } = await supabaseAdmin
     .from('blueprint_assignments')
-    .select(`
-      id, starts_on, assigned_at, athlete_id, team_id,
-      profiles!blueprint_assignments_athlete_id_fkey ( full_name ),
-      teams!blueprint_assignments_team_id_fkey ( name )
-    `)
+    .select('id, starts_on, assigned_at, athlete_id, team_id')
     .eq('blueprint_id', blueprintId)
     .order('assigned_at', { ascending: false })
 
   if (error) throw error
-  return data || []
+  if (!rows || rows.length === 0) return []
+
+  // Collect unique IDs then fetch profiles and teams with .in() — no FK hints needed
+  const athleteIds = [...new Set(rows.filter(r => r.athlete_id).map(r => r.athlete_id))]
+  const teamIds    = [...new Set(rows.filter(r => r.team_id).map(r => r.team_id))]
+
+  const [profilesRes, teamsRes] = await Promise.all([
+    athleteIds.length > 0
+      ? supabaseAdmin.from('profiles').select('id, full_name').in('id', athleteIds)
+      : Promise.resolve({ data: [] }),
+    teamIds.length > 0
+      ? supabaseAdmin.from('teams').select('id, name').in('id', teamIds)
+      : Promise.resolve({ data: [] }),
+  ])
+
+  const profileMap = {}
+  for (const p of profilesRes.data || []) profileMap[p.id] = p
+
+  const teamsMap = {}
+  for (const t of teamsRes.data || []) teamsMap[t.id] = t
+
+  return rows.map(r => ({
+    ...r,
+    profiles: r.athlete_id ? (profileMap[r.athlete_id] || null) : null,
+    teams:    r.team_id    ? (teamsMap[r.team_id]    || null) : null,
+  }))
 }
 
 async function assignBlueprint(blueprintId, { assign_to, athlete_id, team_id, starts_on }) {

@@ -36,37 +36,51 @@ async function getCoachRoster(coachId, sort = 'name') {
   if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
   if (!team) return []
 
-  const { data: members, error: membersErr } = await supabaseAdmin
+  // Step 1: get athlete_ids and join dates (no FK hints — avoids PostgREST constraint issues)
+  const { data: memberRows, error: membersErr } = await supabaseAdmin
     .from('team_members')
-    .select(`
-      created_at,
-      profiles!team_members_athlete_id_fkey ( id, full_name, avatar_url ),
-      survey_responses!survey_responses_athlete_id_fkey ( sport, position, goals, time_per_week, completed_at )
-    `)
+    .select('athlete_id, created_at')
     .eq('team_id', team.id)
 
   if (membersErr) throw membersErr
+  if (!memberRows || memberRows.length === 0) return []
 
-  const athleteIds = (members || []).map(m => m.profiles.id)
+  const athleteIds = memberRows.map(m => m.athlete_id)
 
-  // Batch-fetch all maxes for every athlete on the team
-  let maxesMap = {}
-  if (athleteIds.length > 0) {
-    const { data: maxRows } = await supabaseAdmin
+  // Step 2: fetch profiles, surveys, and maxes in parallel using .in() — no FK hints needed
+  const [{ data: profileRows, error: profErr }, { data: surveyRows }, { data: maxRows }] = await Promise.all([
+    supabaseAdmin
+      .from('profiles')
+      .select('id, full_name, avatar_url')
+      .in('id', athleteIds),
+    supabaseAdmin
+      .from('survey_responses')
+      .select('athlete_id, sport, position, goals, time_per_week, completed_at')
+      .in('athlete_id', athleteIds),
+    supabaseAdmin
       .from('lifting_maxes')
       .select('athlete_id, lift, weight_lbs, reps')
-      .in('athlete_id', athleteIds)
+      .in('athlete_id', athleteIds),
+  ])
 
-    maxesMap = buildMaxesMap(maxRows)
-  }
+  if (profErr) throw profErr
 
-  let results = (members || []).map(m => ({
-    id: m.profiles.id,
-    full_name: m.profiles.full_name,
-    avatar_url: m.profiles.avatar_url || null,
-    joined_at: m.created_at,
-    survey: m.survey_responses || null,
-    maxes: maxesMap[m.profiles.id] || {},
+  // Build lookup maps
+  const joinedMap = {}
+  for (const m of memberRows) joinedMap[m.athlete_id] = m.created_at
+
+  const surveyMap = {}
+  for (const s of surveyRows || []) surveyMap[s.athlete_id] = s
+
+  const maxesMap = buildMaxesMap(maxRows)
+
+  let results = (profileRows || []).map(p => ({
+    id: p.id,
+    full_name: p.full_name,
+    avatar_url: p.avatar_url || null,
+    joined_at: joinedMap[p.id] || null,
+    survey: surveyMap[p.id] || null,
+    maxes: maxesMap[p.id] || {},
   }))
 
   // Sorting
