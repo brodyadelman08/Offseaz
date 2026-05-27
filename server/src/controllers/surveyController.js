@@ -3,7 +3,16 @@ const { getAthleteTeam } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
 
 async function submit(req, res) {
-  const { sport, position, goals, weaknesses, injury_history, equipment, time_per_week } = req.body
+  const {
+    full_name,
+    age, height_feet, height_inches, weight_lbs, grade,
+    sport, position,
+    primary_goal, experience_level, days_per_week,
+    equipment_tier,
+    injury_areas, injury_other,
+    weakness_areas,
+    offseason_goals,
+  } = req.body
 
   if (!sport || !sport.trim()) {
     return res.status(400).json({ error: 'Sport is required' })
@@ -21,13 +30,18 @@ async function submit(req, res) {
     }
 
     const survey = await submitSurvey(req.user.id, team.id, {
+      full_name,
+      age, height_feet, height_inches, weight_lbs, grade,
       sport: sport.trim(),
       position,
-      goals,
-      weaknesses,
-      injury_history,
-      equipment,
-      time_per_week,
+      primary_goal,
+      experience_level,
+      days_per_week,
+      equipment_tier,
+      injury_areas,
+      injury_other,
+      weakness_areas,
+      offseason_goals,
     })
 
     res.status(201).json({ survey })
