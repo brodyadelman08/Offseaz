@@ -157,7 +157,7 @@ export default function AthleteMyProfile() {
       <div style={styles.card}>
         <div style={styles.cardHeader}>
           <p style={styles.cardLabel}>Athlete Survey</p>
-          <button style={styles.editBtn} onClick={() => navigate('/survey')}>
+          <button style={styles.editBtn} onClick={() => navigate('/survey', { state: { retake: true } })}>
             <EditIcon size={14} color={BLUE} />
             Retake
           </button>

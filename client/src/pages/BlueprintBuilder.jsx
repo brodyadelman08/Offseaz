@@ -410,7 +410,7 @@ export default function BlueprintBuilder() {
   return (
     <div style={styles.container}>
       <div style={styles.progressWrap}>
-        <button style={styles.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
+        <button type="button" style={styles.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
         <div style={styles.progressBar}>
           <div style={{ ...styles.progressFill, width: `${progressPct}%` }} />
         </div>
@@ -471,7 +471,7 @@ export default function BlueprintBuilder() {
 
               <div style={styles.sessionsHeader}>
                 <label style={{ ...styles.label, marginTop: 0 }}>Sessions</label>
-                <button style={styles.addBtn} onClick={() => addSession(wi)}>+ Add session</button>
+                <button type="button" style={styles.addBtn} onClick={() => addSession(wi)}>+ Add session</button>
               </div>
 
               {week.sessions.length === 0 && (
@@ -493,7 +493,7 @@ export default function BlueprintBuilder() {
                       onChange={e => setSessionField(wi, si, 'focus', e.target.value)}
                       placeholder="Focus (e.g. Upper Body Strength)"
                     />
-                    <button style={styles.removeBtn} onClick={() => removeSession(wi, si)}>×</button>
+                    <button type="button" style={styles.removeBtn} onClick={() => removeSession(wi, si)}>×</button>
                   </div>
                   <textarea
                     style={{ ...styles.textarea, marginTop: 8 }}
@@ -534,17 +534,21 @@ export default function BlueprintBuilder() {
 
         <div style={styles.actions}>
           {isReviewStep ? (
-            <button style={styles.primaryBtn} onClick={handleSubmit} disabled={submitting}>
+            <button type="button" style={styles.primaryBtn} onClick={handleSubmit} disabled={submitting}>
               {submitting ? 'Saving…' : 'Save blueprint'}
             </button>
           ) : (
             <button
+              type="button"
               style={{
                 ...styles.primaryBtn,
                 opacity: step === 1 && !canAdvancePlanInfo ? 0.4 : 1,
                 cursor: step === 1 && !canAdvancePlanInfo ? 'not-allowed' : 'pointer',
               }}
-              onClick={() => (step !== 1 || canAdvancePlanInfo) && setStep(s => s + 1)}
+              onClick={() => {
+                if (step === 1 && !canAdvancePlanInfo) return
+                setStep(s => s + 1)
+              }}
               disabled={step === 1 && !canAdvancePlanInfo}
             >
               {step === form.num_weeks + 1 ? 'Review plan' : 'Next'}

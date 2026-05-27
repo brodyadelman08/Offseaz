@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
+import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
+import { useAuth } from '../context/AuthContext'
 
 const ORANGE = '#F75709'
 const TOTAL_STEPS = 10
@@ -128,6 +129,10 @@ function MultiCards({ options, value = [], onChange }) {
 
 export default function Survey() {
   const navigate = useNavigate()
+  const location = useLocation()
+  const { profile } = useAuth()
+  const isRetake = location.state?.retake === true
+
   const [step, setStep] = useState(1)
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -155,11 +160,37 @@ export default function Survey() {
   useEffect(() => {
     api.get('/api/survey/my')
       .then(res => {
-        if (res.data.survey) navigate('/athlete', { replace: true })
-        else setCheckingExisting(false)
+        const existing = res.data.survey
+        if (existing && !isRetake) {
+          // Survey already done and not retaking — go to dashboard
+          navigate('/athlete', { replace: true })
+        } else {
+          if (existing && isRetake) {
+            // Pre-fill the form with current answers so the athlete can edit
+            setForm({
+              full_name:        profile?.full_name || '',
+              age:              existing.age              ? String(existing.age)           : '',
+              height_feet:      existing.height_feet      ? String(existing.height_feet)   : '',
+              height_inches:    existing.height_inches != null ? String(existing.height_inches) : '0',
+              weight_lbs:       existing.weight_lbs      ? String(existing.weight_lbs)    : '',
+              grade:            existing.grade            || '',
+              sport:            existing.sport            || '',
+              position:         existing.position         || '',
+              primary_goal:     existing.primary_goal     || '',
+              experience_level: existing.experience_level || '',
+              days_per_week:    existing.time_per_week    ? existing.time_per_week : '',
+              equipment_tier:   existing.equipment_tier   || '',
+              injury_areas:     existing.injury_areas     || [],
+              injury_other:     existing.injury_other     || '',
+              weakness_areas:   existing.weakness_areas   || [],
+              offseason_goals:  existing.offseason_goals  || [],
+            })
+          }
+          setCheckingExisting(false)
+        }
       })
       .catch(() => setCheckingExisting(false))
-  }, [navigate])
+  }, [navigate, isRetake])
 
   function set(field, val) { setForm(prev => ({ ...prev, [field]: val })) }
 
@@ -177,7 +208,11 @@ export default function Survey() {
     setError('')
     setSubmitting(true)
     try {
-      await api.post('/api/survey', form)
+      if (isRetake) {
+        await api.put('/api/survey', form)
+      } else {
+        await api.post('/api/survey', form)
+      }
       navigate('/athlete', { replace: true })
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to submit. Please try again.')
@@ -197,7 +232,9 @@ export default function Survey() {
         <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={st.logo} />
         <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
           <span style={st.stepCount}>{step} of {TOTAL_STEPS}</span>
-          <button style={st.skipBtn} onClick={() => navigate('/athlete')}>Skip</button>
+          <button style={st.skipBtn} onClick={() => navigate('/athlete/profile')}>
+            {isRetake ? 'Cancel' : 'Skip'}
+          </button>
         </div>
       </div>
 
