@@ -2,6 +2,7 @@ import { useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, TrophyIcon } from '../components/Icons'
+import { SPORT_TEMPLATES, TEMPLATE_GOALS } from '../data/blueprintTemplates'
 
 const ORANGE  = '#F75709'
 const BLUE    = '#308EBD'
@@ -223,6 +224,8 @@ export default function BlueprintBuilder() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
   const [baseballPicking, setBaseballPicking] = useState(false)
+  const [sportTab, setSportTab] = useState('general')     // 'general' | sport.id
+  const [goalPick, setGoalPick] = useState(null)          // null | { sport, pos }
 
   const [form, setForm] = useState({
     title: '',
@@ -257,6 +260,19 @@ export default function BlueprintBuilder() {
       weeks,
     })
     setBaseballPicking(false)
+    setStep(1)
+  }
+
+  function selectSportTemplate(sport, pos, goal) {
+    const weeks = sport.generateWeeks(pos.id, goal.id)
+    const goalSuffix = goal.id === 'muscle_gain' ? ' — Muscle Gain' : ''
+    setForm({
+      title: `${sport.label} — ${pos.label} 16-Week Offseason${goalSuffix}`,
+      description: `16-week phase-based offseason program for ${pos.label} (${pos.sublabel}). ${goal.desc}`,
+      num_weeks: 16,
+      weeks,
+    })
+    setGoalPick(null)
     setStep(1)
   }
 
@@ -322,23 +338,18 @@ export default function BlueprintBuilder() {
 
   // ── Template picker ───────────────────────────────────────────────────────────
   if (step === 0) {
-    // Baseball day-count sub-picker
+    // Baseball day-count sub-picker (existing)
     if (baseballPicking) {
       return (
         <div style={styles.container}>
           <button style={styles.textBackBtn} onClick={() => setBaseballPicking(false)}>← Back to templates</button>
           <h1 style={styles.pageTitle}>⚾ Baseball — 16-Week Offseason</h1>
           <p style={styles.pageDesc}>How many days per week will your athletes train?</p>
-
           <div style={styles.dayGrid}>
             {[3, 4, 5, 6].map(d => (
-              <button
-                key={d}
-                style={styles.dayCard}
-                onClick={() => selectBaseball(d)}
+              <button key={d} style={styles.dayCard} onClick={() => selectBaseball(d)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-              >
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                 <span style={styles.dayNumber}>{d}</span>
                 <span style={styles.dayLabel}>days / week</span>
                 <span style={styles.dayDesc}>{
@@ -350,13 +361,12 @@ export default function BlueprintBuilder() {
               </button>
             ))}
           </div>
-
           <div style={styles.phaseInfo}>
             <p style={styles.phaseInfoTitle}>Program Structure</p>
             {[
-              { phase: 1, label: 'Foundation',  pct: '70%', weeks: '1–4' },
-              { phase: 2, label: 'Development', pct: '75%', weeks: '5–8' },
-              { phase: 3, label: 'Strength',    pct: '80%', weeks: '9–12' },
+              { phase: 1, label: 'Foundation',  pct: '70%', weeks: '1–4'   },
+              { phase: 2, label: 'Development', pct: '75%', weeks: '5–8'   },
+              { phase: 3, label: 'Strength',    pct: '80%', weeks: '9–12'  },
               { phase: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
             ].map(({ phase, label, pct, weeks }) => (
               <div key={phase} style={styles.phaseRow}>
@@ -371,37 +381,130 @@ export default function BlueprintBuilder() {
       )
     }
 
+    // Sport template: goal sub-picker (Standard vs Muscle Gain)
+    if (goalPick) {
+      const { sport, pos } = goalPick
+      return (
+        <div style={styles.container}>
+          <button style={styles.textBackBtn} onClick={() => setGoalPick(null)}>
+            ← Back to {sport.label}
+          </button>
+          <h1 style={styles.pageTitle}>{sport.label} — {pos.label}</h1>
+          <p style={styles.pageDesc}>{pos.desc}</p>
+          <p style={{ ...styles.sportMeta, marginBottom: 24 }}>
+            {sport.daysPerWeek} days/week · 16 weeks · 4 phases
+          </p>
+
+          <div style={styles.dayGrid}>
+            {TEMPLATE_GOALS.map(goal => (
+              <button
+                key={goal.id}
+                style={{
+                  ...styles.templateCard,
+                  ...(goal.id === 'muscle_gain' ? styles.templateCardFeatured : {}),
+                }}
+                onClick={() => selectSportTemplate(sport, pos, goal)}
+                onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
+                onMouseLeave={e => e.currentTarget.style.borderColor = goal.id === 'muscle_gain' ? 'rgba(240,190,36,0.4)' : 'var(--border)'}
+              >
+                <span style={styles.templateLabel}>{goal.label}</span>
+                <span style={styles.templateDesc}>{goal.desc}</span>
+              </button>
+            ))}
+          </div>
+
+          <div style={styles.phaseInfo}>
+            <p style={styles.phaseInfoTitle}>Program Structure</p>
+            {sport.phases.map(ph => (
+              <div key={ph.num} style={styles.phaseRow}>
+                <span style={styles.phaseBadge}>Phase {ph.num}</span>
+                <span style={styles.phaseLabel}>{ph.label}</span>
+                <span style={styles.phaseWeeks}>Weeks {ph.weeks}</span>
+                <span style={styles.phasePct}>{ph.pct}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    // Main template picker
+    const activeSport = SPORT_TEMPLATES.find(s => s.id === sportTab)
+
     return (
       <div style={styles.container}>
         <h1 style={styles.pageTitle}>Create Blueprint</h1>
-        <p style={styles.pageDesc}>Start from scratch or choose a template to pre-fill your plan.</p>
+        <p style={styles.pageDesc}>Choose a sport-specific template or start from scratch.</p>
 
-        <div style={styles.templateGrid}>
-          {TEMPLATES.map(tpl => (
+        {/* Sport tab bar */}
+        <div style={styles.sportTabBar}>
+          <button
+            style={{ ...styles.sportTabBtn, ...(sportTab === 'general' ? styles.sportTabBtnActive : {}) }}
+            onClick={() => setSportTab('general')}
+          >
+            General
+          </button>
+          {SPORT_TEMPLATES.map(s => (
             <button
-              key={tpl.label}
-              style={{
-                ...styles.templateCard,
-                ...(tpl.baseball ? styles.templateCardFeatured : {}),
-              }}
-              onClick={() => tpl.baseball ? setBaseballPicking(true) : selectTemplate(tpl)}
-              onMouseEnter={e => e.currentTarget.style.borderColor = tpl.baseball ? YELLOW : ORANGE}
-              onMouseLeave={e => e.currentTarget.style.borderColor = tpl.baseball ? `rgba(240,190,36,0.4)` : 'var(--border)'}
+              key={s.id}
+              style={{ ...styles.sportTabBtn, ...(sportTab === s.id ? styles.sportTabBtnActive : {}) }}
+              onClick={() => setSportTab(s.id)}
             >
-              <div style={{
-                ...styles.templateIconWrap,
-                ...(tpl.baseball ? { background: 'rgba(240,190,36,0.12)' } : {}),
-              }}>
-                <tpl.Icon size={22} color={tpl.baseball ? YELLOW : ORANGE} />
-              </div>
-              <span style={styles.templateLabel}>{tpl.label}</span>
-              <span style={styles.templateDesc}>{tpl.description}</span>
-              {tpl.baseball && (
-                <span style={styles.templateBadge}>16 weeks · 4 phases</span>
-              )}
+              {s.label}
             </button>
           ))}
         </div>
+
+        {/* General tab */}
+        {sportTab === 'general' && (
+          <div style={styles.templateGrid}>
+            {TEMPLATES.map(tpl => (
+              <button
+                key={tpl.label}
+                style={{ ...styles.templateCard, ...(tpl.baseball ? styles.templateCardFeatured : {}) }}
+                onClick={() => tpl.baseball ? setBaseballPicking(true) : selectTemplate(tpl)}
+                onMouseEnter={e => e.currentTarget.style.borderColor = tpl.baseball ? YELLOW : ORANGE}
+                onMouseLeave={e => e.currentTarget.style.borderColor = tpl.baseball ? 'rgba(240,190,36,0.4)' : 'var(--border)'}
+              >
+                <div style={{ ...styles.templateIconWrap, ...(tpl.baseball ? { background: 'rgba(240,190,36,0.12)' } : {}) }}>
+                  <tpl.Icon size={22} color={tpl.baseball ? YELLOW : ORANGE} />
+                </div>
+                <span style={styles.templateLabel}>{tpl.label}</span>
+                <span style={styles.templateDesc}>{tpl.description}</span>
+                {tpl.baseball && <span style={styles.templateBadge}>16 weeks · 4 phases</span>}
+              </button>
+            ))}
+          </div>
+        )}
+
+        {/* Sport tab — position cards */}
+        {activeSport && (
+          <div>
+            <p style={styles.sportMeta}>
+              {activeSport.daysPerWeek} days/week · 16 weeks · 4 phases
+            </p>
+            <div style={styles.templateGrid}>
+              {activeSport.positions.map(pos => (
+                <button
+                  key={pos.id}
+                  style={{ ...styles.templateCard, ...styles.templateCardFeatured }}
+                  onClick={() => setGoalPick({ sport: activeSport, pos })}
+                  onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
+                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(240,190,36,0.4)'}
+                >
+                  <span style={styles.templateLabel}>{pos.label}</span>
+                  <span style={{
+                    ...styles.templateBadge,
+                    color: ORANGE,
+                    background: 'rgba(247,87,9,0.1)',
+                  }}>{pos.sublabel}</span>
+                  <span style={styles.templateDesc}>{pos.desc}</span>
+                  <span style={styles.templateBadge}>16 weeks · 4 phases →</span>
+                </button>
+              ))}
+            </div>
+          </div>
+        )}
       </div>
     )
   }
@@ -611,6 +714,11 @@ const styles = {
   actions: { display: 'flex', justifyContent: 'flex-end', marginTop: 28 },
   primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
   errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginTop: 16 },
+
+  sportTabBar: { display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 12, marginBottom: 16, scrollbarWidth: 'none' },
+  sportTabBtn: { flexShrink: 0, padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' },
+  sportTabBtnActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.07)' },
+  sportMeta: { fontSize: 12, color: 'var(--text-3)', fontWeight: 600, marginBottom: 14, textTransform: 'uppercase', letterSpacing: 0.4 },
 
   reviewMeta: { fontSize: 16, color: 'var(--text)', marginBottom: 6 },
   reviewDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 16 },
