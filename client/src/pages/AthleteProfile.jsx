@@ -24,6 +24,21 @@ const LOG_STATUS = {
   skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
 }
 
+/** Split a workout note into flagged injury exercises and a free-text note. */
+function parseLogNote(rawNote) {
+  if (!rawNote) return { injuryExercises: [], freeNote: null }
+  const PREFIX = '⚠️ Cannot complete:'
+  if (!rawNote.startsWith(PREFIX)) return { injuryExercises: [], freeNote: rawNote }
+  const nlIdx = rawNote.indexOf('\n\n')
+  const prefixLine = nlIdx > 0 ? rawNote.slice(0, nlIdx) : rawNote
+  const rest = nlIdx > 0 ? rawNote.slice(nlIdx + 2).trim() : ''
+  const exStr = prefixLine.slice(PREFIX.length).trim()
+  return {
+    injuryExercises: exStr.split(',').map(s => s.trim()).filter(Boolean),
+    freeNote: rest || null,
+  }
+}
+
 function fmtDate(dateStr) {
   if (!dateStr) return ''
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric' })
@@ -314,7 +329,24 @@ export default function AthleteProfile() {
                     {log.week_number != null && <span style={styles.logWeek}>Wk {log.week_number}</span>}
                     <span style={styles.logDate}>{fmtDate(log.logged_at)}</span>
                   </div>
-                  {log.note && <p style={styles.logNote}>"{log.note}"</p>}
+                  {log.note && (() => {
+                    const { injuryExercises, freeNote } = parseLogNote(log.note)
+                    return (
+                      <>
+                        {injuryExercises.length > 0 && (
+                          <div style={styles.injuryExRow}>
+                            <span style={styles.injuryExLabel}>⚠️ Cannot complete:</span>
+                            <div style={styles.injuryExPills}>
+                              {injuryExercises.map(ex => (
+                                <span key={ex} style={styles.injuryExPill}>{ex}</span>
+                              ))}
+                            </div>
+                          </div>
+                        )}
+                        {freeNote && <p style={styles.logNote}>"{freeNote}"</p>}
+                      </>
+                    )
+                  })()}
                 </div>
               )
             })}
@@ -389,4 +421,8 @@ const styles = {
   logWeek: { fontSize: 11, color: 'var(--text-3)', background: 'var(--border)', padding: '2px 6px', borderRadius: 3 },
   logDate: { fontSize: 12, color: 'var(--text-3)', marginLeft: 'auto' },
   logNote: { fontSize: 13, color: 'var(--text-2)', fontStyle: 'italic', margin: '6px 0 0', lineHeight: 1.5 },
+  injuryExRow: { display: 'flex', alignItems: 'flex-start', gap: 8, flexWrap: 'wrap', marginTop: 6 },
+  injuryExLabel: { fontSize: 12, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', paddingTop: 2 },
+  injuryExPills: { display: 'flex', flexWrap: 'wrap', gap: 5 },
+  injuryExPill: { fontSize: 11, fontWeight: 700, color: '#7f1d1d', background: '#fce8e6', border: '1px solid #f5c6c2', borderRadius: 10, padding: '2px 8px' },
 }

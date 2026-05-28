@@ -11,6 +11,21 @@ const STATUS_OPTIONS = [
   { value: 'skipped_injury',  label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6', activeBg: '#c73820' },
 ]
 
+/** Extract exercise names from a multi-line session description. */
+function parseExercises(desc) {
+  if (!desc) return []
+  return desc
+    .split('\n')
+    .filter(line => {
+      const t = line.trim()
+      if (!t || t.startsWith('(') || t.startsWith('⚠') || t.startsWith('[')) return false
+      const ci = t.indexOf(':')
+      return ci > 2 && ci < 60          // colon exists and name isn't empty or absurdly long
+    })
+    .map(line => line.slice(0, line.indexOf(':')).trim())
+    .filter(Boolean)
+}
+
 export default function WorkoutLog() {
   const navigate = useNavigate()
   const { state } = useLocation()
@@ -25,8 +40,19 @@ export default function WorkoutLog() {
   const [status, setStatus] = useState('')
   const [effort, setEffort] = useState(null)
   const [note, setNote] = useState('')
+  const [injuredExercises, setInjuredExercises] = useState(new Set())
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
+
+  const exercises = parseExercises(description)
+
+  function toggleInjury(name) {
+    setInjuredExercises(prev => {
+      const next = new Set(prev)
+      next.has(name) ? next.delete(name) : next.add(name)
+      return next
+    })
+  }
 
   async function handleSubmit(e) {
     e.preventDefault()
@@ -37,13 +63,20 @@ export default function WorkoutLog() {
     setError('')
     setSubmitting(true)
 
+    // Prepend injury exercise flags to the note if any were selected
+    let finalNote = note.trim() || null
+    if (injuredExercises.size > 0) {
+      const injuryLine = `⚠️ Cannot complete: ${[...injuredExercises].join(', ')}`
+      finalNote = finalNote ? `${injuryLine}\n\n${finalNote}` : injuryLine
+    }
+
     try {
       await api.post('/api/workouts', {
         blueprint_week_id: weekId,
         session_index: sessionIndex,
         status,
         effort: isSkip ? null : effort,
-        note: note.trim() || null,
+        note: finalNote,
       })
       navigate('/athlete/plan')
     } catch (err) {
@@ -70,29 +103,68 @@ export default function WorkoutLog() {
       </div>
 
       <form onSubmit={handleSubmit} style={styles.form}>
-        {/* Status selector */}
+        {/* Status selector — 2×2 grid so all labels fit */}
         <div>
           <p style={styles.fieldLabel}>How did it go?</p>
-          <div style={styles.statusRow}>
-            {STATUS_OPTIONS.map(opt => (
-              <button
-                key={opt.value}
-                type="button"
-                style={{
-                  ...styles.statusBtn,
-                  ...(status === opt.value ? {
-                    borderColor: opt.activeBg,
-                    background: opt.activeBg,
-                    color: '#fff',
-                  } : {}),
-                }}
-                onClick={() => setStatus(opt.value)}
-              >
-                {opt.label}
-              </button>
-            ))}
+          <div style={styles.statusGrid}>
+            {STATUS_OPTIONS.map(opt => {
+              const isInjuryOpt = opt.value === 'skipped_injury'
+              const isActive = status === opt.value
+              return (
+                <button
+                  key={opt.value}
+                  type="button"
+                  style={{
+                    ...styles.statusBtn,
+                    // Skipped — Injury always shows red tint so it's visually distinct
+                    ...(isInjuryOpt && !isActive ? {
+                      borderColor: 'rgba(199,56,32,0.4)',
+                      color: '#c73820',
+                    } : {}),
+                    ...(isActive ? {
+                      borderColor: opt.activeBg,
+                      background: opt.activeBg,
+                      color: '#fff',
+                    } : {}),
+                  }}
+                  onClick={() => setStatus(opt.value)}
+                >
+                  {opt.label}
+                </button>
+              )
+            })}
           </div>
         </div>
+
+        {/* Exercise-level injury flags — shown when session has exercises */}
+        {exercises.length > 0 && (
+          <div>
+            <p style={styles.fieldLabel}>
+              Exercises you can't do
+              <span style={styles.optional}> (optional — flags injury to your coach)</span>
+            </p>
+            <div style={styles.exerciseFlagRow}>
+              {exercises.map(name => {
+                const flagged = injuredExercises.has(name)
+                return (
+                  <button
+                    key={name}
+                    type="button"
+                    style={{ ...styles.exerciseFlagChip, ...(flagged ? styles.exerciseFlagChipActive : {}) }}
+                    onClick={() => toggleInjury(name)}
+                  >
+                    {flagged ? '⚠️ ' : ''}{name}
+                  </button>
+                )
+              })}
+            </div>
+            {injuredExercises.size > 0 && (
+              <p style={styles.injuryFlagNote}>
+                {injuredExercises.size === 1 ? '1 exercise' : `${injuredExercises.size} exercises`} flagged — your coach will be notified.
+              </p>
+            )}
+          </div>
+        )}
 
         {/* Effort selector */}
         {status && status !== 'skipped' && status !== 'skipped_injury' && (
@@ -172,8 +244,13 @@ const styles = {
   effortHint: { fontSize: 12, color: 'var(--text-3)', fontWeight: 400 },
   optional: { fontWeight: 400, color: 'var(--text-3)' },
 
-  statusRow: { display: 'flex', gap: 10, flexWrap: 'wrap' },
-  statusBtn: { flex: 1, padding: '11px 0', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s' },
+  statusGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 },
+  statusBtn: { padding: '12px 8px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' },
+
+  exerciseFlagRow: { display: 'flex', flexWrap: 'wrap', gap: 8 },
+  exerciseFlagChip: { padding: '7px 12px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px dashed var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' },
+  exerciseFlagChipActive: { borderStyle: 'solid', borderColor: '#c73820', background: '#fce8e6', color: '#c73820' },
+  injuryFlagNote: { fontSize: 12, color: '#c73820', fontWeight: 600, margin: '8px 0 0' },
 
   effortRow: { display: 'flex', gap: 6, flexWrap: 'wrap' },
   effortBtn: { width: 42, height: 42, fontSize: 14, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s' },
