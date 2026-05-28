@@ -195,6 +195,7 @@ export default function AthletePlan() {
                                     focus: s.focus,
                                     day: s.day,
                                     description: s.description,
+                                    exercises: s.exercises || [],
                                   },
                                 })}
                               >

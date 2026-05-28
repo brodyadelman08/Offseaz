@@ -91,7 +91,7 @@ async function getCoachRoster(coachId, sort = 'name') {
   } else if (sort === 'joined') {
     results.sort((a, b) => new Date(a.joined_at) - new Date(b.joined_at))
   } else {
-    results.sort((a, b) => a.full_name.localeCompare(b.full_name))
+    results.sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''))
   }
 
   return results

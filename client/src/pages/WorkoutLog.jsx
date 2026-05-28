@@ -35,7 +35,7 @@ export default function WorkoutLog() {
     return null
   }
 
-  const { weekId, sessionIndex, focus, day, description } = state
+  const { weekId, sessionIndex, focus, day, description, exercises: structuredExercises } = state
 
   const [status, setStatus] = useState('')
   const [effort, setEffort] = useState(null)
@@ -44,7 +44,11 @@ export default function WorkoutLog() {
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
 
-  const exercises = parseExercises(description)
+  // Prefer structured exercise list (used by the Cobber-style templates);
+  // fall back to parsing the free-text description for older/text-only sessions.
+  const exercises = (structuredExercises && structuredExercises.length > 0)
+    ? structuredExercises.map(ex => ex.name).filter(Boolean)
+    : parseExercises(description)
 
   function toggleInjury(name) {
     setInjuredExercises(prev => {

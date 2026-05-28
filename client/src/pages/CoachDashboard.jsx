@@ -26,6 +26,12 @@ const ACTIVITY_STATUS = {
   skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
 }
 
+const EVENT_BADGE = {
+  joined:    { label: 'Joined team',   color: '#1565c0', bg: '#e3f2fd' },
+  survey:    { label: 'Survey done',   color: '#2e7d32', bg: '#e8f5e9' },
+  blueprint: { label: 'Plan assigned', color: '#6a1b9a', bg: '#f3e5f5' },
+}
+
 export default function CoachDashboard() {
   const { profile } = useAuth()
   const navigate = useNavigate()
@@ -187,23 +193,31 @@ export default function CoachDashboard() {
             ) : (
               <div style={styles.activityList}>
                 {activityLogs.slice(0, 10).map(log => {
-                  const s = ACTIVITY_STATUS[log.status]
+                  const isWorkout = log.type === 'workout' || !log.type
+                  const badge = isWorkout
+                    ? (ACTIVITY_STATUS[log.status] || { label: log.status, color: '#888', bg: '#f0f0f0' })
+                    : (EVENT_BADGE[log.type] || { label: log.type, color: '#888', bg: '#f0f0f0' })
+
+                  let subtitle = ''
+                  if (isWorkout) subtitle = log.session_focus || 'Session'
+                  else if (log.type === 'blueprint') subtitle = log.blueprint_title || 'Training plan'
+                  else if (log.type === 'joined') subtitle = 'Joined the team'
+                  else if (log.type === 'survey') subtitle = 'Completed profile survey'
+
                   return (
                     <div key={log.id} style={styles.activityRow}>
                       <div style={styles.activityLeft}>
                         <span style={styles.activityName}>{log.athlete_name}</span>
-                        <span style={styles.activityFocus}>
-                          {log.session_focus || 'Session'}
-                        </span>
-                        {log.week_number && (
+                        <span style={styles.activityFocus}>{subtitle}</span>
+                        {isWorkout && log.week_number && (
                           <span style={styles.activityWeek}>Wk {log.week_number}</span>
                         )}
                       </div>
                       <div style={styles.activityRight}>
-                        <span style={{ ...styles.activityBadge, color: s.color, background: s.bg }}>
-                          {s.label}{log.effort ? ` · ${log.effort}` : ''}
+                        <span style={{ ...styles.activityBadge, color: badge.color, background: badge.bg }}>
+                          {badge.label}{isWorkout && log.effort ? ` · ${log.effort}` : ''}
                         </span>
-                        <span style={styles.activityTime}>{timeAgo(log.logged_at)}</span>
+                        <span style={styles.activityTime}>{timeAgo(log.timestamp || log.logged_at)}</span>
                       </div>
                     </div>
                   )
