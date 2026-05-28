@@ -487,7 +487,16 @@ export default function BlueprintBuilder() {
           </>
         )}
 
-        <div style={styles.actions}>
+        <div style={{ ...styles.actions, justifyContent: step >= 2 && !isReviewStep ? 'space-between' : 'flex-end' }}>
+          {step >= 2 && !isReviewStep && (
+            <button
+              type="button"
+              style={styles.skipBtn}
+              onClick={() => setStep(totalSteps)}
+            >
+              Skip to Review →
+            </button>
+          )}
           {isReviewStep ? (
             <button type="button" style={styles.primaryBtn} onClick={handleSubmit} disabled={submitting}>
               {submitting ? 'Saving…' : 'Save blueprint'}
@@ -506,7 +515,7 @@ export default function BlueprintBuilder() {
               }}
               disabled={step === 1 && !canAdvancePlanInfo}
             >
-              {step === form.num_weeks + 1 ? 'Review plan' : 'Next'}
+              {step === form.num_weeks + 1 ? 'Review plan' : 'Next →'}
             </button>
           )}
         </div>
@@ -563,8 +572,9 @@ const styles = {
   sessionTopRow: { display: 'flex', gap: 8, alignItems: 'center' },
   removeBtn: { background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 18, padding: '0 4px', flexShrink: 0 },
 
-  actions: { display: 'flex', justifyContent: 'flex-end', marginTop: 28 },
+  actions: { display: 'flex', alignItems: 'center', marginTop: 28 },
   primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  skipBtn: { fontSize: 13, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: 0.1 },
   errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginTop: 16 },
 
   sportTabBar: { display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 12, marginBottom: 16, scrollbarWidth: 'none' },
