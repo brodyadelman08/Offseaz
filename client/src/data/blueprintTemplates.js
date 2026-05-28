@@ -433,9 +433,228 @@ function generateSwimmingWeeks() {
   })
 }
 
+// ─── Baseball ─────────────────────────────────────────────────────────────────
+
+const BASEBALL_PHASE_PCTS   = [0.70, 0.75, 0.80, 0.85]
+const BASEBALL_PHASE_LABELS = ['Foundation', 'Development', 'Strength', 'Peak']
+
+function makeBaseballSession(day, focus, exercises) {
+  const description = exercises.map(e => {
+    const setsReps = e.warmup
+      ? `${e.warmup} warmup, ${e.sets}x${e.reps} working`
+      : `${e.sets}x${e.reps}`
+    const pctStr  = e.pct  ? ` @ ${Math.round(e.pct * 100)}%` : ''
+    const noteStr = e.note ? ` (${e.note})` : ''
+    return `${e.name}: ${setsReps}${pctStr}${noteStr}`
+  }).join('\n')
+  return { day, focus, description }
+}
+
+function baseball3Day(wp) {
+  return [
+    makeBaseballSession('Day 1', 'Full Body Strength', [
+      { name: 'Squat',               warmup: '2x5', sets: 3, reps: '5', pct: wp },
+      { name: 'Bench Press',                        sets: 3, reps: '8' },
+      { name: 'Barbell Row',                        sets: 3, reps: '8' },
+      { name: 'Core — Cherry Pickers',              sets: 4, reps: '15' },
+    ]),
+    makeBaseballSession('Day 2', 'Full Body Power', [
+      { name: 'Power Clean',         warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Deadlift',                  sets: 3, reps: '6', pct: wp },
+      { name: 'Pull-ups',                           sets: 3, reps: 'AMAP' },
+      { name: 'Hip Thrust',                         sets: 3, reps: '8' },
+      { name: 'Bird Dog Row',                       sets: 4, reps: '10' },
+    ]),
+    makeBaseballSession('Day 3', 'Full Body Accessory', [
+      { name: 'RDL',                                sets: 3, reps: '8' },
+      { name: 'Single Arm DB Row',                  sets: 3, reps: '12' },
+      { name: 'Bulgarian Split Squat',              sets: 3, reps: '6', note: 'each leg' },
+      { name: 'Forearm Curls (Both Ways)',          sets: 3, reps: 'AMAP' },
+      { name: 'EXT/INT Rotation',                   sets: 3, reps: 'AMAP' },
+      { name: 'Calf Raises',                        sets: 3, reps: 'AMAP' },
+    ]),
+  ]
+}
+
+function baseball4Day(wp, phase) {
+  const p3 = phase >= 3
+  return [
+    makeBaseballSession('Day 1', 'Upper Building', [
+      { name: 'Hang Clean',                        sets: 3, reps: '8' },
+      { name: 'DB Bench',                          sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Tricep Pushdowns',                  sets: 2, reps: '8', note: '+ 1xAMAP' },
+      { name: 'Bench Curls',                       sets: 3, reps: '8' },
+      { name: 'Forearm Curls (Both Ways)',         sets: 3, reps: 'AMAP' },
+      { name: 'Lat Raises — Side, Front, Back',   sets: 3, reps: 'AMAP' },
+      { name: 'Core — Cherry Pickers',             sets: 4, reps: '15' },
+      { name: 'Sit-ups',                           sets: 4, reps: '12' },
+    ]),
+    makeBaseballSession('Day 2', 'Lower Building', [
+      { name: 'Reverse Lunge',                     sets: 3, reps: '5', note: 'each leg' },
+      { name: 'Box Drop',                          sets: 3, reps: '3' },
+      { name: 'Bulgarian Split Squat',             sets: 3, reps: '6', note: 'each leg' },
+      { name: 'Calf Raises',                       sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Hamstring Curls',                   sets: 3, reps: 'AMAP' },
+      { name: 'Leg Extensions',                    sets: 3, reps: 'AMAP' },
+      { name: 'Core — Tuck-Up',                    sets: 3, reps: 'AMAP' },
+      { name: 'EXT/INT Rotation',                  sets: 3, reps: 'AMAP' },
+    ]),
+    makeBaseballSession('Day 3', 'Upper Power', [
+      { name: 'Power Clean',        warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Pull-ups',                          sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Trap Bar Deadlift',                 sets: 3, reps: '6', pct: wp },
+      { name: 'Single Arm DB Row',                 sets: p3 ? 4 : 3, reps: '12' },
+      { name: 'Bird Dog Row',                      sets: 4, reps: '10' },
+      { name: 'Behind Pulldowns',                  sets: 3, reps: p3 ? '5' : '6' },
+      { name: 'Core — Bird Dogs',                  sets: 3, reps: '12' },
+      { name: 'Weighted Half Baby Kip-Ups',        sets: 3, reps: '12' },
+      { name: 'Rotate and Press',                  sets: 3, reps: '12' },
+      { name: 'Triceps',                           sets: 3, reps: '12' },
+    ]),
+    makeBaseballSession('Day 4', 'Lower Power', [
+      { name: 'Squat',              warmup: '2x5', sets: 3, reps: '5', pct: wp },
+      { name: 'Box Jump',                          sets: 3, reps: '3' },
+      { name: 'RDL',                               sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Weighted Hip Thrust',               sets: p3 ? 4 : 3, reps: '8' },
+      { name: 'Banded Pull-Aparts',                sets: 3, reps: '15' },
+      { name: 'Back Extensions',                   sets: 3, reps: '12', note: 'drop set' },
+      { name: 'Core — EXT/INT Rotation',           sets: 3, reps: 'AMAP' },
+    ]),
+  ]
+}
+
+const BASEBALL_ARM_CARE = makeBaseballSession('Day 5', 'Arm Care & Conditioning', [
+  { name: 'Banded Pull-Aparts',     sets: 3,  reps: '15' },
+  { name: 'Band External Rotation', sets: 3,  reps: '15' },
+  { name: 'Reverse Flys',           sets: 3,  reps: '15' },
+  { name: 'Core Work',              sets: 3,  reps: 'AMAP' },
+  { name: '30-Yard Sprints',        sets: 10, reps: '1', note: 'full recovery between each' },
+])
+
+const BASEBALL_LIGHT_FB = makeBaseballSession('Day 6', 'Lighter Full Body & Weak Points', [
+  { name: 'Goblet Squat',   sets: 3, reps: '10' },
+  { name: 'Push-ups',       sets: 3, reps: 'AMAP' },
+  { name: 'Chin-ups',       sets: 3, reps: 'AMAP' },
+  { name: 'Single Leg RDL', sets: 3, reps: '8' },
+  { name: 'Core Circuit',   sets: 3, reps: 'AMAP' },
+])
+
+function generateBaseballWeeks(_, goal, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const phaseIdx    = Math.floor((w - 1) / 4)
+    const phase       = phaseIdx + 1
+    const wp          = BASEBALL_PHASE_PCTS[phaseIdx]
+    const weekInPhase = ((w - 1) % 4) + 1
+
+    let sessions
+    if (daysPerWeek === 3) {
+      sessions = baseball3Day(wp)
+    } else {
+      sessions = baseball4Day(wp, phase)
+      if (daysPerWeek >= 5) sessions = [...sessions, BASEBALL_ARM_CARE]
+      if (daysPerWeek >= 6) sessions = [...sessions, BASEBALL_LIGHT_FB]
+    }
+
+    weeks.push({
+      week_number: w,
+      objective: `Phase ${phase} — ${BASEBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
+// ─── Hockey ───────────────────────────────────────────────────────────────────
+
+const HOCKEY_PHASES = [
+  { label: 'Foundation',  low: 0.65, high: 0.73 },
+  { label: 'Strength',    low: 0.73, high: 0.80 },
+  { label: 'Power Build', low: 0.78, high: 0.85 },
+  { label: 'Peak',        low: 0.82, high: 0.88, deload: true },
+]
+
+function hockeyForwardsSess(info) {
+  const q = info.pct
+  return [
+    { day: 'Day 1', focus: 'Lower Power',
+      description: `Power Clean: 4x3\nBack Squat: 4 sets @ ${q}\nHip Thrust: 4x8\nLateral Bounds: 4x5 each side\nSingle Leg RDL: 3x8 each leg\nCopenhagen Adductor: 3x8 each leg` },
+    { day: 'Day 2', focus: 'Upper Strength',
+      description: `Bench Press: 4 sets @ ${q}\nPull-ups: 4xAMAP\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nFace Pulls: 3x15\nBand External Rotation: 3x15` },
+    { day: 'Day 3', focus: 'Lower Explosion',
+      description: `Hang Clean: 4x3\nFront Squat: 3 sets @ ${q}\nBox Jump: 4x5\nLateral Step-Ups: 3x10 each leg\nBulgarian Split Squat: 3x6 each leg\nHurdle Hops: 3x6` },
+    { day: 'Day 4', focus: 'Full Body Power',
+      description: `Trap Bar Deadlift: 4x5 @ ${q}\nPush Press: 4x5\nWeighted Pull-ups: 4x5\nMed Ball Rotational Throw: 4x6 each side\nSled Sprint: 6x20 yds\nSkating-Stance Lateral Lunge: 3x8 each leg` },
+  ]
+}
+
+function hockeyDefenseSess(info) {
+  const q = info.pct
+  return [
+    { day: 'Day 1', focus: 'Lower Power',
+      description: `Power Clean: 4x3\nBack Squat: 5 sets (40/50/60/70/80%) @ ${q}, last set open\nTrap Bar Deadlift: 3x5 @ ${q}\nHip Thrust: 4x8\nCopenhagen Adductor: 3x8 each leg` },
+    { day: 'Day 2', focus: 'Upper Strength',
+      description: `Bench Press: 5 sets @ ${q}, last set AMAP\nPull-ups: 4xAMAP\nBB Row: 4x8\nOverhead Press: 4x8\nFace Pulls: 3x15\nBand External Rotation: 3x15` },
+    { day: 'Day 3', focus: 'Lower Strength',
+      description: `Front Squat: 4 sets @ ${q}\nRomanian Deadlift: 4x6\nBulgarian Split Squat: 3x6 each leg\nLateral Bounds: 4x5 each side\nNordic Hamstring Curl: 3x5\nCopenhagen Adductor: 3x8 each leg` },
+    { day: 'Day 4', focus: 'Full Body Power',
+      description: `BB Split Jerk: 3x3\nPush Press: 4x5\nWeighted Pull-ups: 4x5\nMed Ball Rotational Throw: 4x6 each side\nSled Sprint: 6x20 yds` },
+  ]
+}
+
+function hockeyGoalieSess(info) {
+  const q = info.pct
+  return [
+    { day: 'Day 1', focus: 'Hip Mobility & Lower',
+      description: `Hip 90/90 Mobility Circuit: 3x60s\nBack Squat: 3 sets @ ${q} (moderate loading)\nLateral Step-Ups: 4x10 each leg\nHip Thrust: 4x10\nCopenhagen Adductor: 4x10 each leg\nSingle Leg Calf Raise: 3xAMAP` },
+    { day: 'Day 2', focus: 'Core & Rotational',
+      description: `Med Ball Rotational Throw: 5x6 each side\nLandmine Rotation: 4x8 each side\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nPlank variations: 3x45s\nDead Bug: 3x10 each side` },
+    { day: 'Day 3', focus: 'Lower Explosion & Lateral',
+      description: `Power Clean: 3x3\nBox Jump: 4x5\nLateral Bounds: 4x5 each side\nSingle Leg RDL: 3x10 each leg\nBulgarian Split Squat: 3x6 each leg\nHurdle Hops: 3x6` },
+    { day: 'Day 4', focus: 'Upper & Full Body',
+      description: `DB Bench: 4x10\nWeighted Pull-ups: 4x5\nPush Press: 3x5\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nCore Circuit: 3 rounds` },
+  ]
+}
+
+function generateHockeyWeeks(posId, goal) {
+  const mg = goal === 'muscle_gain'
+  const phases = mg ? MG_PHASES : HOCKEY_PHASES
+  const baseFns = {
+    forwards: hockeyForwardsSess,
+    defense:  hockeyDefenseSess,
+    goalie:   hockeyGoalieSess,
+  }
+  const baseFn = baseFns[posId] || hockeyForwardsSess
+  const fn = mg
+    ? (info) => baseFn(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
+    : baseFn
+  return buildWeeks(16, phases, fn)
+}
+
 // ─── Exported template groups ─────────────────────────────────────────────────
 
 export const SPORT_TEMPLATES = [
+  {
+    id: 'baseball',
+    label: '⚾ Baseball',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 3, desc: 'Full Body split (3 sessions)' },
+      { days: 4, desc: 'Upper/Lower split (4 sessions)' },
+      { days: 5, desc: 'Upper/Lower + Arm Care' },
+      { days: 6, desc: 'Upper/Lower + Arm Care + Light Day' },
+    ],
+    positions: [
+      { id: 'baseball', label: 'Baseball', sublabel: '16-Week Offseason', desc: '4-phase program built for baseball athletes. Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '70%', weeks: '1–4'   },
+      { num: 2, label: 'Development', pct: '75%', weeks: '5–8'   },
+      { num: 3, label: 'Strength',    pct: '80%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
+    ],
+    generateWeeks: generateBaseballWeeks,
+  },
   {
     id: 'football',
     label: '🏈 Football',
@@ -485,6 +704,23 @@ export const SPORT_TEMPLATES = [
       { num: 4, label: 'Peak',           pct: '82–88%', weeks: '13–16' },
     ],
     generateWeeks: generateSoccerWeeks,
+  },
+  {
+    id: 'hockey',
+    label: '🏒 Hockey',
+    daysPerWeek: 4,
+    positions: [
+      { id: 'forwards', label: 'Forwards', sublabel: 'F',       desc: 'Speed, explosion, shot power, skating stride' },
+      { id: 'defense',  label: 'Defense',  sublabel: 'D',       desc: 'Strength, board battles, gap control' },
+      { id: 'goalie',   label: 'Goalie',   sublabel: 'G',       desc: 'Hip mobility, lateral explosiveness, rotational strength' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '65–73%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',    pct: '73–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Build', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '82–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateHockeyWeeks,
   },
   {
     id: 'wrestling',
