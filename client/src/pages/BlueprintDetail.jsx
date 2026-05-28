@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import SessionDescription from '../components/SessionDescription'
 
 const ORANGE = '#F75709'
 const GREEN  = '#2e7d32'
@@ -134,7 +135,7 @@ export default function BlueprintDetail() {
                         <span style={styles.sessionDay}>{s.day || `Session ${si + 1}`}</span>
                         <span style={styles.sessionFocus}>{s.focus}</span>
                       </div>
-                      {s.description && <p style={styles.sessionDesc}>{s.description}</p>}
+                      {s.description && <SessionDescription description={s.description} style={styles.sessionDesc} />}
                     </div>
                   ))
                 )}

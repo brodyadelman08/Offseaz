@@ -224,15 +224,20 @@ function generateBasketballWeeks(posId, goal) {
 
 // ─── Soccer ───────────────────────────────────────────────────────────────────
 
+const SOC_SPRINT_YARDS = [50, 60, 70, 80]
+
 function soccerSess(info) {
   const q = info.pct
+  const sprintYards = SOC_SPRINT_YARDS[Math.min(3, info.phaseNum - 1)]
   return [
-    { day: 'Day 1', focus: 'Lower Strength',
-      description: `Back Squat: 4 sets @ ${q}\nTrap Bar Deadlift: 3x6 @ ${q}\nNordic Hamstring Curl: 4x5 (critical injury prevention)\nBulgarian Split Squat: 3x8 each leg\nHip Thrust: 3x10\nSingle Leg Calf Raise: 3xAMAP\n\nConditioning (separate from lifting): 200m intervals x8 @ 85% · 400m repeats x4 @ 80% · Agility ladder 3x/week` },
-    { day: 'Day 2', focus: 'Full Body Power',
-      description: `Power Clean: 3x3\nFront Squat: 3 sets @ ${q}\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: 4x5 each side\nHurdle Hops: 3x6\nDB Bench: 3x10` },
-    { day: 'Day 3', focus: 'Conditioning & Accessories',
-      description: `Box Jump: 4x5\nBroad Jump: 4x4\nPull-ups: 4xAMAP\nDB Row: 3x12\nHip Abduction: 3x15 each side\nCopenhagen Adductor: 3x8 each leg` },
+    { day: 'Monday', focus: 'Lower Strength',
+      description: `Front Split Squat: 4 sets @ ${q}\nNordic Hamstring Curl: 4x5\nHex Bar Jumps: 4x6\nSingle Leg RDL: 3x8 each leg\nHip Thrust: 4x8\nGroin Plank: 3x10 each side\nBanded Fire Hydrant: 3x10 each side\nCalf Raises: 3xAMAP` },
+    { day: 'Tuesday', focus: 'Upper & Accessory',
+      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nLateral Raise: 3x12\nLunge Hold Rainbows: 3x8 each leg\nMB Twist Throw: 4x6 each side\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nBanded Monster Walk: 3x10 each direction` },
+    { day: 'Thursday', focus: 'Full Body Power',
+      description: `Hex Bar Deadlift: 4 sets @ ${q}\nFront Squat: 3 sets @ ${q}\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nDB Lateral Lunge: 3x8 each leg\nDB Incline Bench Press: 4x8\nStanding Single Arm Cable Row: 3x10 each arm` },
+    { day: 'Friday', focus: 'Optional Conditioning',
+      description: `(Optional — coach may remove this block)\n\nV Drill: 3x3\nStar Drill: 3x3\n300 Yard Shuttle: 2x2\nFlying 20s: 6x1\nSprint + Jog Ladder: 6 rounds up to ${sprintYards} yards (sprint ${sprintYards} yds · jog back)` },
   ]
 }
 
@@ -693,9 +698,9 @@ export const SPORT_TEMPLATES = [
   {
     id: 'soccer',
     label: '⚽ Soccer',
-    daysPerWeek: 3,
+    daysPerWeek: 4,
     positions: [
-      { id: 'soccer', label: 'Soccer', sublabel: 'All positions', desc: 'Hamstring health, repeated sprint ability, lower body durability' },
+      { id: 'soccer', label: 'Soccer', sublabel: 'All positions', desc: 'Lifting-focused 4-day program — lower strength, upper accessory, full body power, optional conditioning' },
     ],
     phases: [
       { num: 1, label: 'Foundation',     pct: '65–72%', weeks: '1–4'   },

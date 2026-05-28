@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { DumbbellIcon } from '../components/Icons'
+import SessionDescription from '../components/SessionDescription'
 
 const BLUE   = '#308EBD'
 const ORANGE = '#F75709'
@@ -207,7 +208,7 @@ export default function AthletePlan() {
                               ))}
                             </div>
                           ) : s.description ? (
-                            <p style={styles.sessionDesc}>{s.description}</p>
+                            <SessionDescription description={s.description} style={styles.sessionDesc} />
                           ) : null}
                         </div>
                       )
