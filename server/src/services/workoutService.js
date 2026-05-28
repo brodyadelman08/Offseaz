@@ -59,7 +59,7 @@ async function getTeamLogs(coachId) {
   const [profilesRes, logsRes, surveysRes, assignmentsRes] = await Promise.all([
     supabaseAdmin.from('profiles').select('id, full_name').in('id', athleteIds),
     supabaseAdmin.from('workout_logs')
-      .select('id, athlete_id, blueprint_week_id, session_index, status, effort, logged_at')
+      .select('id, athlete_id, blueprint_week_id, session_index, status, effort, note, logged_at')
       .in('athlete_id', athleteIds)
       .order('logged_at', { ascending: false })
       .limit(30),
@@ -95,9 +95,18 @@ async function getTeamLogs(coachId) {
 
   const events = []
 
+  // Parse injury exercise names from the ⚠️ note prefix
+  function parseInjuryExercises(note) {
+    if (!note) return null
+    const match = note.match(/⚠️ Cannot complete: (.+)/i)
+    if (!match) return null
+    return match[1].split(',').map(s => s.trim()).filter(Boolean)
+  }
+
   // Workout log events
   for (const log of rawLogs) {
     const week = weekMap[log.blueprint_week_id]
+    const injuryExercises = log.status === 'skipped_injury' ? parseInjuryExercises(log.note) : null
     events.push({
       id: `workout-${log.id}`,
       type: 'workout',
@@ -108,6 +117,7 @@ async function getTeamLogs(coachId) {
       effort: log.effort,
       session_focus: week?.sessions?.[log.session_index]?.focus ?? null,
       week_number: week?.week_number ?? null,
+      injury_exercises: injuryExercises,
     })
   }
 

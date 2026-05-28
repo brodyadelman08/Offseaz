@@ -132,6 +132,11 @@ export default function CoachAthletes() {
                           editable={false}
                         />
                         <span style={styles.athleteName}>{a.full_name}</span>
+                        {a.has_recent_injury && (
+                          <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days">
+                            ⚠
+                          </span>
+                        )}
                       </div>
                     </td>
 
@@ -239,6 +244,17 @@ const styles = {
   td: { padding: '13px 14px', color: 'var(--text)', verticalAlign: 'middle' },
 
   athleteName: { fontWeight: 600, fontSize: 14 },
+  injuryFlag: {
+    fontSize: 13,
+    color: '#c73820',
+    background: '#fce8e6',
+    border: '1px solid rgba(199,56,32,0.25)',
+    padding: '2px 6px',
+    borderRadius: 4,
+    fontWeight: 700,
+    cursor: 'default',
+    whiteSpace: 'nowrap',
+  },
   sport: { display: 'block', fontWeight: 600, color: 'var(--text)', fontSize: 13 },
   position: { display: 'block', color: 'var(--text-3)', fontSize: 12, marginTop: 2 },
   dash: { color: 'var(--text-3)', fontSize: 13 },

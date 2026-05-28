@@ -27,12 +27,15 @@ function buildMaxesMap(rows) {
  * sort: 'name' | 'position' | 'joined'
  */
 async function getCoachRoster(coachId, sort = 'name') {
+  console.log('[getCoachRoster] coachId:', coachId)
+
   const { data: team, error: teamErr } = await supabaseAdmin
     .from('teams')
     .select('id')
     .eq('coach_id', coachId)
     .single()
 
+  console.log('[getCoachRoster] team:', team, 'teamErr:', teamErr?.message)
   if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
   if (!team) return []
 
@@ -42,27 +45,44 @@ async function getCoachRoster(coachId, sort = 'name') {
     .select('athlete_id, created_at')
     .eq('team_id', team.id)
 
+  console.log('[getCoachRoster] memberRows:', memberRows?.length, 'membersErr:', membersErr?.message)
   if (membersErr) throw membersErr
   if (!memberRows || memberRows.length === 0) return []
 
   const athleteIds = memberRows.map(m => m.athlete_id)
+  console.log('[getCoachRoster] athleteIds:', athleteIds)
 
-  // Step 2: fetch profiles, surveys, and maxes in parallel using .in() — no FK hints needed
-  const [{ data: profileRows, error: profErr }, { data: surveyRows }, { data: maxRows }] = await Promise.all([
+  // Step 2: fetch profiles, surveys, maxes, and recent injury flags in parallel
+  // NOTE: completed_at omitted from survey select — it may not exist in all environments
+  const sevenDaysAgo = new Date(Date.now() - 7 * 24 * 60 * 60 * 1000).toISOString()
+  const [
+    { data: profileRows, error: profErr },
+    { data: surveyRows,  error: surveyErr },
+    { data: maxRows },
+    { data: injuryRows },
+  ] = await Promise.all([
     supabaseAdmin
       .from('profiles')
       .select('id, full_name, avatar_url')
       .in('id', athleteIds),
     supabaseAdmin
       .from('survey_responses')
-      .select('athlete_id, sport, position, goals, time_per_week, completed_at')
+      .select('athlete_id, sport, position, goals, time_per_week')
       .in('athlete_id', athleteIds),
     supabaseAdmin
       .from('lifting_maxes')
       .select('athlete_id, lift, weight_lbs, reps')
       .in('athlete_id', athleteIds),
+    supabaseAdmin
+      .from('workout_logs')
+      .select('athlete_id')
+      .in('athlete_id', athleteIds)
+      .eq('status', 'skipped_injury')
+      .gte('logged_at', sevenDaysAgo),
   ])
 
+  console.log('[getCoachRoster] profileRows:', profileRows?.length, 'profErr:', profErr?.message)
+  console.log('[getCoachRoster] surveyRows:', surveyRows?.length, 'surveyErr:', surveyErr?.message)
   if (profErr) throw profErr
 
   // Build lookup maps
@@ -74,6 +94,8 @@ async function getCoachRoster(coachId, sort = 'name') {
 
   const maxesMap = buildMaxesMap(maxRows)
 
+  const recentInjurySet = new Set((injuryRows || []).map(l => l.athlete_id))
+
   let results = (profileRows || []).map(p => ({
     id: p.id,
     full_name: p.full_name,
@@ -81,7 +103,10 @@ async function getCoachRoster(coachId, sort = 'name') {
     joined_at: joinedMap[p.id] || null,
     survey: surveyMap[p.id] || null,
     maxes: maxesMap[p.id] || {},
+    has_recent_injury: recentInjurySet.has(p.id),
   }))
+
+  console.log('[getCoachRoster] results before sort:', results.length)
 
   // Sorting
   if (sort === 'position') {
@@ -94,6 +119,7 @@ async function getCoachRoster(coachId, sort = 'name') {
     results.sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''))
   }
 
+  console.log('[getCoachRoster] returning', results.length, 'athletes')
   return results
 }
 
@@ -108,17 +134,25 @@ async function getCoachRoster(coachId, sort = 'name') {
  * failures when FK constraint names differ across environments.
  */
 async function getAthleteRoster(athleteId) {
-  // Same reliable query used by getAthleteTeam
+  // Get athlete's team membership (separate query — avoids FK hint fragility)
   const { data: membership, error: memberErr } = await supabaseAdmin
     .from('team_members')
-    .select('team_id, teams(id, name)')
+    .select('team_id')
     .eq('athlete_id', athleteId)
     .single()
 
   if (memberErr && memberErr.code !== 'PGRST116') throw memberErr
   if (!membership) return { team: null, roster: [] }
 
-  const team = membership.teams || null
+  // Fetch team info (includes coach_id for pinning the coach card)
+  const { data: teamData, error: teamErr } = await supabaseAdmin
+    .from('teams')
+    .select('id, name, coach_id')
+    .eq('id', membership.team_id)
+    .single()
+
+  if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
+  if (!teamData) return { team: null, roster: [] }
 
   // Get all athlete_ids on the same team
   const { data: memberRows, error: membersErr } = await supabaseAdmin
@@ -129,10 +163,14 @@ async function getAthleteRoster(athleteId) {
   if (membersErr) throw membersErr
 
   const athleteIds = (memberRows || []).map(m => m.athlete_id)
-  if (athleteIds.length === 0) return { team, roster: [] }
+  if (athleteIds.length === 0) return { team: teamData, roster: [] }
 
-  // Fetch profiles and surveys with plain .in() — no FK hints needed
-  const [{ data: profileRows, error: profErr }, { data: surveyRows }] = await Promise.all([
+  // Fetch profiles, surveys, and coach profile in parallel — no FK hints needed
+  const [
+    { data: profileRows, error: profErr },
+    { data: surveyRows },
+    { data: coachProfile },
+  ] = await Promise.all([
     supabaseAdmin
       .from('profiles')
       .select('id, full_name, avatar_url, privacy_team')
@@ -141,6 +179,14 @@ async function getAthleteRoster(athleteId) {
       .from('survey_responses')
       .select('athlete_id, sport, position')
       .in('athlete_id', athleteIds),
+    teamData.coach_id
+      ? supabaseAdmin
+          .from('profiles')
+          .select('id, full_name, avatar_url')
+          .eq('id', teamData.coach_id)
+          .single()
+          .then(r => r.data)
+      : Promise.resolve(null),
   ])
 
   if (profErr) throw profErr
@@ -163,7 +209,19 @@ async function getAthleteRoster(athleteId) {
     }
   })
 
-  roster.sort((a, b) => a.full_name.localeCompare(b.full_name))
+  roster.sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''))
+
+  // Attach coach info to team so the client can pin a Coach card
+  const team = {
+    id: teamData.id,
+    name: teamData.name,
+    coach: coachProfile ? {
+      id: coachProfile.id,
+      full_name: coachProfile.full_name,
+      avatar_url: coachProfile.avatar_url || null,
+    } : null,
+  }
+
   return { team, roster }
 }
 

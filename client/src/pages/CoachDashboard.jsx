@@ -32,6 +32,8 @@ const EVENT_BADGE = {
   blueprint: { label: 'Plan assigned', color: '#6a1b9a', bg: '#f3e5f5' },
 }
 
+const INJURY_BADGE = { label: '🚨 Injury', color: '#c73820', bg: '#fce8e6' }
+
 export default function CoachDashboard() {
   const { profile } = useAuth()
   const navigate = useNavigate()
@@ -194,28 +196,43 @@ export default function CoachDashboard() {
               <div style={styles.activityList}>
                 {activityLogs.slice(0, 10).map(log => {
                   const isWorkout = log.type === 'workout' || !log.type
-                  const badge = isWorkout
-                    ? (ACTIVITY_STATUS[log.status] || { label: log.status, color: '#888', bg: '#f0f0f0' })
-                    : (EVENT_BADGE[log.type] || { label: log.type, color: '#888', bg: '#f0f0f0' })
+                  const isInjury  = isWorkout && log.status === 'skipped_injury'
+
+                  const badge = isInjury
+                    ? INJURY_BADGE
+                    : isWorkout
+                      ? (ACTIVITY_STATUS[log.status] || { label: log.status, color: '#888', bg: '#f0f0f0' })
+                      : (EVENT_BADGE[log.type]  || { label: log.type, color: '#888', bg: '#f0f0f0' })
 
                   let subtitle = ''
-                  if (isWorkout) subtitle = log.session_focus || 'Session'
-                  else if (log.type === 'blueprint') subtitle = log.blueprint_title || 'Training plan'
-                  else if (log.type === 'joined') subtitle = 'Joined the team'
-                  else if (log.type === 'survey') subtitle = 'Completed profile survey'
+                  if (isInjury) {
+                    subtitle = log.injury_exercises?.length
+                      ? `Can't do: ${log.injury_exercises.join(', ')}`
+                      : (log.session_focus || 'Session')
+                  } else if (isWorkout) {
+                    subtitle = log.session_focus || 'Session'
+                  } else if (log.type === 'blueprint') {
+                    subtitle = log.blueprint_title || 'Training plan'
+                  } else if (log.type === 'joined') {
+                    subtitle = 'Joined the team'
+                  } else if (log.type === 'survey') {
+                    subtitle = 'Completed profile survey'
+                  }
 
                   return (
                     <div key={log.id} style={styles.activityRow}>
                       <div style={styles.activityLeft}>
                         <span style={styles.activityName}>{log.athlete_name}</span>
-                        <span style={styles.activityFocus}>{subtitle}</span>
-                        {isWorkout && log.week_number && (
+                        <span style={isInjury ? styles.activityInjurySub : styles.activityFocus}>
+                          {subtitle}
+                        </span>
+                        {isWorkout && !isInjury && log.week_number && (
                           <span style={styles.activityWeek}>Wk {log.week_number}</span>
                         )}
                       </div>
                       <div style={styles.activityRight}>
                         <span style={{ ...styles.activityBadge, color: badge.color, background: badge.bg }}>
-                          {badge.label}{isWorkout && log.effort ? ` · ${log.effort}` : ''}
+                          {badge.label}{isWorkout && !isInjury && log.effort ? ` · ${log.effort}` : ''}
                         </span>
                         <span style={styles.activityTime}>{timeAgo(log.timestamp || log.logged_at)}</span>
                       </div>
@@ -406,6 +423,14 @@ const styles = {
   activityFocus: {
     fontSize: 13,
     color: 'var(--text-2)',
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
+  },
+  activityInjurySub: {
+    fontSize: 13,
+    color: '#c73820',
+    fontWeight: 600,
     overflow: 'hidden',
     textOverflow: 'ellipsis',
     whiteSpace: 'nowrap',

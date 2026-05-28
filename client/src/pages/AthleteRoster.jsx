@@ -42,11 +42,6 @@ export default function AthleteRoster() {
           {!loading && teammates.length > 0 && (
             <p style={styles.subtitle}>
               {teammates.length} teammate{teammates.length !== 1 ? 's' : ''}
-              {publicCount < teammates.length && (
-                <> · <span style={{ color: 'var(--text-3)' }}>
-                  {teammates.length - publicCount} private
-                </span></>
-              )}
             </p>
           )}
         </div>
@@ -64,59 +59,91 @@ export default function AthleteRoster() {
             Go to Dashboard
           </button>
         </div>
-      ) : teammates.length === 0 ? (
-        <div style={styles.emptyState}>
-          <p style={styles.emptyTitle}>No teammates yet</p>
-          <p style={styles.emptyDesc}>
-            Your coach can share the team invite code to bring more athletes in.
-          </p>
-        </div>
       ) : (
         <>
-          {/* Your own card (always at top) */}
-          {self && (
-            <div style={styles.sectionLabel}>You</div>
-          )}
-          {self && (
-            <div
-              style={{ ...styles.athleteCard, ...styles.selfCard }}
-              onClick={() => navigate('/athlete/profile')}
-            >
-              <AvatarUpload
-                name={self.full_name}
-                avatarUrl={self.avatar_url}
-                size={44}
-                color={ORANGE}
-                editable={false}
-              />
-              <div style={styles.athleteInfo}>
-                <p style={styles.athleteName}>{self.full_name}</p>
-                {self.sport && (
-                  <p style={styles.athleteSub}>
-                    {self.sport}{self.position ? ` · ${self.position}` : ''}
+          {/* Coach card — always pinned at the very top */}
+          {team?.coach && (
+            <>
+              <div style={styles.sectionLabel}>Coach</div>
+              <div style={{ ...styles.athleteCard, ...styles.coachCard, marginBottom: 20 }}>
+                <AvatarUpload
+                  name={team.coach.full_name}
+                  avatarUrl={team.coach.avatar_url}
+                  size={44}
+                  color={BLUE}
+                  editable={false}
+                />
+                <div style={styles.athleteInfo}>
+                  <p style={styles.athleteName}>{team.coach.full_name}</p>
+                  <p style={{ ...styles.athleteSub, color: 'var(--text-3)', fontStyle: 'italic' }}>
+                    Head Coach
                   </p>
-                )}
+                </div>
+                <span style={styles.coachBadge}>Coach</span>
               </div>
-              <span style={styles.youBadge}>You</span>
-            </div>
+            </>
+          )}
+
+          {/* Your own card */}
+          {self && (
+            <>
+              <div style={styles.sectionLabel}>You</div>
+              <div
+                style={{ ...styles.athleteCard, ...styles.selfCard }}
+                onClick={() => navigate('/athlete/profile')}
+              >
+                <AvatarUpload
+                  name={self.full_name}
+                  avatarUrl={self.avatar_url}
+                  size={44}
+                  color={ORANGE}
+                  editable={false}
+                />
+                <div style={styles.athleteInfo}>
+                  <p style={styles.athleteName}>{self.full_name}</p>
+                  {self.sport && (
+                    <p style={styles.athleteSub}>
+                      {self.sport}{self.position ? ` · ${self.position}` : ''}
+                    </p>
+                  )}
+                </div>
+                <span style={styles.youBadge}>You</span>
+              </div>
+            </>
           )}
 
           {/* Teammates */}
-          {teammates.length > 0 && (
-            <div style={{ ...styles.sectionLabel, marginTop: 20 }}>Teammates</div>
+          {teammates.length === 0 ? (
+            <div style={{ ...styles.emptyState, paddingTop: 24 }}>
+              <p style={styles.emptyTitle}>No teammates yet</p>
+              <p style={styles.emptyDesc}>
+                Your coach can share the team invite code to bring more athletes in.
+              </p>
+            </div>
+          ) : (
+            <>
+              <div style={{ ...styles.sectionLabel, marginTop: 20 }}>
+                Teammates
+                {teammates.filter(a => a.privacy === 'public').length < teammates.length && (
+                  <span style={{ fontWeight: 400, color: 'var(--text-3)', marginLeft: 8 }}>
+                    · {teammates.length - teammates.filter(a => a.privacy === 'public').length} private
+                  </span>
+                )}
+              </div>
+              <div style={styles.rosterGrid}>
+                {teammates.map(a => (
+                  <AthleteCard
+                    key={a.id}
+                    athlete={a}
+                    onClick={a.privacy === 'public'
+                      ? () => navigate(`/athlete/roster/${a.id}`)
+                      : null
+                    }
+                  />
+                ))}
+              </div>
+            </>
           )}
-          <div style={styles.rosterGrid}>
-            {teammates.map(a => (
-              <AthleteCard
-                key={a.id}
-                athlete={a}
-                onClick={a.privacy === 'public'
-                  ? () => navigate(`/athlete/roster/${a.id}`)
-                  : null
-                }
-              />
-            ))}
-          </div>
         </>
       )}
     </div>
@@ -239,6 +266,18 @@ const styles = {
   },
 
   cardRight: { flexShrink: 0 },
+  coachCard: {
+    borderLeft: `3px solid ${BLUE}`,
+  },
+  coachBadge: {
+    fontSize: 11,
+    fontWeight: 700,
+    background: 'rgba(48,142,189,0.10)',
+    color: BLUE,
+    border: '1px solid rgba(48,142,189,0.22)',
+    padding: '3px 8px',
+    borderRadius: 5,
+  },
   youBadge: {
     fontSize: 11,
     fontWeight: 700,
