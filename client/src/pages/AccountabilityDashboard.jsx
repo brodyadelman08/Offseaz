@@ -11,9 +11,10 @@ const STATUS = {
 }
 
 const LOG_STATUS = {
-  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
-  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
-  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+  completed:       { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9' },
+  partial:         { label: 'Partial',          color: '#b45309', bg: '#fef3c7' },
+  skipped:         { label: 'Skipped',          color: '#888',    bg: '#f0f0f0' },
+  skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
 }
 
 function initials(name) {

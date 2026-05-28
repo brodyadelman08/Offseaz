@@ -20,9 +20,10 @@ function timeAgo(dateStr) {
 }
 
 const ACTIVITY_STATUS = {
-  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
-  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
-  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+  completed:       { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9' },
+  partial:         { label: 'Partial',          color: '#b45309', bg: '#fef3c7' },
+  skipped:         { label: 'Skipped',          color: '#888',    bg: '#f0f0f0' },
+  skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
 }
 
 export default function CoachDashboard() {
@@ -33,6 +34,7 @@ export default function CoachDashboard() {
   const [athletes, setAthletes] = useState([])
   const [blueprints, setBlueprints] = useState([])
   const [activityLogs, setActivityLogs] = useState([])
+  const [notifications, setNotifications] = useState([])
   const [error, setError] = useState('')
   const [loading, setLoading] = useState(true)
   const [creating, setCreating] = useState(false)
@@ -45,11 +47,13 @@ export default function CoachDashboard() {
       api.get('/api/survey/team').then(r => r.data.athletes).catch(() => []),
       api.get('/api/blueprints').then(r => r.data.blueprints).catch(() => []),
       api.get('/api/workouts/team').then(r => r.data.logs).catch(() => []),
-    ]).then(([teamData, athletesData, blueprintsData, logsData]) => {
+      api.get('/api/notifications').then(r => r.data.notifications).catch(() => []),
+    ]).then(([teamData, athletesData, blueprintsData, logsData, notifData]) => {
       setTeam(teamData)
       setAthletes(athletesData)
       setBlueprints(blueprintsData)
       setActivityLogs(logsData)
+      setNotifications(notifData)
     }).finally(() => setLoading(false))
   }, [])
 
@@ -98,6 +102,23 @@ export default function CoachDashboard() {
         <p style={styles.loadingText}>Loading…</p>
       ) : team ? (
         <>
+          {/* Injury notifications */}
+          {notifications.length > 0 && (
+            <div style={styles.notifSection}>
+              {notifications.map(n => (
+                <button
+                  key={n.id}
+                  style={styles.notifRow}
+                  onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
+                >
+                  <span style={styles.notifIcon}>🚨</span>
+                  <span style={styles.notifMsg}>{n.message}</span>
+                  <span style={styles.notifCta}>View Profile →</span>
+                </button>
+              ))}
+            </div>
+          )}
+
           {/* Stats row */}
           <div style={styles.statsRow}>
             {[
@@ -226,6 +247,12 @@ const styles = {
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   pageSub: { fontSize: 14, color: 'var(--text-2)', margin: 0 },
   loadingText: { color: 'var(--text-3)', fontSize: 15 },
+
+  notifSection: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 },
+  notifRow: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 10, cursor: 'pointer', textAlign: 'left', width: '100%' },
+  notifIcon: { fontSize: 18, flexShrink: 0 },
+  notifMsg: { flex: 1, fontSize: 14, fontWeight: 600, color: '#7f1d1d' },
+  notifCta: { fontSize: 13, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', flexShrink: 0 },
 
   statsRow: {
     display: 'grid',

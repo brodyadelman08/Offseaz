@@ -7,10 +7,11 @@ async function log(req, res) {
 
   if (!blueprint_week_id) return res.status(400).json({ error: 'blueprint_week_id is required' })
   if (session_index == null || session_index < 0) return res.status(400).json({ error: 'session_index is required' })
-  if (!['completed', 'partial', 'skipped'].includes(status)) {
-    return res.status(400).json({ error: 'status must be completed, partial, or skipped' })
+  if (!['completed', 'partial', 'skipped', 'skipped_injury'].includes(status)) {
+    return res.status(400).json({ error: 'status must be completed, partial, skipped, or skipped_injury' })
   }
-  if (status !== 'skipped' && effort != null && (effort < 1 || effort > 10)) {
+  const isSkip = status === 'skipped' || status === 'skipped_injury'
+  if (!isSkip && effort != null && (effort < 1 || effort > 10)) {
     return res.status(400).json({ error: 'effort must be between 1 and 10' })
   }
 

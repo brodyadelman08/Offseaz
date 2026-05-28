@@ -1,12 +1,13 @@
 const supabaseAdmin = require('../config/supabase')
 
 async function logSession(athleteId, { blueprint_week_id, session_index, status, effort, note }) {
+  const isSkip = status === 'skipped' || status === 'skipped_injury'
   const row = {
     athlete_id: athleteId,
     blueprint_week_id,
     session_index,
     status,
-    effort: status === 'skipped' ? null : (effort || null),
+    effort: isSkip ? null : (effort || null),
     note: note || null,
   }
 

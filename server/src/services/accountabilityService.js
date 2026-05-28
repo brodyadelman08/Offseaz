@@ -13,8 +13,12 @@ function getThisWeekMonday() {
   return getMondayKey(new Date())
 }
 
+function isSkip(status) {
+  return status === 'skipped' || status === 'skipped_injury'
+}
+
 function computeStreak(logs) {
-  const nonSkipped = logs.filter(l => l.status !== 'skipped')
+  const nonSkipped = logs.filter(l => !isSkip(l.status))
   if (!nonSkipped.length) return 0
   const loggedWeeks = new Set(nonSkipped.map(l => getMondayKey(l.logged_at)))
   const latest = [...nonSkipped].sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at))[0]
@@ -29,7 +33,7 @@ function computeStreak(logs) {
 
 function computeMetrics(logs, weekMonday) {
   const thisWeekLogs = logs.filter(l => getMondayKey(l.logged_at) === weekMonday)
-  const nonSkippedThisWeek = thisWeekLogs.filter(l => l.status !== 'skipped')
+  const nonSkippedThisWeek = thisWeekLogs.filter(l => !isSkip(l.status))
   const efforts = nonSkippedThisWeek.filter(l => l.effort != null).map(l => l.effort)
   const avgEffort = efforts.length
     ? Math.round((efforts.reduce((a, b) => a + b, 0) / efforts.length) * 10) / 10

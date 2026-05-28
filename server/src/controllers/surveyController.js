@@ -1,6 +1,7 @@
 const { submitSurvey, updateSurvey, getSurveyByAthlete, getTeamSurveys } = require('../services/surveyService')
 const { getAthleteTeam } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
+const { createInjuryNotification } = require('../services/notificationService')
 
 async function submit(req, res) {
   const {
@@ -43,6 +44,15 @@ async function submit(req, res) {
       weakness_areas,
       offseason_goals,
     })
+
+    // Notify coach if athlete flagged any injury area
+    const hasInjury = (injury_areas || []).some(a => a !== 'None')
+    if (hasInjury && team.coach_id) {
+      const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
+      createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
+        console.error('Injury notification failed (submit):', e)
+      )
+    }
 
     res.status(201).json({ survey })
   } catch (err) {
@@ -89,6 +99,22 @@ async function update(req, res) {
       weakness_areas,
       offseason_goals,
     })
+
+    // Notify coach if athlete flagged any injury area
+    const hasInjury = (injury_areas || []).some(a => a !== 'None')
+    if (hasInjury) {
+      try {
+        const team = await getAthleteTeam(req.user.id)
+        if (team?.coach_id) {
+          const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
+          createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
+            console.error('Injury notification failed (update):', e)
+          )
+        }
+      } catch (e) {
+        console.error('Could not look up team for injury notification:', e)
+      }
+    }
 
     res.json({ survey })
   } catch (err) {

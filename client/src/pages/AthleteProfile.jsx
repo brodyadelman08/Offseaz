@@ -18,9 +18,10 @@ const LIFTS = [
 ]
 
 const LOG_STATUS = {
-  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
-  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
-  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+  completed:       { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9' },
+  partial:         { label: 'Partial',          color: '#b45309', bg: '#fef3c7' },
+  skipped:         { label: 'Skipped',          color: '#888',    bg: '#f0f0f0' },
+  skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
 }
 
 function fmtDate(dateStr) {
@@ -50,6 +51,10 @@ export default function AthleteProfile() {
   const [historyOpen, setHistoryOpen] = useState(
     Object.fromEntries(LIFTS.map(l => [l.key, false]))
   )
+  const [noteText, setNoteText] = useState('')
+  const [noteSaving, setNoteSaving] = useState(false)
+  const [noteSaved, setNoteSaved] = useState(false)
+  const [noteUpdatedAt, setNoteUpdatedAt] = useState(null)
 
   useEffect(() => {
     Promise.all([
@@ -59,10 +64,30 @@ export default function AthleteProfile() {
       .then(([athleteData, maxesData]) => {
         setAthlete(athleteData)
         setMaxes(maxesData)
+        setNoteText(athleteData.coach_note || '')
+        setNoteUpdatedAt(athleteData.coach_note_updated_at || null)
       })
       .catch(err => setError(err.response?.data?.error || 'Could not load profile.'))
       .finally(() => setLoading(false))
+
+    // Dismiss any pending injury notifications for this athlete (fire-and-forget)
+    api.patch(`/api/notifications/dismiss-athlete/${id}`).catch(() => {})
   }, [id])
+
+  async function handleSaveNote() {
+    setNoteSaving(true)
+    setNoteSaved(false)
+    try {
+      const res = await api.put(`/api/athletes/${id}/notes`, { note: noteText })
+      setNoteUpdatedAt(res.data.updated_at)
+      setNoteSaved(true)
+      setTimeout(() => setNoteSaved(false), 3000)
+    } catch (e) {
+      console.error('Note save failed:', e)
+    } finally {
+      setNoteSaving(false)
+    }
+  }
 
   if (loading) return <div style={styles.center}>Loading…</div>
   if (error)   return <div style={styles.center}>{error}</div>
@@ -215,6 +240,56 @@ export default function AthleteProfile() {
         )}
       </div>
 
+      {/* Coach Notes */}
+      <div style={{ ...styles.card, marginTop: 14 }}>
+        <p style={{ ...styles.cardLabel, color: '#c73820' }}>Coach Notes <span style={styles.privateTag}>private</span></p>
+
+        {/* Injury context from survey */}
+        {survey && (() => {
+          const areas = (survey.injury_areas || []).filter(a => a && a !== 'None')
+          const hasInjury = areas.length > 0 || survey.injury_other
+          return hasInjury ? (
+            <div style={styles.injuryContext}>
+              <p style={styles.injuryContextLabel}>⚠️ Athlete reported injury</p>
+              {areas.length > 0 && (
+                <div style={styles.pillRow}>
+                  {areas.map((a, i) => (
+                    <span key={i} style={styles.injuryPill}>{a}</span>
+                  ))}
+                </div>
+              )}
+              {survey.injury_other && (
+                <p style={styles.injuryOther}>"{survey.injury_other}"</p>
+              )}
+            </div>
+          ) : (
+            <p style={{ ...styles.empty, marginBottom: 14 }}>No injury reported in survey.</p>
+          )
+        })()}
+
+        <label style={styles.noteLabel}>Your private notes</label>
+        <textarea
+          style={styles.noteTextarea}
+          value={noteText}
+          onChange={e => setNoteText(e.target.value)}
+          placeholder="Add notes about this athlete's injury, training modifications, or anything else…"
+          rows={4}
+        />
+        <div style={styles.noteSaveRow}>
+          {noteUpdatedAt && !noteSaved && (
+            <span style={styles.noteTimestamp}>Last saved {fmtDate(noteUpdatedAt)}</span>
+          )}
+          {noteSaved && <span style={styles.noteSavedMsg}>✓ Saved</span>}
+          <button
+            style={{ ...styles.noteSaveBtn, opacity: noteSaving ? 0.6 : 1 }}
+            onClick={handleSaveNote}
+            disabled={noteSaving}
+          >
+            {noteSaving ? 'Saving…' : 'Save Notes'}
+          </button>
+        </div>
+      </div>
+
       {/* Log history */}
       <div style={{ ...styles.card, marginTop: 14 }}>
         <div style={styles.logHeader}>
@@ -290,6 +365,18 @@ const styles = {
   historyWeight: { fontSize: 13, lineHeight: 1.4 },
   prTag: { fontSize: 10, fontWeight: 700, color: ORANGE, background: 'rgba(247,87,9,0.12)', padding: '1px 5px', borderRadius: 3 },
   historyDate: { fontSize: 11, color: 'var(--text-3)' },
+
+  privateTag: { fontSize: 10, fontWeight: 700, color: '#888', background: 'var(--border)', borderRadius: 4, padding: '1px 6px', marginLeft: 8, textTransform: 'uppercase', letterSpacing: 0.3, verticalAlign: 'middle' },
+  injuryContext: { background: '#fce8e6', border: '1px solid #f5c6c2', borderRadius: 8, padding: '12px 14px', marginBottom: 16 },
+  injuryContextLabel: { fontSize: 12, fontWeight: 700, color: '#c73820', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: 0.4 },
+  injuryPill: { fontSize: 12, fontWeight: 600, background: '#f5c6c2', color: '#7f1d1d', padding: '3px 10px', borderRadius: 12 },
+  injuryOther: { fontSize: 13, color: '#7f1d1d', fontStyle: 'italic', margin: '8px 0 0', lineHeight: 1.5 },
+  noteLabel: { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-2)', textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 8 },
+  noteTextarea: { width: '100%', padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none', lineHeight: 1.6 },
+  noteSaveRow: { display: 'flex', alignItems: 'center', justifyContent: 'flex-end', gap: 12, marginTop: 10 },
+  noteTimestamp: { fontSize: 12, color: 'var(--text-3)', flex: 1 },
+  noteSavedMsg: { fontSize: 12, fontWeight: 700, color: '#2e7d32', flex: 1 },
+  noteSaveBtn: { padding: '8px 18px', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', background: '#c73820', color: '#fff', cursor: 'pointer' },
 
   logHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 },
   logCount: { fontSize: 13, color: 'var(--text-3)' },

@@ -5,9 +5,10 @@ import api from '../services/api'
 const BLUE = '#308EBD'
 
 const STATUS_OPTIONS = [
-  { value: 'completed', label: 'Completed',  color: '#2e7d32', bg: '#e8f5e9', activeBg: '#2e7d32' },
-  { value: 'partial',   label: 'Partial',    color: '#b45309', bg: '#fef3c7', activeBg: '#b45309' },
-  { value: 'skipped',   label: 'Skipped',    color: '#888',    bg: '#f0f0f0', activeBg: '#555' },
+  { value: 'completed',       label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9', activeBg: '#2e7d32' },
+  { value: 'partial',         label: 'Partial',          color: '#b45309', bg: '#fef3c7', activeBg: '#b45309' },
+  { value: 'skipped',         label: 'Skipped',          color: '#888',    bg: '#f0f0f0', activeBg: '#555' },
+  { value: 'skipped_injury',  label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6', activeBg: '#c73820' },
 ]
 
 export default function WorkoutLog() {
@@ -30,7 +31,8 @@ export default function WorkoutLog() {
   async function handleSubmit(e) {
     e.preventDefault()
     if (!status) return setError('Please select how the session went.')
-    if (status !== 'skipped' && !effort) return setError('Please select an effort level.')
+    const isSkip = status === 'skipped' || status === 'skipped_injury'
+    if (!isSkip && !effort) return setError('Please select an effort level.')
 
     setError('')
     setSubmitting(true)
@@ -40,7 +42,7 @@ export default function WorkoutLog() {
         blueprint_week_id: weekId,
         session_index: sessionIndex,
         status,
-        effort: status === 'skipped' ? null : effort,
+        effort: isSkip ? null : effort,
         note: note.trim() || null,
       })
       navigate('/athlete/plan')
@@ -93,7 +95,7 @@ export default function WorkoutLog() {
         </div>
 
         {/* Effort selector */}
-        {status && status !== 'skipped' && (
+        {status && status !== 'skipped' && status !== 'skipped_injury' && (
           <div>
             <p style={styles.fieldLabel}>
               Effort level
@@ -170,7 +172,7 @@ const styles = {
   effortHint: { fontSize: 12, color: 'var(--text-3)', fontWeight: 400 },
   optional: { fontWeight: 400, color: 'var(--text-3)' },
 
-  statusRow: { display: 'flex', gap: 10 },
+  statusRow: { display: 'flex', gap: 10, flexWrap: 'wrap' },
   statusBtn: { flex: 1, padding: '11px 0', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s' },
 
   effortRow: { display: 'flex', gap: 6, flexWrap: 'wrap' },

@@ -33,8 +33,8 @@ async function getAthleteProfile(athleteId, coachId) {
 
   if (profileError) throw profileError
 
-  // Fetch survey, plan, and raw logs in parallel
-  const [survey, plan, logsResult] = await Promise.all([
+  // Fetch survey, plan, raw logs, and coach note in parallel
+  const [survey, plan, logsResult, noteResult] = await Promise.all([
     getSurveyByAthlete(athleteId),
     getAthletePlan(athleteId).catch(() => null),
     supabaseAdmin
@@ -42,6 +42,12 @@ async function getAthleteProfile(athleteId, coachId) {
       .select('id, blueprint_week_id, session_index, status, effort, note, logged_at')
       .eq('athlete_id', athleteId)
       .order('logged_at', { ascending: false }),
+    supabaseAdmin
+      .from('coach_notes')
+      .select('note, updated_at')
+      .eq('coach_id', coachId)
+      .eq('athlete_id', athleteId)
+      .maybeSingle(),
   ])
 
   const rawLogs = logsResult.data || []
@@ -76,6 +82,8 @@ async function getAthleteProfile(athleteId, coachId) {
     full_name: profile.full_name,
     avatar_url: profile.avatar_url || null,
     survey,
+    coach_note: noteResult.data?.note ?? '',
+    coach_note_updated_at: noteResult.data?.updated_at ?? null,
     plan: plan ? {
       title: plan.title,
       description: plan.description,
