@@ -45,7 +45,7 @@ async function getTeamLogs(coachId) {
   // Get athlete IDs with join dates
   const { data: members, error: memberError } = await supabaseAdmin
     .from('team_members')
-    .select('athlete_id, created_at')
+    .select('athlete_id, joined_at')
     .eq('team_id', team.id)
 
   if (memberError) throw memberError
@@ -53,7 +53,7 @@ async function getTeamLogs(coachId) {
 
   const athleteIds = members.map(m => m.athlete_id)
   const joinedMap = {}
-  for (const m of members) joinedMap[m.athlete_id] = m.created_at
+  for (const m of members) joinedMap[m.athlete_id] = m.joined_at
 
   // Fetch all activity sources in parallel — no FK hint joins (avoids PostgREST constraint name issues)
   const [profilesRes, logsRes, surveysRes, assignmentsRes] = await Promise.all([

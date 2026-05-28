@@ -42,7 +42,7 @@ async function getCoachRoster(coachId, sort = 'name') {
   // Step 1: get athlete_ids and join dates (no FK hints — avoids PostgREST constraint issues)
   const { data: memberRows, error: membersErr } = await supabaseAdmin
     .from('team_members')
-    .select('athlete_id, created_at')
+    .select('athlete_id, joined_at')
     .eq('team_id', team.id)
 
   console.log('[getCoachRoster] memberRows:', memberRows?.length, 'membersErr:', membersErr?.message)
@@ -87,7 +87,7 @@ async function getCoachRoster(coachId, sort = 'name') {
 
   // Build lookup maps
   const joinedMap = {}
-  for (const m of memberRows) joinedMap[m.athlete_id] = m.created_at
+  for (const m of memberRows) joinedMap[m.athlete_id] = m.joined_at
 
   const surveyMap = {}
   for (const s of surveyRows || []) surveyMap[s.athlete_id] = s
