@@ -55,6 +55,9 @@ export default function AthleteMyProfile() {
   )
   const [submitting, setSubmitting] = useState(null) // lift key being submitted
   const [savingPrivacy, setSavingPrivacy] = useState(false)
+  const [physicalEditing, setPhysicalEditing] = useState(false)
+  const [physicalForm, setPhysicalForm] = useState({ height_feet: '', height_inches: '', weight_lbs: '' })
+  const [savingPhysical, setSavingPhysical] = useState(false)
 
   useEffect(() => {
     Promise.all([
@@ -69,6 +72,32 @@ export default function AthleteMyProfile() {
       setMaxes(m)
     }).finally(() => setLoading(false))
   }, [])
+
+  function openPhysicalEdit() {
+    setPhysicalForm({
+      height_feet:   survey?.height_feet   != null ? String(survey.height_feet)   : '',
+      height_inches: survey?.height_inches != null ? String(survey.height_inches) : '',
+      weight_lbs:    survey?.weight_lbs    != null ? String(survey.weight_lbs)    : '',
+    })
+    setPhysicalEditing(true)
+  }
+
+  async function handleSavePhysical() {
+    setSavingPhysical(true)
+    try {
+      const res = await api.patch('/api/survey/physical', {
+        height_feet:   physicalForm.height_feet   !== '' ? parseInt(physicalForm.height_feet)   : null,
+        height_inches: physicalForm.height_inches !== '' ? parseInt(physicalForm.height_inches) : null,
+        weight_lbs:    physicalForm.weight_lbs    !== '' ? parseInt(physicalForm.weight_lbs)    : null,
+      })
+      setSurvey(res.data.survey)
+      setPhysicalEditing(false)
+    } catch (err) {
+      console.error('Failed to save physical stats:', err)
+    } finally {
+      setSavingPhysical(false)
+    }
+  }
 
   async function handlePrivacyToggle() {
     const newVal = profile?.privacy_team === 'private' ? 'public' : 'private'
@@ -194,6 +223,95 @@ export default function AthleteMyProfile() {
           </>
         )}
       </div>
+
+      {/* Physical Stats */}
+      {survey && (
+        <div style={{ ...styles.card, marginTop: 14 }}>
+          <div style={styles.cardHeader}>
+            <p style={{ ...styles.cardLabel, color: BLUE }}>Physical Stats</p>
+            {!physicalEditing && (
+              <button style={styles.editBtn} onClick={openPhysicalEdit}>
+                <EditIcon size={14} color={BLUE} />
+                Edit
+              </button>
+            )}
+          </div>
+          {physicalEditing ? (
+            <div style={styles.physicalForm}>
+              <div style={styles.physicalRow}>
+                <div style={{ flex: 1 }}>
+                  <label style={styles.physicalLabel}>Height</label>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <input
+                      style={{ ...styles.physicalInput, width: 70 }}
+                      type="number"
+                      placeholder="ft"
+                      min="3" max="8"
+                      value={physicalForm.height_feet}
+                      onChange={e => setPhysicalForm(p => ({ ...p, height_feet: e.target.value }))}
+                    />
+                    <span style={{ color: 'var(--text-3)', fontSize: 13 }}>ft</span>
+                    <input
+                      style={{ ...styles.physicalInput, width: 70 }}
+                      type="number"
+                      placeholder="in"
+                      min="0" max="11"
+                      value={physicalForm.height_inches}
+                      onChange={e => setPhysicalForm(p => ({ ...p, height_inches: e.target.value }))}
+                    />
+                    <span style={{ color: 'var(--text-3)', fontSize: 13 }}>in</span>
+                  </div>
+                </div>
+                <div style={{ flex: 1 }}>
+                  <label style={styles.physicalLabel}>Weight</label>
+                  <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
+                    <input
+                      style={{ ...styles.physicalInput, width: 100 }}
+                      type="number"
+                      placeholder="lbs"
+                      min="50" max="500"
+                      value={physicalForm.weight_lbs}
+                      onChange={e => setPhysicalForm(p => ({ ...p, weight_lbs: e.target.value }))}
+                    />
+                    <span style={{ color: 'var(--text-3)', fontSize: 13 }}>lbs</span>
+                  </div>
+                </div>
+              </div>
+              <div style={{ display: 'flex', gap: 8, marginTop: 12 }}>
+                <button
+                  style={{ ...styles.saveBtn, maxWidth: 100, opacity: savingPhysical ? 0.6 : 1 }}
+                  onClick={handleSavePhysical}
+                  disabled={savingPhysical}
+                >
+                  {savingPhysical ? 'Saving…' : 'Save'}
+                </button>
+                <button style={styles.cancelBtn} onClick={() => setPhysicalEditing(false)}>
+                  Cancel
+                </button>
+              </div>
+            </div>
+          ) : (
+            <div style={styles.physicalDisplay}>
+              <div style={styles.physicalStat}>
+                <span style={styles.physicalStatLabel}>Height</span>
+                <span style={styles.physicalStatVal}>
+                  {survey.height_feet != null
+                    ? `${survey.height_feet}' ${survey.height_inches ?? 0}"`
+                    : <span style={{ color: 'var(--text-3)', fontStyle: 'italic', fontSize: 14 }}>Not set</span>}
+                </span>
+              </div>
+              <div style={styles.physicalStat}>
+                <span style={styles.physicalStatLabel}>Weight</span>
+                <span style={styles.physicalStatVal}>
+                  {survey.weight_lbs != null
+                    ? `${survey.weight_lbs} lbs`
+                    : <span style={{ color: 'var(--text-3)', fontStyle: 'italic', fontSize: 14 }}>Not set</span>}
+                </span>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
 
       {/* Current plan */}
       {plan && (
@@ -440,6 +558,16 @@ const styles = {
   planName: { fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   planDesc: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 6px' },
   planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
+
+  // Physical stats
+  physicalDisplay: { display: 'flex', gap: 32, flexWrap: 'wrap' },
+  physicalStat: { display: 'flex', flexDirection: 'column', gap: 4 },
+  physicalStatLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.4 },
+  physicalStatVal: { fontSize: 22, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
+  physicalForm: { display: 'flex', flexDirection: 'column', gap: 4 },
+  physicalRow: { display: 'flex', gap: 24, flexWrap: 'wrap' },
+  physicalLabel: { display: 'block', fontSize: 12, fontWeight: 600, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.4, marginBottom: 6 },
+  physicalInput: { padding: '7px 10px', fontSize: 14, borderRadius: 6, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', boxSizing: 'border-box' },
 
   // Maxes
   maxesGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 },

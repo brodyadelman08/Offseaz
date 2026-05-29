@@ -1,7 +1,8 @@
-const { submitSurvey, updateSurvey, getSurveyByAthlete, getTeamSurveys } = require('../services/surveyService')
+const { submitSurvey, updateSurvey, getSurveyByAthlete, getTeamSurveys, updatePhysicalStats } = require('../services/surveyService')
 const { getAthleteTeam } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
 const { createInjuryNotification } = require('../services/notificationService')
+const { autoAssignBlueprint } = require('../services/autoAssignService')
 
 async function submit(req, res) {
   const {
@@ -45,12 +46,20 @@ async function submit(req, res) {
       offseason_goals,
     })
 
+    const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
+
     // Notify coach if athlete flagged any injury area
     const hasInjury = (injury_areas || []).some(a => a !== 'None')
     if (hasInjury && team.coach_id) {
-      const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
       createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
         console.error('Injury notification failed (submit):', e)
+      )
+    }
+
+    // Auto-assign a blueprint based on sport/goal — fire-and-forget
+    if (team.coach_id) {
+      autoAssignBlueprint(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
+        console.error('Auto-assign blueprint failed:', e)
       )
     }
 
@@ -145,4 +154,17 @@ async function teamSurveys(req, res) {
   }
 }
 
-module.exports = { submit, update, mysurvey, teamSurveys }
+async function updatePhysical(req, res) {
+  const { height_feet, height_inches, weight_lbs } = req.body
+  try {
+    const survey = await updatePhysicalStats(req.user.id, { height_feet, height_inches, weight_lbs })
+    res.json({ survey })
+  } catch (err) {
+    if (err.code === 'PGRST116') {
+      return res.status(404).json({ error: 'Survey not found — complete your athlete survey first' })
+    }
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { submit, update, mysurvey, teamSurveys, updatePhysical }

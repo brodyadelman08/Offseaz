@@ -165,10 +165,11 @@ async function getAthleteRoster(athleteId) {
   const athleteIds = (memberRows || []).map(m => m.athlete_id)
   if (athleteIds.length === 0) return { team: teamData, roster: [] }
 
-  // Fetch profiles, surveys, and coach profile in parallel — no FK hints needed
+  // Fetch profiles, surveys, maxes, and coach profile in parallel — no FK hints needed
   const [
     { data: profileRows, error: profErr },
     { data: surveyRows },
+    { data: maxRows },
     { data: coachProfile },
   ] = await Promise.all([
     supabaseAdmin
@@ -178,6 +179,10 @@ async function getAthleteRoster(athleteId) {
     supabaseAdmin
       .from('survey_responses')
       .select('athlete_id, sport, position')
+      .in('athlete_id', athleteIds),
+    supabaseAdmin
+      .from('lifting_maxes')
+      .select('athlete_id, lift, weight_lbs, reps')
       .in('athlete_id', athleteIds),
     teamData.coach_id
       ? supabaseAdmin
@@ -194,6 +199,8 @@ async function getAthleteRoster(athleteId) {
   const surveyMap = {}
   for (const s of surveyRows || []) surveyMap[s.athlete_id] = s
 
+  const maxesMap = buildMaxesMap(maxRows)
+
   const roster = (profileRows || []).map(p => {
     if (p.privacy_team === 'private') {
       return { id: p.id, full_name: p.full_name, avatar_url: p.avatar_url || null, privacy: 'private' }
@@ -206,6 +213,7 @@ async function getAthleteRoster(athleteId) {
       privacy: 'public',
       sport: survey?.sport || null,
       position: survey?.position || null,
+      maxes: maxesMap[p.id] || {},
     }
   })
 

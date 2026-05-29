@@ -154,6 +154,27 @@ export default function AthleteProfile() {
           <p style={styles.empty}>Survey not completed yet.</p>
         ) : (
           <>
+            {/* Physical stats inline */}
+            {(survey.height_feet != null || survey.weight_lbs != null) && (
+              <div style={{ display: 'flex', gap: 24, marginBottom: 18, flexWrap: 'wrap' }}>
+                {survey.height_feet != null && (
+                  <div>
+                    <p style={styles.fieldLabel}>Height</p>
+                    <p style={{ ...styles.fieldValue, fontSize: 20, fontWeight: 700 }}>
+                      {survey.height_feet}' {survey.height_inches ?? 0}"
+                    </p>
+                  </div>
+                )}
+                {survey.weight_lbs != null && (
+                  <div>
+                    <p style={styles.fieldLabel}>Weight</p>
+                    <p style={{ ...styles.fieldValue, fontSize: 20, fontWeight: 700 }}>
+                      {survey.weight_lbs} lbs
+                    </p>
+                  </div>
+                )}
+              </div>
+            )}
             {surveyFields.map(f => survey[f.key] ? (
               <div key={f.key} style={styles.surveyField}>
                 <p style={styles.fieldLabel}>{f.label}</p>

@@ -19,6 +19,24 @@ async function createInjuryNotification(coachId, athleteId, athleteName) {
   if (error) throw error
 }
 
+async function createBlueprintNotification(coachId, athleteId, athleteName, blueprintTitle) {
+  const { error } = await supabaseAdmin
+    .from('coach_notifications')
+    .upsert(
+      {
+        coach_id:    coachId,
+        athlete_id:  athleteId,
+        type:        'blueprint_assigned',
+        message:     `${athleteName} completed their survey — a blueprint was auto-assigned: "${blueprintTitle}". Tap to review.`,
+        dismissed_at: null,
+        created_at:  new Date().toISOString(),
+      },
+      { onConflict: 'coach_id,athlete_id,type' }
+    )
+
+  if (error) throw error
+}
+
 async function getCoachNotifications(coachId) {
   const { data, error } = await supabaseAdmin
     .from('coach_notifications')
@@ -42,4 +60,4 @@ async function dismissAthleteNotifications(coachId, athleteId) {
   if (error) throw error
 }
 
-module.exports = { createInjuryNotification, getCoachNotifications, dismissAthleteNotifications }
+module.exports = { createInjuryNotification, createBlueprintNotification, getCoachNotifications, dismissAthleteNotifications }

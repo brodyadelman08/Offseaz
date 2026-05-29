@@ -7,6 +7,15 @@ import AvatarUpload from '../components/AvatarUpload'
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 
+const LIFT_ABBREVS = [
+  { key: 'bench_press',       abbrev: 'BP'  },
+  { key: 'squat',             abbrev: 'SQ'  },
+  { key: 'deadlift',          abbrev: 'DL'  },
+  { key: 'trap_bar_deadlift', abbrev: 'TBD' },
+  { key: 'power_clean',       abbrev: 'PC'  },
+  { key: 'overhead_press',    abbrev: 'OHP' },
+]
+
 export default function AthleteRoster() {
   const { profile } = useAuth()
   const navigate = useNavigate()
@@ -183,6 +192,19 @@ function AthleteCard({ athlete, onClick }) {
             Private profile
           </p>
         )}
+        {!isPrivate && athlete.maxes && (() => {
+          const logged = LIFT_ABBREVS.filter(l => athlete.maxes[l.key])
+          return logged.length > 0 ? (
+            <div style={{ display: 'flex', flexWrap: 'wrap', gap: 4, marginTop: 5 }}>
+              {logged.map(l => (
+                <span key={l.key} style={styles.maxChip}>
+                  {l.abbrev} {athlete.maxes[l.key].weight_lbs}
+                  {athlete.maxes[l.key].reps > 1 ? `×${athlete.maxes[l.key].reps}` : ''}
+                </span>
+              ))}
+            </div>
+          ) : null
+        })()}
       </div>
 
       <div style={styles.cardRight}>
@@ -299,5 +321,16 @@ const styles = {
     fontSize: 20,
     color: 'var(--text-3)',
     lineHeight: 1,
+  },
+  maxChip: {
+    fontSize: 11,
+    fontWeight: 700,
+    background: 'rgba(247,87,9,0.08)',
+    color: ORANGE,
+    border: '1px solid rgba(247,87,9,0.18)',
+    padding: '2px 6px',
+    borderRadius: 4,
+    whiteSpace: 'nowrap',
+    letterSpacing: 0.2,
   },
 }

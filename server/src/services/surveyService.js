@@ -167,4 +167,21 @@ async function getTeamSurveys(coachId) {
   }))
 }
 
-module.exports = { submitSurvey, updateSurvey, getSurveyByAthlete, getTeamSurveys }
+async function updatePhysicalStats(athleteId, { height_feet, height_inches, weight_lbs }) {
+  const update = {}
+  if (height_feet !== undefined && height_feet !== '') update.height_feet = parseInt(height_feet, 10) || null
+  if (height_inches !== undefined && height_inches !== '') update.height_inches = parseInt(height_inches, 10) ?? null
+  if (weight_lbs !== undefined && weight_lbs !== '') update.weight_lbs = parseInt(weight_lbs, 10) || null
+
+  const { data, error } = await supabaseAdmin
+    .from('survey_responses')
+    .update(update)
+    .eq('athlete_id', athleteId)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
+module.exports = { submitSurvey, updateSurvey, getSurveyByAthlete, getTeamSurveys, updatePhysicalStats }
