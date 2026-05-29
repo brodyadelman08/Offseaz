@@ -213,7 +213,7 @@ export default function AthletePlan() {
                               ))}
                             </div>
                           ) : s.description ? (
-                            <SessionDescription description={s.description} injuryAreas={injuryAreas} style={styles.sessionDesc} />
+                            <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
                           ) : null}
                         </div>
                       )
