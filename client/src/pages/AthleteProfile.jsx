@@ -280,6 +280,14 @@ export default function AthleteProfile() {
       <div style={{ ...styles.card, marginTop: 14 }}>
         <p style={{ ...styles.cardLabel, color: '#c73820' }}>Coach Notes <span style={styles.privateTag}>private</span></p>
 
+        {/* Athlete's own injury notes — top of coach notes */}
+        {survey?.injury_notes && (
+          <div style={styles.injuryNotesBox}>
+            <p style={styles.injuryNotesLabel}>📝 Athlete's Injury Notes</p>
+            <p style={styles.injuryNotesText}>{survey.injury_notes}</p>
+          </div>
+        )}
+
         {/* Injury context from survey */}
         {survey && (() => {
           const areas = (survey.injury_areas || []).filter(a => a && a !== 'None')
@@ -420,6 +428,9 @@ const styles = {
   historyDate: { fontSize: 11, color: 'var(--text-3)' },
 
   privateTag: { fontSize: 10, fontWeight: 700, color: '#888', background: 'var(--border)', borderRadius: 4, padding: '1px 6px', marginLeft: 8, textTransform: 'uppercase', letterSpacing: 0.3, verticalAlign: 'middle' },
+  injuryNotesBox: { background: '#fffbeb', border: '1px solid #fde68a', borderRadius: 8, padding: '12px 14px', marginBottom: 14 },
+  injuryNotesLabel: { fontSize: 12, fontWeight: 700, color: '#92400e', margin: '0 0 6px', textTransform: 'uppercase', letterSpacing: 0.4 },
+  injuryNotesText: { fontSize: 14, color: '#451a03', lineHeight: 1.6, margin: 0, whiteSpace: 'pre-wrap' },
   injuryContext: { background: '#fce8e6', border: '1px solid #f5c6c2', borderRadius: 8, padding: '12px 14px', marginBottom: 16 },
   injuryContextLabel: { fontSize: 12, fontWeight: 700, color: '#c73820', margin: '0 0 8px', textTransform: 'uppercase', letterSpacing: 0.4 },
   injuryPill: { fontSize: 12, fontWeight: 600, background: '#f5c6c2', color: '#7f1d1d', padding: '3px 10px', borderRadius: 12 },

@@ -153,6 +153,7 @@ export default function Survey() {
     equipment_tier:   '',
     injury_areas:     [],
     injury_other:     '',
+    injury_notes:     '',
     weakness_areas:   [],
     offseason_goals:  [],
   })
@@ -182,6 +183,7 @@ export default function Survey() {
               equipment_tier:   existing.equipment_tier   || '',
               injury_areas:     existing.injury_areas     || [],
               injury_other:     existing.injury_other     || '',
+              injury_notes:     existing.injury_notes     || '',
               weakness_areas:   existing.weakness_areas   || [],
               offseason_goals:  existing.offseason_goals  || [],
             })
@@ -448,6 +450,16 @@ export default function Survey() {
                 />
               </>
             )}
+            <label style={{ ...st.label, marginTop: 20 }}>Additional notes (optional)</label>
+            <p style={{ fontSize: 13, color: 'var(--text-3)', margin: '0 0 8px' }}>
+              Any surgeries, hardware, specific movements that cause discomfort, or anything your coach should know.
+            </p>
+            <textarea
+              style={{ ...st.input, minHeight: 90, resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.5 }}
+              placeholder="e.g. Had ACL surgery in March, still rebuilding quad strength. Avoid deep squats below parallel."
+              value={form.injury_notes}
+              onChange={e => set('injury_notes', e.target.value)}
+            />
           </>
         )}
 

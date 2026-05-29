@@ -48,6 +48,7 @@ async function submitSurvey(athleteId, teamId, fields) {
       equipment_tier:   fields.equipment_tier   || null,
       injury_areas:     fields.injury_areas     || [],
       injury_other:     fields.injury_other     || null,
+      injury_notes:     fields.injury_notes     || null,
       weakness_areas:   fields.weakness_areas   || [],
       offseason_goals:  fields.offseason_goals  || [],
     })
@@ -98,6 +99,7 @@ async function updateSurvey(athleteId, fields) {
       equipment_tier:   fields.equipment_tier   || null,
       injury_areas:     fields.injury_areas     || [],
       injury_other:     fields.injury_other     || null,
+      injury_notes:     fields.injury_notes     || null,
       weakness_areas:   fields.weakness_areas   || [],
       offseason_goals:  fields.offseason_goals  || [],
       completed_at:     new Date().toISOString(),

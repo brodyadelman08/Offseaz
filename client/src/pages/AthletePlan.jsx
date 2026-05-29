@@ -88,6 +88,7 @@ export default function AthletePlan() {
   const [plan, setPlan] = useState(undefined)
   const [logs, setLogs] = useState([])
   const [maxes, setMaxes] = useState({})
+  const [injuryAreas, setInjuryAreas] = useState([])
   const [loading, setLoading] = useState(true)
   const [currentWeek, setCurrentWeek] = useState(1)
 
@@ -96,10 +97,12 @@ export default function AthletePlan() {
       api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
       api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
       api.get('/api/maxes').then(r => r.data.maxes).catch(() => ({})),
-    ]).then(([planData, logsData, maxesData]) => {
+      api.get('/api/survey/my').then(r => r.data.survey?.injury_areas || []).catch(() => []),
+    ]).then(([planData, logsData, maxesData, injuryData]) => {
       setPlan(planData)
       setLogs(logsData)
       setMaxes(maxesData || {})
+      setInjuryAreas(injuryData)
       if (planData) setCurrentWeek(calcCurrentWeek(planData.starts_on, planData.num_weeks))
     }).finally(() => setLoading(false))
   }, [])
@@ -210,7 +213,7 @@ export default function AthletePlan() {
                               ))}
                             </div>
                           ) : s.description ? (
-                            <SessionDescription description={s.description} style={styles.sessionDesc} />
+                            <SessionDescription description={s.description} injuryAreas={injuryAreas} style={styles.sessionDesc} />
                           ) : null}
                         </div>
                       )

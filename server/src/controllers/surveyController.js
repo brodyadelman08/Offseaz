@@ -11,7 +11,7 @@ async function submit(req, res) {
     sport, position,
     primary_goal, experience_level, days_per_week,
     equipment_tier,
-    injury_areas, injury_other,
+    injury_areas, injury_other, injury_notes,
     weakness_areas,
     offseason_goals,
   } = req.body
@@ -42,6 +42,7 @@ async function submit(req, res) {
       equipment_tier,
       injury_areas,
       injury_other,
+      injury_notes,
       weakness_areas,
       offseason_goals,
     })
@@ -83,7 +84,7 @@ async function update(req, res) {
     sport, position,
     primary_goal, experience_level, days_per_week,
     equipment_tier,
-    injury_areas, injury_other,
+    injury_areas, injury_other, injury_notes,
     weakness_areas,
     offseason_goals,
   } = req.body
@@ -109,6 +110,7 @@ async function update(req, res) {
       equipment_tier,
       injury_areas,
       injury_other,
+      injury_notes,
       weakness_areas,
       offseason_goals,
     })
