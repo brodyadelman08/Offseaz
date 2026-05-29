@@ -14,27 +14,44 @@ const { createBlueprintNotification } = require('./notificationService')
  * @param {string} athleteName
  */
 async function autoAssignBlueprint(athleteId, teamId, coachId, survey, athleteName) {
-  // Generate weeks from the template system
-  const blueprintData = generateBlueprintForAthlete(survey)
+  console.log('[autoAssignBlueprint] START', {
+    athleteId, teamId, coachId,
+    sport: survey?.sport,
+    primary_goal: survey?.primary_goal,
+    position: survey?.position,
+    time_per_week: survey?.time_per_week,
+  })
+
+  // 1. Generate weeks from the template system
+  let blueprintData
+  try {
+    blueprintData = generateBlueprintForAthlete(survey)
+    console.log('[autoAssignBlueprint] template generated:', blueprintData?.title, '— weeks:', blueprintData?.weeks?.length)
+  } catch (err) {
+    console.error('[autoAssignBlueprint] generateBlueprintForAthlete threw:', err)
+    throw err
+  }
+
   if (!blueprintData) {
-    console.log('[autoAssignBlueprint] no template found for survey:', survey.sport)
+    console.error('[autoAssignBlueprint] generateBlueprintForAthlete returned null — aborting')
     return null
   }
 
   const { title, description, num_weeks, weeks } = blueprintData
 
-  // Create the blueprint under the coach's account
-  const blueprint = await createBlueprint(coachId, teamId, {
-    title,
-    description,
-    num_weeks,
-    weeks,
-    locked: false,
-  })
+  // 2. Create the blueprint row + all 16 blueprint_weeks rows
+  let blueprint
+  try {
+    blueprint = await createBlueprint(coachId, teamId, { title, description, num_weeks, weeks, locked: false })
+    console.log('[autoAssignBlueprint] blueprint row created, id:', blueprint?.id)
+  } catch (err) {
+    console.error('[autoAssignBlueprint] createBlueprint failed:', err?.message, err?.code, err?.details)
+    throw err
+  }
 
-  // Assign directly to the athlete (not the whole team)
+  // 3. Insert the blueprint_assignment for this athlete
   const today = new Date().toISOString().split('T')[0]
-  const { error: assignError } = await supabaseAdmin
+  const { data: assignment, error: assignError } = await supabaseAdmin
     .from('blueprint_assignments')
     .insert({
       blueprint_id: blueprint.id,
@@ -42,15 +59,22 @@ async function autoAssignBlueprint(athleteId, teamId, coachId, survey, athleteNa
       team_id:      null,
       starts_on:    today,
     })
+    .select()
+    .single()
 
-  if (assignError) throw assignError
+  if (assignError) {
+    console.error('[autoAssignBlueprint] blueprint_assignments insert failed:', assignError?.message, assignError?.code, assignError?.details)
+    throw assignError
+  }
 
-  // Notify the coach (fire-and-forget — don't block if this fails)
+  console.log('[autoAssignBlueprint] assignment row created, id:', assignment?.id)
+
+  // 4. Notify the coach (fire-and-forget — don't block on failure)
   createBlueprintNotification(coachId, athleteId, athleteName, title).catch(e =>
-    console.error('[autoAssignBlueprint] notification failed:', e)
+    console.error('[autoAssignBlueprint] notification failed:', e?.message)
   )
 
-  console.log(`[autoAssignBlueprint] assigned "${title}" to athlete ${athleteId}`)
+  console.log(`[autoAssignBlueprint] SUCCESS — "${title}" assigned to athlete ${athleteId}`)
   return blueprint
 }
 

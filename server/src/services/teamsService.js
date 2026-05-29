@@ -51,14 +51,24 @@ async function joinTeam(teamId, athleteId) {
 }
 
 async function getAthleteTeam(athleteId) {
-  const { data, error } = await supabaseAdmin
+  // Two separate queries — avoids FK hint join fragility across environments
+  const { data: membership, error: memberErr } = await supabaseAdmin
     .from('team_members')
-    .select('team_id, teams(*)')
+    .select('team_id')
     .eq('athlete_id', athleteId)
     .single()
 
-  if (error && error.code !== 'PGRST116') throw error
-  return data ? data.teams : null
+  if (memberErr && memberErr.code !== 'PGRST116') throw memberErr
+  if (!membership) return null
+
+  const { data: team, error: teamErr } = await supabaseAdmin
+    .from('teams')
+    .select('*')
+    .eq('id', membership.team_id)
+    .single()
+
+  if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
+  return team || null
 }
 
 module.exports = { createTeam, getTeamByCoach, getTeamByInviteCode, joinTeam, getAthleteTeam }

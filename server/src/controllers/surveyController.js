@@ -57,10 +57,14 @@ async function submit(req, res) {
     }
 
     // Auto-assign a blueprint based on sport/goal — fire-and-forget
+    console.log('[survey/submit] team:', { id: team?.id, coach_id: team?.coach_id })
     if (team.coach_id) {
+      console.log('[survey/submit] triggering autoAssignBlueprint for athlete', req.user.id)
       autoAssignBlueprint(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
-        console.error('Auto-assign blueprint failed:', e)
+        console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
       )
+    } else {
+      console.warn('[survey/submit] team has no coach_id — skipping auto-assign. team:', team)
     }
 
     res.status(201).json({ survey })

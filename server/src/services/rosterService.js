@@ -165,12 +165,11 @@ async function getAthleteRoster(athleteId) {
   const athleteIds = (memberRows || []).map(m => m.athlete_id)
   if (athleteIds.length === 0) return { team: teamData, roster: [] }
 
-  // Fetch profiles, surveys, maxes, and coach profile in parallel — no FK hints needed
+  // Fetch profiles, surveys, maxes in parallel; coach profile fetched separately (safe pattern)
   const [
     { data: profileRows, error: profErr },
     { data: surveyRows },
     { data: maxRows },
-    { data: coachProfile },
   ] = await Promise.all([
     supabaseAdmin
       .from('profiles')
@@ -184,15 +183,18 @@ async function getAthleteRoster(athleteId) {
       .from('lifting_maxes')
       .select('athlete_id, lift, weight_lbs, reps')
       .in('athlete_id', athleteIds),
-    teamData.coach_id
-      ? supabaseAdmin
-          .from('profiles')
-          .select('id, full_name, avatar_url')
-          .eq('id', teamData.coach_id)
-          .single()
-          .then(r => r.data)
-      : Promise.resolve(null),
   ])
+
+  // Coach profile — separate query, no FK hint
+  let coachProfile = null
+  if (teamData.coach_id) {
+    const { data: cp } = await supabaseAdmin
+      .from('profiles')
+      .select('id, full_name, avatar_url')
+      .eq('id', teamData.coach_id)
+      .single()
+    coachProfile = cp || null
+  }
 
   if (profErr) throw profErr
 
