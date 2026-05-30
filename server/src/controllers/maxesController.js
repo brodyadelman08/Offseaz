@@ -31,6 +31,7 @@ async function addMax(req, res) {
     const max = await logMax(req.user.id, lift, weight_lbs, reps, notes)
     res.status(201).json({ max })
   } catch (err) {
+    console.error('[addMax] failed for lift=%s user=%s: %s', lift, req.user?.id, err.message)
     res.status(400).json({ error: err.message })
   }
 }

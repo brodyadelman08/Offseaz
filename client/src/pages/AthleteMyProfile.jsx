@@ -54,6 +54,7 @@ export default function AthleteMyProfile() {
     Object.fromEntries(LIFTS.map(l => [l.key, false]))
   )
   const [submitting, setSubmitting] = useState(null) // lift key being submitted
+  const [saveErrors, setSaveErrors] = useState({})   // { [liftKey]: errorString }
   const [savingPrivacy, setSavingPrivacy] = useState(false)
   const [physicalEditing, setPhysicalEditing] = useState(false)
   const [physicalForm, setPhysicalForm] = useState({ height_feet: '', height_inches: '', weight_lbs: '' })
@@ -117,13 +118,16 @@ export default function AthleteMyProfile() {
     const w = parseFloat(form.weight)
     if (!w || w <= 0) return
     setSubmitting(liftKey)
+    setSaveErrors(prev => ({ ...prev, [liftKey]: null }))
     try {
       await api.post('/api/maxes', { lift: liftKey, weight_lbs: w, reps: parseInt(form.reps) || 1, notes: form.notes || null })
       const res = await api.get('/api/maxes')
       setMaxes(res.data.maxes)
       setLogForms(prev => ({ ...prev, [liftKey]: { open: false, weight: '', reps: '1', notes: '' } }))
     } catch (err) {
+      const msg = err?.response?.data?.error || err?.message || 'Failed to save. Please try again.'
       console.error('Failed to log max:', err)
+      setSaveErrors(prev => ({ ...prev, [liftKey]: msg }))
     } finally {
       setSubmitting(null)
     }
@@ -382,7 +386,10 @@ export default function AthleteMyProfile() {
                         max="2000"
                         step="0.5"
                         value={form.weight}
-                        onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], weight: e.target.value } }))}
+                        onChange={e => {
+                          setLogForms(prev => ({ ...prev, [key]: { ...prev[key], weight: e.target.value } }))
+                          setSaveErrors(prev => ({ ...prev, [key]: null }))
+                        }}
                       />
                       <input
                         style={{ ...styles.weightInput, flex: 1 }}
@@ -401,6 +408,9 @@ export default function AthleteMyProfile() {
                       value={form.notes}
                       onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], notes: e.target.value } }))}
                     />
+                    {saveErrors[key] && (
+                      <p style={styles.saveError}>{saveErrors[key]}</p>
+                    )}
                     <div style={styles.logFormBtns}>
                       <button
                         style={{ ...styles.saveBtn, opacity: (!form.weight || isSubmitting) ? 0.6 : 1 }}
@@ -411,7 +421,10 @@ export default function AthleteMyProfile() {
                       </button>
                       <button
                         style={styles.cancelBtn}
-                        onClick={() => setLogForms(prev => ({ ...prev, [key]: { open: false, weight: '', reps: '1', notes: '' } }))}
+                        onClick={() => {
+                          setLogForms(prev => ({ ...prev, [key]: { open: false, weight: '', reps: '1', notes: '' } }))
+                          setSaveErrors(prev => ({ ...prev, [key]: null }))
+                        }}
                       >
                         Cancel
                       </button>
@@ -585,6 +598,7 @@ const styles = {
   weightInput: { padding: '7px 10px', fontSize: 14, borderRadius: 6, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', width: '100%', boxSizing: 'border-box' },
   notesInput: { padding: '6px 10px', fontSize: 12, borderRadius: 6, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', width: '100%', boxSizing: 'border-box' },
   logFormBtns: { display: 'flex', gap: 6 },
+  saveError: { fontSize: 12, color: '#c73820', background: '#fce8e6', border: '1px solid #fca5a5', borderRadius: 6, padding: '5px 8px', margin: 0 },
   saveBtn: { flex: 1, padding: '7px 0', fontSize: 13, fontWeight: 700, borderRadius: 6, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer' },
   cancelBtn: { padding: '7px 12px', fontSize: 13, fontWeight: 600, borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' },
 

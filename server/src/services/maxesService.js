@@ -11,7 +11,11 @@ async function logMax(athleteId, lift, weight_lbs, reps, notes) {
     .select()
     .single()
 
-  if (error) throw error
+  if (error) {
+    // Surface Supabase error detail (e.g. unique constraint violations)
+    const detail = error.details || error.message || 'Database error'
+    throw new Error(detail)
+  }
   return data
 }
 
