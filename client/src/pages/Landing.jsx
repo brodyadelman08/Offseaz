@@ -1,7 +1,8 @@
 import { useEffect } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { Wordmark } from '../components/Wordmark'
+
+const LOGO = '/Offseaz_logo__DARK_-removebg-preview.png'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -65,7 +66,7 @@ export default function Landing() {
 
       {/* ── Navbar ────────────────────────────────────────────────────────── */}
       <nav style={s.nav}>
-        <Wordmark size={26} />
+        <img src={LOGO} alt="Offseaz" style={{ height: 34, display: 'block' }} />
         <div style={{ display: 'flex', gap: 12, alignItems: 'center' }}>
           <Link to="/login" style={s.navLink}>Sign In</Link>
           <Link to="/register" style={s.navCta}>Get Started</Link>
@@ -86,7 +87,10 @@ export default function Landing() {
 
           <h1 style={s.headline}>
             Champions Are Made<br />
-            <span style={{ color: ORANGE }}>in the Offseaz</span>
+            <span style={{ color: ORANGE, display: 'inline-flex', alignItems: 'center', gap: 16, lineHeight: 1 }}>
+              in the
+              <img src={LOGO} alt="Offseaz" style={{ height: '0.85em', display: 'block' }} />
+            </span>
           </h1>
 
           <p style={s.heroSub}>
@@ -191,7 +195,7 @@ export default function Landing() {
       {/* ── Footer ───────────────────────────────────────────────────────── */}
       <footer style={s.footer}>
         <div style={s.footerInner}>
-          <Wordmark size={20} />
+          <img src={LOGO} alt="Offseaz" style={{ height: 26, display: 'block' }} />
           <p style={s.footerText}>
             © {new Date().getFullYear()} Offseaz · Built for coaches who take the offseason seriously.
           </p>
