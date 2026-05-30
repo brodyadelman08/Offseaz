@@ -5,6 +5,7 @@ import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
 
+import Landing from './pages/Landing'
 import Login from './pages/Login'
 import Register from './pages/Register'
 import JoinTeam from './pages/JoinTeam'
@@ -42,6 +43,7 @@ export default function App() {
         <AuthProvider>
           <Routes>
             {/* Public routes */}
+            <Route path="/" element={<Landing />} />
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/join/:code" element={<JoinTeam />} />
@@ -108,7 +110,7 @@ export default function App() {
             <Route path="/blueprints/new" element={<Navigate to="/coach/blueprints/new" replace />} />
             <Route path="/messages" element={<MessagesRedirect />} />
 
-            <Route path="*" element={<Navigate to="/login" replace />} />
+            <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
         </AuthProvider>
       </BrowserRouter>
