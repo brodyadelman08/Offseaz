@@ -12,8 +12,13 @@ const LIFT_LABELS = {
   squat:             'Squat',
   deadlift:          'Deadlift',
   trap_bar_deadlift: 'Trap Bar Deadlift',
-  power_clean:       'Power Clean',
   overhead_press:    'Overhead Press',
+  power_clean:       'Power Clean',
+  hang_clean:        'Hang Clean',
+  clean:             'Clean',
+  front_squat:       'Front Squat',
+  romanian_deadlift: 'Romanian Deadlift',
+  reverse_lunge:     'Reverse Lunge',
 }
 
 /** Round to nearest 5 lbs */

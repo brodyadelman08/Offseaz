@@ -13,8 +13,13 @@ const LIFTS = [
   { key: 'squat',             label: 'Squat' },
   { key: 'deadlift',          label: 'Deadlift' },
   { key: 'trap_bar_deadlift', label: 'Trap Bar Deadlift' },
-  { key: 'power_clean',       label: 'Power Clean' },
   { key: 'overhead_press',    label: 'Overhead Press' },
+  { key: 'power_clean',       label: 'Power Clean' },
+  { key: 'hang_clean',        label: 'Hang Clean' },
+  { key: 'clean',             label: 'Clean' },
+  { key: 'front_squat',       label: 'Front Squat' },
+  { key: 'romanian_deadlift', label: 'Romanian Deadlift' },
+  { key: 'reverse_lunge',     label: 'Reverse Lunge' },
 ]
 
 function fmtShortDate(dateStr) {

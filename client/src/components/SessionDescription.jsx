@@ -29,12 +29,13 @@ const LIFT_KEY_MAP = {
   // Squat variations
   'back squat':             'squat',
   'squat':                  'squat',
-  'front squat':            'squat',
+  'front squat':            'front_squat',
 
   // Deadlift variations
   'trap bar deadlift':      'trap_bar_deadlift',
   'hex bar deadlift':       'trap_bar_deadlift',
-  'romanian deadlift':      'deadlift',
+  'romanian deadlift':      'romanian_deadlift',
+  'rdl':                    'romanian_deadlift',
   'deadlift':               'deadlift',
 
   // Bench variations
@@ -42,21 +43,30 @@ const LIFT_KEY_MAP = {
   'close grip bench press': 'bench_press',
 
   // Olympic / clean variations
-  'power clean':            'power_clean',
-  'hang clean':             'power_clean',
   'power clean from floor': 'power_clean',
+  'power clean':            'power_clean',
+  'hang clean':             'hang_clean',
+  'clean':                  'clean',
 
   // Overhead
   'overhead press':         'overhead_press',
+
+  // Lunge
+  'reverse lunge':          'reverse_lunge',
 }
 
 const LIFT_LABELS = {
+  bench_press:       'Bench Press',
   squat:             'Squat',
   deadlift:          'Deadlift',
   trap_bar_deadlift: 'Trap Bar Deadlift',
-  bench_press:       'Bench Press',
-  power_clean:       'Power Clean',
   overhead_press:    'Overhead Press',
+  power_clean:       'Power Clean',
+  hang_clean:        'Hang Clean',
+  clean:             'Clean',
+  front_squat:       'Front Squat',
+  romanian_deadlift: 'Romanian Deadlift',
+  reverse_lunge:     'Reverse Lunge',
 }
 
 /**
