@@ -75,7 +75,39 @@ function buildFlaggedSet(injuryAreas = []) {
 
 /** Round to nearest 5 lbs */
 function calcWeight(maxLbs, pct) {
-  return Math.round((maxLbs * pct) / 5) * 5
+  return Math.round((Number(maxLbs) * pct) / 5) * 5
+}
+
+/**
+ * For comma-separated format lines without a colon
+ * (e.g. "Back squat 4x6 @ 65%"), try to match the start of the
+ * segment against LIFT_KEY_MAP and substitute @ XX% with the
+ * calculated weight or a prompt to log the max.
+ */
+function substitutePercentage(text, maxes) {
+  const pctMatch = text.match(/@\s*(\d+)%/)
+  if (!pctMatch) return text
+  const pct = parseInt(pctMatch[1], 10) / 100
+  const pctLabel = `${Math.round(pct * 100)}%`
+  const textLower = text.toLowerCase()
+  // Try longest lift-name match first so "close grip bench press" beats "bench press"
+  const sortedKeys = Object.keys(LIFT_KEY_MAP).sort((a, b) => b.length - a.length)
+  let liftKey = null
+  for (const key of sortedKeys) {
+    if (textLower.startsWith(key)) {
+      liftKey = LIFT_KEY_MAP[key]
+      break
+    }
+  }
+  if (!liftKey) return text
+  const maxEntry = maxes?.[liftKey]
+  const maxLbs = maxEntry?.current?.weight_lbs ?? null
+  if (maxLbs) {
+    const lbs = calcWeight(maxLbs, pct)
+    return text.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
+  }
+  const label = LIFT_LABELS[liftKey] || liftKey
+  return text.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
 }
 
 /**
@@ -174,7 +206,16 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
             </span>
           )
         } else {
-          rendered = <span>{line}</span>
+          // No colon — handle comma-separated builder format (e.g. "Back squat 4x6 @ 65%, Leg press 3x10")
+          if (/@\s*\d+%/.test(line)) {
+            const processed = line
+              .split(/, ?/)
+              .map(seg => substitutePercentage(seg.trim(), maxes))
+              .join(', ')
+            rendered = <span>{processed}</span>
+          } else {
+            rendered = <span>{line}</span>
+          }
         }
 
         return (

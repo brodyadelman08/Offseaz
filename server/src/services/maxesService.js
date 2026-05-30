@@ -36,11 +36,12 @@ async function getMaxesByAthlete(athleteId) {
   }
 
   // current = entry with highest weight_lbs per lift
+  // Use Number() to handle Supabase returning NUMERIC columns as strings
   for (const lift of VALID_LIFTS) {
     const entries = result[lift].history
     if (entries.length > 0) {
       result[lift].current = entries.reduce((best, e) =>
-        e.weight_lbs > best.weight_lbs ? e : best
+        Number(e.weight_lbs) > Number(best.weight_lbs) ? e : best
       )
     }
   }
