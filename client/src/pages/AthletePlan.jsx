@@ -97,12 +97,7 @@ export default function AthletePlan() {
       api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
       api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
       api.get('/api/maxes').then(r => {
-        console.log('[AthletePlan] /api/maxes raw response:', r.data)
         const m = r.data.maxes || {}
-        console.log('[AthletePlan] maxes keys:', Object.keys(m))
-        console.log('[AthletePlan] trap_bar_deadlift:', m.trap_bar_deadlift)
-        console.log('[AthletePlan] bench_press:', m.bench_press)
-        console.log('[AthletePlan] squat:', m.squat)
         return m
       }).catch(err => {
         console.error('[AthletePlan] /api/maxes FAILED:', err?.response?.status, err?.message)
@@ -110,7 +105,6 @@ export default function AthletePlan() {
       }),
       api.get('/api/survey/my').then(r => r.data.survey?.injury_areas || []).catch(() => []),
     ]).then(([planData, logsData, maxesData, injuryData]) => {
-      console.log('[AthletePlan] setting maxes state:', maxesData)
       setPlan(planData)
       setLogs(logsData)
       setMaxes(maxesData || {})
@@ -118,6 +112,18 @@ export default function AthletePlan() {
       if (planData) setCurrentWeek(calcCurrentWeek(planData.starts_on, planData.num_weeks))
     }).finally(() => setLoading(false))
   }, [])
+
+  // ── Debug: log maxes whenever state updates ──────────────────────────────
+  useEffect(() => {
+    console.log('[AthletePlan] maxes state:', maxes)
+    console.log('[AthletePlan] maxes keys:', Object.keys(maxes))
+    const tbd = maxes?.trap_bar_deadlift
+    const bp  = maxes?.bench_press
+    const sq  = maxes?.squat
+    console.log('[AthletePlan] trap_bar_deadlift →', tbd ? `current=${tbd.current?.weight_lbs ?? 'null'}` : 'KEY MISSING')
+    console.log('[AthletePlan] bench_press        →', bp  ? `current=${bp.current?.weight_lbs  ?? 'null'}` : 'KEY MISSING')
+    console.log('[AthletePlan] squat              →', sq  ? `current=${sq.current?.weight_lbs  ?? 'null'}` : 'KEY MISSING')
+  }, [maxes])
 
   function getLog(weekId, sessionIndex) {
     return logs.find(l => l.blueprint_week_id === weekId && l.session_index === sessionIndex) || null

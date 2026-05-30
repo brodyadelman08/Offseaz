@@ -91,6 +91,16 @@ function calcWeight(maxLbs, pct) {
  *   style        {object}   - optional style overrides for the wrapper <p>
  */
 export default function SessionDescription({ description, injuryAreas = [], maxes = {}, style }) {
+  // ── Debug: always visible in browser console ─────────────────────────────
+  console.log('[SessionDescription] render — maxes keys:', Object.keys(maxes))
+  console.log('[SessionDescription] maxes.trap_bar_deadlift:', maxes?.trap_bar_deadlift)
+  console.log('[SessionDescription] maxes.squat:', maxes?.squat)
+  console.log('[SessionDescription] maxes.bench_press:', maxes?.bench_press)
+  if (description) {
+    const pctLines = description.split('\n').filter(l => /@\s*\d+%/.test(l))
+    console.log('[SessionDescription] lines with @ pct:', pctLines)
+  }
+
   if (!description) return null
 
   const flaggedSet = buildFlaggedSet(injuryAreas)
