@@ -19,22 +19,35 @@ const INJURY_FLAGS = {
 }
 
 /**
- * Maps lowercase exercise names to a lifting_maxes lift key so percentage
- * references in descriptions can be resolved to an actual weight.
+ * Maps every exercise name (lowercase) that appears with a "@ XX%" percentage
+ * reference in the blueprint templates to its lifting_maxes table key.
+ *
+ * VALID keys in lifting_maxes: bench_press | squat | deadlift |
+ *   trap_bar_deadlift | power_clean | overhead_press
  */
 const LIFT_KEY_MAP = {
+  // Squat variations
   'back squat':             'squat',
   'squat':                  'squat',
   'front squat':            'squat',
+
+  // Deadlift variations
   'trap bar deadlift':      'trap_bar_deadlift',
   'hex bar deadlift':       'trap_bar_deadlift',
-  'bench press':            'bench_press',
-  'close grip bench press': 'bench_press',
-  'power clean':            'power_clean',
-  'hang clean':             'power_clean',
-  'overhead press':         'overhead_press',
   'romanian deadlift':      'deadlift',
   'deadlift':               'deadlift',
+
+  // Bench variations
+  'bench press':            'bench_press',
+  'close grip bench press': 'bench_press',
+
+  // Olympic / clean variations
+  'power clean':            'power_clean',
+  'hang clean':             'power_clean',
+  'power clean from floor': 'power_clean',
+
+  // Overhead
+  'overhead press':         'overhead_press',
 }
 
 const LIFT_LABELS = {
@@ -71,11 +84,6 @@ function calcWeight(maxLbs, pct) {
  *  - Yellow caution tags for exercises matching the athlete's injury areas
  *  - Automatic weight calculation for "@ XX%" percentage references
  *
- * Description format (per line):
- *   "Exercise Name: sets x reps @ XX%"
- *   "Exercise Name: sets x reps (notes)"
- *   OR plain text / blank lines
- *
  * Props:
  *   description  {string}   - newline-delimited session text
  *   injuryAreas  {string[]} - athlete's reported injury areas (e.g. ['Shoulder', 'Knee'])
@@ -104,9 +112,21 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
           const pctMatch = rest.match(/@\s*(\d+)%/)
           if (pctMatch) {
             const pct = parseInt(pctMatch[1], 10) / 100
-            const liftKey = LIFT_KEY_MAP[name.toLowerCase()]
-            const maxLbs = liftKey ? maxes?.[liftKey]?.current?.weight_lbs : null
+            const nameLower = name.toLowerCase()
+            const liftKey = LIFT_KEY_MAP[nameLower]
+            const maxEntry = liftKey ? maxes?.[liftKey] : null
+            const maxLbs = maxEntry?.current?.weight_lbs ?? null
             const pctLabel = `${Math.round(pct * 100)}%`
+
+            console.log('[SessionDescription] pct match:', {
+              name,
+              nameLower,
+              liftKey,
+              maxEntry: maxEntry ? { current: maxEntry.current } : null,
+              maxLbs,
+              maxesKeys: Object.keys(maxes),
+            })
+
             if (maxLbs) {
               const lbs = calcWeight(maxLbs, pct)
               rest = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)

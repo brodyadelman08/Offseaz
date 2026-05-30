@@ -96,9 +96,21 @@ export default function AthletePlan() {
     Promise.all([
       api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
       api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
-      api.get('/api/maxes').then(r => r.data.maxes).catch(() => ({})),
+      api.get('/api/maxes').then(r => {
+        console.log('[AthletePlan] /api/maxes raw response:', r.data)
+        const m = r.data.maxes || {}
+        console.log('[AthletePlan] maxes keys:', Object.keys(m))
+        console.log('[AthletePlan] trap_bar_deadlift:', m.trap_bar_deadlift)
+        console.log('[AthletePlan] bench_press:', m.bench_press)
+        console.log('[AthletePlan] squat:', m.squat)
+        return m
+      }).catch(err => {
+        console.error('[AthletePlan] /api/maxes FAILED:', err?.response?.status, err?.message)
+        return {}
+      }),
       api.get('/api/survey/my').then(r => r.data.survey?.injury_areas || []).catch(() => []),
     ]).then(([planData, logsData, maxesData, injuryData]) => {
+      console.log('[AthletePlan] setting maxes state:', maxesData)
       setPlan(planData)
       setLogs(logsData)
       setMaxes(maxesData || {})
