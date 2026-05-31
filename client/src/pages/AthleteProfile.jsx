@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
-import { ChevronDownIcon, ChevronUpIcon } from '../components/Icons'
+import { ChevronDownIcon, ChevronUpIcon, FileTextIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -75,17 +75,20 @@ export default function AthleteProfile() {
   const [noteSaving, setNoteSaving] = useState(false)
   const [noteSaved, setNoteSaved] = useState(false)
   const [noteUpdatedAt, setNoteUpdatedAt] = useState(null)
+  const [goals, setGoals] = useState([])
 
   useEffect(() => {
     Promise.all([
       api.get(`/api/athletes/${id}`).then(r => r.data.athlete),
       api.get(`/api/maxes/${id}`).then(r => r.data.maxes).catch(() => null),
+      api.get(`/api/goals/athlete/${id}`).then(r => r.data.goals).catch(() => []),
     ])
-      .then(([athleteData, maxesData]) => {
+      .then(([athleteData, maxesData, goalsData]) => {
         setAthlete(athleteData)
         setMaxes(maxesData)
         setNoteText(athleteData.coach_note || '')
         setNoteUpdatedAt(athleteData.coach_note_updated_at || null)
+        setGoals(goalsData)
       })
       .catch(err => setError(err.response?.data?.error || 'Could not load profile.'))
       .finally(() => setLoading(false))
@@ -125,9 +128,18 @@ export default function AthleteProfile() {
 
   return (
     <div style={styles.container}>
-      <button style={styles.backLink} onClick={() => navigate('/coach/athletes')}>
-        ← Athletes
-      </button>
+      <div style={styles.topBar}>
+        <button style={styles.backLink} onClick={() => navigate('/coach/athletes')}>
+          ← Athletes
+        </button>
+        <button
+          style={styles.reportBtn}
+          onClick={() => navigate(`/coach/athletes/${id}/report`)}
+        >
+          <FileTextIcon size={14} color="#fff" />
+          End of Offseason Report
+        </button>
+      </div>
 
       {/* Athlete header */}
       <div style={styles.athleteHeader}>
@@ -281,6 +293,43 @@ export default function AthleteProfile() {
         )}
       </div>
 
+      {/* Goals */}
+      <div style={{ ...styles.card, marginTop: 14 }}>
+        <p style={{ ...styles.cardLabel, color: '#F75709' }}>Offseason Goals</p>
+        {goals.length === 0 ? (
+          <p style={styles.empty}>No goals set yet.</p>
+        ) : (
+          <>
+            <div style={{ display: 'flex', justifyContent: 'flex-end', marginBottom: 10 }}>
+              <span style={{ fontSize: 13, color: 'var(--text-3)' }}>
+                {goals.filter(g => g.completed).length}/{goals.length} completed
+              </span>
+            </div>
+            {goals.map(goal => (
+              <div key={goal.id} style={styles.goalViewRow}>
+                <span style={{
+                  ...styles.goalDot,
+                  background: goal.completed ? '#2e7d32' : 'var(--border)',
+                }} />
+                <div style={styles.goalViewContent}>
+                  <span style={{
+                    ...styles.goalViewTitle,
+                    textDecoration: goal.completed ? 'line-through' : 'none',
+                    color: goal.completed ? 'var(--text-3)' : 'var(--text)',
+                  }}>
+                    {goal.title}
+                  </span>
+                  {goal.target && <span style={styles.goalViewTarget}>{goal.target}</span>}
+                </div>
+                {goal.completed && (
+                  <span style={styles.completedTag}>✓ Done</span>
+                )}
+              </div>
+            ))}
+          </>
+        )}
+      </div>
+
       {/* Coach Notes */}
       <div style={{ ...styles.card, marginTop: 14 }}>
         <p style={{ ...styles.cardLabel, color: '#c73820' }}>Coach Notes <span style={styles.privateTag}>private</span></p>
@@ -394,7 +443,27 @@ export default function AthleteProfile() {
 const styles = {
   center: { color: 'var(--text-3)', fontSize: 15 },
   container: { maxWidth: 700, margin: '0 auto' },
-  backLink: { display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px' },
+  topBar: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 20 },
+  backLink: { display: 'inline-flex', alignItems: 'center', gap: 6, fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0 },
+  reportBtn: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 7,
+    padding: '8px 16px',
+    fontSize: 13,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: 'none',
+    background: BLUE,
+    color: '#fff',
+    cursor: 'pointer',
+  },
+  goalViewRow: { display: 'flex', alignItems: 'flex-start', gap: 10, padding: '8px 0', borderBottom: '1px solid var(--border-light)' },
+  goalDot: { width: 10, height: 10, borderRadius: '50%', flexShrink: 0, marginTop: 4 },
+  goalViewContent: { flex: 1, display: 'flex', flexDirection: 'column', gap: 2 },
+  goalViewTitle: { fontSize: 14, fontWeight: 600 },
+  goalViewTarget: { fontSize: 13, color: 'var(--text-2)' },
+  completedTag: { fontSize: 11, fontWeight: 700, color: '#2e7d32', background: '#e8f5e9', padding: '2px 8px', borderRadius: 4, whiteSpace: 'nowrap', flexShrink: 0 },
 
   athleteHeader: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
   athleteName: { fontSize: 24, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },

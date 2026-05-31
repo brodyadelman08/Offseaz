@@ -3,7 +3,7 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import {
   GridIcon, UsersIcon, LayoutIcon, MessageIcon, BarChartIcon,
-  HomeIcon, CalendarIcon, EditIcon, UserIcon, SignOutIcon,
+  HomeIcon, CalendarIcon, EditIcon, UserIcon, SignOutIcon, FeedIcon,
 } from './Icons'
 import AvatarUpload from './AvatarUpload'
 
@@ -36,6 +36,7 @@ const COACH_NAV = [
   { path: '/coach',               label: 'Dashboard',     Icon: GridIcon,    exact: true },
   { path: '/coach/athletes',      label: 'Athletes',      Icon: UsersIcon,   exact: false },
   { path: '/coach/blueprints',    label: 'Blueprints',    Icon: LayoutIcon,  exact: false },
+  { path: '/coach/feed',          label: 'Feed',          Icon: FeedIcon,    exact: false },
   { path: '/coach/messages',      label: 'Messages',      Icon: MessageIcon, exact: false },
   { path: '/coach/accountability',label: 'Accountability',Icon: BarChartIcon,exact: false },
 ]
@@ -44,6 +45,7 @@ const ATHLETE_NAV = [
   { path: '/athlete',          label: 'Home',        Icon: HomeIcon,     exact: true },
   { path: '/athlete/plan',     label: 'My Plan',     Icon: CalendarIcon, exact: false },
   { path: '/athlete/log',      label: 'Log Workout', Icon: EditIcon,     exact: false },
+  { path: '/athlete/feed',     label: 'Feed',        Icon: FeedIcon,     exact: false },
   { path: '/athlete/roster',   label: 'Roster',      Icon: UsersIcon,    exact: false },
   { path: '/athlete/messages', label: 'Messages',    Icon: MessageIcon,  exact: false },
   { path: '/athlete/profile',  label: 'My Profile',  Icon: UserIcon,     exact: false },

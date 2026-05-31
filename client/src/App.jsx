@@ -27,6 +27,8 @@ import AthleteMyProfile from './pages/AthleteMyProfile'
 import AthleteOnboarding from './pages/AthleteOnboarding'
 import AthleteRoster from './pages/AthleteRoster'
 import AthleteTeammateProfile from './pages/AthleteTeammateProfile'
+import Feed from './pages/Feed'
+import AthleteReport from './pages/AthleteReport'
 
 // Smart redirect for /messages → role-based destination
 function MessagesRedirect() {
@@ -83,6 +85,8 @@ export default function App() {
               <Route path="blueprints/:id" element={<BlueprintDetail />} />
               <Route path="messages" element={<Messages />} />
               <Route path="accountability" element={<AccountabilityDashboard />} />
+              <Route path="feed" element={<Feed />} />
+              <Route path="athletes/:id/report" element={<AthleteReport />} />
             </Route>
 
             {/* ── Athlete routes (nested, with Layout) ── */}
@@ -101,6 +105,7 @@ export default function App() {
               <Route path="roster" element={<AthleteRoster />} />
               <Route path="roster/:athleteId" element={<AthleteTeammateProfile />} />
               <Route path="profile" element={<AthleteMyProfile />} />
+              <Route path="feed" element={<Feed />} />
             </Route>
 
             {/* Legacy redirects — keep old bookmarks working */}

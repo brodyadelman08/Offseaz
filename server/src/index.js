@@ -12,6 +12,9 @@ const athleteRoutes = require('./routes/athletes')
 const maxesRoutes = require('./routes/maxes')
 const rosterRoutes = require('./routes/roster')
 const notificationRoutes = require('./routes/notifications')
+const feedRoutes = require('./routes/feed')
+const goalsRoutes = require('./routes/goals')
+const reportRoutes = require('./routes/report')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -37,6 +40,9 @@ app.use('/api/athletes', athleteRoutes)
 app.use('/api/maxes', maxesRoutes)
 app.use('/api/roster', rosterRoutes)
 app.use('/api/notifications', notificationRoutes)
+app.use('/api/feed', feedRoutes)
+app.use('/api/goals', goalsRoutes)
+app.use('/api/report', reportRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
