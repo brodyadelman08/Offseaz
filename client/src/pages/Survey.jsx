@@ -35,7 +35,7 @@ const POSITIONS = {
   Football:          ['QB', 'RB', 'WR', 'OL', 'DL', 'LB', 'DB', 'TE', 'K/P'],
   Basketball:        ['PG', 'SG', 'SF', 'PF', 'C'],
   Baseball:          ['Pitcher', 'Catcher', 'First Base', 'Second Base', 'Third Base', 'Shortstop', 'Outfield', 'DH'],
-  Softball:          ['Pitcher', 'Catcher', 'First Base', 'Second Base', 'Third Base', 'Shortstop', 'Outfield', 'DH'],
+  Softball:          ['Pitcher', 'Catcher', 'First Base', 'Second Base', 'Third Base', 'Shortstop', 'Outfield', 'Utility'],
   Soccer:            ['Goalkeeper', 'Defender', 'Midfielder', 'Forward'],
   Hockey:            ['Goalie', 'Defenseman', 'Center', 'Left Wing', 'Right Wing'],
   Volleyball:        ['Setter', 'Outside Hitter', 'Middle Blocker', 'Libero', 'Right Side'],

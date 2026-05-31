@@ -112,12 +112,12 @@ export default function BlueprintBuilder() {
     setStep(1)
   }
 
-  function selectBaseballTemplate(daysPerWeek) {
+  function selectDayPickerTemplate(daysPerWeek) {
     const { sport, pos } = daysPick
     const weeks = sport.generateWeeks(pos.id, 'standard', daysPerWeek)
     setForm({
-      title: `Baseball — 16-Week Offseason (${daysPerWeek} Days/Week)`,
-      description: `16-week phase-based offseason program for baseball athletes. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.`,
+      title: `${sport.label} — 16-Week Offseason (${daysPerWeek} Days/Week)`,
+      description: sport.templateDescription || `16-week phase-based offseason program for ${sport.label.toLowerCase()} athletes.`,
       num_weeks: 16,
       weeks,
     })
@@ -210,7 +210,7 @@ export default function BlueprintBuilder() {
           <p style={styles.pageDesc}>How many days per week will your athletes train?</p>
           <div style={styles.dayGrid}>
             {sport.daysOptions.map(opt => (
-              <button key={opt.days} style={styles.dayCard} onClick={() => selectBaseballTemplate(opt.days)}
+              <button key={opt.days} style={styles.dayCard} onClick={() => selectDayPickerTemplate(opt.days)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
                 onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                 <span style={styles.dayNumber}>{opt.days}</span>

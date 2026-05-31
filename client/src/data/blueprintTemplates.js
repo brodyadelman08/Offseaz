@@ -570,6 +570,134 @@ function generateBaseballWeeks(_, goal, daysPerWeek) {
   return weeks
 }
 
+// ─── Softball ─────────────────────────────────────────────────────────────────
+// Key differences from baseball: shoulder stability over elbow/forearm arm care,
+// bilateral lower body emphasis, hip stability work (Copenhagen, lateral band walk)
+
+const SOFTBALL_PHASE_PCTS   = [0.70, 0.75, 0.80, 0.85]
+const SOFTBALL_PHASE_LABELS = ['Foundation', 'Development', 'Strength', 'Peak']
+
+function softball3Day(wp) {
+  return [
+    makeBaseballSession('Day 1', 'Full Body Strength', [
+      { name: 'Squat',                         warmup: '2x5', sets: 3, reps: '5',    pct: wp },
+      { name: 'DB Bench',                                     sets: 3, reps: '8' },
+      { name: 'Barbell Row',                                  sets: 3, reps: '8' },
+      { name: 'Band External Rotation',                       sets: 3, reps: '15',   note: 'each arm' },
+      { name: 'Core — Cherry Pickers',                        sets: 4, reps: '15' },
+    ]),
+    makeBaseballSession('Day 2', 'Full Body Power', [
+      { name: 'Power Clean',                   warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Deadlift',                            sets: 3, reps: '6',    pct: wp },
+      { name: 'Pull-ups',                                     sets: 3, reps: 'AMAP' },
+      { name: 'Hip Thrust',                                   sets: 3, reps: '8' },
+      { name: 'YTW Shoulder Series',                          sets: 3, reps: '10',   note: 'each' },
+      { name: 'Core — Tuck-Up',                               sets: 3, reps: 'AMAP' },
+    ]),
+    makeBaseballSession('Day 3', 'Full Body Accessory', [
+      { name: 'Reverse Lunge',                                sets: 3, reps: '5',    note: 'each leg' },
+      { name: 'Bulgarian Split Squat',                        sets: 3, reps: '6',    note: 'each leg' },
+      { name: 'Single Arm DB Row',                            sets: 3, reps: '12' },
+      { name: 'Copenhagen Adductor',                          sets: 3, reps: '8',    note: 'each leg' },
+      { name: 'Band Pull-Aparts',                             sets: 3, reps: '20' },
+      { name: 'Calf Raises',                                  sets: 3, reps: 'AMAP' },
+    ]),
+  ]
+}
+
+function softball4Day(wp, phase) {
+  const p3 = phase >= 3
+  return [
+    makeBaseballSession('Day 1', 'Upper Building', [
+      { name: 'Hang Clean',                                   sets: 3, reps: '8' },
+      { name: 'DB Bench',                                     sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Tricep Pushdowns',                             sets: 2, reps: '8',    note: '+ 1xAMAP' },
+      { name: 'Bench Curls',                                  sets: 3, reps: '8' },
+      { name: 'Lat Raises — Side, Front, Back',              sets: 3, reps: 'AMAP' },
+      { name: 'Band External Rotation',                       sets: 4, reps: '15',   note: 'each arm' },
+      { name: 'YTW Shoulder Series',                          sets: 3, reps: '10',   note: 'each' },
+      { name: 'Core — Cherry Pickers',                        sets: 4, reps: '15' },
+      { name: 'Sit-ups',                                      sets: 4, reps: '12' },
+    ]),
+    makeBaseballSession('Day 2', 'Lower Building', [
+      { name: 'Reverse Lunge',                                sets: 3, reps: '5',    note: 'each leg' },
+      { name: 'Box Drop',                                     sets: 3, reps: '3' },
+      { name: 'Bulgarian Split Squat',                        sets: 3, reps: '6',    note: 'each leg' },
+      { name: 'Copenhagen Adductor',                          sets: 3, reps: '8',    note: 'each leg' },
+      { name: 'Lateral Band Walk',                            sets: 3, reps: '15',   note: 'each direction' },
+      { name: 'Calf Raises',                                  sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Hamstring Curls',                              sets: 3, reps: 'AMAP' },
+      { name: 'Core — Tuck-Up',                               sets: 3, reps: 'AMAP' },
+      { name: 'EXT/INT Rotation',                             sets: 3, reps: 'AMAP' },
+    ]),
+    makeBaseballSession('Day 3', 'Upper Power', [
+      { name: 'Power Clean',                  warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Pull-ups',                                     sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Trap Bar Deadlift',                            sets: 3, reps: '6',    pct: wp },
+      { name: 'Single Arm DB Row',                            sets: p3 ? 4 : 3, reps: '12' },
+      { name: 'Bird Dog Row',                                 sets: 4, reps: '10' },
+      { name: 'Behind Pulldowns',                             sets: 3, reps: '6' },
+      { name: 'Band Pull-Aparts',                             sets: 3, reps: '20' },
+      { name: 'Core — Rotate and Press',                      sets: 3, reps: '12' },
+      { name: 'Triceps',                                      sets: 3, reps: '12' },
+    ]),
+    makeBaseballSession('Day 4', 'Lower Power', [
+      { name: 'Squat',                        warmup: '2x5', sets: 3, reps: '5',    pct: wp },
+      { name: 'Box Jump',                                     sets: 3, reps: '3' },
+      { name: 'RDL',                                          sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Weighted Hip Thrust',                          sets: p3 ? 4 : 3, reps: '8' },
+      { name: 'Single Leg RDL',                               sets: 3, reps: '8',    note: 'each leg' },
+      { name: 'Banded Pull-Aparts',                           sets: 3, reps: '15' },
+      { name: 'Back Extensions',                              sets: 3, reps: '12' },
+      { name: 'Core — EXT/INT Rotation',                      sets: 3, reps: 'AMAP' },
+    ]),
+  ]
+}
+
+const SOFTBALL_SHOULDER_CARE = makeBaseballSession('Day 5', 'Shoulder Care & Conditioning', [
+  { name: 'Band External Rotation',  sets: 3,  reps: '15',   note: 'each arm' },
+  { name: 'YTW Shoulder Series',     sets: 3,  reps: '10',   note: 'each' },
+  { name: 'Reverse Flys',            sets: 3,  reps: '15' },
+  { name: 'Band Pull-Aparts',        sets: 4,  reps: '20' },
+  { name: 'Core Work',               sets: 3,  reps: 'AMAP' },
+  { name: '30-Yard Sprints',         sets: 10, reps: '1',    note: 'full recovery between each' },
+])
+
+const SOFTBALL_LIGHT_FB = makeBaseballSession('Day 6', 'Lighter Full Body & Weak Points', [
+  { name: 'Goblet Squat',            sets: 3, reps: '10' },
+  { name: 'Push-ups',                sets: 3, reps: 'AMAP' },
+  { name: 'Chin-ups',                sets: 3, reps: 'AMAP' },
+  { name: 'Single Leg RDL',          sets: 3, reps: '8' },
+  { name: 'Copenhagen Adductor',     sets: 3, reps: '8',    note: 'each leg' },
+  { name: 'Core Circuit',            sets: 3, reps: 'AMAP' },
+])
+
+function generateSoftballWeeks(_, goal, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const phaseIdx    = Math.floor((w - 1) / 4)
+    const phase       = phaseIdx + 1
+    const wp          = SOFTBALL_PHASE_PCTS[phaseIdx]
+    const weekInPhase = ((w - 1) % 4) + 1
+
+    let sessions
+    if (daysPerWeek === 3) {
+      sessions = softball3Day(wp)
+    } else {
+      sessions = softball4Day(wp, phase)
+      if (daysPerWeek >= 5) sessions = [...sessions, SOFTBALL_SHOULDER_CARE]
+      if (daysPerWeek >= 6) sessions = [...sessions, SOFTBALL_LIGHT_FB]
+    }
+
+    weeks.push({
+      week_number: w,
+      objective: `Phase ${phase} — ${SOFTBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
 // ─── Hockey ───────────────────────────────────────────────────────────────────
 
 const HOCKEY_PHASES = [
@@ -643,6 +771,7 @@ export const SPORT_TEMPLATES = [
     id: 'baseball',
     label: 'Baseball',
     daysPerWeekPicker: true,
+    templateDescription: '16-week phase-based offseason program for baseball athletes. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.',
     daysOptions: [
       { days: 3, desc: 'Full Body split (3 sessions)' },
       { days: 4, desc: 'Upper/Lower split (4 sessions)' },
@@ -659,6 +788,28 @@ export const SPORT_TEMPLATES = [
       { num: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
     ],
     generateWeeks: generateBaseballWeeks,
+  },
+  {
+    id: 'softball',
+    label: 'Softball',
+    daysPerWeekPicker: true,
+    templateDescription: '16-week phase-based offseason program for softball athletes. Emphasizes shoulder stability, rotator cuff health, bilateral lower body strength, and hip stability. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.',
+    daysOptions: [
+      { days: 3, desc: 'Full Body split (3 sessions)' },
+      { days: 4, desc: 'Upper/Lower split (4 sessions)' },
+      { days: 5, desc: 'Upper/Lower + Shoulder Care' },
+      { days: 6, desc: 'Upper/Lower + Shoulder Care + Light Day' },
+    ],
+    positions: [
+      { id: 'softball', label: 'Softball', sublabel: '16-Week Offseason', desc: '4-phase program built for softball athletes. Shoulder stability, hip stability, and bilateral lower body emphasis. Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '70%', weeks: '1–4'   },
+      { num: 2, label: 'Development', pct: '75%', weeks: '5–8'   },
+      { num: 3, label: 'Strength',    pct: '80%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
+    ],
+    generateWeeks: generateSoftballWeeks,
   },
   {
     id: 'football',
