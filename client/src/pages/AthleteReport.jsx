@@ -27,7 +27,7 @@ function StatBox({ label, value, accent }) {
 }
 
 export default function AthleteReport() {
-  const { athleteId } = useParams()
+  const { id: athleteId } = useParams()
   const navigate = useNavigate()
   const [report, setReport] = useState(null)
   const [loading, setLoading] = useState(true)
