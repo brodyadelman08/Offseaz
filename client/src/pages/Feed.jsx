@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
+import { HeartIcon, HeartFilledIcon, MessageIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -91,11 +92,13 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
           style={{ ...styles.actionBtn, color: post.liked_by_me ? ORANGE : 'var(--text-3)' }}
           onClick={() => onLike(post.id)}
         >
-          <span style={{ fontSize: 16 }}>{post.liked_by_me ? '♥' : '♡'}</span>
+          {post.liked_by_me
+            ? <HeartFilledIcon size={16} color={ORANGE} />
+            : <HeartIcon size={16} color="var(--text-3)" />}
           {post.like_count > 0 && <span>{post.like_count}</span>}
         </button>
         <button style={styles.actionBtn} onClick={toggleComments}>
-          <span style={{ fontSize: 15 }}>💬</span>
+          <MessageIcon size={15} color="var(--text-3)" />
           {post.comments.length > 0 && <span>{post.comments.length}</span>}
           <span>{showComments ? 'Hide' : 'Comment'}</span>
         </button>

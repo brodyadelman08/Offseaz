@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
-import { ChevronDownIcon, ChevronUpIcon, FileTextIcon } from '../components/Icons'
+import { ChevronDownIcon, ChevronUpIcon, FileTextIcon, AlertIcon, ClipboardIcon, CheckIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -322,7 +322,9 @@ export default function AthleteProfile() {
                   {goal.target && <span style={styles.goalViewTarget}>{goal.target}</span>}
                 </div>
                 {goal.completed && (
-                  <span style={styles.completedTag}>✓ Done</span>
+                  <span style={styles.completedTag}>
+                    <CheckIcon size={11} color="#2e7d32" /> Done
+                  </span>
                 )}
               </div>
             ))}
@@ -337,7 +339,7 @@ export default function AthleteProfile() {
         {/* Athlete's own injury notes — top of coach notes */}
         {survey?.injury_notes && (
           <div style={styles.injuryNotesBox}>
-            <p style={styles.injuryNotesLabel}>📝 Athlete's Injury Notes</p>
+            <p style={styles.injuryNotesLabel}><ClipboardIcon size={13} color="#c73820" /> Athlete's Injury Notes</p>
             <p style={styles.injuryNotesText}>{survey.injury_notes}</p>
           </div>
         )}
@@ -348,7 +350,7 @@ export default function AthleteProfile() {
           const hasInjury = areas.length > 0 || survey.injury_other
           return hasInjury ? (
             <div style={styles.injuryContext}>
-              <p style={styles.injuryContextLabel}>⚠️ Athlete reported injury</p>
+              <p style={styles.injuryContextLabel}><AlertIcon size={13} color="#c73820" /> Athlete reported injury</p>
               {areas.length > 0 && (
                 <div style={styles.pillRow}>
                   {areas.map((a, i) => (
@@ -377,7 +379,7 @@ export default function AthleteProfile() {
           {noteUpdatedAt && !noteSaved && (
             <span style={styles.noteTimestamp}>Last saved {fmtDate(noteUpdatedAt)}</span>
           )}
-          {noteSaved && <span style={styles.noteSavedMsg}>✓ Saved</span>}
+          {noteSaved && <span style={styles.noteSavedMsg}><CheckIcon size={13} color="#2e7d32" /> Saved</span>}
           <button
             style={{ ...styles.noteSaveBtn, opacity: noteSaving ? 0.6 : 1 }}
             onClick={handleSaveNote}
@@ -418,7 +420,7 @@ export default function AthleteProfile() {
                       <>
                         {injuryExercises.length > 0 && (
                           <div style={styles.injuryExRow}>
-                            <span style={styles.injuryExLabel}>⚠️ Cannot complete:</span>
+                            <span style={styles.injuryExLabel}><AlertIcon size={12} color="#c73820" /> Cannot complete:</span>
                             <div style={styles.injuryExPills}>
                               {injuryExercises.map(ex => (
                                 <span key={ex} style={styles.injuryExPill}>{ex}</span>

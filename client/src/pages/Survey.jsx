@@ -2,6 +2,13 @@ import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import {
+  FootballIcon, BasketballIcon, BaseballIcon, SoccerIcon,
+  HockeyIcon, VolleyballIcon, WrestlingIcon, RunningIcon,
+  LacrosseIcon, SwimmingIcon, MedalIcon,
+  DumbbellIcon, BarChartIcon, BoltIcon, TrophyIcon,
+  SeedlingIcon, FlameIcon, BarbellIcon, UserIcon,
+} from '../components/Icons'
 
 const ORANGE = '#F75709'
 const TOTAL_STEPS = 10
@@ -9,19 +16,19 @@ const TOTAL_STEPS = 10
 // ─── Static data ──────────────────────────────────────────────────────────────
 
 const SPORTS = [
-  { key: 'Football',        emoji: '🏈' },
-  { key: 'Basketball',      emoji: '🏀' },
-  { key: 'Baseball',        emoji: '⚾' },
-  { key: 'Softball',        emoji: '🥎' },
-  { key: 'Soccer',          emoji: '⚽' },
-  { key: 'Hockey',          emoji: '🏒' },
-  { key: 'Volleyball',      emoji: '🏐' },
-  { key: 'Wrestling',       emoji: '🤼' },
-  { key: 'Track and Field', emoji: '🏃' },
-  { key: 'Cross Country',   emoji: '🌲' },
-  { key: 'Lacrosse',        emoji: '🥍' },
-  { key: 'Swimming',        emoji: '🏊' },
-  { key: 'Other',           emoji: '🏅' },
+  { key: 'Football',        Icon: FootballIcon },
+  { key: 'Basketball',      Icon: BasketballIcon },
+  { key: 'Baseball',        Icon: BaseballIcon },
+  { key: 'Softball',        Icon: BaseballIcon },
+  { key: 'Soccer',          Icon: SoccerIcon },
+  { key: 'Hockey',          Icon: HockeyIcon },
+  { key: 'Volleyball',      Icon: VolleyballIcon },
+  { key: 'Wrestling',       Icon: WrestlingIcon },
+  { key: 'Track and Field', Icon: RunningIcon },
+  { key: 'Cross Country',   Icon: RunningIcon },
+  { key: 'Lacrosse',        Icon: LacrosseIcon },
+  { key: 'Swimming',        Icon: SwimmingIcon },
+  { key: 'Other',           Icon: MedalIcon },
 ]
 
 const POSITIONS = {
@@ -48,8 +55,8 @@ function SelectCard({ options, value, onChange, cols = 2 }) {
       {options.map(opt => {
         const key   = typeof opt === 'string' ? opt : opt.key
         const label = typeof opt === 'string' ? opt : (opt.label || opt.key)
-        const sub   = typeof opt === 'object' ? opt.sub   : null
-        const emoji = typeof opt === 'object' ? opt.emoji : null
+        const sub   = typeof opt === 'object' ? opt.sub  : null
+        const Icon  = typeof opt === 'object' ? opt.Icon : null
         const sel   = value === key
         return (
           <button
@@ -65,7 +72,11 @@ function SelectCard({ options, value, onChange, cols = 2 }) {
               transition: 'border-color 0.15s',
             }}
           >
-            {emoji && <div style={{ fontSize: 22, marginBottom: 6, lineHeight: 1 }}>{emoji}</div>}
+            {Icon && (
+              <div style={{ marginBottom: 6, lineHeight: 1 }}>
+                <Icon size={22} color={sel ? ORANGE : 'var(--text-3)'} />
+              </div>
+            )}
             <div style={{ fontSize: 14, fontWeight: 700, color: sel ? ORANGE : 'var(--text)', lineHeight: 1.3 }}>{label}</div>
             {sub && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4, lineHeight: 1.4 }}>{sub}</div>}
           </button>
@@ -353,10 +364,10 @@ export default function Survey() {
             <p style={st.desc}>Choose your primary training goal this offseason.</p>
             <SelectCard
               options={[
-                { key: 'Strength and Power',           label: 'Strength & Power',            sub: 'Maximal force and explosiveness',      emoji: '💪' },
-                { key: 'Muscle Gain and Size',         label: 'Muscle Gain & Size',           sub: 'Build mass and fill out your frame',   emoji: '📈' },
-                { key: 'Speed and Conditioning',       label: 'Speed & Conditioning',         sub: 'Faster, leaner, more athletic',        emoji: '⚡' },
-                { key: 'General Athletic Performance', label: 'General Athletic Performance', sub: 'Well-rounded sport readiness',         emoji: '🏆' },
+                { key: 'Strength and Power',           label: 'Strength & Power',            sub: 'Maximal force and explosiveness',      Icon: DumbbellIcon },
+                { key: 'Muscle Gain and Size',         label: 'Muscle Gain & Size',           sub: 'Build mass and fill out your frame',   Icon: BarChartIcon },
+                { key: 'Speed and Conditioning',       label: 'Speed & Conditioning',         sub: 'Faster, leaner, more athletic',        Icon: BoltIcon },
+                { key: 'General Athletic Performance', label: 'General Athletic Performance', sub: 'Well-rounded sport readiness',         Icon: TrophyIcon },
               ]}
               value={form.primary_goal}
               onChange={v => set('primary_goal', v)}
@@ -373,9 +384,9 @@ export default function Survey() {
             <p style={st.desc}>How long have you been seriously lifting or training?</p>
             <SelectCard
               options={[
-                { key: 'Beginner',     label: 'Beginner',     sub: 'Less than 1 year of serious training',  emoji: '🌱' },
-                { key: 'Intermediate', label: 'Intermediate', sub: '1 to 3 years of training',               emoji: '🔥' },
-                { key: 'Advanced',     label: 'Advanced',     sub: '3+ years of consistent training',        emoji: '🏆' },
+                { key: 'Beginner',     label: 'Beginner',     sub: 'Less than 1 year of serious training',  Icon: SeedlingIcon },
+                { key: 'Intermediate', label: 'Intermediate', sub: '1 to 3 years of training',               Icon: FlameIcon },
+                { key: 'Advanced',     label: 'Advanced',     sub: '3+ years of consistent training',        Icon: TrophyIcon },
               ]}
               value={form.experience_level}
               onChange={v => set('experience_level', v)}
@@ -416,9 +427,9 @@ export default function Survey() {
             <p style={st.desc}>Choose the option that best describes your access to training equipment.</p>
             <SelectCard
               options={[
-                { key: 'Full',    label: 'Full Gym',    sub: 'Barbell rack, plates, cables, machines — the full setup', emoji: '🏋️' },
-                { key: 'Partial', label: 'Partial Gym', sub: 'Dumbbells, some machines, limited barbell access',        emoji: '🔩' },
-                { key: 'Minimal', label: 'Minimal',     sub: 'Bands, light dumbbells, and bodyweight only',             emoji: '🏠' },
+                { key: 'Full',    label: 'Full Gym',    sub: 'Barbell rack, plates, cables, machines — the full setup', Icon: BarbellIcon },
+                { key: 'Partial', label: 'Partial Gym', sub: 'Dumbbells, some machines, limited barbell access',        Icon: DumbbellIcon },
+                { key: 'Minimal', label: 'Minimal',     sub: 'Bands, light dumbbells, and bodyweight only',             Icon: UserIcon },
               ]}
               value={form.equipment_tier}
               onChange={v => set('equipment_tier', v)}

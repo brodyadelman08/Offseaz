@@ -641,7 +641,7 @@ function generateHockeyWeeks(posId, goal) {
 export const SPORT_TEMPLATES = [
   {
     id: 'baseball',
-    label: '⚾ Baseball',
+    label: 'Baseball',
     daysPerWeekPicker: true,
     daysOptions: [
       { days: 3, desc: 'Full Body split (3 sessions)' },
@@ -662,7 +662,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'football',
-    label: '🏈 Football',
+    label: 'Football',
     daysPerWeek: 4,
     positions: [
       { id: 'linemen', label: 'Linemen',  sublabel: 'OL / DL',         desc: 'Maximum strength and size' },
@@ -680,7 +680,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'basketball',
-    label: '🏀 Basketball',
+    label: 'Basketball',
     daysPerWeek: 4,
     positions: [
       { id: 'guards', label: 'Guards',          sublabel: 'PG / SG', desc: 'Speed, vertical, lateral quickness' },
@@ -697,7 +697,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'soccer',
-    label: '⚽ Soccer',
+    label: 'Soccer',
     daysPerWeek: 4,
     positions: [
       { id: 'soccer', label: 'Soccer', sublabel: 'All positions', desc: 'Lifting-focused 4-day program — lower strength, upper accessory, full body power, optional conditioning' },
@@ -712,7 +712,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'hockey',
-    label: '🏒 Hockey',
+    label: 'Hockey',
     daysPerWeek: 4,
     positions: [
       { id: 'forwards', label: 'Forwards', sublabel: 'F',       desc: 'Speed, explosion, shot power, skating stride' },
@@ -729,7 +729,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'wrestling',
-    label: '🤼 Wrestling',
+    label: 'Wrestling',
     daysPerWeek: 4,
     positions: [
       { id: 'wrestling', label: 'Wrestling', sublabel: 'All weight classes', desc: 'Maximal strength, isometric holds, weight class management' },
@@ -744,7 +744,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'volleyball',
-    label: '🏐 Volleyball',
+    label: 'Volleyball',
     daysPerWeek: 3,
     positions: [
       { id: 'volleyball', label: 'Volleyball', sublabel: 'All positions', desc: 'Vertical jump, shoulder durability, elastic power' },
@@ -759,7 +759,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'track',
-    label: '🏃 Track & Field',
+    label: 'Track & Field',
     daysPerWeek: 4,
     positions: [
       { id: 'sprint', label: 'Sprinters', sublabel: '100m – 400m',            desc: 'Power, posterior chain, elastic speed' },
@@ -776,7 +776,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'cross_country',
-    label: '🌲 Cross Country',
+    label: 'Cross Country',
     daysPerWeek: 2,
     positions: [
       { id: 'cross_country', label: 'Cross Country', sublabel: 'All distances', desc: 'Injury prevention, aerobic support, minimal lifting fatigue' },
@@ -791,7 +791,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'lacrosse',
-    label: '🥍 Lacrosse',
+    label: 'Lacrosse',
     daysPerWeek: 4,
     positions: [
       { id: 'lacrosse', label: 'Lacrosse', sublabel: 'All positions', desc: 'Soccer conditioning with football upper body demands' },
@@ -806,7 +806,7 @@ export const SPORT_TEMPLATES = [
   },
   {
     id: 'swimming',
-    label: '🏊 Swimming',
+    label: 'Swimming',
     daysPerWeek: 3,
     positions: [
       { id: 'swimming', label: 'Swimming', sublabel: 'Dryland only', desc: 'Shoulder stability, core strength, lat development' },

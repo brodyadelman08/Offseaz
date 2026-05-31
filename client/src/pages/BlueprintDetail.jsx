@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import SessionDescription from '../components/SessionDescription'
+import { LockIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const GREEN  = '#2e7d32'
@@ -98,7 +99,7 @@ export default function BlueprintDetail() {
         </div>
         <div style={styles.lockWrap}>
           {blueprint.locked && (
-            <span style={styles.lockedBadge}>🔒 Locked</span>
+            <span style={styles.lockedBadge}><LockIcon size={13} color="#c73820" /> Locked</span>
           )}
           <button
             style={{ ...styles.lockBtn, ...(blueprint.locked ? styles.lockBtnUnlock : {}) }}

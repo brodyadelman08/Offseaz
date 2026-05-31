@@ -4,7 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import {
   UsersIcon, ClipboardIcon, DumbbellIcon, BoltIcon,
-  CheckCircleIcon, TrophyIcon,
+  CheckCircleIcon, TrophyIcon, CheckIcon,
 } from '../components/Icons'
 
 const ORANGE = '#F75709'
@@ -349,7 +349,7 @@ export default function AthleteOnboarding() {
                     }}
                     onClick={() => setSelectedLift(l.key)}
                   >
-                    {isLogged && !isSelected ? '✓ ' : ''}{l.label}
+                    {isLogged && !isSelected && <><CheckIcon size={12} color={ORANGE} />{' '}</>}{l.label}
                   </button>
                 )
               })}

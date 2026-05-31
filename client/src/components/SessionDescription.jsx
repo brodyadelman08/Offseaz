@@ -1,5 +1,6 @@
 import ExerciseInfoButton from './ExerciseInfoButton'
 import { lookupExercise } from '../data/exerciseLibrary'
+import { AlertIcon } from './Icons'
 
 /**
  * Exercises to flag per injury area.
@@ -209,7 +210,7 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
                   lineHeight: 1.4,
                   whiteSpace: 'nowrap',
                 }}>
-                  ⚠️ Use caution — flagged injury
+                  <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
                 </span>
               )}
               {rest}

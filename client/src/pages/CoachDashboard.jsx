@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
-import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon } from '../components/Icons'
+import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon, AlertIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -32,7 +32,7 @@ const EVENT_BADGE = {
   blueprint: { label: 'Plan assigned', color: '#6a1b9a', bg: '#f3e5f5' },
 }
 
-const INJURY_BADGE = { label: '🚨 Injury', color: '#c73820', bg: '#fce8e6' }
+const INJURY_BADGE = { label: 'Injury', color: '#c73820', bg: '#fce8e6' }
 
 export default function CoachDashboard() {
   const { profile } = useAuth()
@@ -119,7 +119,7 @@ export default function CoachDashboard() {
                   style={styles.notifRow}
                   onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
                 >
-                  <span style={styles.notifIcon}>🚨</span>
+                  <AlertIcon size={18} color="#c73820" />
                   <span style={styles.notifMsg}>{n.message}</span>
                   <span style={styles.notifCta}>View Profile →</span>
                 </button>

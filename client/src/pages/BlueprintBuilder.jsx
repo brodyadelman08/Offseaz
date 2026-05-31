@@ -116,7 +116,7 @@ export default function BlueprintBuilder() {
     const { sport, pos } = daysPick
     const weeks = sport.generateWeeks(pos.id, 'standard', daysPerWeek)
     setForm({
-      title: `⚾ Baseball — 16-Week Offseason (${daysPerWeek} Days/Week)`,
+      title: `Baseball — 16-Week Offseason (${daysPerWeek} Days/Week)`,
       description: `16-week phase-based offseason program for baseball athletes. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.`,
       num_weeks: 16,
       weeks,

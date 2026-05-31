@@ -27,7 +27,7 @@ async function generateReport(athleteId, coachId) {
   if (profileErr) throw new Error('Athlete not found')
 
   // 2. Run parallel queries
-  const [survey, maxes, logsRes, goals, noteRes] = await Promise.all([
+  const [survey, maxes, logsRes, goals, noteRes, coachRes] = await Promise.all([
     getSurveyByAthlete(athleteId).catch(() => null),
     getMaxesByAthlete(athleteId).catch(() => ({})),
     supabaseAdmin
@@ -42,6 +42,11 @@ async function generateReport(athleteId, coachId) {
       .eq('coach_id', coachId)
       .eq('athlete_id', athleteId)
       .maybeSingle(),
+    supabaseAdmin
+      .from('profiles')
+      .select('full_name')
+      .eq('id', coachId)
+      .single(),
   ])
 
   const rawLogs = logsRes.data || []
@@ -112,6 +117,7 @@ async function generateReport(athleteId, coachId) {
       goalsTotal: goals.length,
     },
     coachNote: noteRes.data?.note || null,
+    coachName: coachRes.data?.full_name || 'Coach',
     generatedAt: new Date().toISOString(),
   }
 }

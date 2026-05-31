@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
+import { AlertIcon } from '../components/Icons'
 
 const BLUE = '#308EBD'
 
@@ -157,7 +158,7 @@ export default function WorkoutLog() {
                     style={{ ...styles.exerciseFlagChip, ...(flagged ? styles.exerciseFlagChipActive : {}) }}
                     onClick={() => toggleInjury(name)}
                   >
-                    {flagged ? '⚠️ ' : ''}{name}
+                    {flagged && <><AlertIcon size={12} color="#c73820" />{' '}</>}{name}
                   </button>
                 )
               })}
