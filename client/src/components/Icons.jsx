@@ -308,122 +308,232 @@ export function BarbellIcon({ size = 20, color = 'currentColor' }) {
   )
 }
 
-// ── Sport icons ────────────────────────────────────────────────────────────────
+// ── Sport icons — multicolor, brand colors, viewBox 0 0 40 40 ─────────────────
+const sb = { display: 'inline-block', flexShrink: 0, verticalAlign: 'middle' }
 
-export function FootballIcon({ size = 24, color = 'currentColor' }) {
+export function FootballIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <ellipse cx="12" cy="12" rx="9" ry="6" />
-      <line x1="12" y1="6" x2="12" y2="18" />
-      <line x1="9" y1="11" x2="15" y2="11" />
-      <line x1="9" y1="13" x2="15" y2="13" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <g transform="rotate(-28 20 20)">
+        <ellipse cx="20" cy="20" rx="17" ry="11" fill="#F75709" />
+        <ellipse cx="20" cy="20" rx="17" ry="11" fill="none" stroke="#bf4207" strokeWidth="0.8" />
+        {/* Lengthwise seam */}
+        <line x1="3" y1="20" x2="37" y2="20" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        {/* Lace vertical bar */}
+        <line x1="20" y1="13" x2="20" y2="27" stroke="white" strokeWidth="2" strokeLinecap="round" />
+        {/* Lace horizontal stitches */}
+        <line x1="15.5" y1="16.5" x2="24.5" y2="16.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="15" y1="19.5" x2="25" y2="19.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="15.5" y1="22.5" x2="24.5" y2="22.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+      </g>
     </svg>
   )
 }
 
-export function BasketballIcon({ size = 24, color = 'currentColor' }) {
+export function BasketballIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" />
-      <line x1="3" y1="12" x2="21" y2="12" />
-      <path d="M12 3c-3.5 4-3.5 14 0 18" />
-      <path d="M12 3c3.5 4 3.5 14 0 18" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="#F75709" />
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#bf4207" strokeWidth="0.8" />
+      {/* Seam lines */}
+      <line x1="3" y1="20" x2="37" y2="20" stroke="#7a2800" strokeWidth="1.5" />
+      <line x1="20" y1="3" x2="20" y2="37" stroke="#7a2800" strokeWidth="1.5" />
+      <path d="M 20 3 Q 9 15 9 20 Q 9 25 20 37" fill="none" stroke="#7a2800" strokeWidth="1.5" />
+      <path d="M 20 3 Q 31 15 31 20 Q 31 25 20 37" fill="none" stroke="#7a2800" strokeWidth="1.5" />
     </svg>
   )
 }
 
-export function BaseballIcon({ size = 24, color = 'currentColor' }) {
+export function BaseballIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M9.5 4.5c1 5 1 10 0 15" />
-      <path d="M14.5 4.5c-1 5-1 10 0 15" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="white" />
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#ccc" strokeWidth="1" />
+      {/* Left stitch curve + tick marks */}
+      <path d="M 13 6 Q 7 20 13 34" fill="none" stroke="#c73820" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="13" y1="10" x2="9.5" y2="8.5" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="11.5" y1="16" x2="8" y2="16" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="10.5" y1="22" x2="7" y2="22" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="11.5" y1="28" x2="8" y2="29" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      {/* Right stitch curve + tick marks */}
+      <path d="M 27 6 Q 33 20 27 34" fill="none" stroke="#c73820" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="27" y1="10" x2="30.5" y2="8.5" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="28.5" y1="16" x2="32" y2="16" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="29.5" y1="22" x2="33" y2="22" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="28.5" y1="28" x2="32" y2="29" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   )
 }
 
-export function SoccerIcon({ size = 24, color = 'currentColor' }) {
+export function SoftballIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" />
-      <polygon points="12,6 15,9 14,13 10,13 9,9" />
-      <line x1="9" y1="9" x2="4.5" y2="8" />
-      <line x1="15" y1="9" x2="19.5" y2="8" />
-      <line x1="10" y1="13" x2="8.5" y2="18" />
-      <line x1="14" y1="13" x2="15.5" y2="18" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="#F0BE24" />
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#c89e00" strokeWidth="1" />
+      <path d="M 13 6 Q 7 20 13 34" fill="none" stroke="#c73820" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="13" y1="10" x2="9.5" y2="8.5" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="11.5" y1="16" x2="8" y2="16" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="10.5" y1="22" x2="7" y2="22" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="11.5" y1="28" x2="8" y2="29" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M 27 6 Q 33 20 27 34" fill="none" stroke="#c73820" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="27" y1="10" x2="30.5" y2="8.5" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="28.5" y1="16" x2="32" y2="16" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="29.5" y1="22" x2="33" y2="22" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
+      <line x1="28.5" y1="28" x2="32" y2="29" stroke="#c73820" strokeWidth="1.5" strokeLinecap="round" />
     </svg>
   )
 }
 
-export function HockeyIcon({ size = 24, color = 'currentColor' }) {
+export function SoccerIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <ellipse cx="12" cy="16" rx="8" ry="4" />
-      <path d="M4 16V13c0-2.2 3.6-4 8-4s8 1.8 8 4v3" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="white" />
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#bbb" strokeWidth="1" />
+      {/* Center pentagon */}
+      <polygon points="20,12 26,16 24,23 16,23 14,16" fill="#308EBD" />
+      {/* Radiating lines from each vertex to edge */}
+      <line x1="20" y1="12" x2="20" y2="3" stroke="#308EBD" strokeWidth="1.5" />
+      <line x1="26" y1="16" x2="35" y2="12" stroke="#308EBD" strokeWidth="1.5" />
+      <line x1="24" y1="23" x2="31" y2="32" stroke="#308EBD" strokeWidth="1.5" />
+      <line x1="16" y1="23" x2="9" y2="32" stroke="#308EBD" strokeWidth="1.5" />
+      <line x1="14" y1="16" x2="5" y2="12" stroke="#308EBD" strokeWidth="1.5" />
     </svg>
   )
 }
 
-export function VolleyballIcon({ size = 24, color = 'currentColor' }) {
+export function HockeyIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="12" cy="12" r="9" />
-      <path d="M3 11c4-4 10-3 12 1" />
-      <path d="M15 12c2-4 8-4 7.5 1" />
-      <path d="M12 3c-1 4-4 6-4 9" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Puck side */}
+      <rect x="6" y="20" width="28" height="8" rx="1" fill="#2a2a2a" />
+      {/* Puck bottom ellipse */}
+      <ellipse cx="20" cy="28" rx="14" ry="4" fill="#333" />
+      {/* Puck top face */}
+      <ellipse cx="20" cy="20" rx="14" ry="5" fill="#308EBD" />
+      {/* Subtle top highlight */}
+      <ellipse cx="16" cy="19" rx="5" ry="2" fill="rgba(255,255,255,0.2)" />
     </svg>
   )
 }
 
-export function WrestlingIcon({ size = 24, color = 'currentColor' }) {
+export function VolleyballIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="7" cy="4" r="2" />
-      <circle cx="17" cy="4" r="2" />
-      <path d="M5 21l2-6 3 2 2-4 2 4 3-2 2 6" />
-      <path d="M7 10c1 2 2 3 5 3s4-1 5-3" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="#eef2ff" />
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#308EBD" strokeWidth="1.5" />
+      {/* Three curved seam lines */}
+      <path d="M 3 20 Q 14 9 37 15" fill="none" stroke="#308EBD" strokeWidth="2" />
+      <path d="M 9 9 Q 20 22 10 35" fill="none" stroke="#308EBD" strokeWidth="2" />
+      <path d="M 31 8 Q 22 21 35 33" fill="none" stroke="#308EBD" strokeWidth="2" />
     </svg>
   )
 }
 
-export function RunningIcon({ size = 24, color = 'currentColor' }) {
+export function WrestlingIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="15" cy="4" r="2" />
-      <path d="M19 9l-4 2-2 9" />
-      <path d="M5 19l4-5 4-1 2-4" />
-      <path d="M11 13l-5-2" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Orange wrestler (left) */}
+      <circle cx="10" cy="6" r="3.5" fill="#F75709" />
+      <line x1="10" y1="10" x2="12" y2="22" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="11" y1="14" x2="20" y2="17" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      <line x1="11" y1="14" x2="4" y2="10" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      <line x1="12" y1="22" x2="6" y2="34" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      <line x1="12" y1="22" x2="17" y2="33" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Blue wrestler (right) */}
+      <circle cx="30" cy="6" r="3.5" fill="#308EBD" />
+      <line x1="30" y1="10" x2="28" y2="22" stroke="#308EBD" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="29" y1="14" x2="20" y2="17" stroke="#308EBD" strokeWidth="2" strokeLinecap="round" />
+      <line x1="29" y1="14" x2="36" y2="10" stroke="#308EBD" strokeWidth="2" strokeLinecap="round" />
+      <line x1="28" y1="22" x2="23" y2="33" stroke="#308EBD" strokeWidth="2" strokeLinecap="round" />
+      <line x1="28" y1="22" x2="34" y2="34" stroke="#308EBD" strokeWidth="2" strokeLinecap="round" />
+      {/* Grapple point */}
+      <circle cx="20" cy="17" r="2.5" fill="#F0BE24" />
     </svg>
   )
 }
 
-export function LacrosseIcon({ size = 24, color = 'currentColor' }) {
+export function RunningIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <line x1="5" y1="20" x2="15" y2="8" />
-      <path d="M15 8c0-3 6-3 6 0s-6 3-6 0z" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Head */}
+      <circle cx="27" cy="6" r="4" fill="#F75709" />
+      {/* Torso */}
+      <line x1="25" y1="10" x2="20" y2="23" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Back arm */}
+      <line x1="23" y1="14" x2="14" y2="10" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Front arm */}
+      <line x1="22" y1="17" x2="31" y2="14" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Front leg — striding forward */}
+      <line x1="20" y1="23" x2="27" y2="35" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Back leg — kick behind */}
+      <line x1="20" y1="23" x2="12" y2="30" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Front foot plant */}
+      <line x1="27" y1="35" x2="33" y2="37" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Back foot kick-up */}
+      <line x1="12" y1="30" x2="8" y2="24" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
     </svg>
   )
 }
 
-export function SwimmingIcon({ size = 24, color = 'currentColor' }) {
+export function CrossCountryIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="17" cy="5" r="2" />
-      <path d="M13 7l4-2 2 4-5 4" />
-      <path d="M2 16c2-3 4-3 6 0s4 3 6 0 4-3 6 0" />
-      <path d="M2 20c2-3 4-3 6 0s4 3 6 0 4-3 6 0" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Runner */}
+      <circle cx="29" cy="5" r="3.5" fill="#F75709" />
+      <line x1="27" y1="9" x2="23" y2="21" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="25" y1="13" x2="17" y2="10" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      <line x1="24" y1="16" x2="32" y2="13" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      <line x1="23" y1="21" x2="30" y2="31" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      <line x1="23" y1="21" x2="16" y2="28" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Terrain / rolling hills */}
+      <path d="M 2 34 Q 8 25 16 30 Q 24 36 33 27 Q 37 23 40 25" fill="none" stroke="#308EBD" strokeWidth="2.5" strokeLinecap="round" />
     </svg>
   )
 }
 
-export function MedalIcon({ size = 24, color = 'currentColor' }) {
+export function LacrosseIcon({ size = 40 }) {
   return (
-    <svg style={base(size, color, 1.5)} viewBox="0 0 24 24">
-      <circle cx="12" cy="15" r="6" />
-      <path d="M8.5 8.5L12 3l3.5 5.5" />
-      <line x1="10" y1="15" x2="14" y2="15" />
-      <line x1="12" y1="13" x2="12" y2="17" />
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Stick shaft */}
+      <line x1="5" y1="37" x2="27" y2="10" stroke="#F75709" strokeWidth="3" strokeLinecap="round" />
+      {/* Stick head — pocket outline */}
+      <path d="M 27 10 Q 39 5 37 18 Q 35 23 27 22" fill="rgba(247,87,9,0.18)" stroke="#F75709" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round" />
+      {/* Mesh pocket strings */}
+      <line x1="28.5" y1="12" x2="34" y2="20" stroke="#F75709" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
+      <line x1="32" y1="10" x2="31" y2="22" stroke="#F75709" strokeWidth="1.2" strokeLinecap="round" opacity="0.8" />
+      {/* Ball */}
+      <circle cx="11" cy="31" r="4" fill="#308EBD" />
+    </svg>
+  )
+}
+
+export function SwimmingIcon({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Head */}
+      <circle cx="33" cy="9" r="4" fill="#F75709" />
+      {/* Body reaching forward */}
+      <line x1="29" y1="11" x2="9" y2="18" stroke="#F75709" strokeWidth="2.5" strokeLinecap="round" />
+      {/* Leading arm extended */}
+      <line x1="9" y1="18" x2="2" y2="13" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Recovery arm (out of water, overhead) */}
+      <line x1="22" y1="14" x2="26" y2="5" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Flutter kick legs */}
+      <line x1="29" y1="11" x2="36" y2="18" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      <line x1="30" y1="13" x2="36" y2="22" stroke="#F75709" strokeWidth="2" strokeLinecap="round" />
+      {/* Water surface waves */}
+      <path d="M 2 24 Q 7 20 12 24 Q 17 28 22 24 Q 27 20 32 24 Q 37 28 40 25" fill="none" stroke="#308EBD" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 5 30 Q 10 26 15 30 Q 20 34 25 30 Q 30 26 36 30" fill="none" stroke="#308EBD" strokeWidth="1.5" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function SportOtherIcon({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="#308EBD" />
+      <line x1="20" y1="10" x2="20" y2="30" stroke="white" strokeWidth="3.5" strokeLinecap="round" />
+      <line x1="10" y1="20" x2="30" y2="20" stroke="white" strokeWidth="3.5" strokeLinecap="round" />
     </svg>
   )
 }

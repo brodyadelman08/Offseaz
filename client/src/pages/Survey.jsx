@@ -3,9 +3,9 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import {
-  FootballIcon, BasketballIcon, BaseballIcon, SoccerIcon,
-  HockeyIcon, VolleyballIcon, WrestlingIcon, RunningIcon,
-  LacrosseIcon, SwimmingIcon, MedalIcon,
+  FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon,
+  SoccerIcon, HockeyIcon, VolleyballIcon, WrestlingIcon,
+  RunningIcon, CrossCountryIcon, LacrosseIcon, SwimmingIcon, SportOtherIcon,
   DumbbellIcon, BarChartIcon, BoltIcon, TrophyIcon,
   SeedlingIcon, FlameIcon, BarbellIcon, UserIcon,
 } from '../components/Icons'
@@ -16,19 +16,19 @@ const TOTAL_STEPS = 10
 // ─── Static data ──────────────────────────────────────────────────────────────
 
 const SPORTS = [
-  { key: 'Football',        Icon: FootballIcon },
-  { key: 'Basketball',      Icon: BasketballIcon },
-  { key: 'Baseball',        Icon: BaseballIcon },
-  { key: 'Softball',        Icon: BaseballIcon },
-  { key: 'Soccer',          Icon: SoccerIcon },
-  { key: 'Hockey',          Icon: HockeyIcon },
-  { key: 'Volleyball',      Icon: VolleyballIcon },
-  { key: 'Wrestling',       Icon: WrestlingIcon },
-  { key: 'Track and Field', Icon: RunningIcon },
-  { key: 'Cross Country',   Icon: RunningIcon },
-  { key: 'Lacrosse',        Icon: LacrosseIcon },
-  { key: 'Swimming',        Icon: SwimmingIcon },
-  { key: 'Other',           Icon: MedalIcon },
+  { key: 'Football',        Icon: FootballIcon,    iconSize: 40 },
+  { key: 'Basketball',      Icon: BasketballIcon,  iconSize: 40 },
+  { key: 'Baseball',        Icon: BaseballIcon,    iconSize: 40 },
+  { key: 'Softball',        Icon: SoftballIcon,    iconSize: 40 },
+  { key: 'Soccer',          Icon: SoccerIcon,      iconSize: 40 },
+  { key: 'Hockey',          Icon: HockeyIcon,      iconSize: 40 },
+  { key: 'Volleyball',      Icon: VolleyballIcon,  iconSize: 40 },
+  { key: 'Wrestling',       Icon: WrestlingIcon,   iconSize: 40 },
+  { key: 'Track and Field', Icon: RunningIcon,     iconSize: 40 },
+  { key: 'Cross Country',   Icon: CrossCountryIcon, iconSize: 40 },
+  { key: 'Lacrosse',        Icon: LacrosseIcon,    iconSize: 40 },
+  { key: 'Swimming',        Icon: SwimmingIcon,    iconSize: 40 },
+  { key: 'Other',           Icon: SportOtherIcon,  iconSize: 40 },
 ]
 
 const POSITIONS = {
@@ -53,32 +53,33 @@ function SelectCard({ options, value, onChange, cols = 2 }) {
   return (
     <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 10 }}>
       {options.map(opt => {
-        const key   = typeof opt === 'string' ? opt : opt.key
-        const label = typeof opt === 'string' ? opt : (opt.label || opt.key)
-        const sub   = typeof opt === 'object' ? opt.sub  : null
-        const Icon  = typeof opt === 'object' ? opt.Icon : null
-        const sel   = value === key
+        const key      = typeof opt === 'string' ? opt : opt.key
+        const label    = typeof opt === 'string' ? opt : (opt.label || opt.key)
+        const sub      = typeof opt === 'object' ? opt.sub      : null
+        const Icon     = typeof opt === 'object' ? opt.Icon     : null
+        const iconSize = typeof opt === 'object' ? (opt.iconSize || 22) : 22
+        const sel      = value === key
         return (
           <button
             key={key}
             onClick={() => onChange(sel ? '' : key)}
             style={{
-              padding: sub ? '16px 14px' : '13px 10px',
+              padding: (sub || iconSize > 22) ? '16px 12px 14px' : '13px 10px',
               borderRadius: 12,
               border: `2px solid ${sel ? ORANGE : 'var(--border)'}`,
               background: sel ? 'rgba(247,87,9,0.08)' : 'var(--card-inner)',
               cursor: 'pointer',
-              textAlign: 'left',
+              textAlign: 'center',
               transition: 'border-color 0.15s',
             }}
           >
             {Icon && (
-              <div style={{ marginBottom: 6, lineHeight: 1 }}>
-                <Icon size={22} color={sel ? ORANGE : 'var(--text-3)'} />
+              <div style={{ marginBottom: 8, lineHeight: 1, opacity: sel ? 1 : 0.45, display: 'flex', justifyContent: 'center' }}>
+                <Icon size={iconSize} color={sel ? ORANGE : 'var(--text-3)'} />
               </div>
             )}
-            <div style={{ fontSize: 14, fontWeight: 700, color: sel ? ORANGE : 'var(--text)', lineHeight: 1.3 }}>{label}</div>
-            {sub && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4, lineHeight: 1.4 }}>{sub}</div>}
+            <div style={{ fontSize: iconSize > 22 ? 12 : 14, fontWeight: 700, color: sel ? ORANGE : 'var(--text)', lineHeight: 1.3 }}>{label}</div>
+            {sub && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4, lineHeight: 1.4, textAlign: 'left' }}>{sub}</div>}
           </button>
         )
       })}
