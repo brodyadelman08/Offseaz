@@ -734,6 +734,14 @@ export default function Landing() {
           background: 'radial-gradient(ellipse, rgba(48,142,189,0.07) 0%, transparent 60%)' }} />
 
         <div style={s.heroInner}>
+          {/* Brand logo — bold, first thing seen */}
+          <img
+            src={LOGO}
+            alt="Offseaz"
+            className="land-hero-logo"
+            style={{ height: 'auto', objectFit: 'contain', display: 'block' }}
+          />
+
           <div style={s.heroBadge}>
             <span style={s.heroBadgeDot} />
             <span style={s.heroBadgeText}>Offseason Training Platform</span>

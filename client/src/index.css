@@ -234,6 +234,16 @@ select {
   box-shadow: 0 8px 28px rgba(0,0,0,0.30) !important;
 }
 
+/* ── Hero logo – large brand statement ─────────────────────────────────────── */
+/* clamp(220px, 36vw, 380px):
+     375 px phone  → 220 px  (lower bound)
+     640 px tablet → 230 px  (middle)
+    1200 px desktop→ 380 px  (upper bound)                                    */
+.land-hero-logo {
+  width: clamp(220px, 36vw, 380px);
+  margin: 0 auto 36px;
+}
+
 /* ── DualDashboardMockup responsive layout ────────────────────────────────── */
 /* Desktop: two panels side by side in a fixed-height row                     */
 .mock-body {
