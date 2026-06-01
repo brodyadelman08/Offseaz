@@ -125,3 +125,58 @@ select:focus {
 
 /* ── Text selection ───────────────────────────────────────────────────────── */
 ::selection { background: rgba(247, 87, 9, 0.22); color: inherit; }
+
+/* ── Keyframe animations ──────────────────────────────────────────────────── */
+@keyframes spin {
+  from { transform: rotate(0deg); }
+  to   { transform: rotate(360deg); }
+}
+
+@keyframes surveyFadeIn {
+  from { opacity: 0; transform: translateY(10px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+/* ── Survey step transition ───────────────────────────────────────────────── */
+.survey-step-enter {
+  animation: surveyFadeIn 0.22s cubic-bezier(0.22, 1, 0.36, 1) forwards;
+}
+
+/* ── Survey loading spinner ───────────────────────────────────────────────── */
+.survey-spinner {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 3px solid var(--border);
+  border-top-color: #F75709;
+  margin: 0 auto;
+  animation: spin 0.75s linear infinite;
+}
+
+.survey-spinner-sm {
+  display: inline-block;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  border: 2px solid rgba(255,255,255,0.30);
+  border-top-color: #fff;
+  animation: spin 0.65s linear infinite;
+  vertical-align: middle;
+}
+
+/* ── Custom select dropdown arrow ─────────────────────────────────────────── */
+/* Applied globally so every select in the app looks consistent               */
+select {
+  background-image: url("data:image/svg+xml;charset=utf-8,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%23666666' stroke-width='2.5' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 12px center;
+  padding-right: 36px !important;
+  cursor: pointer;
+}
+
+/* ── Survey skip button hover ─────────────────────────────────────────────── */
+/* Can't inline hover on plain button, so CSS handles it */
+.survey-skip:hover {
+  color: var(--text) !important;
+  border-color: var(--text-3) !important;
+}

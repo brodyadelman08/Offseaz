@@ -3,9 +3,6 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import {
-  FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon,
-  SoccerIcon, HockeyIcon, VolleyballIcon, WrestlingIcon,
-  RunningIcon, CrossCountryIcon, LacrosseIcon, SwimmingIcon, SportOtherIcon,
   DumbbellIcon, BarChartIcon, BoltIcon, TrophyIcon,
   SeedlingIcon, FlameIcon, BarbellIcon, UserIcon,
 } from '../components/Icons'
@@ -13,22 +10,21 @@ import {
 const ORANGE = '#F75709'
 const TOTAL_STEPS = 10
 
-// ─── Static data ──────────────────────────────────────────────────────────────
-
+// Sport data — emojis for universal recognition, renders natively on every platform
 const SPORTS = [
-  { key: 'Football',        Icon: FootballIcon,    iconSize: 40 },
-  { key: 'Basketball',      Icon: BasketballIcon,  iconSize: 40 },
-  { key: 'Baseball',        Icon: BaseballIcon,    iconSize: 40 },
-  { key: 'Softball',        Icon: SoftballIcon,    iconSize: 40 },
-  { key: 'Soccer',          Icon: SoccerIcon,      iconSize: 40 },
-  { key: 'Hockey',          Icon: HockeyIcon,      iconSize: 40 },
-  { key: 'Volleyball',      Icon: VolleyballIcon,  iconSize: 40 },
-  { key: 'Wrestling',       Icon: WrestlingIcon,   iconSize: 40 },
-  { key: 'Track and Field', Icon: RunningIcon,     iconSize: 40 },
-  { key: 'Cross Country',   Icon: CrossCountryIcon, iconSize: 40 },
-  { key: 'Lacrosse',        Icon: LacrosseIcon,    iconSize: 40 },
-  { key: 'Swimming',        Icon: SwimmingIcon,    iconSize: 40 },
-  { key: 'Other',           Icon: SportOtherIcon,  iconSize: 40 },
+  { key: 'Football',        emoji: '🏈' },
+  { key: 'Basketball',      emoji: '🏀' },
+  { key: 'Baseball',        emoji: '⚾' },
+  { key: 'Softball',        emoji: '🥎' },
+  { key: 'Soccer',          emoji: '⚽' },
+  { key: 'Hockey',          emoji: '🏒' },
+  { key: 'Volleyball',      emoji: '🏐' },
+  { key: 'Wrestling',       emoji: '🤼' },
+  { key: 'Track and Field', emoji: '🏃' },
+  { key: 'Cross Country',   emoji: '🏃‍♀️' },
+  { key: 'Lacrosse',        emoji: '🥍' },
+  { key: 'Swimming',        emoji: '🏊' },
+  { key: 'Other',           emoji: '🏋️' },
 ]
 
 const POSITIONS = {
@@ -47,48 +43,380 @@ function getPositions(sport) {
   return POSITIONS[sport] || ['General Position']
 }
 
-// ─── Reusable selection components ───────────────────────────────────────────
+const STEP_META = [
+  null,
+  { tag: 'About You',     title: "Let's build your profile",       desc: 'Tell us about yourself so your coach can personalize your program.' },
+  { tag: 'Sport',         title: "What's your sport?",             desc: 'Select the sport you\'re training for this offseason.' },
+  { tag: 'Position',      title: null,                             desc: null }, // dynamic
+  { tag: 'Primary Goal',  title: "What's your main goal?",         desc: 'Choose your primary training objective this offseason.' },
+  { tag: 'Experience',    title: 'Training experience',             desc: 'How long have you been seriously training or lifting?' },
+  { tag: 'Schedule',      title: 'Weekly training days',            desc: 'How many days per week can you commit to structured training?' },
+  { tag: 'Equipment',     title: 'Your training setup',             desc: 'Select the equipment you have regular access to.' },
+  { tag: 'Health',        title: 'Injury history',                  desc: 'Flag any areas your coach should know about. Helps build a safer program.' },
+  { tag: 'Self-Assessment', title: 'Areas to improve',              desc: 'Be honest — select every area where you want to get better.' },
+  { tag: 'Goals',         title: 'Goals this offseason',            desc: 'Check everything you want to accomplish before the season starts.' },
+]
 
-function SelectCard({ options, value, onChange, cols = 2 }) {
+// ─── Design tokens ────────────────────────────────────────────────────────────
+const T = {
+  cardSelected: `linear-gradient(145deg, rgba(247,87,9,0.11) 0%, rgba(247,87,9,0.04) 100%), var(--card-inner)`,
+  cardHov:      `linear-gradient(145deg, rgba(247,87,9,0.04) 0%, transparent 100%), var(--card-inner)`,
+  cardBase:     'var(--card-inner)',
+  shadowBase:   '0 1px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
+  shadowHov:    '0 5px 18px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.05)',
+  shadowSel:    '0 0 0 3px rgba(247,87,9,0.10), 0 4px 18px rgba(247,87,9,0.18), inset 0 1px 0 rgba(255,255,255,0.07)',
+  transAll:     'border-color 0.18s ease, box-shadow 0.18s ease, background 0.18s ease, transform 0.18s ease',
+}
+
+// ─── Spring checkmark badge ───────────────────────────────────────────────────
+function CheckBadge({ visible, size = 18, top = 10, right = 10 }) {
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: `repeat(${cols}, 1fr)`, gap: 10 }}>
+    <div
+      aria-hidden="true"
+      style={{
+        position: 'absolute',
+        top,
+        right,
+        width: size,
+        height: size,
+        borderRadius: '50%',
+        background: ORANGE,
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        opacity: visible ? 1 : 0,
+        transform: visible ? 'scale(1)' : 'scale(0.25)',
+        transition: 'opacity 0.15s ease, transform 0.22s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        pointerEvents: 'none',
+        boxShadow: '0 2px 8px rgba(247,87,9,0.45)',
+        zIndex: 2,
+      }}
+    >
+      <svg width={size * 0.5} height={size * 0.5} viewBox="0 0 24 24" fill="none"
+        stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+        <polyline points="20 6 9 17 4 12" />
+      </svg>
+    </div>
+  )
+}
+
+// ─── Icon badge (icon in a rounded square) ────────────────────────────────────
+function IconBadge({ Icon, selected }) {
+  return (
+    <div style={{
+      width: 44,
+      height: 44,
+      borderRadius: 12,
+      background: selected ? 'rgba(247,87,9,0.16)' : 'rgba(255,255,255,0.05)',
+      border: `1px solid ${selected ? 'rgba(247,87,9,0.25)' : 'var(--border)'}`,
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+      flexShrink: 0,
+      transition: 'background 0.18s ease, border-color 0.18s ease',
+    }}>
+      <Icon size={22} color={selected ? ORANGE : 'var(--text-2)'} />
+    </div>
+  )
+}
+
+// ─── OptionCard — unified single-select card ─────────────────────────────────
+// layout:
+//   'row'   → horizontal: icon-badge left, text right, radio right  [for 1-col lists]
+//   'grid'  → vertical: icon-badge top, label center                [for 2-col icon grids]
+//   'plain' → compact text-only pill                                [for positions]
+
+function OptionCard({ option, selected, onClick, layout = 'row' }) {
+  const [hov, setHov] = useState(false)
+
+  const key   = typeof option === 'string' ? option : option.key
+  const label = typeof option === 'string' ? option : (option.label || option.key)
+  const sub   = typeof option === 'object' ? option.sub  : null
+  const Icon  = typeof option === 'object' ? option.Icon : null
+
+  const border = `1.5px solid ${selected ? ORANGE : hov ? 'rgba(247,87,9,0.28)' : 'var(--border)'}`
+  const bg     = selected ? T.cardSelected : hov ? T.cardHov : T.cardBase
+  const shadow = selected ? T.shadowSel : hov ? T.shadowHov : T.shadowBase
+
+  const baseStyle = {
+    position: 'relative',
+    border,
+    background: bg,
+    boxShadow: shadow,
+    borderRadius: 14,
+    cursor: 'pointer',
+    outline: 'none',
+    transform: hov && !selected ? 'translateY(-1px)' : 'none',
+    transition: T.transAll,
+  }
+
+  if (layout === 'row') {
+    return (
+      <button
+        style={{ ...baseStyle, display: 'flex', alignItems: 'center', gap: 14, padding: '15px 18px', textAlign: 'left', width: '100%' }}
+        onClick={onClick}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+      >
+        {Icon && <IconBadge Icon={Icon} selected={selected} />}
+        <div style={{ flex: 1, minWidth: 0 }}>
+          <div style={{ fontSize: 15, fontWeight: 700, color: selected ? ORANGE : 'var(--text)', marginBottom: sub ? 3 : 0, transition: 'color 0.15s', lineHeight: 1.3 }}>
+            {label}
+          </div>
+          {sub && (
+            <div style={{ fontSize: 13, color: 'var(--text-3)', lineHeight: 1.45 }}>
+              {sub}
+            </div>
+          )}
+        </div>
+        {/* Radio indicator */}
+        <div style={{
+          width: 20,
+          height: 20,
+          borderRadius: '50%',
+          border: `2px solid ${selected ? ORANGE : 'var(--border)'}`,
+          background: selected ? ORANGE : 'transparent',
+          display: 'flex',
+          alignItems: 'center',
+          justifyContent: 'center',
+          flexShrink: 0,
+          transition: 'all 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          boxShadow: selected ? '0 0 0 3px rgba(247,87,9,0.14)' : 'none',
+        }}>
+          <div style={{
+            width: 7,
+            height: 7,
+            borderRadius: '50%',
+            background: '#fff',
+            opacity: selected ? 1 : 0,
+            transform: selected ? 'scale(1)' : 'scale(0)',
+            transition: 'opacity 0.15s ease, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+          }} />
+        </div>
+      </button>
+    )
+  }
+
+  if (layout === 'grid') {
+    return (
+      <button
+        style={{ ...baseStyle, display: 'flex', flexDirection: 'column', alignItems: 'center', padding: '22px 14px 18px', textAlign: 'center' }}
+        onClick={onClick}
+        onMouseEnter={() => setHov(true)}
+        onMouseLeave={() => setHov(false)}
+      >
+        <CheckBadge visible={selected} />
+        {Icon && (
+          <div style={{
+            width: 52,
+            height: 52,
+            borderRadius: 14,
+            background: selected ? 'rgba(247,87,9,0.15)' : 'rgba(255,255,255,0.05)',
+            border: `1px solid ${selected ? 'rgba(247,87,9,0.25)' : 'var(--border)'}`,
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center',
+            marginBottom: 12,
+            transform: selected ? 'scale(1.05)' : 'scale(1)',
+            transition: 'background 0.18s, transform 0.18s, border-color 0.18s',
+          }}>
+            <Icon size={26} color={selected ? ORANGE : 'var(--text-2)'} />
+          </div>
+        )}
+        <div style={{ fontSize: 14, fontWeight: 700, color: selected ? ORANGE : 'var(--text)', marginBottom: sub ? 5 : 0, transition: 'color 0.15s' }}>
+          {label}
+        </div>
+        {sub && (
+          <div style={{ fontSize: 12, color: 'var(--text-3)', lineHeight: 1.4 }}>{sub}</div>
+        )}
+      </button>
+    )
+  }
+
+  // plain — compact text pill for positions / weight classes
+  return (
+    <button
+      style={{
+        ...baseStyle,
+        padding: '11px 8px',
+        textAlign: 'center',
+        fontSize: 13,
+        fontWeight: selected ? 700 : 600,
+        color: selected ? ORANGE : 'var(--text-2)',
+        letterSpacing: 0.1,
+      }}
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+    >
+      {label}
+    </button>
+  )
+}
+
+// ─── SelectCard — layout wrapper for OptionCard grid ─────────────────────────
+function SelectCard({ options, value, onChange, layout = 'row', minColWidth = 140 }) {
+  const gridStyle = layout === 'row'
+    ? { display: 'flex', flexDirection: 'column', gap: 10 }
+    : {
+        display: 'grid',
+        gridTemplateColumns: `repeat(auto-fill, minmax(${minColWidth}px, 1fr))`,
+        gap: layout === 'plain' ? 8 : 10,
+      }
+
+  return (
+    <div style={gridStyle}>
       {options.map(opt => {
-        const key      = typeof opt === 'string' ? opt : opt.key
-        const label    = typeof opt === 'string' ? opt : (opt.label || opt.key)
-        const sub      = typeof opt === 'object' ? opt.sub      : null
-        const Icon     = typeof opt === 'object' ? opt.Icon     : null
-        const iconSize = typeof opt === 'object' ? (opt.iconSize || 22) : 22
-        const sel      = value === key
+        const key = typeof opt === 'string' ? opt : opt.key
+        return (
+          <OptionCard
+            key={key}
+            option={opt}
+            selected={value === key}
+            onClick={() => onChange(value === key ? '' : key)}
+            layout={layout}
+          />
+        )
+      })}
+    </div>
+  )
+}
+
+// ─── Sport Selection Grid ─────────────────────────────────────────────────────
+function SportGrid({ options, value, onChange }) {
+  const [hovered, setHovered] = useState(null)
+
+  return (
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(108px, 1fr))',
+      gap: 10,
+    }}>
+      {options.map(({ key, emoji }) => {
+        const sel = value === key
+        const hov = hovered === key && !sel
+
         return (
           <button
             key={key}
+            type="button"
             onClick={() => onChange(sel ? '' : key)}
+            onMouseEnter={() => setHovered(key)}
+            onMouseLeave={() => setHovered(null)}
             style={{
-              padding: (sub || iconSize > 22) ? '16px 12px 14px' : '13px 10px',
-              borderRadius: 14,
-              border: `2px solid ${sel ? ORANGE : 'var(--border)'}`,
-              background: sel
-                ? 'linear-gradient(145deg, rgba(247,87,9,0.12) 0%, rgba(247,87,9,0.04) 100%), var(--card-inner)'
-                : 'var(--card-inner)',
+              position: 'relative',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '22px 8px 16px',
+              borderRadius: 16,
+              border: `1.5px solid ${sel ? ORANGE : hov ? 'rgba(247,87,9,0.32)' : 'var(--border)'}`,
+              background: sel ? T.cardSelected : hov ? T.cardHov : T.cardBase,
               cursor: 'pointer',
-              textAlign: 'center',
-              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
-              boxShadow: sel
-                ? '0 0 0 3px rgba(247,87,9,0.10), 0 4px 14px rgba(247,87,9,0.16)'
-                : '0 1px 3px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.04)',
+              outline: 'none',
+              transform: hov ? 'translateY(-2px)' : 'none',
+              boxShadow: sel ? T.shadowSel : hov ? T.shadowHov : T.shadowBase,
+              transition: T.transAll,
             }}
           >
-            {Icon && (
-              <div style={{ marginBottom: 8, lineHeight: 1, opacity: sel ? 1 : 0.45, display: 'flex', justifyContent: 'center' }}>
-                <Icon size={iconSize} color={sel ? ORANGE : 'var(--text-3)'} />
-              </div>
-            )}
-            <div style={{ fontSize: iconSize > 22 ? 12 : 14, fontWeight: 700, color: sel ? ORANGE : 'var(--text)', lineHeight: 1.3 }}>{label}</div>
-            {sub && <div style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4, lineHeight: 1.4, textAlign: 'left' }}>{sub}</div>}
+            <CheckBadge visible={sel} />
+            <span style={{
+              fontSize: 34,
+              lineHeight: 1,
+              marginBottom: 10,
+              display: 'block',
+              transform: sel ? 'scale(1.12)' : hov ? 'scale(1.06)' : 'scale(1)',
+              transition: 'transform 0.2s ease',
+              userSelect: 'none',
+            }}>
+              {emoji}
+            </span>
+            <span style={{
+              fontSize: 11,
+              fontWeight: 700,
+              color: sel ? ORANGE : 'var(--text)',
+              letterSpacing: 0.2,
+              textAlign: 'center',
+              lineHeight: 1.3,
+              transition: 'color 0.15s',
+            }}>
+              {key}
+            </span>
           </button>
         )
       })}
     </div>
+  )
+}
+
+// ─── Multi-Select Card ────────────────────────────────────────────────────────
+function MultiCard({ option, selected, onClick }) {
+  const [hov, setHov] = useState(false)
+  const key   = typeof option === 'string' ? option : option.key
+  const label = typeof option === 'string' ? option : option.label
+
+  return (
+    <button
+      onClick={onClick}
+      onMouseEnter={() => setHov(true)}
+      onMouseLeave={() => setHov(false)}
+      style={{
+        display: 'flex',
+        alignItems: 'center',
+        gap: 12,
+        padding: '13px 16px',
+        borderRadius: 12,
+        border: `1.5px solid ${selected ? ORANGE : hov ? 'rgba(247,87,9,0.24)' : 'var(--border)'}`,
+        background: selected ? T.cardSelected : hov ? T.cardHov : T.cardBase,
+        cursor: 'pointer',
+        textAlign: 'left',
+        width: '100%',
+        transform: hov && !selected ? 'translateY(-1px)' : 'none',
+        boxShadow: selected
+          ? '0 0 0 2.5px rgba(247,87,9,0.10), 0 2px 12px rgba(247,87,9,0.14), inset 0 1px 0 rgba(255,255,255,0.05)'
+          : hov
+            ? '0 4px 14px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)'
+            : T.shadowBase,
+        transition: T.transAll,
+        outline: 'none',
+      }}
+    >
+      {/* Animated checkbox */}
+      <div style={{
+        width: 20,
+        height: 20,
+        borderRadius: 6,
+        border: `2px solid ${selected ? ORANGE : hov ? 'rgba(247,87,9,0.38)' : 'var(--text-3)'}`,
+        background: selected ? ORANGE : 'transparent',
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        flexShrink: 0,
+        transition: 'all 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)',
+        boxShadow: selected ? '0 2px 6px rgba(247,87,9,0.32)' : 'none',
+      }}>
+        <svg
+          width="10" height="10"
+          viewBox="0 0 24 24" fill="none"
+          stroke="white" strokeWidth="3.5"
+          strokeLinecap="round" strokeLinejoin="round"
+          style={{ opacity: selected ? 1 : 0, transform: selected ? 'scale(1)' : 'scale(0.4)', transition: 'opacity 0.15s, transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1)' }}
+        >
+          <polyline points="20 6 9 17 4 12" />
+        </svg>
+      </div>
+
+      <span style={{
+        fontSize: 14,
+        fontWeight: selected ? 700 : 500,
+        color: selected ? ORANGE : hov ? 'var(--text)' : 'var(--text-2)',
+        transition: 'color 0.15s',
+        lineHeight: 1.3,
+      }}>
+        {label}
+      </span>
+    </button>
   )
 }
 
@@ -102,143 +430,97 @@ function MultiCards({ options, value = [], onChange }) {
     onChange(cleared.includes(key) ? cleared.filter(v => v !== key) : [...cleared, key])
   }
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 8 }}>
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))',
+      gap: 8,
+    }}>
       {options.map(opt => {
-        const key   = typeof opt === 'string' ? opt : opt.key
-        const label = typeof opt === 'string' ? opt : opt.label
-        const sel   = value.includes(key)
+        const key = typeof opt === 'string' ? opt : opt.key
         return (
-          <button
+          <MultiCard
             key={key}
+            option={opt}
+            selected={value.includes(key)}
             onClick={() => toggle(key)}
-            style={{
-              padding: '12px 14px',
-              borderRadius: 12,
-              border: `2px solid ${sel ? ORANGE : 'var(--border)'}`,
-              background: sel
-                ? 'linear-gradient(145deg, rgba(247,87,9,0.10) 0%, rgba(247,87,9,0.03) 100%), var(--card-inner)'
-                : 'var(--card-inner)',
-              cursor: 'pointer',
-              textAlign: 'left',
-              display: 'flex',
-              alignItems: 'center',
-              gap: 10,
-              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
-              boxShadow: sel
-                ? '0 0 0 2px rgba(247,87,9,0.10), 0 2px 10px rgba(247,87,9,0.12)'
-                : '0 1px 3px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.04)',
-            }}
-          >
-            <span style={{
-              width: 18, height: 18, borderRadius: 4, flexShrink: 0,
-              border: `2px solid ${sel ? ORANGE : 'var(--text-3)'}`,
-              background: sel ? ORANGE : 'transparent',
-              display: 'flex', alignItems: 'center', justifyContent: 'center',
-            }}>
-              {sel && <span style={{ fontSize: 10, fontWeight: 900, color: '#fff', lineHeight: 1 }}>✓</span>}
-            </span>
-            <span style={{ fontSize: 14, fontWeight: sel ? 700 : 500, color: sel ? ORANGE : 'var(--text)' }}>
-              {label}
-            </span>
-          </button>
+          />
         )
       })}
     </div>
   )
 }
 
-// ─── Sport selection grid ─────────────────────────────────────────────────────
+// ─── Day Picker ───────────────────────────────────────────────────────────────
+const DAY_LABELS = { 3: 'Recommended', 4: 'Standard', 5: 'Intensive', 6: 'Elite' }
 
-function SportGrid({ options, value, onChange }) {
+function DayPicker({ value, onChange }) {
   const [hovered, setHovered] = useState(null)
 
   return (
-    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
-      {options.map(opt => {
-        const key = opt.key
-        const Icon = opt.Icon
-        const sel  = value === key
-        const hov  = hovered === key && !sel
+    <div style={{
+      display: 'grid',
+      gridTemplateColumns: 'repeat(4, 1fr)',
+      gap: 12,
+    }}>
+      {[3, 4, 5, 6].map(d => {
+        const sel = value === d
+        const hov = hovered === d && !sel
 
         return (
           <button
-            key={key}
-            type="button"
-            onClick={() => onChange(sel ? '' : key)}
-            onMouseEnter={() => setHovered(key)}
+            key={d}
+            onClick={() => onChange(d)}
+            onMouseEnter={() => setHovered(d)}
             onMouseLeave={() => setHovered(null)}
             style={{
               position: 'relative',
-              padding: '22px 8px 18px',
-              borderRadius: 18,
-              border: `2px solid ${sel ? ORANGE : hov ? 'rgba(247,87,9,0.38)' : 'var(--border)'}`,
-              background: sel
-                ? `linear-gradient(150deg, rgba(247,87,9,0.13) 0%, rgba(247,87,9,0.04) 100%), var(--card-inner)`
-                : hov
-                  ? `linear-gradient(150deg, rgba(247,87,9,0.06) 0%, rgba(247,87,9,0.01) 100%), var(--card-inner)`
-                  : 'var(--card-inner)',
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              justifyContent: 'center',
+              padding: '26px 12px 20px',
+              borderRadius: 16,
+              border: `1.5px solid ${sel ? ORANGE : hov ? 'rgba(247,87,9,0.30)' : 'var(--border)'}`,
+              background: sel ? T.cardSelected : hov ? T.cardHov : T.cardBase,
               cursor: 'pointer',
-              textAlign: 'center',
-              transform: hov ? 'translateY(-3px)' : 'translateY(0)',
-              boxShadow: sel
-                ? `0 0 0 3px rgba(247,87,9,0.12), 0 6px 24px rgba(247,87,9,0.24), inset 0 1px 0 rgba(255,255,255,0.08)`
-                : hov
-                  ? `0 8px 28px rgba(0,0,0,0.12), 0 0 0 1px rgba(247,87,9,0.18), 0 0 18px rgba(247,87,9,0.07), inset 0 1px 0 rgba(255,255,255,0.07)`
-                  : `0 1px 3px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.04)`,
-              transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+              transform: hov ? 'translateY(-2px)' : 'none',
+              boxShadow: sel ? T.shadowSel : hov ? T.shadowHov : T.shadowBase,
+              transition: T.transAll,
               outline: 'none',
             }}
           >
-            {/* Checkmark badge — pops in on selection */}
-            <div
-              aria-hidden="true"
-              style={{
-                position: 'absolute',
-                top: 8,
-                right: 8,
-                width: 17,
-                height: 17,
-                borderRadius: '50%',
-                background: ORANGE,
-                display: 'flex',
-                alignItems: 'center',
-                justifyContent: 'center',
-                opacity: sel ? 1 : 0,
-                transform: sel ? 'scale(1)' : 'scale(0.4)',
-                transition: 'opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)',
-                pointerEvents: 'none',
-                boxShadow: '0 2px 6px rgba(247,87,9,0.4)',
-              }}
-            >
-              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
-                <polyline points="20 6 9 17 4 12" />
-              </svg>
-            </div>
-
-            {/* Icon with scale + opacity micro-interaction */}
-            <div style={{
-              display: 'flex',
-              justifyContent: 'center',
-              marginBottom: 10,
-              lineHeight: 1,
-              opacity: sel ? 1 : hov ? 0.80 : 0.48,
-              transform: sel ? 'scale(1.08)' : hov ? 'scale(1.06)' : 'scale(1)',
-              transition: 'transform 0.2s ease, opacity 0.2s ease',
-            }}>
-              <Icon size={40} />
-            </div>
-
-            {/* Sport label */}
-            <div style={{
-              fontSize: 12,
-              fontWeight: 700,
+            <CheckBadge visible={sel} />
+            <span style={{
+              fontSize: 44,
+              fontWeight: 800,
               color: sel ? ORANGE : 'var(--text)',
-              letterSpacing: 0.25,
-              lineHeight: 1.3,
-              transition: 'color 0.15s ease',
+              lineHeight: 1,
+              letterSpacing: -1.5,
+              fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', sans-serif",
+              transition: 'color 0.15s',
             }}>
-              {key}
-            </div>
+              {d}
+            </span>
+            <span style={{
+              fontSize: 11,
+              fontWeight: 600,
+              color: 'var(--text-3)',
+              marginTop: 7,
+              letterSpacing: 0.3,
+            }}>
+              days/wk
+            </span>
+            <span style={{
+              fontSize: 9,
+              fontWeight: 700,
+              color: sel ? ORANGE : 'var(--text-3)',
+              marginTop: 5,
+              letterSpacing: 0.5,
+              textTransform: 'uppercase',
+              transition: 'color 0.15s',
+            }}>
+              {DAY_LABELS[d]}
+            </span>
           </button>
         )
       })}
@@ -246,17 +528,16 @@ function SportGrid({ options, value, onChange }) {
   )
 }
 
-// ─── Survey ───────────────────────────────────────────────────────────────────
-
+// ─── Survey shell ─────────────────────────────────────────────────────────────
 export default function Survey() {
   const navigate = useNavigate()
   const location = useLocation()
   const { profile } = useAuth()
   const isRetake = location.state?.retake === true
 
-  const [step, setStep] = useState(1)
-  const [submitting, setSubmitting] = useState(false)
-  const [error, setError] = useState('')
+  const [step, setStep]               = useState(1)
+  const [submitting, setSubmitting]   = useState(false)
+  const [error, setError]             = useState('')
   const [checkingExisting, setCheckingExisting] = useState(true)
 
   const [form, setForm] = useState({
@@ -284,17 +565,15 @@ export default function Survey() {
       .then(res => {
         const existing = res.data.survey
         if (existing && !isRetake) {
-          // Survey already done and not retaking — go to dashboard
           navigate('/athlete', { replace: true })
         } else {
           if (existing && isRetake) {
-            // Pre-fill the form with current answers so the athlete can edit
             setForm({
               full_name:        profile?.full_name || '',
-              age:              existing.age              ? String(existing.age)           : '',
-              height_feet:      existing.height_feet      ? String(existing.height_feet)   : '',
+              age:              existing.age              ? String(existing.age)               : '',
+              height_feet:      existing.height_feet      ? String(existing.height_feet)       : '',
               height_inches:    existing.height_inches != null ? String(existing.height_inches) : '0',
-              weight_lbs:       existing.weight_lbs      ? String(existing.weight_lbs)    : '',
+              weight_lbs:       existing.weight_lbs      ? String(existing.weight_lbs)        : '',
               grade:            existing.grade            || '',
               sport:            existing.sport            || '',
               position:         existing.position         || '',
@@ -343,335 +622,552 @@ export default function Survey() {
     }
   }
 
-  if (checkingExisting) return <div style={st.center}>Loading…</div>
+  if (checkingExisting) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg)' }}>
+        <div style={{ textAlign: 'center' }}>
+          <div className="survey-spinner" />
+          <p style={{ fontSize: 14, color: 'var(--text-3)', marginTop: 12 }}>Loading…</p>
+        </div>
+      </div>
+    )
+  }
 
-  const progressPct = ((step - 1) / TOTAL_STEPS) * 100
+  const meta = STEP_META[step]
+
+  // Dynamic title/desc for position step
+  const title = step === 3
+    ? (form.sport === 'Wrestling' ? 'Your weight class' : 'Your position')
+    : meta.title
+
+  const desc = step === 3
+    ? (form.sport === 'Wrestling'
+        ? 'Select your competition weight class.'
+        : `Select your primary position${form.sport ? ` in ${form.sport}` : ''}.`)
+    : meta.desc
 
   return (
     <div style={st.page}>
 
-      {/* ── Top bar ──────────────────────────────────────────────────────── */}
+      {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <div style={st.topBar}>
         <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={st.logo} />
-        <div style={{ display: 'flex', alignItems: 'center', gap: 14 }}>
-          <span style={st.stepCount}>{step} of {TOTAL_STEPS}</span>
-          <button style={st.skipBtn} onClick={() => navigate('/athlete/profile')}>
-            {isRetake ? 'Cancel' : 'Skip'}
-          </button>
+
+        <div style={st.stepPill}>
+          <span style={st.stepPillName}>{meta.tag}</span>
+          <span style={st.stepPillDivider} />
+          <span style={st.stepPillCount}>{step}<span style={{ opacity: 0.5 }}> / {TOTAL_STEPS}</span></span>
         </div>
+
+        <button
+          style={st.skipBtn}
+          onClick={() => navigate(isRetake ? '/athlete/profile' : '/athlete')}
+        >
+          {isRetake ? 'Cancel' : 'Skip for now'}
+        </button>
       </div>
 
-      {/* ── Progress bar ─────────────────────────────────────────────────── */}
-      <div style={st.progressTrack}>
-        <div style={{ ...st.progressFill, width: `${progressPct}%` }} />
+      {/* ── Segmented progress ──────────────────────────────────────────────── */}
+      <div style={st.progressBar}>
+        {Array.from({ length: TOTAL_STEPS }, (_, i) => (
+          <div
+            key={i}
+            style={{
+              flex: 1,
+              height: '100%',
+              borderRadius: 2,
+              background: i < step ? ORANGE : 'var(--border)',
+              transition: 'background 0.3s ease',
+            }}
+          />
+        ))}
       </div>
 
-      <div style={st.container}>
+      {/* ── Scrollable content ──────────────────────────────────────────────── */}
+      <div style={st.scrollArea}>
+        <div style={st.container}>
 
-        {/* ── Step 1: Basic Info ─────────────────────────────────────────── */}
-        {step === 1 && (
-          <>
-            <p style={st.tag}>Basic Info</p>
-            <h2 style={st.title}>Let's get to know you</h2>
-            <p style={st.desc}>Tell us a bit about yourself to personalize your profile.</p>
+          {/* Step header */}
+          <div className="survey-step-enter" key={`header-${step}`} style={st.header}>
+            <div style={st.tag}>{meta.tag}</div>
+            <h2 style={st.title}>{title}</h2>
+            <p style={st.desc}>{desc}</p>
+          </div>
 
-            <label style={st.label}>Name *</label>
-            <input
-              style={st.input}
-              type="text"
-              placeholder="Your full name"
-              value={form.full_name}
-              onChange={e => set('full_name', e.target.value)}
-              autoFocus
-            />
+          {/* ── Step body ────────────────────────────────────────────────────── */}
+          <div className="survey-step-enter" key={`body-${step}`}>
 
-            <div style={{ display: 'flex', gap: 12 }}>
-              <div style={{ flex: 1 }}>
-                <label style={st.label}>Age</label>
-                <select style={st.input} value={form.age} onChange={e => set('age', e.target.value)}>
-                  <option value="">—</option>
-                  {Array.from({ length: 13 }, (_, i) => i + 13).map(a => (
-                    <option key={a} value={a}>{a}</option>
-                  ))}
-                </select>
+            {/* Step 1 — Basic Info */}
+            {step === 1 && (
+              <div style={st.formCard}>
+
+                <div style={st.fieldGroup}>
+                  <label style={st.label}>
+                    Full name
+                    <span style={{ color: ORANGE, marginLeft: 3 }}>*</span>
+                  </label>
+                  <input
+                    style={st.input}
+                    type="text"
+                    placeholder="Your full name"
+                    value={form.full_name}
+                    onChange={e => set('full_name', e.target.value)}
+                    autoFocus
+                  />
+                </div>
+
+                <div style={st.twoCol}>
+                  <div style={st.fieldGroup}>
+                    <label style={st.label}>Age</label>
+                    <select style={st.input} value={form.age} onChange={e => set('age', e.target.value)}>
+                      <option value="">Select age</option>
+                      {Array.from({ length: 13 }, (_, i) => i + 13).map(a => (
+                        <option key={a} value={a}>{a}</option>
+                      ))}
+                    </select>
+                  </div>
+                  <div style={st.fieldGroup}>
+                    <label style={st.label}>Grade / Year</label>
+                    <select style={st.input} value={form.grade} onChange={e => set('grade', e.target.value)}>
+                      <option value="">Select grade</option>
+                      {['8th', '9th', '10th', '11th', '12th', 'College'].map(g => (
+                        <option key={g} value={g}>{g}</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div style={st.fieldGroup}>
+                  <label style={st.label}>Height</label>
+                  <div style={st.twoCol}>
+                    <select style={st.input} value={form.height_feet} onChange={e => set('height_feet', e.target.value)}>
+                      <option value="">— ft</option>
+                      {[4, 5, 6, 7].map(f => <option key={f} value={f}>{f} ft</option>)}
+                    </select>
+                    <select style={st.input} value={form.height_inches} onChange={e => set('height_inches', e.target.value)}>
+                      {Array.from({ length: 12 }, (_, i) => (
+                        <option key={i} value={i}>{i} in</option>
+                      ))}
+                    </select>
+                  </div>
+                </div>
+
+                <div style={st.fieldGroup}>
+                  <label style={st.label}>Weight (lbs)</label>
+                  <input
+                    style={st.input}
+                    type="number"
+                    placeholder="e.g. 175"
+                    value={form.weight_lbs}
+                    onChange={e => set('weight_lbs', e.target.value)}
+                  />
+                </div>
+
               </div>
-              <div style={{ flex: 1 }}>
-                <label style={st.label}>Grade</label>
-                <select style={st.input} value={form.grade} onChange={e => set('grade', e.target.value)}>
-                  <option value="">—</option>
-                  {['8th', '9th', '10th', '11th', '12th', 'College'].map(g => (
-                    <option key={g} value={g}>{g}</option>
-                  ))}
-                </select>
-              </div>
-            </div>
+            )}
 
-            <label style={st.label}>Height</label>
-            <div style={{ display: 'flex', gap: 12 }}>
-              <select style={{ ...st.input, flex: 1 }} value={form.height_feet} onChange={e => set('height_feet', e.target.value)}>
-                <option value="">ft</option>
-                {[4, 5, 6, 7].map(f => <option key={f} value={f}>{f} ft</option>)}
-              </select>
-              <select style={{ ...st.input, flex: 1 }} value={form.height_inches} onChange={e => set('height_inches', e.target.value)}>
-                {Array.from({ length: 12 }, (_, i) => (
-                  <option key={i} value={i}>{i} in</option>
-                ))}
-              </select>
-            </div>
+            {/* Step 2 — Sport */}
+            {step === 2 && (
+              <SportGrid
+                options={SPORTS}
+                value={form.sport}
+                onChange={v => { set('sport', v); set('position', '') }}
+              />
+            )}
 
-            <label style={st.label}>Weight (lbs)</label>
-            <input
-              style={st.input}
-              type="number"
-              placeholder="e.g. 175"
-              value={form.weight_lbs}
-              onChange={e => set('weight_lbs', e.target.value)}
-            />
-          </>
-        )}
+            {/* Step 3 — Position */}
+            {step === 3 && (
+              <SelectCard
+                options={getPositions(form.sport)}
+                value={form.position}
+                onChange={v => set('position', v)}
+                layout="plain"
+                minColWidth={form.sport === 'Wrestling' ? 78 : 120}
+              />
+            )}
 
-        {/* ── Step 2: Sport ──────────────────────────────────────────────── */}
-        {step === 2 && (
-          <>
-            <p style={st.tag}>Sport</p>
-            <h2 style={st.title}>What's your sport?</h2>
-            <p style={{ ...st.desc, marginBottom: 24 }}>Select the sport you're training for this offseason.</p>
-            <SportGrid
-              options={SPORTS}
-              value={form.sport}
-              onChange={v => { set('sport', v); set('position', '') }}
-            />
-          </>
-        )}
+            {/* Step 4 — Primary Goal */}
+            {step === 4 && (
+              <SelectCard
+                options={[
+                  { key: 'Strength and Power',           label: 'Strength & Power',             sub: 'Maximal force and explosiveness',     Icon: DumbbellIcon },
+                  { key: 'Muscle Gain and Size',         label: 'Muscle Gain & Size',            sub: 'Build mass and fill out your frame',  Icon: BarChartIcon },
+                  { key: 'Speed and Conditioning',       label: 'Speed & Conditioning',          sub: 'Faster, leaner, more athletic',       Icon: BoltIcon },
+                  { key: 'General Athletic Performance', label: 'General Athletic Performance',  sub: 'Well-rounded sport readiness',        Icon: TrophyIcon },
+                ]}
+                value={form.primary_goal}
+                onChange={v => set('primary_goal', v)}
+                layout="row"
+              />
+            )}
 
-        {/* ── Step 3: Position ───────────────────────────────────────────── */}
-        {step === 3 && (
-          <>
-            <p style={st.tag}>Position</p>
-            <h2 style={st.title}>
-              {form.sport === 'Wrestling' ? 'Weight class' : 'Your position'}
-            </h2>
-            <p style={st.desc}>
-              {form.sport === 'Wrestling'
-                ? 'Select your competition weight class.'
-                : `Select your position${form.sport ? ` in ${form.sport}` : ''}.`}
-            </p>
-            <SelectCard
-              options={getPositions(form.sport)}
-              value={form.position}
-              onChange={v => set('position', v)}
-              cols={form.sport === 'Wrestling' ? 4 : 3}
-            />
-          </>
-        )}
+            {/* Step 5 — Experience */}
+            {step === 5 && (
+              <SelectCard
+                options={[
+                  { key: 'Beginner',     label: 'Beginner',     sub: 'Less than 1 year of structured training', Icon: SeedlingIcon },
+                  { key: 'Intermediate', label: 'Intermediate', sub: '1–3 years of consistent training',        Icon: FlameIcon },
+                  { key: 'Advanced',     label: 'Advanced',     sub: '3+ years — you know what you\'re doing',  Icon: TrophyIcon },
+                ]}
+                value={form.experience_level}
+                onChange={v => set('experience_level', v)}
+                layout="row"
+              />
+            )}
 
-        {/* ── Step 4: Primary Goal ───────────────────────────────────────── */}
-        {step === 4 && (
-          <>
-            <p style={st.tag}>Primary Goal</p>
-            <h2 style={st.title}>What's your main focus?</h2>
-            <p style={st.desc}>Choose your primary training goal this offseason.</p>
-            <SelectCard
-              options={[
-                { key: 'Strength and Power',           label: 'Strength & Power',            sub: 'Maximal force and explosiveness',      Icon: DumbbellIcon },
-                { key: 'Muscle Gain and Size',         label: 'Muscle Gain & Size',           sub: 'Build mass and fill out your frame',   Icon: BarChartIcon },
-                { key: 'Speed and Conditioning',       label: 'Speed & Conditioning',         sub: 'Faster, leaner, more athletic',        Icon: BoltIcon },
-                { key: 'General Athletic Performance', label: 'General Athletic Performance', sub: 'Well-rounded sport readiness',         Icon: TrophyIcon },
-              ]}
-              value={form.primary_goal}
-              onChange={v => set('primary_goal', v)}
-              cols={2}
-            />
-          </>
-        )}
+            {/* Step 6 — Days per week */}
+            {step === 6 && (
+              <DayPicker
+                value={form.days_per_week}
+                onChange={v => set('days_per_week', v)}
+              />
+            )}
 
-        {/* ── Step 5: Experience ─────────────────────────────────────────── */}
-        {step === 5 && (
-          <>
-            <p style={st.tag}>Experience</p>
-            <h2 style={st.title}>Training experience</h2>
-            <p style={st.desc}>How long have you been seriously lifting or training?</p>
-            <SelectCard
-              options={[
-                { key: 'Beginner',     label: 'Beginner',     sub: 'Less than 1 year of serious training',  Icon: SeedlingIcon },
-                { key: 'Intermediate', label: 'Intermediate', sub: '1 to 3 years of training',               Icon: FlameIcon },
-                { key: 'Advanced',     label: 'Advanced',     sub: '3+ years of consistent training',        Icon: TrophyIcon },
-              ]}
-              value={form.experience_level}
-              onChange={v => set('experience_level', v)}
-              cols={1}
-            />
-          </>
-        )}
+            {/* Step 7 — Equipment */}
+            {step === 7 && (
+              <SelectCard
+                options={[
+                  { key: 'Full',    label: 'Full Gym',    sub: 'Barbell rack, plates, cables, and machines — complete setup', Icon: BarbellIcon },
+                  { key: 'Partial', label: 'Partial Gym', sub: 'Dumbbells, some machines, limited barbell access',            Icon: DumbbellIcon },
+                  { key: 'Minimal', label: 'Minimal',     sub: 'Bands, light dumbbells, and bodyweight only',                 Icon: UserIcon },
+                ]}
+                value={form.equipment_tier}
+                onChange={v => set('equipment_tier', v)}
+                layout="row"
+              />
+            )}
 
-        {/* ── Step 6: Days per week ──────────────────────────────────────── */}
-        {step === 6 && (
-          <>
-            <p style={st.tag}>Schedule</p>
-            <h2 style={st.title}>Days per week</h2>
-            <p style={st.desc}>How many days can you commit to training each week?</p>
-            <div style={st.dayGrid}>
-              {[3, 4, 5, 6].map(d => {
-                const sel = form.days_per_week === d
-                return (
-                  <button
-                    key={d}
-                    style={{ ...st.dayBtn, ...(sel ? st.dayBtnOn : {}) }}
-                    onClick={() => set('days_per_week', d)}
-                  >
-                    <span style={{ fontSize: 40, fontWeight: 800, color: sel ? ORANGE : 'var(--text)', lineHeight: 1 }}>{d}</span>
-                    <span style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 4 }}>days / wk</span>
-                  </button>
-                )
-              })}
-            </div>
-          </>
-        )}
-
-        {/* ── Step 7: Equipment ──────────────────────────────────────────── */}
-        {step === 7 && (
-          <>
-            <p style={st.tag}>Equipment</p>
-            <h2 style={st.title}>What's your setup?</h2>
-            <p style={st.desc}>Choose the option that best describes your access to training equipment.</p>
-            <SelectCard
-              options={[
-                { key: 'Full',    label: 'Full Gym',    sub: 'Barbell rack, plates, cables, machines — the full setup', Icon: BarbellIcon },
-                { key: 'Partial', label: 'Partial Gym', sub: 'Dumbbells, some machines, limited barbell access',        Icon: DumbbellIcon },
-                { key: 'Minimal', label: 'Minimal',     sub: 'Bands, light dumbbells, and bodyweight only',             Icon: UserIcon },
-              ]}
-              value={form.equipment_tier}
-              onChange={v => set('equipment_tier', v)}
-              cols={1}
-            />
-          </>
-        )}
-
-        {/* ── Step 8: Injury History ─────────────────────────────────────── */}
-        {step === 8 && (
-          <>
-            <p style={st.tag}>Health</p>
-            <h2 style={st.title}>Injury history</h2>
-            <p style={st.desc}>Select any areas your coach should know about. Helps build a safer program.</p>
-            <MultiCards
-              options={['Shoulder', 'Knee', 'Back', 'Hip', 'Ankle', 'None', 'Other']}
-              value={form.injury_areas}
-              onChange={v => set('injury_areas', v)}
-            />
-            {form.injury_areas.includes('Other') && (
+            {/* Step 8 — Injury History */}
+            {step === 8 && (
               <>
-                <label style={st.label}>Describe the injury</label>
-                <input
-                  style={st.input}
-                  type="text"
-                  placeholder="Brief description…"
-                  value={form.injury_other}
-                  onChange={e => set('injury_other', e.target.value)}
+                <MultiCards
+                  options={['Shoulder', 'Knee', 'Back', 'Hip', 'Ankle', 'None', 'Other']}
+                  value={form.injury_areas}
+                  onChange={v => set('injury_areas', v)}
                 />
+                {form.injury_areas.includes('Other') && (
+                  <div style={{ marginTop: 18 }}>
+                    <label style={st.label}>Describe the injury</label>
+                    <input
+                      style={st.input}
+                      type="text"
+                      placeholder="Brief description…"
+                      value={form.injury_other}
+                      onChange={e => set('injury_other', e.target.value)}
+                    />
+                  </div>
+                )}
+                <div style={{ marginTop: 24 }}>
+                  <label style={st.label}>
+                    Additional notes
+                    <span style={{ fontWeight: 400, color: 'var(--text-3)', fontSize: 12, marginLeft: 6 }}>optional</span>
+                  </label>
+                  <p style={{ fontSize: 13, color: 'var(--text-3)', margin: '4px 0 10px', lineHeight: 1.55 }}>
+                    Surgeries, hardware, movements that cause pain, or anything your coach should know.
+                  </p>
+                  <textarea
+                    style={{ ...st.input, minHeight: 88, resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.6 }}
+                    placeholder="e.g. ACL surgery March 2024, still rebuilding quad strength. Avoid deep squats below parallel."
+                    value={form.injury_notes}
+                    onChange={e => set('injury_notes', e.target.value)}
+                  />
+                </div>
               </>
             )}
-            <label style={{ ...st.label, marginTop: 20 }}>Additional notes (optional)</label>
-            <p style={{ fontSize: 13, color: 'var(--text-3)', margin: '0 0 8px' }}>
-              Any surgeries, hardware, specific movements that cause discomfort, or anything your coach should know.
-            </p>
-            <textarea
-              style={{ ...st.input, minHeight: 90, resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.5 }}
-              placeholder="e.g. Had ACL surgery in March, still rebuilding quad strength. Avoid deep squats below parallel."
-              value={form.injury_notes}
-              onChange={e => set('injury_notes', e.target.value)}
-            />
-          </>
-        )}
 
-        {/* ── Step 9: Weaknesses ─────────────────────────────────────────── */}
-        {step === 9 && (
-          <>
-            <p style={st.tag}>Self-Assessment</p>
-            <h2 style={st.title}>Your weaknesses</h2>
-            <p style={st.desc}>Be honest — select every area where you want to get better.</p>
-            <MultiCards
-              options={[
-                'Speed', 'Strength', 'Endurance', 'Explosiveness', 'Mobility',
-                'Upper body strength', 'Lower body strength', 'Core strength',
-                'Size and muscle mass', 'Overall conditioning',
-              ]}
-              value={form.weakness_areas}
-              onChange={v => set('weakness_areas', v)}
-            />
-          </>
-        )}
+            {/* Step 9 — Weaknesses */}
+            {step === 9 && (
+              <MultiCards
+                options={[
+                  'Speed', 'Strength', 'Endurance', 'Explosiveness', 'Mobility',
+                  'Upper body strength', 'Lower body strength', 'Core strength',
+                  'Size and muscle mass', 'Overall conditioning',
+                ]}
+                value={form.weakness_areas}
+                onChange={v => set('weakness_areas', v)}
+              />
+            )}
 
-        {/* ── Step 10: Offseason Goals ───────────────────────────────────── */}
-        {step === 10 && (
-          <>
-            <p style={st.tag}>Goals</p>
-            <h2 style={st.title}>Goals this offseason</h2>
-            <p style={st.desc}>Check everything you want to accomplish before the season starts.</p>
-            <MultiCards
-              options={[
-                'Gain weight', 'Lose weight', 'Get faster', 'Get stronger',
-                'Improve vertical', 'Build muscle', 'Stay healthy', 'Make varsity', 'Get recruited',
-              ]}
-              value={form.offseason_goals}
-              onChange={v => set('offseason_goals', v)}
-            />
-          </>
-        )}
+            {/* Step 10 — Goals */}
+            {step === 10 && (
+              <MultiCards
+                options={[
+                  'Gain weight', 'Lose weight', 'Get faster', 'Get stronger',
+                  'Improve vertical', 'Build muscle', 'Stay healthy', 'Make varsity', 'Get recruited',
+                ]}
+                value={form.offseason_goals}
+                onChange={v => set('offseason_goals', v)}
+              />
+            )}
 
-        {error && <p style={st.error}>{error}</p>}
+          </div>{/* /step body */}
 
-        {/* ── Navigation ───────────────────────────────────────────────────── */}
-        <div style={st.nav}>
-          {step > 1 && (
-            <button style={st.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
+          {/* Error */}
+          {error && (
+            <div style={st.errorBox}>{error}</div>
           )}
-          {step < TOTAL_STEPS ? (
-            <button
-              style={{ ...st.nextBtn, opacity: canAdvance() ? 1 : 0.4, cursor: canAdvance() ? 'pointer' : 'not-allowed' }}
-              onClick={() => canAdvance() && setStep(s => s + 1)}
-              disabled={!canAdvance()}
-            >
-              Next →
-            </button>
-          ) : (
-            <button style={st.nextBtn} onClick={handleSubmit} disabled={submitting}>
-              {submitting ? 'Saving…' : 'Complete Profile →'}
-            </button>
-          )}
-        </div>
 
-      </div>
+          {/* ── Navigation ──────────────────────────────────────────────────── */}
+          <div style={st.nav}>
+            {step > 1 ? (
+              <button style={st.backBtn} onClick={() => { setError(''); setStep(s => s - 1) }}>
+                ← Back
+              </button>
+            ) : (
+              <div />
+            )}
+
+            {step < TOTAL_STEPS ? (
+              <button
+                style={{
+                  ...st.nextBtn,
+                  opacity: canAdvance() ? 1 : 0.36,
+                  cursor: canAdvance() ? 'pointer' : 'not-allowed',
+                  boxShadow: canAdvance()
+                    ? '0 2px 16px rgba(247,87,9,0.42), 0 1px 3px rgba(0,0,0,0.20)'
+                    : 'none',
+                }}
+                onClick={() => { if (canAdvance()) { setError(''); setStep(s => s + 1) } }}
+                disabled={!canAdvance()}
+              >
+                Continue →
+              </button>
+            ) : (
+              <button
+                style={{ ...st.nextBtn, minWidth: 188 }}
+                onClick={handleSubmit}
+                disabled={submitting}
+              >
+                {submitting ? (
+                  <span style={{ display: 'flex', alignItems: 'center', gap: 8, justifyContent: 'center' }}>
+                    <span className="survey-spinner-sm" />
+                    Saving…
+                  </span>
+                ) : 'Complete Profile →'}
+              </button>
+            )}
+          </div>
+
+        </div>{/* /container */}
+      </div>{/* /scrollArea */}
+
     </div>
   )
 }
 
+// ─── Styles ───────────────────────────────────────────────────────────────────
 const st = {
-  center: { display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100vh', color: 'var(--text-2)' },
-  page:   { minHeight: '100vh', background: 'var(--bg)' },
+  // Shell
+  page: {
+    minHeight: '100vh',
+    background: 'var(--bg)',
+    display: 'flex',
+    flexDirection: 'column',
+  },
 
-  topBar:    { display: 'flex', justifyContent: 'space-between', alignItems: 'center', padding: '14px 24px', borderBottom: '1px solid var(--border)' },
-  logo:      { height: 28 },
-  stepCount: { fontSize: 13, fontWeight: 600, color: 'var(--text-3)' },
-  skipBtn:   { fontSize: 13, color: 'var(--text-3)', background: 'none', border: '1px solid var(--border)', borderRadius: 6, padding: '6px 12px', cursor: 'pointer' },
+  // Top bar
+  topBar: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 20,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    padding: '0 28px',
+    height: 56,
+    background: 'rgba(15,15,15,0.92)',
+    backdropFilter: 'blur(12px)',
+    WebkitBackdropFilter: 'blur(12px)',
+    borderBottom: '1px solid var(--border)',
+    flexShrink: 0,
+  },
+  logo: {
+    height: 26,
+    display: 'block',
+  },
 
-  progressTrack: { height: 4, background: 'var(--border)' },
-  progressFill:  { height: '100%', background: ORANGE, transition: 'width 0.3s ease' },
+  // Step pill (center of topbar)
+  stepPill: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 10,
+    background: 'var(--card-inner)',
+    border: '1px solid var(--border)',
+    borderRadius: 20,
+    padding: '5px 14px',
+  },
+  stepPillName: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: 'var(--text)',
+    letterSpacing: 0.3,
+  },
+  stepPillDivider: {
+    width: 1,
+    height: 12,
+    background: 'var(--border)',
+    display: 'block',
+  },
+  stepPillCount: {
+    fontSize: 12,
+    fontWeight: 700,
+    color: ORANGE,
+    letterSpacing: 0.2,
+  },
 
-  container: { maxWidth: 560, margin: '0 auto', padding: '32px 20px 80px' },
+  skipBtn: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: 'var(--text-3)',
+    background: 'none',
+    border: '1px solid var(--border)',
+    borderRadius: 8,
+    padding: '6px 14px',
+    cursor: 'pointer',
+    transition: 'color 0.15s, border-color 0.15s',
+    letterSpacing: 0.1,
+  },
 
-  tag:   { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 4px' },
-  title: { fontSize: 24, fontWeight: 800, color: 'var(--text)', margin: '0 0 6px' },
-  desc:  { fontSize: 14, color: 'var(--text-2)', margin: '0 0 22px' },
+  // Progress (segmented dots)
+  progressBar: {
+    display: 'flex',
+    gap: 3,
+    padding: '0 28px',
+    height: 34,
+    alignItems: 'center',
+    background: 'var(--bg)',
+    borderBottom: '1px solid var(--border)',
+    flexShrink: 0,
+  },
 
-  label: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', margin: '16px 0 6px' },
-  input: { width: '100%', padding: '12px 14px', fontSize: 15, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', boxSizing: 'border-box', outline: 'none' },
+  // Scrollable area
+  scrollArea: {
+    flex: 1,
+    overflowY: 'auto',
+  },
+  container: {
+    maxWidth: 640,
+    margin: '0 auto',
+    padding: '44px 28px 100px',
+  },
 
-  dayGrid:  { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 },
-  dayBtn:   { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '22px 8px', borderRadius: 16, border: '2px solid var(--border)', background: 'var(--card-inner)', cursor: 'pointer', transition: 'all 0.18s ease', boxShadow: '0 1px 4px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)' },
-  dayBtnOn: { border: `2px solid ${ORANGE}`, background: 'linear-gradient(150deg, rgba(247,87,9,0.12) 0%, rgba(247,87,9,0.04) 100%)', boxShadow: `0 0 0 3px rgba(247,87,9,0.10), 0 4px 14px rgba(247,87,9,0.20)` },
+  // Step header
+  header: {
+    marginBottom: 32,
+  },
+  tag: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    fontSize: 11,
+    fontWeight: 700,
+    color: ORANGE,
+    textTransform: 'uppercase',
+    letterSpacing: 0.9,
+    marginBottom: 12,
+    background: 'rgba(247,87,9,0.10)',
+    border: '1px solid rgba(247,87,9,0.20)',
+    padding: '3px 10px',
+    borderRadius: 20,
+  },
+  title: {
+    fontSize: 30,
+    fontWeight: 800,
+    color: 'var(--text)',
+    margin: '0 0 10px',
+    lineHeight: 1.18,
+    letterSpacing: -0.6,
+    fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif",
+  },
+  desc: {
+    fontSize: 15,
+    color: 'var(--text-2)',
+    margin: 0,
+    lineHeight: 1.65,
+    maxWidth: 500,
+  },
 
-  nav:     { display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 36 },
-  backBtn: { padding: '12px 22px', fontSize: 14, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card-inner)', color: 'var(--text)', cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
-  nextBtn: { padding: '13px 32px', fontSize: 15, fontWeight: 800, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2, boxShadow: '0 2px 12px rgba(247,87,9,0.35)' },
-  error:   { color: '#c73820', fontSize: 13, marginTop: 12 },
+  // Form card (step 1)
+  formCard: {
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 18,
+    padding: '24px 24px 20px',
+    boxShadow: '0 2px 16px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04)',
+  },
+  fieldGroup: {
+    marginBottom: 4,
+  },
+  twoCol: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: 12,
+  },
+  label: {
+    display: 'block',
+    fontSize: 13,
+    fontWeight: 600,
+    color: 'var(--text-2)',
+    margin: '16px 0 7px',
+    letterSpacing: 0.1,
+  },
+  input: {
+    width: '100%',
+    padding: '12px 16px',
+    fontSize: 15,
+    borderRadius: 10,
+    border: '1.5px solid var(--input-border)',
+    background: 'var(--input-bg)',
+    color: 'var(--text)',
+    boxSizing: 'border-box',
+    outline: 'none',
+    transition: 'border-color 0.15s ease',
+    appearance: 'none',
+    WebkitAppearance: 'none',
+  },
+
+  // Navigation
+  nav: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    alignItems: 'center',
+    marginTop: 44,
+    gap: 12,
+  },
+  backBtn: {
+    padding: '12px 24px',
+    fontSize: 14,
+    fontWeight: 600,
+    borderRadius: 10,
+    border: '1.5px solid var(--border)',
+    background: 'transparent',
+    color: 'var(--text-2)',
+    cursor: 'pointer',
+    letterSpacing: 0.1,
+    transition: 'border-color 0.15s, color 0.15s',
+  },
+  nextBtn: {
+    padding: '13px 32px',
+    fontSize: 15,
+    fontWeight: 800,
+    borderRadius: 10,
+    border: 'none',
+    background: ORANGE,
+    color: '#fff',
+    cursor: 'pointer',
+    letterSpacing: 0.15,
+    minWidth: 148,
+    transition: 'box-shadow 0.18s ease, opacity 0.15s ease',
+  },
+
+  // Error
+  errorBox: {
+    background: 'rgba(199,56,32,0.10)',
+    border: '1px solid rgba(199,56,32,0.28)',
+    color: '#ff6b4a',
+    borderRadius: 10,
+    padding: '12px 16px',
+    fontSize: 13,
+    marginTop: 20,
+    lineHeight: 1.55,
+  },
 }
