@@ -15,7 +15,7 @@ async function sendMessage(senderId, { recipient_id, body }) {
       team_id: team.id,
       sender_id: senderId,
       recipient_id: recipient_id || null,
-      body,
+      content: body,
     })
     .select()
     .single()
@@ -37,7 +37,7 @@ async function getMessagesForCoach(coachId) {
   const { data, error } = await supabaseAdmin
     .from('team_messages')
     .select(`
-      id, body, sent_at, recipient_id,
+      id, content, sent_at, recipient_id,
       sender:profiles!team_messages_sender_id_fkey ( full_name ),
       recipient:profiles!team_messages_recipient_id_fkey ( full_name )
     `)
@@ -48,7 +48,7 @@ async function getMessagesForCoach(coachId) {
 
   return (data || []).map(m => ({
     id: m.id,
-    body: m.body,
+    body: m.content,
     sent_at: m.sent_at,
     recipient_id: m.recipient_id,
     sender_name: m.sender?.full_name || null,
@@ -69,7 +69,7 @@ async function getMessagesForAthlete(athleteId) {
   const { data, error } = await supabaseAdmin
     .from('team_messages')
     .select(`
-      id, body, sent_at, recipient_id,
+      id, content, sent_at, recipient_id,
       sender:profiles!team_messages_sender_id_fkey ( full_name )
     `)
     .eq('team_id', membership.team_id)
@@ -80,7 +80,7 @@ async function getMessagesForAthlete(athleteId) {
 
   return (data || []).map(m => ({
     id: m.id,
-    body: m.body,
+    body: m.content,
     sent_at: m.sent_at,
     recipient_id: m.recipient_id,
     sender_name: m.sender?.full_name || null,
