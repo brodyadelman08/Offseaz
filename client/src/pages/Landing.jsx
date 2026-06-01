@@ -166,10 +166,10 @@ function DualDashboardMockup() {
       </div>
 
       {/* Split body */}
-      <div style={mk.body}>
+      <div className="mock-body" style={mk.body}>
 
         {/* ── LEFT: Coach accountability view ── */}
-        <div style={mk.panel}>
+        <div className="mock-panel" style={mk.panel}>
           {/* Panel tab */}
           <div style={{ ...mk.panelTab, borderBottom: `2px solid ${ORANGE}` }}>
             <div style={{ ...mk.tabDot, background: ORANGE }} />
@@ -191,7 +191,7 @@ function DualDashboardMockup() {
           </div>
 
           {/* Main area */}
-          <div style={mk.panelMain}>
+          <div className="mock-panel-main" style={mk.panelMain}>
             {/* Top stats */}
             <div style={mk.statsRow}>
               {[
@@ -246,16 +246,16 @@ function DualDashboardMockup() {
         </div>
 
         {/* Divider */}
-        <div style={mk.divider} />
+        <div className="mock-divider" style={mk.divider} />
 
         {/* ── RIGHT: Athlete blueprint view ── */}
-        <div style={mk.panel}>
+        <div className="mock-panel" style={mk.panel}>
           <div style={{ ...mk.panelTab, borderBottom: `2px solid ${BLUE}` }}>
             <div style={{ ...mk.tabDot, background: BLUE }} />
             <span style={{ ...mk.tabLabel, color: BLUE }}>Athlete View</span>
           </div>
 
-          <div style={mk.panelMain}>
+          <div className="mock-panel-main" style={mk.panelMain}>
             {/* Blueprint header */}
             <div style={mk.blueprintHeader}>
               <div>
@@ -331,14 +331,14 @@ const mk = {
     background: '#161616', border: '1px solid #222',
     borderRadius: 5, padding: '3px 12px', letterSpacing: 0.3,
   },
-  body: { display: 'flex', height: 340 },
+  body: { display: 'flex' },
 
   // Panel
   panel:     { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' },
   panelTab:  { display: 'flex', alignItems: 'center', gap: 6, padding: '8px 12px', background: '#0F0F0F' },
   tabDot:    { width: 7, height: 7, borderRadius: '50%' },
   tabLabel:  { fontSize: 8, fontWeight: 700, letterSpacing: 1, textTransform: 'uppercase' },
-  divider:   { width: 1, background: '#1E1E1E', flexShrink: 0 },
+  divider:   { background: '#1E1E1E', flexShrink: 0 },
 
   // Mini sidebar (coach panel)
   miniSidebar: {
@@ -350,7 +350,7 @@ const mk = {
     display: 'flex', alignItems: 'center', gap: 5, padding: '5px 6px', borderRadius: 5,
   },
 
-  panelMain:  { flex: 1, padding: '10px 12px', overflow: 'hidden', display: 'flex', flexDirection: 'column', gap: 6 },
+  panelMain:  { padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 6 },
   statsRow:   { display: 'flex', gap: 5 },
   miniStatBox: {
     flex: 1, background: '#1A1A1A', border: '1px solid #222',
@@ -400,7 +400,7 @@ mk.miniSidebar = {
   width: 62, flexShrink: 0,
 }
 // panel needs flex-row internally
-mk.panel = { flex: 1, display: 'flex', overflow: 'hidden' }
+mk.panel = { display: 'flex', overflow: 'hidden' }
 mk.panelInner = { flex: 1, display: 'flex', flexDirection: 'column', overflow: 'hidden' }
 
 // ── Team Feed Mockup ──────────────────────────────────────────────────────────
