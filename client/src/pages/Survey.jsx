@@ -137,6 +137,105 @@ function MultiCards({ options, value = [], onChange }) {
   )
 }
 
+// ─── Sport selection grid ─────────────────────────────────────────────────────
+
+function SportGrid({ options, value, onChange }) {
+  const [hovered, setHovered] = useState(null)
+
+  return (
+    <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12 }}>
+      {options.map(opt => {
+        const key = opt.key
+        const Icon = opt.Icon
+        const sel  = value === key
+        const hov  = hovered === key && !sel
+
+        return (
+          <button
+            key={key}
+            type="button"
+            onClick={() => onChange(sel ? '' : key)}
+            onMouseEnter={() => setHovered(key)}
+            onMouseLeave={() => setHovered(null)}
+            style={{
+              position: 'relative',
+              padding: '22px 8px 18px',
+              borderRadius: 18,
+              border: `2px solid ${sel ? ORANGE : hov ? 'rgba(247,87,9,0.38)' : 'var(--border)'}`,
+              background: sel
+                ? `linear-gradient(150deg, rgba(247,87,9,0.13) 0%, rgba(247,87,9,0.04) 100%), var(--card-inner)`
+                : hov
+                  ? `linear-gradient(150deg, rgba(247,87,9,0.06) 0%, rgba(247,87,9,0.01) 100%), var(--card-inner)`
+                  : 'var(--card-inner)',
+              cursor: 'pointer',
+              textAlign: 'center',
+              transform: hov ? 'translateY(-3px)' : 'translateY(0)',
+              boxShadow: sel
+                ? `0 0 0 3px rgba(247,87,9,0.12), 0 6px 24px rgba(247,87,9,0.24), inset 0 1px 0 rgba(255,255,255,0.08)`
+                : hov
+                  ? `0 8px 28px rgba(0,0,0,0.12), 0 0 0 1px rgba(247,87,9,0.18), 0 0 18px rgba(247,87,9,0.07), inset 0 1px 0 rgba(255,255,255,0.07)`
+                  : `0 1px 3px rgba(0,0,0,0.07), inset 0 1px 0 rgba(255,255,255,0.04)`,
+              transition: 'transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease',
+              outline: 'none',
+            }}
+          >
+            {/* Checkmark badge — pops in on selection */}
+            <div
+              aria-hidden="true"
+              style={{
+                position: 'absolute',
+                top: 8,
+                right: 8,
+                width: 17,
+                height: 17,
+                borderRadius: '50%',
+                background: ORANGE,
+                display: 'flex',
+                alignItems: 'center',
+                justifyContent: 'center',
+                opacity: sel ? 1 : 0,
+                transform: sel ? 'scale(1)' : 'scale(0.4)',
+                transition: 'opacity 0.18s ease, transform 0.18s cubic-bezier(0.34, 1.56, 0.64, 1)',
+                pointerEvents: 'none',
+                boxShadow: '0 2px 6px rgba(247,87,9,0.4)',
+              }}
+            >
+              <svg width="9" height="9" viewBox="0 0 24 24" fill="none" stroke="white" strokeWidth="3.5" strokeLinecap="round" strokeLinejoin="round">
+                <polyline points="20 6 9 17 4 12" />
+              </svg>
+            </div>
+
+            {/* Icon with scale + opacity micro-interaction */}
+            <div style={{
+              display: 'flex',
+              justifyContent: 'center',
+              marginBottom: 10,
+              lineHeight: 1,
+              opacity: sel ? 1 : hov ? 0.80 : 0.48,
+              transform: sel ? 'scale(1.08)' : hov ? 'scale(1.06)' : 'scale(1)',
+              transition: 'transform 0.2s ease, opacity 0.2s ease',
+            }}>
+              <Icon size={40} />
+            </div>
+
+            {/* Sport label */}
+            <div style={{
+              fontSize: 12,
+              fontWeight: 700,
+              color: sel ? ORANGE : 'var(--text)',
+              letterSpacing: 0.25,
+              lineHeight: 1.3,
+              transition: 'color 0.15s ease',
+            }}>
+              {key}
+            </div>
+          </button>
+        )
+      })}
+    </div>
+  )
+}
+
 // ─── Survey ───────────────────────────────────────────────────────────────────
 
 export default function Survey() {
@@ -326,12 +425,11 @@ export default function Survey() {
           <>
             <p style={st.tag}>Sport</p>
             <h2 style={st.title}>What's your sport?</h2>
-            <p style={st.desc}>Select the sport you're training for this offseason.</p>
-            <SelectCard
+            <p style={{ ...st.desc, marginBottom: 24 }}>Select the sport you're training for this offseason.</p>
+            <SportGrid
               options={SPORTS}
               value={form.sport}
               onChange={v => { set('sport', v); set('position', '') }}
-              cols={3}
             />
           </>
         )}
