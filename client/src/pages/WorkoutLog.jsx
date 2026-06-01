@@ -238,9 +238,9 @@ const styles = {
 
   pageTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
 
-  previewCard: { background: 'var(--card)', border: '1px solid var(--border)', borderLeft: `3px solid ${BLUE}`, borderRadius: '0 12px 12px 0', padding: 20, marginBottom: 28 },
+  previewCard: { background: 'linear-gradient(135deg, rgba(48,142,189,0.05) 0%, var(--card) 100%)', border: '1px solid var(--border)', borderLeft: `3px solid ${BLUE}`, borderRadius: '0 16px 16px 0', padding: 20, marginBottom: 28, boxShadow: '0 2px 8px rgba(0,0,0,0.15)' },
   previewHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6 },
-  dayBadge: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', background: 'rgba(48,142,189,0.1)', padding: '3px 8px', borderRadius: 4 },
+  dayBadge: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', background: 'rgba(48,142,189,0.12)', padding: '3px 8px', borderRadius: 6, letterSpacing: 0.3 },
   focusText: { fontSize: 16, fontWeight: 700, color: 'var(--text)' },
   previewDesc: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6 },
 
@@ -250,17 +250,17 @@ const styles = {
   optional: { fontWeight: 400, color: 'var(--text-3)' },
 
   statusGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 },
-  statusBtn: { padding: '12px 8px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s', textAlign: 'center' },
+  statusBtn: { padding: '13px 8px', fontSize: 13, fontWeight: 600, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.18s ease', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
 
   exerciseFlagRow: { display: 'flex', flexWrap: 'wrap', gap: 8 },
-  exerciseFlagChip: { padding: '7px 12px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px dashed var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' },
+  exerciseFlagChip: { padding: '7px 13px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px dashed var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.18s ease', whiteSpace: 'nowrap' },
   exerciseFlagChipActive: { borderStyle: 'solid', borderColor: '#c73820', background: '#fce8e6', color: '#c73820' },
   injuryFlagNote: { fontSize: 12, color: '#c73820', fontWeight: 600, margin: '8px 0 0' },
 
   effortRow: { display: 'flex', gap: 6, flexWrap: 'wrap' },
-  effortBtn: { width: 42, height: 42, fontSize: 14, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.15s' },
+  effortBtn: { width: 44, height: 44, fontSize: 14, fontWeight: 600, borderRadius: 10, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.18s ease', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
 
-  textarea: { width: '100%', padding: '11px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
-  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13 },
-  submitBtn: { padding: '13px 0', fontSize: 15, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  textarea: { width: '100%', padding: '11px 14px', fontSize: 14, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 10, padding: '10px 14px', fontSize: 13 },
+  submitBtn: { padding: '14px 0', fontSize: 15, fontWeight: 700, borderRadius: 10, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2, boxShadow: '0 2px 10px rgba(48,142,189,0.32)' },
 }

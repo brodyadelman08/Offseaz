@@ -136,7 +136,12 @@ export default function CoachDashboard() {
             ].map(({ Icon, val, label, path }, i) => (
               <button
                 key={label}
-                style={{ ...styles.statCard, borderLeft: `3px solid ${ACCENTS[i]}` }}
+                data-hov=""
+                style={{
+                  ...styles.statCard,
+                  borderLeft: `3px solid ${ACCENTS[i]}`,
+                  background: `linear-gradient(135deg, ${['rgba(247,87,9,0.05)','rgba(48,142,189,0.05)','rgba(240,190,36,0.05)'][i]} 0%, var(--card) 100%)`,
+                }}
                 onClick={() => navigate(path)}
               >
                 <Icon size={20} color={ACCENTS[i]} />
@@ -280,7 +285,7 @@ const styles = {
   loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
   notifSection: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 },
-  notifRow: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 10, cursor: 'pointer', textAlign: 'left', width: '100%' },
+  notifRow: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 12, cursor: 'pointer', textAlign: 'left', width: '100%' },
   notifIcon: { fontSize: 18, flexShrink: 0 },
   notifMsg: { flex: 1, fontSize: 14, fontWeight: 600, color: '#7f1d1d' },
   notifCta: { fontSize: 13, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', flexShrink: 0 },
@@ -289,28 +294,29 @@ const styles = {
     display: 'grid',
     gridTemplateColumns: 'repeat(3, 1fr)',
     gap: 12,
-    marginBottom: 14,
+    marginBottom: 16,
   },
   statCard: {
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: 6,
-    padding: '20px 12px',
+    padding: '22px 12px',
     background: 'var(--card)',
     border: '1px solid var(--border)',
-    borderRadius: 12,
+    borderRadius: 16,
     cursor: 'pointer',
-    transition: 'border-color 0.15s',
+    boxShadow: '0 1px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   statVal: { fontSize: 28, fontWeight: 700, color: 'var(--text)', lineHeight: 1 },
-  statLabel: { fontSize: 12, color: 'var(--text-3)', fontWeight: 600 },
+  statLabel: { fontSize: 12, color: 'var(--text-3)', fontWeight: 600, letterSpacing: 0.2 },
 
   card: {
     background: 'var(--card)',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: 24,
     border: '1px solid var(--border)',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   cardHeader: {
     display: 'flex',
@@ -356,7 +362,7 @@ const styles = {
     gap: 10,
     background: 'var(--card-inner)',
     border: '1px solid var(--border)',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: '10px 14px',
   },
   inviteText: {
@@ -371,14 +377,15 @@ const styles = {
     alignItems: 'center',
     gap: 5,
     fontSize: 13,
-    padding: '5px 12px',
-    borderRadius: 6,
+    padding: '6px 13px',
+    borderRadius: 8,
     border: `1px solid ${BLUE}`,
     background: 'transparent',
     color: BLUE,
     cursor: 'pointer',
     whiteSpace: 'nowrap',
     fontWeight: 600,
+    transition: 'background 0.15s, box-shadow 0.15s',
   },
 
   sectionHeader: {
@@ -457,7 +464,7 @@ const styles = {
     background: 'rgba(199,56,32,0.08)',
     border: '1px solid rgba(199,56,32,0.25)',
     color: '#c73820',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: '10px 14px',
     fontSize: 13,
     marginBottom: 16,
@@ -467,7 +474,7 @@ const styles = {
     width: '100%',
     padding: '11px 14px',
     fontSize: 15,
-    borderRadius: 8,
+    borderRadius: 10,
     border: '1px solid var(--input-border)',
     background: 'var(--input-bg)',
     color: 'var(--text)',
@@ -475,14 +482,15 @@ const styles = {
     boxSizing: 'border-box',
   },
   primaryBtn: {
-    padding: '11px 0',
+    padding: '12px 0',
     fontSize: 15,
     fontWeight: 700,
-    borderRadius: 8,
+    borderRadius: 10,
     border: 'none',
     background: ORANGE,
     color: '#fff',
     cursor: 'pointer',
     letterSpacing: 0.2,
+    boxShadow: '0 2px 10px rgba(247,87,9,0.30)',
   },
 }

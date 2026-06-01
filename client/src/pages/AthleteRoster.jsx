@@ -169,8 +169,18 @@ function AthleteCard({ athlete, onClick }) {
         opacity: isPrivate ? 0.75 : 1,
       }}
       onClick={onClick || undefined}
-      onMouseEnter={e => onClick && (e.currentTarget.style.borderColor = 'rgba(247,87,9,0.40)')}
-      onMouseLeave={e => onClick && (e.currentTarget.style.borderColor = 'var(--border)')}
+      onMouseEnter={e => {
+        if (!onClick) return
+        e.currentTarget.style.borderColor = 'rgba(247,87,9,0.40)'
+        e.currentTarget.style.transform = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.05)'
+      }}
+      onMouseLeave={e => {
+        if (!onClick) return
+        e.currentTarget.style.borderColor = 'var(--border)'
+        e.currentTarget.style.transform = 'translateY(0)'
+        e.currentTarget.style.boxShadow = '0 2px 6px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)'
+      }}
     >
       <AvatarUpload
         name={athlete.full_name}
@@ -242,11 +252,13 @@ const styles = {
     padding: '10px 20px',
     fontSize: 14,
     fontWeight: 700,
-    borderRadius: 8,
+    borderRadius: 10,
     border: 'none',
     background: BLUE,
     color: '#fff',
     cursor: 'pointer',
+    boxShadow: '0 2px 10px rgba(48,142,189,0.30)',
+    letterSpacing: 0.1,
   },
 
   rosterGrid: {
@@ -261,10 +273,11 @@ const styles = {
     gap: 14,
     background: 'var(--card)',
     border: '1px solid var(--border)',
-    borderRadius: 12,
+    borderRadius: 16,
     padding: '14px 18px',
     marginBottom: 0,
-    transition: 'border-color 0.15s',
+    transition: 'transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease',
+    boxShadow: '0 2px 6px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   selfCard: {
     borderLeft: `3px solid ${ORANGE}`,
@@ -297,8 +310,9 @@ const styles = {
     background: 'rgba(48,142,189,0.10)',
     color: BLUE,
     border: '1px solid rgba(48,142,189,0.22)',
-    padding: '3px 8px',
-    borderRadius: 5,
+    padding: '3px 9px',
+    borderRadius: 6,
+    letterSpacing: 0.2,
   },
   youBadge: {
     fontSize: 11,
@@ -306,16 +320,17 @@ const styles = {
     background: 'rgba(247,87,9,0.10)',
     color: ORANGE,
     border: '1px solid rgba(247,87,9,0.22)',
-    padding: '3px 8px',
-    borderRadius: 5,
+    padding: '3px 9px',
+    borderRadius: 6,
+    letterSpacing: 0.2,
   },
   privateBadge: {
     fontSize: 11,
     fontWeight: 700,
     background: 'var(--border)',
     color: 'var(--text-3)',
-    padding: '3px 8px',
-    borderRadius: 5,
+    padding: '3px 9px',
+    borderRadius: 6,
   },
   viewChevron: {
     fontSize: 20,

@@ -65,3 +65,60 @@ a {
 a:hover {
   text-decoration: underline;
 }
+
+/* ── Premium design token extensions ──────────────────────────────────────── */
+:root {
+  --shadow-sm:    0 1px 3px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-card:  0 2px 8px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.05);
+  --radius-card:  16px;
+  --radius-btn:   10px;
+}
+
+/* ── Global button micro-interactions ─────────────────────────────────────── */
+button {
+  /* Applied to buttons that don't already set transition in inline styles */
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease, opacity 0.15s ease;
+}
+
+button:not([disabled]):active {
+  transform: scale(0.97);
+  transition-duration: 0.07s;
+}
+
+/* ── Input / textarea / select focus ring ─────────────────────────────────── */
+/* Uses box-shadow so it works even when inline styles set border-color       */
+input, textarea, select {
+  transition: box-shadow 0.15s ease;
+}
+
+input:focus,
+textarea:focus,
+select:focus {
+  box-shadow: 0 0 0 2.5px rgba(247, 87, 9, 0.38) !important;
+}
+
+/* ── Interactive card hover (data-hov attribute) ──────────────────────────── */
+/* Apply data-hov="" to any clickable card element for lift + shadow on hover  */
+[data-hov] {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+}
+
+[data-hov]:not([disabled]):hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 24px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+}
+
+[data-hov]:not([disabled]):active {
+  transform: scale(0.98);
+  transition-duration: 0.07s;
+}
+
+/* ── Custom scrollbar ─────────────────────────────────────────────────────── */
+::-webkit-scrollbar       { width: 5px; height: 5px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+
+/* ── Text selection ───────────────────────────────────────────────────────── */
+::selection { background: rgba(247, 87, 9, 0.22); color: inherit; }

@@ -65,12 +65,17 @@ function SelectCard({ options, value, onChange, cols = 2 }) {
             onClick={() => onChange(sel ? '' : key)}
             style={{
               padding: (sub || iconSize > 22) ? '16px 12px 14px' : '13px 10px',
-              borderRadius: 12,
+              borderRadius: 14,
               border: `2px solid ${sel ? ORANGE : 'var(--border)'}`,
-              background: sel ? 'rgba(247,87,9,0.08)' : 'var(--card-inner)',
+              background: sel
+                ? 'linear-gradient(145deg, rgba(247,87,9,0.12) 0%, rgba(247,87,9,0.04) 100%), var(--card-inner)'
+                : 'var(--card-inner)',
               cursor: 'pointer',
               textAlign: 'center',
-              transition: 'border-color 0.15s',
+              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+              boxShadow: sel
+                ? '0 0 0 3px rgba(247,87,9,0.10), 0 4px 14px rgba(247,87,9,0.16)'
+                : '0 1px 3px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.04)',
             }}
           >
             {Icon && (
@@ -108,15 +113,20 @@ function MultiCards({ options, value = [], onChange }) {
             onClick={() => toggle(key)}
             style={{
               padding: '12px 14px',
-              borderRadius: 10,
+              borderRadius: 12,
               border: `2px solid ${sel ? ORANGE : 'var(--border)'}`,
-              background: sel ? 'rgba(247,87,9,0.08)' : 'var(--card-inner)',
+              background: sel
+                ? 'linear-gradient(145deg, rgba(247,87,9,0.10) 0%, rgba(247,87,9,0.03) 100%), var(--card-inner)'
+                : 'var(--card-inner)',
               cursor: 'pointer',
               textAlign: 'left',
               display: 'flex',
               alignItems: 'center',
               gap: 10,
-              transition: 'border-color 0.15s',
+              transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+              boxShadow: sel
+                ? '0 0 0 2px rgba(247,87,9,0.10), 0 2px 10px rgba(247,87,9,0.12)'
+                : '0 1px 3px rgba(0,0,0,0.10), inset 0 1px 0 rgba(255,255,255,0.04)',
             }}
           >
             <span style={{
@@ -657,11 +667,11 @@ const st = {
   input: { width: '100%', padding: '12px 14px', fontSize: 15, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', boxSizing: 'border-box', outline: 'none' },
 
   dayGrid:  { display: 'grid', gridTemplateColumns: 'repeat(4, 1fr)', gap: 12 },
-  dayBtn:   { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '20px 8px', borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card-inner)', cursor: 'pointer', transition: 'all 0.15s' },
-  dayBtnOn: { border: `2px solid ${ORANGE}`, background: 'rgba(247,87,9,0.1)' },
+  dayBtn:   { display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center', padding: '22px 8px', borderRadius: 16, border: '2px solid var(--border)', background: 'var(--card-inner)', cursor: 'pointer', transition: 'all 0.18s ease', boxShadow: '0 1px 4px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)' },
+  dayBtnOn: { border: `2px solid ${ORANGE}`, background: 'linear-gradient(150deg, rgba(247,87,9,0.12) 0%, rgba(247,87,9,0.04) 100%)', boxShadow: `0 0 0 3px rgba(247,87,9,0.10), 0 4px 14px rgba(247,87,9,0.20)` },
 
   nav:     { display: 'flex', justifyContent: 'flex-end', gap: 10, marginTop: 36 },
-  backBtn: { padding: '12px 22px', fontSize: 14, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card-inner)', color: 'var(--text)', cursor: 'pointer' },
-  nextBtn: { padding: '13px 32px', fontSize: 15, fontWeight: 800, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  backBtn: { padding: '12px 22px', fontSize: 14, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card-inner)', color: 'var(--text)', cursor: 'pointer', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
+  nextBtn: { padding: '13px 32px', fontSize: 15, fontWeight: 800, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2, boxShadow: '0 2px 12px rgba(247,87,9,0.35)' },
   error:   { color: '#c73820', fontSize: 13, marginTop: 12 },
 }
