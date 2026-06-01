@@ -1098,7 +1098,7 @@ export default function Landing() {
             <img
               src={LOGO}
               alt="Offseaz"
-              style={{ height: 48, width: 'auto', display: 'block', objectFit: 'contain', marginBottom: 10 }}
+              style={{ width: 170, height: 'auto', display: 'block', objectFit: 'contain', margin: '0 auto 10px' }}
             />
             <p style={s.footerTagline}>Built for coaches who take the offseason seriously.</p>
           </div>
@@ -1407,8 +1407,8 @@ const s = {
     display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
     flexWrap: 'wrap', gap: 24, marginBottom: 40,
   },
-  footerLeft:    { display: 'flex', flexDirection: 'column' },
-  footerTagline: { fontSize: 13, color: '#3A3A3A', margin: 0 },
+  footerLeft:    { display: 'flex', flexDirection: 'column', alignItems: 'center' },
+  footerTagline: { fontSize: 13, color: '#3A3A3A', margin: 0, textAlign: 'center' },
   footerRight:   { display: 'flex', gap: 24, alignItems: 'center' },
   footerLink:    { fontSize: 13, color: '#3A3A3A', textDecoration: 'none', fontWeight: 500 },
   footerBottom:  { maxWidth: 1120, margin: '0 auto', paddingTop: 20, borderTop: '1px solid #141414' },
