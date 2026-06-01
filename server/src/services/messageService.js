@@ -10,7 +10,7 @@ async function sendMessage(senderId, { recipient_id, body }) {
   if (teamError) throw teamError
 
   const { data, error } = await supabaseAdmin
-    .from('messages')
+    .from('team_messages')
     .insert({
       team_id: team.id,
       sender_id: senderId,
@@ -35,11 +35,11 @@ async function getMessagesForCoach(coachId) {
   if (!team) return []
 
   const { data, error } = await supabaseAdmin
-    .from('messages')
+    .from('team_messages')
     .select(`
       id, body, sent_at, recipient_id,
-      sender:profiles!messages_sender_id_fkey ( full_name ),
-      recipient:profiles!messages_recipient_id_fkey ( full_name )
+      sender:profiles!team_messages_sender_id_fkey ( full_name ),
+      recipient:profiles!team_messages_recipient_id_fkey ( full_name )
     `)
     .eq('team_id', team.id)
     .order('sent_at', { ascending: false })
@@ -67,10 +67,10 @@ async function getMessagesForAthlete(athleteId) {
   if (!membership) return []
 
   const { data, error } = await supabaseAdmin
-    .from('messages')
+    .from('team_messages')
     .select(`
       id, body, sent_at, recipient_id,
-      sender:profiles!messages_sender_id_fkey ( full_name )
+      sender:profiles!team_messages_sender_id_fkey ( full_name )
     `)
     .eq('team_id', membership.team_id)
     .or(`recipient_id.is.null,recipient_id.eq.${athleteId}`)
