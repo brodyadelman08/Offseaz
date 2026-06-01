@@ -234,6 +234,72 @@ select {
   box-shadow: 0 8px 28px rgba(0,0,0,0.30) !important;
 }
 
+/* ── Chat interface ──────────────────────────────────────────────────────── */
+/*
+  The Layout <main> adds padding: 36px top / 60px bottom on desktop,
+  24px top / 80px bottom on mobile.  The chat shell must fill exactly
+  the remaining viewport height so nothing overflows and the input bar
+  is always visible.
+*/
+.chat-shell {
+  display: flex;
+  height: calc(100vh - 96px);  /* 36 + 60 */
+  background: var(--card);
+  border: 1px solid var(--border);
+  border-radius: 18px;
+  overflow: hidden;
+  box-shadow: 0 2px 16px rgba(0,0,0,0.20), inset 0 1px 0 rgba(255,255,255,0.04);
+}
+
+.chat-sidebar {
+  width: 280px;
+  min-width: 280px;
+  border-right: 1px solid var(--border);
+  display: flex;
+  flex-direction: column;
+  background: var(--bg);
+  overflow: hidden;
+  transition: width 0.2s ease;
+}
+
+.chat-main {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+  background: var(--bg);
+}
+
+/* Back button: hidden on desktop, shown on mobile */
+.chat-back-btn {
+  display: none !important;
+}
+
+@media (max-width: 700px) {
+  .chat-shell {
+    height: calc(100vh - 104px);  /* 24 + 80 */
+    border-radius: 14px;
+  }
+
+  .chat-sidebar {
+    width: 100%;
+    min-width: 100%;
+    border-right: none;
+  }
+
+  .chat-sidebar-hidden {
+    display: none;
+  }
+
+  .chat-main-hidden {
+    display: none;
+  }
+
+  .chat-back-btn {
+    display: flex !important;
+  }
+}
+
 /* ── Hero logo – large brand statement ─────────────────────────────────────── */
 /* clamp(220px, 36vw, 380px):
      375 px phone  → 220 px  (lower bound)
