@@ -9,11 +9,11 @@ const BLUE   = '#308EBD'
 
 // ── Shared design tokens ──────────────────────────────────────────────────────
 const T = {
-  card: 'var(--card)',
-  cardInner: 'var(--card-inner)',
+  card:       'var(--card)',
+  cardInner:  'var(--card-inner)',
   shadowBase: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)',
   shadowHov:  '0 8px 28px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06)',
-  trans: 'border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
+  trans:      'border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
 }
 
 function timeAgo(dateStr) {
@@ -28,6 +28,47 @@ function timeAgo(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
+// ── Camera icon (inline SVG) ──────────────────────────────────────────────────
+function CameraIcon({ size = 18, color = 'currentColor' }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
+      stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
+      <circle cx="12" cy="13" r="4"/>
+    </svg>
+  )
+}
+
+function XIcon({ size = 14 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 14 14" fill="none"
+      stroke="currentColor" strokeWidth="2" strokeLinecap="round">
+      <line x1="2" y1="2" x2="12" y2="12"/>
+      <line x1="12" y1="2" x2="2" y2="12"/>
+    </svg>
+  )
+}
+
+// ── Client-side image compression using Canvas ────────────────────────────────
+async function compressImage(file, maxDim = 1200, quality = 0.78) {
+  return new Promise((resolve, reject) => {
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      const { naturalWidth: w, naturalHeight: h } = img
+      const scale  = Math.min(1, maxDim / Math.max(w, h))
+      const canvas = document.createElement('canvas')
+      canvas.width  = Math.round(w * scale)
+      canvas.height = Math.round(h * scale)
+      canvas.getContext('2d').drawImage(img, 0, 0, canvas.width, canvas.height)
+      resolve(canvas.toDataURL('image/jpeg', quality))
+    }
+    img.onerror = () => { URL.revokeObjectURL(objectUrl); reject(new Error('Failed to load image')) }
+    img.src = objectUrl
+  })
+}
+
 // ── Comment item ──────────────────────────────────────────────────────────────
 function CommentItem({ comment, currentUserId, role, onDelete }) {
   return (
@@ -35,9 +76,7 @@ function CommentItem({ comment, currentUserId, role, onDelete }) {
       <AvatarUpload
         name={comment.author?.full_name}
         avatarUrl={comment.author?.avatar_url}
-        size={28}
-        color={BLUE}
-        editable={false}
+        size={28} color={BLUE} editable={false}
       />
       <div style={st.commentBubble}>
         <div style={st.commentHeader}>
@@ -55,11 +94,11 @@ function CommentItem({ comment, currentUserId, role, onDelete }) {
 
 // ── Post card ─────────────────────────────────────────────────────────────────
 function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDeleteComment }) {
-  const [showComments, setShowComments] = useState(false)
-  const [commentText, setCommentText] = useState('')
-  const [submitting, setSubmitting] = useState(false)
-  // Spring animation state for like button
-  const [likeAnim, setLikeAnim] = useState(false)
+  const [showComments, setShowComments]  = useState(false)
+  const [commentText, setCommentText]    = useState('')
+  const [submitting, setSubmitting]      = useState(false)
+  const [likeAnim, setLikeAnim]          = useState(false)
+  const [imgExpanded, setImgExpanded]    = useState(false)
   const inputRef = useRef(null)
 
   async function handleComment(e) {
@@ -88,14 +127,14 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
     <div
       style={st.postCard}
       onMouseEnter={e => {
-        e.currentTarget.style.transform = 'translateY(-2px)'
-        e.currentTarget.style.boxShadow = T.shadowHov
-        e.currentTarget.style.borderColor = 'rgba(247,87,9,0.28)'
+        e.currentTarget.style.transform    = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow    = T.shadowHov
+        e.currentTarget.style.borderColor  = 'rgba(247,87,9,0.28)'
       }}
       onMouseLeave={e => {
-        e.currentTarget.style.transform = ''
-        e.currentTarget.style.boxShadow = T.shadowBase
-        e.currentTarget.style.borderColor = 'var(--border)'
+        e.currentTarget.style.transform    = ''
+        e.currentTarget.style.boxShadow    = T.shadowBase
+        e.currentTarget.style.borderColor  = 'var(--border)'
       }}
     >
       {/* Header */}
@@ -103,9 +142,7 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
         <AvatarUpload
           name={post.author?.full_name}
           avatarUrl={post.author?.avatar_url}
-          size={40}
-          color={ORANGE}
-          editable={false}
+          size={40} color={ORANGE} editable={false}
         />
         <div style={st.postMeta}>
           <span style={st.postAuthor}>{post.author?.full_name}</span>
@@ -116,28 +153,46 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
         )}
       </div>
 
-      {/* Content */}
-      <p style={st.postContent}>{post.content}</p>
+      {/* Text content */}
+      {post.content && (
+        <p style={st.postContent}>{post.content}</p>
+      )}
+
+      {/* Photo */}
+      {post.photo_url && (
+        <div
+          style={{
+            ...st.postPhotoWrap,
+            ...(post.content ? {} : { marginTop: 0 }),
+          }}
+          onClick={() => setImgExpanded(v => !v)}
+          title={imgExpanded ? 'Collapse' : 'Expand'}
+        >
+          <img
+            src={post.photo_url}
+            alt="Post photo"
+            style={{
+              ...st.postPhoto,
+              maxHeight: imgExpanded ? 600 : 320,
+            }}
+          />
+        </div>
+      )}
 
       {/* Action bar */}
       <div style={st.postActions}>
         <button
-          style={{
-            ...st.actionBtn,
-            color: post.liked_by_me ? ORANGE : 'var(--text-3)',
-          }}
+          style={{ ...st.actionBtn, color: post.liked_by_me ? ORANGE : 'var(--text-3)' }}
           onClick={handleLikeClick}
         >
           <span style={{
             display: 'inline-flex',
             transform: likeAnim ? 'scale(1.5)' : 'scale(1)',
-            transition: likeAnim
-              ? 'none'
-              : 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+            transition: likeAnim ? 'none' : 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)',
           }}>
             {post.liked_by_me
               ? <HeartFilledIcon size={17} color={ORANGE} />
-              : <HeartIcon size={17} color="var(--text-3)" />}
+              : <HeartIcon       size={17} color="var(--text-3)" />}
           </span>
           {post.like_count > 0 && (
             <span style={{ fontSize: 13, fontWeight: 700 }}>{post.like_count}</span>
@@ -160,10 +215,8 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
             <div style={st.commentsList}>
               {post.comments.map(c => (
                 <CommentItem
-                  key={c.id}
-                  comment={c}
-                  currentUserId={currentUserId}
-                  role={role}
+                  key={c.id} comment={c}
+                  currentUserId={currentUserId} role={role}
                   onDelete={onDeleteComment}
                 />
               ))}
@@ -180,10 +233,7 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
             />
             <button
               type="submit"
-              style={{
-                ...st.commentSubmit,
-                opacity: submitting || !commentText.trim() ? 0.45 : 1,
-              }}
+              style={{ ...st.commentSubmit, opacity: submitting || !commentText.trim() ? 0.45 : 1 }}
               disabled={submitting || !commentText.trim()}
             >
               Post
@@ -197,13 +247,21 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Feed() {
-  const { profile } = useAuth()
-  const [posts, setPosts] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [error, setError] = useState('')
-  const [composeText, setComposeText] = useState('')
-  const [posting, setPosting] = useState(false)
+  const { profile }  = useAuth()
+  const [posts, setPosts]               = useState([])
+  const [loading, setLoading]           = useState(true)
+  const [error, setError]               = useState('')
+  const [composeText, setComposeText]   = useState('')
+  const [posting, setPosting]           = useState(false)
   const [composeFocused, setComposeFocused] = useState(false)
+
+  // Photo state
+  const [photoPreview, setPhotoPreview] = useState(null)   // data URL for preview
+  const [photoDataUrl, setPhotoDataUrl] = useState(null)   // compressed data URL to upload
+  const [photoMime, setPhotoMime]       = useState('image/jpeg')
+  const [photoUploading, setPhotoUploading] = useState(false)
+  const [photoErr, setPhotoErr]         = useState('')
+  const photoInputRef = useRef(null)
 
   useEffect(() => {
     api.get('/api/feed')
@@ -212,21 +270,73 @@ export default function Feed() {
       .finally(() => setLoading(false))
   }, [])
 
+  async function handlePhotoSelect(e) {
+    const file = e.target.files?.[0]
+    if (!file) return
+    setPhotoErr('')
+    const allowed = ['image/jpeg', 'image/png', 'image/webp', 'image/gif', 'image/heic']
+    if (!allowed.includes(file.type)) {
+      setPhotoErr('Only JPEG, PNG, WebP, or GIF images are supported.')
+      if (photoInputRef.current) photoInputRef.current.value = ''
+      return
+    }
+    if (file.size > 20 * 1024 * 1024) {
+      setPhotoErr('Image must be under 20 MB.')
+      if (photoInputRef.current) photoInputRef.current.value = ''
+      return
+    }
+    try {
+      const compressed = await compressImage(file)
+      setPhotoPreview(compressed)
+      setPhotoDataUrl(compressed)
+      setPhotoMime('image/jpeg')
+      setComposeFocused(true)
+    } catch {
+      setPhotoErr('Failed to process image. Please try another file.')
+    }
+    if (photoInputRef.current) photoInputRef.current.value = ''
+  }
+
+  function removePhoto() {
+    setPhotoPreview(null)
+    setPhotoDataUrl(null)
+    setPhotoErr('')
+  }
+
   async function handlePost(e) {
     e.preventDefault()
-    if (!composeText.trim()) return
+    if (!composeText.trim() && !photoDataUrl) return
     setPosting(true)
+    setPhotoErr('')
     try {
-      const res = await api.post('/api/feed', { content: composeText.trim() })
+      let uploadedPhotoUrl = null
+
+      // Upload photo first if present
+      if (photoDataUrl) {
+        setPhotoUploading(true)
+        try {
+          const res = await api.post('/api/feed/photos', { dataUrl: photoDataUrl, mimeType: photoMime })
+          uploadedPhotoUrl = res.data.url
+        } finally {
+          setPhotoUploading(false)
+        }
+      }
+
+      const res = await api.post('/api/feed', {
+        content:   composeText.trim(),
+        photo_url: uploadedPhotoUrl,
+      })
       const newPost = {
         ...res.data.post,
-        author: { full_name: profile?.full_name, avatar_url: profile?.avatar_url },
-        like_count: 0,
+        author:      { full_name: profile?.full_name, avatar_url: profile?.avatar_url },
+        like_count:  0,
         liked_by_me: false,
-        comments: [],
+        comments:    [],
       }
       setPosts(prev => [newPost, ...prev])
       setComposeText('')
+      setPhotoPreview(null)
+      setPhotoDataUrl(null)
       setComposeFocused(false)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to post.')
@@ -282,6 +392,8 @@ export default function Feed() {
     }
   }
 
+  const canPost = !posting && (composeText.trim().length > 0 || photoDataUrl !== null)
+
   return (
     <div style={st.container}>
       {/* Header */}
@@ -302,9 +414,7 @@ export default function Feed() {
           <AvatarUpload
             name={profile?.full_name}
             avatarUrl={profile?.avatar_url}
-            size={38}
-            color={ORANGE}
-            editable={false}
+            size={38} color={ORANGE} editable={false}
           />
           <textarea
             style={st.composeInput}
@@ -317,36 +427,83 @@ export default function Feed() {
             maxLength={1000}
           />
         </div>
-        {(composeFocused || composeText.length > 0) && (
+
+        {/* Photo preview */}
+        {photoPreview && (
+          <div style={st.previewWrap}>
+            <img src={photoPreview} alt="Preview" style={st.previewImg} />
+            <button type="button" style={st.previewRemove} onClick={removePhoto} title="Remove photo">
+              <XIcon size={12} />
+            </button>
+          </div>
+        )}
+
+        {photoErr && (
+          <p style={st.photoErr}>⚠ {photoErr}</p>
+        )}
+
+        {/* Hidden file input */}
+        <input
+          ref={photoInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          style={{ display: 'none' }}
+          onChange={handlePhotoSelect}
+        />
+
+        {(composeFocused || composeText.length > 0 || photoPreview) && (
           <div style={st.composeFooter}>
+            {/* Attach photo button */}
+            <button
+              type="button"
+              style={st.photoBtn}
+              onClick={() => photoInputRef.current?.click()}
+              title="Attach photo"
+              disabled={posting}
+            >
+              <CameraIcon size={16} color={photoPreview ? ORANGE : 'var(--text-3)'} />
+              <span style={{ color: photoPreview ? ORANGE : 'var(--text-3)' }}>
+                {photoPreview ? 'Change photo' : 'Add photo'}
+              </span>
+            </button>
+
             <span style={st.charCount}>{composeText.length}/1000</span>
+
             <button
               type="submit"
-              style={{
-                ...st.postBtn,
-                opacity: posting || !composeText.trim() ? 0.45 : 1,
-              }}
-              disabled={posting || !composeText.trim()}
+              style={{ ...st.postBtn, opacity: canPost ? 1 : 0.45 }}
+              disabled={!canPost}
             >
               {posting ? (
                 <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
                   <span className="survey-spinner-sm" />
-                  Posting…
+                  {photoUploading ? 'Uploading…' : 'Posting…'}
                 </span>
               ) : 'Post to team'}
             </button>
           </div>
         )}
+
+        {/* Show photo button even when compose is collapsed */}
+        {!composeFocused && composeText.length === 0 && !photoPreview && (
+          <div style={{ marginTop: 10, paddingTop: 10, borderTop: '1px solid var(--border-light)', display: 'flex' }}>
+            <button
+              type="button"
+              style={st.photoBtn}
+              onClick={() => { photoInputRef.current?.click(); setComposeFocused(true) }}
+              title="Attach photo"
+            >
+              <CameraIcon size={16} color="var(--text-3)" />
+              <span style={{ color: 'var(--text-3)' }}>Add photo</span>
+            </button>
+          </div>
+        )}
       </form>
 
-      {error && (
-        <div style={st.errorMsg}>⚠ {error}</div>
-      )}
+      {error && <div style={st.errorMsg}>⚠ {error}</div>}
 
       {loading ? (
-        <div style={st.loadingWrap}>
-          <div className="survey-spinner" />
-        </div>
+        <div style={st.loadingWrap}><div className="survey-spinner" /></div>
       ) : posts.length === 0 ? (
         <div style={st.emptyState}>
           <div style={st.emptyIcon}>
@@ -419,16 +576,67 @@ const st = {
     boxSizing: 'border-box',
     transition: 'border-color 0.15s',
   },
+
+  // Photo preview
+  previewWrap: {
+    position: 'relative',
+    marginTop: 12,
+    display: 'inline-block',
+    borderRadius: 12,
+    overflow: 'hidden',
+    border: '1px solid var(--border)',
+  },
+  previewImg: {
+    display: 'block',
+    maxWidth: '100%',
+    maxHeight: 220,
+    objectFit: 'cover',
+    borderRadius: 12,
+  },
+  previewRemove: {
+    position: 'absolute',
+    top: 6,
+    right: 6,
+    width: 24,
+    height: 24,
+    borderRadius: '50%',
+    background: 'rgba(0,0,0,0.72)',
+    border: 'none',
+    color: '#fff',
+    cursor: 'pointer',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+    transition: 'background 0.14s',
+  },
+  photoErr: {
+    marginTop: 8, fontSize: 12, color: '#c73820', margin: '8px 0 0',
+  },
+
   composeFooter: {
     display: 'flex',
-    justifyContent: 'flex-end',
     alignItems: 'center',
-    gap: 12,
+    gap: 8,
     marginTop: 12,
     paddingTop: 12,
     borderTop: '1px solid var(--border-light)',
   },
-  charCount: { fontSize: 12, color: 'var(--text-3)', flex: 1 },
+  photoBtn: {
+    display: 'inline-flex',
+    alignItems: 'center',
+    gap: 6,
+    background: 'none',
+    border: '1px solid var(--border)',
+    color: 'var(--text-3)',
+    fontSize: 12,
+    fontWeight: 600,
+    cursor: 'pointer',
+    padding: '6px 11px',
+    borderRadius: 8,
+    transition: 'border-color 0.14s, background 0.14s',
+  },
+  charCount: { fontSize: 12, color: 'var(--text-3)', flex: 1, textAlign: 'right' },
   postBtn: {
     padding: '10px 24px',
     fontSize: 14,
@@ -441,11 +649,12 @@ const st = {
     letterSpacing: 0.2,
     boxShadow: '0 2px 16px rgba(247,87,9,0.38), 0 1px 4px rgba(0,0,0,0.20)',
     transition: 'opacity 0.15s, transform 0.15s, box-shadow 0.15s',
+    whiteSpace: 'nowrap',
   },
 
   // ── Empty / loading ──
   emptyState: { textAlign: 'center', paddingTop: 56, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 },
-  emptyIcon: { width: 64, height: 64, borderRadius: '50%', background: 'var(--card-inner)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
+  emptyIcon:  { width: 64, height: 64, borderRadius: '50%', background: 'var(--card-inner)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
   emptyTitle: { fontSize: 18, fontWeight: 700, color: 'var(--text)', margin: 0 },
   emptySub:   { fontSize: 14, color: 'var(--text-3)', margin: 0 },
 
@@ -466,19 +675,30 @@ const st = {
   postAuthor: { fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
   postTime:   { fontSize: 12, color: 'var(--text-3)' },
   deleteBtn: {
-    background: 'none',
-    border: 'none',
-    color: 'var(--text-3)',
-    fontSize: 22,
-    cursor: 'pointer',
-    lineHeight: 1,
-    padding: '0 4px',
-    borderRadius: 6,
-    alignSelf: 'flex-start',
-    opacity: 0.6,
-    transition: 'opacity 0.12s',
+    background: 'none', border: 'none', color: 'var(--text-3)',
+    fontSize: 22, cursor: 'pointer', lineHeight: 1,
+    padding: '0 4px', borderRadius: 6, alignSelf: 'flex-start',
+    opacity: 0.6, transition: 'opacity 0.12s',
   },
   postContent: { fontSize: 15, color: 'var(--text)', lineHeight: 1.65, margin: '0 0 14px', whiteSpace: 'pre-wrap' },
+
+  // Post photo
+  postPhotoWrap: {
+    marginTop: 0,
+    marginBottom: 14,
+    borderRadius: 12,
+    overflow: 'hidden',
+    border: '1px solid var(--border)',
+    cursor: 'zoom-in',
+    lineHeight: 0,
+  },
+  postPhoto: {
+    width: '100%',
+    objectFit: 'cover',
+    display: 'block',
+    borderRadius: 12,
+    transition: 'max-height 0.3s ease',
+  },
 
   postActions: {
     display: 'flex',
@@ -487,17 +707,10 @@ const st = {
     borderTop: '1px solid var(--border-light)',
   },
   actionBtn: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 6,
-    background: 'none',
-    border: 'none',
-    color: 'var(--text-3)',
-    fontSize: 13,
-    fontWeight: 600,
-    cursor: 'pointer',
-    padding: '6px 12px',
-    borderRadius: 8,
+    display: 'inline-flex', alignItems: 'center', gap: 6,
+    background: 'none', border: 'none',
+    color: 'var(--text-3)', fontSize: 13, fontWeight: 600,
+    cursor: 'pointer', padding: '6px 12px', borderRadius: 8,
     transition: 'background 0.14s, color 0.14s',
   },
 
@@ -522,18 +735,12 @@ const st = {
   commentTime:   { fontSize: 11, color: 'var(--text-3)' },
   commentText:   { fontSize: 13, color: 'var(--text-2)', margin: 0, lineHeight: 1.55, whiteSpace: 'pre-wrap' },
   deleteSmall: {
-    background: 'none',
-    border: 'none',
-    color: 'var(--text-3)',
-    fontSize: 18,
-    cursor: 'pointer',
-    lineHeight: 1,
-    padding: '4px 0',
-    flexShrink: 0,
-    opacity: 0.5,
+    background: 'none', border: 'none', color: 'var(--text-3)',
+    fontSize: 18, cursor: 'pointer', lineHeight: 1,
+    padding: '4px 0', flexShrink: 0, opacity: 0.5,
   },
 
-  commentForm: { display: 'flex', gap: 8 },
+  commentForm:   { display: 'flex', gap: 8 },
   commentInput: {
     flex: 1,
     padding: '9px 13px',
@@ -549,13 +756,9 @@ const st = {
   },
   commentSubmit: {
     padding: '9px 18px',
-    fontSize: 13,
-    fontWeight: 700,
-    borderRadius: 10,
-    border: 'none',
-    background: BLUE,
-    color: '#fff',
-    cursor: 'pointer',
+    fontSize: 13, fontWeight: 700,
+    borderRadius: 10, border: 'none',
+    background: BLUE, color: '#fff', cursor: 'pointer',
     whiteSpace: 'nowrap',
     boxShadow: '0 2px 10px rgba(48,142,189,0.32)',
     transition: 'opacity 0.15s',
