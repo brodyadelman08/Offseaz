@@ -31,6 +31,13 @@ body {
   background: var(--bg, #ffffff);
   color: var(--text, #0a0a0a);
   transition: background 0.15s ease, color 0.15s ease;
+  overflow-x: hidden;
+}
+
+/* Prevent any element from pushing the page wider than the viewport */
+html {
+  max-width: 100%;
+  overflow-x: hidden;
 }
 
 #root {

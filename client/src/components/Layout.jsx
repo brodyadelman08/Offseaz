@@ -13,6 +13,8 @@ export default function Layout() {
         style={{
           flex: 1,
           minHeight: '100vh',
+          minWidth: 0,
+          overflowX: 'hidden',
           marginLeft: isMobile ? 0 : SIDEBAR_W,
           padding: isMobile ? '24px 16px 80px' : '36px 48px 60px',
         }}

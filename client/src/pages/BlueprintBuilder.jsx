@@ -4,6 +4,21 @@ import api from '../services/api'
 import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon } from '../components/Icons'
 import { SPORT_TEMPLATES, TEMPLATE_GOALS } from '../data/blueprintTemplates'
 
+const SPORT_EMOJIS = {
+  baseball:      '⚾',
+  softball:      '🥎',
+  football:      '🏈',
+  basketball:    '🏀',
+  soccer:        '⚽',
+  hockey:        '🏒',
+  wrestling:     '🤼',
+  volleyball:    '🏐',
+  track:         '🏃',
+  cross_country: '🏃‍♀️',
+  lacrosse:      '🥍',
+  swimming:      '🏊',
+}
+
 const ORANGE  = '#F75709'
 const BLUE    = '#308EBD'
 const YELLOW  = '#F0BE24'
@@ -303,6 +318,7 @@ export default function BlueprintBuilder() {
               style={{ ...styles.sportTabBtn, ...(sportTab === s.id ? styles.sportTabBtnActive : {}) }}
               onClick={() => setSportTab(s.id)}
             >
+              {SPORT_EMOJIS[s.id] && <span style={{ marginRight: 5 }}>{SPORT_EMOJIS[s.id]}</span>}
               {s.label}
             </button>
           ))}
@@ -530,8 +546,8 @@ const styles = {
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
   pageDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 28 },
 
-  templateGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 },
-  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: 20, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.15s' },
+  templateGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(220px, 100%), 1fr))', gap: 12 },
+  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: 20, borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s', boxShadow: '0 2px 6px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)' },
   templateIconWrap: { width: 40, height: 40, borderRadius: 10, background: 'rgba(247,87,9,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   templateLabel: { fontSize: 15, fontWeight: 700, color: 'var(--text)' },
   templateDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
@@ -539,8 +555,8 @@ const styles = {
   templateBadge: { fontSize: 11, fontWeight: 700, color: YELLOW, background: 'rgba(240,190,36,0.15)', borderRadius: 6, padding: '2px 8px', letterSpacing: 0.3 },
 
   textBackBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px 0' },
-  dayGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12, marginBottom: 28 },
-  dayCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: 20, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.15s' },
+  dayGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(180px, 100%), 1fr))', gap: 12, marginBottom: 28 },
+  dayCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: 20, borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s', boxShadow: '0 2px 6px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)' },
   dayNumber: { fontSize: 36, fontWeight: 800, color: 'var(--text)', lineHeight: 1 },
   dayLabel: { fontSize: 13, fontWeight: 600, color: 'var(--text-2)' },
   dayDesc: { fontSize: 12, color: 'var(--text-3)', lineHeight: 1.4 },
@@ -573,7 +589,7 @@ const styles = {
   removeBtn: { background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 18, padding: '0 4px', flexShrink: 0 },
 
   actions: { display: 'flex', alignItems: 'center', marginTop: 28 },
-  primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2, boxShadow: '0 2px 10px rgba(247,87,9,0.35)' },
   skipBtn: { fontSize: 13, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: 0.1 },
   errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginTop: 16 },
 
