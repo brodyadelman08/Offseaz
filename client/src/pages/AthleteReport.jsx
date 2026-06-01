@@ -338,19 +338,20 @@ const styles = {
     display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 28,
   },
   backBtn: {
-    padding: '8px 16px', fontSize: 13, fontWeight: 600, borderRadius: 8,
+    padding: '8px 16px', fontSize: 13, fontWeight: 600, borderRadius: 10,
     border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer',
   },
   exportBtn: {
     display: 'inline-flex', alignItems: 'center', gap: 7,
-    padding: '8px 20px', fontSize: 13, fontWeight: 700, borderRadius: 8,
+    padding: '8px 20px', fontSize: 13, fontWeight: 700, borderRadius: 10,
     border: 'none', background: BLUE, color: '#fff', cursor: 'pointer',
+    boxShadow: '0 2px 8px rgba(48,142,189,0.28)',
   },
 
   // ── Header ──────────────────────────────────────────────────────────────────
   reportHeader: {
     display: 'flex', justifyContent: 'space-between', alignItems: 'flex-end',
-    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '12px 12px 0 0',
+    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: '16px 16px 0 0',
     padding: '28px 32px 24px',
   },
   headerLeft: { display: 'flex', flexDirection: 'column', gap: 6 },
@@ -381,17 +382,19 @@ const styles = {
     gap: 10, marginBottom: 16,
   },
   statBox: {
-    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10,
+    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12,
     padding: '14px 10px', display: 'flex', flexDirection: 'column',
     alignItems: 'center', gap: 4,
+    boxShadow: '0 1px 4px rgba(0,0,0,0.14)',
   },
   statVal:   { fontSize: 24, fontWeight: 800, lineHeight: 1 },
   statLabel: { fontSize: 10, fontWeight: 700, color: 'var(--text-3)', textAlign: 'center', textTransform: 'uppercase', letterSpacing: 0.4 },
 
   // ── Shared card ──────────────────────────────────────────────────────────────
   card: {
-    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12,
+    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16,
     padding: '22px 24px', marginBottom: 14,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   cardLabel: {
     fontSize: 11, fontWeight: 700, textTransform: 'uppercase',
@@ -407,8 +410,9 @@ const styles = {
   // ── Lifts ─────────────────────────────────────────────────────────────────────
   liftGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(145px, 1fr))', gap: 10 },
   liftBox: {
-    background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 10,
+    background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 12,
     padding: '12px 14px', display: 'flex', flexDirection: 'column', gap: 3,
+    boxShadow: '0 1px 4px rgba(0,0,0,0.14)',
   },
   liftName:    { fontSize: 10, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.4, margin: 0 },
   liftCurrent: { fontSize: 22, fontWeight: 800, color: ORANGE, lineHeight: 1.1, margin: 0 },

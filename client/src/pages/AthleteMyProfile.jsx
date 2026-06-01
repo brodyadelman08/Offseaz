@@ -553,19 +553,19 @@ const styles = {
   photoHint: { fontSize: 11, color: 'var(--text-3)', margin: 0, fontStyle: 'italic' },
 
   statsRow: { display: 'grid', gridTemplateColumns: 'repeat(3, 1fr)', gap: 12, marginBottom: 20 },
-  statCard: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 10, padding: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4 },
+  statCard: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 14, padding: 16, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 4, boxShadow: '0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.04)' },
   statVal: { fontSize: 22, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
   statLabel: { fontSize: 12, color: 'var(--text-3)' },
 
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
   cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   cardLabel: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: 0 },
-  editBtn: { display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: BLUE, background: 'none', border: `1px solid ${BLUE}`, borderRadius: 6, padding: '4px 10px', cursor: 'pointer' },
+  editBtn: { display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: BLUE, background: 'none', border: `1px solid ${BLUE}`, borderRadius: 8, padding: '4px 10px', cursor: 'pointer', transition: 'background 0.15s' },
   logCount: { fontSize: 13, color: 'var(--text-3)' },
 
   emptyAction: { display: 'flex', flexDirection: 'column', gap: 14 },
   emptyText: { color: 'var(--text-3)', fontSize: 14, margin: 0 },
-  primaryBtn: { alignSelf: 'flex-start', padding: '9px 18px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer' },
+  primaryBtn: { alignSelf: 'flex-start', padding: '9px 18px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 8px rgba(247,87,9,0.28)' },
 
   surveyField: { marginBottom: 16 },
   fieldLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.4, margin: '0 0 4px' },
@@ -589,7 +589,7 @@ const styles = {
 
   // Maxes
   maxesGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 },
-  liftCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 10, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6 },
+  liftCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6, boxShadow: '0 1px 4px rgba(0,0,0,0.14)' },
   liftTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
   liftLabel: { fontSize: 12, fontWeight: 700, color: 'var(--text-2)', textTransform: 'uppercase', letterSpacing: 0.4 },
   liftPR: { fontSize: 22, fontWeight: 700, color: ORANGE, lineHeight: 1 },
@@ -604,8 +604,8 @@ const styles = {
   notesInput: { padding: '6px 10px', fontSize: 12, borderRadius: 6, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', width: '100%', boxSizing: 'border-box' },
   logFormBtns: { display: 'flex', gap: 6 },
   saveError: { fontSize: 12, color: '#c73820', background: '#fce8e6', border: '1px solid #fca5a5', borderRadius: 6, padding: '5px 8px', margin: 0 },
-  saveBtn: { flex: 1, padding: '7px 0', fontSize: 13, fontWeight: 700, borderRadius: 6, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer' },
-  cancelBtn: { padding: '7px 12px', fontSize: 13, fontWeight: 600, borderRadius: 6, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' },
+  saveBtn: { flex: 1, padding: '7px 0', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 6px rgba(247,87,9,0.28)' },
+  cancelBtn: { padding: '7px 12px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' },
 
   historyToggle: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', marginTop: 2 },
   historyList: { borderTop: '1px solid var(--border-light)', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 },
@@ -623,11 +623,12 @@ const styles = {
     padding: '8px 16px',
     fontSize: 13,
     fontWeight: 700,
-    borderRadius: 8,
+    borderRadius: 10,
     border: '1px solid var(--border)',
     background: 'none',
     cursor: 'pointer',
     whiteSpace: 'nowrap',
+    transition: 'border-color 0.15s, color 0.15s',
   },
 
   // Session log

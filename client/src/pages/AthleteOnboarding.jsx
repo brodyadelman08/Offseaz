@@ -878,7 +878,7 @@ const styles = {
     color: 'var(--text-3)',
     background: 'none',
     border: '1px solid var(--border)',
-    borderRadius: 8,
+    borderRadius: 10,
     padding: '10px 16px',
     cursor: 'pointer',
   },

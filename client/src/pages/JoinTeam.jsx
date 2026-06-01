@@ -116,10 +116,11 @@ const styles = {
     padding: '9px 20px',
     fontSize: 14,
     fontWeight: 600,
-    borderRadius: 8,
+    borderRadius: 10,
     border: 'none',
     background: '#308EBD',
     color: '#fff',
     cursor: 'pointer',
+    boxShadow: '0 2px 8px rgba(48,142,189,0.30)',
   },
 }

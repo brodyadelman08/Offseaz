@@ -228,25 +228,25 @@ const styles = {
 
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 24 },
 
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
   cardLabel: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 14px' },
 
   typeRow: { display: 'flex', gap: 10, marginBottom: 14 },
-  typeBtn: { flex: 1, padding: '9px 0', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '2px solid var(--border)', background: 'var(--card-inner)', cursor: 'pointer', color: 'var(--text-2)', transition: 'all 0.15s' },
+  typeBtn: { flex: 1, padding: '9px 0', fontSize: 13, fontWeight: 600, borderRadius: 10, border: '2px solid var(--border)', background: 'var(--card-inner)', cursor: 'pointer', color: 'var(--text-2)', transition: 'all 0.15s' },
   typeBtnActive: { color: '#fff' },
 
   composeForm: { display: 'flex', flexDirection: 'column', gap: 10 },
-  select: { padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', width: '100%' },
-  textarea: { padding: '11px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.5, width: '100%', boxSizing: 'border-box', outline: 'none' },
-  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13 },
+  select: { padding: '10px 14px', fontSize: 14, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', width: '100%' },
+  textarea: { padding: '11px 14px', fontSize: 14, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', fontFamily: 'inherit', lineHeight: 1.5, width: '100%', boxSizing: 'border-box', outline: 'none' },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 10, padding: '10px 14px', fontSize: 13 },
   sendRow: { display: 'flex', justifyContent: 'flex-end' },
-  sendBtn: { padding: '10px 20px', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', color: '#fff', cursor: 'pointer', letterSpacing: 0.2 },
+  sendBtn: { padding: '10px 22px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', color: '#fff', cursor: 'pointer', letterSpacing: 0.2, boxShadow: '0 2px 10px rgba(247,87,9,0.32)' },
 
   historyHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
   msgCount: { fontSize: 13, color: 'var(--text-3)' },
 
   msgList: { display: 'flex', flexDirection: 'column', gap: 10, marginTop: 4 },
-  msgCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderLeft: '3px solid', borderRadius: '0 10px 10px 0', padding: '12px 16px' },
+  msgCard: { background: 'var(--card-inner)', border: '1px solid var(--border)', borderLeft: '3px solid', borderRadius: '0 12px 12px 0', padding: '12px 16px', boxShadow: '0 1px 4px rgba(0,0,0,0.14)' },
   msgMeta: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8, flexWrap: 'wrap' },
   msgTo: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },
   msgSender: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },

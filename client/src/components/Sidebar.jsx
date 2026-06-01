@@ -88,7 +88,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
                 ...styles.navItem,
                 ...(active ? { background: accentBg } : {}),
               }}
-              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.04)' }}
+              onMouseEnter={e => { if (!active) e.currentTarget.style.background = 'rgba(255,255,255,0.05)' }}
               onMouseLeave={e => { if (!active) e.currentTarget.style.background = 'transparent' }}
             >
               <div style={styles.navBorder(active, accent)} />
@@ -186,6 +186,7 @@ const styles = {
     flexDirection: 'column',
     zIndex: 50,
     overflowY: 'auto',
+    boxShadow: '4px 0 24px rgba(0,0,0,0.35)',
   },
 
   logoArea: {
@@ -200,7 +201,7 @@ const styles = {
 
   navList: {
     flex: 1,
-    padding: '10px 0',
+    padding: '10px 8px',
     display: 'flex',
     flexDirection: 'column',
     gap: 2,
@@ -210,16 +211,16 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: 10,
-    padding: '0 16px 0 0',
-    height: 44,
+    padding: '0 12px',
+    height: 40,
     background: 'transparent',
     border: 'none',
     cursor: 'pointer',
     textAlign: 'left',
     width: '100%',
     position: 'relative',
-    transition: 'background 0.12s',
-    borderRadius: 0,
+    transition: 'background 0.14s ease, box-shadow 0.14s ease',
+    borderRadius: 8,
   },
   navItemActive: {
     background: 'rgba(247,87,9,0.08)',
@@ -227,12 +228,13 @@ const styles = {
 
   navBorder: (active, color = ORANGE) => ({
     width: 3,
-    alignSelf: 'stretch',
+    height: 16,
     background: active ? color : 'transparent',
     flexShrink: 0,
-    borderRadius: '0 2px 2px 0',
-    marginRight: 13,
-    transition: 'background 0.12s',
+    borderRadius: 3,
+    marginRight: 4,
+    transition: 'background 0.15s',
+    boxShadow: active ? `0 0 6px ${color}` : 'none',
   }),
 
   navLabel: {
@@ -295,11 +297,14 @@ const styles = {
     left: 0,
     right: 0,
     height: 60,
-    background: '#111111',
+    background: 'rgba(17,17,17,0.96)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
     borderTop: '1px solid var(--border)',
     display: 'flex',
     alignItems: 'stretch',
     zIndex: 50,
+    boxShadow: '0 -4px 20px rgba(0,0,0,0.4)',
   },
   tabItem: {
     flex: 1,

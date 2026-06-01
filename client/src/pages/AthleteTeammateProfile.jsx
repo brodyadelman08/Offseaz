@@ -233,7 +233,7 @@ const styles = {
     padding: '9px 18px',
     fontSize: 14,
     fontWeight: 600,
-    borderRadius: 8,
+    borderRadius: 10,
     border: '1px solid var(--border)',
     background: 'none',
     color: 'var(--text-2)',
@@ -248,17 +248,18 @@ const styles = {
   statCard: {
     background: 'var(--card)',
     border: '1px solid var(--border)',
-    borderRadius: 10,
+    borderRadius: 14,
     padding: '14px 18px',
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
     gap: 4,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   statVal: { fontSize: 22, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
   statLabel: { fontSize: 12, color: 'var(--text-3)' },
 
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 24 },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
   cardLabel: {
     fontSize: 11,
     fontWeight: 700,
@@ -293,11 +294,12 @@ const styles = {
   liftCard: {
     background: 'var(--card-inner)',
     border: '1px solid var(--border)',
-    borderRadius: 10,
+    borderRadius: 12,
     padding: '14px 16px',
     display: 'flex',
     flexDirection: 'column',
     gap: 5,
+    boxShadow: '0 1px 4px rgba(0,0,0,0.14)',
   },
   liftTop: { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
   liftLabel: {

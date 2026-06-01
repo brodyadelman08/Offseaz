@@ -52,8 +52,8 @@ export default function CoachBlueprints() {
               key={bp.id}
               style={styles.card}
               onClick={() => navigate(`/coach/blueprints/${bp.id}`)}
-              onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-              onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
+              onMouseEnter={e => { e.currentTarget.style.borderColor = ORANGE; e.currentTarget.style.transform = 'translateY(-2px)'; e.currentTarget.style.boxShadow = '0 8px 24px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05)' }}
+              onMouseLeave={e => { e.currentTarget.style.borderColor = 'var(--border)'; e.currentTarget.style.transform = ''; e.currentTarget.style.boxShadow = '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' }}
             >
               <span style={styles.cardTitle}>{bp.title}</span>
               {bp.description && (
@@ -92,16 +92,17 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     gap: 7,
-    padding: '9px 16px',
+    padding: '9px 18px',
     fontSize: 14,
     fontWeight: 700,
-    borderRadius: 8,
+    borderRadius: 10,
     border: 'none',
     background: ORANGE,
     color: '#fff',
     cursor: 'pointer',
     whiteSpace: 'nowrap',
     letterSpacing: 0.1,
+    boxShadow: '0 2px 10px rgba(247,87,9,0.32)',
   },
 
   empty: { color: 'var(--text-3)', fontSize: 15 },
@@ -112,16 +113,17 @@ const styles = {
     padding: '11px 24px',
     fontSize: 14,
     fontWeight: 700,
-    borderRadius: 8,
+    borderRadius: 10,
     border: 'none',
     background: ORANGE,
     color: '#fff',
     cursor: 'pointer',
+    boxShadow: '0 2px 10px rgba(247,87,9,0.32)',
   },
 
   grid: {
     display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(240px, 1fr))',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(min(240px, 100%), 1fr))',
     gap: 14,
   },
   card: {
@@ -129,12 +131,13 @@ const styles = {
     flexDirection: 'column',
     gap: 8,
     padding: '20px 18px',
-    borderRadius: 12,
+    borderRadius: 16,
     border: '1px solid var(--border)',
     background: 'var(--card)',
     cursor: 'pointer',
     textAlign: 'left',
-    transition: 'border-color 0.15s',
+    transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   cardTitle: { fontSize: 15, fontWeight: 700, color: 'var(--text)' },
   cardDesc: {
@@ -158,7 +161,7 @@ const styles = {
     fontWeight: 700,
     background: 'rgba(247,87,9,0.1)',
     color: ORANGE,
-    padding: '2px 8px',
-    borderRadius: 4,
+    padding: '3px 9px',
+    borderRadius: 6,
   },
 }
