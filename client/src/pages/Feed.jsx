@@ -7,6 +7,15 @@ import { HeartIcon, HeartFilledIcon, MessageIcon } from '../components/Icons'
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 
+// ── Shared design tokens ──────────────────────────────────────────────────────
+const T = {
+  card: 'var(--card)',
+  cardInner: 'var(--card-inner)',
+  shadowBase: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)',
+  shadowHov:  '0 8px 28px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06)',
+  trans: 'border-color 0.18s ease, box-shadow 0.18s ease, transform 0.18s ease',
+}
+
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime()
   const mins = Math.floor(diff / 60000)
@@ -19,32 +28,38 @@ function timeAgo(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
+// ── Comment item ──────────────────────────────────────────────────────────────
 function CommentItem({ comment, currentUserId, role, onDelete }) {
   return (
-    <div style={styles.comment}>
+    <div style={st.comment}>
       <AvatarUpload
         name={comment.author?.full_name}
         avatarUrl={comment.author?.avatar_url}
-        size={26}
+        size={28}
         color={BLUE}
         editable={false}
       />
-      <div style={styles.commentBody}>
-        <span style={styles.commentAuthor}>{comment.author?.full_name}</span>
-        <span style={styles.commentTime}> · {timeAgo(comment.created_at)}</span>
-        <p style={styles.commentText}>{comment.content}</p>
+      <div style={st.commentBubble}>
+        <div style={st.commentHeader}>
+          <span style={st.commentAuthor}>{comment.author?.full_name}</span>
+          <span style={st.commentTime}>{timeAgo(comment.created_at)}</span>
+        </div>
+        <p style={st.commentText}>{comment.content}</p>
       </div>
       {(role === 'coach' || comment.author_id === currentUserId) && (
-        <button style={styles.deleteSmall} onClick={() => onDelete(comment.id)} title="Delete">×</button>
+        <button style={st.deleteSmall} onClick={() => onDelete(comment.id)} title="Delete">×</button>
       )}
     </div>
   )
 }
 
+// ── Post card ─────────────────────────────────────────────────────────────────
 function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDeleteComment }) {
   const [showComments, setShowComments] = useState(false)
   const [commentText, setCommentText] = useState('')
   const [submitting, setSubmitting] = useState(false)
+  // Spring animation state for like button
+  const [likeAnim, setLikeAnim] = useState(false)
   const inputRef = useRef(null)
 
   async function handleComment(e) {
@@ -58,68 +73,106 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
 
   function toggleComments() {
     setShowComments(s => !s)
-    if (!showComments) setTimeout(() => inputRef.current?.focus(), 50)
+    if (!showComments) setTimeout(() => inputRef.current?.focus(), 60)
+  }
+
+  function handleLikeClick() {
+    setLikeAnim(true)
+    setTimeout(() => setLikeAnim(false), 350)
+    onLike(post.id)
   }
 
   const canDelete = role === 'coach' || post.author_id === currentUserId
 
   return (
-    <div style={styles.postCard}>
+    <div
+      style={st.postCard}
+      onMouseEnter={e => {
+        e.currentTarget.style.transform = 'translateY(-2px)'
+        e.currentTarget.style.boxShadow = T.shadowHov
+        e.currentTarget.style.borderColor = 'rgba(247,87,9,0.28)'
+      }}
+      onMouseLeave={e => {
+        e.currentTarget.style.transform = ''
+        e.currentTarget.style.boxShadow = T.shadowBase
+        e.currentTarget.style.borderColor = 'var(--border)'
+      }}
+    >
       {/* Header */}
-      <div style={styles.postHeader}>
+      <div style={st.postHeader}>
         <AvatarUpload
           name={post.author?.full_name}
           avatarUrl={post.author?.avatar_url}
-          size={38}
+          size={40}
           color={ORANGE}
           editable={false}
         />
-        <div style={styles.postMeta}>
-          <span style={styles.postAuthor}>{post.author?.full_name}</span>
-          <span style={styles.postTime}>{timeAgo(post.created_at)}</span>
+        <div style={st.postMeta}>
+          <span style={st.postAuthor}>{post.author?.full_name}</span>
+          <span style={st.postTime}>{timeAgo(post.created_at)}</span>
         </div>
         {canDelete && (
-          <button style={styles.deleteBtn} onClick={() => onDelete(post.id)} title="Delete post">×</button>
+          <button style={st.deleteBtn} onClick={() => onDelete(post.id)} title="Delete post">×</button>
         )}
       </div>
 
       {/* Content */}
-      <p style={styles.postContent}>{post.content}</p>
+      <p style={st.postContent}>{post.content}</p>
 
-      {/* Actions */}
-      <div style={styles.postActions}>
+      {/* Action bar */}
+      <div style={st.postActions}>
         <button
-          style={{ ...styles.actionBtn, color: post.liked_by_me ? ORANGE : 'var(--text-3)' }}
-          onClick={() => onLike(post.id)}
+          style={{
+            ...st.actionBtn,
+            color: post.liked_by_me ? ORANGE : 'var(--text-3)',
+          }}
+          onClick={handleLikeClick}
         >
-          {post.liked_by_me
-            ? <HeartFilledIcon size={16} color={ORANGE} />
-            : <HeartIcon size={16} color="var(--text-3)" />}
-          {post.like_count > 0 && <span>{post.like_count}</span>}
+          <span style={{
+            display: 'inline-flex',
+            transform: likeAnim ? 'scale(1.5)' : 'scale(1)',
+            transition: likeAnim
+              ? 'none'
+              : 'transform 0.35s cubic-bezier(0.34,1.56,0.64,1)',
+          }}>
+            {post.liked_by_me
+              ? <HeartFilledIcon size={17} color={ORANGE} />
+              : <HeartIcon size={17} color="var(--text-3)" />}
+          </span>
+          {post.like_count > 0 && (
+            <span style={{ fontSize: 13, fontWeight: 700 }}>{post.like_count}</span>
+          )}
+          <span>Like</span>
         </button>
-        <button style={styles.actionBtn} onClick={toggleComments}>
-          <MessageIcon size={15} color="var(--text-3)" />
-          {post.comments.length > 0 && <span>{post.comments.length}</span>}
+        <button style={st.actionBtn} onClick={toggleComments}>
+          <MessageIcon size={16} color="var(--text-3)" />
+          {post.comments.length > 0 && (
+            <span style={{ fontSize: 13, fontWeight: 700 }}>{post.comments.length}</span>
+          )}
           <span>{showComments ? 'Hide' : 'Comment'}</span>
         </button>
       </div>
 
-      {/* Comments section */}
+      {/* Comments */}
       {showComments && (
-        <div style={styles.commentsSection}>
-          {post.comments.map(c => (
-            <CommentItem
-              key={c.id}
-              comment={c}
-              currentUserId={currentUserId}
-              role={role}
-              onDelete={onDeleteComment}
-            />
-          ))}
-          <form onSubmit={handleComment} style={styles.commentForm}>
+        <div style={st.commentsSection}>
+          {post.comments.length > 0 && (
+            <div style={st.commentsList}>
+              {post.comments.map(c => (
+                <CommentItem
+                  key={c.id}
+                  comment={c}
+                  currentUserId={currentUserId}
+                  role={role}
+                  onDelete={onDeleteComment}
+                />
+              ))}
+            </div>
+          )}
+          <form onSubmit={handleComment} style={st.commentForm}>
             <input
               ref={inputRef}
-              style={styles.commentInput}
+              style={st.commentInput}
               placeholder="Write a comment…"
               value={commentText}
               onChange={e => setCommentText(e.target.value)}
@@ -127,7 +180,10 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
             />
             <button
               type="submit"
-              style={{ ...styles.commentSubmit, opacity: submitting || !commentText.trim() ? 0.5 : 1 }}
+              style={{
+                ...st.commentSubmit,
+                opacity: submitting || !commentText.trim() ? 0.45 : 1,
+              }}
               disabled={submitting || !commentText.trim()}
             >
               Post
@@ -139,6 +195,7 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
   )
 }
 
+// ── Page ──────────────────────────────────────────────────────────────────────
 export default function Feed() {
   const { profile } = useAuth()
   const [posts, setPosts] = useState([])
@@ -146,6 +203,7 @@ export default function Feed() {
   const [error, setError] = useState('')
   const [composeText, setComposeText] = useState('')
   const [posting, setPosting] = useState(false)
+  const [composeFocused, setComposeFocused] = useState(false)
 
   useEffect(() => {
     api.get('/api/feed')
@@ -169,6 +227,7 @@ export default function Feed() {
       }
       setPosts(prev => [newPost, ...prev])
       setComposeText('')
+      setComposeFocused(false)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to post.')
     } finally {
@@ -224,54 +283,80 @@ export default function Feed() {
   }
 
   return (
-    <div style={styles.container}>
-      <div style={styles.pageHeader}>
-        <h1 style={styles.pageTitle}>Team Feed</h1>
-        <p style={styles.pageSub}>Stay connected with your team.</p>
+    <div style={st.container}>
+      {/* Header */}
+      <div style={st.pageHeader}>
+        <h1 style={st.pageTitle}>Team Feed</h1>
+        <p style={st.pageSub}>Stay connected with your team.</p>
       </div>
 
-      {/* Compose */}
-      <form onSubmit={handlePost} style={styles.composeCard}>
-        <div style={styles.composeRow}>
+      {/* Compose box */}
+      <form onSubmit={handlePost} style={{
+        ...st.composeCard,
+        borderColor: composeFocused ? 'rgba(247,87,9,0.35)' : 'var(--border)',
+        boxShadow: composeFocused
+          ? '0 0 0 3px rgba(247,87,9,0.08), 0 4px 20px rgba(0,0,0,0.26), inset 0 1px 0 rgba(255,255,255,0.05)'
+          : '0 4px 20px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04)',
+      }}>
+        <div style={st.composeRow}>
           <AvatarUpload
             name={profile?.full_name}
             avatarUrl={profile?.avatar_url}
-            size={36}
+            size={38}
             color={ORANGE}
             editable={false}
           />
           <textarea
-            style={styles.composeInput}
+            style={st.composeInput}
             placeholder="Share an update with your team…"
             value={composeText}
             onChange={e => setComposeText(e.target.value)}
+            onFocus={() => setComposeFocused(true)}
+            onBlur={() => setComposeFocused(false)}
             rows={composeText.split('\n').length > 2 ? 4 : 2}
             maxLength={1000}
           />
         </div>
-        <div style={styles.composeFooter}>
-          <span style={styles.charCount}>{composeText.length}/1000</span>
-          <button
-            type="submit"
-            style={{ ...styles.postBtn, opacity: posting || !composeText.trim() ? 0.5 : 1 }}
-            disabled={posting || !composeText.trim()}
-          >
-            {posting ? 'Posting…' : 'Post'}
-          </button>
-        </div>
+        {(composeFocused || composeText.length > 0) && (
+          <div style={st.composeFooter}>
+            <span style={st.charCount}>{composeText.length}/1000</span>
+            <button
+              type="submit"
+              style={{
+                ...st.postBtn,
+                opacity: posting || !composeText.trim() ? 0.45 : 1,
+              }}
+              disabled={posting || !composeText.trim()}
+            >
+              {posting ? (
+                <span style={{ display: 'inline-flex', alignItems: 'center', gap: 7 }}>
+                  <span className="survey-spinner-sm" />
+                  Posting…
+                </span>
+              ) : 'Post to team'}
+            </button>
+          </div>
+        )}
       </form>
 
-      {error && <p style={styles.errorMsg}>{error}</p>}
+      {error && (
+        <div style={st.errorMsg}>⚠ {error}</div>
+      )}
 
       {loading ? (
-        <p style={styles.loadingText}>Loading feed…</p>
+        <div style={st.loadingWrap}>
+          <div className="survey-spinner" />
+        </div>
       ) : posts.length === 0 ? (
-        <div style={styles.emptyState}>
-          <p style={styles.emptyTitle}>No posts yet</p>
-          <p style={styles.emptySub}>Be the first to share something with your team.</p>
+        <div style={st.emptyState}>
+          <div style={st.emptyIcon}>
+            <MessageIcon size={32} color="var(--text-3)" />
+          </div>
+          <p style={st.emptyTitle}>No posts yet</p>
+          <p style={st.emptySub}>Be the first to share something with your team.</p>
         </div>
       ) : (
-        <div style={styles.feedList}>
+        <div style={st.feedList}>
           {posts.map(post => (
             <PostCard
               key={post.id}
@@ -290,104 +375,152 @@ export default function Feed() {
   )
 }
 
-const styles = {
+// ── Styles ────────────────────────────────────────────────────────────────────
+const st = {
   container:  { maxWidth: 640, margin: '0 auto' },
-  pageHeader: { marginBottom: 20 },
-  pageTitle:  { fontSize: 24, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
-  pageSub:    { fontSize: 14, color: 'var(--text-2)', fontStyle: 'italic', margin: 0 },
-  loadingText:{ color: 'var(--text-3)', fontSize: 15 },
-  errorMsg:   { color: '#c73820', fontSize: 14, marginBottom: 12 },
 
-  // Compose
-  composeCard: {
-    background: 'var(--card)',
-    border: '1px solid var(--border)',
-    borderRadius: 16,
-    padding: '16px 18px',
-    marginBottom: 20,
-    boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
+  pageHeader: { marginBottom: 24 },
+  pageTitle:  { fontSize: 26, fontWeight: 800, color: 'var(--text)', margin: '0 0 4px', letterSpacing: -0.4 },
+  pageSub:    { fontSize: 14, color: 'var(--text-2)', margin: 0 },
+
+  loadingWrap: { display: 'flex', justifyContent: 'center', paddingTop: 48 },
+  errorMsg: {
+    background: 'rgba(199,56,32,0.08)',
+    border: '1px solid rgba(199,56,32,0.22)',
+    color: '#c73820',
+    borderRadius: 10,
+    padding: '10px 14px',
+    fontSize: 13,
+    marginBottom: 16,
   },
-  composeRow:   { display: 'flex', gap: 12, alignItems: 'flex-start' },
+
+  // ── Compose ──
+  composeCard: {
+    background: `linear-gradient(145deg, rgba(247,87,9,0.04) 0%, var(--card) 100%)`,
+    border: '1.5px solid var(--border)',
+    borderRadius: 18,
+    padding: '18px 20px 16px',
+    marginBottom: 24,
+    transition: 'border-color 0.18s ease, box-shadow 0.18s ease',
+  },
+  composeRow: { display: 'flex', gap: 13, alignItems: 'flex-start' },
   composeInput: {
     flex: 1,
     padding: '10px 14px',
     fontSize: 14,
-    borderRadius: 10,
-    border: '1px solid var(--input-border)',
-    background: 'var(--input-bg)',
+    borderRadius: 12,
+    border: '1px solid var(--border)',
+    background: 'var(--card-inner)',
     color: 'var(--text)',
     resize: 'none',
     fontFamily: 'inherit',
-    lineHeight: 1.5,
+    lineHeight: 1.6,
     outline: 'none',
     boxSizing: 'border-box',
+    transition: 'border-color 0.15s',
   },
-  composeFooter: { display: 'flex', justifyContent: 'flex-end', alignItems: 'center', gap: 12, marginTop: 10 },
-  charCount: { fontSize: 12, color: 'var(--text-3)' },
+  composeFooter: {
+    display: 'flex',
+    justifyContent: 'flex-end',
+    alignItems: 'center',
+    gap: 12,
+    marginTop: 12,
+    paddingTop: 12,
+    borderTop: '1px solid var(--border-light)',
+  },
+  charCount: { fontSize: 12, color: 'var(--text-3)', flex: 1 },
   postBtn: {
-    padding: '8px 20px',
-    fontSize: 13,
-    fontWeight: 700,
+    padding: '10px 24px',
+    fontSize: 14,
+    fontWeight: 800,
     borderRadius: 10,
     border: 'none',
     background: ORANGE,
     color: '#fff',
     cursor: 'pointer',
-    boxShadow: '0 2px 8px rgba(247,87,9,0.28)',
+    letterSpacing: 0.2,
+    boxShadow: '0 2px 16px rgba(247,87,9,0.38), 0 1px 4px rgba(0,0,0,0.20)',
+    transition: 'opacity 0.15s, transform 0.15s, box-shadow 0.15s',
   },
 
-  emptyState: { textAlign: 'center', paddingTop: 48 },
-  emptyTitle: { fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' },
+  // ── Empty / loading ──
+  emptyState: { textAlign: 'center', paddingTop: 56, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10 },
+  emptyIcon: { width: 64, height: 64, borderRadius: '50%', background: 'var(--card-inner)', border: '1px solid var(--border)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 4 },
+  emptyTitle: { fontSize: 18, fontWeight: 700, color: 'var(--text)', margin: 0 },
   emptySub:   { fontSize: 14, color: 'var(--text-3)', margin: 0 },
 
   feedList: { display: 'flex', flexDirection: 'column', gap: 14 },
 
-  // Post card
+  // ── Post card ──
   postCard: {
     background: 'var(--card)',
     border: '1px solid var(--border)',
-    borderRadius: 16,
-    padding: '16px 18px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.16), inset 0 1px 0 rgba(255,255,255,0.04)',
+    borderRadius: 18,
+    padding: '18px 20px',
+    boxShadow: T.shadowBase,
+    transition: T.trans,
+    cursor: 'default',
   },
-  postHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 12 },
+  postHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 14 },
   postMeta:   { flex: 1, display: 'flex', flexDirection: 'column', gap: 2 },
-  postAuthor: { fontSize: 14, fontWeight: 700, color: 'var(--text)' },
+  postAuthor: { fontSize: 14, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
   postTime:   { fontSize: 12, color: 'var(--text-3)' },
   deleteBtn: {
     background: 'none',
     border: 'none',
     color: 'var(--text-3)',
-    fontSize: 20,
+    fontSize: 22,
     cursor: 'pointer',
     lineHeight: 1,
     padding: '0 4px',
-    borderRadius: 4,
+    borderRadius: 6,
     alignSelf: 'flex-start',
+    opacity: 0.6,
+    transition: 'opacity 0.12s',
   },
-  postContent: { fontSize: 15, color: 'var(--text)', lineHeight: 1.6, margin: '0 0 12px', whiteSpace: 'pre-wrap' },
+  postContent: { fontSize: 15, color: 'var(--text)', lineHeight: 1.65, margin: '0 0 14px', whiteSpace: 'pre-wrap' },
 
-  postActions: { display: 'flex', gap: 16, paddingTop: 10, borderTop: '1px solid var(--border-light)' },
-  actionBtn: {
+  postActions: {
     display: 'flex',
+    gap: 4,
+    paddingTop: 10,
+    borderTop: '1px solid var(--border-light)',
+  },
+  actionBtn: {
+    display: 'inline-flex',
     alignItems: 'center',
-    gap: 5,
+    gap: 6,
     background: 'none',
     border: 'none',
     color: 'var(--text-3)',
     fontSize: 13,
     fontWeight: 600,
     cursor: 'pointer',
-    padding: '4px 0',
+    padding: '6px 12px',
+    borderRadius: 8,
+    transition: 'background 0.14s, color 0.14s',
   },
 
-  // Comments
-  commentsSection: { marginTop: 12, borderTop: '1px solid var(--border-light)', paddingTop: 12 },
-  comment: { display: 'flex', gap: 8, alignItems: 'flex-start', marginBottom: 10 },
-  commentBody: { flex: 1 },
+  // ── Comments ──
+  commentsSection: {
+    marginTop: 12,
+    borderTop: '1px solid var(--border-light)',
+    paddingTop: 14,
+  },
+  commentsList: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 12 },
+  comment: { display: 'flex', gap: 10, alignItems: 'flex-start' },
+  commentBubble: {
+    flex: 1,
+    background: 'var(--card-inner)',
+    border: '1px solid var(--border)',
+    borderRadius: '4px 12px 12px 12px',
+    padding: '8px 12px',
+    boxShadow: '0 1px 3px rgba(0,0,0,0.12)',
+  },
+  commentHeader: { display: 'flex', alignItems: 'center', gap: 6, marginBottom: 4 },
   commentAuthor: { fontSize: 13, fontWeight: 700, color: 'var(--text)' },
-  commentTime: { fontSize: 11, color: 'var(--text-3)' },
-  commentText: { fontSize: 13, color: 'var(--text-2)', margin: '3px 0 0', lineHeight: 1.5, whiteSpace: 'pre-wrap' },
+  commentTime:   { fontSize: 11, color: 'var(--text-3)' },
+  commentText:   { fontSize: 13, color: 'var(--text-2)', margin: 0, lineHeight: 1.55, whiteSpace: 'pre-wrap' },
   deleteSmall: {
     background: 'none',
     border: 'none',
@@ -395,23 +528,27 @@ const styles = {
     fontSize: 18,
     cursor: 'pointer',
     lineHeight: 1,
-    padding: 0,
+    padding: '4px 0',
     flexShrink: 0,
+    opacity: 0.5,
   },
-  commentForm: { display: 'flex', gap: 8, marginTop: 8 },
+
+  commentForm: { display: 'flex', gap: 8 },
   commentInput: {
     flex: 1,
-    padding: '8px 12px',
+    padding: '9px 13px',
     fontSize: 13,
     borderRadius: 10,
     border: '1px solid var(--input-border)',
-    background: 'var(--input-bg)',
+    background: 'var(--card-inner)',
     color: 'var(--text)',
     outline: 'none',
     fontFamily: 'inherit',
+    lineHeight: 1.5,
+    transition: 'border-color 0.15s',
   },
   commentSubmit: {
-    padding: '8px 16px',
+    padding: '9px 18px',
     fontSize: 13,
     fontWeight: 700,
     borderRadius: 10,
@@ -420,6 +557,7 @@ const styles = {
     color: '#fff',
     cursor: 'pointer',
     whiteSpace: 'nowrap',
-    boxShadow: '0 2px 8px rgba(48,142,189,0.28)',
+    boxShadow: '0 2px 10px rgba(48,142,189,0.32)',
+    transition: 'opacity 0.15s',
   },
 }
