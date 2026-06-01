@@ -61,6 +61,39 @@ const ATHLETE_BENEFITS = [
   'Enter next season ahead of the competition',
 ]
 
+const SPORTS = [
+  { emoji: '🏈', name: 'Football' },
+  { emoji: '🏀', name: 'Basketball' },
+  { emoji: '⚾', name: 'Baseball' },
+  { emoji: '🥎', name: 'Softball' },
+  { emoji: '⚽', name: 'Soccer' },
+  { emoji: '🏒', name: 'Hockey' },
+  { emoji: '🤼', name: 'Wrestling' },
+  { emoji: '🏐', name: 'Volleyball' },
+  { emoji: '🏃', name: 'Track & Field' },
+  { emoji: '🌲', name: 'Cross Country' },
+  { emoji: '🥍', name: 'Lacrosse' },
+  { emoji: '🏊', name: 'Swimming' },
+]
+
+const BLUEPRINT_STEPS = [
+  {
+    num: '01', color: ORANGE,
+    title: 'Athlete Completes the Needs Analysis Survey',
+    body: 'Athletes fill out a detailed intake survey selecting their sport, position, primary goal, experience level, and days available — giving their coach the full picture instantly.',
+  },
+  {
+    num: '02', color: BLUE,
+    title: 'Offseaz Generates a Personalized Blueprint',
+    body: 'The platform automatically builds a training program based on their survey answers. Percentage-based weights are calculated from their logged maxes — no manual math required.',
+  },
+  {
+    num: '03', color: YELLOW,
+    title: 'Coach Reviews, Customizes, and Assigns',
+    body: 'Coaches review every generated blueprint, customize any exercise or loading scheme, assign it to the whole team or individual athletes, and lock it so athletes follow the program as designed.',
+  },
+]
+
 // ── Icon components (inline SVG) ─────────────────────────────────────────────
 
 function ClipboardIcon({ size = 22, color = 'currentColor' }) {
@@ -591,6 +624,82 @@ const gl = {
   },
 }
 
+// ── Sports & Blueprint styles ─────────────────────────────────────────────────
+
+const sp = {
+  sportGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fill, minmax(min(120px, 100%), 1fr))',
+    gap: 10,
+    marginBottom: 72,
+  },
+  sportChip: {
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
+    padding: '22px 12px',
+    background: '#141414', border: '1px solid #202020',
+    borderRadius: 16, cursor: 'default',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.20)',
+  },
+  sportEmoji: { fontSize: 30, lineHeight: 1, display: 'block' },
+  sportName:  { fontSize: 12, fontWeight: 600, color: '#777', letterSpacing: 0.3, textAlign: 'center', lineHeight: 1.3 },
+
+  sectionDivider: {
+    height: 1,
+    background: 'linear-gradient(to right, transparent, #2A2A2A, transparent)',
+    margin: '0 0 72px',
+  },
+
+  stepsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+    gap: 16,
+    marginBottom: 48,
+  },
+  stepCard: {
+    background: '#141414', border: '1px solid #202020',
+    borderRadius: 18, padding: '32px 28px',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03)',
+  },
+  stepNum: {
+    fontSize: 52, fontWeight: 900, lineHeight: 1,
+    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+    letterSpacing: '-0.04em', marginBottom: 20, display: 'block',
+  },
+  stepTitle: {
+    fontSize: 17, fontWeight: 700, color: '#E8E8E8', marginBottom: 12,
+    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+    letterSpacing: '-0.01em', lineHeight: 1.3,
+  },
+  stepBody: { fontSize: 14, color: '#666', lineHeight: 1.75, margin: 0 },
+
+  callout: {
+    display: 'flex', alignItems: 'flex-start', gap: 20,
+    background: 'rgba(247,87,9,0.06)',
+    border: '1px solid rgba(247,87,9,0.22)',
+    borderLeft: `3px solid ${ORANGE}`,
+    borderRadius: 16,
+    padding: '28px 32px',
+    marginBottom: 20,
+  },
+  calloutIconWrap: {
+    width: 48, height: 48, borderRadius: 12, flexShrink: 0, marginTop: 2,
+    background: 'rgba(247,87,9,0.12)', border: '1px solid rgba(247,87,9,0.25)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  },
+  calloutIconText:  { fontSize: 22 },
+  calloutHeading:   { fontSize: 16, fontWeight: 700, color: '#E8E8E8', marginBottom: 6, fontFamily: "'Calibri', 'Trebuchet MS', sans-serif" },
+  calloutBody:      { fontSize: 14, color: '#777', lineHeight: 1.7, margin: 0 },
+
+  customNote: {
+    display: 'flex', alignItems: 'flex-start', gap: 16,
+    background: '#111', border: '1px solid #1E1E1E',
+    borderRadius: 14, padding: '22px 28px',
+    maxWidth: 700, margin: '0 auto',
+  },
+  customNoteIcon: { fontSize: 18, flexShrink: 0, marginTop: 1 },
+  customNoteText: { fontSize: 14, color: '#555', lineHeight: 1.7, margin: 0 },
+}
+
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function Landing() {
@@ -732,6 +841,74 @@ export default function Landing() {
               </div>
             ))}
           </div>
+        </div>
+      </section>
+
+      {/* ── Sports & Blueprint section ─────────────────────────────── */}
+      <section style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818', borderBottom: '1px solid #181818' }}>
+        <div style={s.inner}>
+
+          {/* Header */}
+          <div style={{ ...s.sectionHead, maxWidth: 700 }}>
+            <span style={s.eyebrow}>Sport-Specific Training</span>
+            <h2 style={s.sectionH2}>Built for Every Sport and Every Athlete</h2>
+            <p style={s.sectionP}>
+              Offseaz ships with training templates built for 12 sports — and a fully customizable blueprint builder so coaches can design their own programs from scratch.
+            </p>
+          </div>
+
+          {/* Sports grid */}
+          <div style={sp.sportGrid}>
+            {SPORTS.map((sport, i) => (
+              <div key={i} className="land-feature-card" style={sp.sportChip}>
+                <span style={sp.sportEmoji}>{sport.emoji}</span>
+                <span style={sp.sportName}>{sport.name}</span>
+              </div>
+            ))}
+          </div>
+
+          {/* Divider */}
+          <div style={sp.sectionDivider} />
+
+          {/* How it works heading */}
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <span style={s.eyebrow}>How the Blueprint System Works</span>
+            <h3 style={{ ...s.sectionH2, marginBottom: 0 }}>From Survey to Program in Seconds</h3>
+          </div>
+
+          {/* 3-step cards */}
+          <div style={sp.stepsGrid}>
+            {BLUEPRINT_STEPS.map((step, i) => (
+              <div key={i} style={{ ...sp.stepCard, borderTop: `2px solid ${step.color}` }}>
+                <span style={{ ...sp.stepNum, color: step.color }}>{step.num}</span>
+                <h4 style={sp.stepTitle}>{step.title}</h4>
+                <p style={sp.stepBody}>{step.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Weight callout */}
+          <div style={sp.callout}>
+            <div style={sp.calloutIconWrap}>
+              <span style={sp.calloutIconText}>⚡</span>
+            </div>
+            <div>
+              <p style={sp.calloutHeading}>No math. No guesswork. Just lift.</p>
+              <p style={sp.calloutBody}>
+                Every lift shows the exact weight the athlete should use based on their personal max — automatically calculated from their logged 1RMs. Athletes see the number. They just lift it.
+              </p>
+            </div>
+          </div>
+
+          {/* Custom plans note */}
+          <div style={sp.customNote}>
+            <span style={sp.customNoteIcon}>🔧</span>
+            <p style={sp.customNoteText}>
+              <strong style={{ color: '#CCC', fontWeight: 700 }}>Prefer to build your own?</strong>{' '}
+              Coaches can build completely custom plans from scratch using the blueprint builder — full control over exercises, sets, reps, progressions, and weekly scheduling.
+            </p>
+          </div>
+
         </div>
       </section>
 
