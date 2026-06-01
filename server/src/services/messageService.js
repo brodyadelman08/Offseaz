@@ -37,19 +37,19 @@ async function getMessagesForCoach(coachId) {
   const { data, error } = await supabaseAdmin
     .from('team_messages')
     .select(`
-      id, content, sent_at, recipient_id,
+      id, content, created_at, recipient_id,
       sender:profiles!team_messages_sender_id_fkey ( full_name ),
       recipient:profiles!team_messages_recipient_id_fkey ( full_name )
     `)
     .eq('team_id', team.id)
-    .order('sent_at', { ascending: false })
+    .order('created_at', { ascending: false })
 
   if (error) throw error
 
   return (data || []).map(m => ({
     id: m.id,
     body: m.content,
-    sent_at: m.sent_at,
+    sent_at: m.created_at,
     recipient_id: m.recipient_id,
     sender_name: m.sender?.full_name || null,
     recipient_name: m.recipient?.full_name || null,
@@ -69,19 +69,19 @@ async function getMessagesForAthlete(athleteId) {
   const { data, error } = await supabaseAdmin
     .from('team_messages')
     .select(`
-      id, content, sent_at, recipient_id,
+      id, content, created_at, recipient_id,
       sender:profiles!team_messages_sender_id_fkey ( full_name )
     `)
     .eq('team_id', membership.team_id)
     .or(`recipient_id.is.null,recipient_id.eq.${athleteId}`)
-    .order('sent_at', { ascending: false })
+    .order('created_at', { ascending: false })
 
   if (error) throw error
 
   return (data || []).map(m => ({
     id: m.id,
     body: m.content,
-    sent_at: m.sent_at,
+    sent_at: m.created_at,
     recipient_id: m.recipient_id,
     sender_name: m.sender?.full_name || null,
     recipient_name: null,
