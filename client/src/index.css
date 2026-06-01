@@ -180,3 +180,56 @@ select {
   color: var(--text) !important;
   border-color: var(--text-3) !important;
 }
+
+/* ── Landing page button / link hover states ──────────────────────────────── */
+.land-cta-orange {
+  transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.15s ease;
+}
+.land-cta-orange:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 36px rgba(247,87,9,0.52) !important;
+  text-decoration: none !important;
+}
+.land-cta-orange:active { transform: scale(0.97); }
+
+.land-cta-blue {
+  transition: transform 0.18s ease, background 0.18s ease, color 0.18s ease, box-shadow 0.18s ease;
+}
+.land-cta-blue:hover {
+  background: rgba(48,142,189,0.12) !important;
+  transform: translateY(-2px);
+  box-shadow: 0 4px 20px rgba(48,142,189,0.22) !important;
+  text-decoration: none !important;
+}
+.land-cta-blue:active { transform: scale(0.97); }
+
+.land-cta-ghost {
+  transition: color 0.15s ease, border-color 0.15s ease;
+}
+.land-cta-ghost:hover {
+  color: #fff !important;
+  border-color: rgba(255,255,255,0.35) !important;
+  text-decoration: none !important;
+}
+
+.land-nav-link:hover {
+  color: #fff !important;
+  text-decoration: none !important;
+}
+
+.land-feature-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease;
+}
+.land-feature-card:hover {
+  transform: translateY(-3px);
+  box-shadow: 0 12px 36px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+  border-color: rgba(247,87,9,0.22) !important;
+}
+
+.land-stat-card {
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+.land-stat-card:hover {
+  transform: translateY(-2px);
+  box-shadow: 0 8px 28px rgba(0,0,0,0.30) !important;
+}
