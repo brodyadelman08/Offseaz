@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, Component } from 'react'
 import api from '../services/api'
 import { ClipboardIcon, FlameIcon } from '../components/Icons'
 
@@ -15,6 +15,18 @@ const LOG_STATUS = {
   partial:         { label: 'Partial',          color: '#b45309', bg: '#fef3c7' },
   skipped:         { label: 'Skipped',          color: '#888',    bg: '#f0f0f0' },
   skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
+}
+
+// Fallback for any unexpected status value — prevents render crash
+const LOG_STATUS_FALLBACK = { label: 'Logged', color: '#888', bg: '#f0f0f0' }
+
+function getLogStatus(status) {
+  const ls = LOG_STATUS[status]
+  if (!ls) {
+    console.warn('[AccountabilityDashboard] Unknown log status:', status)
+    return LOG_STATUS_FALLBACK
+  }
+  return ls
 }
 
 function initials(name) {
@@ -40,20 +52,83 @@ const FILTERS = [
   { key: 'notLogged', label: 'Not logged' },
 ]
 
+// ── Error boundary so a render crash shows a recoverable UI instead of grey ──
+class ErrorBoundary extends Component {
+  state = { error: null }
+  static getDerivedStateFromError(error) { return { error } }
+  componentDidCatch(error, info) {
+    console.error('[AccountabilityDashboard] Render error:', error, info)
+  }
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: 32, textAlign: 'center' }}>
+          <p style={{ color: 'var(--text)', fontWeight: 700, marginBottom: 8 }}>
+            Something went wrong loading this page.
+          </p>
+          <p style={{ color: 'var(--text-3)', fontSize: 13, marginBottom: 20 }}>
+            {this.state.error?.message || 'Unknown error'}
+          </p>
+          <button
+            style={{ padding: '9px 20px', borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', fontWeight: 700, cursor: 'pointer' }}
+            onClick={() => this.setState({ error: null })}
+          >
+            Try again
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
+
 export default function AccountabilityDashboard() {
+  return (
+    <ErrorBoundary>
+      <AccountabilityInner />
+    </ErrorBoundary>
+  )
+}
+
+function AccountabilityInner() {
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
+  const [apiError, setApiError] = useState(null)
 
   useEffect(() => {
+    console.log('[AccountabilityDashboard] Fetching accountability data…')
     api.get('/api/workouts/accountability')
-      .then(res => setData(res.data))
-      .catch(() => setData({ athletes: [], logs: [] }))
+      .then(res => {
+        console.log('[AccountabilityDashboard] Data received:', {
+          athletes: res.data?.athletes?.length,
+          logs: res.data?.logs?.length,
+          rawKeys: Object.keys(res.data || {}),
+        })
+        setData(res.data)
+      })
+      .catch(err => {
+        console.error('[AccountabilityDashboard] API error:', err?.response?.status, err?.response?.data?.error || err.message)
+        setApiError(err?.response?.data?.error || err.message || 'Failed to load')
+        setData({ athletes: [], logs: [] })
+      })
       .finally(() => setLoading(false))
   }, [])
 
   const athletes = data?.athletes || []
   const logs = data?.logs || []
+
+  // Log unexpected data shapes that could cause render crashes
+  if (!loading && data) {
+    logs.forEach((log, i) => {
+      if (!LOG_STATUS[log.status]) {
+        console.warn(`[AccountabilityDashboard] Log[${i}] has unknown status "${log.status}" — id:`, log.id)
+      }
+      if (!log.id) {
+        console.warn(`[AccountabilityDashboard] Log[${i}] has no id:`, log)
+      }
+    })
+  }
 
   const filtered = athletes.filter(a => {
     if (filter === 'logged')    return a.logged_this_week
@@ -80,6 +155,13 @@ export default function AccountabilityDashboard() {
           </p>
         )}
       </div>
+
+      {/* API error banner — visible above the empty state so we can debug on device */}
+      {apiError && !loading && (
+        <div style={{ background: 'rgba(199,56,32,0.10)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 10, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
+          ⚠ API error: {apiError}
+        </div>
+      )}
 
       {loading ? (
         <p style={styles.loadingText}>Loading…</p>
@@ -176,10 +258,12 @@ export default function AccountabilityDashboard() {
               <p style={styles.emptyFeed}>No sessions logged yet.</p>
             ) : (
               <div style={styles.feedList}>
-                {logs.map(log => {
-                  const ls = LOG_STATUS[log.status]
+                {logs.map((log, idx) => {
+                  // Use getLogStatus() — safe wrapper that never returns undefined
+                  const ls = getLogStatus(log.status)
+                  // Use idx as fallback key if log.id is missing
                   return (
-                    <div key={log.id} style={styles.feedRow}>
+                    <div key={log.id ?? idx} style={styles.feedRow}>
                       <div style={styles.feedLeft}>
                         <span style={styles.feedName}>{log.athlete_name}</span>
                         <span style={styles.feedFocus}>{log.session_focus || 'Session'}</span>
