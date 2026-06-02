@@ -10,6 +10,7 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import JoinTeam from './pages/JoinTeam'
 import Survey from './pages/Survey'
+import { Privacy, Terms, Refund, Accessibility } from './pages/Legal'
 
 import CoachDashboard from './pages/CoachDashboard'
 import CoachAthletes from './pages/CoachAthletes'
@@ -49,6 +50,10 @@ export default function App() {
             <Route path="/login" element={<Login />} />
             <Route path="/register" element={<Register />} />
             <Route path="/join/:code" element={<JoinTeam />} />
+            <Route path="/privacy"       element={<Privacy />} />
+            <Route path="/terms"         element={<Terms />} />
+            <Route path="/refund"        element={<Refund />} />
+            <Route path="/accessibility" element={<Accessibility />} />
 
             {/* Athlete-only standalone (no sidebar) */}
             <Route

@@ -1092,22 +1092,21 @@ export default function Landing() {
 
       {/* ── Footer ─────────────────────────────────────────────────────── */}
       <footer style={s.footer}>
-        <div style={s.footerInner}>
-          <div style={s.footerLeft}>
-            {/* FIX 2 — correct logo aspect ratio */}
-            <img
-              src={LOGO}
-              alt="Offseaz"
-              style={{ width: 170, height: 'auto', display: 'block', objectFit: 'contain', margin: '0 auto 10px' }}
-            />
-            <p style={s.footerTagline}>Built for coaches who take the offseason seriously.</p>
+        <div style={s.footerCenter}>
+          <img
+            src={LOGO}
+            alt="Offseaz"
+            style={{ width: 170, height: 'auto', display: 'block', objectFit: 'contain', margin: '0 auto 20px' }}
+          />
+          <div style={s.footerLinks}>
+            <Link to="/privacy"       style={s.footerLink}>Privacy Policy</Link>
+            <span style={s.footerDot}>·</span>
+            <Link to="/terms"         style={s.footerLink}>Terms &amp; Conditions</Link>
+            <span style={s.footerDot}>·</span>
+            <Link to="/refund"        style={s.footerLink}>Refund Policy</Link>
+            <span style={s.footerDot}>·</span>
+            <Link to="/accessibility" style={s.footerLink}>Accessibility</Link>
           </div>
-          <div style={s.footerRight}>
-            <Link to="/register" style={s.footerLink}>Get Started</Link>
-            <Link to="/login"    style={s.footerLink}>Sign In</Link>
-          </div>
-        </div>
-        <div style={s.footerBottom}>
           <p style={s.footerCopy}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
         </div>
       </footer>
@@ -1399,18 +1398,17 @@ const s = {
 
   // Footer
   footer: {
-    padding: 'clamp(40px, 5vw, 64px) clamp(20px, 5vw, 56px) clamp(24px, 3vw, 36px)',
+    padding: 'clamp(40px, 5vw, 64px) clamp(20px, 5vw, 56px) clamp(28px, 3vw, 40px)',
     background: '#080808', borderTop: '1px solid #141414',
   },
-  footerInner: {
-    maxWidth: 1120, margin: '0 auto',
-    display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between',
-    flexWrap: 'wrap', gap: 24, marginBottom: 40,
+  footerCenter: {
+    textAlign: 'center',
   },
-  footerLeft:    { display: 'flex', flexDirection: 'column', alignItems: 'center' },
-  footerTagline: { fontSize: 13, color: '#3A3A3A', margin: 0, textAlign: 'center' },
-  footerRight:   { display: 'flex', gap: 24, alignItems: 'center' },
-  footerLink:    { fontSize: 13, color: '#3A3A3A', textDecoration: 'none', fontWeight: 500 },
-  footerBottom:  { maxWidth: 1120, margin: '0 auto', paddingTop: 20, borderTop: '1px solid #141414' },
-  footerCopy:    { fontSize: 12, color: '#2A2A2A', margin: 0 },
+  footerLinks: {
+    display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
+    alignItems: 'center', gap: '6px 10px', marginBottom: 14,
+  },
+  footerLink:  { fontSize: 13, color: '#3A3A3A', textDecoration: 'none', fontWeight: 500 },
+  footerDot:   { fontSize: 13, color: '#222' },
+  footerCopy:  { fontSize: 12, color: '#2A2A2A', margin: 0 },
 }
