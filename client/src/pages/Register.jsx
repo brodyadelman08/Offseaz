@@ -168,7 +168,7 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    background: 'var(--bg)',
+    background: '#0F0F0F',
     padding: '40px 20px',
   },
   content: {
@@ -187,7 +187,7 @@ const styles = {
     gap: 12,
   },
   logoHero: {
-    width: 180,
+    width: 200,
     height: 'auto',
     display: 'block',
     objectFit: 'contain',
