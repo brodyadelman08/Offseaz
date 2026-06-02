@@ -41,7 +41,7 @@ export default function Login() {
     <div style={styles.page}>
       <div style={styles.content}>
         <div style={styles.brand}>
-          <img src="/OFFSEAZ_LOGO_PNG.png?v=3" alt="Offseaz" style={styles.logoHero} />
+          <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logoHero} />
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
 
