@@ -59,7 +59,7 @@ export default function Register() {
     <div style={styles.page}>
       <div style={styles.content}>
         <div style={styles.brand}>
-          <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logoHero} />
+          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
 
@@ -187,8 +187,10 @@ const styles = {
     gap: 12,
   },
   logoHero: {
-    height: 72,
+    width: 180,
+    height: 'auto',
     display: 'block',
+    objectFit: 'contain',
   },
   tagline: {
     fontSize: 14,

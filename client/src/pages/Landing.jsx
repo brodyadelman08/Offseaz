@@ -1,4 +1,4 @@
-import { useEffect } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
@@ -530,7 +530,7 @@ const fd = {
 
 function GoalsMockup() {
   const goals = [
-    { label: 'Squat 1RM',   current: 285, target: 315, unit: 'lbs', pct: 90, color: ORANGE },
+    { label: 'Squat One Rep Max',   current: 285, target: 315, unit: 'lbs', pct: 90, color: ORANGE },
     { label: 'Sprint 40yd', current: 4.6, target: 4.4, unit: 'sec', pct: 70, color: BLUE   },
     { label: 'Workouts',    current: 38,  target: 48,  unit: 'done',pct: 79, color: YELLOW },
   ]
@@ -705,6 +705,7 @@ const sp = {
 export default function Landing() {
   const { session, profile, loading } = useAuth()
   const navigate = useNavigate()
+  const [scrolled, setScrolled] = useState(false)
 
   useEffect(() => {
     if (!loading && session && profile) {
@@ -712,11 +713,23 @@ export default function Landing() {
     }
   }, [loading, session, profile, navigate])
 
+  useEffect(() => {
+    function onScroll() { setScrolled(window.scrollY > 80) }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div style={s.root}>
 
-      {/* ── Navbar ─────────────────────────────────────────────────────── */}
-      <nav style={s.nav}>
+      {/* ── Navbar — hidden until user scrolls past hero logo ─────────── */}
+      <nav style={{
+        ...s.nav,
+        opacity: scrolled ? 1 : 0,
+        pointerEvents: scrolled ? 'auto' : 'none',
+        transform: scrolled ? 'translateY(0)' : 'translateY(-6px)',
+        transition: 'opacity 0.25s ease, transform 0.25s ease',
+      }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={s.navLinks}>
           <Link to="/login" className="land-nav-link" style={s.navLink}>Sign In</Link>
@@ -903,7 +916,7 @@ export default function Landing() {
             <div>
               <p style={sp.calloutHeading}>No math. No guesswork. Just lift.</p>
               <p style={sp.calloutBody}>
-                Every lift shows the exact weight the athlete should use based on their personal max — automatically calculated from their logged 1RMs. Athletes see the number. They just lift it.
+                Every lift shows the exact weight the athlete should use based on their personal max — automatically calculated from their logged One Rep Maxes. Athletes see the number. They just lift it.
               </p>
             </div>
           </div>
@@ -1096,8 +1109,9 @@ export default function Landing() {
           <img
             src={LOGO}
             alt="Offseaz"
-            style={{ width: 170, height: 'auto', display: 'block', objectFit: 'contain', margin: '0 auto 20px' }}
+            style={{ width: 170, height: 'auto', display: 'block', objectFit: 'contain', margin: '0 auto 14px' }}
           />
+          <p style={s.footerTagline}>Built for coaches and athletes who take the offseason seriously.</p>
           <div style={s.footerLinks}>
             <Link to="/privacy"       style={s.footerLink}>Privacy Policy</Link>
             <span style={s.footerDot}>·</span>
@@ -1399,16 +1413,20 @@ const s = {
   // Footer
   footer: {
     padding: 'clamp(40px, 5vw, 64px) clamp(20px, 5vw, 56px) clamp(28px, 3vw, 40px)',
-    background: '#080808', borderTop: '1px solid #141414',
+    background: '#080808', borderTop: '1px solid #1A1A1A',
   },
   footerCenter: {
     textAlign: 'center',
   },
+  footerTagline: {
+    fontSize: 13, color: '#EFEFEF', margin: '0 0 20px', fontWeight: 400,
+    letterSpacing: 0.1,
+  },
   footerLinks: {
     display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-    alignItems: 'center', gap: '6px 10px', marginBottom: 14,
+    alignItems: 'center', gap: '6px 10px', marginBottom: 16,
   },
-  footerLink:  { fontSize: 13, color: '#3A3A3A', textDecoration: 'none', fontWeight: 500 },
-  footerDot:   { fontSize: 13, color: '#222' },
-  footerCopy:  { fontSize: 12, color: '#2A2A2A', margin: 0 },
+  footerLink:  { fontSize: 13, color: BLUE, textDecoration: 'none', fontWeight: 500 },
+  footerDot:   { fontSize: 13, color: YELLOW },
+  footerCopy:  { fontSize: 12, color: '#888', margin: 0 },
 }
