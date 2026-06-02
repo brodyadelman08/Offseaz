@@ -714,7 +714,13 @@ export default function Landing() {
   }, [loading, session, profile, navigate])
 
   useEffect(() => {
-    function onScroll() { setScrolled(window.scrollY > 80) }
+    function onScroll() {
+      const y = window.scrollY
+      setScrolled(prev => {
+        if (prev) return y > 10   // already shown — hide only when truly at top
+        return y > 80             // not shown yet — appear after 80px
+      })
+    }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
@@ -722,13 +728,12 @@ export default function Landing() {
   return (
     <div style={s.root}>
 
-      {/* ── Navbar — hidden until user scrolls past hero logo ─────────── */}
+      {/* ── Navbar — fades in after 80px scroll, stays until back at top ── */}
       <nav style={{
         ...s.nav,
         opacity: scrolled ? 1 : 0,
         pointerEvents: scrolled ? 'auto' : 'none',
-        transform: scrolled ? 'translateY(0)' : 'translateY(-6px)',
-        transition: 'opacity 0.25s ease, transform 0.25s ease',
+        transition: 'opacity 0.22s ease',
       }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={s.navLinks}>
@@ -1136,17 +1141,21 @@ const s = {
     background: '#0A0A0A',
     color: '#EFEFEF',
     fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-    overflowX: 'hidden',
+    /* overflow-x is set on body in index.css — do NOT set it here,
+       overflow:hidden on any div ancestor breaks position:fixed on iOS Safari */
   },
 
-  // Navbar
+  // Navbar — GPU-composited so position:fixed works reliably on iOS
   nav: {
     position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     padding: '0 clamp(20px, 5vw, 56px)', height: 64,
-    background: 'rgba(10,10,10,0.88)',
+    background: 'rgba(10,10,10,0.92)',
     backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(255,255,255,0.05)',
+    borderBottom: '1px solid rgba(255,255,255,0.06)',
+    WebkitTransform: 'translate3d(0,0,0)',
+    transform: 'translate3d(0,0,0)',
+    willChange: 'opacity',
   },
   navLinks: { display: 'flex', gap: 8, alignItems: 'center' },
   navLink: {
