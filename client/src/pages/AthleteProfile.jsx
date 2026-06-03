@@ -77,6 +77,17 @@ export default function AthleteProfile() {
   const [noteUpdatedAt, setNoteUpdatedAt] = useState(null)
   const [goals, setGoals] = useState([])
 
+  // ── Edit plan state ──────────────────────────────────────────────────────────
+  const [editingPlan, setEditingPlan] = useState(false)
+  const [planOverrides, setPlanOverrides] = useState(null)   // { coach_note, removed_exercises }
+  const [assignmentId, setAssignmentId] = useState(null)
+  const [overridesLoading, setOverridesLoading] = useState(false)
+  const [savingOverrides, setSavingOverrides] = useState(false)
+  const [overridesSaved, setOverridesSaved] = useState(false)
+  // Edit form values
+  const [editNote, setEditNote] = useState('')
+  const [removedExercises, setRemovedExercises] = useState({}) // { "w1_s0_line0": true }
+
   useEffect(() => {
     Promise.all([
       api.get(`/api/athletes/${id}`).then(r => r.data.athlete),
@@ -96,6 +107,51 @@ export default function AthleteProfile() {
     // Dismiss any pending injury notifications for this athlete (fire-and-forget)
     api.patch(`/api/notifications/dismiss-athlete/${id}`).catch(() => {})
   }, [id])
+
+  async function handleOpenEditPlan() {
+    setEditingPlan(true)
+    setOverridesLoading(true)
+    try {
+      const res = await api.get(`/api/blueprints/overrides/${id}`)
+      const existing = res.data.overrides
+      setAssignmentId(res.data.assignmentId)
+      if (existing) {
+        setPlanOverrides(existing)
+        setEditNote(existing.coach_note || '')
+        setRemovedExercises(existing.removed_exercises || {})
+      } else {
+        setPlanOverrides({})
+        setEditNote('')
+        setRemovedExercises({})
+      }
+    } catch (e) {
+      console.error('Failed to load overrides:', e)
+    } finally {
+      setOverridesLoading(false)
+    }
+  }
+
+  async function handleSavePlanOverrides() {
+    if (!assignmentId) return
+    setSavingOverrides(true)
+    setOverridesSaved(false)
+    try {
+      const overrides = { coach_note: editNote.trim(), removed_exercises: removedExercises }
+      await api.post(`/api/blueprints/overrides/${id}`, { assignment_id: assignmentId, overrides })
+      setPlanOverrides(overrides)
+      setOverridesSaved(true)
+      setTimeout(() => { setOverridesSaved(false); setEditingPlan(false) }, 1500)
+    } catch (e) {
+      console.error('Failed to save overrides:', e)
+    } finally {
+      setSavingOverrides(false)
+    }
+  }
+
+  function toggleExerciseRemoval(weekNum, sessionIdx, lineIdx) {
+    const key = `w${weekNum}_s${sessionIdx}_l${lineIdx}`
+    setRemovedExercises(prev => ({ ...prev, [key]: !prev[key] }))
+  }
 
   async function handleSaveNote() {
     setNoteSaving(true)
@@ -215,13 +271,153 @@ export default function AthleteProfile() {
       {/* Plan card */}
       {plan && (
         <div style={{ ...styles.card, marginTop: 14 }}>
-          <p style={{ ...styles.cardLabel, color: BLUE }}>Current Plan</p>
-          <p style={styles.planName}>{plan.title}</p>
-          {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
-          <p style={styles.planMeta}>
-            {plan.num_weeks}-week plan · Started {fmtDate(plan.starts_on)}
-            {currentWeek && ` · Week ${currentWeek}`}
-          </p>
+          <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12 }}>
+            <div style={{ flex: 1 }}>
+              <p style={{ ...styles.cardLabel, color: BLUE }}>Current Plan</p>
+              <p style={styles.planName}>{plan.title}</p>
+              {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
+              <p style={styles.planMeta}>
+                {plan.num_weeks}-week plan · Started {fmtDate(plan.starts_on)}
+                {currentWeek && ` · Week ${currentWeek}`}
+              </p>
+            </div>
+            <button
+              style={styles.editPlanBtn}
+              onClick={handleOpenEditPlan}
+            >
+              Edit Plan
+            </button>
+          </div>
+
+          {/* Plan override summary */}
+          {planOverrides?.coach_note && !editingPlan && (
+            <div style={styles.overrideNoteBox}>
+              <p style={styles.overrideNoteLabel}>Coach note for this athlete</p>
+              <p style={styles.overrideNoteText}>{planOverrides.coach_note}</p>
+            </div>
+          )}
+          {planOverrides && Object.values(planOverrides.removed_exercises || {}).some(Boolean) && !editingPlan && (
+            <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 8 }}>
+              {Object.values(planOverrides.removed_exercises).filter(Boolean).length} exercise{Object.values(planOverrides.removed_exercises).filter(Boolean).length !== 1 ? 's' : ''} removed for this athlete
+            </p>
+          )}
+        </div>
+      )}
+
+      {/* Edit plan panel */}
+      {editingPlan && plan && (
+        <div style={{ ...styles.card, marginTop: 14, border: `2px solid ${BLUE}` }}>
+          <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 }}>
+            <p style={{ ...styles.cardLabel, color: BLUE, margin: 0 }}>Editing Plan for {athlete.full_name}</p>
+            <button
+              style={{ background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 13, fontWeight: 500, padding: '4px 8px' }}
+              onClick={() => setEditingPlan(false)}
+            >
+              Cancel
+            </button>
+          </div>
+
+          {/* Coach note for athlete */}
+          <div style={{ marginBottom: 20 }}>
+            <label style={styles.noteLabel}>Private note for this athlete's plan</label>
+            <p style={{ fontSize: 12, color: 'var(--text-3)', margin: '4px 0 8px' }}>
+              This will be visible to the athlete when they view their plan.
+            </p>
+            <textarea
+              style={styles.noteTextarea}
+              value={editNote}
+              onChange={e => setEditNote(e.target.value)}
+              placeholder="e.g. Modified for your shoulder — skip any overhead pressing this phase."
+              rows={3}
+            />
+          </div>
+
+          {/* Exercise toggles per session */}
+          {overridesLoading ? (
+            <p style={{ color: 'var(--text-3)', fontSize: 14 }}>Loading exercises…</p>
+          ) : (
+            <div>
+              <p style={{ ...styles.noteLabel, marginBottom: 12 }}>Toggle exercises to remove for this athlete</p>
+              <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+                {plan.weeks?.slice(0, 1).map(week => (
+                  <div key={week.week_number}>
+                    <p style={{ fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.5, marginBottom: 8 }}>
+                      Week {week.week_number} (applies to all weeks)
+                    </p>
+                    {(week.sessions || []).map((session, si) => {
+                      const lines = (session.description || '').split('\n').filter(l => l.trim())
+                      return (
+                        <div key={si} style={{ marginBottom: 12 }}>
+                          <p style={{ fontSize: 13, fontWeight: 600, color: BLUE, marginBottom: 6 }}>
+                            {session.day} — {session.focus}
+                          </p>
+                          <div style={{ display: 'flex', flexDirection: 'column', gap: 4 }}>
+                            {lines.map((line, li) => {
+                              const key = `w${week.week_number}_s${si}_l${li}`
+                              const removed = !!removedExercises[key]
+                              return (
+                                <div key={li} style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                                  <button
+                                    style={{
+                                      width: 18,
+                                      height: 18,
+                                      borderRadius: 4,
+                                      border: `2px solid ${removed ? '#c73820' : 'var(--border)'}`,
+                                      background: removed ? '#c73820' : 'transparent',
+                                      cursor: 'pointer',
+                                      flexShrink: 0,
+                                      padding: 0,
+                                      display: 'flex',
+                                      alignItems: 'center',
+                                      justifyContent: 'center',
+                                      fontSize: 10,
+                                      color: '#fff',
+                                      fontWeight: 700,
+                                    }}
+                                    onClick={() => toggleExerciseRemoval(week.week_number, si, li)}
+                                    title={removed ? 'Click to restore' : 'Click to remove'}
+                                  >
+                                    {removed ? '✕' : ''}
+                                  </button>
+                                  <span style={{
+                                    fontSize: 13,
+                                    color: removed ? 'var(--text-3)' : 'var(--text-2)',
+                                    textDecoration: removed ? 'line-through' : 'none',
+                                    flex: 1,
+                                  }}>
+                                    {line}
+                                  </span>
+                                </div>
+                              )
+                            })}
+                          </div>
+                        </div>
+                      )
+                    })}
+                  </div>
+                ))}
+              </div>
+              <p style={{ fontSize: 12, color: 'var(--text-3)', marginTop: 8, fontStyle: 'italic' }}>
+                Removals apply to all weeks of the plan for this athlete.
+              </p>
+            </div>
+          )}
+
+          <div style={{ display: 'flex', alignItems: 'center', gap: 12, marginTop: 20 }}>
+            <button
+              style={{ ...styles.noteSaveBtn, opacity: savingOverrides ? 0.6 : 1 }}
+              onClick={handleSavePlanOverrides}
+              disabled={savingOverrides}
+            >
+              {savingOverrides ? 'Saving…' : overridesSaved ? '✓ Saved' : 'Save Changes'}
+            </button>
+            <button
+              style={{ padding: '9px 16px', fontSize: 13, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' }}
+              onClick={() => setEditingPlan(false)}
+            >
+              Cancel
+            </button>
+          </div>
         </div>
       )}
 
@@ -534,4 +730,27 @@ const styles = {
   injuryExLabel: { fontSize: 12, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', paddingTop: 2 },
   injuryExPills: { display: 'flex', flexWrap: 'wrap', gap: 5 },
   injuryExPill: { fontSize: 11, fontWeight: 700, color: '#7f1d1d', background: '#fce8e6', border: '1px solid #f5c6c2', borderRadius: 10, padding: '2px 8px' },
+
+  editPlanBtn: {
+    padding: '7px 16px',
+    fontSize: 12,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: `1px solid ${BLUE}`,
+    background: 'transparent',
+    color: BLUE,
+    cursor: 'pointer',
+    whiteSpace: 'nowrap',
+    flexShrink: 0,
+    transition: 'background 0.15s',
+  },
+  overrideNoteBox: {
+    marginTop: 14,
+    background: 'rgba(48,142,189,0.06)',
+    border: `1px solid rgba(48,142,189,0.25)`,
+    borderRadius: 10,
+    padding: '10px 14px',
+  },
+  overrideNoteLabel: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', letterSpacing: 0.4, margin: '0 0 4px' },
+  overrideNoteText: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.6, margin: 0 },
 }

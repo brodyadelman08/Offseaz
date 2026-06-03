@@ -570,6 +570,105 @@ function generateBaseballWeeks(_, goal, daysPerWeek) {
   return weeks
 }
 
+// ─── Baseball — Pitcher ───────────────────────────────────────────────────────
+
+function pitcher3Day(wp) {
+  return [
+    makeBaseballSession('Day 1', 'Lower Power', [
+      { name: 'Trap Bar Deadlift',    warmup: '2x5', sets: 3, reps: '6', pct: wp },
+      { name: 'Hip Thrust',           sets: 4, reps: '8' },
+      { name: 'Reverse Lunge',        sets: 3, reps: '5', note: 'each leg' },
+      { name: 'Copenhagen Adductor',  sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Single Leg RDL',       sets: 3, reps: '8', note: 'each leg' },
+    ]),
+    makeBaseballSession('Day 2', 'Upper Pulling & Rotational Power', [
+      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Pull-ups',                  sets: 3, reps: 'AMAP' },
+      { name: 'Single Arm DB Row',         sets: 4, reps: '10' },
+      { name: 'Bird Dog Row',              sets: 4, reps: '10' },
+      { name: 'Med Ball Rotational Throw', sets: 4, reps: '6', note: 'each side' },
+      { name: 'Band External Rotation',    sets: 4, reps: '15' },
+    ]),
+    makeBaseballSession('Day 3', 'Arm Care & Hip Stability', [
+      { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
+      { name: 'Band External Rotation', sets: 4, reps: '15' },
+      { name: 'Single Leg RDL',         sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Hip Thrust',             sets: 4, reps: '8' },
+      { name: 'Copenhagen Adductor',    sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+    ]),
+  ]
+}
+
+function pitcher4Day(wp, phase) {
+  const p3 = phase >= 3
+  return [
+    makeBaseballSession('Day 1', 'Lower Power', [
+      { name: 'Trap Bar Deadlift',    warmup: '2x5', sets: 3, reps: '6', pct: wp },
+      { name: 'Hip Thrust',           sets: 4, reps: '8' },
+      { name: 'Reverse Lunge',        sets: 3, reps: '5', note: 'each leg' },
+      { name: 'Copenhagen Adductor',  sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Single Leg RDL',       sets: 3, reps: '8', note: 'each leg' },
+    ]),
+    makeBaseballSession('Day 2', 'Upper Pulling & Arm Care', [
+      { name: 'Pull-ups',               sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Single Arm DB Row',      sets: 4, reps: '10' },
+      { name: 'Band External Rotation', sets: 4, reps: '15' },
+      { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
+      { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+    ]),
+    makeBaseballSession('Day 3', 'Rotational Power', [
+      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Med Ball Rotational Throw', sets: 4, reps: '6', note: 'each side' },
+      { name: 'Single Leg RDL',            sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Hip Thrust',                sets: p3 ? 4 : 3, reps: '8' },
+      { name: 'Pull-ups',                  sets: 3, reps: 'AMAP' },
+    ]),
+    makeBaseballSession('Day 4', 'Full Body & Arm Care', [
+      { name: 'Trap Bar Deadlift',      warmup: '2x5', sets: 3, reps: '6', pct: wp },
+      { name: 'Single Arm DB Row',      sets: 4, reps: '10' },
+      { name: 'Copenhagen Adductor',    sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Band External Rotation', sets: 4, reps: '15' },
+      { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
+      { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+    ]),
+  ]
+}
+
+const PITCHER_ARM_CARE = makeBaseballSession('Day 5', 'Arm Care & Conditioning', [
+  { name: 'Band External Rotation', sets: 4, reps: '15' },
+  { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
+  { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+  { name: 'Core Work',              sets: 3, reps: 'AMAP' },
+  { name: '30-Yard Sprints',        sets: 10, reps: '1', note: 'full recovery between each' },
+])
+
+function generatePitcherBaseballWeeks(goal, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const phaseIdx    = Math.floor((w - 1) / 4)
+    const phase       = phaseIdx + 1
+    const wp          = BASEBALL_PHASE_PCTS[phaseIdx]
+    const weekInPhase = ((w - 1) % 4) + 1
+
+    let sessions
+    if (daysPerWeek === 3) {
+      sessions = pitcher3Day(wp)
+    } else {
+      sessions = pitcher4Day(wp, phase)
+      if (daysPerWeek >= 5) sessions = [...sessions, PITCHER_ARM_CARE]
+      if (daysPerWeek >= 6) sessions = [...sessions, BASEBALL_LIGHT_FB]
+    }
+
+    weeks.push({
+      week_number: w,
+      objective: `Phase ${phase} — ${BASEBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
 // ─── Hockey ───────────────────────────────────────────────────────────────────
 
 function hockeyForwardsSess(info) {
@@ -699,6 +798,11 @@ function normalizePosition(sport, rawPos) {
     return 'sprint'
   }
 
+  if (sport === 'baseball') {
+    if (/\b(pitcher|p)\b/.test(p) || p === 'pitcher') return 'pitcher'
+    return 'baseball'
+  }
+
   // Single-position sports — return sport ID as posId
   return sport
 }
@@ -728,6 +832,8 @@ const POS_LABELS = {
   forwards: 'Forwards', defense: 'Defense', goalie: 'Goalie',
   // Track
   sprint: 'Sprinters', throw: 'Throwers', jump: 'Jumpers',
+  // Baseball
+  pitcher: 'Pitcher',
 }
 
 function buildBlueprintTitle(sport, posId, goal) {
@@ -761,7 +867,11 @@ function generateBlueprintForAthlete(survey) {
   else if (sport === 'cross_country') weeks = generateXCWeeks()
   else if (sport === 'lacrosse') weeks = generateLacrosseWeeks(posId, goal)
   else if (sport === 'swimming') weeks = generateSwimmingWeeks()
-  else if (sport === 'baseball') weeks = generateBaseballWeeks(posId, goal, days)
+  else if (sport === 'baseball') {
+    weeks = posId === 'pitcher'
+      ? generatePitcherBaseballWeeks(goal, days)
+      : generateBaseballWeeks(posId, goal, days)
+  }
   else if (sport === 'hockey')   weeks = generateHockeyWeeks(posId, goal)
   else                           weeks = generateGeneralWeeks(posId, goal)
 

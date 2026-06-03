@@ -34,18 +34,18 @@ export function useIsMobile() {
 
 const COACH_NAV = [
   { path: '/coach',               label: 'Dashboard',     Icon: GridIcon,    exact: true },
-  { path: '/coach/athletes',      label: 'Athletes',      Icon: UsersIcon,   exact: false },
-  { path: '/coach/blueprints',    label: 'Blueprints',    Icon: LayoutIcon,  exact: false },
-  { path: '/coach/feed',          label: 'Feed',          Icon: FeedIcon,    exact: false },
+  { path: '/coach/athletes',      label: 'Athletes',      Icon: UsersIcon,   exact: false, dataTutorial: 'coach-athletes' },
+  { path: '/coach/blueprints',    label: 'Blueprints',    Icon: LayoutIcon,  exact: false, dataTutorial: 'coach-blueprints' },
+  { path: '/coach/feed',          label: 'Feed',          Icon: FeedIcon,    exact: false, dataTutorial: 'coach-feed' },
   { path: '/coach/messages',      label: 'Messages',      Icon: MessageIcon, exact: false },
-  { path: '/coach/accountability',label: 'Accountability',Icon: BarChartIcon,exact: false },
+  { path: '/coach/accountability',label: 'Accountability',Icon: BarChartIcon,exact: false, dataTutorial: 'coach-accountability' },
 ]
 
 const ATHLETE_NAV = [
   { path: '/athlete',          label: 'Home',        Icon: HomeIcon,     exact: true },
   { path: '/athlete/plan',     label: 'My Plan',     Icon: CalendarIcon, exact: false },
   { path: '/athlete/log',      label: 'Log Workout', Icon: EditIcon,     exact: false },
-  { path: '/athlete/feed',     label: 'Feed',        Icon: FeedIcon,     exact: false },
+  { path: '/athlete/feed',     label: 'Feed',        Icon: FeedIcon,     exact: false, dataTutorial: 'athlete-feed' },
   { path: '/athlete/roster',   label: 'Roster',      Icon: UsersIcon,    exact: false },
   { path: '/athlete/messages', label: 'Messages',    Icon: MessageIcon,  exact: false },
   { path: '/athlete/profile',  label: 'My Profile',  Icon: UserIcon,     exact: false },
@@ -76,13 +76,14 @@ function DesktopSidebar({ nav, profile, signOut }) {
 
       {/* Nav items */}
       <div style={styles.navList}>
-        {nav.map(({ path, label, Icon, exact }, i) => {
+        {nav.map(({ path, label, Icon, exact, dataTutorial }, i) => {
           const active = isActive(path, exact)
           const accent = ACCENTS[i % 3]
           const accentBg = ACCENT_BG[i % 3]
           return (
             <button
               key={path}
+              data-tutorial={dataTutorial || undefined}
               onClick={() => navigate(path)}
               style={{
                 ...styles.navItem,
@@ -140,12 +141,13 @@ function BottomBar({ nav }) {
 
   return (
     <div style={styles.bottomBar}>
-      {nav.map(({ path, label, Icon, exact }, i) => {
+      {nav.map(({ path, label, Icon, exact, dataTutorial }, i) => {
         const active = isActive(path, exact)
         const accent = ACCENTS[i % 3]
         return (
           <button
             key={path}
+            data-tutorial={dataTutorial || undefined}
             onClick={() => navigate(path)}
             style={styles.tabItem}
           >

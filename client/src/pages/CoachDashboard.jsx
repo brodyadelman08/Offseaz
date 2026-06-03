@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon, AlertIcon } from '../components/Icons'
+import CoachTutorial from '../components/CoachTutorial'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -97,6 +98,7 @@ export default function CoachDashboard() {
 
   return (
     <div style={styles.container}>
+      <CoachTutorial />
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>
           {profile?.full_name?.split(' ')[0]
@@ -160,7 +162,7 @@ export default function CoachDashboard() {
               </div>
             </div>
             <p style={styles.fieldLabel}>Invite Code</p>
-            <div style={styles.codeRow}>
+            <div style={styles.codeRow} data-tutorial="coach-invite">
               <span style={styles.codeText}>{team.invite_code}</span>
               <button style={styles.copyBtn} onClick={handleCopyCode}>
                 {copiedCode

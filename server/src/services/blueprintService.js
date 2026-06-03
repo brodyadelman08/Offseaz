@@ -206,6 +206,62 @@ async function toggleLock(blueprintId, locked) {
   return data
 }
 
+async function getAthleteOverrides(athleteId) {
+  // Get the athlete's active assignment id first
+  const { data: membership } = await supabaseAdmin
+    .from('team_members')
+    .select('team_id')
+    .eq('athlete_id', athleteId)
+    .maybeSingle()
+
+  const teamId = membership?.team_id || null
+
+  let assignment = null
+  if (teamId) {
+    const [{ data: indiv }, { data: team }] = await Promise.all([
+      supabaseAdmin.from('blueprint_assignments').select('id').eq('athlete_id', athleteId)
+        .order('assigned_at', { ascending: false }).limit(1).maybeSingle(),
+      supabaseAdmin.from('blueprint_assignments').select('id').eq('team_id', teamId)
+        .order('assigned_at', { ascending: false }).limit(1).maybeSingle(),
+    ])
+    if (indiv && team) {
+      assignment = indiv
+    } else {
+      assignment = indiv || team || null
+    }
+  } else {
+    const { data: indiv } = await supabaseAdmin.from('blueprint_assignments').select('id')
+      .eq('athlete_id', athleteId).order('assigned_at', { ascending: false }).limit(1).maybeSingle()
+    assignment = indiv || null
+  }
+
+  if (!assignment) return { overrides: null, assignmentId: null }
+
+  const { data, error } = await supabaseAdmin
+    .from('athlete_plan_overrides')
+    .select('*')
+    .eq('assignment_id', assignment.id)
+    .eq('athlete_id', athleteId)
+    .maybeSingle()
+
+  if (error) throw error
+  return { overrides: data?.overrides || null, assignmentId: assignment.id }
+}
+
+async function saveAthleteOverrides(athleteId, assignmentId, overrides) {
+  const { data, error } = await supabaseAdmin
+    .from('athlete_plan_overrides')
+    .upsert(
+      { assignment_id: assignmentId, athlete_id: athleteId, overrides, updated_at: new Date().toISOString() },
+      { onConflict: 'assignment_id,athlete_id' }
+    )
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 module.exports = {
   createBlueprint,
   getBlueprintsByCoach,
@@ -214,4 +270,6 @@ module.exports = {
   assignBlueprint,
   getAthletePlan,
   toggleLock,
+  getAthleteOverrides,
+  saveAthleteOverrides,
 }

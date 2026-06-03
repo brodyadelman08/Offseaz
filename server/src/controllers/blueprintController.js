@@ -8,6 +8,8 @@ const {
   assignBlueprint,
   getAthletePlan,
   toggleLock,
+  getAthleteOverrides,
+  saveAthleteOverrides,
 } = require('../services/blueprintService')
 
 async function create(req, res) {
@@ -162,4 +164,38 @@ async function lock(req, res) {
   }
 }
 
-module.exports = { create, list, detail, assign, myPlan, lock }
+async function getOverrides(req, res) {
+  const { athleteId } = req.params
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can view plan overrides' })
+    }
+    const result = await getAthleteOverrides(athleteId)
+    res.json(result)
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+async function saveOverrides(req, res) {
+  const { athleteId } = req.params
+  const { assignment_id, overrides } = req.body
+
+  if (!assignment_id || !overrides) {
+    return res.status(400).json({ error: 'assignment_id and overrides are required' })
+  }
+
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can save plan overrides' })
+    }
+    const result = await saveAthleteOverrides(athleteId, assignment_id, overrides)
+    res.json({ override: result })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { create, list, detail, assign, myPlan, lock, getOverrides, saveOverrides }

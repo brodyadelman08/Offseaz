@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { CheckCircleIcon, PlusIcon, CheckIcon } from '../components/Icons'
+import AthleteTutorial from '../components/AthleteTutorial'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -162,6 +163,7 @@ export default function AthleteDashboard() {
 
   return (
     <div style={styles.container}>
+      <AthleteTutorial />
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>
           {profile?.full_name?.split(' ')[0]
@@ -182,7 +184,7 @@ export default function AthleteDashboard() {
               <p style={styles.teamName}>{team.name}</p>
             </div>
           ) : (
-            <div style={styles.joinHeroCard}>
+            <div style={styles.joinHeroCard} data-tutorial="athlete-join-team">
               <p style={styles.joinHeroLabel}>Join Your Team</p>
               <h2 style={styles.joinHeroTitle}>Enter the code your coach shared with you</h2>
               <p style={styles.joinHeroDesc}>
@@ -212,7 +214,7 @@ export default function AthleteDashboard() {
           )}
 
           {/* Survey card */}
-          <div style={styles.card}>
+          <div style={styles.card} data-tutorial="athlete-survey">
             {survey ? (
               <div style={styles.surveyComplete}>
                 <div style={styles.checkIcon}>
@@ -241,7 +243,7 @@ export default function AthleteDashboard() {
           </div>
 
           {/* Training plan card */}
-          <div style={styles.card}>
+          <div style={styles.card} data-tutorial="athlete-plan">
             {plan ? (
               <div style={styles.actionRow}>
                 <div>
@@ -264,7 +266,7 @@ export default function AthleteDashboard() {
           </div>
 
           {/* ── Goals card ── */}
-          <div style={styles.card}>
+          <div style={styles.card} data-tutorial="athlete-goals">
             <div style={styles.goalCardHeader}>
               <div>
                 <p style={{ ...styles.cardLabel, color: ORANGE, marginBottom: 0 }}>Offseason Goals</p>

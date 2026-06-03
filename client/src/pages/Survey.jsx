@@ -539,6 +539,7 @@ export default function Survey() {
   const [submitting, setSubmitting]   = useState(false)
   const [error, setError]             = useState('')
   const [checkingExisting, setCheckingExisting] = useState(true)
+  const [hasTeam, setHasTeam]         = useState(true)
 
   const [form, setForm] = useState({
     full_name:        '',
@@ -561,9 +562,21 @@ export default function Survey() {
   })
 
   useEffect(() => {
-    api.get('/api/survey/my')
-      .then(res => {
-        const existing = res.data.survey
+    Promise.all([
+      api.get('/api/survey/my'),
+      api.get('/api/teams/my-team').catch(() => ({ data: { team: null } })),
+    ])
+      .then(([surveyRes, teamRes]) => {
+        const existing = surveyRes.data.survey
+        const team = teamRes.data.team
+
+        // Gate: athlete must be on a team before taking survey (unless retaking)
+        if (!team && !isRetake) {
+          setHasTeam(false)
+          setCheckingExisting(false)
+          return
+        }
+
         if (existing && !isRetake) {
           navigate('/athlete', { replace: true })
         } else {
@@ -628,6 +641,39 @@ export default function Survey() {
         <div style={{ textAlign: 'center' }}>
           <div className="survey-spinner" />
           <p style={{ fontSize: 14, color: 'var(--text-3)', marginTop: 12 }}>Loading…</p>
+        </div>
+      </div>
+    )
+  }
+
+  if (!hasTeam) {
+    return (
+      <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', minHeight: '100vh', background: 'var(--bg)', padding: '40px 20px' }}>
+        <div style={{ maxWidth: 420, width: '100%', textAlign: 'center' }}>
+          <div style={{ fontSize: 56, marginBottom: 20 }}>🔑</div>
+          <h2 style={{ fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 10 }}>
+            Join a team first
+          </h2>
+          <p style={{ fontSize: 15, color: 'var(--text-2)', lineHeight: 1.65, marginBottom: 28 }}>
+            You need to join a team before completing your profile. Ask your coach for their
+            invite code and enter it on the home screen.
+          </p>
+          <button
+            style={{
+              padding: '12px 28px',
+              fontSize: 15,
+              fontWeight: 700,
+              borderRadius: 10,
+              border: 'none',
+              background: ORANGE,
+              color: '#fff',
+              cursor: 'pointer',
+              boxShadow: '0 2px 12px rgba(247,87,9,0.35)',
+            }}
+            onClick={() => navigate('/athlete')}
+          >
+            ← Back to Home
+          </button>
         </div>
       </div>
     )
