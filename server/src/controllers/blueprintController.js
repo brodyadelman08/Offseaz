@@ -7,11 +7,13 @@ const {
   getBlueprintById,
   getAssignments,
   assignBlueprint,
+  bulkAssignBlueprint,
   getAthletePlan,
   toggleLock,
   getAthleteOverrides,
   saveAthleteOverrides,
 } = require('../services/blueprintService')
+const { createPost } = require('../services/feedService')
 
 async function create(req, res) {
   const { title, description, num_weeks, weeks, locked } = req.body
@@ -226,4 +228,49 @@ async function saveOverrides(req, res) {
   }
 }
 
-module.exports = { create, list, detail, assign, myPlan, lock, getOverrides, saveOverrides }
+async function bulkAssign(req, res) {
+  const { id } = req.params
+  const { athlete_ids, starts_on } = req.body
+
+  if (!Array.isArray(athlete_ids) || athlete_ids.length === 0) {
+    return res.status(400).json({ error: 'athlete_ids must be a non-empty array' })
+  }
+
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can assign blueprints' })
+    }
+
+    const blueprint = await getBlueprintById(id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const isOwner    = blueprint.coach_id === req.user.id
+    const isSameTeam = team && blueprint.team_id === team.id
+    if (!isOwner && !isSameTeam) {
+      return res.status(403).json({ error: 'Not your blueprint' })
+    }
+    if (accessLevel === 'view_only') {
+      return res.status(403).json({ error: 'View-only coaches cannot assign blueprints' })
+    }
+
+    const assignments = await bulkAssignBlueprint(id, athlete_ids, starts_on)
+
+    // Post to team feed so athletes are notified
+    if (team) {
+      const count = athlete_ids.length
+      const msg = `📋 "${blueprint.title}" has been assigned to ${count} athlete${count === 1 ? '' : 's'}.`
+      createPost(team.id, req.user.id, msg, null).catch(e =>
+        console.error('[bulkAssign] feed notification failed:', e?.message)
+      )
+    }
+
+    res.status(201).json({ assignments })
+  } catch (err) {
+    if (err.code === 'PGRST116') {
+      return res.status(404).json({ error: 'Blueprint not found' })
+    }
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { create, list, detail, assign, bulkAssign, myPlan, lock, getOverrides, saveOverrides }

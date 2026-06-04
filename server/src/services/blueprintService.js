@@ -139,6 +139,24 @@ async function assignBlueprint(blueprintId, { assign_to, athlete_id, team_id, st
   return data
 }
 
+async function bulkAssignBlueprint(blueprintId, athleteIds, startsOn) {
+  const date = startsOn || new Date().toISOString().split('T')[0]
+  const rows = athleteIds.map(athleteId => ({
+    blueprint_id: blueprintId,
+    starts_on:    date,
+    athlete_id:   athleteId,
+    team_id:      null,
+  }))
+
+  const { data, error } = await supabaseAdmin
+    .from('blueprint_assignments')
+    .insert(rows)
+    .select()
+
+  if (error) throw error
+  return data || []
+}
+
 async function getAthletePlan(athleteId) {
   // Find the athlete's team
   const { data: membership, error: memberError } = await supabaseAdmin
@@ -288,6 +306,7 @@ module.exports = {
   getBlueprintById,
   getAssignments,
   assignBlueprint,
+  bulkAssignBlueprint,
   getAthletePlan,
   toggleLock,
   getAthleteOverrides,
