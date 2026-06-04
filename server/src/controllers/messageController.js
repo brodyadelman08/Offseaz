@@ -1,4 +1,5 @@
 const { getProfile } = require('../services/authService')
+const { resolveCoachTeamAndAccess } = require('../services/teamsService')
 const {
   getConversationList,
   getConversationThread,
@@ -38,6 +39,13 @@ async function send(req, res) {
   }
   try {
     const profile = await getProfile(req.user.id)
+    // View-only coaches cannot send messages
+    if (profile.role === 'coach') {
+      const { accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+      if (accessLevel === 'view_only') {
+        return res.status(403).json({ error: 'View-only coaches cannot send messages' })
+      }
+    }
     const message = await sendChatMessage(req.user.id, profile.role, convId, content.trim())
     res.status(201).json({ message })
   } catch (err) {

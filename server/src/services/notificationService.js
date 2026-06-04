@@ -49,6 +49,24 @@ async function getCoachNotifications(coachId) {
   return data || []
 }
 
+async function createCoachJoinNotification(headCoachId, newCoachId, newCoachName) {
+  const { error } = await supabaseAdmin
+    .from('coach_notifications')
+    .upsert(
+      {
+        coach_id:    headCoachId,
+        athlete_id:  newCoachId,   // reuses athlete_id column to store the new coach's user id
+        type:        'coach_joined',
+        message:     `${newCoachName} joined your team as a coach. Go to Roster → Coaches to manage their access.`,
+        dismissed_at: null,
+        created_at:  new Date().toISOString(),
+      },
+      { onConflict: 'coach_id,athlete_id,type' }
+    )
+
+  if (error) throw error
+}
+
 async function dismissAthleteNotifications(coachId, athleteId) {
   const { error } = await supabaseAdmin
     .from('coach_notifications')
@@ -60,4 +78,4 @@ async function dismissAthleteNotifications(coachId, athleteId) {
   if (error) throw error
 }
 
-module.exports = { createInjuryNotification, createBlueprintNotification, getCoachNotifications, dismissAthleteNotifications }
+module.exports = { createInjuryNotification, createBlueprintNotification, createCoachJoinNotification, getCoachNotifications, dismissAthleteNotifications }

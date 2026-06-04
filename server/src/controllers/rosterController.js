@@ -1,4 +1,5 @@
 const { getProfile } = require('../services/authService')
+const { resolveCoachTeamAndAccess } = require('../services/teamsService')
 const {
   getCoachRoster,
   getAthleteRoster,
@@ -19,7 +20,10 @@ async function roster(req, res) {
       const sort = ['name', 'position', 'joined'].includes(req.query.sort)
         ? req.query.sort
         : 'name'
-      const data = await getCoachRoster(req.user.id, sort)
+      // Works for both head coaches and assistant coaches
+      const { team } = await resolveCoachTeamAndAccess(req.user.id)
+      if (!team) return res.json({ roster: [] })
+      const data = await getCoachRoster(team.id, sort)
       return res.json({ roster: data })
     }
 
@@ -67,7 +71,13 @@ async function removeAthleteFromTeam(req, res) {
     if (profile.role !== 'coach') {
       return res.status(403).json({ error: 'Only coaches can remove athletes' })
     }
-    await removeAthlete(req.user.id, req.params.athleteId)
+    // Only head coach or admin coach can remove athletes
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    if (!team || accessLevel === 'view_only') {
+      return res.status(403).json({ error: 'View-only coaches cannot remove athletes' })
+    }
+    // Pass head coach's ID (team owner) so removeAthlete can look up the team
+    await removeAthlete(team.coach_id, req.params.athleteId)
     res.json({ success: true })
   } catch (err) {
     if (err.status === 404) return res.status(404).json({ error: err.message })

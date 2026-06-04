@@ -1,8 +1,9 @@
 const { getProfile } = require('../services/authService')
-const { getTeamByCoach, getAthleteTeam } = require('../services/teamsService')
+const { resolveCoachTeamAndAccess, getAthleteTeam } = require('../services/teamsService')
 const {
   createBlueprint,
   getBlueprintsByCoach,
+  getBlueprintsByTeam,
   getBlueprintById,
   getAssignments,
   assignBlueprint,
@@ -28,9 +29,12 @@ async function create(req, res) {
       return res.status(403).json({ error: 'Only coaches can create blueprints' })
     }
 
-    const team = await getTeamByCoach(req.user.id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
     if (!team) {
       return res.status(400).json({ error: 'Create a team before building a blueprint' })
+    }
+    if (accessLevel === 'view_only') {
+      return res.status(403).json({ error: 'View-only coaches cannot create blueprints' })
     }
 
     const blueprint = await createBlueprint(req.user.id, team.id, {
@@ -54,7 +58,17 @@ async function list(req, res) {
       return res.status(403).json({ error: 'Only coaches can list blueprints' })
     }
 
-    const blueprints = await getBlueprintsByCoach(req.user.id)
+    // Head coaches: use existing coach-scoped query
+    // Assistant coaches: use team-scoped query so they can see the team's blueprints
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    let blueprints
+    if (!team) {
+      blueprints = []
+    } else if (accessLevel === 'head_coach') {
+      blueprints = await getBlueprintsByCoach(req.user.id)
+    } else {
+      blueprints = await getBlueprintsByTeam(team.id)
+    }
     res.json({ blueprints })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -71,7 +85,11 @@ async function detail(req, res) {
     }
 
     const blueprint = await getBlueprintById(id)
-    if (blueprint.coach_id !== req.user.id) {
+    // Head coach: must own the blueprint. Assistant: must be on the same team.
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const isOwner   = blueprint.coach_id === req.user.id
+    const isSameTeam = team && blueprint.team_id === team.id
+    if (!isOwner && !isSameTeam) {
       return res.status(403).json({ error: 'Not your blueprint' })
     }
 
@@ -103,8 +121,14 @@ async function assign(req, res) {
     }
 
     const blueprint = await getBlueprintById(id)
-    if (blueprint.coach_id !== req.user.id) {
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const isOwner    = blueprint.coach_id === req.user.id
+    const isSameTeam = team && blueprint.team_id === team.id
+    if (!isOwner && !isSameTeam) {
       return res.status(403).json({ error: 'Not your blueprint' })
+    }
+    if (accessLevel === 'view_only') {
+      return res.status(403).json({ error: 'View-only coaches cannot assign blueprints' })
     }
 
     const assignment = await assignBlueprint(id, {
@@ -190,6 +214,10 @@ async function saveOverrides(req, res) {
     const profile = await getProfile(req.user.id)
     if (profile.role !== 'coach') {
       return res.status(403).json({ error: 'Only coaches can save plan overrides' })
+    }
+    const { accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    if (accessLevel === 'view_only') {
+      return res.status(403).json({ error: 'View-only coaches cannot edit plans' })
     }
     const result = await saveAthleteOverrides(athleteId, assignment_id, overrides)
     res.json({ override: result })

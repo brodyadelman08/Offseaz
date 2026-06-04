@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useCoachAccess } from '../context/CoachAccessContext'
 import api from '../services/api'
 import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon, AlertIcon } from '../components/Icons'
 import CoachTutorial from '../components/CoachTutorial'
@@ -37,34 +38,47 @@ const INJURY_BADGE = { label: 'Injury', color: '#c73820', bg: '#fce8e6' }
 
 export default function CoachDashboard() {
   const { profile } = useAuth()
+  const { team: ctxTeam, isHeadCoach, refresh: refreshAccess } = useCoachAccess()
   const navigate = useNavigate()
-  const [team, setTeam] = useState(null)
-  const [teamName, setTeamName] = useState('')
-  const [athletes, setAthletes] = useState([])
+
+  // The dashboard owns create-team flow; other team data comes from context
+  const [team, setTeam]           = useState(null)
+  const [teamName, setTeamName]   = useState('')
+  const [athletes, setAthletes]   = useState([])
   const [blueprints, setBlueprints] = useState([])
   const [activityLogs, setActivityLogs] = useState([])
   const [notifications, setNotifications] = useState([])
-  const [error, setError] = useState('')
-  const [loading, setLoading] = useState(true)
-  const [creating, setCreating] = useState(false)
-  const [copied, setCopied] = useState(false)
-  const [copiedCode, setCopiedCode] = useState(false)
+  const [error, setError]         = useState('')
+  const [loading, setLoading]     = useState(true)
+  const [creating, setCreating]   = useState(false)
+
+  // Copy state for each code / link
+  const [copiedAthleteCode, setCopiedAthleteCode] = useState(false)
+  const [copiedCoachCode,   setCopiedCoachCode]   = useState(false)
+  const [copiedLink,        setCopiedLink]        = useState(false)
+
+  // Coach join-as-assistant (for coaches who don't have a team yet)
+  const [joinCode,     setJoinCode]     = useState('')
+  const [joining,      setJoining]      = useState(false)
+  const [joinError,    setJoinError]    = useState('')
+
+  // Sync team from context
+  useEffect(() => { setTeam(ctxTeam) }, [ctxTeam])
 
   useEffect(() => {
+    if (!ctxTeam) { setLoading(false); return }
     Promise.all([
-      api.get('/api/teams/mine').then(r => r.data.team).catch(() => null),
       api.get('/api/survey/team').then(r => r.data.athletes).catch(() => []),
       api.get('/api/blueprints').then(r => r.data.blueprints).catch(() => []),
       api.get('/api/workouts/team').then(r => r.data.logs).catch(() => []),
       api.get('/api/notifications').then(r => r.data.notifications).catch(() => []),
-    ]).then(([teamData, athletesData, blueprintsData, logsData, notifData]) => {
-      setTeam(teamData)
+    ]).then(([athletesData, blueprintsData, logsData, notifData]) => {
       setAthletes(athletesData)
       setBlueprints(blueprintsData)
       setActivityLogs(logsData)
       setNotifications(notifData)
     }).finally(() => setLoading(false))
-  }, [])
+  }, [ctxTeam?.id])
 
   async function handleCreateTeam(e) {
     e.preventDefault()
@@ -74,6 +88,7 @@ export default function CoachDashboard() {
       const res = await api.post('/api/teams', { name: teamName })
       setTeam(res.data.team)
       setTeamName('')
+      refreshAccess()
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to create team')
     } finally {
@@ -81,16 +96,36 @@ export default function CoachDashboard() {
     }
   }
 
-  function handleCopy() {
-    navigator.clipboard.writeText(inviteLink)
-    setCopied(true)
-    setTimeout(() => setCopied(false), 2000)
+  async function handleJoinAsCoach(e) {
+    e.preventDefault()
+    setJoinError('')
+    setJoining(true)
+    try {
+      const res = await api.post('/api/teams/join-as-coach', { coach_code: joinCode.trim() })
+      setTeam(res.data.team)
+      setJoinCode('')
+      refreshAccess()
+    } catch (err) {
+      setJoinError(err.response?.data?.error || 'Invalid coach code')
+    } finally {
+      setJoining(false)
+    }
   }
 
-  function handleCopyCode() {
+  function copyAthleteCode() {
     navigator.clipboard.writeText(team.invite_code)
-    setCopiedCode(true)
-    setTimeout(() => setCopiedCode(false), 2000)
+    setCopiedAthleteCode(true)
+    setTimeout(() => setCopiedAthleteCode(false), 2000)
+  }
+  function copyCoachCode() {
+    navigator.clipboard.writeText(team.coach_code)
+    setCopiedCoachCode(true)
+    setTimeout(() => setCopiedCoachCode(false), 2000)
+  }
+  function copyLink() {
+    navigator.clipboard.writeText(`${window.location.origin}/join/${team.invite_code}`)
+    setCopiedLink(true)
+    setTimeout(() => setCopiedLink(false), 2000)
   }
 
   const inviteLink = team ? `${window.location.origin}/join/${team.invite_code}` : null
@@ -153,7 +188,7 @@ export default function CoachDashboard() {
             ))}
           </div>
 
-          {/* Team + invite */}
+          {/* Team + invite codes */}
           <div style={styles.card}>
             <div style={styles.cardHeader}>
               <div>
@@ -161,22 +196,50 @@ export default function CoachDashboard() {
                 <h2 style={styles.teamName}>{team.name}</h2>
               </div>
             </div>
-            <p style={styles.fieldLabel}>Invite Code</p>
-            <div style={styles.codeRow} data-tutorial="coach-invite">
-              <span style={styles.codeText}>{team.invite_code}</span>
-              <button style={styles.copyBtn} onClick={handleCopyCode}>
-                {copiedCode
-                  ? <><CheckIcon size={13} color={BLUE} /> Copied</>
-                  : <><CopyIcon size={13} color={BLUE} /> Copy Code</>
-                }
-              </button>
+
+            {/* Two codes side-by-side */}
+            <div style={styles.codesGrid}>
+              {/* Athlete code */}
+              <div style={styles.codeBlock} data-tutorial="coach-invite">
+                <p style={styles.fieldLabel}>Athlete Code</p>
+                <div style={styles.codeRow}>
+                  <span style={styles.codeText}>{team.invite_code}</span>
+                  <button style={styles.copyBtn} onClick={copyAthleteCode}>
+                    {copiedAthleteCode
+                      ? <><CheckIcon size={13} color={BLUE} /> Copied</>
+                      : <><CopyIcon size={13} color={BLUE} /> Copy</>
+                    }
+                  </button>
+                </div>
+                <p style={styles.codeHint}>Share with athletes to join your roster</p>
+              </div>
+
+              {/* Coach code — only head coach sees this */}
+              {isHeadCoach && (
+                <div style={{ ...styles.codeBlock, borderColor: 'rgba(247,87,9,0.3)', background: 'rgba(247,87,9,0.04)' }}>
+                  <p style={{ ...styles.fieldLabel, color: ORANGE }}>Coach Code</p>
+                  <div style={styles.codeRow}>
+                    <span style={{ ...styles.codeText, color: ORANGE }}>{team.coach_code || '—'}</span>
+                    {team.coach_code && (
+                      <button style={{ ...styles.copyBtn, borderColor: ORANGE, color: ORANGE }} onClick={copyCoachCode}>
+                        {copiedCoachCode
+                          ? <><CheckIcon size={13} color={ORANGE} /> Copied</>
+                          : <><CopyIcon size={13} color={ORANGE} /> Copy</>
+                        }
+                      </button>
+                    )}
+                  </div>
+                  <p style={styles.codeHint}>Share with assistant coaches only</p>
+                </div>
+              )}
             </div>
 
-            <p style={{ ...styles.fieldLabel, marginTop: 20 }}>Invite Link</p>
+            {/* Athlete invite link */}
+            <p style={{ ...styles.fieldLabel, marginTop: 20 }}>Athlete Invite Link</p>
             <div style={styles.inviteBox}>
               <span style={styles.inviteText}>{inviteLink}</span>
-              <button style={styles.copyBtn} onClick={handleCopy}>
-                {copied
+              <button style={styles.copyBtn} onClick={copyLink}>
+                {copiedLink
                   ? <><CheckIcon size={13} color={BLUE} /> Copied</>
                   : <><CopyIcon size={13} color={BLUE} /> Copy</>
                 }
@@ -251,27 +314,54 @@ export default function CoachDashboard() {
           </div>
         </>
       ) : (
-        /* Create team */
-        <div style={styles.card}>
-          <p style={styles.cardLabel}>Get Started</p>
-          <h2 style={styles.createTeamTitle}>Create your team</h2>
-          <p style={styles.createTeamDesc}>
-            Set up your team to start adding athletes and building training plans.
-          </p>
-          {error && <div style={styles.errorBox}>{error}</div>}
-          <form onSubmit={handleCreateTeam} style={styles.form}>
-            <input
-              style={styles.input}
-              type="text"
-              placeholder="Team name (e.g. Westview Varsity Football)"
-              value={teamName}
-              onChange={e => setTeamName(e.target.value)}
-              required
-            />
-            <button style={styles.primaryBtn} type="submit" disabled={creating}>
-              {creating ? 'Creating…' : 'Create team'}
-            </button>
-          </form>
+        /* No team — offer create OR join as assistant coach */
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 16 }}>
+          {/* Create a new team */}
+          <div style={styles.card}>
+            <p style={styles.cardLabel}>Get Started</p>
+            <h2 style={styles.createTeamTitle}>Create your team</h2>
+            <p style={styles.createTeamDesc}>
+              Set up your team to start adding athletes and building training plans.
+            </p>
+            {error && <div style={styles.errorBox}>{error}</div>}
+            <form onSubmit={handleCreateTeam} style={styles.form}>
+              <input
+                style={styles.input}
+                type="text"
+                placeholder="Team name (e.g. Westview Varsity Football)"
+                value={teamName}
+                onChange={e => setTeamName(e.target.value)}
+                required
+              />
+              <button style={styles.primaryBtn} type="submit" disabled={creating}>
+                {creating ? 'Creating…' : 'Create team'}
+              </button>
+            </form>
+          </div>
+
+          {/* Join an existing team as assistant coach */}
+          <div style={styles.card}>
+            <p style={{ ...styles.cardLabel, color: BLUE }}>Or join as assistant coach</p>
+            <p style={styles.createTeamDesc}>
+              Enter the coach code from your head coach to join their team with view-only access.
+            </p>
+            {joinError && <div style={styles.errorBox}>{joinError}</div>}
+            <form onSubmit={handleJoinAsCoach} style={styles.form}>
+              <input
+                style={styles.input}
+                type="text"
+                placeholder="Coach code (e.g. a1b2c3d4)"
+                value={joinCode}
+                onChange={e => setJoinCode(e.target.value)}
+                required
+              />
+              <button style={{ ...styles.primaryBtn, background: BLUE, boxShadow: '0 2px 10px rgba(48,142,189,0.30)' }}
+                type="submit" disabled={joining}
+              >
+                {joining ? 'Joining…' : 'Join as coach'}
+              </button>
+            </form>
+          </div>
         </div>
       )}
     </div>
@@ -344,6 +434,26 @@ const styles = {
     marginBottom: 8,
     marginTop: 0,
   },
+  // Two-column grid for athlete code + coach code
+  codesGrid: {
+    display: 'grid',
+    gridTemplateColumns: '1fr 1fr',
+    gap: 16,
+    marginBottom: 4,
+  },
+  codeBlock: {
+    background: 'rgba(48,142,189,0.04)',
+    border: '1px solid rgba(48,142,189,0.2)',
+    borderRadius: 12,
+    padding: '14px 16px',
+  },
+  codeHint: {
+    fontSize: 11,
+    color: 'var(--text-3)',
+    margin: '6px 0 0',
+    lineHeight: 1.3,
+  },
+
   codeRow: {
     display: 'flex',
     alignItems: 'center',
@@ -351,11 +461,16 @@ const styles = {
   },
   codeText: {
     fontFamily: 'monospace',
-    fontSize: 30,
+    fontSize: 24,
     fontWeight: 700,
-    letterSpacing: 5,
+    letterSpacing: 4,
     color: 'var(--text)',
     lineHeight: 1,
+    flex: 1,
+    minWidth: 0,
+    overflow: 'hidden',
+    textOverflow: 'ellipsis',
+    whiteSpace: 'nowrap',
   },
 
   inviteBox: {

@@ -22,6 +22,7 @@ import AthleteProfile from './pages/AthleteProfile'
 import AccountabilityDashboard from './pages/AccountabilityDashboard'
 import Messages from './pages/Messages'
 import CoachProfile from './pages/CoachProfile'
+import { CoachAccessProvider } from './context/CoachAccessContext'
 
 import AthleteDashboard from './pages/AthleteDashboard'
 import AthletePlan from './pages/AthletePlan'
@@ -76,12 +77,14 @@ export default function App() {
               }
             />
 
-            {/* ── Coach routes (nested, with Layout) ── */}
+            {/* ── Coach routes (nested, with Layout + access context) ── */}
             <Route
               path="/coach"
               element={
                 <ProtectedRoute requiredRole="coach">
-                  <Layout />
+                  <CoachAccessProvider>
+                    <Layout />
+                  </CoachAccessProvider>
                 </ProtectedRoute>
               }
             >

@@ -23,29 +23,20 @@ function buildMaxesMap(rows) {
 // ─── Coach roster ──────────────────────────────────────────────────────────────
 
 /**
- * Returns the full team roster for a coach.
+ * Returns the full athlete roster for a team.
+ * Accepts teamId directly (works for both head coaches and assistant coaches).
  * sort: 'name' | 'position' | 'joined'
  */
-async function getCoachRoster(coachId, sort = 'name') {
-  console.log('[getCoachRoster] coachId:', coachId)
+async function getCoachRoster(teamId, sort = 'name') {
+  console.log('[getCoachRoster] teamId:', teamId)
 
-  const { data: team, error: teamErr } = await supabaseAdmin
-    .from('teams')
-    .select('id')
-    .eq('coach_id', coachId)
-    .single()
-
-  console.log('[getCoachRoster] team:', team, 'teamErr:', teamErr?.message)
-  if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
-  if (!team) return []
-
-  // Step 1: get athlete_ids and join dates (no FK hints — avoids PostgREST constraint issues)
+  // Step 1: get athlete_ids and join dates — filter to athletes only
   const { data: memberRows, error: membersErr } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id, joined_at')
-    .eq('team_id', team.id)
+    .eq('team_id', teamId)
+    .eq('access_level', 'athlete')
 
-  console.log('[getCoachRoster] memberRows:', memberRows?.length, 'membersErr:', membersErr?.message)
   if (membersErr) throw membersErr
   if (!memberRows || memberRows.length === 0) return []
 
