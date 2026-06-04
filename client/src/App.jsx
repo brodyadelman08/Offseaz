@@ -1,6 +1,7 @@
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
+import { TeamProvider } from './context/TeamContext'
 import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
@@ -44,6 +45,7 @@ export default function App() {
     <ThemeProvider>
       <BrowserRouter>
         <AuthProvider>
+          <TeamProvider>
           <Routes>
             {/* Public routes */}
             <Route path="/" element={<Landing />} />
@@ -122,6 +124,7 @@ export default function App() {
 
             <Route path="*" element={<Navigate to="/" replace />} />
           </Routes>
+          </TeamProvider>
         </AuthProvider>
       </BrowserRouter>
     </ThemeProvider>

@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTeam } from '../context/TeamContext'
 import api from '../services/api'
 import { CheckCircleIcon, PlusIcon, CheckIcon } from '../components/Icons'
 import AthleteTutorial from '../components/AthleteTutorial'
@@ -55,8 +56,8 @@ function GoalRow({ goal, onToggle, onDelete }) {
 
 export default function AthleteDashboard() {
   const { profile } = useAuth()
+  const { activeTeam, teams, teamsLoading, setActiveTeamId, refreshTeams } = useTeam()
   const navigate = useNavigate()
-  const [team, setTeam] = useState(null)
   const [survey, setSurvey] = useState(undefined)
   const [plan, setPlan] = useState(undefined)
   const [goals, setGoals] = useState([])
@@ -64,6 +65,7 @@ export default function AthleteDashboard() {
   const [joinCode, setJoinCode] = useState('')
   const [joining, setJoining] = useState(false)
   const [joinError, setJoinError] = useState('')
+  const [showJoinAnother, setShowJoinAnother] = useState(false)
 
   // Goal form state
   const [showGoalForm, setShowGoalForm] = useState(false)
@@ -74,12 +76,10 @@ export default function AthleteDashboard() {
 
   useEffect(() => {
     Promise.all([
-      api.get('/api/teams/my-team').then(r => r.data.team).catch(() => null),
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
       api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
       api.get('/api/goals').then(r => r.data.goals).catch(() => []),
-    ]).then(([teamData, surveyData, planData, goalsData]) => {
-      setTeam(teamData)
+    ]).then(([surveyData, planData, goalsData]) => {
       setSurvey(surveyData)
       setPlan(planData)
       setGoals(goalsData)
@@ -109,8 +109,10 @@ export default function AthleteDashboard() {
     setJoining(true)
     try {
       const res = await api.post('/api/teams/join', { invite_code: code })
-      setTeam(res.data.team)
+      await refreshTeams()
+      setActiveTeamId(res.data.team.id)
       setJoinCode('')
+      setShowJoinAnother(false)
     } catch (err) {
       setJoinError(err.response?.data?.error || 'Failed to join team. Check the code and try again.')
     } finally {
@@ -178,10 +180,51 @@ export default function AthleteDashboard() {
       ) : (
         <div style={styles.stack}>
           {/* Team card */}
-          {team ? (
+          {teamsLoading ? (
             <div style={styles.card}>
-              <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
-              <p style={styles.teamName}>{team.name}</p>
+              <p style={styles.loadingText}>Loading team…</p>
+            </div>
+          ) : activeTeam ? (
+            <div style={styles.card}>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
+                <div>
+                  <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
+                  <p style={styles.teamName}>{activeTeam.name}</p>
+                  {teams.length > 1 && (
+                    <p style={styles.teamCount}>{teams.length} teams — use sidebar to switch</p>
+                  )}
+                </div>
+                <button
+                  style={styles.joinAnotherBtn}
+                  onClick={() => { setShowJoinAnother(s => !s); setJoinError('') }}
+                >
+                  {showJoinAnother ? 'Cancel' : '+ Join another team'}
+                </button>
+              </div>
+              {showJoinAnother && (
+                <div style={styles.joinAnotherPanel}>
+                  <form onSubmit={handleJoinTeam} style={styles.joinFormStack}>
+                    <input
+                      style={styles.joinInputSmall}
+                      type="text"
+                      placeholder="Invite code (e.g. 2FB9A616)"
+                      value={joinCode.toUpperCase()}
+                      onChange={e => setJoinCode(e.target.value)}
+                      maxLength={8}
+                      autoCapitalize="characters"
+                      spellCheck={false}
+                    />
+                    <button
+                      type="submit"
+                      style={{ ...styles.actionBtn, background: BLUE, opacity: joining || !joinCode.trim() ? 0.55 : 1 }}
+                      disabled={joining || !joinCode.trim()}
+                    >
+                      {joining ? 'Joining…' : 'Join Team'}
+                    </button>
+                  </form>
+                  {joinError && <p style={styles.joinError}>{joinError}</p>}
+                </div>
+              )}
             </div>
           ) : (
             <div style={styles.joinHeroCard} data-tutorial="athlete-join-team">
@@ -386,7 +429,32 @@ const styles = {
     letterSpacing: 0.8,
     margin: '0 0 8px',
   },
-  teamName: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: 0 },
+  teamName: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: '0 0 2px' },
+  teamCount: { fontSize: 12, color: 'var(--text-3)', margin: 0, marginTop: 2 },
+  joinAnotherBtn: {
+    padding: '6px 12px', fontSize: 11, fontWeight: 700, borderRadius: 8,
+    border: `1px solid ${BLUE}44`, background: 'transparent', color: BLUE,
+    cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, letterSpacing: 0.1,
+  },
+  joinAnotherPanel: {
+    marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border)',
+  },
+  joinInputSmall: {
+    width: '100%',
+    padding: '11px 14px',
+    fontSize: 16,
+    fontFamily: 'monospace',
+    letterSpacing: 4,
+    textAlign: 'center',
+    borderRadius: 10,
+    border: '1px solid var(--input-border)',
+    background: 'var(--input-bg)',
+    color: 'var(--text)',
+    textTransform: 'uppercase',
+    outline: 'none',
+    boxSizing: 'border-box',
+    marginBottom: 8,
+  },
 
   joinHeroCard: {
     background: 'var(--card)',

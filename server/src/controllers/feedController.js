@@ -8,7 +8,7 @@ const {
 async function getFeedHandler(req, res) {
   try {
     const profile = await getProfile(req.user.id)
-    const teamId  = await getTeamId(req.user.id, profile.role)
+    const teamId  = await getTeamId(req.user.id, profile.role, req.query.teamId || null)
     const posts   = await getFeed(teamId, req.user.id)
     res.json({ posts })
   } catch (err) {
@@ -23,7 +23,7 @@ async function createPostHandler(req, res) {
   }
   try {
     const profile = await getProfile(req.user.id)
-    const teamId  = await getTeamId(req.user.id, profile.role)
+    const teamId  = await getTeamId(req.user.id, profile.role, req.query.teamId || null)
     const post    = await createPost(teamId, req.user.id, (content || '').trim(), photo_url || null)
     res.status(201).json({ post })
   } catch (err) {

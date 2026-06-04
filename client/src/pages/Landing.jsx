@@ -624,6 +624,132 @@ const gl = {
   },
 }
 
+// ── Exercise Info Mockup ──────────────────────────────────────────────────────
+
+function ExerciseInfoMockup() {
+  return (
+    <div style={ei.shell}>
+      <div style={ei.chrome}>
+        <div style={{ display: 'flex', gap: 5 }}>
+          {['#FF5F57','#FEBC2E','#28C840'].map((c, i) => (
+            <span key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c, display: 'block' }} />
+          ))}
+        </div>
+        <div style={ei.urlBar}>offseaz.app / athlete / plan</div>
+        <div style={{ width: 54 }} />
+      </div>
+
+      <div style={ei.body}>
+        <div style={ei.sectionTag}>WEDNESDAY — UPPER BODY</div>
+
+        {/* Row 1: simple */}
+        <div style={ei.exCard}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={ei.exNameRow}>
+              <span style={ei.exName}>Bench Press</span>
+              <span style={ei.infoBtn}>i</span>
+            </div>
+            <span style={ei.exMeta}>3×8 · 185 lbs</span>
+          </div>
+        </div>
+
+        {/* Row 2: info panel expanded */}
+        <div style={{ ...ei.exCard, borderColor: BLUE + '44', background: BLUE + '08' }}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 8 }}>
+            <div style={ei.exNameRow}>
+              <span style={ei.exName}>Romanian Deadlift</span>
+              <span style={{
+                ...ei.infoBtn,
+                background: BLUE + '25',
+                borderColor: BLUE,
+                boxShadow: `0 0 6px ${BLUE}44`,
+              }}>i</span>
+            </div>
+            <span style={ei.exMeta}>3×10 · 155 lbs</span>
+          </div>
+
+          {/* Info panel */}
+          <div style={ei.infoPanel}>
+            <p style={ei.infoPanelTitle}>Exercise Info</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 5 }}>
+              <div>
+                <span style={ei.infoLabel}>Primary Muscles</span>
+                <span style={ei.infoValue}>Hamstrings · Glutes · Lower Back</span>
+              </div>
+              <div>
+                <span style={ei.infoLabel}>Key Cue</span>
+                <span style={ei.infoValue}>Hinge at hips, bar stays close to legs, soft knee bend throughout.</span>
+              </div>
+              <div style={{ display: 'flex', alignItems: 'center', gap: 5, paddingTop: 5, borderTop: '1px solid #222' }}>
+                <span style={{ fontSize: 8, color: BLUE }}>▶</span>
+                <span style={{ fontSize: 8, fontWeight: 700, color: BLUE }}>Watch video demo →</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        {/* Row 3: simple */}
+        <div style={ei.exCard}>
+          <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
+            <div style={ei.exNameRow}>
+              <span style={ei.exName}>Pull-ups</span>
+              <span style={ei.infoBtn}>i</span>
+            </div>
+            <span style={ei.exMeta}>4 sets · AMAP</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ei = {
+  shell: {
+    background: '#111', border: '1px solid #252525', borderRadius: 14, overflow: 'hidden',
+    boxShadow: '0 24px 56px rgba(0,0,0,0.55), 0 0 0 1px rgba(255,255,255,0.03)',
+    width: '100%', maxWidth: 320, flexShrink: 0,
+  },
+  chrome: {
+    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    padding: '8px 14px', background: '#0A0A0A', borderBottom: '1px solid #1C1C1C',
+  },
+  urlBar: {
+    fontSize: 8, color: '#3A3A3A', fontFamily: 'monospace',
+    background: '#161616', border: '1px solid #222', borderRadius: 4, padding: '2px 10px',
+  },
+  body: { padding: '10px 12px', display: 'flex', flexDirection: 'column', gap: 7 },
+  sectionTag: {
+    fontSize: 7, fontWeight: 700, letterSpacing: 1.2, color: '#444',
+    textTransform: 'uppercase', paddingBottom: 6, borderBottom: '1px solid #1A1A1A',
+    marginBottom: 1,
+  },
+  exCard: {
+    background: '#1A1A1A', border: '1px solid #252525', borderRadius: 9, padding: '8px 10px',
+  },
+  exNameRow: { display: 'flex', alignItems: 'center', gap: 5 },
+  exName: { fontSize: 10, fontWeight: 700, color: '#E0E0E0' },
+  infoBtn: {
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+    width: 14, height: 14, borderRadius: '50%',
+    border: `1px solid ${BLUE}50`, background: 'transparent',
+    fontSize: 8, fontWeight: 800, color: BLUE, lineHeight: 1, flexShrink: 0,
+  },
+  exMeta: { fontSize: 8, color: '#555', fontWeight: 600 },
+  infoPanel: {
+    background: '#0F0F0F', border: `1px solid ${BLUE}25`,
+    borderRadius: 7, padding: '8px 10px',
+  },
+  infoPanelTitle: {
+    fontSize: 8, fontWeight: 700, color: BLUE, letterSpacing: 0.5,
+    margin: '0 0 6px', textTransform: 'uppercase',
+  },
+  infoLabel: {
+    display: 'block', fontSize: 7, fontWeight: 700, color: BLUE,
+    textTransform: 'uppercase', letterSpacing: 0.8, marginBottom: 1,
+  },
+  infoValue: { fontSize: 8, color: '#888', lineHeight: 1.4 },
+}
+
 // ── Sports & Blueprint styles ─────────────────────────────────────────────────
 
 const sp = {
@@ -1003,6 +1129,49 @@ export default function Landing() {
             <div style={s.splitVisual}>
               <div style={{ ...s.visualGlow, background: 'radial-gradient(ellipse, rgba(48,142,189,0.12) 0%, transparent 65%)' }} />
               <GoalsMockup />
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── Exercise Info section ──────────────────────────────────────── */}
+      <section style={{ ...s.section, borderTop: '1px solid #181818' }}>
+        <div style={s.inner}>
+          <div style={s.splitRow}>
+            {/* Text side */}
+            <div style={s.splitText}>
+              <span style={s.eyebrow}>Exercise Guidance</span>
+              <h2 style={s.sectionH2}>Every Lift. Explained.</h2>
+              <p style={{ ...s.sectionP, marginBottom: 32 }}>
+                Every exercise in every blueprint has a{' '}
+                <span style={{
+                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+                  width: 18, height: 18, borderRadius: '50%',
+                  border: `1.5px solid ${BLUE}`,
+                  fontSize: 11, fontWeight: 800, color: BLUE,
+                  verticalAlign: 'middle', margin: '0 3px', lineHeight: 1,
+                }}>i</span>
+                {' '}button next to it. Tap it and see exactly how to perform the movement, which muscles it targets, and a direct link to a video demo. No guessing, no bad form, no confusion — just clear guidance so every athlete trains with confidence.
+              </p>
+              <div style={s.bulletList}>
+                {[
+                  { color: BLUE,   text: 'Step-by-step technique cues for every exercise' },
+                  { color: ORANGE, text: 'Primary and secondary muscles clearly identified' },
+                  { color: YELLOW, text: 'Direct link to a video demonstration for every lift' },
+                  { color: BLUE,   text: 'Available on every blueprint, on any device' },
+                  { color: ORANGE, text: 'Built for athletes who want to train right, not just train hard' },
+                ].map((b, i) => (
+                  <div key={i} style={s.bulletItem}>
+                    <CheckIcon color={b.color} />
+                    <span style={s.benefitText}>{b.text}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+            {/* Visual side */}
+            <div style={s.splitVisual}>
+              <div style={{ ...s.visualGlow, background: `radial-gradient(ellipse, rgba(48,142,189,0.12) 0%, transparent 65%)` }} />
+              <ExerciseInfoMockup />
             </div>
           </div>
         </div>

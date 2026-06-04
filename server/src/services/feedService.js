@@ -1,6 +1,6 @@
 const supabaseAdmin = require('../config/supabase')
 
-async function getTeamId(userId, role) {
+async function getTeamId(userId, role, preferredTeamId = null) {
   if (role === 'coach') {
     const { data, error } = await supabaseAdmin
       .from('teams')
@@ -10,13 +10,24 @@ async function getTeamId(userId, role) {
     if (error) throw new Error('Team not found')
     return data.id
   } else {
-    const { data, error } = await supabaseAdmin
+    // If a preferred teamId is provided and the athlete is a member, use it
+    if (preferredTeamId) {
+      const { data: pref } = await supabaseAdmin
+        .from('team_members')
+        .select('team_id')
+        .eq('athlete_id', userId)
+        .eq('team_id', preferredTeamId)
+        .maybeSingle()
+      if (pref) return pref.team_id
+    }
+    // Fall back to first team membership (supports athletes on multiple teams)
+    const { data: rows, error } = await supabaseAdmin
       .from('team_members')
       .select('team_id')
       .eq('athlete_id', userId)
-      .single()
-    if (error) throw new Error('Not on a team')
-    return data.team_id
+      .limit(1)
+    if (error || !rows?.length) throw new Error('Not on a team')
+    return rows[0].team_id
   }
 }
 

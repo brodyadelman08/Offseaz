@@ -1,11 +1,12 @@
 const express = require('express')
 const router = express.Router()
 const verifyToken = require('../middleware/verifyToken')
-const { create, mine, join, athleteTeam } = require('../controllers/teamsController')
+const { create, mine, join, athleteTeam, athleteTeams } = require('../controllers/teamsController')
 
 router.post('/', verifyToken, create)
 router.get('/mine', verifyToken, mine)
 router.post('/join', verifyToken, join)
 router.get('/my-team', verifyToken, athleteTeam)
+router.get('/my-teams', verifyToken, athleteTeams)
 
 module.exports = router

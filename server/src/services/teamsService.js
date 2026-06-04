@@ -56,19 +56,38 @@ async function getAthleteTeam(athleteId) {
     .from('team_members')
     .select('team_id')
     .eq('athlete_id', athleteId)
-    .single()
+    .limit(1)
 
-  if (memberErr && memberErr.code !== 'PGRST116') throw memberErr
-  if (!membership) return null
+  if (memberErr) throw memberErr
+  if (!membership || membership.length === 0) return null
 
   const { data: team, error: teamErr } = await supabaseAdmin
     .from('teams')
     .select('*')
-    .eq('id', membership.team_id)
+    .eq('id', membership[0].team_id)
     .single()
 
   if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
   return team || null
 }
 
-module.exports = { createTeam, getTeamByCoach, getTeamByInviteCode, joinTeam, getAthleteTeam }
+async function getAthleteTeams(athleteId) {
+  const { data: memberships, error: memberErr } = await supabaseAdmin
+    .from('team_members')
+    .select('team_id')
+    .eq('athlete_id', athleteId)
+
+  if (memberErr) throw memberErr
+  if (!memberships || memberships.length === 0) return []
+
+  const teamIds = memberships.map(m => m.team_id)
+  const { data: teams, error: teamErr } = await supabaseAdmin
+    .from('teams')
+    .select('*')
+    .in('id', teamIds)
+
+  if (teamErr) throw teamErr
+  return teams || []
+}
+
+module.exports = { createTeam, getTeamByCoach, getTeamByInviteCode, joinTeam, getAthleteTeam, getAthleteTeams }

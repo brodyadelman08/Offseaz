@@ -4,6 +4,7 @@ const {
   getTeamByInviteCode,
   joinTeam,
   getAthleteTeam,
+  getAthleteTeams,
 } = require('../services/teamsService')
 
 async function create(req, res) {
@@ -59,4 +60,13 @@ async function athleteTeam(req, res) {
   }
 }
 
-module.exports = { create, mine, join, athleteTeam }
+async function athleteTeams(req, res) {
+  try {
+    const teams = await getAthleteTeams(req.user.id)
+    res.json({ teams })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { create, mine, join, athleteTeam, athleteTeams }

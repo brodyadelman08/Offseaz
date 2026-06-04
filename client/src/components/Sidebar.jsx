@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTeam } from '../context/TeamContext'
 import {
   GridIcon, UsersIcon, LayoutIcon, MessageIcon, BarChartIcon,
   HomeIcon, CalendarIcon, EditIcon, UserIcon, SignOutIcon, FeedIcon,
@@ -56,6 +57,7 @@ const ATHLETE_NAV = [
 function DesktopSidebar({ nav, profile, signOut }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
+  const { teams, activeTeam, activeTeamId, setActiveTeamId } = useTeam()
 
   function isActive(path, exact) {
     if (exact) return pathname === path
@@ -101,6 +103,32 @@ function DesktopSidebar({ nav, profile, signOut }) {
           )
         })}
       </div>
+
+      {/* Team switcher — athletes only */}
+      {profile?.role === 'athlete' && teams.length > 0 && (
+        <div style={styles.teamSection}>
+          <p style={styles.teamSectionLabel}>Team</p>
+          {teams.length > 1 ? (
+            <div style={styles.teamPills}>
+              {teams.map(t => (
+                <button
+                  key={t.id}
+                  style={{
+                    ...styles.teamPill,
+                    ...(t.id === activeTeamId ? styles.teamPillActive : {}),
+                  }}
+                  onClick={() => setActiveTeamId(t.id)}
+                  title={t.name}
+                >
+                  {t.name}
+                </button>
+              ))}
+            </div>
+          ) : (
+            <p style={styles.teamSingleName}>{activeTeam?.name || teams[0]?.name}</p>
+          )}
+        </div>
+      )}
 
       {/* Bottom — user + sign out */}
       <div style={styles.bottomArea}>
@@ -290,6 +318,38 @@ const styles = {
     fontWeight: 500,
     textAlign: 'left',
     transition: 'color 0.12s',
+  },
+
+  // Team switcher
+  teamSection: {
+    padding: '10px 12px 8px',
+    borderTop: '1px solid var(--border)',
+  },
+  teamSectionLabel: {
+    fontSize: 10, fontWeight: 700, color: 'var(--text-3)',
+    textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 6px',
+  },
+  teamPills: {
+    display: 'flex', flexDirection: 'column', gap: 3,
+  },
+  teamPill: {
+    padding: '7px 10px', fontSize: 12, fontWeight: 600,
+    borderRadius: 8, border: '1px solid var(--border)',
+    background: 'transparent', color: 'var(--text-2)',
+    cursor: 'pointer', textAlign: 'left',
+    overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+    transition: 'all 0.14s',
+    width: '100%',
+  },
+  teamPillActive: {
+    background: 'rgba(48,142,189,0.12)',
+    borderColor: `${BLUE}44`,
+    color: BLUE,
+  },
+  teamSingleName: {
+    fontSize: 13, fontWeight: 600, color: 'var(--text-2)',
+    margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
+    padding: '2px 4px',
   },
 
   // Mobile bottom bar

@@ -13,8 +13,29 @@ const INJURY_FLAGS = {
     'Upright Row', 'Power Clean', 'Hang Clean', 'DB Shoulder Press', 'Arnold Press',
     'Lateral Raise', 'Front Raise', 'Face Pulls', 'Dips',
   ],
-  Knee:  ['Deep Squat', 'Bulgarian Split Squat', 'Box Jump', 'Depth Jump'],
-  Back:  ['Conventional Deadlift', 'Good Mornings', 'Barbell Row'],
+  Knee: [
+    'Back Squat', 'Front Squat', 'Goblet Squat', 'Deep Squat',
+    'Bulgarian Split Squat', 'Split Squat', 'Walking Lunge', 'Reverse Lunge', 'Lateral Lunge',
+    'Step-up', 'Box Jump', 'Depth Jump', 'Jump Squat', 'Squat Jump',
+    'Broad Jump', 'Tuck Jump', 'Sled Push', 'Sled Pull',
+    'Leg Extension', 'Leg Press', 'Hack Squat',
+  ],
+  Ankle: [
+    'Box Jump', 'Depth Jump', 'Broad Jump', 'Jump Squat', 'Tuck Jump', 'Squat Jump',
+    'Calf Raises', 'Calf Raise', 'Single Leg Calf Raise',
+    'Single Leg RDL', 'Walking Lunge', 'Reverse Lunge', 'Sled Push',
+  ],
+  Back: [
+    'Conventional Deadlift', 'Trap Bar Deadlift', 'Hex Bar Deadlift',
+    'Romanian Deadlift', 'RDL', 'Stiff Leg Deadlift',
+    'Back Squat', 'Good Mornings', 'Barbell Row', 'Back Extensions',
+  ],
+  Hip: [
+    'Hip Thrust', 'Weighted Hip Thrust',
+    'Romanian Deadlift', 'RDL', 'Single Leg RDL',
+    'Bulgarian Split Squat', 'Copenhagen Adductor',
+    'Reverse Lunge', 'Walking Lunge', 'Lateral Lunge',
+  ],
   Elbow: ['Power Clean', 'Front Squat', 'Overhead Press'],
   Wrist: ['Power Clean', 'Front Squat', 'Overhead Press'],
 }
