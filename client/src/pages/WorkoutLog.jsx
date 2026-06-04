@@ -3,7 +3,8 @@ import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
 import { AlertIcon } from '../components/Icons'
 
-const BLUE = '#308EBD'
+const BLUE   = '#308EBD'
+const YELLOW = '#F0BE24'
 
 const STATUS_OPTIONS = [
   { value: 'completed',       label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9', activeBg: '#2e7d32' },
@@ -171,27 +172,115 @@ export default function WorkoutLog() {
           </div>
         )}
 
-        {/* Effort selector */}
+        {/* Effort slider */}
         {status && status !== 'skipped' && status !== 'skipped_injury' && (
           <div>
-            <p style={styles.fieldLabel}>
-              Effort level
-              <span style={styles.effortHint}> · 1 = easy, 10 = max effort</span>
-            </p>
-            <div style={styles.effortRow}>
-              {Array.from({ length: 10 }, (_, i) => i + 1).map(n => (
-                <button
-                  key={n}
-                  type="button"
-                  style={{
-                    ...styles.effortBtn,
-                    ...(effort === n ? { background: BLUE, color: '#fff', borderColor: BLUE } : {}),
-                  }}
-                  onClick={() => setEffort(n)}
-                >
-                  {n}
-                </button>
-              ))}
+            {/* Inject thumb + track styles — can't do pseudo-elements via inline React styles */}
+            <style>{`
+              .effort-slider {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 100%;
+                height: 6px;
+                border-radius: 6px;
+                outline: none;
+                cursor: pointer;
+                display: block;
+              }
+              .effort-slider::-webkit-slider-thumb {
+                -webkit-appearance: none;
+                appearance: none;
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #F0BE24;
+                cursor: grab;
+                border: 3px solid rgba(0,0,0,0.8);
+                box-shadow: 0 2px 10px rgba(240,190,36,0.55), 0 0 0 4px rgba(240,190,36,0.18);
+                transition: transform 0.12s ease, box-shadow 0.12s ease;
+              }
+              .effort-slider:hover::-webkit-slider-thumb {
+                transform: scale(1.1);
+                box-shadow: 0 3px 14px rgba(240,190,36,0.65), 0 0 0 6px rgba(240,190,36,0.2);
+              }
+              .effort-slider:active::-webkit-slider-thumb {
+                transform: scale(1.22);
+                cursor: grabbing;
+                box-shadow: 0 4px 20px rgba(240,190,36,0.75), 0 0 0 8px rgba(240,190,36,0.22);
+              }
+              .effort-slider::-moz-range-thumb {
+                width: 32px;
+                height: 32px;
+                border-radius: 50%;
+                background: #F0BE24;
+                cursor: grab;
+                border: 3px solid rgba(0,0,0,0.8);
+                box-shadow: 0 2px 10px rgba(240,190,36,0.55);
+              }
+              .effort-slider::-moz-range-track {
+                height: 6px;
+                border-radius: 6px;
+              }
+              .effort-slider:focus { outline: none; }
+            `}</style>
+
+            <p style={styles.fieldLabel}>Effort level</p>
+
+            {/* Large number display */}
+            <div style={styles.effortDisplay}>
+              <span style={{
+                ...styles.effortNumber,
+                color: effort !== null ? YELLOW : 'var(--text-3)',
+                opacity: effort !== null ? 1 : 0.35,
+              }}>
+                {effort !== null ? effort : '—'}
+              </span>
+              <span style={styles.effortLabel}>
+                {effort === null   ? 'drag the slider to rate'
+                : effort === 1    ? 'Easy'
+                : effort <= 3     ? 'Light effort'
+                : effort <= 5     ? 'Moderate'
+                : effort <= 7     ? 'Hard'
+                : effort <= 9     ? 'Very hard'
+                :                   'Max effort 🔥'}
+              </span>
+            </div>
+
+            {/* Slider */}
+            <div style={styles.sliderWrap}>
+              <input
+                type="range"
+                min={1}
+                max={10}
+                step={1}
+                value={effort !== null ? effort : 5}
+                className="effort-slider"
+                style={{
+                  background: effort !== null
+                    ? `linear-gradient(to right, ${YELLOW} ${((effort - 1) / 9) * 100}%, rgba(240,190,36,0.16) ${((effort - 1) / 9) * 100}%)`
+                    : 'rgba(240,190,36,0.14)',
+                }}
+                onChange={e => setEffort(Number(e.target.value))}
+              />
+              {/* Tick marks 1–10 */}
+              <div style={styles.sliderTicks}>
+                {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                  <span
+                    key={n}
+                    style={{
+                      ...styles.tickLabel,
+                      ...(effort === n ? { color: YELLOW, fontWeight: 700 } : {}),
+                    }}
+                  >
+                    {n}
+                  </span>
+                ))}
+              </div>
+            </div>
+
+            <div style={styles.effortRange}>
+              <span>1 = easy</span>
+              <span>10 = max effort</span>
             </div>
           </div>
         )}
@@ -246,8 +335,59 @@ const styles = {
 
   form: { display: 'flex', flexDirection: 'column', gap: 28 },
   fieldLabel: { fontSize: 14, fontWeight: 600, color: 'var(--text)', margin: '0 0 12px' },
-  effortHint: { fontSize: 12, color: 'var(--text-3)', fontWeight: 400 },
   optional: { fontWeight: 400, color: 'var(--text-3)' },
+
+  // Effort slider
+  effortDisplay: {
+    display: 'flex',
+    flexDirection: 'column',
+    alignItems: 'center',
+    gap: 6,
+    paddingTop: 10,
+    paddingBottom: 24,
+  },
+  effortNumber: {
+    fontSize: 80,
+    fontWeight: 900,
+    lineHeight: 1,
+    letterSpacing: '-0.04em',
+    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+    transition: 'color 0.18s ease, opacity 0.18s ease',
+    userSelect: 'none',
+  },
+  effortLabel: {
+    fontSize: 13,
+    fontWeight: 500,
+    color: 'var(--text-3)',
+    letterSpacing: 0.3,
+    minHeight: 18,
+    transition: 'opacity 0.15s',
+  },
+  sliderWrap: {
+    paddingBottom: 4,
+  },
+  sliderTicks: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: 10,
+  },
+  tickLabel: {
+    fontSize: 11,
+    color: 'var(--text-3)',
+    lineHeight: 1,
+    textAlign: 'center',
+    width: 16,
+    transition: 'color 0.12s, font-weight 0.12s',
+  },
+  effortRange: {
+    display: 'flex',
+    justifyContent: 'space-between',
+    paddingTop: 6,
+    fontSize: 11,
+    color: 'var(--text-3)',
+    letterSpacing: 0.2,
+    opacity: 0.7,
+  },
 
   statusGrid: { display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 10 },
   statusBtn: { padding: '13px 8px', fontSize: 13, fontWeight: 600, borderRadius: 12, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.18s ease', textAlign: 'center', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
@@ -256,9 +396,6 @@ const styles = {
   exerciseFlagChip: { padding: '7px 13px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px dashed var(--border)', background: 'var(--card)', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.18s ease', whiteSpace: 'nowrap' },
   exerciseFlagChipActive: { borderStyle: 'solid', borderColor: '#c73820', background: '#fce8e6', color: '#c73820' },
   injuryFlagNote: { fontSize: 12, color: '#c73820', fontWeight: 600, margin: '8px 0 0' },
-
-  effortRow: { display: 'flex', gap: 6, flexWrap: 'wrap' },
-  effortBtn: { width: 44, height: 44, fontSize: 14, fontWeight: 600, borderRadius: 10, border: '2px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', transition: 'all 0.18s ease', boxShadow: '0 1px 3px rgba(0,0,0,0.12)' },
 
   textarea: { width: '100%', padding: '11px 14px', fontSize: 14, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
   errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 10, padding: '10px 14px', fontSize: 13 },
