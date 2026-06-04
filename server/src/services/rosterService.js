@@ -308,6 +308,30 @@ async function getTeammateProfile(viewerId, targetId) {
   }
 }
 
+// ─── Remove athlete from team ──────────────────────────────────────────────────
+
+/**
+ * Removes an athlete from the coach's team.
+ * Verifies the requesting coach owns the team before deleting.
+ */
+async function removeAthlete(coachId, athleteId) {
+  const { data: team, error: teamErr } = await supabaseAdmin
+    .from('teams')
+    .select('id')
+    .eq('coach_id', coachId)
+    .single()
+
+  if (teamErr || !team) throw Object.assign(new Error('Team not found'), { status: 404 })
+
+  const { error } = await supabaseAdmin
+    .from('team_members')
+    .delete()
+    .eq('team_id', team.id)
+    .eq('athlete_id', athleteId)
+
+  if (error) throw error
+}
+
 // ─── Update privacy ────────────────────────────────────────────────────────────
 
 async function updatePrivacy(athleteId, privacyTeam) {
@@ -326,4 +350,4 @@ async function updatePrivacy(athleteId, privacyTeam) {
   return data
 }
 
-module.exports = { getCoachRoster, getAthleteRoster, getTeammateProfile, updatePrivacy }
+module.exports = { getCoachRoster, getAthleteRoster, getTeammateProfile, removeAthlete, updatePrivacy }

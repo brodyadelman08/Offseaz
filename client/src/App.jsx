@@ -21,6 +21,7 @@ import BlueprintDetail from './pages/BlueprintDetail'
 import AthleteProfile from './pages/AthleteProfile'
 import AccountabilityDashboard from './pages/AccountabilityDashboard'
 import Messages from './pages/Messages'
+import CoachProfile from './pages/CoachProfile'
 
 import AthleteDashboard from './pages/AthleteDashboard'
 import AthletePlan from './pages/AthletePlan'
@@ -94,6 +95,7 @@ export default function App() {
               <Route path="accountability" element={<AccountabilityDashboard />} />
               <Route path="feed" element={<Feed />} />
               <Route path="athletes/:id/report" element={<AthleteReport />} />
+              <Route path="profile" element={<CoachProfile />} />
             </Route>
 
             {/* ── Athlete routes (nested, with Layout) ── */}

@@ -123,6 +123,27 @@ async function updateAvatar(req, res) {
   }
 }
 
+async function updateName(req, res) {
+  const { full_name } = req.body
+  if (!full_name || typeof full_name !== 'string' || !full_name.trim()) {
+    return res.status(400).json({ error: 'full_name is required' })
+  }
+  const trimmed = full_name.trim().slice(0, 100)
+  try {
+    const { data, error: dbError } = await supabaseAdmin
+      .from('profiles')
+      .update({ full_name: trimmed })
+      .eq('id', req.user.id)
+      .select()
+      .single()
+    if (dbError) throw dbError
+    res.json({ profile: data })
+  } catch (err) {
+    console.error('[updateName] error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
 async function updatePrivacy(req, res) {
   const { privacy_team } = req.body
   if (!['public', 'private'].includes(privacy_team)) {
@@ -138,4 +159,4 @@ async function updatePrivacy(req, res) {
   }
 }
 
-module.exports = { register, profile, updateAvatar, updatePrivacy }
+module.exports = { register, profile, updateAvatar, updateName, updatePrivacy }

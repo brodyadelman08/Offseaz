@@ -40,6 +40,7 @@ const COACH_NAV = [
   { path: '/coach/feed',          label: 'Feed',          Icon: FeedIcon,    exact: false, dataTutorial: 'coach-feed' },
   { path: '/coach/messages',      label: 'Messages',      Icon: MessageIcon, exact: false },
   { path: '/coach/accountability',label: 'Accountability',Icon: BarChartIcon,exact: false, dataTutorial: 'coach-accountability' },
+  { path: '/coach/profile',       label: 'My Profile',    Icon: UserIcon,    exact: false },
 ]
 
 const ATHLETE_NAV = [
@@ -148,7 +149,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
           </div>
         </div>
         <button style={styles.signOutBtn} onClick={signOut}>
-          <SignOutIcon size={15} color="var(--text-3)" />
+          <SignOutIcon size={15} color="#c73820" />
           <span>Sign out</span>
         </button>
       </div>
@@ -158,7 +159,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
 
 // ─── Mobile bottom tab bar ────────────────────────────────────────────────────
 
-function BottomBar({ nav }) {
+function BottomBar({ nav, signOut }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
 
@@ -186,6 +187,11 @@ function BottomBar({ nav }) {
           </button>
         )
       })}
+      {/* Sign-out tab — always last */}
+      <button style={styles.tabItem} onClick={signOut}>
+        <SignOutIcon size={22} color="#c73820" />
+        <span style={{ ...styles.tabLabel, color: '#c73820' }}>Sign out</span>
+      </button>
     </div>
   )
 }
@@ -197,7 +203,7 @@ export default function Sidebar() {
   const isMobile = useIsMobile()
   const nav = profile?.role === 'coach' ? COACH_NAV : ATHLETE_NAV
 
-  if (isMobile) return <BottomBar nav={nav} />
+  if (isMobile) return <BottomBar nav={nav} signOut={signOut} />
   return <DesktopSidebar nav={nav} profile={profile} signOut={signOut} />
 }
 
@@ -308,16 +314,18 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     gap: 8,
-    padding: '8px 16px',
-    width: '100%',
-    background: 'none',
-    border: 'none',
+    margin: '4px 12px 0',
+    padding: '9px 14px',
+    width: 'calc(100% - 24px)',
+    background: 'rgba(199,56,32,0.08)',
+    border: '1px solid rgba(199,56,32,0.25)',
+    borderRadius: 8,
     cursor: 'pointer',
-    color: 'var(--text-3)',
+    color: '#c73820',
     fontSize: 13,
-    fontWeight: 500,
+    fontWeight: 600,
     textAlign: 'left',
-    transition: 'color 0.12s',
+    transition: 'background 0.14s, border-color 0.14s',
   },
 
   // Team switcher

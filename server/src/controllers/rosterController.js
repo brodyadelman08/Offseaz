@@ -3,6 +3,7 @@ const {
   getCoachRoster,
   getAthleteRoster,
   getTeammateProfile,
+  removeAthlete,
 } = require('../services/rosterService')
 
 /**
@@ -56,4 +57,23 @@ async function teammateProfle(req, res) {
   }
 }
 
-module.exports = { roster, teammateProfle }
+/**
+ * DELETE /api/roster/:athleteId
+ * Coach removes an athlete from the team.
+ */
+async function removeAthleteFromTeam(req, res) {
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can remove athletes' })
+    }
+    await removeAthlete(req.user.id, req.params.athleteId)
+    res.json({ success: true })
+  } catch (err) {
+    if (err.status === 404) return res.status(404).json({ error: err.message })
+    console.error('[rosterController] removeAthleteFromTeam error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { roster, teammateProfle, removeAthleteFromTeam }
