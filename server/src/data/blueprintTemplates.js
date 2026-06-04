@@ -571,31 +571,37 @@ function generateBaseballWeeks(_, goal, daysPerWeek) {
 }
 
 // ─── Baseball — Pitcher ───────────────────────────────────────────────────────
+// Pitchers keep all core compound lifts for athletic foundation and velocity.
+// Key differences vs position players: arm care / hip stability added every
+// session; NO overhead pressing (DB Bench replaces Bench Press; no Push Press).
 
-function pitcher3Day(wp) {
+function pitcher3Day(wp, phase) {
+  const p3 = phase >= 3
   return [
-    makeBaseballSession('Day 1', 'Lower Power', [
-      { name: 'Trap Bar Deadlift',    warmup: '2x5', sets: 3, reps: '6', pct: wp },
-      { name: 'Hip Thrust',           sets: 4, reps: '8' },
-      { name: 'Reverse Lunge',        sets: 3, reps: '5', note: 'each leg' },
-      { name: 'Copenhagen Adductor',  sets: 3, reps: '8', note: 'each leg' },
-      { name: 'Single Leg RDL',       sets: 3, reps: '8', note: 'each leg' },
+    makeBaseballSession('Day 1', 'Full Body Strength', [
+      { name: 'Back Squat',              warmup: '2x5', sets: 3, reps: '5', pct: wp },
+      { name: 'DB Bench Press',                         sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Barbell Row',                            sets: 3, reps: '8' },
+      { name: 'Band External Rotation',                 sets: 4, reps: '15', note: 'each arm' },
+      { name: 'Core — Cherry Pickers',                  sets: 4, reps: '15' },
     ]),
-    makeBaseballSession('Day 2', 'Upper Pulling & Rotational Power', [
-      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
-      { name: 'Pull-ups',                  sets: 3, reps: 'AMAP' },
-      { name: 'Single Arm DB Row',         sets: 4, reps: '10' },
-      { name: 'Bird Dog Row',              sets: 4, reps: '10' },
-      { name: 'Med Ball Rotational Throw', sets: 4, reps: '6', note: 'each side' },
-      { name: 'Band External Rotation',    sets: 4, reps: '15' },
+    makeBaseballSession('Day 2', 'Full Body Power', [
+      { name: 'Power Clean',             warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Deadlift',                      sets: 3, reps: '6', pct: wp },
+      { name: 'Pull-ups',                               sets: 3, reps: 'AMAP' },
+      { name: 'Weighted Hip Thrust',                    sets: 3, reps: '8' },
+      { name: 'Med Ball Rotational Throw',              sets: 4, reps: '6', note: 'each side' },
+      { name: 'Bird Dog Row',                           sets: 4, reps: '10' },
     ]),
-    makeBaseballSession('Day 3', 'Arm Care & Hip Stability', [
-      { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
-      { name: 'Band External Rotation', sets: 4, reps: '15' },
-      { name: 'Single Leg RDL',         sets: 3, reps: '8', note: 'each leg' },
-      { name: 'Hip Thrust',             sets: 4, reps: '8' },
-      { name: 'Copenhagen Adductor',    sets: 3, reps: '8', note: 'each leg' },
-      { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+    makeBaseballSession('Day 3', 'Full Body Accessory & Arm Care', [
+      { name: 'RDL',                                    sets: 3, reps: '8' },
+      { name: 'Single Arm DB Row',                      sets: 3, reps: '12' },
+      { name: 'Bulgarian Split Squat',                  sets: 3, reps: '6', note: 'each leg' },
+      { name: 'Copenhagen Adductor',                    sets: 3, reps: '8', note: 'each leg' },
+      { name: 'YTW Shoulder Series',                    sets: 3, reps: '10', note: 'each' },
+      { name: 'Band External Rotation',                 sets: 3, reps: '15', note: 'each arm' },
+      { name: 'EXT/INT Rotation',                       sets: 3, reps: 'AMAP' },
+      { name: 'Calf Raises',                            sets: 3, reps: 'AMAP' },
     ]),
   ]
 }
@@ -603,44 +609,59 @@ function pitcher3Day(wp) {
 function pitcher4Day(wp, phase) {
   const p3 = phase >= 3
   return [
-    makeBaseballSession('Day 1', 'Lower Power', [
-      { name: 'Trap Bar Deadlift',    warmup: '2x5', sets: 3, reps: '6', pct: wp },
-      { name: 'Hip Thrust',           sets: 4, reps: '8' },
-      { name: 'Reverse Lunge',        sets: 3, reps: '5', note: 'each leg' },
-      { name: 'Copenhagen Adductor',  sets: 3, reps: '8', note: 'each leg' },
-      { name: 'Single Leg RDL',       sets: 3, reps: '8', note: 'each leg' },
+    makeBaseballSession('Day 1', 'Upper Building', [
+      { name: 'Power Clean',                            sets: 3, reps: '8' },
+      { name: 'DB Bench Press',                         sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Tricep Pushdowns',                       sets: 2, reps: '8', note: '+ 1xAMAP' },
+      { name: 'Band External Rotation',                 sets: 4, reps: '15', note: 'each arm' },
+      { name: 'YTW Shoulder Series',                    sets: 3, reps: '10', note: 'each' },
+      { name: 'Forearm Curls (Both Ways)',               sets: 3, reps: 'AMAP' },
+      { name: 'Lat Raises — Side and Front',             sets: 3, reps: 'AMAP' },
+      { name: 'Core — Cherry Pickers',                  sets: 4, reps: '15' },
+      { name: 'Sit-ups',                                sets: 4, reps: '12' },
     ]),
-    makeBaseballSession('Day 2', 'Upper Pulling & Arm Care', [
-      { name: 'Pull-ups',               sets: p3 ? 4 : 3, reps: 'AMAP' },
-      { name: 'Single Arm DB Row',      sets: 4, reps: '10' },
-      { name: 'Band External Rotation', sets: 4, reps: '15' },
-      { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
-      { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+    makeBaseballSession('Day 2', 'Lower Building', [
+      { name: 'Reverse Lunge',                          sets: 3, reps: '5', note: 'each leg' },
+      { name: 'Box Drop',                               sets: 3, reps: '3' },
+      { name: 'Bulgarian Split Squat',                  sets: 3, reps: '6', note: 'each leg' },
+      { name: 'Copenhagen Adductor',                    sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Calf Raises',                            sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Hamstring Curls',                        sets: 3, reps: 'AMAP' },
+      { name: 'Single Leg RDL',                         sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Core — Tuck-Up',                         sets: 3, reps: 'AMAP' },
+      { name: 'EXT/INT Rotation',                       sets: 3, reps: 'AMAP' },
     ]),
-    makeBaseballSession('Day 3', 'Rotational Power', [
-      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
-      { name: 'Med Ball Rotational Throw', sets: 4, reps: '6', note: 'each side' },
-      { name: 'Single Leg RDL',            sets: 3, reps: '8', note: 'each leg' },
-      { name: 'Hip Thrust',                sets: p3 ? 4 : 3, reps: '8' },
-      { name: 'Pull-ups',                  sets: 3, reps: 'AMAP' },
+    makeBaseballSession('Day 3', 'Upper Power', [
+      { name: 'Hang Clean',              warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Pull-ups',                               sets: p3 ? 4 : 3, reps: 'AMAP' },
+      { name: 'Trap Bar Deadlift',                      sets: 3, reps: '6', pct: wp },
+      { name: 'Single Arm DB Row',                      sets: p3 ? 4 : 3, reps: '12' },
+      { name: 'Bird Dog Row',                           sets: 4, reps: '10' },
+      { name: 'Band Pull-Aparts',                       sets: 3, reps: '20' },
+      { name: 'Med Ball Rotational Throw',              sets: 4, reps: '6', note: 'each side' },
+      { name: 'Core — Bird Dogs',                       sets: 3, reps: '12' },
+      { name: 'Weighted Rotate and Press',               sets: 3, reps: '12' },
     ]),
-    makeBaseballSession('Day 4', 'Full Body & Arm Care', [
-      { name: 'Trap Bar Deadlift',      warmup: '2x5', sets: 3, reps: '6', pct: wp },
-      { name: 'Single Arm DB Row',      sets: 4, reps: '10' },
-      { name: 'Copenhagen Adductor',    sets: 3, reps: '8', note: 'each leg' },
-      { name: 'Band External Rotation', sets: 4, reps: '15' },
-      { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
-      { name: 'Bird Dog Row',           sets: 4, reps: '10' },
+    makeBaseballSession('Day 4', 'Lower Power', [
+      { name: 'Back Squat',              warmup: '2x5', sets: 3, reps: '5', pct: wp },
+      { name: 'Box Jump',                               sets: 3, reps: '3' },
+      { name: 'RDL',                                    sets: 3, reps: p3 ? '6' : '8' },
+      { name: 'Weighted Hip Thrust',                    sets: p3 ? 4 : 3, reps: '8' },
+      { name: 'Single Leg RDL',                         sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Copenhagen Adductor',                    sets: 3, reps: '8', note: 'each leg' },
+      { name: 'Back Extensions',                        sets: 3, reps: '12', note: 'drop set' },
+      { name: 'Core — EXT/INT Rotation',                sets: 3, reps: 'AMAP' },
     ]),
   ]
 }
 
 const PITCHER_ARM_CARE = makeBaseballSession('Day 5', 'Arm Care & Conditioning', [
-  { name: 'Band External Rotation', sets: 4, reps: '15' },
-  { name: 'YTW Shoulder Series',    sets: 3, reps: '10' },
-  { name: 'Bird Dog Row',           sets: 4, reps: '10' },
-  { name: 'Core Work',              sets: 3, reps: 'AMAP' },
-  { name: '30-Yard Sprints',        sets: 10, reps: '1', note: 'full recovery between each' },
+  { name: 'Band External Rotation',   sets: 4, reps: '15', note: 'each arm' },
+  { name: 'YTW Shoulder Series',      sets: 3, reps: '10', note: 'each' },
+  { name: 'Band Pull-Aparts',         sets: 3, reps: '20' },
+  { name: 'Bird Dog Row',             sets: 3, reps: '10' },
+  { name: 'Core Work',                sets: 3, reps: 'AMAP' },
+  { name: '30-Yard Sprints',          sets: 10, reps: '1', note: 'full recovery between each' },
 ])
 
 function generatePitcherBaseballWeeks(goal, daysPerWeek) {
@@ -653,7 +674,7 @@ function generatePitcherBaseballWeeks(goal, daysPerWeek) {
 
     let sessions
     if (daysPerWeek === 3) {
-      sessions = pitcher3Day(wp)
+      sessions = pitcher3Day(wp, phase)
     } else {
       sessions = pitcher4Day(wp, phase)
       if (daysPerWeek >= 5) sessions = [...sessions, PITCHER_ARM_CARE]
