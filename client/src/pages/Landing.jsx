@@ -1177,6 +1177,118 @@ export default function Landing() {
         </div>
       </section>
 
+      {/* ── Coach vs Athlete feature breakdown ───────────────────────── */}
+      <section style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818' }}>
+        <div style={s.inner}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <span style={s.eyebrow}>Who It's For</span>
+            <h2 style={{ ...s.sectionH2, marginBottom: 0 }}>Built for Coaches. Designed for Athletes.</h2>
+          </div>
+          <div style={s.roleGrid}>
+            <div style={{ ...s.roleCard, borderTop: `2px solid ${ORANGE}` }}>
+              <span style={{ ...s.rolePill, background: ORANGE + '18', color: ORANGE, border: `1px solid ${ORANGE}33` }}>For Coaches</span>
+              <ul style={s.roleList}>
+                {[
+                  'Create and manage your team',
+                  'Build sport-specific training blueprints',
+                  "Track every athlete's progress in real time",
+                  'Get notified when athletes flag injuries',
+                  'Send group and direct messages',
+                  'Generate end of offseason reports',
+                ].map((item, i) => (
+                  <li key={i} style={s.roleItem}>
+                    <CheckIcon color={ORANGE} />
+                    <span style={s.benefitText}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link to="/register" className="land-cta-orange" style={{ ...s.roleCtaBtn, background: ORANGE, color: '#fff', boxShadow: `0 4px 20px ${ORANGE}44` }}>
+                Get Started as Coach
+              </Link>
+            </div>
+            <div style={{ ...s.roleCard, borderTop: `2px solid ${BLUE}` }}>
+              <span style={{ ...s.rolePill, background: BLUE + '18', color: BLUE, border: `1px solid ${BLUE}33` }}>For Athletes</span>
+              <ul style={s.roleList}>
+                {[
+                  'Get a personalized training plan built for your sport and goals',
+                  'See your exact weights calculated from your personal maxes',
+                  'Log every session and track your streaks',
+                  'Set offseason goals and mark them complete',
+                  'Post to the team feed and see teammates working',
+                  'View your lifting PRs and progress over time',
+                ].map((item, i) => (
+                  <li key={i} style={s.roleItem}>
+                    <CheckIcon color={BLUE} />
+                    <span style={s.benefitText}>{item}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link to="/register" className="land-cta-blue" style={{ ...s.roleCtaBtn, background: 'transparent', color: BLUE, border: `1.5px solid ${BLUE}66` }}>
+                Get Started as Athlete
+              </Link>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── How It Works ───────────────────────────────────────────────── */}
+      <section style={{ ...s.section, borderTop: '1px solid #181818' }}>
+        <div style={s.inner}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <span style={s.eyebrow}>How It Works</span>
+            <h2 style={{ ...s.sectionH2, marginBottom: 0 }}>Up and Running in Three Steps</h2>
+          </div>
+          <div style={sp.stepsGrid}>
+            {[
+              {
+                num: '01', color: ORANGE,
+                title: 'Coach Creates a Team and Builds a Blueprint',
+                body: 'Sign up, create your team, and build a sport-specific training program using the blueprint builder. Your program is ready to assign before a single athlete joins.',
+              },
+              {
+                num: '02', color: BLUE,
+                title: 'Athletes and Coaches Join With Their Invite Code',
+                body: 'Athletes join using the athlete code. Assistant coaches join using the coach code. Everyone completes their setup and is ready to train or coach instantly.',
+              },
+              {
+                num: '03', color: YELLOW,
+                title: 'Everyone Trains. Coach Sees Everything.',
+                body: 'Athletes log every session from their phone. The coach sees real-time compliance, flags injuries, sends messages, and tracks progress across the entire roster.',
+              },
+            ].map((step, i) => (
+              <div key={i} style={{ ...sp.stepCard, borderTop: `2px solid ${step.color}` }}>
+                <span style={{ ...sp.stepNum, color: step.color }}>{step.num}</span>
+                <h4 style={sp.stepTitle}>{step.title}</h4>
+                <p style={sp.stepBody}>{step.body}</p>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
+      {/* ── Platform stats ──────────────────────────────────────────────── */}
+      <section style={{ background: '#0F0F0F', borderTop: '1px solid #181818', borderBottom: '1px solid #181818', padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 56px)' }}>
+        <div style={s.inner}>
+          <div style={{ textAlign: 'center', marginBottom: 56 }}>
+            <span style={s.eyebrow}>By the Numbers</span>
+            <h2 style={{ ...s.sectionH2, marginBottom: 0 }}>Everything You Need. Nothing You Don't.</h2>
+          </div>
+          <div style={s.platformStatsGrid}>
+            {[
+              { value: '11',   label: 'Sports Supported',                  color: ORANGE },
+              { value: '16 Wk',label: 'Offseason Programs',                color: BLUE   },
+              { value: '80+',  label: 'Exercises Explained',               color: YELLOW },
+              { value: '%',    label: 'Weights Calculated Automatically',  color: ORANGE },
+            ].map((stat, i) => (
+              <div key={i} style={{ ...s.platformStatItem, borderTop: `2px solid ${stat.color}` }}>
+                <span style={{ ...s.platformStatValue, color: stat.color }}>{stat.value}</span>
+                <span style={s.platformStatLabel}>{stat.label}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      </section>
+
       {/* ── For Coaches / For Athletes ─────────────────────────────────── */}
       <section style={{ ...s.audienceSection }}>
         <div style={s.inner}>
@@ -1607,4 +1719,54 @@ const s = {
   footerLink:  { fontSize: 13, color: BLUE, textDecoration: 'none', fontWeight: 500 },
   footerDot:   { fontSize: 13, color: YELLOW },
   footerCopy:  { fontSize: 12, color: '#888', margin: 0 },
+
+  // Role breakdown section
+  roleGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
+    gap: 20,
+  },
+  roleCard: {
+    background: '#141414', border: '1px solid #202020',
+    borderRadius: 20, padding: 'clamp(28px, 4vw, 40px)',
+    boxShadow: '0 2px 16px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.03)',
+    display: 'flex', flexDirection: 'column',
+  },
+  rolePill: {
+    display: 'inline-block', alignSelf: 'flex-start',
+    fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase',
+    padding: '5px 14px', borderRadius: 100, marginBottom: 28,
+  },
+  roleList: {
+    listStyle: 'none', padding: 0, margin: '0 0 32px',
+    display: 'flex', flexDirection: 'column', gap: 11, flex: 1,
+  },
+  roleItem: { display: 'flex', alignItems: 'flex-start', gap: 10 },
+  roleCtaBtn: {
+    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
+    padding: '12px 24px', fontSize: 14, fontWeight: 700,
+    borderRadius: 10, textDecoration: 'none', letterSpacing: 0.1, alignSelf: 'flex-start',
+  },
+
+  // Platform stats section
+  platformStatsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
+    gap: 16,
+  },
+  platformStatItem: {
+    background: '#141414', border: '1px solid #202020',
+    borderRadius: 16, padding: '32px 28px',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03)',
+    display: 'flex', flexDirection: 'column', alignItems: 'center',
+    textAlign: 'center', gap: 10,
+  },
+  platformStatValue: {
+    fontSize: 'clamp(38px, 5vw, 58px)',
+    fontWeight: 900, lineHeight: 1, letterSpacing: '-0.03em',
+    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+  },
+  platformStatLabel: {
+    fontSize: 14, color: '#666', fontWeight: 600, lineHeight: 1.4,
+  },
 }
