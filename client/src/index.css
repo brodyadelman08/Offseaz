@@ -306,8 +306,8 @@ select {
      640 px tablet → 230 px  (middle)
     1200 px desktop→ 380 px  (upper bound)                                    */
 .land-hero-logo {
-  width: clamp(220px, 36vw, 380px);
-  margin: 0 auto 36px;
+  width: clamp(300px, 34vw, 460px);
+  margin: 0 auto 40px;
 }
 
 /* ── DualDashboardMockup responsive layout ────────────────────────────────── */
