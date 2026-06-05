@@ -4,7 +4,7 @@ const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 
-const LOGO = '/Offseaz_logo__DARK_-removebg-preview.png'
+const LOGO = '/Offseaz_Logo__White_Letter__Dark_PNG.png'
 
 export default function About() {
   return (
@@ -12,7 +12,7 @@ export default function About() {
       {/* Nav */}
       <nav style={s.nav}>
         <Link to="/" style={s.navLogo}>
-          <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={{ height: 36 }} />
+          <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={{ height: 36 }} />
         </Link>
         <div style={s.navLinks}>
           <Link to="/contact" style={s.navLink}>Contact</Link>

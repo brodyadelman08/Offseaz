@@ -2,7 +2,7 @@
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-const LOGO   = '/Offseaz_logo__DARK_-removebg-preview.png'
+const LOGO   = '/Offseaz_Logo__White_Letter__Dark_PNG.png'
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
