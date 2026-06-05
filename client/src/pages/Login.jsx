@@ -1,4 +1,4 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { useNavigate, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
@@ -42,7 +42,7 @@ export default function Login() {
       <div style={styles.content}>
         <div style={styles.brand}>
           <Link to="/" style={{ display: 'block' }}>
-            <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logoHero} />
+            <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logoHero} />
           </Link>
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>

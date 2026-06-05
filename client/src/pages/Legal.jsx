@@ -1,7 +1,7 @@
-import { useEffect } from 'react'
+﻿import { useEffect } from 'react'
 import { Link } from 'react-router-dom'
 
-const LOGO   = '/OFFSEAZ_LOGO_PNG.png'
+const LOGO   = '/Offseaz_logo__DARK_-removebg-preview.png'
 const ORANGE = '#F75709'
 
 // ── Scroll to top on every page mount ────────────────────────────────────────

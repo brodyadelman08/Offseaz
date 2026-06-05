@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTeam } from '../context/TeamContext'
@@ -105,7 +105,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
       {/* Logo */}
       <div style={styles.logoArea}>
         <img
-          src="/OFFSEAZ_LOGO_PNG.png"
+          src="/Offseaz_logo__DARK_-removebg-preview.png"
           alt="Offseaz"
           style={styles.logo}
           onClick={() => navigate(nav[0].path)}

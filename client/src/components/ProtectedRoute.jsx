@@ -1,4 +1,4 @@
-import { Navigate } from 'react-router-dom'
+﻿import { Navigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
 export default function ProtectedRoute({ children, requiredRole }) {
@@ -7,7 +7,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
   if (loading) {
     return (
       <div style={styles.loading}>
-        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
+        <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logo} />
         <p style={styles.loadingText}>Loading…</p>
       </div>
     )

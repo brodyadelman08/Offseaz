@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+﻿import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -138,7 +138,7 @@ export default function AthleteOnboarding() {
 
       {/* Top bar */}
       <div style={styles.topBar}>
-        <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={styles.logo} />
+        <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={styles.logo} />
         <button style={styles.exitBtn} onClick={() => finishAndGo('/athlete')}>
           Exit setup
         </button>

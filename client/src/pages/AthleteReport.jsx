@@ -6,7 +6,7 @@ import { ArrowUpIcon, ArrowDownIcon, FileTextIcon } from '../components/Icons'
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
-const LOGO   = '/Offseaz_logo__DARK_-removebg-preview.png'
+const LOGO   = '/OFFSEAZ_LOGO_PNG.png'
 
 const LIFTS_ORDER = [
   'bench_press','squat','deadlift','trap_bar_deadlift','overhead_press',

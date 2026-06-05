@@ -1,8 +1,8 @@
-import { useEffect, useState } from 'react'
+﻿import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 
-const LOGO   = '/OFFSEAZ_LOGO_PNG.png'
+const LOGO   = '/Offseaz_logo__DARK_-removebg-preview.png'
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'

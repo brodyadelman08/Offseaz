@@ -1,10 +1,10 @@
-import { useState } from 'react'
+﻿import { useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
-const LOGO   = '/OFFSEAZ_LOGO_PNG.png'
+const LOGO   = '/Offseaz_logo__DARK_-removebg-preview.png'
 
 // ── Inline SVG social icons ───────────────────────────────────────────────────
 
@@ -135,7 +135,7 @@ export default function Contact() {
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
       <nav style={s.nav}>
         <Link to="/" style={s.navLogo}>
-          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={{ height: 36 }} />
+          <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={{ height: 36 }} />
         </Link>
         <div style={s.navLinks}>
           <Link to="/about" style={s.navLink}>About</Link>
