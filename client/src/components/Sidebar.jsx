@@ -476,21 +476,23 @@ const styles = {
     bottom: 0,
     left: 0,
     right: 0,
-    height: 68,
+    // Height grows to include the iOS home indicator safe area so the
+    // bar's background covers it — the 68px visual content sits above.
+    height: 'calc(68px + env(safe-area-inset-bottom))',
     background: 'rgba(15,15,15,0.97)',
     backdropFilter: 'blur(24px)',
     WebkitBackdropFilter: 'blur(24px)',
     borderTop: '1px solid rgba(255,255,255,0.08)',
     display: 'flex',
-    alignItems: 'stretch',
+    alignItems: 'flex-start', // anchor tabs to top of bar, above safe-area padding
+    paddingBottom: 'env(safe-area-inset-bottom)',
     zIndex: 50,
     boxShadow: '0 -4px 24px rgba(0,0,0,0.45)',
-    // Safe area padding for iPhone home indicator
-    paddingBottom: 'env(safe-area-inset-bottom)',
   },
 
   tabItem: {
     flex: 1,
+    height: 68, // fixed 68px — never extends into safe-area padding
     display: 'flex',
     flexDirection: 'column',
     alignItems: 'center',
@@ -501,7 +503,7 @@ const styles = {
     cursor: 'pointer',
     padding: '6px 4px 8px',
     position: 'relative',
-    minWidth: 0, // allow flex shrink
+    minWidth: 0,
   },
 
   // Thin orange bar at the top of an active tab
@@ -541,7 +543,7 @@ const styles = {
     position: 'fixed',
     left: 0,
     right: 0,
-    bottom: 68, // sits directly above the tab bar
+    bottom: 'calc(68px + env(safe-area-inset-bottom))', // sits above full bar height
     background: '#141414',
     borderRadius: '20px 20px 0 0',
     borderTop: '1px solid rgba(255,255,255,0.1)',

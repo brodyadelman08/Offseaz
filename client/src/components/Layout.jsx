@@ -16,7 +16,7 @@ export default function Layout() {
           minWidth: 0,
           overflowX: 'hidden',
           marginLeft: isMobile ? 0 : SIDEBAR_W,
-          padding: isMobile ? '24px 16px 80px' : '36px 48px 60px',
+          padding: isMobile ? '24px 16px calc(80px + env(safe-area-inset-bottom))' : '36px 48px 60px',
         }}
       >
         <Outlet />

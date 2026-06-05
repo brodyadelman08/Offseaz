@@ -117,11 +117,17 @@ select:focus {
   transition-duration: 0.07s;
 }
 
-/* ── Custom scrollbar ─────────────────────────────────────────────────────── */
-::-webkit-scrollbar       { width: 5px; height: 5px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
-::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+/* ── Custom scrollbar (desktop only — hidden on mobile to avoid covering tab bar) */
+@media (min-width: 768px) {
+  ::-webkit-scrollbar       { width: 5px; height: 5px; }
+  ::-webkit-scrollbar-track { background: transparent; }
+  ::-webkit-scrollbar-thumb { background: var(--border); border-radius: 3px; }
+  ::-webkit-scrollbar-thumb:hover { background: var(--text-3); }
+}
+@media (max-width: 767px) {
+  ::-webkit-scrollbar { display: none; }
+  * { scrollbar-width: none; }
+}
 
 /* ── Text selection ───────────────────────────────────────────────────────── */
 ::selection { background: rgba(247, 87, 9, 0.22); color: inherit; }
