@@ -153,7 +153,7 @@ async function teamSurveys(req, res) {
       return res.status(403).json({ error: 'Only coaches can view team surveys' })
     }
 
-    const athletes = await getTeamSurveys(req.user.id)
+    const athletes = await getTeamSurveys(req.user.id, req.query.team_id || null)
     res.json({ athletes })
   } catch (err) {
     res.status(500).json({ error: err.message })

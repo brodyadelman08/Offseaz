@@ -58,7 +58,7 @@ function MaxesCell({ maxes }) {
 export default function CoachAthletes() {
   const navigate   = useNavigate()
   const isMobile   = useIsMobile()
-  const { isHeadCoach, refresh: refreshAccess } = useCoachAccess()
+  const { team, isHeadCoach, refresh: refreshAccess } = useCoachAccess()
 
   const [activeTab, setActiveTab] = useState('athletes')
 
@@ -79,17 +79,17 @@ export default function CoachAthletes() {
   // ── Load athletes ──────────────────────────────────────────────────────────
   useEffect(() => {
     setAthLoading(true)
-    api.get('/api/roster')
+    api.get(`/api/roster${team?.id ? `?team_id=${team.id}` : ''}`)
       .then(r => setAthletes(r.data.roster || []))
       .catch(() => setAthletes([]))
       .finally(() => setAthLoading(false))
-  }, [])
+  }, [team?.id])
 
   // ── Load coaches ───────────────────────────────────────────────────────────
   useEffect(() => {
     if (activeTab !== 'coaches') return
     setCoachLoading(true)
-    api.get('/api/teams/coaches')
+    api.get(`/api/teams/coaches${team?.id ? `?team_id=${team.id}` : ''}`)
       .then(r => {
         setCoaches(r.data.coaches || [])
         setHeadCoachId(r.data.head_coach_id || null)
@@ -97,7 +97,7 @@ export default function CoachAthletes() {
       })
       .catch(() => {})
       .finally(() => setCoachLoading(false))
-  }, [activeTab])
+  }, [activeTab, team?.id])
 
   // ── Coach access management ────────────────────────────────────────────────
   async function handleToggleAccess(coachId, currentLevel) {

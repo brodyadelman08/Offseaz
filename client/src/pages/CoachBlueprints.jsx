@@ -2,20 +2,23 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { PlusIcon } from '../components/Icons'
+import { useCoachAccess } from '../context/CoachAccessContext'
 
 const ORANGE = '#F75709'
 
 export default function CoachBlueprints() {
   const navigate = useNavigate()
+  const { team } = useCoachAccess()
   const [blueprints, setBlueprints] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/api/blueprints')
+    const url = team?.id ? `/api/blueprints?team_id=${team.id}` : '/api/blueprints'
+    api.get(url)
       .then(r => setBlueprints(r.data.blueprints || []))
       .catch(() => setBlueprints([]))
       .finally(() => setLoading(false))
-  }, [])
+  }, [team?.id])
 
   return (
     <div style={styles.container}>

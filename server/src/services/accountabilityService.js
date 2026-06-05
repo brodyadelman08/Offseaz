@@ -49,22 +49,21 @@ function computeMetrics(logs, weekMonday) {
   }
 }
 
-async function getAccountabilityData(coachId) {
+async function getAccountabilityData(coachId, teamId = null) {
   // Get coach's team
-  const { data: team, error: teamError } = await supabaseAdmin
-    .from('teams')
-    .select('id')
-    .eq('coach_id', coachId)
-    .single()
-
-  if (teamError && teamError.code !== 'PGRST116') throw teamError
-  if (!team) return { athletes: [], logs: [] }
+  let resolvedTeamId = teamId
+  if (!resolvedTeamId) {
+    const { data: teams } = await supabaseAdmin
+      .from('teams').select('id').eq('coach_id', coachId).limit(1)
+    if (!teams?.length) return { athletes: [], logs: [] }
+    resolvedTeamId = teams[0].id
+  }
 
   // Get all team members with full_name
   const { data: members, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id, profiles!team_members_athlete_id_fkey(id, full_name)')
-    .eq('team_id', team.id)
+    .eq('team_id', resolvedTeamId)
 
   if (memberError) throw memberError
   if (!members || members.length === 0) return { athletes: [], logs: [] }
@@ -98,7 +97,7 @@ async function getAccountabilityData(coachId) {
   })
 
   // Recent activity feed (reuse existing function)
-  const logs = await getTeamLogs(coachId)
+  const logs = await getTeamLogs(coachId, resolvedTeamId)
 
   return { athletes, logs }
 }

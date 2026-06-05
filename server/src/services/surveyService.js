@@ -123,21 +123,20 @@ async function getSurveyByAthlete(athleteId) {
   return data || null
 }
 
-async function getTeamSurveys(coachId) {
-  const { data: team, error: teamError } = await supabaseAdmin
-    .from('teams')
-    .select('id')
-    .eq('coach_id', coachId)
-    .single()
-
-  if (teamError && teamError.code !== 'PGRST116') throw teamError
-  if (!team) return []
+async function getTeamSurveys(coachId, teamId = null) {
+  let resolvedTeamId = teamId
+  if (!resolvedTeamId) {
+    const { data: teams } = await supabaseAdmin
+      .from('teams').select('id').eq('coach_id', coachId).limit(1)
+    if (!teams?.length) return []
+    resolvedTeamId = teams[0].id
+  }
 
   // Get athlete_ids first (no FK joins — avoids PostgREST constraint name issues)
   const { data: memberRows, error: membersError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id')
-    .eq('team_id', team.id)
+    .eq('team_id', resolvedTeamId)
 
   if (membersError) throw membersError
   if (!memberRows || memberRows.length === 0) return []

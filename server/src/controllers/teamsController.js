@@ -7,6 +7,7 @@ const {
   joinTeamAsCoach,
   getAthleteTeam,
   getAthleteTeams,
+  getCoachTeams,
   resolveCoachTeamAndAccess,
   getTeamCoaches,
   updateCoachAccessLevel,
@@ -195,6 +196,17 @@ async function athleteTeams(req, res) {
   }
 }
 
+// ─── Coach: list all own / assistant teams ────────────────────────────────────
+
+async function myCoachTeams(req, res) {
+  try {
+    const teams = await getCoachTeams(req.user.id)
+    res.json({ teams })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
 module.exports = {
   create,
   mine,
@@ -205,4 +217,5 @@ module.exports = {
   removeCoach,
   athleteTeam,
   athleteTeams,
+  myCoachTeams,
 }

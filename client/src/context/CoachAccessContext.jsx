@@ -4,45 +4,61 @@ import { useAuth } from './AuthContext'
 
 const CoachAccessContext = createContext(null)
 
-/**
- * Wraps all coach-authenticated routes. Fetches GET /api/teams/mine once and exposes:
- *   team         — the coach's team object (or null)
- *   accessLevel  — 'head_coach' | 'admin_coach' | 'view_only' | null
- *   isHeadCoach  — accessLevel === 'head_coach'
- *   canEdit      — head_coach or admin_coach
- *   loading      — true while fetching
- *   refresh()    — re-fetch (call after team is created or access level changes)
- */
 export function CoachAccessProvider({ children }) {
   const { profile } = useAuth()
-  const [team, setTeam]               = useState(null)
-  const [accessLevel, setAccessLevel] = useState(null)
-  const [loading, setLoading]         = useState(true)
+  const [teams, setTeams]               = useState([])
+  const [accessByTeam, setAccessByTeam] = useState({})
+  const [loading, setLoading]           = useState(true)
+  const [activeTeamId, _setActiveTeamId] = useState(
+    () => localStorage.getItem('offseaz_active_coach_team') || null
+  )
 
   const refresh = useCallback(async () => {
-    if (!profile || profile.role !== 'coach') {
-      setLoading(false)
-      return
-    }
+    if (!profile || profile.role !== 'coach') { setLoading(false); return }
     setLoading(true)
     try {
-      const res = await api.get('/api/teams/mine')
-      setTeam(res.data.team || null)
-      setAccessLevel(res.data.my_access_level || null)
-    } catch {
-      // Non-fatal — keep existing state
-    } finally {
-      setLoading(false)
-    }
+      const res = await api.get('/api/teams/my-coach-teams')
+      const all = res.data.teams || []
+      setTeams(all)
+      const aMap = {}
+      for (const t of all) aMap[t.id] = t.my_access_level
+      setAccessByTeam(aMap)
+      // Auto-select first team if saved one no longer valid
+      const savedId = localStorage.getItem('offseaz_active_coach_team')
+      const stillValid = savedId && all.find(t => t.id === savedId)
+      if (all.length > 0 && !stillValid) {
+        _setActiveTeamId(all[0].id)
+        localStorage.setItem('offseaz_active_coach_team', all[0].id)
+      }
+    } catch { /* non-fatal */ }
+    finally { setLoading(false) }
   }, [profile?.id, profile?.role])
 
   useEffect(() => { refresh() }, [refresh])
 
+  function setActiveTeamId(id) {
+    _setActiveTeamId(id)
+    if (id) localStorage.setItem('offseaz_active_coach_team', id)
+    else     localStorage.removeItem('offseaz_active_coach_team')
+  }
+
+  const activeTeam  = teams.find(t => t.id === activeTeamId) || teams[0] || null
+  const accessLevel = activeTeam ? (accessByTeam[activeTeam.id] || null) : null
   const isHeadCoach = accessLevel === 'head_coach'
-  const canEdit     = accessLevel === 'head_coach' || accessLevel === 'admin_coach'
+  const canEdit     = isHeadCoach || accessLevel === 'admin_coach'
 
   return (
-    <CoachAccessContext.Provider value={{ team, accessLevel, isHeadCoach, canEdit, loading, refresh }}>
+    <CoachAccessContext.Provider value={{
+      team: activeTeam,          // backward compat — the active team
+      teams,                     // all teams
+      activeTeamId: activeTeam?.id || null,
+      setActiveTeamId,
+      accessLevel,
+      isHeadCoach,
+      canEdit,
+      loading,
+      refresh,
+    }}>
       {children}
     </CoachAccessContext.Provider>
   )

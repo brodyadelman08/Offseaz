@@ -2,6 +2,7 @@
 import { useNavigate, useLocation } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTeam } from '../context/TeamContext'
+import { useCoachAccess } from '../context/CoachAccessContext'
 import {
   GridIcon, UsersIcon, LayoutIcon, MessageIcon, BarChartIcon,
   HomeIcon, CalendarIcon, UserIcon, SignOutIcon, FeedIcon,
@@ -94,6 +95,8 @@ function DesktopSidebar({ nav, profile, signOut }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { teams, activeTeam, activeTeamId, setActiveTeamId } = useTeam()
+  const { teams: coachTeams, activeTeamId: activeCoachTeamId, setActiveTeamId: setActiveCoachTeamId } = useCoachAccess()
+  const activeCoachTeam = coachTeams.find(t => t.id === activeCoachTeamId) || coachTeams[0] || null
 
   function isActive(path, exact) {
     if (exact) return pathname === path
@@ -161,6 +164,32 @@ function DesktopSidebar({ nav, profile, signOut }) {
             </div>
           ) : (
             <p style={styles.teamSingleName}>{activeTeam?.name || teams[0]?.name}</p>
+          )}
+        </div>
+      )}
+
+      {/* Team switcher — coaches */}
+      {profile?.role === 'coach' && coachTeams.length > 0 && (
+        <div style={styles.teamSection}>
+          <p style={styles.teamSectionLabel}>Active Team</p>
+          {coachTeams.length === 1 ? (
+            <p style={styles.teamSingleName}>{activeCoachTeam?.name || coachTeams[0]?.name}</p>
+          ) : (
+            <div style={styles.teamPills}>
+              {coachTeams.map(t => (
+                <button
+                  key={t.id}
+                  style={{
+                    ...styles.teamPill,
+                    ...(t.id === activeCoachTeamId ? styles.teamPillCoachActive : {}),
+                  }}
+                  onClick={() => setActiveCoachTeamId(t.id)}
+                  title={t.name}
+                >
+                  {t.name}
+                </button>
+              ))}
+            </div>
           )}
         </div>
       )}
@@ -462,6 +491,11 @@ const styles = {
     background: 'rgba(48,142,189,0.12)',
     borderColor: `${BLUE}44`,
     color: BLUE,
+  },
+  teamPillCoachActive: {
+    background: 'rgba(247,87,9,0.12)',
+    borderColor: `${ORANGE}44`,
+    color: ORANGE,
   },
   teamSingleName: {
     fontSize: 13, fontWeight: 600, color: 'var(--text-2)',

@@ -60,7 +60,7 @@ async function athletes(req, res) {
     if (profile.role !== 'coach') {
       return res.status(403).json({ error: 'Only coaches can access this' })
     }
-    const list = await getTeamAthletes(req.user.id)
+    const list = await getTeamAthletes(req.user.id, req.query.team_id || null)
     res.json({ athletes: list })
   } catch (err) {
     res.status(500).json({ error: err.message })

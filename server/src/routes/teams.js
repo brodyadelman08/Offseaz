@@ -11,9 +11,11 @@ const {
   removeCoach,
   athleteTeam,
   athleteTeams,
+  myCoachTeams,
 } = require('../controllers/teamsController')
 
 router.post('/',                           verifyToken, create)
+router.get('/my-coach-teams',              verifyToken, myCoachTeams)
 router.get('/mine',                        verifyToken, mine)
 router.post('/join',                       verifyToken, join)
 router.post('/join-as-coach',              verifyToken, joinAsCoach)

@@ -56,7 +56,7 @@ async function teamLogs(req, res) {
       return res.status(403).json({ error: 'Only coaches can view team logs' })
     }
 
-    const logs = await getTeamLogs(req.user.id)
+    const logs = await getTeamLogs(req.user.id, req.query.team_id || null)
     res.json({ logs })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -69,7 +69,7 @@ async function accountability(req, res) {
     if (profile.role !== 'coach') {
       return res.status(403).json({ error: 'Only coaches can view the accountability dashboard' })
     }
-    const data = await getAccountabilityData(req.user.id)
+    const data = await getAccountabilityData(req.user.id, req.query.team_id || null)
     res.json(data)
   } catch (err) {
     res.status(500).json({ error: err.message })

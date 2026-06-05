@@ -123,44 +123,76 @@ async function getAthleteTeams(athleteId) {
   return teams || []
 }
 
+// ─── Multi-team support: list all teams for a coach ──────────────────────────
+
+/**
+ * Returns all teams a coach owns or is an assistant on.
+ * Each team object has an extra `my_access_level` field.
+ */
+async function getCoachTeams(coachId) {
+  // All teams this coach owns
+  const { data: owned, error } = await supabaseAdmin
+    .from('teams').select('*').eq('coach_id', coachId).order('created_at', { ascending: true })
+  if (error) throw error
+
+  // All teams where this coach is an assistant
+  const { data: memberships } = await supabaseAdmin
+    .from('team_members').select('team_id, access_level')
+    .eq('athlete_id', coachId).in('access_level', ['view_only', 'admin_coach'])
+
+  let assistantTeams = []
+  if (memberships?.length) {
+    const ids = memberships.map(m => m.team_id)
+    const { data: aTeams } = await supabaseAdmin.from('teams').select('*').in('id', ids)
+    assistantTeams = aTeams || []
+  }
+  const membershipMap = Object.fromEntries((memberships || []).map(m => [m.team_id, m.access_level]))
+
+  return [
+    ...(owned || []).map(t => ({ ...t, my_access_level: 'head_coach' })),
+    ...assistantTeams.map(t => ({ ...t, my_access_level: membershipMap[t.id] || 'view_only' })),
+  ]
+}
+
 // ─── Assistant coach access resolution ────────────────────────────────────────
 
 /**
  * For any coach user, return their team and access level.
+ * Accepts an optional teamId to resolve a specific team.
  * Head coaches  → { team, accessLevel: 'head_coach' }
  * Asst. coaches → { team, accessLevel: 'view_only' | 'admin_coach' }
  * No team       → { team: null, accessLevel: null }
  */
-async function resolveCoachTeamAndAccess(coachId) {
-  // 1. Check if this user is the head coach (team owner)
-  const { data: ownedTeams, error: ownedErr } = await supabaseAdmin
-    .from('teams')
-    .select('*')
-    .eq('coach_id', coachId)
-    .limit(1)
+async function resolveCoachTeamAndAccess(coachId, teamId = null) {
+  if (teamId) {
+    const { data: ownedTeam } = await supabaseAdmin
+      .from('teams').select('*').eq('id', teamId).eq('coach_id', coachId).maybeSingle()
+    if (ownedTeam) return { team: ownedTeam, accessLevel: 'head_coach' }
 
-  if (!ownedErr && ownedTeams && ownedTeams.length > 0) {
-    return { team: ownedTeams[0], accessLevel: 'head_coach' }
+    const { data: membership } = await supabaseAdmin
+      .from('team_members').select('team_id, access_level')
+      .eq('team_id', teamId).eq('athlete_id', coachId)
+      .in('access_level', ['view_only', 'admin_coach']).maybeSingle()
+    if (!membership) return { team: null, accessLevel: null }
+
+    const { data: team } = await supabaseAdmin.from('teams').select('*').eq('id', teamId).maybeSingle()
+    return { team: team || null, accessLevel: membership.access_level }
   }
 
-  // 2. Check if this user is an assistant coach in team_members
-  const { data: membership } = await supabaseAdmin
-    .from('team_members')
-    .select('team_id, access_level')
-    .eq('athlete_id', coachId)
-    .in('access_level', ['view_only', 'admin_coach'])
-    .limit(1)
+  // Fallback: first owned team
+  const { data: ownedTeams } = await supabaseAdmin
+    .from('teams').select('*').eq('coach_id', coachId).limit(1)
+  if (ownedTeams?.length) return { team: ownedTeams[0], accessLevel: 'head_coach' }
 
-  if (!membership || membership.length === 0) return { team: null, accessLevel: null }
+  // Then assistant team
+  const { data: memberships } = await supabaseAdmin
+    .from('team_members').select('team_id, access_level')
+    .eq('athlete_id', coachId).in('access_level', ['view_only', 'admin_coach']).limit(1)
+  if (!memberships?.length) return { team: null, accessLevel: null }
 
-  const { data: team, error: teamErr } = await supabaseAdmin
-    .from('teams')
-    .select('*')
-    .eq('id', membership[0].team_id)
-    .single()
-
-  if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
-  return { team: team || null, accessLevel: membership[0].access_level }
+  const { data: team } = await supabaseAdmin
+    .from('teams').select('*').eq('id', memberships[0].team_id).maybeSingle()
+  return { team: team || null, accessLevel: memberships[0].access_level }
 }
 
 // ─── Assistant coach join ─────────────────────────────────────────────────────
@@ -259,6 +291,7 @@ module.exports = {
   joinTeamAsCoach,
   getAthleteTeam,
   getAthleteTeams,
+  getCoachTeams,
   resolveCoachTeamAndAccess,
   getTeamCoaches,
   updateCoachAccessLevel,

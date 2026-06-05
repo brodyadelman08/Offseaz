@@ -37,7 +37,7 @@ const INJURY_BADGE = { label: 'Injury', color: '#c73820', bg: '#fce8e6' }
 
 export default function CoachDashboard() {
   const { profile } = useAuth()
-  const { team: ctxTeam, isHeadCoach, refresh: refreshAccess } = useCoachAccess()
+  const { team: ctxTeam, teams, isHeadCoach, refresh: refreshAccess, setActiveTeamId } = useCoachAccess()
   const navigate = useNavigate()
 
   // The dashboard owns create-team flow; other team data comes from context
@@ -50,6 +50,12 @@ export default function CoachDashboard() {
   const [error, setError]         = useState('')
   const [loading, setLoading]     = useState(true)
   const [creating, setCreating]   = useState(false)
+
+  // New team modal state
+  const [showNewTeamModal, setShowNewTeamModal] = useState(false)
+  const [newTeamName, setNewTeamName] = useState('')
+  const [newTeamCreating, setNewTeamCreating] = useState(false)
+  const [newTeamError, setNewTeamError] = useState('')
 
   // Copy state for each code / link
   const [copiedAthleteCode, setCopiedAthleteCode] = useState(false)
@@ -67,9 +73,9 @@ export default function CoachDashboard() {
   useEffect(() => {
     if (!ctxTeam) { setLoading(false); return }
     Promise.all([
-      api.get('/api/survey/team').then(r => r.data.athletes).catch(() => []),
-      api.get('/api/blueprints').then(r => r.data.blueprints).catch(() => []),
-      api.get('/api/workouts/team').then(r => r.data.logs).catch(() => []),
+      api.get(`/api/survey/team${ctxTeam?.id ? `?team_id=${ctxTeam.id}` : ''}`).then(r => r.data.athletes).catch(() => []),
+      api.get(`/api/blueprints${ctxTeam?.id ? `?team_id=${ctxTeam.id}` : ''}`).then(r => r.data.blueprints).catch(() => []),
+      api.get(`/api/workouts/team${ctxTeam?.id ? `?team_id=${ctxTeam.id}` : ''}`).then(r => r.data.logs).catch(() => []),
       api.get('/api/notifications').then(r => r.data.notifications).catch(() => []),
     ]).then(([athletesData, blueprintsData, logsData, notifData]) => {
       setAthletes(athletesData)
@@ -92,6 +98,24 @@ export default function CoachDashboard() {
       setError(err.response?.data?.error || 'Failed to create team')
     } finally {
       setCreating(false)
+    }
+  }
+
+  async function handleCreateNewTeam(e) {
+    e.preventDefault()
+    if (!newTeamName.trim()) return
+    setNewTeamCreating(true)
+    setNewTeamError('')
+    try {
+      const res = await api.post('/api/teams', { name: newTeamName.trim() })
+      setNewTeamName('')
+      setShowNewTeamModal(false)
+      await refreshAccess()
+      setActiveTeamId(res.data.team.id)
+    } catch (err) {
+      setNewTeamError(err.response?.data?.error || 'Failed to create team')
+    } finally {
+      setNewTeamCreating(false)
     }
   }
 
@@ -133,13 +157,43 @@ export default function CoachDashboard() {
   return (
     <div style={styles.container}>
       <div style={styles.pageHeader}>
-        <h1 style={styles.pageTitle}>
-          {profile?.full_name?.split(' ')[0]
-            ? `Welcome back, ${profile.full_name.split(' ')[0]}`
-            : 'Dashboard'}
-        </h1>
-        <p style={styles.pageSub}>Here's what's happening with your team.</p>
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'space-between', flexWrap: 'wrap', gap: 12 }}>
+          <div>
+            <h1 style={styles.pageTitle}>
+              {profile?.full_name?.split(' ')[0]
+                ? `Welcome back, ${profile.full_name.split(' ')[0]}`
+                : 'Dashboard'}
+            </h1>
+            <p style={styles.pageSub}>Here's what's happening with your team.</p>
+          </div>
+          {team && (
+            <button style={styles.newTeamBtn} onClick={() => setShowNewTeamModal(true)}>
+              + New Team
+            </button>
+          )}
+        </div>
       </div>
+
+      {showNewTeamModal && (
+        <div style={styles.modalOverlay} onClick={() => setShowNewTeamModal(false)}>
+          <div style={styles.modalBox} onClick={e => e.stopPropagation()}>
+            <h3 style={styles.modalTitle}>Create New Team</h3>
+            <form onSubmit={handleCreateNewTeam}>
+              <input
+                style={styles.modalInput}
+                value={newTeamName}
+                onChange={e => setNewTeamName(e.target.value)}
+                placeholder="Team name"
+                autoFocus
+              />
+              {newTeamError && <p style={styles.modalError}>{newTeamError}</p>}
+              <button type="submit" style={styles.modalBtn} disabled={newTeamCreating}>
+                {newTeamCreating ? 'Creating…' : 'Create Team'}
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
 
       {loading ? (
         <p style={styles.loadingText}>Loading…</p>
@@ -598,5 +652,33 @@ const styles = {
     cursor: 'pointer',
     letterSpacing: 0.2,
     boxShadow: '0 2px 10px rgba(247,87,9,0.30)',
+  },
+
+  newTeamBtn: {
+    padding: '8px 16px', background: 'transparent',
+    border: `1px solid ${ORANGE}`, borderRadius: 8,
+    color: ORANGE, fontSize: 13, fontWeight: 600, cursor: 'pointer',
+  },
+
+  modalOverlay: {
+    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.6)',
+    zIndex: 100, display: 'flex', alignItems: 'center', justifyContent: 'center',
+  },
+  modalBox: {
+    background: 'var(--card)', border: '1px solid var(--border)',
+    borderRadius: 16, padding: 28, width: 320, maxWidth: '90vw',
+  },
+  modalTitle: { fontSize: 18, fontWeight: 700, color: 'var(--text)', margin: '0 0 18px' },
+  modalInput: {
+    width: '100%', padding: '10px 14px', background: 'var(--input-bg)',
+    border: '1px solid var(--input-border)', borderRadius: 8,
+    color: 'var(--text)', fontSize: 14, outline: 'none',
+    boxSizing: 'border-box', marginBottom: 12,
+  },
+  modalError: { color: '#c73820', fontSize: 13, marginBottom: 10 },
+  modalBtn: {
+    width: '100%', padding: '11px 0', background: ORANGE, border: 'none',
+    borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 14,
+    cursor: 'pointer',
   },
 }

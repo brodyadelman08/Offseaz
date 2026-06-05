@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useCoachAccess } from '../context/CoachAccessContext'
+import { useTeam } from '../context/TeamContext'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
 import { HeartIcon, HeartFilledIcon, MessageIcon } from '../components/Icons'
@@ -247,7 +249,12 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
 
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Feed() {
-  const { profile }  = useAuth()
+  const { profile }      = useAuth()
+  const { team: coachTeam } = useCoachAccess()
+  const { activeTeam }   = useTeam()
+  // Derive the active team ID for whichever role is viewing
+  const teamId = profile?.role === 'coach' ? coachTeam?.id : activeTeam?.id
+
   const [posts, setPosts]               = useState([])
   const [loading, setLoading]           = useState(true)
   const [error, setError]               = useState('')
@@ -264,11 +271,12 @@ export default function Feed() {
   const photoInputRef = useRef(null)
 
   useEffect(() => {
-    api.get('/api/feed')
+    const url = teamId ? `/api/feed?teamId=${teamId}` : '/api/feed'
+    api.get(url)
       .then(r => setPosts(r.data.posts || []))
       .catch(err => setError(err.response?.data?.error || 'Could not load feed.'))
       .finally(() => setLoading(false))
-  }, [])
+  }, [teamId])
 
   async function handlePhotoSelect(e) {
     const file = e.target.files?.[0]
@@ -322,7 +330,7 @@ export default function Feed() {
         }
       }
 
-      const res = await api.post('/api/feed', {
+      const res = await api.post(`/api/feed${teamId ? `?teamId=${teamId}` : ''}`, {
         content:   composeText.trim(),
         photo_url: uploadedPhotoUrl,
       })

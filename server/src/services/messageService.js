@@ -261,18 +261,20 @@ async function sendChatMessage(senderId, role, conversationId, content) {
 
 // ── Legacy: roster list for coach ────────────────────────────────────────────
 
-async function getTeamAthletes(coachId) {
-  const { data: team, error: teamError } = await supabaseAdmin
-    .from('teams').select('id').eq('coach_id', coachId).single()
-  if (teamError && teamError.code !== 'PGRST116') throw teamError
-  if (!team) return []
-
+async function getTeamAthletes(coachId, teamId = null) {
+  let resolvedTeamId = teamId
+  if (!resolvedTeamId) {
+    const { data: teams } = await supabaseAdmin
+      .from('teams').select('id').eq('coach_id', coachId).limit(1)
+    if (!teams?.length) return []
+    resolvedTeamId = teams[0].id
+  }
   const { data, error } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id, profiles!team_members_athlete_id_fkey(id, full_name)')
-    .eq('team_id', team.id)
+    .eq('team_id', resolvedTeamId)
+    .eq('access_level', 'athlete')
   if (error) throw error
-
   return (data || []).map(m => ({ id: m.profiles.id, full_name: m.profiles.full_name }))
 }
 

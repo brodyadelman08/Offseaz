@@ -31,22 +31,21 @@ async function getAthleteLog(athleteId) {
   return data || []
 }
 
-async function getTeamLogs(coachId) {
+async function getTeamLogs(coachId, teamId = null) {
   // Find the coach's team
-  const { data: team, error: teamError } = await supabaseAdmin
-    .from('teams')
-    .select('id')
-    .eq('coach_id', coachId)
-    .single()
-
-  if (teamError && teamError.code !== 'PGRST116') throw teamError
-  if (!team) return []
+  let resolvedTeamId = teamId
+  if (!resolvedTeamId) {
+    const { data: teams } = await supabaseAdmin
+      .from('teams').select('id').eq('coach_id', coachId).limit(1)
+    if (!teams?.length) return []
+    resolvedTeamId = teams[0].id
+  }
 
   // Get athlete IDs with join dates
   const { data: members, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id, joined_at')
-    .eq('team_id', team.id)
+    .eq('team_id', resolvedTeamId)
 
   if (memberError) throw memberError
   if (!members || members.length === 0) return []
