@@ -12,7 +12,7 @@ export default function About() {
       {/* Nav */}
       <nav style={s.nav}>
         <Link to="/" style={s.navLogo}>
-          <img src="/Offseaz_logo__DARK_-removebg-preview.png" alt="Offseaz" style={{ height: 36 }} />
+          <img src="/OFFSEAZ_LOGO_PNG.png" alt="Offseaz" style={{ height: 36 }} />
         </Link>
         <div style={s.navLinks}>
           <Link to="/contact" style={s.navLink}>Contact</Link>

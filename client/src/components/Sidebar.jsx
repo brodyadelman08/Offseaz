@@ -69,7 +69,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
       {/* Logo */}
       <div style={styles.logoArea}>
         <img
-          src="/Offseaz_logo__DARK_-removebg-preview.png"
+          src="/OFFSEAZ_LOGO_PNG.png"
           alt="Offseaz"
           style={styles.logo}
           onClick={() => navigate(nav[0].path)}
