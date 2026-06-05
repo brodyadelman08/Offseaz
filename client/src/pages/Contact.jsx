@@ -160,15 +160,16 @@ export default function Contact() {
           <div style={s.storyGrid}>
             <div style={s.storyCol}>
               <p style={s.storyText}>
-                Offseaz was built by <span style={s.highlight}>Brody Adelman</span> — a competitive powerlifter
-                and multi-sport athlete from Alexandria, Minnesota, heading to the University of St. Thomas
-                on the <span style={s.highlight}>Schulze Innovation Scholarship</span>.
+                Offseaz was built by <span style={s.highlight}>Brody Adelman</span> — a multi-sport
+                athlete from Alexandria, Minnesota, heading to the University of St. Thomas on the{' '}
+                <span style={s.highlight}>Schulze Innovation Scholarship</span>. He finished his
+                high school career with a 565 lb trap bar deadlift, 415 lb squat for 5 reps, 405 lb
+                reverse lunge for 5 reps, and a 245 lb bench press.
               </p>
               <p style={s.storyText}>
-                After watching teammates and peers go through unstructured, unaccountable offseasons year
-                after year, Brody saw the same problem everywhere: coaches with great plans and no efficient
-                way to deliver them, athletes with no idea what they should be doing. Offseaz was built to
-                close that gap.
+                Those numbers came from years of serious offseason training and from seeing firsthand
+                how much of a difference a structured program makes for an athlete who is willing to
+                put in the work.
               </p>
             </div>
             <div style={s.storyCol}>
