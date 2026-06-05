@@ -310,6 +310,31 @@ select {
   margin: 0 auto 40px;
 }
 
+/* ── CoachDashboard invite codes ─────────────────────────────────────────── */
+.codes-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 16px;
+  margin-bottom: 4px;
+}
+.code-text {
+  font-size: 22px;
+  letter-spacing: 3px;
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+  word-break: break-all;
+}
+@media (max-width: 520px) {
+  .codes-grid {
+    grid-template-columns: 1fr;
+  }
+  .code-text {
+    font-size: 20px;
+    letter-spacing: 2px;
+  }
+}
+
 /* ── DualDashboardMockup responsive layout ────────────────────────────────── */
 /* Desktop: two panels side by side in a fixed-height row                     */
 .mock-body {

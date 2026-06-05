@@ -195,13 +195,13 @@ export default function CoachDashboard() {
               </div>
             </div>
 
-            {/* Two codes side-by-side */}
-            <div style={styles.codesGrid}>
+            {/* Two codes — stacks to single column on mobile */}
+            <div className="codes-grid">
               {/* Athlete code */}
               <div style={styles.codeBlock}>
                 <p style={styles.fieldLabel}>Athlete Code</p>
                 <div style={styles.codeRow}>
-                  <span style={styles.codeText}>{team.invite_code}</span>
+                  <span className="code-text" style={styles.codeText}>{team.invite_code}</span>
                   <button style={styles.copyBtn} onClick={copyAthleteCode}>
                     {copiedAthleteCode
                       ? <><CheckIcon size={13} color={BLUE} /> Copied</>
@@ -217,7 +217,7 @@ export default function CoachDashboard() {
                 <div style={{ ...styles.codeBlock, borderColor: 'rgba(247,87,9,0.3)', background: 'rgba(247,87,9,0.04)' }}>
                   <p style={{ ...styles.fieldLabel, color: ORANGE }}>Coach Code</p>
                   <div style={styles.codeRow}>
-                    <span style={{ ...styles.codeText, color: ORANGE }}>{team.coach_code || '—'}</span>
+                    <span className="code-text" style={{ ...styles.codeText, color: ORANGE }}>{team.coach_code || '—'}</span>
                     {team.coach_code && (
                       <button style={{ ...styles.copyBtn, borderColor: ORANGE, color: ORANGE }} onClick={copyCoachCode}>
                         {copiedCoachCode
@@ -432,13 +432,8 @@ const styles = {
     marginBottom: 8,
     marginTop: 0,
   },
-  // Two-column grid for athlete code + coach code
-  codesGrid: {
-    display: 'grid',
-    gridTemplateColumns: '1fr 1fr',
-    gap: 16,
-    marginBottom: 4,
-  },
+  // Responsive grid handled by .codes-grid CSS class
+  codesGrid: {},
   codeBlock: {
     background: 'rgba(48,142,189,0.04)',
     border: '1px solid rgba(48,142,189,0.2)',
@@ -458,17 +453,13 @@ const styles = {
     gap: 16,
   },
   codeText: {
+    // font-size, letter-spacing, white-space, overflow handled by .code-text CSS class
     fontFamily: 'monospace',
-    fontSize: 24,
     fontWeight: 700,
-    letterSpacing: 4,
     color: 'var(--text)',
     lineHeight: 1,
     flex: 1,
     minWidth: 0,
-    overflow: 'hidden',
-    textOverflow: 'ellipsis',
-    whiteSpace: 'nowrap',
   },
 
   inviteBox: {
