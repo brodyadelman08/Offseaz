@@ -24,7 +24,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }))
-app.use(express.json({ limit: '6mb' })) // avatar base64 uploads can be ~4–5 MB
+app.use(express.json({ limit: '15mb' })) // avatar base64 uploads compressed client-side; raw files up to 10 MB
 
 app.get('/', (req, res) => {
   res.json({ status: 'ok' })

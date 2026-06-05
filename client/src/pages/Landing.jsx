@@ -1399,6 +1399,10 @@ export default function Landing() {
           />
           <p style={s.footerTagline}>Built for coaches and athletes who take the offseason seriously.</p>
           <div style={s.footerLinks}>
+            <Link to="/about"         style={s.footerLink}>About</Link>
+            <span style={s.footerDot}>·</span>
+            <Link to="/contact"       style={s.footerLink}>Contact</Link>
+            <span style={s.footerDot}>·</span>
             <Link to="/privacy"       style={s.footerLink}>Privacy Policy</Link>
             <span style={s.footerDot}>·</span>
             <Link to="/terms"         style={s.footerLink}>Terms &amp; Conditions</Link>

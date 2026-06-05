@@ -168,67 +168,67 @@ async function getAthletePlan(athleteId) {
   if (memberError && memberError.code !== 'PGRST116') throw memberError
   const teamId = membership?.team_id || null
 
-  // Find most recent assignment (individual takes priority, then team-wide)
-  let assignment = null
-
-  if (teamId) {
-    // Fetch both individual and team assignments in parallel
-    const [{ data: indiv }, { data: team }] = await Promise.all([
-      supabaseAdmin
-        .from('blueprint_assignments')
-        .select('*, blueprints(*)')
-        .eq('athlete_id', athleteId)
-        .order('assigned_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-      supabaseAdmin
-        .from('blueprint_assignments')
-        .select('*, blueprints(*)')
-        .eq('team_id', teamId)
-        .order('assigned_at', { ascending: false })
-        .limit(1)
-        .maybeSingle(),
-    ])
-
-    // Pick whichever is more recent
-    if (indiv && team) {
-      assignment = new Date(indiv.assigned_at) >= new Date(team.assigned_at) ? indiv : team
-    } else {
-      assignment = indiv || team || null
-    }
-  } else {
-    const { data: indiv } = await supabaseAdmin
+  // Fetch all relevant assignments with blueprint data
+  const [{ data: indivData, error: indivErr }, teamResult] = await Promise.all([
+    supabaseAdmin
       .from('blueprint_assignments')
       .select('*, blueprints(*)')
       .eq('athlete_id', athleteId)
-      .order('assigned_at', { ascending: false })
-      .limit(1)
-      .maybeSingle()
+      .order('assigned_at', { ascending: false }),
+    teamId
+      ? supabaseAdmin
+          .from('blueprint_assignments')
+          .select('*, blueprints(*)')
+          .eq('team_id', teamId)
+          .order('assigned_at', { ascending: false })
+      : Promise.resolve({ data: [], error: null }),
+  ])
 
-    assignment = indiv || null
+  if (indivErr) throw indivErr
+  if (teamResult.error) throw teamResult.error
+
+  // Merge, keeping only assignments that have a linked blueprint
+  const allAssignments = [
+    ...(indivData || []).filter(a => a.blueprints),
+    ...(teamResult.data || []).filter(a => a.blueprints),
+  ]
+
+  // Separate auto-generated (description starts with "Auto-generated") from coach-assigned
+  const autoAssignments = allAssignments
+    .filter(a => a.blueprints?.description?.startsWith('Auto-generated'))
+    .sort((a, b) => new Date(b.assigned_at) - new Date(a.assigned_at))
+
+  const coachAssignments = allAssignments
+    .filter(a => !a.blueprints?.description?.startsWith('Auto-generated'))
+    .sort((a, b) => new Date(b.assigned_at) - new Date(a.assigned_at))
+
+  // Build a full plan object (with weeks) from an assignment row
+  async function buildPlan(assignment) {
+    if (!assignment) return null
+    const blueprint = assignment.blueprints
+    const { data: weeks, error: weeksError } = await supabaseAdmin
+      .from('blueprint_weeks')
+      .select('*')
+      .eq('blueprint_id', blueprint.id)
+      .order('week_number', { ascending: true })
+    if (weeksError) throw weeksError
+    return {
+      id: blueprint.id,
+      title: blueprint.title,
+      description: blueprint.description,
+      num_weeks: blueprint.num_weeks,
+      starts_on: assignment.starts_on,
+      assigned_at: assignment.assigned_at,
+      weeks: weeks || [],
+    }
   }
 
-  if (!assignment) return null
+  const [auto_plan, coach_plan] = await Promise.all([
+    buildPlan(autoAssignments[0] || null),
+    buildPlan(coachAssignments[0] || null),
+  ])
 
-  const blueprint = assignment.blueprints
-
-  const { data: weeks, error: weeksError } = await supabaseAdmin
-    .from('blueprint_weeks')
-    .select('*')
-    .eq('blueprint_id', blueprint.id)
-    .order('week_number', { ascending: true })
-
-  if (weeksError) throw weeksError
-
-  return {
-    id: blueprint.id,
-    title: blueprint.title,
-    description: blueprint.description,
-    num_weeks: blueprint.num_weeks,
-    starts_on: assignment.starts_on,
-    assigned_at: assignment.assigned_at,
-    weeks: weeks || [],
-  }
+  return { auto_plan, coach_plan }
 }
 
 async function toggleLock(blueprintId, locked) {

@@ -45,7 +45,8 @@ export default function AthleteMyProfile() {
   const { profile, updateProfile } = useAuth()
   const navigate = useNavigate()
   const [survey, setSurvey] = useState(null)
-  const [plan, setPlan] = useState(null)
+  const [coachPlan, setCoachPlan] = useState(null)
+  const [autoPlan,  setAutoPlan]  = useState(null)
   const [logs, setLogs] = useState([])
   const [maxes, setMaxes] = useState(null)
   const [loading, setLoading] = useState(true)
@@ -68,12 +69,15 @@ export default function AthleteMyProfile() {
   useEffect(() => {
     Promise.all([
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
-      api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
+      api.get('/api/blueprints/my-plan')
+        .then(r => ({ auto: r.data.auto_plan || null, coach: r.data.coach_plan || null }))
+        .catch(() => ({ auto: null, coach: null })),
       api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
       api.get('/api/maxes').then(r => r.data.maxes).catch(() => null),
-    ]).then(([s, p, l, m]) => {
+    ]).then(([s, plans, l, m]) => {
       setSurvey(s)
-      setPlan(p)
+      setCoachPlan(plans.coach)
+      setAutoPlan(plans.auto)
       setLogs(l)
       setMaxes(m)
     }).finally(() => setLoading(false))
@@ -322,23 +326,38 @@ export default function AthleteMyProfile() {
         </div>
       )}
 
-      {/* Current plan */}
-      {plan && (
-        <div style={{ ...styles.card, marginTop: 14 }}>
-          <div style={styles.cardHeader}>
-            <p style={{ ...styles.cardLabel, color: BLUE }}>Current Plan</p>
-            <button style={styles.editBtn} onClick={() => navigate('/athlete/plan')}>
-              <CalendarIcon size={14} color={BLUE} />
-              View plan
-            </button>
-          </div>
-          <p style={styles.planName}>{plan.title}</p>
-          {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
-          <p style={styles.planMeta}>
-            {plan.num_weeks}-week plan · Started {fmtDate(plan.starts_on)}
-          </p>
+      {/* Training plan */}
+      <div style={{ ...styles.card, marginTop: 14 }}>
+        <div style={styles.cardHeader}>
+          <p style={{ ...styles.cardLabel, color: BLUE }}>Training Plan</p>
+          <button style={styles.editBtn} onClick={() => navigate('/athlete/plan')}>
+            <CalendarIcon size={14} color={BLUE} />
+            View plan
+          </button>
         </div>
-      )}
+
+        {!coachPlan && (
+          <p style={{ fontSize: 13, color: 'var(--text-3)', fontStyle: 'italic', margin: autoPlan ? '0 0 16px' : '0' }}>
+            Your coach has not assigned a training plan yet.
+          </p>
+        )}
+
+        {coachPlan && (
+          <div style={{ marginBottom: autoPlan ? 18 : 0 }}>
+            <span style={styles.coachBadge}>📋 Assigned by Coach</span>
+            <p style={{ ...styles.planName, marginTop: 8 }}>{coachPlan.title}</p>
+            <p style={styles.planMeta}>{coachPlan.num_weeks}-week plan · Started {fmtDate(coachPlan.starts_on)}</p>
+          </div>
+        )}
+
+        {autoPlan && (
+          <div>
+            <span style={styles.autoBadge}>⚡ Personalized Plan — Generated from Your Survey</span>
+            <p style={{ ...styles.planName, marginTop: 8 }}>{autoPlan.title}</p>
+            <p style={styles.planMeta}>{autoPlan.num_weeks}-week plan · Started {fmtDate(autoPlan.starts_on)}</p>
+          </div>
+        )}
+      </div>
 
       {/* ── Lifting Maxes ───────────────────────────────────────────────── */}
       <div style={{ ...styles.card, marginTop: 14 }}>
@@ -574,8 +593,15 @@ const styles = {
   pill: { fontSize: 12, fontWeight: 600, background: 'var(--border)', color: 'var(--text-2)', padding: '3px 10px', borderRadius: 12 },
 
   planName: { fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
-  planDesc: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 6px' },
   planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
+  coachBadge: {
+    display: 'inline-block', fontSize: 12, fontWeight: 700, color: '#308EBD',
+    background: 'rgba(48,142,189,0.12)', padding: '3px 12px', borderRadius: 12,
+  },
+  autoBadge: {
+    display: 'inline-block', fontSize: 12, fontWeight: 700, color: '#F75709',
+    background: 'rgba(247,87,9,0.08)', padding: '3px 12px', borderRadius: 12,
+  },
 
   // Physical stats
   physicalDisplay: { display: 'flex', gap: 32, flexWrap: 'wrap' },

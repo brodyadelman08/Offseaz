@@ -5,7 +5,7 @@ import { EditIcon } from './Icons'
 
 const ORANGE = '#F75709'
 const ALLOWED_TYPES = ['image/jpeg', 'image/png', 'image/webp']
-const MAX_BYTES = 4 * 1024 * 1024 // 4 MB
+const MAX_BYTES = 10 * 1024 * 1024 // 10 MB pre-compression limit
 
 function initials(name) {
   if (!name) return '?'
@@ -13,12 +13,44 @@ function initials(name) {
   return (parts[0][0] + (parts[1]?.[0] || '')).toUpperCase()
 }
 
-function readAsDataUrl(file) {
+/**
+ * Compress an image file to under ~900 KB using canvas before upload.
+ * Scales the longest dimension to at most 1200 px, then iteratively
+ * reduces JPEG quality until the base64 payload is small enough.
+ */
+function compressImage(file) {
   return new Promise((resolve, reject) => {
-    const reader = new FileReader()
-    reader.onload = e => resolve(e.target.result)
-    reader.onerror = reject
-    reader.readAsDataURL(file)
+    const img = new Image()
+    const objectUrl = URL.createObjectURL(file)
+    img.onload = () => {
+      URL.revokeObjectURL(objectUrl)
+      const canvas = document.createElement('canvas')
+      let w = img.width
+      let h = img.height
+      const MAX_DIM = 1200
+      if (w > MAX_DIM || h > MAX_DIM) {
+        const scale = MAX_DIM / Math.max(w, h)
+        w = Math.round(w * scale)
+        h = Math.round(h * scale)
+      }
+      canvas.width = w
+      canvas.height = h
+      canvas.getContext('2d').drawImage(img, 0, 0, w, h)
+      // Target: decoded image ≤ 900 KB  →  base64 string ≤ ~1 250 000 chars
+      const TARGET = 1_250_000
+      let quality = 0.85
+      let dataUrl = canvas.toDataURL('image/jpeg', quality)
+      while (dataUrl.length > TARGET && quality > 0.15) {
+        quality = Math.max(quality - 0.12, 0.15)
+        dataUrl = canvas.toDataURL('image/jpeg', quality)
+      }
+      resolve({ dataUrl, mimeType: 'image/jpeg' })
+    }
+    img.onerror = () => {
+      URL.revokeObjectURL(objectUrl)
+      reject(new Error('Failed to load image'))
+    }
+    img.src = objectUrl
   })
 }
 
@@ -67,16 +99,15 @@ export default function AvatarUpload({
       return
     }
     if (file.size > MAX_BYTES) {
-      setUploadError('Image must be under 4 MB')
+      setUploadError('Image must be under 10 MB')
       return
     }
 
     setUploading(true)
     try {
-      // Convert to base64 and send to server.
-      // The server uploads via the service-role key, so no storage RLS is needed.
-      const dataUrl = await readAsDataUrl(file)
-      const res = await api.patch('/api/auth/avatar', { dataUrl, mimeType: file.type })
+      // Compress client-side before upload — keeps payload under ~900 KB regardless of original size.
+      const { dataUrl, mimeType } = await compressImage(file)
+      const res = await api.patch('/api/auth/avatar', { dataUrl, mimeType })
       const url = res.data.profile.avatar_url
       setLocalUrl(url)
       onUpload?.(url)

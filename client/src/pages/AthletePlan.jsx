@@ -1,5 +1,4 @@
 import { useState, useEffect } from 'react'
-import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { DumbbellIcon } from '../components/Icons'
 import SessionDescription from '../components/SessionDescription'
@@ -88,59 +87,154 @@ const LOG_STATUS = {
   skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
 }
 
-export default function AthletePlan() {
-  const navigate = useNavigate()
-  const [plan, setPlan] = useState(undefined)
-  const [logs, setLogs] = useState([])
-  const [maxes, setMaxes] = useState({})
-  const [injuryAreas, setInjuryAreas] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [currentWeek, setCurrentWeek] = useState(1)
+// ── Sub-component: renders one plan's week navigator + content ──────────────
 
-  useEffect(() => {
-    Promise.all([
-      api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
-      api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
-      api.get('/api/maxes').then(r => {
-        const m = r.data.maxes || {}
-        return m
-      }).catch(err => {
-        console.error('[AthletePlan] /api/maxes FAILED:', err?.response?.status, err?.message)
-        return {}
-      }),
-      api.get('/api/survey/my').then(r => r.data.survey?.injury_areas || []).catch(() => []),
-    ]).then(([planData, logsData, maxesData, injuryData]) => {
-      setPlan(planData)
-      setLogs(logsData)
-      setMaxes(maxesData || {})
-      setInjuryAreas(injuryData)
-      if (planData) setCurrentWeek(calcCurrentWeek(planData.starts_on, planData.num_weeks))
-    }).finally(() => setLoading(false))
-  }, [])
-
-  // ── Debug: log maxes whenever state updates ──────────────────────────────
-  useEffect(() => {
-    console.log('[AthletePlan] maxes state:', maxes)
-    console.log('[AthletePlan] maxes keys:', Object.keys(maxes))
-    const tbd = maxes?.trap_bar_deadlift
-    const bp  = maxes?.bench_press
-    const sq  = maxes?.squat
-    console.log('[AthletePlan] trap_bar_deadlift →', tbd ? `current=${tbd.current?.weight_lbs ?? 'null'}` : 'KEY MISSING')
-    console.log('[AthletePlan] bench_press        →', bp  ? `current=${bp.current?.weight_lbs  ?? 'null'}` : 'KEY MISSING')
-    console.log('[AthletePlan] squat              →', sq  ? `current=${sq.current?.weight_lbs  ?? 'null'}` : 'KEY MISSING')
-  }, [maxes])
+function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas }) {
+  const week = plan?.weeks?.find(w => w.week_number === currentWeek)
 
   function getLog(weekId, sessionIndex) {
     return logs.find(l => l.blueprint_week_id === weekId && l.session_index === sessionIndex) || null
   }
 
+  return (
+    <>
+      <p style={styles.planMeta}>
+        {plan.num_weeks}-week plan · Started{' '}
+        {new Date(plan.starts_on).toLocaleDateString('en-US', {
+          month: 'short', day: 'numeric', year: 'numeric',
+        })}
+      </p>
+
+      {/* Week navigator */}
+      <div style={styles.weekNav}>
+        <button
+          style={{ ...styles.navBtn, opacity: currentWeek === 1 ? 0.3 : 1 }}
+          onClick={() => setCurrentWeek(w => Math.max(1, w - 1))}
+          disabled={currentWeek === 1}
+        >
+          ←
+        </button>
+        <div style={styles.weekInfo}>
+          <span style={styles.weekLabel}>Week {currentWeek}</span>
+          <span style={styles.weekOf}>of {plan.num_weeks}</span>
+        </div>
+        <button
+          style={{ ...styles.navBtn, opacity: currentWeek === plan.num_weeks ? 0.3 : 1 }}
+          onClick={() => setCurrentWeek(w => Math.min(plan.num_weeks, w + 1))}
+          disabled={currentWeek === plan.num_weeks}
+        >
+          →
+        </button>
+      </div>
+
+      {/* Current week card */}
+      <div style={styles.card}>
+        {!week ? (
+          <p style={styles.emptyWeek}>No content for this week yet.</p>
+        ) : (
+          <>
+            {week.objective && (
+              <div style={styles.objectiveBlock}>
+                <p style={styles.objectiveLabel}>This Week's Focus</p>
+                <p style={styles.objectiveText}>{week.objective}</p>
+              </div>
+            )}
+            {week.sessions.length === 0 ? (
+              <p style={styles.emptyWeek}>No sessions scheduled this week.</p>
+            ) : (
+              <div style={styles.sessionList}>
+                {week.sessions.map((s, i) => {
+                  const logged = getLog(week.id, i)
+                  const statusInfo = logged ? LOG_STATUS[logged.status] : null
+                  return (
+                    <div key={i} style={styles.sessionCard}>
+                      <div style={styles.sessionHeader}>
+                        <span style={styles.sessionDay}>{s.day || `Session ${i + 1}`}</span>
+                        <span style={styles.sessionFocus}>{s.focus}</span>
+                        {logged && statusInfo && (
+                          <span style={{ ...styles.logBadge, color: statusInfo.color, background: statusInfo.bg }}>
+                            {statusInfo.label}{logged.effort ? ` · ${logged.effort}` : ''}
+                          </span>
+                        )}
+                      </div>
+                      {s.exercises && s.exercises.length > 0 ? (
+                        <div style={styles.exerciseList}>
+                          {s.exercises.map((ex, ei) => (
+                            <ExerciseRow key={ei} exercise={ex} maxes={maxes} />
+                          ))}
+                        </div>
+                      ) : s.description ? (
+                        <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
+                      ) : null}
+                    </div>
+                  )
+                })}
+              </div>
+            )}
+          </>
+        )}
+      </div>
+
+      {/* Week dots */}
+      <div style={styles.weekDots}>
+        {Array.from({ length: plan.num_weeks }, (_, i) => i + 1).map(n => {
+          const isPast = n < calcCurrentWeek(plan.starts_on, plan.num_weeks)
+          return (
+            <button
+              key={n}
+              style={{
+                ...styles.dot,
+                ...(n === currentWeek ? styles.dotActive : {}),
+                ...(isPast && n !== currentWeek ? styles.dotPast : {}),
+              }}
+              onClick={() => setCurrentWeek(n)}
+              title={`Week ${n}`}
+            />
+          )
+        })}
+      </div>
+    </>
+  )
+}
+
+// ── Main page ─────────────────────────────────────────────────────────────────
+
+export default function AthletePlan() {
+  const [coachPlan, setCoachPlan]  = useState(undefined)
+  const [autoPlan,  setAutoPlan]   = useState(undefined)
+  const [logs,        setLogs]     = useState([])
+  const [maxes,       setMaxes]    = useState({})
+  const [injuryAreas, setInjuryAreas] = useState([])
+  const [loading,     setLoading]  = useState(true)
+  const [currentWeekCoach, setCurrentWeekCoach] = useState(1)
+  const [currentWeekAuto,  setCurrentWeekAuto]  = useState(1)
+
+  useEffect(() => {
+    Promise.all([
+      api.get('/api/blueprints/my-plan')
+        .then(r => ({ auto: r.data.auto_plan || null, coach: r.data.coach_plan || null }))
+        .catch(() => ({ auto: null, coach: null })),
+      api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
+      api.get('/api/maxes').then(r => r.data.maxes || {}).catch(() => ({})),
+      api.get('/api/survey/my').then(r => r.data.survey?.injury_areas || []).catch(() => []),
+    ]).then(([plans, logsData, maxesData, injuryData]) => {
+      setCoachPlan(plans.coach)
+      setAutoPlan(plans.auto)
+      setLogs(logsData)
+      setMaxes(maxesData)
+      setInjuryAreas(injuryData)
+      if (plans.coach) setCurrentWeekCoach(calcCurrentWeek(plans.coach.starts_on, plans.coach.num_weeks))
+      if (plans.auto)  setCurrentWeekAuto(calcCurrentWeek(plans.auto.starts_on,   plans.auto.num_weeks))
+    }).finally(() => setLoading(false))
+  }, [])
+
   if (loading) return <div style={styles.center}>Loading…</div>
 
-  const week = plan?.weeks?.find(w => w.week_number === currentWeek)
+  const hasAny = coachPlan || autoPlan
 
-  return (
-    <div style={styles.container}>
-      {!plan ? (
+  if (!hasAny) {
+    return (
+      <div style={styles.container}>
         <div style={styles.emptyState}>
           <div style={styles.emptyIcon}>
             <DumbbellIcon size={36} color="var(--text-3)" />
@@ -148,125 +242,51 @@ export default function AthletePlan() {
           <h2 style={styles.emptyTitle}>No plan assigned yet</h2>
           <p style={styles.emptyDesc}>Your coach is working on your training plan. Check back soon.</p>
         </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={styles.container}>
+
+      {/* ── Coach plan section ─────────────────────────────────────────── */}
+      {coachPlan ? (
+        <div style={styles.planSection}>
+          <div style={styles.labelRow}>
+            <span style={styles.coachLabel}>📋 Assigned by Coach — {coachPlan.title}</span>
+          </div>
+          <PlanView
+            plan={coachPlan}
+            currentWeek={currentWeekCoach}
+            setCurrentWeek={setCurrentWeekCoach}
+            logs={logs}
+            maxes={maxes}
+            injuryAreas={injuryAreas}
+          />
+        </div>
       ) : (
-        <>
-          <div style={styles.planHeader}>
-            <h1 style={styles.planTitle}>{plan.title}</h1>
-            {plan.description && <p style={styles.planDesc}>{plan.description}</p>}
-            <p style={styles.planMeta}>
-              {plan.num_weeks}-week plan · Started{' '}
-              {new Date(plan.starts_on).toLocaleDateString('en-US', {
-                month: 'short', day: 'numeric', year: 'numeric',
-              })}
-            </p>
-          </div>
-
-          {/* Week navigator */}
-          <div style={styles.weekNav}>
-            <button
-              style={{ ...styles.navBtn, opacity: currentWeek === 1 ? 0.3 : 1 }}
-              onClick={() => setCurrentWeek(w => Math.max(1, w - 1))}
-              disabled={currentWeek === 1}
-            >
-              ←
-            </button>
-            <div style={styles.weekInfo}>
-              <span style={styles.weekLabel}>Week {currentWeek}</span>
-              <span style={styles.weekOf}>of {plan.num_weeks}</span>
-            </div>
-            <button
-              style={{ ...styles.navBtn, opacity: currentWeek === plan.num_weeks ? 0.3 : 1 }}
-              onClick={() => setCurrentWeek(w => Math.min(plan.num_weeks, w + 1))}
-              disabled={currentWeek === plan.num_weeks}
-            >
-              →
-            </button>
-          </div>
-
-          {/* Current week card */}
-          <div style={styles.card}>
-            {!week ? (
-              <p style={styles.emptyWeek}>No content for this week yet.</p>
-            ) : (
-              <>
-                {week.objective && (
-                  <div style={styles.objectiveBlock}>
-                    <p style={styles.objectiveLabel}>This Week's Focus</p>
-                    <p style={styles.objectiveText}>{week.objective}</p>
-                  </div>
-                )}
-                {week.sessions.length === 0 ? (
-                  <p style={styles.emptyWeek}>No sessions scheduled this week.</p>
-                ) : (
-                  <div style={styles.sessionList}>
-                    {week.sessions.map((s, i) => {
-                      const logged = getLog(week.id, i)
-                      const statusInfo = logged ? LOG_STATUS[logged.status] : null
-                      return (
-                        <div key={i} style={styles.sessionCard}>
-                          <div style={styles.sessionHeader}>
-                            <span style={styles.sessionDay}>{s.day || `Session ${i + 1}`}</span>
-                            <span style={styles.sessionFocus}>{s.focus}</span>
-                            {logged ? (
-                              <span style={{ ...styles.logBadge, color: statusInfo.color, background: statusInfo.bg }}>
-                                {statusInfo.label}{logged.effort ? ` · ${logged.effort}` : ''}
-                              </span>
-                            ) : (
-                              <button
-                                style={styles.logBtn}
-                                onClick={() => navigate('/athlete/log', {
-                                  state: {
-                                    weekId: week.id,
-                                    sessionIndex: i,
-                                    focus: s.focus,
-                                    day: s.day,
-                                    description: s.description,
-                                    exercises: s.exercises || [],
-                                  },
-                                })}
-                              >
-                                Log session
-                              </button>
-                            )}
-                          </div>
-                          {s.exercises && s.exercises.length > 0 ? (
-                            <div style={styles.exerciseList}>
-                              {s.exercises.map((ex, ei) => (
-                                <ExerciseRow key={ei} exercise={ex} maxes={maxes} />
-                              ))}
-                            </div>
-                          ) : s.description ? (
-                            <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
-                          ) : null}
-                        </div>
-                      )
-                    })}
-                  </div>
-                )}
-              </>
-            )}
-          </div>
-
-          {/* Week dots */}
-          <div style={styles.weekDots}>
-            {Array.from({ length: plan.num_weeks }, (_, i) => i + 1).map(n => {
-              const isPast = n < calcCurrentWeek(plan.starts_on, plan.num_weeks)
-              return (
-                <button
-                  key={n}
-                  style={{
-                    ...styles.dot,
-                    ...(n === currentWeek ? styles.dotActive : {}),
-                    ...(isPast && n !== currentWeek ? styles.dotPast : {}),
-                  }}
-                  onClick={() => setCurrentWeek(n)}
-                  title={`Week ${n}`}
-                />
-              )
-            })}
-          </div>
-        </>
+        <div style={styles.noCoachNotice}>
+          Your coach has not assigned a training plan yet.
+        </div>
       )}
+
+      {/* ── Auto-generated plan section ────────────────────────────────── */}
+      {autoPlan && (
+        <div style={styles.planSection}>
+          <div style={styles.labelRow}>
+            <span style={styles.autoLabel}>⚡ Personalized Plan — Generated from Your Survey</span>
+          </div>
+          <PlanView
+            plan={autoPlan}
+            currentWeek={currentWeekAuto}
+            setCurrentWeek={setCurrentWeekAuto}
+            logs={logs}
+            maxes={maxes}
+            injuryAreas={injuryAreas}
+          />
+        </div>
+      )}
+
     </div>
   )
 }
@@ -280,10 +300,25 @@ const styles = {
   emptyTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
   emptyDesc: { color: 'var(--text-2)', fontSize: 15 },
 
-  planHeader: { marginBottom: 28 },
-  planTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
-  planDesc: { color: 'var(--text-2)', fontSize: 15, marginBottom: 6 },
-  planMeta: { color: 'var(--text-3)', fontSize: 13 },
+  planSection: { marginBottom: 40 },
+  labelRow: { marginBottom: 14 },
+  coachLabel: {
+    display: 'inline-block', fontSize: 13, fontWeight: 700, color: BLUE,
+    background: 'rgba(48,142,189,0.12)', border: '1px solid rgba(48,142,189,0.25)',
+    padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
+  },
+  autoLabel: {
+    display: 'inline-block', fontSize: 13, fontWeight: 700, color: ORANGE,
+    background: 'rgba(247,87,9,0.08)', border: '1px solid rgba(247,87,9,0.2)',
+    padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
+  },
+  noCoachNotice: {
+    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 14,
+    padding: '16px 20px', marginBottom: 28, color: 'var(--text-2)', fontSize: 14,
+    fontStyle: 'italic',
+  },
+
+  planMeta: { color: 'var(--text-3)', fontSize: 13, margin: '0 0 16px' },
 
   weekNav: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
   navBtn: { padding: '8px 20px', fontSize: 18, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', lineHeight: 1, boxShadow: '0 1px 3px rgba(0,0,0,0.18)' },
@@ -310,7 +345,6 @@ const styles = {
   sessionFocus: { fontSize: 15, fontWeight: 700, color: 'var(--text)', flex: 1 },
   sessionDesc: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6 },
   exerciseList: { marginTop: 4 },
-  logBtn: { marginLeft: 'auto', padding: '6px 14px', fontSize: 12, fontWeight: 700, borderRadius: 8, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 2px 8px rgba(48,142,189,0.30)', letterSpacing: 0.1 },
   logBadge: { marginLeft: 'auto', fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 6, whiteSpace: 'nowrap', flexShrink: 0 },
 
   weekDots: { display: 'flex', justifyContent: 'center', gap: 8 },

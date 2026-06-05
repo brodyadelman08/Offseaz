@@ -156,8 +156,8 @@ async function myPlan(req, res) {
       return res.status(403).json({ error: 'Only athletes can view their plan' })
     }
 
-    const plan = await getAthletePlan(req.user.id)
-    res.json({ plan })
+    const { auto_plan, coach_plan } = await getAthletePlan(req.user.id)
+    res.json({ auto_plan, coach_plan })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

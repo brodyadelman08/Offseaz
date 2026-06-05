@@ -26,8 +26,9 @@ import { CoachAccessProvider } from './context/CoachAccessContext'
 
 import AthleteDashboard from './pages/AthleteDashboard'
 import AthletePlan from './pages/AthletePlan'
-import WorkoutLog from './pages/WorkoutLog'
 import AthleteMyProfile from './pages/AthleteMyProfile'
+import About from './pages/About'
+import Contact from './pages/Contact'
 import AthleteOnboarding from './pages/AthleteOnboarding'
 import AthleteRoster from './pages/AthleteRoster'
 import AthleteTeammateProfile from './pages/AthleteTeammateProfile'
@@ -58,6 +59,8 @@ export default function App() {
             <Route path="/terms"         element={<Terms />} />
             <Route path="/refund"        element={<Refund />} />
             <Route path="/accessibility" element={<Accessibility />} />
+            <Route path="/about"         element={<About />} />
+            <Route path="/contact"       element={<Contact />} />
 
             {/* Athlete-only standalone (no sidebar) */}
             <Route
@@ -112,7 +115,6 @@ export default function App() {
             >
               <Route index element={<AthleteDashboard />} />
               <Route path="plan" element={<AthletePlan />} />
-              <Route path="log" element={<WorkoutLog />} />
               <Route path="messages" element={<Messages />} />
               <Route path="roster" element={<AthleteRoster />} />
               <Route path="roster/:athleteId" element={<AthleteTeammateProfile />} />
@@ -122,7 +124,6 @@ export default function App() {
 
             {/* Legacy redirects — keep old bookmarks working */}
             <Route path="/plan" element={<Navigate to="/athlete/plan" replace />} />
-            <Route path="/log" element={<Navigate to="/athlete/log" replace />} />
             <Route path="/accountability" element={<Navigate to="/coach/accountability" replace />} />
             <Route path="/blueprints/new" element={<Navigate to="/coach/blueprints/new" replace />} />
             <Route path="/messages" element={<MessagesRedirect />} />
