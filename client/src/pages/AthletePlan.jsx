@@ -2,6 +2,8 @@ import { useState, useEffect } from 'react'
 import api from '../services/api'
 import { DumbbellIcon } from '../components/Icons'
 import SessionDescription from '../components/SessionDescription'
+import PreviewBanner from '../components/PreviewBanner'
+import { useTeam } from '../context/TeamContext'
 
 const BLUE   = '#308EBD'
 const ORANGE = '#F75709'
@@ -25,7 +27,7 @@ function calcWeight(maxLbs, pct) {
   return Math.round((maxLbs * pct) / 5) * 5
 }
 
-function ExerciseRow({ exercise, maxes }) {
+function ExerciseRow({ exercise, maxes, locked = false }) {
   const { name, sets, reps, pct, lift_key, warmup, note } = exercise
   const maxEntry = lift_key ? maxes?.[lift_key]?.current : null
   const maxLbs   = maxEntry?.weight_lbs
@@ -48,15 +50,18 @@ function ExerciseRow({ exercise, maxes }) {
     <div style={exStyles.row}>
       <div style={exStyles.left}>
         <span style={exStyles.exerciseName}>{name}</span>
-        {note && <span style={exStyles.exerciseNote}> ({note})</span>}
+        {!locked && note && <span style={exStyles.exerciseNote}> ({note})</span>}
       </div>
       <div style={exStyles.right}>
         <span style={exStyles.setsReps}>{setsRepsStr}</span>
-        {weightLine && (
+        {locked && pct ? (
+          /* Replace weight line with a locked placeholder */
+          <span style={exStyles.lockedWeight}>🔒 ██ lbs · unlock to see</span>
+        ) : weightLine ? (
           <span style={maxLbs ? exStyles.weightCalc : exStyles.weightPrompt}>
             {weightLine}
           </span>
-        )}
+        ) : null}
       </div>
     </div>
   )
@@ -71,6 +76,7 @@ const exStyles = {
   setsReps:      { display: 'block', fontSize: 13, color: 'var(--text-2)' },
   weightCalc:    { display: 'block', fontSize: 12, fontWeight: 700, color: ORANGE, marginTop: 2 },
   weightPrompt:  { display: 'block', fontSize: 11, color: 'var(--text-3)', fontStyle: 'italic', marginTop: 2, maxWidth: 200 },
+  lockedWeight:  { display: 'block', fontSize: 12, color: 'var(--text-3)', marginTop: 2, letterSpacing: 0.5, userSelect: 'none' },
 }
 
 function calcCurrentWeek(startsOn, numWeeks) {
@@ -89,7 +95,7 @@ const LOG_STATUS = {
 
 // ── Sub-component: renders one plan's week navigator + content ──────────────
 
-function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas }) {
+function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas, locked = false }) {
   const week = plan?.weeks?.find(w => w.week_number === currentWeek)
 
   function getLog(weekId, sessionIndex) {
@@ -160,11 +166,17 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas 
                       {s.exercises && s.exercises.length > 0 ? (
                         <div style={styles.exerciseList}>
                           {s.exercises.map((ex, ei) => (
-                            <ExerciseRow key={ei} exercise={ex} maxes={maxes} />
+                            <ExerciseRow key={ei} exercise={ex} maxes={maxes} locked={locked} />
                           ))}
                         </div>
                       ) : s.description ? (
-                        <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
+                        locked ? (
+                          <div style={styles.lockedDesc}>
+                            🔒 Detailed coaching notes unlock when you join your team
+                          </div>
+                        ) : (
+                          <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
+                        )
                       ) : null}
                     </div>
                   )
@@ -200,6 +212,9 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas 
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AthletePlan() {
+  const { activeTeam } = useTeam()
+  const hasTeam = Boolean(activeTeam)
+
   const [coachPlan, setCoachPlan]  = useState(undefined)
   const [autoPlan,  setAutoPlan]   = useState(undefined)
   const [logs,        setLogs]     = useState([])
@@ -232,7 +247,27 @@ export default function AthletePlan() {
 
   const hasAny = coachPlan || autoPlan
 
-  if (!hasAny) {
+  // No team + no plan at all = haven't taken survey yet
+  if (!hasAny && !hasTeam) {
+    return (
+      <div style={styles.container}>
+        <PreviewBanner noun="training plan" />
+        <div style={styles.emptyState}>
+          <div style={styles.emptyIcon}>
+            <DumbbellIcon size={36} color="var(--text-3)" />
+          </div>
+          <h2 style={styles.emptyTitle}>Complete your survey to preview your plan</h2>
+          <p style={styles.emptyDesc}>
+            We'll generate a personalized training plan matched to your sport and goals.
+            You can preview it now and unlock the full version when you join your coach's team.
+          </p>
+        </div>
+      </div>
+    )
+  }
+
+  // Has a team but no plan yet
+  if (!hasAny && hasTeam) {
     return (
       <div style={styles.container}>
         <div style={styles.emptyState}>
@@ -246,43 +281,55 @@ export default function AthletePlan() {
     )
   }
 
+  // Locked preview: has auto plan but no team
+  const previewMode = !hasTeam && Boolean(autoPlan)
+
   return (
     <div style={styles.container}>
 
+      {/* ── Preview banner (shown when athlete has no team) ─────────────── */}
+      {previewMode && <PreviewBanner noun="training plan" />}
+
       {/* ── Coach plan section ─────────────────────────────────────────── */}
-      {coachPlan ? (
-        <div style={styles.planSection}>
-          <div style={styles.labelRow}>
-            <span style={styles.coachLabel}>📋 Assigned by Coach — {coachPlan.title}</span>
+      {hasTeam && (
+        coachPlan ? (
+          <div style={styles.planSection}>
+            <div style={styles.labelRow}>
+              <span style={styles.coachLabel}>📋 Assigned by Coach — {coachPlan.title}</span>
+            </div>
+            <PlanView
+              plan={coachPlan}
+              currentWeek={currentWeekCoach}
+              setCurrentWeek={setCurrentWeekCoach}
+              logs={logs}
+              maxes={maxes}
+              injuryAreas={injuryAreas}
+            />
           </div>
-          <PlanView
-            plan={coachPlan}
-            currentWeek={currentWeekCoach}
-            setCurrentWeek={setCurrentWeekCoach}
-            logs={logs}
-            maxes={maxes}
-            injuryAreas={injuryAreas}
-          />
-        </div>
-      ) : (
-        <div style={styles.noCoachNotice}>
-          Your coach has not assigned a training plan yet.
-        </div>
+        ) : (
+          <div style={styles.noCoachNotice}>
+            Your coach has not assigned a training plan yet.
+          </div>
+        )
       )}
 
       {/* ── Auto-generated plan section ────────────────────────────────── */}
       {autoPlan && (
         <div style={styles.planSection}>
           <div style={styles.labelRow}>
-            <span style={styles.autoLabel}>⚡ Personalized Plan — Generated from Your Survey</span>
+            <span style={previewMode ? styles.previewLabel : styles.autoLabel}>
+              {previewMode ? '👁 Preview — ' : '⚡ '}
+              {previewMode ? `${autoPlan.title}` : 'Personalized Plan — Generated from Your Survey'}
+            </span>
           </div>
           <PlanView
             plan={autoPlan}
             currentWeek={currentWeekAuto}
             setCurrentWeek={setCurrentWeekAuto}
-            logs={logs}
-            maxes={maxes}
+            logs={previewMode ? [] : logs}
+            maxes={previewMode ? {} : maxes}
             injuryAreas={injuryAreas}
+            locked={previewMode}
           />
         </div>
       )}
@@ -311,6 +358,16 @@ const styles = {
     display: 'inline-block', fontSize: 13, fontWeight: 700, color: ORANGE,
     background: 'rgba(247,87,9,0.08)', border: '1px solid rgba(247,87,9,0.2)',
     padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
+  },
+  previewLabel: {
+    display: 'inline-block', fontSize: 13, fontWeight: 700, color: 'var(--text-3)',
+    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)',
+    padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
+  },
+  lockedDesc: {
+    fontSize: 13, color: 'var(--text-3)', fontStyle: 'italic',
+    padding: '8px 12px', background: 'rgba(255,255,255,0.04)',
+    borderRadius: 8, marginTop: 6, userSelect: 'none',
   },
   noCoachNotice: {
     background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 14,

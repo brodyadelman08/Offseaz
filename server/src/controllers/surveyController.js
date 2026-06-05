@@ -26,12 +26,11 @@ async function submit(req, res) {
       return res.status(403).json({ error: 'Only athletes can submit surveys' })
     }
 
-    const team = await getAthleteTeam(req.user.id)
-    if (!team) {
-      return res.status(400).json({ error: 'You must be on a team before submitting a survey' })
-    }
+    // Team is OPTIONAL — athletes can complete the survey and get a preview
+    // blueprint without joining a team first.
+    const team = await getAthleteTeam(req.user.id).catch(() => null)
 
-    const survey = await submitSurvey(req.user.id, team.id, {
+    const survey = await submitSurvey(req.user.id, team?.id || null, {
       full_name,
       age, height_feet, height_inches, weight_lbs, grade,
       sport: sport.trim(),
@@ -49,24 +48,20 @@ async function submit(req, res) {
 
     const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
 
-    // Notify coach if athlete flagged any injury area
+    // Notify coach only if athlete is on a team and flagged an injury
     const hasInjury = (injury_areas || []).some(a => a !== 'None')
-    if (hasInjury && team.coach_id) {
+    if (hasInjury && team?.coach_id) {
       createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
         console.error('Injury notification failed (submit):', e)
       )
     }
 
-    // Auto-assign a blueprint based on sport/goal — fire-and-forget
+    // Auto-assign a blueprint based on sport/goal — always runs, even without a team
+    // (creates a preview plan the athlete can unlock by joining a team)
     console.log('[survey/submit] team:', { id: team?.id, coach_id: team?.coach_id })
-    if (team.coach_id) {
-      console.log('[survey/submit] triggering autoAssignBlueprint for athlete', req.user.id)
-      autoAssignBlueprint(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
-        console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
-      )
-    } else {
-      console.warn('[survey/submit] team has no coach_id — skipping auto-assign. team:', team)
-    }
+    autoAssignBlueprint(req.user.id, team?.id || null, team?.coach_id || null, survey, athleteName).catch(e =>
+      console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
+    )
 
     res.status(201).json({ survey })
   } catch (err) {

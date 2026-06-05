@@ -2,6 +2,7 @@ import { useState, useEffect, useRef } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useCoachAccess } from '../context/CoachAccessContext'
 import { useTeam } from '../context/TeamContext'
+import PreviewBanner from '../components/PreviewBanner'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
 import { HeartIcon, HeartFilledIcon, MessageIcon } from '../components/Icons'
@@ -401,6 +402,31 @@ export default function Feed() {
   }
 
   const canPost = !posting && (composeText.trim().length > 0 || photoDataUrl !== null)
+  // Athletes without a team see a locked preview instead of the live feed
+  const isAthleteNoTeam = profile?.role === 'athlete' && !activeTeam
+
+  if (isAthleteNoTeam) {
+    return (
+      <div style={st.container}>
+        <div style={st.pageHeader}>
+          <h1 style={st.pageTitle}>Team Feed</h1>
+          <p style={st.pageSub}>Stay connected with your team.</p>
+        </div>
+        <PreviewBanner noun="team feed" />
+        {/* Ghost posts to show what the feed looks like */}
+        {[1, 2, 3].map(i => (
+          <div key={i} style={st.ghostPost}>
+            <div style={st.ghostAvatar} />
+            <div style={st.ghostContent}>
+              <div style={{ ...st.ghostLine, width: `${40 + i * 15}%` }} />
+              <div style={{ ...st.ghostLine, width: `${60 + i * 10}%`, marginTop: 8 }} />
+              {i === 1 && <div style={{ ...st.ghostLine, width: '45%', marginTop: 8 }} />}
+            </div>
+          </div>
+        ))}
+      </div>
+    )
+  }
 
   return (
     <div style={st.container}>
@@ -770,5 +796,21 @@ const st = {
     whiteSpace: 'nowrap',
     boxShadow: '0 2px 10px rgba(48,142,189,0.32)',
     transition: 'opacity 0.15s',
+  },
+
+  // ── Locked preview ghost posts ────────────────────────────────────────────
+  ghostPost: {
+    display: 'flex', gap: 12, alignItems: 'flex-start',
+    background: 'var(--card)', border: '1px solid var(--border)',
+    borderRadius: 16, padding: '18px 20px', marginBottom: 14,
+    opacity: 0.45, pointerEvents: 'none',
+  },
+  ghostAvatar: {
+    width: 38, height: 38, borderRadius: '50%', flexShrink: 0,
+    background: 'var(--border)',
+  },
+  ghostContent: { flex: 1 },
+  ghostLine: {
+    height: 12, borderRadius: 6, background: 'var(--border)',
   },
 }

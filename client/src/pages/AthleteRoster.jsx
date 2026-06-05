@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
+import PreviewBanner from '../components/PreviewBanner'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -60,13 +61,7 @@ export default function AthleteRoster() {
         <p style={styles.empty}>Loading…</p>
       ) : !team ? (
         <div style={styles.emptyState}>
-          <p style={styles.emptyTitle}>You're not on a team yet</p>
-          <p style={styles.emptyDesc}>
-            Enter a join code from your coach to join a team.
-          </p>
-          <button style={styles.joinBtn} onClick={() => navigate('/athlete')}>
-            Go to Dashboard
-          </button>
+          <PreviewBanner noun="team roster" />
         </div>
       ) : (
         <>

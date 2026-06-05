@@ -69,10 +69,12 @@ async function autoAssignBlueprint(athleteId, teamId, coachId, survey, athleteNa
 
   console.log('[autoAssignBlueprint] assignment row created, id:', assignment?.id)
 
-  // 4. Notify the coach (fire-and-forget — don't block on failure)
-  createBlueprintNotification(coachId, athleteId, athleteName, title).catch(e =>
-    console.error('[autoAssignBlueprint] notification failed:', e?.message)
-  )
+  // 4. Notify the coach — only if there is one (teamless preview has no coach)
+  if (coachId) {
+    createBlueprintNotification(coachId, athleteId, athleteName, title).catch(e =>
+      console.error('[autoAssignBlueprint] notification failed:', e?.message)
+    )
+  }
 
   console.log(`[autoAssignBlueprint] SUCCESS — "${title}" assigned to athlete ${athleteId}`)
   return blueprint

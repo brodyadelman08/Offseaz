@@ -1,5 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useTeam } from '../context/TeamContext'
+import PreviewBanner from '../components/PreviewBanner'
 import api from '../services/api'
 
 const ORANGE = '#F75709'
@@ -218,6 +220,7 @@ function dayLabel(dateStr) {
 
 export default function Messages() {
   const { profile }                       = useAuth()
+  const { activeTeam }                    = useTeam()
   const [convs, setConvs]                 = useState([])
   const [activeId, setActiveId]           = useState(null)
   const [messages, setMessages]           = useState([])
@@ -370,6 +373,27 @@ export default function Messages() {
   }
 
   // ── Render ───────────────────────────────────────────────────────────────────
+
+  // Athletes without a team see a locked preview
+  if (profile?.role === 'athlete' && !activeTeam) {
+    return (
+      <div style={{ maxWidth: 600, margin: '0 auto', padding: '20px 0' }}>
+        <PreviewBanner noun="team messaging" />
+        {/* Ghost conversation list */}
+        <div style={{ opacity: 0.35, pointerEvents: 'none' }}>
+          {[80, 65, 55].map((w, i) => (
+            <div key={i} style={st.ghostConv}>
+              <div style={st.ghostAvatar2} />
+              <div style={{ flex: 1 }}>
+                <div style={{ ...st.ghostLine2, width: `${w}%` }} />
+                <div style={{ ...st.ghostLine2, width: `${w - 20}%`, marginTop: 6, opacity: 0.6 }} />
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )
+  }
 
   return (
     <div className="chat-shell">
@@ -600,4 +624,15 @@ const st = {
     boxShadow: '0 2px 10px rgba(247,87,9,0.35)',
     transition: 'opacity 0.15s, transform 0.1s',
   },
+
+  // ── Locked preview ghost UI ────────────────────────────────────────────────
+  ghostConv: {
+    display: 'flex', alignItems: 'center', gap: 12,
+    padding: '14px 18px', borderBottom: '1px solid var(--border)',
+  },
+  ghostAvatar2: {
+    width: 42, height: 42, borderRadius: '50%', flexShrink: 0,
+    background: 'var(--border)',
+  },
+  ghostLine2: { height: 11, borderRadius: 6, background: 'var(--border)' },
 }
