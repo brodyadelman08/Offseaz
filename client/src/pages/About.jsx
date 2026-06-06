@@ -102,8 +102,8 @@ export default function About() {
       {/* ── Desktop photo grid — shown only on ≥768px via CSS ───────────── */}
       <section className="about-photo-grid">
         {[
-          { src: '/about-deadlift.webp', alt: '565 lb trap bar deadlift', caption: '565 lb Trap Bar Deadlift',          pos: '50% 70%' },
-          { src: '/about-baseball.webp', alt: 'Baseball batting swing',   caption: 'Starting Shortstop — 3 Years Varsity', pos: '50% 40%' },
+          { src: '/about-deadlift.webp', alt: '565 lb trap bar deadlift', caption: '565 lb Trap Bar Deadlift',          pos: '50% 30%'     },
+          { src: '/about-baseball.webp', alt: 'Baseball batting swing',   caption: 'Starting Shortstop — 3 Years Varsity', pos: 'center center' },
         ].map(({ src, alt, caption, pos }) => (
           <div key={caption} style={s.photoGridItem}>
             <div style={s.photoGridImgWrap}>
@@ -229,7 +229,7 @@ const s = {
   heroBg: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 70%', display: 'block' },
   heroOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.50) 0%, rgba(10,10,10,0.75) 55%, rgba(10,10,10,0.97) 100%)' },
   heroContent: { position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 24px', gap: 18 },
-  heroLogo: { width: 'clamp(180px, 28vw, 360px)', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.6))' },
+  heroLogo: { width: 'clamp(280px, 42vw, 480px)', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.6))' },
   heroHeadline: { fontSize: 'clamp(28px, 5.5vw, 58px)', fontWeight: 800, lineHeight: 1.1, color: '#fff', margin: 0, textShadow: '0 2px 20px rgba(0,0,0,0.5)', fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
   heroSub: { fontSize: 'clamp(14px, 2vw, 19px)', color: 'rgba(255,255,255,0.55)', fontWeight: 400, margin: 0, letterSpacing: 0.3 },
 
@@ -246,7 +246,7 @@ const s = {
 
   /* Desktop photo grid — layout handled by CSS class, styles here */
   photoGridItem: { display: 'flex', flexDirection: 'column' },
-  photoGridImgWrap: { position: 'relative', height: 500, overflow: 'hidden' },
+  photoGridImgWrap: { position: 'relative', height: 600, overflow: 'hidden' },
   photoGridImg: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' },
   photoGridOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.65) 0%, rgba(10,10,10,0.15) 45%, transparent 70%)' },
   photoCaption: {
