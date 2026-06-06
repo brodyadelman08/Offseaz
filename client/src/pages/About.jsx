@@ -152,6 +152,9 @@ export default function About() {
             their sport, their position, and their goals. Every coach gets real-time visibility
             into their entire roster without chasing anyone.
           </p>
+          <p style={s.bodyText}>
+            Offseaz brings the weight room experience into a platform your whole team can access from anywhere.
+          </p>
           <p style={{ ...s.bodyText, color: '#fff', fontWeight: 600, marginBottom: 48 }}>
             The offseason is where champions are made. Offseaz makes sure no athlete wastes it.
           </p>

@@ -705,6 +705,21 @@ export default function Survey() {
       <div style={st.scrollArea}>
         <div style={st.container}>
 
+          {/* Welcome message — step 1 only */}
+          {step === 1 && (
+            <div className="survey-step-enter" key="welcome" style={{ marginBottom: 4 }}>
+              <p style={{ fontSize: 13, fontWeight: 700, color: ORANGE, letterSpacing: 0.4, textTransform: 'uppercase', marginBottom: 6 }}>
+                Welcome to Offseaz
+              </p>
+              <h2 style={{ fontSize: 26, fontWeight: 800, color: 'var(--text)', lineHeight: 1.2, marginBottom: 8 }}>
+                Let's build your<br />weight room plan.
+              </h2>
+              <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.6, marginBottom: 28 }}>
+                Answer a few quick questions and we'll generate a sport-specific, periodized training blueprint built for you.
+              </p>
+            </div>
+          )}
+
           {/* Step header */}
           <div className="survey-step-enter" key={`header-${step}`} style={st.header}>
             <div style={st.tag}>{meta.tag}</div>

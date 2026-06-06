@@ -1,88 +1,48 @@
-import { useState } from 'react'
+import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon } from '../components/Icons'
 import { SPORT_TEMPLATES, TEMPLATE_GOALS } from '../data/blueprintTemplates'
 
+const ORANGE = '#F75709'
+const BLUE   = '#308EBD'
+const YELLOW = '#F0BE24'
+const CELL_W = 220
+const LABEL_W = 130
+
 const SPORT_EMOJIS = {
-  baseball:      '⚾',
-  softball:      '🥎',
-  football:      '🏈',
-  basketball:    '🏀',
-  soccer:        '⚽',
-  hockey:        '🏒',
-  rugby:         '🏉',
-  tennis:        '🎾',
-  golf:          '⛳',
-  wrestling:     '🤼',
-  volleyball:    '🏐',
-  track:         '🏃',
-  cross_country: '🏃‍♀️',
-  lacrosse:      '🥍',
-  swimming:      '🏊',
+  baseball: '⚾', softball: '🥎', football: '🏈', basketball: '🏀',
+  soccer: '⚽', hockey: '🏒', rugby: '🏉', tennis: '🎾', golf: '⛳',
+  wrestling: '🤼', volleyball: '🏐', track: '🏃', cross_country: '🏃‍♀️',
+  lacrosse: '🥍', swimming: '🏊',
 }
 
-const ORANGE  = '#F75709'
-const BLUE    = '#308EBD'
-const YELLOW  = '#F0BE24'
-
-// ─── Static templates ─────────────────────────────────────────────────────────
-
 const TEMPLATES = [
-  {
-    label: 'Start fresh',
-    description: 'Build your own plan from scratch',
-    Icon: PlusIcon,
-    data: null,
-  },
-  {
-    label: '4-Week General Conditioning',
-    description: 'Mixed fitness foundation — a balanced starting block',
-    Icon: CalendarIcon,
-    data: {
-      title: '4-Week General Conditioning',
-      description: 'A balanced 4-week block covering strength, conditioning, and mobility.',
-      num_weeks: 4,
+  { label: 'Start fresh', description: 'Build your own plan from scratch', Icon: PlusIcon, data: null },
+  { label: '4-Week General Conditioning', description: 'Mixed fitness foundation — a balanced starting block', Icon: CalendarIcon,
+    data: { title: '4-Week General Conditioning', description: 'A balanced 4-week block covering strength, conditioning, and mobility.', num_weeks: 4,
       weeks: [
-        { week_number: 1, objective: 'Establish baseline fitness and movement patterns', sessions: [{ day: 'Day 1', focus: 'Full Body Strength', description: 'Squat 3x10, Push-up 3x15, Row 3x12, Plank 3x30s' }, { day: 'Day 2', focus: 'Conditioning', description: '20 min steady-state cardio at moderate pace' }, { day: 'Day 4', focus: 'Full Body Strength', description: 'Deadlift 3x8, Dumbbell press 3x10, Pull-up 3x8' }, { day: 'Day 5', focus: 'Mobility & Recovery', description: '30 min stretching and foam rolling' }] },
-        { week_number: 2, objective: 'Increase training volume', sessions: [{ day: 'Day 1', focus: 'Lower Body', description: 'Squat 4x10, Lunge 3x12 each, Calf raise 4x15' }, { day: 'Day 2', focus: 'Conditioning', description: '25 min cardio — mix of steady state and intervals' }, { day: 'Day 3', focus: 'Upper Body', description: 'Push-up 4x15, Dumbbell row 4x12, Shoulder press 3x10' }, { day: 'Day 5', focus: 'Active Recovery', description: 'Walk 30 min + full body stretch' }] },
-        { week_number: 3, objective: 'Build intensity and challenge limits', sessions: [{ day: 'Day 1', focus: 'Full Body Circuit', description: '4 rounds: Squat 15, Push-up 15, Row 15, Burpee 10 — 60s rest between rounds' }, { day: 'Day 3', focus: 'Conditioning', description: '6x400m run at 85% effort, 90s rest' }, { day: 'Day 5', focus: 'Strength', description: 'Deadlift 4x6, Bench press 4x8, Pull-up 4x6' }] },
-        { week_number: 4, objective: 'Test improvements and recover', sessions: [{ day: 'Day 1', focus: 'Fitness Test', description: 'Max push-ups, 1-mile run time, max pull-ups — record results' }, { day: 'Day 3', focus: 'Light Full Body', description: 'All movements at 60% intensity — focus on form' }, { day: 'Day 5', focus: 'Recovery & Reflect', description: 'Yoga or stretching 30 min, review progress' }] },
-      ],
-    },
-  },
-  {
-    label: '6-Week Strength Block',
-    description: 'Progressive overload — built to add weight every week',
-    Icon: DumbbellIcon,
-    data: {
-      title: '6-Week Strength Block',
-      description: 'A classic 6-week progressive overload program targeting main lifts.',
-      num_weeks: 6,
+        { week_number: 1, objective: 'Establish baseline fitness', sessions: [{ day: 'Day 1', focus: 'Full Body Strength', description: 'Squat 3x10, Push-up 3x15, Row 3x12, Plank 3x30s' }, { day: 'Day 2', focus: 'Conditioning', description: '20 min steady-state cardio' }, { day: 'Day 4', focus: 'Full Body Strength', description: 'Deadlift 3x8, DB press 3x10, Pull-up 3x8' }] },
+        { week_number: 2, objective: 'Increase training volume', sessions: [{ day: 'Day 1', focus: 'Lower Body', description: 'Squat 4x10, Lunge 3x12 each, Calf raise 4x15' }, { day: 'Day 2', focus: 'Conditioning', description: '25 min cardio' }, { day: 'Day 3', focus: 'Upper Body', description: 'Push-up 4x15, DB row 4x12, Press 3x10' }] },
+        { week_number: 3, objective: 'Build intensity', sessions: [{ day: 'Day 1', focus: 'Full Body Circuit', description: '4 rounds: Squat 15, Push-up 15, Row 15, Burpee 10' }, { day: 'Day 3', focus: 'Conditioning', description: '6x400m run at 85% effort' }, { day: 'Day 5', focus: 'Strength', description: 'Deadlift 4x6, Bench 4x8, Pull-up 4x6' }] },
+        { week_number: 4, objective: 'Test and recover', sessions: [{ day: 'Day 1', focus: 'Fitness Test', description: 'Max push-ups, 1-mile run, max pull-ups' }, { day: 'Day 3', focus: 'Light Full Body', description: 'All movements at 60% — focus on form' }, { day: 'Day 5', focus: 'Recovery', description: 'Yoga or stretching 30 min' }] },
+      ] } },
+  { label: '6-Week Strength Block', description: 'Progressive overload — built to add weight every week', Icon: DumbbellIcon,
+    data: { title: '6-Week Strength Block', description: 'A classic 6-week progressive overload program.', num_weeks: 6,
       weeks: [
-        { week_number: 1, objective: 'Learn movement patterns at moderate load (65–70% effort)', sessions: [{ day: 'Day 1', focus: 'Squat & Accessory', description: 'Back squat 4x6 @ 65%, Leg press 3x10, Leg curl 3x12' }, { day: 'Day 3', focus: 'Bench & Accessory', description: 'Bench press 4x6 @ 65%, Dumbbell fly 3x12, Tricep dip 3x10' }, { day: 'Day 5', focus: 'Deadlift & Accessory', description: 'Deadlift 4x5 @ 65%, Romanian deadlift 3x8, Back extension 3x12' }] },
-        { week_number: 2, objective: 'Add 5 lbs to all main lifts', sessions: [{ day: 'Day 1', focus: 'Squat Day', description: 'Back squat 4x5 @ 70%, Leg press 3x10, Nordic curl 3x8' }, { day: 'Day 3', focus: 'Bench Day', description: 'Bench press 4x5 @ 70%, Incline dumbbell 3x10, Skull crushers 3x10' }, { day: 'Day 5', focus: 'Deadlift Day', description: 'Deadlift 4x4 @ 70%, Barbell row 4x8, Face pull 3x15' }] },
-        { week_number: 3, objective: 'Push intensity to 75–80%', sessions: [{ day: 'Day 1', focus: 'Squat Day', description: 'Back squat 5x4 @ 75%, Bulgarian split squat 3x8 each' }, { day: 'Day 3', focus: 'Bench Day', description: 'Bench press 5x4 @ 75%, Push-up finisher 2x max' }, { day: 'Day 5', focus: 'Deadlift Day', description: 'Deadlift 5x3 @ 75%, Single-leg RDL 3x10 each' }] },
-        { week_number: 4, objective: 'Deload — reduce volume, keep intensity', sessions: [{ day: 'Day 1', focus: 'Squat (Deload)', description: 'Back squat 3x4 @ 60%, Light leg work' }, { day: 'Day 3', focus: 'Bench (Deload)', description: 'Bench press 3x4 @ 60%, Light accessory work' }, { day: 'Day 5', focus: 'Deadlift (Deload)', description: 'Deadlift 3x3 @ 60%, Mobility work' }] },
-        { week_number: 5, objective: 'Peak — reach 85–90% intensity', sessions: [{ day: 'Day 1', focus: 'Squat Day', description: 'Back squat 4x3 @ 85%, Pause squat 2x3 @ 70%' }, { day: 'Day 3', focus: 'Bench Day', description: 'Bench press 4x3 @ 85%, Spoto press 2x4 @ 70%' }, { day: 'Day 5', focus: 'Deadlift Day', description: 'Deadlift 4x2 @ 85%, Rack pull 2x3' }] },
-        { week_number: 6, objective: 'Test maxes and celebrate progress', sessions: [{ day: 'Day 1', focus: 'Max Squat Attempt', description: 'Warm up thoroughly, attempt One Rep Max back squat, record result' }, { day: 'Day 3', focus: 'Max Bench Attempt', description: 'Warm up thoroughly, attempt One Rep Max bench press, record result' }, { day: 'Day 5', focus: 'Max Deadlift Attempt', description: 'Warm up thoroughly, attempt One Rep Max deadlift, record result' }] },
-      ],
-    },
-  },
-  {
-    label: '2-Week Peaking',
-    description: 'Pre-season ramp — sharpen speed and explosiveness',
-    Icon: BoltIcon,
-    data: {
-      title: '2-Week Peaking',
-      description: 'Sharpen explosiveness and sport readiness in the final 2 weeks before the season.',
-      num_weeks: 2,
+        { week_number: 1, objective: '65–70% effort', sessions: [{ day: 'Day 1', focus: 'Squat', description: 'Back squat 4x6 @ 65%' }, { day: 'Day 3', focus: 'Bench', description: 'Bench press 4x6 @ 65%' }, { day: 'Day 5', focus: 'Deadlift', description: 'Deadlift 4x5 @ 65%' }] },
+        { week_number: 2, objective: 'Add 5 lbs to all lifts', sessions: [{ day: 'Day 1', focus: 'Squat', description: 'Back squat 4x5 @ 70%' }, { day: 'Day 3', focus: 'Bench', description: 'Bench press 4x5 @ 70%' }, { day: 'Day 5', focus: 'Deadlift', description: 'Deadlift 4x4 @ 70%' }] },
+        { week_number: 3, objective: '75–80% intensity', sessions: [{ day: 'Day 1', focus: 'Squat', description: 'Back squat 5x4 @ 75%' }, { day: 'Day 3', focus: 'Bench', description: 'Bench press 5x4 @ 75%' }, { day: 'Day 5', focus: 'Deadlift', description: 'Deadlift 5x3 @ 75%' }] },
+        { week_number: 4, objective: 'Deload', sessions: [{ day: 'Day 1', focus: 'Squat (Deload)', description: 'Back squat 3x4 @ 60%' }, { day: 'Day 3', focus: 'Bench (Deload)', description: 'Bench 3x4 @ 60%' }, { day: 'Day 5', focus: 'Deadlift (Deload)', description: 'Deadlift 3x3 @ 60%' }] },
+        { week_number: 5, objective: 'Peak 85–90%', sessions: [{ day: 'Day 1', focus: 'Squat', description: 'Back squat 4x3 @ 85%' }, { day: 'Day 3', focus: 'Bench', description: 'Bench 4x3 @ 85%' }, { day: 'Day 5', focus: 'Deadlift', description: 'Deadlift 4x2 @ 85%' }] },
+        { week_number: 6, objective: 'Test maxes', sessions: [{ day: 'Day 1', focus: 'Max Squat', description: 'Warm up, attempt 1RM back squat' }, { day: 'Day 3', focus: 'Max Bench', description: 'Warm up, attempt 1RM bench' }, { day: 'Day 5', focus: 'Max Deadlift', description: 'Warm up, attempt 1RM deadlift' }] },
+      ] } },
+  { label: '2-Week Peaking', description: 'Pre-season ramp — sharpen speed and explosiveness', Icon: BoltIcon,
+    data: { title: '2-Week Peaking', description: 'Sharpen explosiveness in the final 2 weeks before season.', num_weeks: 2,
       weeks: [
-        { week_number: 1, objective: 'High-intensity speed and power work', sessions: [{ day: 'Day 1', focus: 'Sprint & Power', description: '6x40m sprints @ 95%, 3 min rest · Box jumps 5x5 · Broad jump 5x3' }, { day: 'Day 2', focus: 'Upper Body Activation', description: 'Med ball chest pass 4x8 · Push press 4x4 @ 75% · Band pull-aparts 3x15' }, { day: 'Day 4', focus: 'Agility & Change of Direction', description: '5-10-5 drill 6x · T-drill 4x · Ladder footwork 10 min' }, { day: 'Day 5', focus: 'Light Full Body', description: 'All movements at 50% — prime the CNS, do not fatigue' }] },
-        { week_number: 2, objective: 'Taper — reduce volume, stay sharp', sessions: [{ day: 'Day 1', focus: 'Sprint Maintenance', description: '4x30m sprint @ 90%, full rest · 3x broad jump — stay fresh' }, { day: 'Day 3', focus: 'Activation', description: 'Band walks 2x15, Glute bridge 2x15, Push-up 2x10 — light and fast' }, { day: 'Day 5', focus: 'Mental & Physical Prep', description: 'Walk-through movements, visualization, light stretch — ready for game day' }] },
-      ],
-    },
-  },
+        { week_number: 1, objective: 'High-intensity speed and power', sessions: [{ day: 'Day 1', focus: 'Sprint & Power', description: '6x40m @ 95% · Box jumps 5x5 · Broad jump 5x3' }, { day: 'Day 2', focus: 'Upper Activation', description: 'Med ball chest pass 4x8 · Push press 4x4 @ 75%' }, { day: 'Day 4', focus: 'Agility', description: '5-10-5 drill 6x · T-drill 4x · Ladder 10 min' }] },
+        { week_number: 2, objective: 'Taper — stay sharp', sessions: [{ day: 'Day 1', focus: 'Sprint Maintenance', description: '4x30m @ 90% · 3x broad jump' }, { day: 'Day 3', focus: 'Activation', description: 'Band walks 2x15, Glute bridge 2x15, Push-up 2x10' }] },
+      ] } },
 ]
 
 function makeWeeks(n, existing = []) {
@@ -93,71 +53,212 @@ function makeWeeks(n, existing = []) {
   })
 }
 
-function blankSession() {
-  return { day: '', focus: '', description: '' }
+function blankSession(di) {
+  return { day: `Day ${di + 1}`, focus: '', description: '', locked: false }
 }
+
+function getMaxDays(weeks) {
+  return Math.max(1, ...weeks.map(w => w.sessions.length))
+}
+
+// ─── Edit drawer ──────────────────────────────────────────────────────────────
+
+function EditDrawer({ cell, weekNum, dayIdx, onChange, onClose, onCopy, onPaste, onLock, clipboard }) {
+  return (
+    <div style={dr.overlay} onClick={onClose}>
+      <div style={dr.drawer} onClick={e => e.stopPropagation()}>
+        <div style={dr.drawerHeader}>
+          <div>
+            <span style={dr.drawerWeek}>Week {weekNum}</span>
+            <span style={dr.drawerDay}> · Day {dayIdx + 1}</span>
+          </div>
+          <button onClick={onClose} style={dr.closeBtn}>✕</button>
+        </div>
+
+        <label style={dr.label}>Day label</label>
+        <input style={dr.input} value={cell.day || ''} onChange={e => onChange({ day: e.target.value })} placeholder={`Day ${dayIdx + 1}`} />
+
+        <label style={dr.label}>Focus</label>
+        <input style={dr.input} value={cell.focus || ''} onChange={e => onChange({ focus: e.target.value })} placeholder="e.g. Lower Power" />
+
+        <label style={dr.label}>Description</label>
+        <textarea style={dr.textarea} rows={8} value={cell.description || ''} onChange={e => onChange({ description: e.target.value })} placeholder="Exercises, sets, reps, notes…" />
+
+        <div style={dr.drawerActions}>
+          <button
+            style={{ ...dr.actionBtn, background: cell.locked ? 'rgba(247,87,9,0.12)' : 'var(--card-inner)', color: cell.locked ? ORANGE : 'var(--text-2)', border: `1px solid ${cell.locked ? ORANGE : 'var(--border)'}` }}
+            onClick={onLock}
+          >
+            {cell.locked ? '🔐 Locked' : '🔓 Unlocked'}
+          </button>
+          <button style={{ ...dr.actionBtn, background: 'var(--card-inner)', color: 'var(--text-2)', border: '1px solid var(--border)' }} onClick={onCopy}>
+            📋 Copy Session
+          </button>
+          {clipboard && (
+            <button style={{ ...dr.actionBtn, background: 'rgba(247,87,9,0.1)', color: ORANGE, border: `1px solid ${ORANGE}` }} onClick={onPaste}>
+              ⬇ Paste
+            </button>
+          )}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+// ─── Bulk edit modal ──────────────────────────────────────────────────────────
+
+function BulkEditModal({ count, focus, desc, onFocusChange, onDescChange, onApply, onClose }) {
+  return (
+    <div style={dr.overlay} onClick={onClose}>
+      <div style={{ ...dr.drawer, maxWidth: 420 }} onClick={e => e.stopPropagation()}>
+        <div style={dr.drawerHeader}>
+          <span style={{ fontSize: 16, fontWeight: 700, color: 'var(--text)' }}>
+            Bulk Edit — {count} session{count !== 1 ? 's' : ''}
+          </span>
+          <button onClick={onClose} style={dr.closeBtn}>✕</button>
+        </div>
+        <p style={{ fontSize: 13, color: 'var(--text-2)', marginBottom: 16 }}>
+          Fill in only the fields you want to change. Leave blank to keep existing values.
+        </p>
+        <label style={dr.label}>Focus (overwrite all selected)</label>
+        <input style={dr.input} value={focus} onChange={e => onFocusChange(e.target.value)} placeholder="e.g. Lower Power" />
+        <label style={dr.label}>Description (overwrite all selected)</label>
+        <textarea style={dr.textarea} rows={5} value={desc} onChange={e => onDescChange(e.target.value)} placeholder="Exercises, sets, reps, notes…" />
+        <button style={{ ...dr.applyBtn, marginTop: 20 }} onClick={onApply}>
+          Apply to {count} session{count !== 1 ? 's' : ''}
+        </button>
+      </div>
+    </div>
+  )
+}
+
+// ─── Main component ───────────────────────────────────────────────────────────
 
 export default function BlueprintBuilder() {
   const navigate = useNavigate()
-  const [step, setStep] = useState(0)
+  const [phase, setPhase] = useState('pick')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
-  const [daysPick, setDaysPick] = useState(null)          // null | { sport, pos } — for day-count sub-picker
-  const [sportTab, setSportTab] = useState('general')     // 'general' | sport.id
-  const [goalPick, setGoalPick] = useState(null)          // null | { sport, pos }
+  const [daysPick, setDaysPick] = useState(null)
+  const [sportTab, setSportTab] = useState('general')
+  const [goalPick, setGoalPick] = useState(null)
+  const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768)
 
-  const [form, setForm] = useState({
-    title: '',
-    description: '',
-    num_weeks: 4,
-    weeks: makeWeeks(4),
-  })
+  const [form, setForm] = useState({ title: '', description: '', num_weeks: 4, weeks: makeWeeks(4) })
 
-  const totalSteps = form.num_weeks + 2
-  const isReviewStep = step === totalSteps
+  // Grid state
+  const [clipboard, setClipboard] = useState(null)
+  const [selected, setSelected] = useState(new Set())
+  const [editing, setEditing] = useState(null)
+  const [activeWeek, setActiveWeek] = useState(0)
+  const [bulkEditOpen, setBulkEditOpen] = useState(false)
+  const [bulkFocus, setBulkFocus] = useState('')
+  const [bulkDesc, setBulkDesc] = useState('')
+
+  useEffect(() => {
+    const onResize = () => setIsMobile(window.innerWidth < 768)
+    window.addEventListener('resize', onResize)
+    return () => window.removeEventListener('resize', onResize)
+  }, [])
+
+  // ── Template selection ──────────────────────────────────────────────────────
 
   function selectTemplate(tpl) {
-    if (!tpl.data) {
-      setForm({ title: '', description: '', num_weeks: 4, weeks: makeWeeks(4) })
-    } else {
-      setForm({
-        title: tpl.data.title,
-        description: tpl.data.description,
-        num_weeks: tpl.data.num_weeks,
-        weeks: makeWeeks(tpl.data.num_weeks, tpl.data.weeks),
-      })
-    }
-    setStep(1)
+    if (!tpl.data) setForm({ title: '', description: '', num_weeks: 4, weeks: makeWeeks(4) })
+    else setForm({ title: tpl.data.title, description: tpl.data.description, num_weeks: tpl.data.num_weeks, weeks: makeWeeks(tpl.data.num_weeks, tpl.data.weeks) })
+    setPhase('build')
   }
 
   function selectDayPickerTemplate(daysPerWeek) {
     const { sport, pos } = daysPick
     const weeks = sport.generateWeeks(pos.id, 'standard', daysPerWeek)
-    setForm({
-      title: `${sport.label} — 16-Week Offseason (${daysPerWeek} Days/Week)`,
-      description: sport.templateDescription || `16-week phase-based offseason program for ${sport.label.toLowerCase()} athletes.`,
-      num_weeks: 16,
-      weeks,
-    })
+    setForm({ title: `${sport.label} — 16-Week Offseason (${daysPerWeek} Days/Week)`, description: sport.templateDescription || `16-week program for ${sport.label.toLowerCase()} athletes.`, num_weeks: 16, weeks })
     setDaysPick(null)
-    setStep(1)
+    setPhase('build')
   }
 
   function selectSportTemplate(sport, pos, goal) {
     const weeks = sport.generateWeeks(pos.id, goal.id)
     const goalSuffix = goal.id === 'muscle_gain' ? ' — Muscle Gain' : ''
-    setForm({
-      title: `${sport.label} — ${pos.label} 16-Week Offseason${goalSuffix}`,
-      description: `16-week phase-based offseason program for ${pos.label} (${pos.sublabel}). ${goal.desc}`,
-      num_weeks: 16,
-      weeks,
-    })
+    setForm({ title: `${sport.label} — ${pos.label} 16-Week Offseason${goalSuffix}`, description: `16-week offseason for ${pos.label} (${pos.sublabel}). ${goal.desc}`, num_weeks: 16, weeks })
     setGoalPick(null)
-    setStep(1)
+    setPhase('build')
   }
 
-  function setField(field, value) {
-    setForm(prev => ({ ...prev, [field]: value }))
+  // ── Grid operations ─────────────────────────────────────────────────────────
+
+  function getCell(wi, di) { return form.weeks[wi]?.sessions[di] || null }
+
+  function setCell(wi, di, updates) {
+    setForm(prev => ({
+      ...prev,
+      weeks: prev.weeks.map((w, i) => {
+        if (i !== wi) return w
+        const sessions = [...w.sessions]
+        while (sessions.length <= di) sessions.push(blankSession(sessions.length))
+        sessions[di] = { ...sessions[di], ...updates }
+        return { ...w, sessions }
+      }),
+    }))
+  }
+
+  function copyCell(wi, di) {
+    const c = getCell(wi, di)
+    if (c) setClipboard({ day: c.day, focus: c.focus, description: c.description })
+  }
+
+  function pasteCell(wi, di) {
+    if (!clipboard) return
+    setCell(wi, di, { focus: clipboard.focus, description: clipboard.description })
+  }
+
+  function pasteToAllWeeks(di) {
+    if (!clipboard) return
+    setForm(prev => ({
+      ...prev,
+      weeks: prev.weeks.map(w => {
+        const sessions = [...w.sessions]
+        while (sessions.length <= di) sessions.push(blankSession(sessions.length))
+        sessions[di] = { ...sessions[di], focus: clipboard.focus, description: clipboard.description }
+        return { ...w, sessions }
+      }),
+    }))
+  }
+
+  function toggleLock(wi, di) {
+    const c = getCell(wi, di)
+    if (c) setCell(wi, di, { locked: !c.locked })
+    else setCell(wi, di, { ...blankSession(di), locked: true })
+  }
+
+  function toggleSelect(wi, di) {
+    const k = `${wi}-${di}`
+    setSelected(prev => { const n = new Set(prev); n.has(k) ? n.delete(k) : n.add(k); return n })
+  }
+
+  function addDay() {
+    const n = getMaxDays(form.weeks)
+    setForm(prev => ({ ...prev, weeks: prev.weeks.map(w => ({ ...w, sessions: [...w.sessions, blankSession(n)] })) }))
+  }
+
+  function removeDay(di) {
+    setForm(prev => ({ ...prev, weeks: prev.weeks.map(w => ({ ...w, sessions: w.sessions.filter((_, i) => i !== di) })) }))
+    if (editing?.di === di) setEditing(null)
+    setSelected(prev => { const n = new Set(); for (const k of prev) { const [, d] = k.split('-').map(Number); if (d !== di) n.add(k) }; return n })
+  }
+
+  function applyBulkEdit() {
+    setForm(prev => ({
+      ...prev,
+      weeks: prev.weeks.map((w, wi) => ({
+        ...w,
+        sessions: w.sessions.map((s, di) => {
+          if (!selected.has(`${wi}-${di}`)) return s
+          return { ...s, ...(bulkFocus.trim() ? { focus: bulkFocus } : {}), ...(bulkDesc.trim() ? { description: bulkDesc } : {}) }
+        }),
+      })),
+    }))
+    setSelected(new Set()); setBulkEditOpen(false); setBulkFocus(''); setBulkDesc('')
   }
 
   function setNumWeeks(n) {
@@ -165,45 +266,9 @@ export default function BlueprintBuilder() {
     setForm(prev => ({ ...prev, num_weeks: num, weeks: makeWeeks(num, prev.weeks) }))
   }
 
-  function setWeekField(weekIdx, field, value) {
-    setForm(prev => {
-      const weeks = prev.weeks.map((w, i) => i === weekIdx ? { ...w, [field]: value } : w)
-      return { ...prev, weeks }
-    })
-  }
-
-  function addSession(weekIdx) {
-    setForm(prev => {
-      const weeks = prev.weeks.map((w, i) =>
-        i === weekIdx ? { ...w, sessions: [...w.sessions, blankSession()] } : w
-      )
-      return { ...prev, weeks }
-    })
-  }
-
-  function removeSession(weekIdx, sessionIdx) {
-    setForm(prev => {
-      const weeks = prev.weeks.map((w, i) =>
-        i === weekIdx ? { ...w, sessions: w.sessions.filter((_, si) => si !== sessionIdx) } : w
-      )
-      return { ...prev, weeks }
-    })
-  }
-
-  function setSessionField(weekIdx, sessionIdx, field, value) {
-    setForm(prev => {
-      const weeks = prev.weeks.map((w, i) => {
-        if (i !== weekIdx) return w
-        const sessions = w.sessions.map((s, si) => si === sessionIdx ? { ...s, [field]: value } : s)
-        return { ...w, sessions }
-      })
-      return { ...prev, weeks }
-    })
-  }
-
   async function handleSubmit() {
-    setError('')
-    setSubmitting(true)
+    if (!form.title.trim()) { setError('Please enter a title for this blueprint.'); return }
+    setError(''); setSubmitting(true)
     try {
       const res = await api.post('/api/blueprints', form)
       navigate(`/coach/blueprints/${res.data.blueprint.id}`)
@@ -213,164 +278,95 @@ export default function BlueprintBuilder() {
     }
   }
 
-  const canAdvancePlanInfo = form.title.trim().length > 0
-  const progressPct = step === 0 ? 0 : Math.round((step / totalSteps) * 100)
+  // ── Template picker ─────────────────────────────────────────────────────────
 
-  // ── Template picker ───────────────────────────────────────────────────────────
-  if (step === 0) {
-    // Days/week sub-picker (for sports like Baseball that offer multiple training frequencies)
+  if (phase === 'pick') {
     if (daysPick) {
       const { sport } = daysPick
       return (
-        <div style={styles.container}>
-          <button style={styles.textBackBtn} onClick={() => setDaysPick(null)}>← Back to {sport.label}</button>
-          <h1 style={styles.pageTitle}>{sport.label} — 16-Week Offseason</h1>
-          <p style={styles.pageDesc}>How many days per week will your athletes train?</p>
-          <div style={styles.dayGrid}>
+        <div style={s.container}>
+          <button style={s.textBackBtn} onClick={() => setDaysPick(null)}>← Back to {sport.label}</button>
+          <h1 style={s.pageTitle}>{sport.label} — 16-Week Offseason</h1>
+          <p style={s.pageDesc}>How many days per week will your athletes train?</p>
+          <div style={s.dayGrid}>
             {sport.daysOptions.map(opt => (
-              <button key={opt.days} style={styles.dayCard} onClick={() => selectDayPickerTemplate(opt.days)}
+              <button key={opt.days} style={s.dayCard} onClick={() => selectDayPickerTemplate(opt.days)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
                 onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
-                <span style={styles.dayNumber}>{opt.days}</span>
-                <span style={styles.dayLabel}>days / week</span>
-                <span style={styles.dayDesc}>{opt.desc}</span>
+                <span style={s.dayNumber}>{opt.days}</span>
+                <span style={s.dayLabel}>days / week</span>
+                <span style={s.dayDesc}>{opt.desc}</span>
               </button>
             ))}
           </div>
-          <div style={styles.phaseInfo}>
-            <p style={styles.phaseInfoTitle}>Program Structure</p>
-            {sport.phases.map(ph => (
-              <div key={ph.num} style={styles.phaseRow}>
-                <span style={styles.phaseBadge}>Phase {ph.num}</span>
-                <span style={styles.phaseLabel}>{ph.label}</span>
-                <span style={styles.phaseWeeks}>Weeks {ph.weeks}</span>
-                <span style={styles.phasePct}>{ph.pct} of max</span>
-              </div>
-            ))}
-          </div>
+          <PhaseInfo phases={sport.phases} />
         </div>
       )
     }
 
-    // Sport template: goal sub-picker (Standard vs Muscle Gain)
     if (goalPick) {
       const { sport, pos } = goalPick
       return (
-        <div style={styles.container}>
-          <button style={styles.textBackBtn} onClick={() => setGoalPick(null)}>
-            ← Back to {sport.label}
-          </button>
-          <h1 style={styles.pageTitle}>{sport.label} — {pos.label}</h1>
-          <p style={styles.pageDesc}>{pos.desc}</p>
-          <p style={{ ...styles.sportMeta, marginBottom: 24 }}>
-            {sport.daysPerWeek} days/week · 16 weeks · 4 phases
-          </p>
-
-          <div style={styles.dayGrid}>
+        <div style={s.container}>
+          <button style={s.textBackBtn} onClick={() => setGoalPick(null)}>← Back to {sport.label}</button>
+          <h1 style={s.pageTitle}>{sport.label} — {pos.label}</h1>
+          <p style={s.pageDesc}>{pos.desc}</p>
+          <p style={{ ...s.sportMeta, marginBottom: 24 }}>{sport.daysPerWeek} days/week · 16 weeks · 4 phases</p>
+          <div style={s.dayGrid}>
             {TEMPLATE_GOALS.map(goal => (
-              <button
-                key={goal.id}
-                style={{
-                  ...styles.templateCard,
-                  ...(goal.id === 'muscle_gain' ? styles.templateCardFeatured : {}),
-                }}
+              <button key={goal.id} style={{ ...s.templateCard, ...(goal.id === 'muscle_gain' ? s.templateCardFeatured : {}) }}
                 onClick={() => selectSportTemplate(sport, pos, goal)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = goal.id === 'muscle_gain' ? 'rgba(240,190,36,0.4)' : 'var(--border)'}
-              >
-                <span style={styles.templateLabel}>{goal.label}</span>
-                <span style={styles.templateDesc}>{goal.desc}</span>
+                onMouseLeave={e => e.currentTarget.style.borderColor = goal.id === 'muscle_gain' ? 'rgba(240,190,36,0.4)' : 'var(--border)'}>
+                <span style={s.templateLabel}>{goal.label}</span>
+                <span style={s.templateDesc}>{goal.desc}</span>
               </button>
             ))}
           </div>
-
-          <div style={styles.phaseInfo}>
-            <p style={styles.phaseInfoTitle}>Program Structure</p>
-            {sport.phases.map(ph => (
-              <div key={ph.num} style={styles.phaseRow}>
-                <span style={styles.phaseBadge}>Phase {ph.num}</span>
-                <span style={styles.phaseLabel}>{ph.label}</span>
-                <span style={styles.phaseWeeks}>Weeks {ph.weeks}</span>
-                <span style={styles.phasePct}>{ph.pct}</span>
-              </div>
-            ))}
-          </div>
+          <PhaseInfo phases={sport.phases} />
         </div>
       )
     }
 
-    // Main template picker
-    const activeSport = SPORT_TEMPLATES.find(s => s.id === sportTab)
-
+    const activeSport = SPORT_TEMPLATES.find(sp => sp.id === sportTab)
     return (
-      <div style={styles.container}>
-        <h1 style={styles.pageTitle}>Create Blueprint</h1>
-        <p style={styles.pageDesc}>Choose a sport-specific template or start from scratch.</p>
-
-        {/* Sport tab bar */}
-        <div style={styles.sportTabBar}>
-          <button
-            style={{ ...styles.sportTabBtn, ...(sportTab === 'general' ? styles.sportTabBtnActive : {}) }}
-            onClick={() => setSportTab('general')}
-          >
-            General
-          </button>
-          {SPORT_TEMPLATES.map(s => (
-            <button
-              key={s.id}
-              style={{ ...styles.sportTabBtn, ...(sportTab === s.id ? styles.sportTabBtnActive : {}) }}
-              onClick={() => setSportTab(s.id)}
-            >
-              {SPORT_EMOJIS[s.id] && <span style={{ marginRight: 5 }}>{SPORT_EMOJIS[s.id]}</span>}
-              {s.label}
+      <div style={s.container}>
+        <h1 style={s.pageTitle}>Create Blueprint</h1>
+        <p style={s.pageDesc}>Choose a sport-specific template or start from scratch.</p>
+        <div style={s.sportTabBar}>
+          <button style={{ ...s.sportTabBtn, ...(sportTab === 'general' ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab('general')}>General</button>
+          {SPORT_TEMPLATES.map(sp => (
+            <button key={sp.id} style={{ ...s.sportTabBtn, ...(sportTab === sp.id ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab(sp.id)}>
+              {SPORT_EMOJIS[sp.id] && <span style={{ marginRight: 5 }}>{SPORT_EMOJIS[sp.id]}</span>}{sp.label}
             </button>
           ))}
         </div>
-
-        {/* General tab */}
         {sportTab === 'general' && (
-          <div style={styles.templateGrid}>
+          <div style={s.templateGrid}>
             {TEMPLATES.map(tpl => (
-              <button
-                key={tpl.label}
-                style={styles.templateCard}
-                onClick={() => selectTemplate(tpl)}
+              <button key={tpl.label} style={s.templateCard} onClick={() => selectTemplate(tpl)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}
-              >
-                <div style={styles.templateIconWrap}>
-                  <tpl.Icon size={22} color={ORANGE} />
-                </div>
-                <span style={styles.templateLabel}>{tpl.label}</span>
-                <span style={styles.templateDesc}>{tpl.description}</span>
+                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+                <div style={s.templateIconWrap}><tpl.Icon size={22} color={ORANGE} /></div>
+                <span style={s.templateLabel}>{tpl.label}</span>
+                <span style={s.templateDesc}>{tpl.description}</span>
               </button>
             ))}
           </div>
         )}
-
-        {/* Sport tab — position cards */}
         {activeSport && (
           <div>
-            <p style={styles.sportMeta}>
-              {activeSport.daysPerWeekPicker ? '3–6 days/week (choose below)' : `${activeSport.daysPerWeek} days/week`} · 16 weeks · 4 phases
-            </p>
-            <div style={styles.templateGrid}>
+            <p style={s.sportMeta}>{activeSport.daysPerWeekPicker ? '3–6 days/week (choose below)' : `${activeSport.daysPerWeek} days/week`} · 16 weeks · 4 phases</p>
+            <div style={s.templateGrid}>
               {activeSport.positions.map(pos => (
-                <button
-                  key={pos.id}
-                  style={{ ...styles.templateCard, ...styles.templateCardFeatured }}
+                <button key={pos.id} style={{ ...s.templateCard, ...s.templateCardFeatured }}
                   onClick={() => activeSport.daysPerWeekPicker ? setDaysPick({ sport: activeSport, pos }) : setGoalPick({ sport: activeSport, pos })}
                   onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(240,190,36,0.4)'}
-                >
-                  <span style={styles.templateLabel}>{pos.label}</span>
-                  <span style={{
-                    ...styles.templateBadge,
-                    color: ORANGE,
-                    background: 'rgba(247,87,9,0.1)',
-                  }}>{pos.sublabel}</span>
-                  <span style={styles.templateDesc}>{pos.desc}</span>
-                  <span style={styles.templateBadge}>16 weeks · 4 phases →</span>
+                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(240,190,36,0.4)'}>
+                  <span style={s.templateLabel}>{pos.label}</span>
+                  <span style={{ ...s.templateBadge, color: ORANGE, background: 'rgba(247,87,9,0.1)' }}>{pos.sublabel}</span>
+                  <span style={s.templateDesc}>{pos.desc}</span>
+                  <span style={s.templateBadge}>16 weeks · 4 phases →</span>
                 </button>
               ))}
             </div>
@@ -380,190 +376,229 @@ export default function BlueprintBuilder() {
     )
   }
 
-  // ── Steps 1+ ─────────────────────────────────────────────────────────────────
+  // ── Grid builder ────────────────────────────────────────────────────────────
+
+  const maxDays = getMaxDays(form.weeks)
+  const editingCell = editing ? (getCell(editing.wi, editing.di) || blankSession(editing.di)) : null
+
   return (
-    <div style={styles.container}>
-      <div style={styles.progressWrap}>
-        <button type="button" style={styles.backBtn} onClick={() => setStep(s => s - 1)}>← Back</button>
-        <div style={styles.progressBar}>
-          <div style={{ ...styles.progressFill, width: `${progressPct}%` }} />
+    <div style={g.page}>
+
+      {/* ── Top bar ── */}
+      <div style={g.topBar}>
+        <button onClick={() => setPhase('pick')} style={g.backBtn}>← Templates</button>
+        <div style={g.titleGroup}>
+          <input style={g.titleInput} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Blueprint title…" />
+          <select style={g.weeksSelect} value={form.num_weeks} onChange={e => setNumWeeks(e.target.value)}>
+            {Array.from({ length: 16 }, (_, i) => i + 1).map(n => <option key={n} value={n}>{n} {n === 1 ? 'wk' : 'wks'}</option>)}
+          </select>
         </div>
-        <span style={styles.progressPct}>
-          {isReviewStep ? 'Review' : step === 1 ? 'Plan info' : `Wk ${step - 1}/${form.num_weeks}`}
-        </span>
+        <button onClick={handleSubmit} disabled={submitting} style={g.saveBtn}>
+          {submitting ? 'Saving…' : 'Save Blueprint'}
+        </button>
       </div>
 
-      <div style={styles.card}>
-        {/* Step 1: Plan info */}
-        {step === 1 && (
-          <>
-            <h2 style={styles.stepTitle}>Plan details</h2>
-            <label style={styles.label}>Title *</label>
-            <input
-              style={styles.input}
-              value={form.title}
-              onChange={e => setField('title', e.target.value)}
-              placeholder="e.g. Fall Strength Block"
-              autoFocus
-            />
-            <label style={styles.label}>Description</label>
-            <textarea
-              style={styles.textarea}
-              value={form.description}
-              onChange={e => setField('description', e.target.value)}
-              placeholder="Optional overview for your athletes…"
-              rows={3}
-            />
-            <label style={styles.label}>Number of weeks</label>
-            <select
-              style={styles.input}
-              value={form.num_weeks}
-              onChange={e => setNumWeeks(e.target.value)}
-            >
-              {Array.from({ length: 16 }, (_, i) => i + 1).map(n => (
-                <option key={n} value={n}>{n} {n === 1 ? 'week' : 'weeks'}</option>
-              ))}
-            </select>
-          </>
-        )}
+      {error && <div style={g.errorBox}>{error}</div>}
 
-        {/* Steps 2..N+1: Week editors */}
-        {step >= 2 && !isReviewStep && (() => {
-          const wi = step - 2
-          const week = form.weeks[wi]
-          return (
-            <>
-              <h2 style={styles.stepTitle}>Week {week.week_number}</h2>
-              <label style={styles.label}>Weekly objective</label>
-              <textarea
-                style={styles.textarea}
-                value={week.objective}
-                onChange={e => setWeekField(wi, 'objective', e.target.value)}
-                placeholder="What's the focus of this week? (e.g. Build aerobic base)"
-                rows={2}
-              />
+      {/* ── Clipboard banner ── */}
+      {clipboard && (
+        <div style={g.clipBar}>
+          <span style={g.clipIcon}>📋</span>
+          <div style={g.clipInfo}>
+            <span style={g.clipFocus}>{clipboard.focus || 'Session copied'}</span>
+            <span style={g.clipHint}>Click any cell to paste · Use "Paste All ↓" on a day row to fill all {form.num_weeks} weeks instantly</span>
+          </div>
+          <button onClick={() => setClipboard(null)} style={g.clipClear}>✕ Clear</button>
+        </div>
+      )}
 
-              <div style={styles.sessionsHeader}>
-                <label style={{ ...styles.label, marginTop: 0 }}>Sessions</label>
-                <button type="button" style={styles.addBtn} onClick={() => addSession(wi)}>+ Add session</button>
-              </div>
+      {/* ── Bulk edit banner ── */}
+      {selected.size > 0 && (
+        <div style={g.bulkBar}>
+          <span style={g.bulkCount}>{selected.size} session{selected.size !== 1 ? 's' : ''} selected</span>
+          <button onClick={() => setBulkEditOpen(true)} style={g.bulkEditBtn}>✏ Bulk Edit</button>
+          <button onClick={() => setSelected(new Set())} style={g.bulkClearBtn}>Deselect All</button>
+        </div>
+      )}
 
-              {week.sessions.length === 0 && (
-                <p style={styles.emptyMsg}>No sessions yet — click "Add session" to build this week.</p>
-              )}
-
-              {week.sessions.map((s, si) => (
-                <div key={si} style={styles.sessionRow}>
-                  <div style={styles.sessionTopRow}>
-                    <input
-                      style={{ ...styles.input, flex: '0 0 100px' }}
-                      value={s.day}
-                      onChange={e => setSessionField(wi, si, 'day', e.target.value)}
-                      placeholder="Day 1"
-                    />
-                    <input
-                      style={{ ...styles.input, flex: 1 }}
-                      value={s.focus}
-                      onChange={e => setSessionField(wi, si, 'focus', e.target.value)}
-                      placeholder="Focus (e.g. Upper Body Strength)"
-                    />
-                    <button type="button" style={styles.removeBtn} onClick={() => removeSession(wi, si)}>×</button>
+      {/* ── Grid (desktop) / Card view (mobile) ── */}
+      {isMobile ? (
+        <div style={g.mobileWrap}>
+          {/* Week selector */}
+          <div style={g.weekTabs}>
+            {form.weeks.map((w, wi) => (
+              <button key={wi} style={{ ...g.weekTab, ...(activeWeek === wi ? g.weekTabActive : {}) }} onClick={() => setActiveWeek(wi)}>
+                W{w.week_number}
+              </button>
+            ))}
+          </div>
+          {/* Day cards */}
+          <div style={g.mobileCards}>
+            {form.weeks[activeWeek] && Array.from({ length: maxDays }, (_, di) => {
+              const cell = form.weeks[activeWeek].sessions[di]
+              const k = `${activeWeek}-${di}`
+              return (
+                <div key={di} style={{ ...g.mobileCard, ...(cell?.locked ? g.mobileCardLocked : {}) }}>
+                  <div style={g.mobileCardHeader}>
+                    <span style={g.mobileCardDay}>{cell?.day || `Day ${di + 1}`}</span>
+                    {cell?.locked && <span style={g.lockBadge}>🔐 Locked</span>}
+                    <div style={g.mobileCardBtns}>
+                      <button style={g.mobileActionBtn} onClick={() => copyCell(activeWeek, di)}>📋</button>
+                      {clipboard && <button style={{ ...g.mobileActionBtn, color: ORANGE }} onClick={() => pasteCell(activeWeek, di)}>⬇</button>}
+                      <button style={g.mobileActionBtn} onClick={() => setEditing({ wi: activeWeek, di })}>✏</button>
+                    </div>
                   </div>
-                  <textarea
-                    style={{ ...styles.textarea, marginTop: 8 }}
-                    value={s.description}
-                    onChange={e => setSessionField(wi, si, 'description', e.target.value)}
-                    placeholder="Describe the session… (exercises, sets, reps, notes)"
-                    rows={3}
-                  />
+                  {cell?.focus && <p style={g.mobileCardFocus}>{cell.focus}</p>}
+                  {cell?.description && <p style={g.mobileCardDesc}>{cell.description}</p>}
+                  {!cell?.focus && !cell?.description && <p style={g.emptyCell}>Tap ✏ to add session</p>}
+                </div>
+              )
+            })}
+            <button onClick={addDay} style={g.addDayBtn}>+ Add Day</button>
+          </div>
+        </div>
+      ) : (
+        <div style={g.gridOuter}>
+          <div style={{ minWidth: LABEL_W + form.num_weeks * CELL_W }}>
+            {/* Week header row */}
+            <div style={g.gridRow}>
+              <div style={{ ...g.cornerCell, width: LABEL_W, minWidth: LABEL_W }}>
+                <span style={g.cornerText}>Day / Week</span>
+              </div>
+              {form.weeks.map((w, wi) => (
+                <div key={wi} style={{ ...g.weekHeaderCell, width: CELL_W, minWidth: CELL_W }}>
+                  <span style={g.weekNum}>Week {w.week_number}</span>
+                  {w.objective && <span style={g.weekObj} title={w.objective}>{w.objective.slice(0, 30)}{w.objective.length > 30 ? '…' : ''}</span>}
                 </div>
               ))}
-            </>
-          )
-        })()}
+            </div>
 
-        {/* Review step */}
-        {isReviewStep && (
-          <>
-            <h2 style={styles.stepTitle}>Review your blueprint</h2>
-            <p style={styles.reviewMeta}><strong>{form.title}</strong> · {form.num_weeks} weeks</p>
-            {form.description && <p style={styles.reviewDesc}>{form.description}</p>}
-            {form.weeks.map(w => (
-              <div key={w.week_number} style={styles.reviewWeek}>
-                <p style={styles.reviewWeekTitle}>Week {w.week_number}</p>
-                {w.objective && <p style={styles.reviewObjective}>{w.objective}</p>}
-                {w.sessions.length === 0 && <p style={styles.reviewEmpty}>No sessions added</p>}
-                {w.sessions.map((s, si) => (
-                  <div key={si} style={styles.reviewSession}>
-                    <span style={styles.reviewDay}>{s.day || `Session ${si + 1}`}</span>
-                    <span style={styles.reviewFocus}>{s.focus}</span>
-                    {s.description && <p style={styles.reviewSessionDesc}>{s.description}</p>}
+            {/* Day rows */}
+            {Array.from({ length: maxDays }, (_, di) => (
+              <div key={di} style={g.gridRow}>
+                {/* Day label column */}
+                <div style={{ ...g.dayLabelCell, width: LABEL_W, minWidth: LABEL_W }}>
+                  <span style={g.dayLabelText}>Day {di + 1}</span>
+                  <div style={g.dayLabelBtns}>
+                    {clipboard && (
+                      <button style={g.pasteAllBtn} title={`Paste "${clipboard.focus || 'session'}" to all ${form.num_weeks} weeks`} onClick={() => pasteToAllWeeks(di)}>
+                        Paste All ↓
+                      </button>
+                    )}
+                    <button style={g.removeDayBtn} title="Remove this day from all weeks" onClick={() => removeDay(di)}>×</button>
                   </div>
-                ))}
+                </div>
+
+                {/* Session cells */}
+                {form.weeks.map((w, wi) => {
+                  const cell = w.sessions[di]
+                  const k = `${wi}-${di}`
+                  const isSel = selected.has(k)
+                  const isEdit = editing?.wi === wi && editing?.di === di
+
+                  return (
+                    <div key={wi}
+                      style={{ ...g.cell, width: CELL_W, minWidth: CELL_W, ...(isSel ? g.cellSelected : {}), ...(isEdit ? g.cellEditing : {}), ...(cell?.locked ? g.cellLocked : {}) }}
+                      onClick={() => setEditing({ wi, di })}
+                    >
+                      <div style={g.cellTop}>
+                        <input type="checkbox" style={g.checkbox} checked={isSel}
+                          onClick={e => { e.stopPropagation(); toggleSelect(wi, di) }}
+                          onChange={() => {}} />
+                        {cell?.locked && <span style={g.lockIcon} title="Locked">🔐</span>}
+                        {cell?.focus
+                          ? <span style={g.cellFocus}>{cell.focus}</span>
+                          : <span style={g.cellEmpty}>Empty — click to add</span>
+                        }
+                      </div>
+                      {cell?.description && (
+                        <p style={g.cellDesc}>{cell.description.slice(0, 80)}{cell.description.length > 80 ? '…' : ''}</p>
+                      )}
+                      <div style={g.cellFooter}>
+                        <button style={g.cellBtn} onClick={e => { e.stopPropagation(); copyCell(wi, di) }} title="Copy session">📋 Copy</button>
+                        {clipboard && (
+                          <button style={{ ...g.cellBtn, color: ORANGE }} onClick={e => { e.stopPropagation(); pasteCell(wi, di) }} title="Paste clipboard here">⬇ Paste</button>
+                        )}
+                      </div>
+                    </div>
+                  )
+                })}
               </div>
             ))}
-            {error && <div style={styles.errorBox}>{error}</div>}
-          </>
-        )}
 
-        <div style={{ ...styles.actions, justifyContent: step >= 2 && !isReviewStep ? 'space-between' : 'flex-end' }}>
-          {step >= 2 && !isReviewStep && (
-            <button
-              type="button"
-              style={styles.skipBtn}
-              onClick={() => setStep(totalSteps)}
-            >
-              Skip to Review →
-            </button>
-          )}
-          {isReviewStep ? (
-            <button type="button" style={styles.primaryBtn} onClick={handleSubmit} disabled={submitting}>
-              {submitting ? 'Saving…' : 'Save blueprint'}
-            </button>
-          ) : (
-            <button
-              type="button"
-              style={{
-                ...styles.primaryBtn,
-                opacity: step === 1 && !canAdvancePlanInfo ? 0.4 : 1,
-                cursor: step === 1 && !canAdvancePlanInfo ? 'not-allowed' : 'pointer',
-              }}
-              onClick={() => {
-                if (step === 1 && !canAdvancePlanInfo) return
-                setStep(s => s + 1)
-              }}
-              disabled={step === 1 && !canAdvancePlanInfo}
-            >
-              {step === form.num_weeks + 1 ? 'Review plan' : 'Next →'}
-            </button>
-          )}
+            {/* Add day row */}
+            <div style={g.addDayRow}>
+              <button onClick={addDay} style={g.addDayBtnGrid}>+ Add Day</button>
+            </div>
+          </div>
         </div>
-      </div>
+      )}
+
+      {/* ── Edit drawer ── */}
+      {editing && editingCell && (
+        <EditDrawer
+          cell={editingCell}
+          weekNum={form.weeks[editing.wi]?.week_number}
+          dayIdx={editing.di}
+          onChange={updates => setCell(editing.wi, editing.di, updates)}
+          onClose={() => setEditing(null)}
+          onCopy={() => copyCell(editing.wi, editing.di)}
+          onPaste={clipboard ? () => pasteCell(editing.wi, editing.di) : null}
+          onLock={() => toggleLock(editing.wi, editing.di)}
+          clipboard={clipboard}
+        />
+      )}
+
+      {/* ── Bulk edit modal ── */}
+      {bulkEditOpen && (
+        <BulkEditModal
+          count={selected.size}
+          focus={bulkFocus}
+          desc={bulkDesc}
+          onFocusChange={setBulkFocus}
+          onDescChange={setBulkDesc}
+          onApply={applyBulkEdit}
+          onClose={() => setBulkEditOpen(false)}
+        />
+      )}
     </div>
   )
 }
 
-const styles = {
-  container: { maxWidth: 680, margin: '0 auto' },
+function PhaseInfo({ phases }) {
+  return (
+    <div style={s.phaseInfo}>
+      <p style={s.phaseInfoTitle}>Program Structure</p>
+      {phases.map(ph => (
+        <div key={ph.num} style={s.phaseRow}>
+          <span style={s.phaseBadge}>Phase {ph.num}</span>
+          <span style={s.phaseLabel}>{ph.label}</span>
+          <span style={s.phaseWeeks}>Weeks {ph.weeks}</span>
+          <span style={s.phasePct}>{ph.pct}</span>
+        </div>
+      ))}
+    </div>
+  )
+}
 
+// ─── Template picker styles ───────────────────────────────────────────────────
+const s = {
+  container: { maxWidth: 680, margin: '0 auto' },
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', marginBottom: 6 },
   pageDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 28 },
-
-  templateGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(220px, 100%), 1fr))', gap: 12 },
-  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: 20, borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s', boxShadow: '0 2px 6px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)' },
+  templateGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(220px,100%),1fr))', gap: 12 },
+  templateCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 10, padding: 20, borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.18s', boxShadow: '0 2px 6px rgba(0,0,0,0.14)' },
   templateIconWrap: { width: 40, height: 40, borderRadius: 10, background: 'rgba(247,87,9,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   templateLabel: { fontSize: 15, fontWeight: 700, color: 'var(--text)' },
   templateDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
-  templateCardFeatured: { border: `2px solid rgba(240,190,36,0.4)`, background: 'rgba(240,190,36,0.04)' },
+  templateCardFeatured: { border: '2px solid rgba(240,190,36,0.4)', background: 'rgba(240,190,36,0.04)' },
   templateBadge: { fontSize: 11, fontWeight: 700, color: YELLOW, background: 'rgba(240,190,36,0.15)', borderRadius: 6, padding: '2px 8px', letterSpacing: 0.3 },
-
   textBackBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px 0' },
-  dayGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(180px, 100%), 1fr))', gap: 12, marginBottom: 28 },
-  dayCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: 20, borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.18s, box-shadow 0.18s, transform 0.18s', boxShadow: '0 2px 6px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)' },
+  dayGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(min(180px,100%),1fr))', gap: 12, marginBottom: 28 },
+  dayCard: { display: 'flex', flexDirection: 'column', alignItems: 'flex-start', gap: 6, padding: 20, borderRadius: 14, border: '2px solid var(--border)', background: 'var(--card)', cursor: 'pointer', textAlign: 'left', transition: 'border-color 0.18s', boxShadow: '0 2px 6px rgba(0,0,0,0.14)' },
   dayNumber: { fontSize: 36, fontWeight: 800, color: 'var(--text)', lineHeight: 1 },
   dayLabel: { fontSize: 13, fontWeight: 600, color: 'var(--text-2)' },
   dayDesc: { fontSize: 12, color: 'var(--text-3)', lineHeight: 1.4 },
-
   phaseInfo: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12, padding: 20 },
   phaseInfoTitle: { fontSize: 13, fontWeight: 700, color: 'var(--text-2)', marginBottom: 12, textTransform: 'uppercase', letterSpacing: 0.5 },
   phaseRow: { display: 'flex', alignItems: 'center', gap: 12, paddingBottom: 8, marginBottom: 8, borderBottom: '1px solid var(--border)' },
@@ -571,44 +606,101 @@ const styles = {
   phaseLabel: { fontSize: 13, fontWeight: 600, color: 'var(--text)', flex: 1 },
   phaseWeeks: { fontSize: 12, color: 'var(--text-2)', whiteSpace: 'nowrap' },
   phasePct: { fontSize: 12, fontWeight: 700, color: ORANGE, whiteSpace: 'nowrap' },
-
-  progressWrap: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 20 },
-  backBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, whiteSpace: 'nowrap' },
-  progressBar: { flex: 1, height: 4, background: 'var(--border)', borderRadius: 2 },
-  progressFill: { height: '100%', background: ORANGE, borderRadius: 2, transition: 'width 0.3s' },
-  progressPct: { fontSize: 12, color: 'var(--text-3)', whiteSpace: 'nowrap', minWidth: 60, textAlign: 'right' },
-
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 28 },
-  stepTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 20 },
-  label: { display: 'block', fontSize: 13, fontWeight: 600, color: 'var(--text-2)', marginBottom: 6, marginTop: 16 },
-  input: { width: '100%', padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', boxSizing: 'border-box', outline: 'none' },
-  textarea: { width: '100%', padding: '10px 14px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none' },
-
-  sessionsHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginTop: 20, marginBottom: 10 },
-  addBtn: { fontSize: 13, padding: '6px 14px', borderRadius: 8, border: `1px solid ${ORANGE}`, background: 'transparent', color: ORANGE, cursor: 'pointer', fontWeight: 600 },
-  emptyMsg: { color: 'var(--text-3)', fontSize: 13, padding: '10px 0' },
-  sessionRow: { border: '1px solid var(--border)', borderRadius: 10, padding: 14, marginBottom: 10, background: 'var(--card-inner)' },
-  sessionTopRow: { display: 'flex', gap: 8, alignItems: 'center' },
-  removeBtn: { background: 'none', border: 'none', color: 'var(--text-3)', cursor: 'pointer', fontSize: 18, padding: '0 4px', flexShrink: 0 },
-
-  actions: { display: 'flex', alignItems: 'center', marginTop: 28 },
-  primaryBtn: { padding: '11px 28px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', letterSpacing: 0.2, boxShadow: '0 2px 10px rgba(247,87,9,0.35)' },
-  skipBtn: { fontSize: 13, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, letterSpacing: 0.1 },
-  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginTop: 16 },
-
   sportTabBar: { display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 12, marginBottom: 16, scrollbarWidth: 'none' },
   sportTabBtn: { flexShrink: 0, padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' },
   sportTabBtnActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.07)' },
   sportMeta: { fontSize: 12, color: 'var(--text-3)', fontWeight: 600, marginBottom: 14, textTransform: 'uppercase', letterSpacing: 0.4 },
+}
 
-  reviewMeta: { fontSize: 16, color: 'var(--text)', marginBottom: 6 },
-  reviewDesc: { color: 'var(--text-2)', fontSize: 14, marginBottom: 16 },
-  reviewWeek: { borderTop: '1px solid var(--border)', paddingTop: 14, marginTop: 14 },
-  reviewWeekTitle: { fontWeight: 700, fontSize: 14, color: 'var(--text)', marginBottom: 4 },
-  reviewObjective: { color: 'var(--text-2)', fontSize: 13, marginBottom: 8, fontStyle: 'italic' },
-  reviewEmpty: { color: 'var(--text-3)', fontSize: 13 },
-  reviewSession: { marginBottom: 8 },
-  reviewDay: { fontSize: 11, fontWeight: 700, color: ORANGE, marginRight: 8 },
-  reviewFocus: { fontSize: 13, fontWeight: 600, color: 'var(--text)' },
-  reviewSessionDesc: { fontSize: 13, color: 'var(--text-2)', margin: '2px 0 0 0', lineHeight: 1.5 },
+// ─── Grid builder styles ──────────────────────────────────────────────────────
+const g = {
+  page: { display: 'flex', flexDirection: 'column', height: '100%', minHeight: 0 },
+
+  topBar: { display: 'flex', alignItems: 'center', gap: 10, padding: '12px 0 16px', flexWrap: 'wrap' },
+  backBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, whiteSpace: 'nowrap', flexShrink: 0 },
+  titleGroup: { flex: 1, display: 'flex', gap: 8, minWidth: 0 },
+  titleInput: { flex: 1, padding: '9px 13px', fontSize: 15, fontWeight: 600, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', minWidth: 0 },
+  weeksSelect: { padding: '9px 10px', fontSize: 13, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', cursor: 'pointer', flexShrink: 0 },
+  saveBtn: { padding: '9px 22px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 10px rgba(247,87,9,0.35)', flexShrink: 0 },
+  errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 12 },
+
+  clipBar: { display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', background: 'rgba(247,87,9,0.07)', border: `1px solid rgba(247,87,9,0.25)`, borderRadius: 10, marginBottom: 10, flexWrap: 'wrap' },
+  clipIcon: { fontSize: 18, flexShrink: 0 },
+  clipInfo: { flex: 1, display: 'flex', flexDirection: 'column', gap: 2, minWidth: 0 },
+  clipFocus: { fontSize: 13, fontWeight: 700, color: ORANGE },
+  clipHint: { fontSize: 12, color: 'var(--text-2)' },
+  clipClear: { fontSize: 12, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', flexShrink: 0 },
+
+  bulkBar: { display: 'flex', alignItems: 'center', gap: 12, padding: '9px 14px', background: 'rgba(48,142,189,0.07)', border: '1px solid rgba(48,142,189,0.25)', borderRadius: 10, marginBottom: 10 },
+  bulkCount: { fontSize: 13, fontWeight: 600, color: BLUE, flex: 1 },
+  bulkEditBtn: { fontSize: 13, fontWeight: 700, padding: '5px 14px', borderRadius: 7, border: `1px solid ${BLUE}`, background: 'transparent', color: BLUE, cursor: 'pointer' },
+  bulkClearBtn: { fontSize: 12, fontWeight: 500, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer' },
+
+  gridOuter: { flex: 1, overflowX: 'auto', overflowY: 'auto', borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)' },
+
+  gridRow: { display: 'flex', borderBottom: '1px solid var(--border)' },
+
+  cornerCell: { flexShrink: 0, padding: '10px 14px', borderRight: '1px solid var(--border)', background: 'var(--card)', display: 'flex', alignItems: 'center', position: 'sticky', left: 0, zIndex: 2 },
+  cornerText: { fontSize: 11, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.4 },
+
+  weekHeaderCell: { flexShrink: 0, padding: '10px 14px', borderRight: '1px solid var(--border)', background: 'var(--card)', display: 'flex', flexDirection: 'column', gap: 3 },
+  weekNum: { fontSize: 12, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' },
+  weekObj: { fontSize: 11, color: 'var(--text-3)', whiteSpace: 'nowrap', overflow: 'hidden', textOverflow: 'ellipsis' },
+
+  dayLabelCell: { flexShrink: 0, padding: '12px 14px', borderRight: '1px solid var(--border)', background: 'var(--card)', display: 'flex', flexDirection: 'column', gap: 6, justifyContent: 'center', position: 'sticky', left: 0, zIndex: 2 },
+  dayLabelText: { fontSize: 13, fontWeight: 700, color: 'var(--text)', whiteSpace: 'nowrap' },
+  dayLabelBtns: { display: 'flex', gap: 6, flexWrap: 'wrap' },
+  pasteAllBtn: { fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6, border: `1px solid ${ORANGE}`, background: 'rgba(247,87,9,0.1)', color: ORANGE, cursor: 'pointer', whiteSpace: 'nowrap' },
+  removeDayBtn: { fontSize: 14, fontWeight: 700, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', lineHeight: 1, padding: '1px 4px' },
+
+  cell: { flexShrink: 0, padding: 12, borderRight: '1px solid var(--border)', cursor: 'pointer', display: 'flex', flexDirection: 'column', gap: 6, transition: 'background 0.15s', minHeight: 110 },
+  cellSelected: { background: 'rgba(48,142,189,0.08)', outline: `2px solid ${BLUE}`, outlineOffset: -2 },
+  cellEditing: { background: 'rgba(247,87,9,0.06)', outline: `2px solid ${ORANGE}`, outlineOffset: -2 },
+  cellLocked: { background: 'rgba(247,87,9,0.03)' },
+
+  cellTop: { display: 'flex', alignItems: 'flex-start', gap: 6 },
+  checkbox: { marginTop: 2, flexShrink: 0, cursor: 'pointer', accentColor: BLUE },
+  lockIcon: { fontSize: 12, flexShrink: 0 },
+  cellFocus: { fontSize: 13, fontWeight: 700, color: 'var(--text)', lineHeight: 1.3, flex: 1 },
+  cellEmpty: { fontSize: 12, color: 'var(--text-3)', fontStyle: 'italic', flex: 1 },
+  cellDesc: { fontSize: 11, color: 'var(--text-2)', lineHeight: 1.4, margin: 0 },
+  cellFooter: { display: 'flex', gap: 8, marginTop: 'auto' },
+  cellBtn: { fontSize: 11, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0' },
+
+  addDayRow: { padding: '10px 14px' },
+  addDayBtnGrid: { fontSize: 13, fontWeight: 600, padding: '7px 16px', borderRadius: 8, border: `1px dashed var(--border)`, background: 'transparent', color: 'var(--text-2)', cursor: 'pointer' },
+
+  // Mobile
+  mobileWrap: { flex: 1, display: 'flex', flexDirection: 'column', gap: 12 },
+  weekTabs: { display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 },
+  weekTab: { flexShrink: 0, padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer' },
+  weekTabActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.08)' },
+  mobileCards: { display: 'flex', flexDirection: 'column', gap: 10 },
+  mobileCard: { padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)' },
+  mobileCardLocked: { borderColor: 'rgba(247,87,9,0.3)', background: 'rgba(247,87,9,0.03)' },
+  mobileCardHeader: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 },
+  mobileCardDay: { fontSize: 13, fontWeight: 700, color: 'var(--text)', flex: 1 },
+  lockBadge: { fontSize: 11, color: ORANGE, fontWeight: 600 },
+  mobileCardBtns: { display: 'flex', gap: 6 },
+  mobileActionBtn: { fontSize: 16, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px', color: 'var(--text-2)' },
+  mobileCardFocus: { fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 },
+  mobileCardDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5 },
+  emptyCell: { fontSize: 13, color: 'var(--text-3)', fontStyle: 'italic' },
+  addDayBtn: { fontSize: 13, fontWeight: 600, padding: '12px', borderRadius: 10, border: '1px dashed var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer', width: '100%' },
+}
+
+// ─── Drawer / modal styles ────────────────────────────────────────────────────
+const dr = {
+  overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.45)', zIndex: 200, display: 'flex', alignItems: 'stretch', justifyContent: 'flex-end' },
+  drawer: { width: '100%', maxWidth: 400, background: 'var(--bg)', borderLeft: '1px solid var(--border)', padding: 24, display: 'flex', flexDirection: 'column', overflowY: 'auto' },
+  drawerHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 20 },
+  drawerWeek: { fontSize: 16, fontWeight: 700, color: 'var(--text)' },
+  drawerDay: { fontSize: 14, color: 'var(--text-2)' },
+  closeBtn: { fontSize: 18, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: '0 4px', lineHeight: 1 },
+  label: { display: 'block', fontSize: 12, fontWeight: 700, color: 'var(--text-2)', marginBottom: 6, marginTop: 14, textTransform: 'uppercase', letterSpacing: 0.4 },
+  input: { width: '100%', padding: '10px 13px', fontSize: 14, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', boxSizing: 'border-box', outline: 'none' },
+  textarea: { width: '100%', padding: '10px 13px', fontSize: 13, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', resize: 'vertical', boxSizing: 'border-box', fontFamily: 'inherit', outline: 'none', lineHeight: 1.5 },
+  drawerActions: { display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 },
+  actionBtn: { fontSize: 13, fontWeight: 600, padding: '8px 14px', borderRadius: 8, cursor: 'pointer' },
+  applyBtn: { width: '100%', padding: '12px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer' },
 }

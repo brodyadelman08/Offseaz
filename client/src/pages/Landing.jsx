@@ -918,14 +918,13 @@ export default function Landing() {
             <span style={s.heroBadgeText}>Offseason Training Platform</span>
           </div>
 
-          {/* FIX 4 — no recruiting language */}
           <h1 style={s.headline}>
-            Train Smarter.<br />
-            <span style={s.headlineAccent}>Dominate Next Season.</span>
+            The Weight Room<br />
+            <span style={s.headlineAccent}>in an App.</span>
           </h1>
 
           <p style={s.heroSub}>
-            The complete offseason platform connecting coaches and athletes. Structured programs, live accountability, and direct communication — everything you need to turn the offseason into your biggest competitive advantage.
+            Sport-specific blueprints. Real accountability. Built for coaches and athletes who take the offseason seriously.
           </p>
 
           {/* FIX 1 — Coach CTA orange filled, Athlete CTA blue outlined */}
