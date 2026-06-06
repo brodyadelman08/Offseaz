@@ -68,6 +68,9 @@ const SPORTS = [
   { emoji: '🥎', name: 'Softball' },
   { emoji: '⚽', name: 'Soccer' },
   { emoji: '🏒', name: 'Hockey' },
+  { emoji: '🏉', name: 'Rugby' },
+  { emoji: '🎾', name: 'Tennis' },
+  { emoji: '⛳', name: 'Golf' },
   { emoji: '🤼', name: 'Wrestling' },
   { emoji: '🏐', name: 'Volleyball' },
   { emoji: '🏃', name: 'Track & Field' },
@@ -1029,7 +1032,7 @@ export default function Landing() {
             <span style={s.eyebrow}>Sport-Specific Training</span>
             <h2 style={s.sectionH2}>Built for Every Sport and Every Athlete</h2>
             <p style={s.sectionP}>
-              Offseaz ships with training templates built for 12 sports — and a fully customizable blueprint builder so coaches can design their own programs from scratch.
+              Offseaz ships with training templates built for 15 sports — and a fully customizable blueprint builder so coaches can design their own programs from scratch.
             </p>
           </div>
 
