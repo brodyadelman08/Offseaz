@@ -111,6 +111,13 @@ const WU_LOWER = 'Lower Body Warm-up: Hip Circles 10 each direction · Leg Swing
 const WU_UPPER = 'Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5\n\n'
 const SPRINT_STD   = '\n\nSprint Work: 10x10 yds · 6x20 yds · 4x40 yds'
 const SPRINT_SKILL = '\n\nSprint Work: 10x10 yds · 8x20 yds · 6x40 yds @ 95%'
+const NECK = '\nNeck Flexion: 2x15\nNeck Extension: 2x15\nLateral Neck Flexion: 2x15 each side'
+function bballPlyo(phaseNum) {
+  if (phaseNum === 1) return 'Box Jumps: 3x4'
+  if (phaseNum === 2) return 'Broad Jumps: 3x3'
+  if (phaseNum === 3) return 'Hurdle Hops: 3x5'
+  return 'Depth Jumps: 3x4'
+}
 
 function fbLinemenSess(info) {
   const q  = info.pct
@@ -119,11 +126,11 @@ function fbLinemenSess(info) {
     { day: 'Day 1', focus: 'Lower Power',
       description: `${WU_LOWER}Power Clean from floor: 5x3 working up, last set AMAP\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-ups: 3x12\nDouble Leg Calf Raise: 3x15${SPRINT_STD}` },
     { day: 'Day 2', focus: 'Upper Strength',
-      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nIncline DB Press: 4x8\nWeighted Pull-ups: 4x5\nBB Row: 4x8\nTricep Pushdowns: 3x12\nFace Pulls: 3x15` },
+      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nIncline DB Press: 4x8\nWeighted Pull-ups: 4x5\nBB Row: 4x8\nTricep Pushdowns: 3x12\nFace Pulls: 3x15${NECK}` },
     { day: 'Day 3', focus: 'Lower Strength',
       description: `${WU_LOWER}Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nRomanian Deadlift: 4x6\nDB Step-Ups: 3x6 each leg\nDB Suitcase Carries: 3x20 yds each side\nSingle Leg Calf Raise: 3x12\nNordic Hamstring Curl: 3x5${SPRINT_STD}` },
     { day: 'Day 4', focus: 'Upper Power',
-      description: `${WU_UPPER}BB Split Jerk: 4x3 working up\nClose Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nSled Push: 6x20 yds` },
+      description: `${WU_UPPER}BB Split Jerk: 4x3 working up\nClose Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nSled Push: 6x20 yds${NECK}` },
   ]
 }
 
@@ -133,11 +140,11 @@ function fbLinemenMGSess(info) {
     { day: 'Day 1', focus: 'Lower Power — Hypertrophy',
       description: `${WU_LOWER}Power Clean from floor: 4x3\nBack Squat: 6x8-10 @ ${q}\nBulgarian Split Squat: 4x8 each leg\nLeg Curl: 3x12\nDouble Leg Calf Raise: 4x15\nBicep Curls: 3x12\nTricep Extensions: 3x12` },
     { day: 'Day 2', focus: 'Upper Strength — Hypertrophy',
-      description: `${WU_UPPER}Bench Press: 6x8-10 @ ${q}\nIncline DB Press: 5x10\nDB Fly: 3x12\nWeighted Pull-ups: 5x6\nBB Row: 5x10\nLateral Raises: 3x15\nFace Pulls: 4x15\nTricep Pushdowns: 4x12` },
+      description: `${WU_UPPER}Bench Press: 6x8-10 @ ${q}\nIncline DB Press: 5x10\nDB Fly: 3x12\nWeighted Pull-ups: 5x6\nBB Row: 5x10\nLateral Raises: 3x15\nFace Pulls: 4x15\nTricep Pushdowns: 4x12${NECK}` },
     { day: 'Day 3', focus: 'Lower Strength — Hypertrophy',
       description: `${WU_LOWER}Front Squat: 5x8-10 @ ${q}\nRomanian Deadlift: 4x10\nDB Step-Ups: 4x8 each leg\nHip Thrust: 4x12\nNordic Hamstring Curl: 3x5\nSingle Leg Calf Raise: 4x12` },
     { day: 'Day 4', focus: 'Upper Volume',
-      description: `${WU_UPPER}Close Grip Bench Press: 5x8-10 @ ${q}\nWeighted Chin-ups: 5x6\nSingle Arm DB Row: 5x10 each arm\nOverhead Press: 4x10\nDB Shrugs: 4x12\nLateral Raises: 3x15\nBicep Curls: 3x12\nFace Pulls: 3x15` },
+      description: `${WU_UPPER}Close Grip Bench Press: 5x8-10 @ ${q}\nWeighted Chin-ups: 5x6\nSingle Arm DB Row: 5x10 each arm\nOverhead Press: 4x10\nDB Shrugs: 4x12\nLateral Raises: 3x15\nBicep Curls: 3x12\nFace Pulls: 3x15${NECK}` },
   ]
 }
 
@@ -152,7 +159,7 @@ function fbSkillSess(info) {
     { day: 'Day 3', focus: 'Lower Explosion',
       description: `${WU_LOWER}Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nSingle Leg RDL: 3x8 each leg\nBulgarian Split Squat: 3x6 each leg\nDB Squat Jumps: 4x5\n${phasePlyo(ph)}${SPRINT_SKILL}` },
     { day: 'Day 4', focus: 'Upper Power',
-      description: `${WU_UPPER}BB Split Jerk: 3x3\nPush Press: 4x5\nWeighted Pull-ups: 4x5\nBent Over BB Row: 4x8\nBand External Rotation: 3x15\nMed Ball Chest Pass: 4x5` },
+      description: `${WU_UPPER}Push Press: 4x5\nWeighted Pull-ups: 4x5\nBent Over BB Row: 4x8\nBand External Rotation: 3x15\nMed Ball Chest Pass: 4x5` },
   ]
 }
 
@@ -163,11 +170,11 @@ function fbHybridSess(info) {
     { day: 'Day 1', focus: 'Lower Power',
       description: `${WU_LOWER}Power Clean from floor: 5x3 working up\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 3x8\nDB Squat Jumps: 4x5\n${phasePlyo(ph)}\nLateral Bounds: 3x5 each side\nSled Push: 4x20 yds${SPRINT_SKILL}` },
     { day: 'Day 2', focus: 'Upper Strength',
-      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nIncline DB Press: 4x8\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nBand Pull-Aparts: 3x15` },
+      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nIncline DB Press: 4x8\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nBand Pull-Aparts: 3x15${NECK}` },
     { day: 'Day 3', focus: 'Lower Explosion',
       description: `${WU_LOWER}Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nSingle Leg RDL: 3x8 each leg\nBulgarian Split Squat: 3x6 each leg\nDB Squat Jumps: 4x5\n${phasePlyo(ph)}${SPRINT_SKILL}` },
     { day: 'Day 4', focus: 'Upper Power',
-      description: `${WU_UPPER}BB Split Jerk: 3x3\nPush Press: 4x5\nWeighted Pull-ups: 4x5\nBent Over BB Row: 4x8\nBand External Rotation: 3x15\nMed Ball Chest Pass: 4x5` },
+      description: `${WU_UPPER}Push Press: 4x5\nWeighted Pull-ups: 4x5\nBent Over BB Row: 4x8\nBand External Rotation: 3x15\nMed Ball Chest Pass: 4x5${NECK}` },
   ]
 }
 
@@ -209,7 +216,7 @@ function bbGuardSess(info) {
     { day: 'Day 2', focus: 'Upper',
       description: `Power Clean: 3x3\nDB Bench: 4x10\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15` },
     { day: 'Day 3', focus: 'Explosion & Plyos',
-      description: `${phasePlyo(ph)}\nSingle Leg Box Jump: 3x4 each leg\nTrap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nNordic Hamstring Curl: 3x5` },
+      description: `${bballPlyo(ph)}\nSingle Leg Box Jump: 2x4 each leg\nTrap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nNordic Hamstring Curl: 3x5` },
     { day: 'Day 4', focus: 'Full Body Power',
       description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Step-Ups: 3x8 each leg\nAnkle Hops: 3x20` },
   ]
@@ -224,7 +231,7 @@ function bbWingsSess(info) {
     { day: 'Day 2', focus: 'Upper',
       description: `Power Clean: 3x3\nDB Bench: 4x10\nDB Chest Press (varied grip): 3x10\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x12 each arm\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15` },
     { day: 'Day 3', focus: 'Explosion & Plyos',
-      description: `${phasePlyo(ph)}\nSingle Leg Box Jump: 3x4 each leg\nTrap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nNordic Hamstring Curl: 3x5` },
+      description: `${bballPlyo(ph)}\nSingle Leg Box Jump: 2x4 each leg\nTrap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nNordic Hamstring Curl: 3x5` },
     { day: 'Day 4', focus: 'Full Body Power',
       description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Step-Ups: 3x8 each leg\nAnkle Hops: 3x20` },
   ]
@@ -361,7 +368,7 @@ function trackThrowSess(info) {
     { day: 'Day 3', focus: 'Lower Strength — Deadlift',
       description: `Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nRomanian Deadlift: 4x6\nDB Step-Ups: 3x6 each leg\nNordic Hamstring Curl: 3x5\nSingle Leg Calf Raise: 3x12` },
     { day: 'Day 4', focus: 'Upper Power & Rotational',
-      description: `BB Split Jerk: 4x3 working up\nClose Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nRotational Cable Throw: 4x8 each side` },
+      description: `Push Press: 4x5\nClose Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nRotational Cable Throw: 4x8 each side` },
   ]
 }
 
@@ -573,7 +580,7 @@ function baseball4Day(wp, phase) {
     ]),
     makeBaseballSession('Day 4', 'Upper Power', [
       { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
-      { name: 'Behind Pulldowns',                         sets: 3, reps: '6' },
+      { name: 'Lat Pulldown',                              sets: 3, reps: '8' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
       { name: 'Bench Curls',                              sets: 3, reps: '8' },
@@ -699,7 +706,7 @@ function pitcher4Day(wp, phase) {
       { name: 'Pull-ups',                                 sets: 3, reps: 'AMAP' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
-      { name: 'Behind Pulldowns',                         sets: 3, reps: '6' },
+      { name: 'Lat Pulldown',                              sets: 3, reps: '8' },
       { name: 'Band External Rotation',                   sets: 3, reps: '15',   note: 'each arm' },
       { name: 'Core — Bird Dogs (Weighted)',              sets: 3, reps: '12' },
       { name: 'Half Baby Kip-Ups',                        sets: 3, reps: 'AMAP' },
@@ -815,7 +822,7 @@ function softball4Day(wp, phase) {
       { name: 'Trap Bar Deadlift',             ramp: `40%×10, 50%×8, 60%×6, 70%×5, ${Math.round(wp * 100)}%×3` },
       { name: 'Single Arm DB Row',                             sets: p3 ? 4 : 3, reps: '12' },
       { name: 'Bird Dog Row',                                  sets: 4, reps: '10' },
-      { name: 'Behind Pulldowns',                              sets: 3, reps: '6' },
+      { name: 'Lat Pulldown',                                  sets: 3, reps: '8' },
       { name: 'Band Pull-Aparts',                              sets: 3, reps: '20' },
       { name: 'Core — Rotate and Press',                       sets: 3, reps: '12' },
       { name: 'Triceps',                                       sets: 3, reps: '12' },
