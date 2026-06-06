@@ -45,12 +45,12 @@ export default function About() {
         </div>
       </nav>
 
-      {/* ── Hero — deadlift background ───────────────────────────────────── */}
+      {/* ── Hero — deadlift background (bg/overlay hidden on desktop via CSS) ── */}
       <section style={s.hero}>
-        <img src="/about-deadlift.webp" alt="" style={s.heroBg} />
-        <div style={s.heroOverlay} />
+        <img src="/about-deadlift.webp" alt="" style={s.heroBg} className="about-hero-bg" />
+        <div style={s.heroOverlay} className="about-hero-overlay" />
         <div style={s.heroContent}>
-          <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={s.heroLogo} />
+          <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={s.heroLogo} className="about-hero-logo" />
           <h1 style={s.heroHeadline}>
             Built by an Athlete.<br />
             <span style={{ color: ORANGE }}>Built for Athletes.</span>
@@ -99,6 +99,22 @@ export default function About() {
         </div>
       </section>
 
+      {/* ── Desktop photo grid — shown only on ≥768px via CSS ───────────── */}
+      <section className="about-photo-grid">
+        {[
+          { src: '/about-deadlift.webp', alt: '565 lb trap bar deadlift', caption: '565 lb Trap Bar Deadlift',          pos: '50% 70%' },
+          { src: '/about-baseball.webp', alt: 'Baseball batting swing',   caption: 'Starting Shortstop — 3 Years Varsity', pos: '50% 40%' },
+        ].map(({ src, alt, caption, pos }) => (
+          <div key={caption} style={s.photoGridItem}>
+            <div style={s.photoGridImgWrap}>
+              <img src={src} alt={alt} style={{ ...s.photoGridImg, objectPosition: pos }} />
+              <div style={s.photoGridOverlay} />
+            </div>
+            <p style={s.photoCaption}>{caption}</p>
+          </div>
+        ))}
+      </section>
+
       {/* ── Stats bar ────────────────────────────────────────────────────── */}
       <section style={s.statsSection}>
         <div style={s.statsGrid}>
@@ -111,8 +127,8 @@ export default function About() {
         </div>
       </section>
 
-      {/* ── Baseball action quote ─────────────────────────────────────────── */}
-      <section style={s.actionSection}>
+      {/* ── Baseball action quote — mobile only (hidden on desktop via CSS) ── */}
+      <section style={s.actionSection} className="about-action-section">
         <img src="/about-baseball.webp" alt="Brody batting" style={s.actionBg} />
         <div style={s.actionOverlay} />
         <div style={s.actionContent}>
@@ -227,6 +243,18 @@ const s = {
   founderTitle: { fontSize: 11, fontWeight: 700, color: ORANGE, margin: 0, textTransform: 'uppercase', letterSpacing: 1.1, textAlign: 'center' },
   founderTextCol: { flex: 1, minWidth: 260 },
   founderHeading: { fontSize: 'clamp(21px, 3.2vw, 32px)', fontWeight: 800, color: '#fff', margin: '0 0 22px', lineHeight: 1.2, fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+
+  /* Desktop photo grid — layout handled by CSS class, styles here */
+  photoGridItem: { display: 'flex', flexDirection: 'column' },
+  photoGridImgWrap: { position: 'relative', height: 500, overflow: 'hidden' },
+  photoGridImg: { width: '100%', height: '100%', objectFit: 'cover', display: 'block' },
+  photoGridOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(10,10,10,0.65) 0%, rgba(10,10,10,0.15) 45%, transparent 70%)' },
+  photoCaption: {
+    padding: '14px 24px', background: '#0D0D0D',
+    borderTop: '1px solid rgba(255,255,255,0.06)',
+    color: '#888', fontSize: 12, fontWeight: 700,
+    letterSpacing: 1, textTransform: 'uppercase', textAlign: 'center', margin: 0,
+  },
 
   /* Stats */
   statsSection: { padding: 'clamp(36px, 5vw, 60px) clamp(20px, 5vw, 64px)', background: '#111', borderBottom: '1px solid rgba(255,255,255,0.07)' },
