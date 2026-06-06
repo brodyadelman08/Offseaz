@@ -34,6 +34,8 @@ body {
   /* NOTE: overflow-x hidden on html breaks position:fixed on iOS Safari.
      Only set it on body, not html. */
   overflow-x: hidden;
+  /* Prevent iOS rubber-band overscroll from surfacing elements below the tab bar */
+  overscroll-behavior: none;
 }
 
 #root {

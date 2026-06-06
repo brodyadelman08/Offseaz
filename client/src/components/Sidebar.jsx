@@ -258,7 +258,8 @@ function BottomBar({ profile, signOut }) {
       <div
         style={{
           ...styles.moreDrawer,
-          transform: moreOpen ? 'translateY(0)' : 'translateY(110%)',
+          transform: moreOpen ? 'translateY(0)' : 'translateY(calc(100% + 300px))',
+          pointerEvents: moreOpen ? 'auto' : 'none',
         }}
       >
         {/* Drag handle */}

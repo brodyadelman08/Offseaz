@@ -831,7 +831,10 @@ const sp = {
 export default function Landing() {
   const { session, profile, loading } = useAuth()
   const navigate = useNavigate()
-  const [scrolled, setScrolled] = useState(false)
+  const [scrolled, setScrolled]       = useState(false)
+  const [betaDismissed, setBetaDismissed] = useState(
+    () => sessionStorage.getItem('offseaz_beta_dismissed') === '1'
+  )
 
   useEffect(() => {
     if (!loading && session && profile) {
@@ -853,6 +856,27 @@ export default function Landing() {
 
   return (
     <div style={s.root}>
+
+      {/* ── Beta banner ─────────────────────────────────────────────────── */}
+      {!betaDismissed && (
+        <div style={s.betaBanner}>
+          <span style={s.betaText}>
+            <span style={s.betaBadge}>BETA</span>
+            Offseaz is currently free — features are actively being developed based on coach and athlete feedback.{' '}
+            <span style={s.betaHighlight}>A paid version with additional features is coming soon.</span>
+          </span>
+          <button
+            style={s.betaClose}
+            onClick={() => {
+              setBetaDismissed(true)
+              sessionStorage.setItem('offseaz_beta_dismissed', '1')
+            }}
+            aria-label="Dismiss"
+          >
+            ✕
+          </button>
+        </div>
+      )}
 
       {/* ── Navbar — fades in after 80px scroll, stays until back at top ── */}
       <nav style={{
@@ -1444,6 +1468,56 @@ const s = {
     fontFamily: "Inter, system-ui, -apple-system, sans-serif",
     /* overflow-x is set on body in index.css — do NOT set it here,
        overflow:hidden on any div ancestor breaks position:fixed on iOS Safari */
+  },
+
+  // ── Beta banner ────────────────────────────────────────────────────────────
+  betaBanner: {
+    width: '100%',
+    background: '#111',
+    borderBottom: `1px solid rgba(247,87,9,0.25)`,
+    padding: '9px clamp(16px, 4vw, 40px)',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    position: 'relative',
+    zIndex: 200, // above the fixed nav (zIndex 100)
+  },
+  betaText: {
+    fontSize: 13,
+    color: '#AAAAAA',
+    lineHeight: 1.5,
+    textAlign: 'center',
+    flex: 1,
+  },
+  betaBadge: {
+    display: 'inline-block',
+    fontSize: 10,
+    fontWeight: 800,
+    letterSpacing: 1,
+    color: ORANGE,
+    background: 'rgba(247,87,9,0.15)',
+    border: `1px solid rgba(247,87,9,0.35)`,
+    padding: '2px 7px',
+    borderRadius: 4,
+    marginRight: 8,
+    verticalAlign: 'middle',
+  },
+  betaHighlight: {
+    color: YELLOW,
+    fontWeight: 600,
+  },
+  betaClose: {
+    flexShrink: 0,
+    background: 'transparent',
+    border: 'none',
+    color: '#555',
+    fontSize: 14,
+    cursor: 'pointer',
+    padding: '2px 6px',
+    lineHeight: 1,
+    borderRadius: 4,
+    transition: 'color 0.15s',
   },
 
   // Navbar — GPU-composited so position:fixed works reliably on iOS
