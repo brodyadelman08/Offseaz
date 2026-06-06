@@ -210,7 +210,7 @@ const s = {
 
   /* Hero */
   hero: { position: 'relative', minHeight: 'clamp(480px, 75vh, 720px)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.08)' },
-  heroBg: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 30%', display: 'block' },
+  heroBg: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 70%', display: 'block' },
   heroOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.50) 0%, rgba(10,10,10,0.75) 55%, rgba(10,10,10,0.97) 100%)' },
   heroContent: { position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 24px', gap: 18 },
   heroLogo: { width: 'clamp(180px, 28vw, 360px)', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.6))' },
@@ -237,7 +237,7 @@ const s = {
 
   /* Action quote */
   actionSection: { position: 'relative', minHeight: 'clamp(340px, 52vh, 580px)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden' },
-  actionBg: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: 'center 22%', display: 'block' },
+  actionBg: { position: 'absolute', inset: 0, width: '100%', height: '100%', objectFit: 'cover', objectPosition: '50% 40%', display: 'block' },
   actionOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(10,10,10,0.84) 0%, rgba(10,10,10,0.62) 50%, rgba(10,10,10,0.82) 100%)' },
   actionContent: { position: 'relative', zIndex: 2, textAlign: 'center', padding: '0 clamp(20px, 6vw, 80px)', maxWidth: 680 },
   quoteMarks: { fontSize: 72, lineHeight: 0.6, color: ORANGE, margin: '0 0 6px', fontFamily: 'Georgia, serif', opacity: 0.9 },
