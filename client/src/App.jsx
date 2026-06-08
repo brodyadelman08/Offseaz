@@ -11,19 +11,31 @@ import Layout from './components/Layout'
 class ErrorBoundary extends React.Component {
   constructor(props) {
     super(props)
-    this.state = { hasError: false }
+    this.state = { hasError: false, errorMessage: '', componentStack: '' }
   }
-  static getDerivedStateFromError() {
-    return { hasError: true }
+  static getDerivedStateFromError(error) {
+    return {
+      hasError: true,
+      errorMessage: error?.message || String(error),
+    }
   }
   componentDidCatch(error, info) {
-    // Log both the error message and the full component stack so it's easy
-    // to find the crashing component in the browser console.
-    console.error('[Offseaz ErrorBoundary] Caught render error:', error)
-    console.error('[Offseaz ErrorBoundary] Component stack:', info?.componentStack)
+    const stack = info?.componentStack || ''
+    console.error('[Offseaz ErrorBoundary] ═══ RENDER CRASH ═══')
+    console.error('[Offseaz ErrorBoundary] Error:', error)
+    console.error('[Offseaz ErrorBoundary] Message:', error?.message)
+    console.error('[Offseaz ErrorBoundary] Component stack:', stack)
+    console.error('[Offseaz ErrorBoundary] JS stack:', error?.stack)
+    // Store stack so we can display it in the fallback UI
+    this.setState({ componentStack: stack })
   }
   render() {
     if (this.state.hasError) {
+      const { errorMessage, componentStack } = this.state
+      // Extract the first crashing component name from the stack
+      const firstComp = componentStack
+        ? componentStack.trim().split('\n')[0].replace(/^\s*at\s+/, '').split(' ')[0]
+        : ''
       return (
         <div style={{
           minHeight: '100vh', display: 'flex', alignItems: 'center',
@@ -38,8 +50,35 @@ class ErrorBoundary extends React.Component {
           <p style={{ color: '#666', fontSize: 15, maxWidth: 360, lineHeight: 1.6, margin: 0 }}>
             Something went wrong. Please refresh the page.
           </p>
+          {/* Error details box — visible to anyone who can read the screen */}
+          <div style={{
+            marginTop: 8, padding: '14px 18px',
+            background: 'rgba(199,56,32,0.10)', border: '1px solid rgba(199,56,32,0.30)',
+            borderRadius: 10, maxWidth: 520, width: '100%', textAlign: 'left',
+          }}>
+            <p style={{ fontSize: 12, fontWeight: 700, color: '#c73820', margin: '0 0 6px', textTransform: 'uppercase', letterSpacing: 0.5 }}>
+              Error details (share with support)
+            </p>
+            <p style={{ fontSize: 13, color: '#ff9999', margin: '0 0 8px', wordBreak: 'break-word', fontFamily: 'monospace' }}>
+              {errorMessage}
+            </p>
+            {firstComp && (
+              <p style={{ fontSize: 12, color: '#888', margin: 0, fontFamily: 'monospace' }}>
+                Component: <span style={{ color: '#ffaa88' }}>{firstComp}</span>
+              </p>
+            )}
+            {componentStack && (
+              <pre style={{
+                fontSize: 10, color: '#555', margin: '8px 0 0', overflowX: 'auto',
+                whiteSpace: 'pre-wrap', wordBreak: 'break-word', maxHeight: 160,
+                overflowY: 'auto', lineHeight: 1.5,
+              }}>
+                {componentStack.trim()}
+              </pre>
+            )}
+          </div>
           <button
-            onClick={() => { this.setState({ hasError: false }); window.location.href = '/' }}
+            onClick={() => { this.setState({ hasError: false, errorMessage: '', componentStack: '' }); window.location.href = '/' }}
             style={{
               padding: '11px 28px', background: '#F75709', color: '#fff',
               border: 'none', borderRadius: 10, cursor: 'pointer',

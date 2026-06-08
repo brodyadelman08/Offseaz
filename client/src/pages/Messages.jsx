@@ -220,7 +220,7 @@ function dayLabel(dateStr) {
 
 export default function Messages() {
   const { profile }                       = useAuth()
-  const { activeTeam }                    = useTeam()
+  const activeTeam                        = useTeam()?.activeTeam ?? null
   const [convs, setConvs]                 = useState([])
   const [activeId, setActiveId]           = useState(null)
   const [messages, setMessages]           = useState([])

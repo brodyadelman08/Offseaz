@@ -94,7 +94,15 @@ const ATHLETE_MORE = [
 function DesktopSidebar({ nav, profile, signOut }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
-  const { teams, activeTeam, activeTeamId, setActiveTeamId } = useTeam()
+
+  // TeamContext defaults to null (createContext(null)).  TeamProvider wraps the
+  // whole route tree so this is always provided, but guard defensively in case
+  // a future refactor or race condition ever produces a null here.
+  const teamCtx = useTeam()
+  const teams          = teamCtx?.teams          ?? []
+  const activeTeam     = teamCtx?.activeTeam     ?? null
+  const activeTeamId   = teamCtx?.activeTeamId   ?? null
+  const setActiveTeamId = teamCtx?.setActiveTeamId ?? (() => {})
 
   // CoachAccessContext is only provided inside /coach routes.  Athlete routes
   // render Layout WITHOUT it, so useCoachAccess() returns null here.  Guard

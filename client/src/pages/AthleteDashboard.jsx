@@ -55,7 +55,12 @@ function GoalRow({ goal, onToggle, onDelete }) {
 
 export default function AthleteDashboard() {
   const { profile } = useAuth()
-  const { activeTeam, teams, teamsLoading, setActiveTeamId, refreshTeams } = useTeam()
+  const teamCtx = useTeam()
+  const activeTeam     = teamCtx?.activeTeam     ?? null
+  const teams          = teamCtx?.teams          ?? []
+  const teamsLoading   = teamCtx?.teamsLoading   ?? false
+  const setActiveTeamId = teamCtx?.setActiveTeamId ?? (() => {})
+  const refreshTeams   = teamCtx?.refreshTeams   ?? (() => Promise.resolve())
   const navigate = useNavigate()
   const [survey, setSurvey] = useState(undefined)
   const [plan, setPlan] = useState(undefined)

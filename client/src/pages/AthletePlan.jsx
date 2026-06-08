@@ -212,7 +212,7 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AthletePlan() {
-  const { activeTeam } = useTeam()
+  const activeTeam = useTeam()?.activeTeam ?? null
   const hasTeam = Boolean(activeTeam)
 
   const [coachPlan, setCoachPlan]  = useState(undefined)

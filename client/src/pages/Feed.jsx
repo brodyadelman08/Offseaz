@@ -255,7 +255,7 @@ export default function Feed() {
   // /athlete/feed (no provider — hook returns null).  Guard every access.
   const coachCtx         = useCoachAccess()
   const coachTeam        = coachCtx?.team ?? null
-  const { activeTeam }   = useTeam()
+  const activeTeam       = useTeam()?.activeTeam ?? null
   // Derive the active team ID for whichever role is viewing
   const teamId = profile?.role === 'coach' ? coachTeam?.id : activeTeam?.id
 
