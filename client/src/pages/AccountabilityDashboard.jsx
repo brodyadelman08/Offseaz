@@ -1,7 +1,6 @@
 import { useState, useEffect, Component } from 'react'
 import api from '../services/api'
 import { ClipboardIcon, FlameIcon } from '../components/Icons'
-import { useCoachAccess } from '../context/CoachAccessContext'
 
 const ORANGE = '#F75709'
 const YELLOW = '#F0BE24'

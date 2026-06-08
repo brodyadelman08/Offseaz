@@ -251,7 +251,10 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
 // ── Page ──────────────────────────────────────────────────────────────────────
 export default function Feed() {
   const { profile }      = useAuth()
-  const { team: coachTeam } = useCoachAccess()
+  // Feed is shared between /coach/feed (CoachAccessProvider present) and
+  // /athlete/feed (no provider — hook returns null).  Guard every access.
+  const coachCtx         = useCoachAccess()
+  const coachTeam        = coachCtx?.team ?? null
   const { activeTeam }   = useTeam()
   // Derive the active team ID for whichever role is viewing
   const teamId = profile?.role === 'coach' ? coachTeam?.id : activeTeam?.id

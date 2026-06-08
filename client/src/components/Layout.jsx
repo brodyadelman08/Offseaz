@@ -25,10 +25,16 @@ function ChevronDown({ size = 16, color = 'currentColor' }) {
 // on mobile for coaches with 2 or more teams.
 
 function CoachTeamSwitcherBar({ isMobile }) {
-  const { profile }                                           = useAuth()
-  const { teams, activeTeamId, team: activeTeam,
-          setActiveTeamId }                                   = useCoachAccess()
-  const [open, setOpen]                                       = useState(false)
+  const { profile }   = useAuth()
+  // CoachAccessProvider is only present on /coach routes.  On /athlete routes
+  // this hook returns null — apply safe defaults so we never destructure null
+  // before the early-return guard below fires.
+  const coachCtx      = useCoachAccess()
+  const teams         = coachCtx?.teams         ?? []
+  const activeTeamId  = coachCtx?.activeTeamId  ?? null
+  const activeTeam    = coachCtx?.team          ?? null
+  const setActiveTeamId = coachCtx?.setActiveTeamId ?? (() => {})
+  const [open, setOpen] = useState(false)
 
   // Nothing to render for athletes, desktop, or single-team coaches
   if (!isMobile || profile?.role !== 'coach' || teams.length < 2) return null
