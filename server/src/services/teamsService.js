@@ -282,6 +282,39 @@ async function removeCoachFromTeam(teamId, coachId) {
   if (error) throw error
 }
 
+/**
+ * Transfer head-coach ownership of a team to an existing assistant coach.
+ * The previous head coach is downgraded to admin_coach (assistant with write access).
+ *
+ * No new SQL needed — updates existing teams.coach_id and team_members rows.
+ */
+async function transferTeamOwnership(teamId, currentHeadCoachId, newHeadCoachId) {
+  // 1. Promote the new head coach: insert them as head_coach in teams table
+  const { error: teamErr } = await supabaseAdmin
+    .from('teams')
+    .update({ coach_id: newHeadCoachId })
+    .eq('id', teamId)
+    .eq('coach_id', currentHeadCoachId)  // safety: only if caller is the current owner
+
+  if (teamErr) throw teamErr
+
+  // 2. Remove the new head coach from team_members (they're now the owner, not an assistant)
+  await supabaseAdmin
+    .from('team_members')
+    .delete()
+    .eq('team_id', teamId)
+    .eq('athlete_id', newHeadCoachId)
+
+  // 3. Add the old head coach as an admin_coach assistant (if they want to stay)
+  //    We upsert so calling this twice is safe.
+  await supabaseAdmin
+    .from('team_members')
+    .upsert(
+      { team_id: teamId, athlete_id: currentHeadCoachId, access_level: 'admin_coach' },
+      { onConflict: 'team_id,athlete_id' }
+    )
+}
+
 module.exports = {
   createTeam,
   getTeamByCoach,
@@ -296,4 +329,5 @@ module.exports = {
   getTeamCoaches,
   updateCoachAccessLevel,
   removeCoachFromTeam,
+  transferTeamOwnership,
 }

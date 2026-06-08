@@ -1,12 +1,125 @@
 import { useState, useEffect } from 'react'
+import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { DumbbellIcon } from '../components/Icons'
+import { DumbbellIcon, CheckCircleIcon, ArrowLeftIcon } from '../components/Icons'
 import SessionDescription from '../components/SessionDescription'
 import PreviewBanner from '../components/PreviewBanner'
 import { useTeam } from '../context/TeamContext'
 
 const BLUE   = '#308EBD'
 const ORANGE = '#F75709'
+const YELLOW = '#F0BE24'
+
+// ── Program Completion Banner ─────────────────────────────────────────────────
+
+function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
+  const navigate = useNavigate()
+  const options = [
+    {
+      key:   'retest_maxes',
+      emoji: '🏋️',
+      title: 'Retest Your Maxes',
+      desc:  'Log updated 1RMs so your next program auto-calculates weights from your new strength levels.',
+      color: ORANGE,
+    },
+    {
+      key:   'retake_survey',
+      emoji: '📋',
+      title: 'Retake Your Survey',
+      desc:  'Update your goals, position, and preferences to generate a fresh personalized blueprint.',
+      color: BLUE,
+    },
+    {
+      key:   'wait_for_coach',
+      emoji: '🎯',
+      title: 'Wait for Your Coach',
+      desc:  "Notify your coach you're ready. They'll review your progress and assign your next program.",
+      color: YELLOW,
+    },
+  ]
+
+  if (chosen) {
+    const opt = options.find(o => o.key === chosen)
+    return (
+      <div style={cb.banner}>
+        <div style={cb.checkRow}>
+          <CheckCircleIcon size={22} color={ORANGE} />
+          <span style={cb.doneTitle}>
+            {chosen === 'retest_maxes'   && 'Head to My Profile to log your new maxes.'}
+            {chosen === 'retake_survey'  && 'Taking you to your survey now…'}
+            {chosen === 'wait_for_coach' && "Your coach has been notified — they'll assign your next plan soon."}
+          </span>
+        </div>
+      </div>
+    )
+  }
+
+  return (
+    <div style={cb.banner}>
+      <div style={cb.iconRow}>
+        <span style={cb.trophy}>🏆</span>
+      </div>
+      <h2 style={cb.heading}>You completed your {plan.num_weeks}-week program</h2>
+      <p style={cb.sub}>Choose what happens next</p>
+
+      <div style={cb.cards}>
+        {options.map(opt => (
+          <button
+            key={opt.key}
+            style={{
+              ...cb.card,
+              borderColor: choosing === opt.key ? opt.color : 'var(--border)',
+              background:  choosing === opt.key ? `${opt.color}10` : 'var(--card-inner)',
+              opacity:     choosing && choosing !== opt.key ? 0.45 : 1,
+            }}
+            onClick={() => onChoose(opt.key, navigate)}
+            disabled={Boolean(choosing)}
+          >
+            <span style={cb.cardEmoji}>{opt.emoji}</span>
+            <span style={{ ...cb.cardTitle, color: opt.color }}>{opt.title}</span>
+            <span style={cb.cardDesc}>{opt.desc}</span>
+            {choosing === opt.key && (
+              <span style={{ ...cb.cardSpinner, borderTopColor: opt.color }} className="survey-spinner-sm" />
+            )}
+          </button>
+        ))}
+      </div>
+    </div>
+  )
+}
+
+const cb = {
+  banner: {
+    background: 'linear-gradient(135deg, rgba(247,87,9,0.07) 0%, rgba(48,142,189,0.05) 100%)',
+    border: `1px solid ${ORANGE}33`,
+    borderRadius: 20,
+    padding: '32px 28px 28px',
+    marginBottom: 28,
+    textAlign: 'center',
+  },
+  iconRow:  { marginBottom: 12 },
+  trophy:   { fontSize: 40 },
+  heading:  { fontSize: 22, fontWeight: 800, color: 'var(--text)', margin: '0 0 6px', fontFamily: "'Calibri','Trebuchet MS',sans-serif" },
+  sub:      { fontSize: 14, color: 'var(--text-2)', margin: '0 0 24px' },
+  cards:    { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px,100%),1fr))', gap: 12, textAlign: 'left' },
+  card: {
+    display: 'flex', flexDirection: 'column', gap: 6,
+    padding: '18px 16px', borderRadius: 14, border: '1px solid',
+    cursor: 'pointer', textAlign: 'left',
+    transition: 'border-color 0.18s, background 0.18s, opacity 0.18s',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.14)',
+  },
+  cardEmoji: { fontSize: 24 },
+  cardTitle: { fontSize: 14, fontWeight: 700, lineHeight: 1.2 },
+  cardDesc:  { fontSize: 12, color: 'var(--text-2)', lineHeight: 1.55 },
+  cardSpinner: {
+    display: 'inline-block', width: 14, height: 14,
+    border: '2px solid var(--border)', borderRadius: '50%',
+    animation: 'spin 0.65s linear infinite', alignSelf: 'center',
+  },
+  checkRow:  { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 },
+  doneTitle: { fontSize: 15, fontWeight: 600, color: 'var(--text)' },
+}
 
 const LIFT_LABELS = {
   bench_press:       'Bench Press',
@@ -212,6 +325,7 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AthletePlan() {
+  const navigate = useNavigate()
   const activeTeam = useTeam()?.activeTeam ?? null
   const hasTeam = Boolean(activeTeam)
 
@@ -223,6 +337,30 @@ export default function AthletePlan() {
   const [loading,     setLoading]  = useState(true)
   const [currentWeekCoach, setCurrentWeekCoach] = useState(1)
   const [currentWeekAuto,  setCurrentWeekAuto]  = useState(1)
+
+  // Program completion flow
+  const [choosingAction, setChoosingAction] = useState(null)   // action key being submitted
+  const [chosenAction,   setChosenAction]   = useState(null)   // action confirmed
+
+  async function handleProgramComplete(action, nav) {
+    setChoosingAction(action)
+    try {
+      const activePlan = coachPlan || autoPlan
+      await api.post('/api/programs/complete', {
+        blueprint_id: activePlan?.id || null,
+        action,
+      })
+      setChosenAction(action)
+      // Route immediately for retake_survey; profile nav is shown in banner
+      if (action === 'retake_survey') {
+        setTimeout(() => nav('/survey', { state: { retake: true } }), 800)
+      }
+    } catch (err) {
+      console.error('[AthletePlan] handleProgramComplete:', err)
+    } finally {
+      setChoosingAction(null)
+    }
+  }
 
   useEffect(() => {
     Promise.all([
@@ -284,11 +422,27 @@ export default function AthletePlan() {
   // Locked preview: has auto plan but no team
   const previewMode = !hasTeam && Boolean(autoPlan)
 
+  // Show completion banner on the final week of the active plan (coach-assigned takes priority)
+  const activePlan        = coachPlan || autoPlan
+  const activeCurrentWeek = coachPlan ? currentWeekCoach : currentWeekAuto
+  const showCompletion    = !previewMode && activePlan &&
+    activeCurrentWeek >= activePlan.num_weeks
+
   return (
     <div style={styles.container}>
 
       {/* ── Preview banner (shown when athlete has no team) ─────────────── */}
       {previewMode && <PreviewBanner noun="training plan" />}
+
+      {/* ── Program completion banner — shown on final week ──────────────── */}
+      {showCompletion && (
+        <ProgramCompletionBanner
+          plan={activePlan}
+          onChoose={handleProgramComplete}
+          choosing={choosingAction}
+          chosen={chosenAction}
+        />
+      )}
 
       {/* ── Coach plan section ─────────────────────────────────────────── */}
       {hasTeam && (

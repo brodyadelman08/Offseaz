@@ -78,4 +78,45 @@ async function dismissAthleteNotifications(coachId, athleteId) {
   if (error) throw error
 }
 
-module.exports = { createInjuryNotification, createBlueprintNotification, createCoachJoinNotification, getCoachNotifications, dismissAthleteNotifications }
+async function createProgramCompletionNotification(coachId, athleteId, athleteName) {
+  const { error } = await supabaseAdmin
+    .from('coach_notifications')
+    .upsert(
+      {
+        coach_id:    coachId,
+        athlete_id:  athleteId,
+        type:        'program_complete',
+        message:     `${athleteName} completed their 16-week program and is waiting for a new plan. Tap to assign one.`,
+        dismissed_at: null,
+        created_at:  new Date().toISOString(),
+      },
+      { onConflict: 'coach_id,athlete_id,type' }
+    )
+
+  if (error) throw error
+}
+
+async function createOwnershipTransferNotification(newHeadCoachId, teamName) {
+  const { error } = await supabaseAdmin
+    .from('coach_notifications')
+    .insert({
+      coach_id:   newHeadCoachId,
+      athlete_id: newHeadCoachId,   // self-notification; athlete_id col reused
+      type:       'ownership_transfer',
+      message:    `You are now the head coach of ${teamName}. You have full admin access.`,
+      dismissed_at: null,
+      created_at: new Date().toISOString(),
+    })
+
+  if (error) throw error
+}
+
+module.exports = {
+  createInjuryNotification,
+  createBlueprintNotification,
+  createCoachJoinNotification,
+  createProgramCompletionNotification,
+  createOwnershipTransferNotification,
+  getCoachNotifications,
+  dismissAthleteNotifications,
+}

@@ -12,6 +12,7 @@ const {
   athleteTeam,
   athleteTeams,
   myCoachTeams,
+  transferOwnership,
 } = require('../controllers/teamsController')
 
 router.post('/',                           verifyToken, create)
@@ -24,5 +25,6 @@ router.get('/my-teams',                    verifyToken, athleteTeams)
 router.get('/coaches',                     verifyToken, coaches)
 router.patch('/coaches/:coachId/access',   verifyToken, updateCoachAccess)
 router.delete('/coaches/:coachId',         verifyToken, removeCoach)
+router.post('/transfer-ownership',         verifyToken, transferOwnership)
 
 module.exports = router

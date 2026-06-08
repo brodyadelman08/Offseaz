@@ -1,6 +1,7 @@
 import { useState, useEffect, useCallback } from 'react'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
+import { useCoachAccess } from '../context/CoachAccessContext'
 import AvatarUpload from '../components/AvatarUpload'
 import { EditIcon, CheckIcon, TrashIcon, UsersIcon } from '../components/Icons'
 
@@ -8,7 +9,9 @@ const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 
 export default function CoachProfile() {
-  const { session, profile, updateProfile } = useAuth()
+  const { session, profile, updateProfile, signOut } = useAuth()
+  const coachCtx = useCoachAccess()
+  const accessLevel = coachCtx?.accessLevel ?? null
 
   // ── Name editing ──────────────────────────────────────────────────────────
   const [editingName, setEditingName] = useState(false)
@@ -25,16 +28,26 @@ export default function CoachProfile() {
   const [confirmRemove, setConfirmRemove] = useState(null) // athlete object
   const [removing, setRemoving]           = useState(null) // athlete id being removed
 
+  // ── Transfer ownership / leave team ─────────────────────────────────────────
+  const [coachList, setCoachList]         = useState([])
+  const [showLeave, setShowLeave]         = useState(false)
+  const [selectedNewOwner, setSelectedNewOwner] = useState(null)
+  const [transferring, setTransferring]   = useState(false)
+  const [transferDone, setTransferDone]   = useState(false)
+  const [transferErr, setTransferErr]     = useState('')
+
   // ── Load data ──────────────────────────────────────────────────────────────
   const loadData = useCallback(async () => {
     setLoading(true)
     try {
-      const [teamRes, rosterRes] = await Promise.all([
+      const [teamRes, rosterRes, coachRes] = await Promise.all([
         api.get('/api/teams/mine'),
         api.get('/api/roster'),
+        api.get('/api/teams/coaches').catch(() => ({ data: { coaches: [] } })),
       ])
       setTeam(teamRes.data.team || null)
       setRoster(rosterRes.data.roster || [])
+      setCoachList(coachRes.data.coaches || [])
     } catch (err) {
       console.error('[CoachProfile] load error:', err)
     } finally {
@@ -78,6 +91,23 @@ export default function CoachProfile() {
     }
   }
 
+  async function handleTransferOwnership() {
+    if (!selectedNewOwner) return
+    setTransferErr('')
+    setTransferring(true)
+    try {
+      await api.post('/api/teams/transfer-ownership', { new_head_coach_id: selectedNewOwner })
+      setTransferDone(true)
+      // Refresh access level by reloading the page (context will update on next mount)
+      setTimeout(() => window.location.reload(), 1500)
+    } catch (err) {
+      setTransferErr(err.response?.data?.error || 'Transfer failed.')
+    } finally {
+      setTransferring(false)
+    }
+  }
+
+  const isHeadCoach = accessLevel === 'head_coach'
   const email = session?.user?.email || '—'
 
   return (
@@ -225,6 +255,84 @@ export default function CoachProfile() {
           </div>
         )}
       </div>
+
+      {/* ── Leave Team / Transfer Ownership ──────────────────────────── */}
+      {team && (
+        <div style={{ ...styles.card, borderColor: 'rgba(199,56,32,0.22)' }}>
+          <h2 style={{ ...styles.cardTitle, color: '#c73820' }}>Leave Team</h2>
+
+          {!showLeave ? (
+            <button
+              style={styles.leaveBtn}
+              onClick={() => setShowLeave(true)}
+            >
+              Leave {team.name}
+            </button>
+          ) : transferDone ? (
+            <p style={{ fontSize: 14, color: 'var(--text-2)' }}>
+              ✓ Ownership transferred. Reloading…
+            </p>
+          ) : isHeadCoach ? (
+            // Head coach must transfer ownership first
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+              <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.55 }}>
+                Before you leave, you must transfer ownership to another coach on this team.
+              </p>
+              {coachList.length === 0 ? (
+                <div style={styles.transferNote}>
+                  <strong style={{ color: 'var(--text)' }}>You are the only coach on this team.</strong>
+                  {' '}Add an assistant coach before leaving, or delete the team entirely.
+                </div>
+              ) : (
+                <>
+                  <div style={styles.coachPicker}>
+                    {coachList.map(c => (
+                      <button
+                        key={c.id}
+                        style={{
+                          ...styles.coachOption,
+                          borderColor: selectedNewOwner === c.id ? '#c73820' : 'var(--border)',
+                          background:  selectedNewOwner === c.id ? 'rgba(199,56,32,0.07)' : 'transparent',
+                        }}
+                        onClick={() => setSelectedNewOwner(c.id)}
+                      >
+                        <span style={styles.coachOptionName}>{c.full_name}</span>
+                        <span style={styles.coachOptionLevel}>{c.access_level === 'admin_coach' ? 'Admin Coach' : 'View Only'}</span>
+                      </button>
+                    ))}
+                  </div>
+                  {transferErr && <p style={styles.transferErr}>{transferErr}</p>}
+                  <div style={{ display: 'flex', gap: 10 }}>
+                    <button style={styles.cancelLeaveBtn} onClick={() => { setShowLeave(false); setSelectedNewOwner(null); setTransferErr('') }}>
+                      Cancel
+                    </button>
+                    <button
+                      style={{ ...styles.confirmTransferBtn, opacity: !selectedNewOwner || transferring ? 0.5 : 1 }}
+                      onClick={handleTransferOwnership}
+                      disabled={!selectedNewOwner || transferring}
+                    >
+                      {transferring ? 'Transferring…' : 'Transfer & Leave'}
+                    </button>
+                  </div>
+                </>
+              )}
+            </div>
+          ) : (
+            // Assistant coach — can just leave
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+              <p style={{ fontSize: 14, color: 'var(--text-2)' }}>
+                You will be removed from {team.name} and lose access to its roster and blueprints.
+              </p>
+              <div style={{ display: 'flex', gap: 10 }}>
+                <button style={styles.cancelLeaveBtn} onClick={() => setShowLeave(false)}>Cancel</button>
+                <button style={styles.confirmTransferBtn} onClick={() => { signOut(); window.location.href = '/login' }}>
+                  Leave Team
+                </button>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
     </div>
   )
 }
@@ -510,5 +618,62 @@ const styles = {
     background: 'var(--card)',
     color: 'var(--text-2)',
     cursor: 'pointer',
+  },
+
+  // Leave / transfer ownership
+  leaveBtn: {
+    alignSelf: 'flex-start',
+    padding: '8px 18px',
+    fontSize: 13,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: '1px solid rgba(199,56,32,0.40)',
+    background: 'rgba(199,56,32,0.06)',
+    color: '#c73820',
+    cursor: 'pointer',
+    transition: 'background 0.15s',
+  },
+  transferNote: {
+    fontSize: 13,
+    color: 'var(--text-2)',
+    background: 'rgba(199,56,32,0.06)',
+    border: '1px solid rgba(199,56,32,0.20)',
+    borderRadius: 10,
+    padding: '12px 16px',
+    lineHeight: 1.6,
+  },
+  coachPicker: { display: 'flex', flexDirection: 'column', gap: 8 },
+  coachOption: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+    padding: '10px 14px',
+    borderRadius: 10, border: '1px solid',
+    background: 'transparent', cursor: 'pointer',
+    transition: 'border-color 0.15s, background 0.15s',
+    textAlign: 'left',
+  },
+  coachOptionName:  { fontSize: 14, fontWeight: 600, color: 'var(--text)' },
+  coachOptionLevel: { fontSize: 11, color: 'var(--text-3)', fontWeight: 500 },
+  transferErr: { fontSize: 12, color: '#c73820', margin: 0 },
+  cancelLeaveBtn: {
+    padding: '8px 18px',
+    fontSize: 13,
+    fontWeight: 600,
+    borderRadius: 8,
+    border: '1px solid var(--border)',
+    background: 'transparent',
+    color: 'var(--text-2)',
+    cursor: 'pointer',
+  },
+  confirmTransferBtn: {
+    padding: '8px 18px',
+    fontSize: 13,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: 'none',
+    background: '#c73820',
+    color: '#fff',
+    cursor: 'pointer',
+    boxShadow: '0 2px 8px rgba(199,56,32,0.35)',
+    transition: 'opacity 0.14s',
   },
 }

@@ -12,6 +12,7 @@ const {
   getTeamCoaches,
   updateCoachAccessLevel,
   removeCoachFromTeam,
+  transferTeamOwnership,
 } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
 const { createCoachJoinNotification } = require('../services/notificationService')
@@ -207,6 +208,50 @@ async function myCoachTeams(req, res) {
   }
 }
 
+// ─── Transfer team ownership ──────────────────────────────────────────────────
+
+async function transferOwnership(req, res) {
+  const { new_head_coach_id } = req.body
+
+  if (!new_head_coach_id) {
+    return res.status(400).json({ error: 'new_head_coach_id is required' })
+  }
+
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Coaches only' })
+    }
+
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    if (!team) {
+      return res.status(404).json({ error: 'No team found' })
+    }
+    if (accessLevel !== 'head_coach') {
+      return res.status(403).json({ error: 'Only the head coach can transfer ownership' })
+    }
+
+    // Verify the new coach is actually an assistant on this team
+    const teamCoaches = await getTeamCoaches(team.id)
+    const target = teamCoaches.find(c => c.id === new_head_coach_id)
+    if (!target) {
+      return res.status(404).json({ error: 'That coach is not on this team' })
+    }
+
+    await transferTeamOwnership(team.id, req.user.id, new_head_coach_id)
+
+    // Notify the new head coach
+    const { createOwnershipTransferNotification } = require('../services/notificationService')
+    createOwnershipTransferNotification(new_head_coach_id, team.name).catch(e =>
+      console.error('[transferOwnership] notification failed:', e?.message)
+    )
+
+    res.json({ ok: true, message: `Ownership of ${team.name} transferred to ${target.full_name}` })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
 module.exports = {
   create,
   mine,
@@ -218,4 +263,5 @@ module.exports = {
   athleteTeam,
   athleteTeams,
   myCoachTeams,
+  transferOwnership,
 }
