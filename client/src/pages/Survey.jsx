@@ -1,4 +1,4 @@
-﻿import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate, useLocation } from 'react-router-dom'
 import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
@@ -542,6 +542,19 @@ export default function Survey() {
   const isRetake = location.state?.retake === true
 
   const [step, setStep]               = useState(1)
+  // Ref for the internal scroll container — the survey scrolls inside a
+  // flex <div> with overflowY:auto, NOT the window, so window.scrollTo
+  // cannot reach it.  We scroll this ref directly on every step change.
+  const scrollAreaRef = useRef(null)
+
+  // Scroll the survey's internal container back to the top on every step
+  // change.  Also reset the window in case the viewport itself has moved.
+  useEffect(() => {
+    if (scrollAreaRef.current) scrollAreaRef.current.scrollTop = 0
+    window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+  }, [step])
+
   const [submitting, setSubmitting]   = useState(false)
   const [error, setError]             = useState('')
   const [checkingExisting, setCheckingExisting] = useState(true)
@@ -702,7 +715,7 @@ export default function Survey() {
       </div>
 
       {/* ── Scrollable content ──────────────────────────────────────────────── */}
-      <div style={st.scrollArea}>
+      <div ref={scrollAreaRef} style={st.scrollArea}>
         <div style={st.container}>
 
           {/* Welcome message — step 1 only */}
@@ -960,7 +973,7 @@ export default function Survey() {
                     ? '0 2px 16px rgba(247,87,9,0.42), 0 1px 3px rgba(0,0,0,0.20)'
                     : 'none',
                 }}
-                onClick={() => { if (canAdvance()) { setError(''); setStep(s => s + 1); window.scrollTo(0, 0) } }}
+                onClick={() => { if (canAdvance()) { setError(''); setStep(s => s + 1) } }}
                 disabled={!canAdvance()}
               >
                 Continue →

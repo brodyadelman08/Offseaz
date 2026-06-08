@@ -1,4 +1,4 @@
-import React, { useEffect } from 'react'
+import React, { useEffect, useLayoutEffect } from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -7,12 +7,29 @@ import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
 
-// ── ScrollToTop — restores the window to the top on every route change ────────
+// ── ScrollToTop — snaps window to top on every route change ──────────────────
+// Uses useLayoutEffect so the scroll fires synchronously before the browser
+// paints the new page, preventing any flash of the previous page's scroll
+// position (e.g. landing footer → About landing at the bottom).
 function ScrollToTop() {
   const { pathname } = useLocation()
+
+  // Disable browser scroll-restoration once so it never fights us on
+  // client-side navigations.
   useEffect(() => {
+    if ('scrollRestoration' in window.history) {
+      window.history.scrollRestoration = 'manual'
+    }
+  }, [])
+
+  useLayoutEffect(() => {
+    // Belt-and-suspenders: cover window, documentElement, and body so the
+    // scroll is reset on every browser / CSS scroll-container variant.
     window.scrollTo(0, 0)
+    document.documentElement.scrollTop = 0
+    document.body.scrollTop = 0
   }, [pathname])
+
   return null
 }
 
