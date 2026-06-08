@@ -960,7 +960,7 @@ export default function Survey() {
                     ? '0 2px 16px rgba(247,87,9,0.42), 0 1px 3px rgba(0,0,0,0.20)'
                     : 'none',
                 }}
-                onClick={() => { if (canAdvance()) { setError(''); setStep(s => s + 1) } }}
+                onClick={() => { if (canAdvance()) { setError(''); setStep(s => s + 1); window.scrollTo(0, 0) } }}
                 disabled={!canAdvance()}
               >
                 Continue →

@@ -1,11 +1,20 @@
-import React from 'react'
-import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
+import React, { useEffect } from 'react'
+import { BrowserRouter, Routes, Route, Navigate, useNavigate, useLocation } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
 import { TeamProvider } from './context/TeamContext'
 import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
+
+// ── ScrollToTop — restores the window to the top on every route change ────────
+function ScrollToTop() {
+  const { pathname } = useLocation()
+  useEffect(() => {
+    window.scrollTo(0, 0)
+  }, [pathname])
+  return null
+}
 
 // ── Error boundary — catches any render crash and shows a safe fallback ────────
 class ErrorBoundary extends React.Component {
@@ -136,6 +145,7 @@ export default function App() {
     <ErrorBoundary>
       <ThemeProvider>
       <BrowserRouter>
+        <ScrollToTop />
         <AuthProvider>
           <TeamProvider>
           <Routes>

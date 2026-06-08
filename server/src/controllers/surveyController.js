@@ -56,12 +56,18 @@ async function submit(req, res) {
       )
     }
 
-    // Auto-assign a blueprint based on sport/goal — always runs, even without a team
-    // (creates a preview plan the athlete can unlock by joining a team)
-    console.log('[survey/submit] team:', { id: team?.id, coach_id: team?.coach_id })
-    autoAssignBlueprint(req.user.id, team?.id || null, team?.coach_id || null, survey, athleteName).catch(e =>
-      console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
-    )
+    // Auto-assign a blueprint only when the athlete is on a team.
+    // Without a team there is no coach_id, so the blueprints insert would fail
+    // (coach_id NOT NULL).  Teamless athletes see a locked preview once they
+    // join a team — no blueprint record is needed yet.
+    if (team?.id && team?.coach_id) {
+      console.log('[survey/submit] team found — running autoAssignBlueprint', { teamId: team.id, coachId: team.coach_id })
+      autoAssignBlueprint(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
+        console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
+      )
+    } else {
+      console.log('[survey/submit] no team — skipping autoAssignBlueprint for teamless athlete')
+    }
 
     res.status(201).json({ survey })
   } catch (err) {
