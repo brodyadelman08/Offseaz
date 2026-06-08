@@ -381,8 +381,14 @@ export default function BlueprintBuilder() {
   const maxDays = getMaxDays(form.weeks)
   const editingCell = editing ? (getCell(editing.wi, editing.di) || blankSession(editing.di)) : null
 
+  // On mobile the page must grow naturally so the parent <main> can scroll it.
+  // On desktop the page is fixed-height and the grid scrolls internally.
+  const pageStyle = isMobile
+    ? { display: 'flex', flexDirection: 'column' }
+    : g.page
+
   return (
-    <div style={g.page}>
+    <div style={pageStyle}>
 
       {/* ── Top bar ── */}
       <div style={g.topBar}>
@@ -670,9 +676,9 @@ const g = {
   addDayRow: { padding: '10px 14px' },
   addDayBtnGrid: { fontSize: 13, fontWeight: 600, padding: '7px 16px', borderRadius: 8, border: `1px dashed var(--border)`, background: 'transparent', color: 'var(--text-2)', cursor: 'pointer' },
 
-  // Mobile
-  mobileWrap: { flex: 1, display: 'flex', flexDirection: 'column', gap: 12 },
-  weekTabs: { display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4 },
+  // Mobile — no flex:1 so the wrapper grows with content and parent <main> scrolls
+  mobileWrap: { display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 16 },
+  weekTabs: { display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4, WebkitOverflowScrolling: 'touch' },
   weekTab: { flexShrink: 0, padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer' },
   weekTabActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.08)' },
   mobileCards: { display: 'flex', flexDirection: 'column', gap: 10 },

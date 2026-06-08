@@ -244,10 +244,9 @@ select {
 
 /* ── Chat interface ──────────────────────────────────────────────────────── */
 /*
-  The Layout <main> adds padding: 36px top / 60px bottom on desktop,
-  24px top / 80px bottom on mobile.  The chat shell must fill exactly
-  the remaining viewport height so nothing overflows and the input bar
-  is always visible.
+  Desktop: Layout <main> adds 36px top / 60px bottom padding → subtract 96px.
+  Mobile:  Layout <main> adds 24px top / calc(80px + safe-area) bottom → subtract
+           104px + safe-area so the shell never extends behind the home indicator.
 */
 .chat-shell {
   display: flex;
@@ -270,12 +269,20 @@ select {
   transition: width 0.2s ease;
 }
 
+/* Conversation list — scrollable column */
+.chat-sidebar-list {
+  flex: 1;
+  overflow-y: auto;
+  -webkit-overflow-scrolling: touch;
+}
+
 .chat-main {
   flex: 1;
   display: flex;
   flex-direction: column;
   min-width: 0;
   background: var(--bg);
+  overflow: hidden;
 }
 
 /* Back button: hidden on desktop, shown on mobile */
@@ -285,7 +292,8 @@ select {
 
 @media (max-width: 700px) {
   .chat-shell {
-    height: calc(100vh - 104px);  /* 24 + 80 */
+    /* Subtract top padding (24) + bottom padding (80) + iOS safe area */
+    height: calc(100vh - 104px - env(safe-area-inset-bottom, 0px));
     border-radius: 14px;
   }
 
@@ -293,14 +301,17 @@ select {
     width: 100%;
     min-width: 100%;
     border-right: none;
+    /* On mobile the sidebar IS the full view — let it scroll if needed */
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
   }
 
   .chat-sidebar-hidden {
-    display: none;
+    display: none !important;
   }
 
   .chat-main-hidden {
-    display: none;
+    display: none !important;
   }
 
   .chat-back-btn {

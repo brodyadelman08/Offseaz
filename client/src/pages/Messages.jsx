@@ -89,7 +89,7 @@ function ConvItem({ conv, active, onClick }) {
             overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', flex: 1,
             transition: 'color 0.15s',
           }}>
-            {conv.name}
+            {conv.name || (conv.type === 'group' ? 'Group Chat' : 'Direct Message')}
           </span>
           {conv.lastMessage && (
             <span style={{ fontSize: 11, color: 'var(--text-3)', flexShrink: 0 }}>
@@ -260,7 +260,14 @@ export default function Messages() {
   async function loadConvs() {
     try {
       const { data } = await api.get('/api/messages/conversations')
-      setConvs(data.conversations || [])
+      const list = data.conversations || []
+      // Pin group chat to the top of the list so it's always first on mobile
+      list.sort((a, b) => {
+        if (a.type === 'group' && b.type !== 'group') return -1
+        if (b.type === 'group' && a.type !== 'group') return 1
+        return 0
+      })
+      setConvs(list)
     } catch { /* silence */ }
   }
 
@@ -416,7 +423,7 @@ export default function Messages() {
             )}
           </div>
         ) : (
-          <div style={st.convList}>
+          <div className="chat-sidebar-list" style={st.convList}>
             {convs.map(conv => (
               <ConvItem
                 key={conv.id}
@@ -456,7 +463,9 @@ export default function Messages() {
               </div>
 
               <div>
-                <div style={st.headName}>{activeConv?.name || '…'}</div>
+                <div style={st.headName}>
+                  {activeConv?.name || (activeConv?.type === 'group' ? 'Group Chat' : 'Direct Message')}
+                </div>
                 <div style={st.headSub}>
                   {activeConv?.type === 'group' ? 'Everyone on the team' : 'Direct message'}
                 </div>

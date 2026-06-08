@@ -30,6 +30,9 @@ export function AuthProvider({ children }) {
       return
     }
 
+    // Reset loading to true whenever the session changes so ProtectedRoute
+    // shows a spinner instead of redirecting before the profile arrives.
+    setLoading(true)
     api.get('/api/auth/profile')
       .then(res => setProfile(res.data.profile))
       .catch(() => setProfile(null))

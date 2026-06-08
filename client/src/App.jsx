@@ -1,3 +1,4 @@
+import React from 'react'
 import { BrowserRouter, Routes, Route, Navigate, useNavigate } from 'react-router-dom'
 import { AuthProvider } from './context/AuthContext'
 import { ThemeProvider } from './context/ThemeContext'
@@ -5,6 +6,51 @@ import { TeamProvider } from './context/TeamContext'
 import { useAuth } from './context/AuthContext'
 import ProtectedRoute from './components/ProtectedRoute'
 import Layout from './components/Layout'
+
+// ── Error boundary — catches any render crash and shows a safe fallback ────────
+class ErrorBoundary extends React.Component {
+  constructor(props) {
+    super(props)
+    this.state = { hasError: false }
+  }
+  static getDerivedStateFromError() {
+    return { hasError: true }
+  }
+  componentDidCatch(error, info) {
+    console.error('[Offseaz ErrorBoundary]', error, info)
+  }
+  render() {
+    if (this.state.hasError) {
+      return (
+        <div style={{
+          minHeight: '100vh', display: 'flex', alignItems: 'center',
+          justifyContent: 'center', background: '#0A0A0A', color: '#EFEFEF',
+          flexDirection: 'column', gap: 16, padding: '40px 20px', textAlign: 'center',
+        }}>
+          <img
+            src="/Offseaz_Logo__White_Letter__Dark_PNG.png"
+            alt="Offseaz"
+            style={{ height: 48, display: 'block' }}
+          />
+          <p style={{ color: '#666', fontSize: 15, maxWidth: 360, lineHeight: 1.6, margin: 0 }}>
+            Something went wrong. Please refresh the page.
+          </p>
+          <button
+            onClick={() => { this.setState({ hasError: false }); window.location.href = '/' }}
+            style={{
+              padding: '11px 28px', background: '#F75709', color: '#fff',
+              border: 'none', borderRadius: 10, cursor: 'pointer',
+              fontSize: 14, fontWeight: 700,
+            }}
+          >
+            Reload App
+          </button>
+        </div>
+      )
+    }
+    return this.props.children
+  }
+}
 
 import Landing from './pages/Landing'
 import Login from './pages/Login'
@@ -45,7 +91,8 @@ function MessagesRedirect() {
 
 export default function App() {
   return (
-    <ThemeProvider>
+    <ErrorBoundary>
+      <ThemeProvider>
       <BrowserRouter>
         <AuthProvider>
           <TeamProvider>
@@ -133,6 +180,7 @@ export default function App() {
           </TeamProvider>
         </AuthProvider>
       </BrowserRouter>
-    </ThemeProvider>
+      </ThemeProvider>
+    </ErrorBoundary>
   )
 }

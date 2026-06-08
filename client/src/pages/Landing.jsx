@@ -840,7 +840,11 @@ export default function Landing() {
   )
 
   useEffect(() => {
-    if (!loading && session && profile) {
+    // Only redirect once auth is fully resolved AND we have a confirmed profile.
+    // The `loading` flag is reset to true whenever the session changes (see
+    // AuthContext), so this never fires mid-profile-fetch.
+    if (loading) return
+    if (session && profile) {
       navigate(profile.role === 'coach' ? '/coach' : '/athlete', { replace: true })
     }
   }, [loading, session, profile, navigate])
