@@ -41,11 +41,13 @@ async function getTeamLogs(coachId, teamId = null) {
     resolvedTeamId = teams[0].id
   }
 
-  // Get athlete IDs with join dates
+  // Get athlete IDs with join dates — filter to athletes only so coaches
+  // who joined as assistants don't show up in the activity feed.
   const { data: members, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id, joined_at')
     .eq('team_id', resolvedTeamId)
+    .eq('access_level', 'athlete')
 
   if (memberError) throw memberError
   if (!members || members.length === 0) return []

@@ -59,11 +59,13 @@ async function getAccountabilityData(coachId, teamId = null) {
     resolvedTeamId = teams[0].id
   }
 
-  // Get all team members with full_name
+  // Get athlete members only — filter out assistant coaches who may have
+  // access_level 'admin_coach' or 'view_only' on team_members.
   const { data: members, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id, profiles!team_members_athlete_id_fkey(id, full_name)')
     .eq('team_id', resolvedTeamId)
+    .eq('access_level', 'athlete')
 
   if (memberError) throw memberError
   if (!members || members.length === 0) return { athletes: [], logs: [] }

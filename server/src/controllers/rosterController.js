@@ -43,7 +43,7 @@ async function roster(req, res) {
  * GET /api/roster/:athleteId
  * Athlete views a public teammate's full profile.
  */
-async function teammateProfle(req, res) {
+async function teammateProfile(req, res) {
   const { athleteId } = req.params
   try {
     const profile = await getProfile(req.user.id)
@@ -85,4 +85,4 @@ async function removeAthleteFromTeam(req, res) {
   }
 }
 
-module.exports = { roster, teammateProfle, removeAthleteFromTeam }
+module.exports = { roster, teammateProfile, removeAthleteFromTeam }

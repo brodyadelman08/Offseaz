@@ -63,7 +63,7 @@ export default function AthleteOnboarding() {
     Promise.all([
       api.get('/api/teams/my-team').then(r => r.data.team).catch(() => null),
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
-      api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
+      api.get('/api/blueprints/my-plan').then(r => r.data.coach_plan || r.data.auto_plan || null).catch(() => null),
     ]).then(([t, s, p]) => {
       setTeam(t)
       setSurvey(s)

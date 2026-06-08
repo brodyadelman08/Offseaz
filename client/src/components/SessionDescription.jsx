@@ -155,16 +155,6 @@ function substitutePercentage(text, maxes) {
  *   style        {object}   - optional style overrides for the wrapper <p>
  */
 export default function SessionDescription({ description, injuryAreas = [], maxes = {}, style }) {
-  // ── Debug: always visible in browser console ─────────────────────────────
-  console.log('[SessionDescription] render — maxes keys:', Object.keys(maxes))
-  console.log('[SessionDescription] maxes.trap_bar_deadlift:', maxes?.trap_bar_deadlift)
-  console.log('[SessionDescription] maxes.squat:', maxes?.squat)
-  console.log('[SessionDescription] maxes.bench_press:', maxes?.bench_press)
-  if (description) {
-    const pctLines = description.split('\n').filter(l => /@\s*\d+%/.test(l))
-    console.log('[SessionDescription] lines with @ pct:', pctLines)
-  }
-
   if (!description) return null
 
   const flaggedSet = buildFlaggedSet(injuryAreas)
@@ -191,15 +181,6 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
             const maxEntry = liftKey ? maxes?.[liftKey] : null
             const maxLbs = maxEntry?.current?.weight_lbs ?? null
             const pctLabel = `${Math.round(pct * 100)}%`
-
-            console.log('[SessionDescription] pct match:', {
-              name,
-              nameLower,
-              liftKey,
-              maxEntry: maxEntry ? { current: maxEntry.current } : null,
-              maxLbs,
-              maxesKeys: Object.keys(maxes),
-            })
 
             if (maxLbs) {
               const lbs = calcWeight(maxLbs, pct)

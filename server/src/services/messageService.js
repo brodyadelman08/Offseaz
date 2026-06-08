@@ -22,26 +22,42 @@ function shapeMessage(m, viewerId) {
 }
 
 // Returns { teamId, coachId } or null
-async function getUserTeamInfo(userId, role) {
+async function getUserTeamInfo(userId, role, teamId = null) {
   if (role === 'coach') {
-    const { data, error } = await supabaseAdmin
-      .from('teams')
-      .select('id, coach_id')
-      .eq('coach_id', userId)
-      .single()
-    if (error && error.code !== 'PGRST116') throw error
-    if (!data) return null
-    return { teamId: data.id, coachId: userId }
+    // Head coach: look up by coach_id (supports multi-team via CoachAccessContext-chosen team)
+    let query = supabaseAdmin.from('teams').select('id, coach_id').eq('coach_id', userId)
+    if (teamId) query = query.eq('id', teamId)
+    const { data: owned, error: ownErr } = await query.order('created_at', { ascending: true }).limit(1)
+    if (ownErr && ownErr.code !== 'PGRST116') throw ownErr
+    if (owned?.length) return { teamId: owned[0].id, coachId: userId }
+
+    // Assistant coach: team_members row
+    const { data: memberships, error: memErr } = await supabaseAdmin
+      .from('team_members')
+      .select('team_id')
+      .eq('athlete_id', userId)
+      .in('access_level', ['view_only', 'admin_coach'])
+      .order('joined_at', { ascending: true })
+      .limit(1)
+    if (memErr && memErr.code !== 'PGRST116') throw memErr
+    if (!memberships?.length) return null
+    const tm = memberships[0]
+    const { data: teamRow } = await supabaseAdmin
+      .from('teams').select('id, coach_id').eq('id', tm.team_id).single()
+    if (!teamRow) return null
+    return { teamId: teamRow.id, coachId: teamRow.coach_id }
   }
-  // athlete
-  const { data, error } = await supabaseAdmin
+  // Athlete — use limit(1) to avoid PGRST116 when on multiple teams
+  const { data: rows, error } = await supabaseAdmin
     .from('team_members')
     .select('team_id, teams!inner(coach_id)')
     .eq('athlete_id', userId)
-    .single()
+    .eq('access_level', 'athlete')
+    .order('joined_at', { ascending: true })
+    .limit(1)
   if (error && error.code !== 'PGRST116') throw error
-  if (!data) return null
-  return { teamId: data.team_id, coachId: data.teams.coach_id }
+  if (!rows?.length) return null
+  return { teamId: rows[0].team_id, coachId: rows[0].teams.coach_id }
 }
 
 // Fetch all DM messages between two users in a team (two queries merged)
@@ -119,15 +135,24 @@ async function getConversationList(userId, role) {
   }]
 
   if (role === 'coach') {
-    // One DM conversation per team athlete
+    // One DM conversation per team athlete — filter to athletes only
     const { data: members } = await supabaseAdmin
       .from('team_members')
-      .select('athlete_id, profiles!team_members_athlete_id_fkey(id, full_name)')
+      .select('athlete_id')
       .eq('team_id', teamId)
+      .eq('access_level', 'athlete')
+
+    // Fetch profiles separately to avoid FK hint fragility
+    const memberIds = (members || []).map(m => m.athlete_id)
+    const { data: profileRows } = memberIds.length
+      ? await supabaseAdmin.from('profiles').select('id, full_name').in('id', memberIds)
+      : { data: [] }
+    const profileMap = {}
+    for (const p of profileRows || []) profileMap[p.id] = p.full_name
 
     await Promise.all((members || []).map(async m => {
-      const athleteId   = m.profiles.id
-      const athleteName = m.profiles.full_name
+      const athleteId   = m.athlete_id
+      const athleteName = profileMap[athleteId] || 'Athlete'
 
       const [dmAll, { count: unread }] = await Promise.all([
         fetchDMMessages(teamId, userId, athleteId, false),
@@ -269,13 +294,18 @@ async function getTeamAthletes(coachId, teamId = null) {
     if (!teams?.length) return []
     resolvedTeamId = teams[0].id
   }
-  const { data, error } = await supabaseAdmin
+  // Use two queries to avoid FK hint fragility
+  const { data: members, error } = await supabaseAdmin
     .from('team_members')
-    .select('athlete_id, profiles!team_members_athlete_id_fkey(id, full_name)')
+    .select('athlete_id')
     .eq('team_id', resolvedTeamId)
     .eq('access_level', 'athlete')
   if (error) throw error
-  return (data || []).map(m => ({ id: m.profiles.id, full_name: m.profiles.full_name }))
+  if (!members?.length) return []
+  const ids = members.map(m => m.athlete_id)
+  const { data: profiles } = await supabaseAdmin
+    .from('profiles').select('id, full_name').in('id', ids)
+  return (profiles || []).map(p => ({ id: p.id, full_name: p.full_name }))
 }
 
 module.exports = {

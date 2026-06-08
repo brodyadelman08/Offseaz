@@ -151,6 +151,16 @@ export default function CoachDashboard() {
     setTimeout(() => setCopiedLink(false), 2000)
   }
 
+  async function handleDismissNotification(e, athleteId) {
+    e.stopPropagation()
+    try {
+      await api.patch(`/api/notifications/dismiss-athlete/${athleteId}`)
+      setNotifications(prev => prev.filter(n => n.athlete_id !== athleteId))
+    } catch (err) {
+      console.error('[CoachDashboard] dismiss notification failed:', err)
+    }
+  }
+
   const inviteLink = team ? `${window.location.origin}/join/${team.invite_code}` : null
   const surveyedCount = athletes.filter(a => a.survey).length
 
@@ -203,15 +213,24 @@ export default function CoachDashboard() {
           {notifications.length > 0 && (
             <div style={styles.notifSection}>
               {notifications.map(n => (
-                <button
-                  key={n.id}
-                  style={styles.notifRow}
-                  onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
-                >
+                <div key={n.id} style={styles.notifRow}>
                   <AlertIcon size={18} color="#c73820" />
-                  <span style={styles.notifMsg}>{n.message}</span>
-                  <span style={styles.notifCta}>View Profile →</span>
-                </button>
+                  <button
+                    style={{ flex: 1, background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', padding: 0 }}
+                    onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
+                  >
+                    <span style={styles.notifMsg}>{n.message}</span>
+                  </button>
+                  <span
+                    style={styles.notifCta}
+                    onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
+                  >View →</span>
+                  <button
+                    style={styles.notifDismiss}
+                    onClick={e => handleDismissNotification(e, n.athlete_id)}
+                    title="Dismiss"
+                  >✕</button>
+                </div>
               ))}
             </div>
           )}
@@ -429,10 +448,11 @@ const styles = {
   loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
   notifSection: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 },
-  notifRow: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 12, cursor: 'pointer', textAlign: 'left', width: '100%' },
+  notifRow: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 12, textAlign: 'left' },
   notifIcon: { fontSize: 18, flexShrink: 0 },
   notifMsg: { flex: 1, fontSize: 14, fontWeight: 600, color: '#7f1d1d' },
-  notifCta: { fontSize: 13, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', flexShrink: 0 },
+  notifCta: { fontSize: 13, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', flexShrink: 0, cursor: 'pointer' },
+  notifDismiss: { background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, color: '#c73820', padding: '0 2px', opacity: 0.6, flexShrink: 0, lineHeight: 1 },
 
   statsRow: {
     display: 'grid',

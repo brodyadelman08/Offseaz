@@ -28,7 +28,6 @@ function buildMaxesMap(rows) {
  * sort: 'name' | 'position' | 'joined'
  */
 async function getCoachRoster(teamId, sort = 'name') {
-  console.log('[getCoachRoster] teamId:', teamId)
 
   // Step 1: get athlete_ids and join dates — filter to athletes only
   const { data: memberRows, error: membersErr } = await supabaseAdmin
@@ -41,7 +40,6 @@ async function getCoachRoster(teamId, sort = 'name') {
   if (!memberRows || memberRows.length === 0) return []
 
   const athleteIds = memberRows.map(m => m.athlete_id)
-  console.log('[getCoachRoster] athleteIds:', athleteIds)
 
   // Step 2: fetch profiles, surveys, maxes, and recent injury flags in parallel
   // NOTE: completed_at omitted from survey select — it may not exist in all environments
@@ -72,8 +70,6 @@ async function getCoachRoster(teamId, sort = 'name') {
       .gte('logged_at', sevenDaysAgo),
   ])
 
-  console.log('[getCoachRoster] profileRows:', profileRows?.length, 'profErr:', profErr?.message)
-  console.log('[getCoachRoster] surveyRows:', surveyRows?.length, 'surveyErr:', surveyErr?.message)
   if (profErr) throw profErr
 
   // Build lookup maps
@@ -97,8 +93,6 @@ async function getCoachRoster(teamId, sort = 'name') {
     has_recent_injury: recentInjurySet.has(p.id),
   }))
 
-  console.log('[getCoachRoster] results before sort:', results.length)
-
   // Sorting
   if (sort === 'position') {
     results.sort((a, b) =>
@@ -110,7 +104,6 @@ async function getCoachRoster(teamId, sort = 'name') {
     results.sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''))
   }
 
-  console.log('[getCoachRoster] returning', results.length, 'athletes')
   return results
 }
 
@@ -125,14 +118,18 @@ async function getCoachRoster(teamId, sort = 'name') {
  * failures when FK constraint names differ across environments.
  */
 async function getAthleteRoster(athleteId) {
-  // Get athlete's team membership (separate query — avoids FK hint fragility)
-  const { data: membership, error: memberErr } = await supabaseAdmin
+  // Get athlete's primary team membership — use limit(1) + maybeSingle so
+  // athletes on multiple teams don't cause a PGRST116 / 406 crash.
+  const { data: memberships, error: memberErr } = await supabaseAdmin
     .from('team_members')
     .select('team_id')
     .eq('athlete_id', athleteId)
-    .single()
+    .eq('access_level', 'athlete')
+    .order('joined_at', { ascending: true })
+    .limit(1)
 
-  if (memberErr && memberErr.code !== 'PGRST116') throw memberErr
+  if (memberErr) throw memberErr
+  const membership = memberships?.[0] || null
   if (!membership) return { team: null, roster: [] }
 
   // Fetch team info (includes coach_id for pinning the coach card)
@@ -145,11 +142,13 @@ async function getAthleteRoster(athleteId) {
   if (teamErr && teamErr.code !== 'PGRST116') throw teamErr
   if (!teamData) return { team: null, roster: [] }
 
-  // Get all athlete_ids on the same team
+  // Get all athlete_ids on the same team — filter to athletes only so
+  // assistant coaches don't appear as teammates in the roster view.
   const { data: memberRows, error: membersErr } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id')
     .eq('team_id', membership.team_id)
+    .eq('access_level', 'athlete')
 
   if (membersErr) throw membersErr
 
@@ -233,10 +232,15 @@ async function getAthleteRoster(athleteId) {
  * Throws 403 if not on the same team, or if target is private.
  */
 async function getTeammateProfile(viewerId, targetId) {
-  const [{ data: vMem }, { data: tMem }] = await Promise.all([
-    supabaseAdmin.from('team_members').select('team_id').eq('athlete_id', viewerId).single(),
-    supabaseAdmin.from('team_members').select('team_id').eq('athlete_id', targetId).single(),
+  // Use maybeSingle (or limit 1) to safely handle athletes on multiple teams
+  const [vRes, tRes] = await Promise.all([
+    supabaseAdmin.from('team_members').select('team_id').eq('athlete_id', viewerId)
+      .eq('access_level', 'athlete').order('joined_at', { ascending: true }).limit(1),
+    supabaseAdmin.from('team_members').select('team_id').eq('athlete_id', targetId)
+      .eq('access_level', 'athlete').order('joined_at', { ascending: true }).limit(1),
   ])
+  const vMem = vRes.data?.[0] || null
+  const tMem = tRes.data?.[0] || null
 
   if (!vMem || !tMem || vMem.team_id !== tMem.team_id) {
     throw Object.assign(new Error('Not on the same team'), { status: 403 })
