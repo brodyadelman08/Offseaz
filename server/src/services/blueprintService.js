@@ -231,6 +231,28 @@ async function getAthletePlan(athleteId) {
   return { auto_plan, coach_plan }
 }
 
+async function deleteBlueprint(blueprintId) {
+  // Delete child rows first so FK constraints don't block the parent delete.
+  // (Supabase RLS / PostgREST needs explicit deletes unless DB-level CASCADE is set.)
+  const { error: assignErr } = await supabaseAdmin
+    .from('blueprint_assignments')
+    .delete()
+    .eq('blueprint_id', blueprintId)
+  if (assignErr) throw assignErr
+
+  const { error: weeksErr } = await supabaseAdmin
+    .from('blueprint_weeks')
+    .delete()
+    .eq('blueprint_id', blueprintId)
+  if (weeksErr) throw weeksErr
+
+  const { error } = await supabaseAdmin
+    .from('blueprints')
+    .delete()
+    .eq('id', blueprintId)
+  if (error) throw error
+}
+
 async function toggleLock(blueprintId, locked) {
   const { data, error } = await supabaseAdmin
     .from('blueprints')
@@ -309,6 +331,7 @@ module.exports = {
   bulkAssignBlueprint,
   getAthletePlan,
   toggleLock,
+  deleteBlueprint,
   getAthleteOverrides,
   saveAthleteOverrides,
 }

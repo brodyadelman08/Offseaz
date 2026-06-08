@@ -10,6 +10,7 @@ const {
   bulkAssignBlueprint,
   getAthletePlan,
   toggleLock,
+  deleteBlueprint,
   getAthleteOverrides,
   saveAthleteOverrides,
 } = require('../services/blueprintService')
@@ -273,4 +274,27 @@ async function bulkAssign(req, res) {
   }
 }
 
-module.exports = { create, list, detail, assign, bulkAssign, myPlan, lock, getOverrides, saveOverrides }
+async function remove(req, res) {
+  const { id } = req.params
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can delete blueprints' })
+    }
+
+    const blueprint = await getBlueprintById(id)
+    if (blueprint.coach_id !== req.user.id) {
+      return res.status(403).json({ error: 'Not your blueprint' })
+    }
+
+    await deleteBlueprint(id)
+    res.status(204).send()
+  } catch (err) {
+    if (err.code === 'PGRST116') {
+      return res.status(404).json({ error: 'Blueprint not found' })
+    }
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { create, list, detail, assign, bulkAssign, myPlan, lock, remove, getOverrides, saveOverrides }

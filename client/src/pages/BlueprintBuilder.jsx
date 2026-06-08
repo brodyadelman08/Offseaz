@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon } from '../components/Icons'
+import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon } from '../components/Icons'
 import { SPORT_TEMPLATES, TEMPLATE_GOALS } from '../data/blueprintTemplates'
 
 const ORANGE = '#F75709'
@@ -91,8 +91,8 @@ function EditDrawer({ cell, weekNum, dayIdx, onChange, onClose, onCopy, onPaste,
           >
             {cell.locked ? '🔐 Locked' : '🔓 Unlocked'}
           </button>
-          <button style={{ ...dr.actionBtn, background: 'var(--card-inner)', color: 'var(--text-2)', border: '1px solid var(--border)' }} onClick={onCopy}>
-            📋 Copy Session
+          <button style={{ ...dr.actionBtn, background: 'var(--card-inner)', color: 'var(--text-2)', border: '1px solid var(--border)', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={onCopy}>
+            <CopyIcon size={13} color="var(--text-2)" /> Copy Session
           </button>
           {clipboard && (
             <button style={{ ...dr.actionBtn, background: 'rgba(247,87,9,0.1)', color: ORANGE, border: `1px solid ${ORANGE}` }} onClick={onPaste}>
@@ -409,7 +409,7 @@ export default function BlueprintBuilder() {
       {/* ── Clipboard banner ── */}
       {clipboard && (
         <div style={g.clipBar}>
-          <span style={g.clipIcon}>📋</span>
+          <span style={g.clipIcon}><CopyIcon size={16} color={ORANGE} /></span>
           <div style={g.clipInfo}>
             <span style={g.clipFocus}>{clipboard.focus || 'Session copied'}</span>
             <span style={g.clipHint}>Click any cell to paste · Use "Paste All ↓" on a day row to fill all {form.num_weeks} weeks instantly</span>
@@ -422,7 +422,7 @@ export default function BlueprintBuilder() {
       {selected.size > 0 && (
         <div style={g.bulkBar}>
           <span style={g.bulkCount}>{selected.size} session{selected.size !== 1 ? 's' : ''} selected</span>
-          <button onClick={() => setBulkEditOpen(true)} style={g.bulkEditBtn}>✏ Bulk Edit</button>
+          <button onClick={() => setBulkEditOpen(true)} style={{ ...g.bulkEditBtn, display: 'inline-flex', alignItems: 'center', gap: 6 }}><EditIcon size={13} color={BLUE} /> Bulk Edit</button>
           <button onClick={() => setSelected(new Set())} style={g.bulkClearBtn}>Deselect All</button>
         </div>
       )}
@@ -449,14 +449,14 @@ export default function BlueprintBuilder() {
                     <span style={g.mobileCardDay}>{cell?.day || `Day ${di + 1}`}</span>
                     {cell?.locked && <span style={g.lockBadge}>🔐 Locked</span>}
                     <div style={g.mobileCardBtns}>
-                      <button style={g.mobileActionBtn} onClick={() => copyCell(activeWeek, di)}>📋</button>
-                      {clipboard && <button style={{ ...g.mobileActionBtn, color: ORANGE }} onClick={() => pasteCell(activeWeek, di)}>⬇</button>}
-                      <button style={g.mobileActionBtn} onClick={() => setEditing({ wi: activeWeek, di })}>✏</button>
+                      <button style={g.mobileActionBtn} onClick={() => copyCell(activeWeek, di)} title="Copy session"><CopyIcon size={15} color="var(--text-2)" /></button>
+                      {clipboard && <button style={{ ...g.mobileActionBtn, color: ORANGE }} onClick={() => pasteCell(activeWeek, di)} title="Paste">⬇</button>}
+                      <button style={g.mobileActionBtn} onClick={() => setEditing({ wi: activeWeek, di })} title="Edit session"><EditIcon size={15} color="var(--text-2)" /></button>
                     </div>
                   </div>
                   {cell?.focus && <p style={g.mobileCardFocus}>{cell.focus}</p>}
                   {cell?.description && <p style={g.mobileCardDesc}>{cell.description}</p>}
-                  {!cell?.focus && !cell?.description && <p style={g.emptyCell}>Tap ✏ to add session</p>}
+                  {!cell?.focus && !cell?.description && <p style={g.emptyCell}>Tap edit to add session</p>}
                 </div>
               )
             })}
@@ -521,7 +521,7 @@ export default function BlueprintBuilder() {
                         <p style={g.cellDesc}>{cell.description.slice(0, 80)}{cell.description.length > 80 ? '…' : ''}</p>
                       )}
                       <div style={g.cellFooter}>
-                        <button style={g.cellBtn} onClick={e => { e.stopPropagation(); copyCell(wi, di) }} title="Copy session">📋 Copy</button>
+                        <button style={{ ...g.cellBtn, display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={e => { e.stopPropagation(); copyCell(wi, di) }} title="Copy session"><CopyIcon size={11} color="var(--text-3)" /> Copy</button>
                         {clipboard && (
                           <button style={{ ...g.cellBtn, color: ORANGE }} onClick={e => { e.stopPropagation(); pasteCell(wi, di) }} title="Paste clipboard here">⬇ Paste</button>
                         )}

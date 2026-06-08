@@ -414,3 +414,14 @@ select {
     overflow: visible;
   }
 }
+
+/* ── Blueprint card trash button hover state ────────────────────────────────── */
+/* Inline styles cannot target :hover — this class provides the red tint on     */
+/* pointer-over so the icon signals "destructive action" before the click.      */
+.bp-trash-btn:hover {
+  background: rgba(199, 56, 32, 0.12) !important;
+  border-color: rgba(199, 56, 32, 0.40) !important;
+}
+.bp-trash-btn:hover svg {
+  stroke: #c73820;
+}
