@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, useState } from 'react'
+import { createContext, useContext, useEffect, useRef, useState } from 'react'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
 
@@ -8,6 +8,12 @@ export function AuthProvider({ children }) {
   const [session, setSession] = useState(undefined)
   const [profile, setProfile] = useState(null)
   const [loading, setLoading] = useState(true)
+
+  // Track the last token we fetched a profile for so we never kick off a
+  // duplicate fetch when both getSession() AND onAuthStateChange fire for the
+  // same session (they both call setSession, React creates two state updates
+  // if the objects have different references, which triggers this effect twice).
+  const lastFetchedToken = useRef(null)
 
   useEffect(() => {
     supabase.auth.getSession().then(({ data }) => {
@@ -25,21 +31,32 @@ export function AuthProvider({ children }) {
     if (session === undefined) return
 
     if (!session) {
+      lastFetchedToken.current = null
       setProfile(null)
       setLoading(false)
       return
     }
 
-    // Reset loading to true whenever the session changes so ProtectedRoute
-    // shows a spinner instead of redirecting before the profile arrives.
+    // Deduplicate: don't re-fetch if it's the exact same access token we
+    // already fetched (handles the getSession + onAuthStateChange double-fire).
+    if (session.access_token === lastFetchedToken.current) return
+    lastFetchedToken.current = session.access_token
+
     setLoading(true)
     api.get('/api/auth/profile')
-      .then(res => setProfile(res.data.profile))
-      .catch(() => setProfile(null))
+      .then(res => {
+        const p = res.data.profile
+        setProfile(p || null)
+      })
+      .catch(() => {
+        setProfile(null)
+        lastFetchedToken.current = null   // allow retry on next session change
+      })
       .finally(() => setLoading(false))
   }, [session])
 
   async function signOut() {
+    lastFetchedToken.current = null
     await supabase.auth.signOut()
     setProfile(null)
   }

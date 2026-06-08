@@ -17,7 +17,10 @@ class ErrorBoundary extends React.Component {
     return { hasError: true }
   }
   componentDidCatch(error, info) {
-    console.error('[Offseaz ErrorBoundary]', error, info)
+    // Log both the error message and the full component stack so it's easy
+    // to find the crashing component in the browser console.
+    console.error('[Offseaz ErrorBoundary] Caught render error:', error)
+    console.error('[Offseaz ErrorBoundary] Component stack:', info?.componentStack)
   }
   render() {
     if (this.state.hasError) {

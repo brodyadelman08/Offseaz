@@ -95,7 +95,15 @@ function DesktopSidebar({ nav, profile, signOut }) {
   const navigate = useNavigate()
   const { pathname } = useLocation()
   const { teams, activeTeam, activeTeamId, setActiveTeamId } = useTeam()
-  const { teams: coachTeams, activeTeamId: activeCoachTeamId, setActiveTeamId: setActiveCoachTeamId } = useCoachAccess()
+
+  // CoachAccessContext is only provided inside /coach routes.  Athlete routes
+  // render Layout WITHOUT it, so useCoachAccess() returns null here.  Guard
+  // every access so DesktopSidebar never crashes on athlete routes.
+  const coachAccessCtx = useCoachAccess()
+  const coachTeams              = coachAccessCtx?.teams              ?? []
+  const activeCoachTeamId       = coachAccessCtx?.activeTeamId       ?? null
+  const setActiveCoachTeamId    = coachAccessCtx?.setActiveTeamId    ?? (() => {})
+
   const activeCoachTeam = coachTeams.find(t => t.id === activeCoachTeamId) || coachTeams[0] || null
 
   function isActive(path, exact) {
