@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
-import { ChevronDownIcon, ChevronUpIcon, FileTextIcon, AlertIcon, ClipboardIcon, CheckIcon } from '../components/Icons'
+import { ChevronDownIcon, ChevronUpIcon, FileTextIcon, AlertIcon, ClipboardIcon, CheckIcon, XIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -377,7 +377,7 @@ export default function AthleteProfile() {
                                     onClick={() => toggleExerciseRemoval(week.week_number, si, li)}
                                     title={removed ? 'Click to restore' : 'Click to remove'}
                                   >
-                                    {removed ? '✕' : ''}
+                                    {removed ? <XIcon size={11} color="currentColor" /> : null}
                                   </button>
                                   <span style={{
                                     fontSize: 13,

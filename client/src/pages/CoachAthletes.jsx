@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { CheckIcon, TrashIcon } from '../components/Icons'
+import { CheckIcon, TrashIcon, AlertIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 import { useIsMobile } from '../components/Sidebar'
 import { useCoachAccess } from '../context/CoachAccessContext'
@@ -261,7 +261,7 @@ export default function CoachAthletes() {
                     <div style={{ minWidth: 0 }}>
                       <div style={styles.mobileAthleteNameRow}>
                         <span style={styles.athleteName}>{a.full_name}</span>
-                        {a.has_recent_injury && <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days">⚠</span>}
+                        {a.has_recent_injury && <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days"><AlertIcon size={12} color="#c73820" /></span>}
                       </div>
                       {a.survey?.sport && (
                         <span style={styles.mobileSport}>{a.survey.sport}{a.survey.position ? ` · ${a.survey.position}` : ''}</span>
@@ -302,7 +302,7 @@ export default function CoachAthletes() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <AvatarUpload name={a.full_name} avatarUrl={a.avatar_url} size={34} color={ORANGE} editable={false} />
                         <span style={styles.athleteName}>{a.full_name}</span>
-                        {a.has_recent_injury && <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days">⚠</span>}
+                        {a.has_recent_injury && <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days"><AlertIcon size={12} color="#c73820" /></span>}
                       </div>
                     </td>
                     <td style={styles.td}>

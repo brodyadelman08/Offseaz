@@ -2,7 +2,7 @@
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
-import { BarChartIcon, UserIcon } from '../components/Icons'
+import { BarChartIcon, UserIcon, TargetIcon, CheckCircleIcon } from '../components/Icons'
 
 export default function Register() {
   const navigate = useNavigate()
@@ -86,7 +86,7 @@ export default function Register() {
 
           {inviteCode && (
             <div style={styles.inviteBanner}>
-              🎯 You have a team invite — joining as an Athlete.
+              <TargetIcon size={14} color="#308EBD" /> You have a team invite — joining as an Athlete.
             </div>
           )}
 
@@ -174,7 +174,7 @@ export default function Register() {
 
             {/* Fix 5 — beta note */}
             <p style={styles.betaNote}>
-              ✅ You can log in immediately after creating your account — no email confirmation required during beta.
+              <CheckCircleIcon size={13} color="var(--text-3)" /> You can log in immediately after creating your account — no email confirmation required during beta.
             </p>
           </form>
 

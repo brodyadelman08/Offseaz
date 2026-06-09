@@ -1,7 +1,11 @@
 import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { DumbbellIcon, CheckCircleIcon } from '../components/Icons'
+import {
+  DumbbellIcon, CheckCircleIcon, TrophyIcon, BarbellIcon, ClipboardIcon,
+  TargetIcon, LockIcon, BoltIcon, EyeIcon,
+  StatusCompleteIcon, StatusPartialIcon, StatusSkippedIcon, StatusInjuryIcon,
+} from '../components/Icons'
 import SessionDescription from '../components/SessionDescription'
 import PreviewBanner from '../components/PreviewBanner'
 import { useTeam } from '../context/TeamContext'
@@ -15,11 +19,11 @@ const YELLOW = '#F0BE24'
 function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
   const navigate = useNavigate()
   const options = [
-    { key: 'retest_maxes',  emoji: '🏋️', title: 'Retest Your Maxes',    color: ORANGE,
+    { key: 'retest_maxes',  Icon: BarbellIcon,   title: 'Retest Your Maxes',    color: ORANGE,
       desc: 'Log updated 1RMs so your next program auto-calculates weights from your new strength levels.' },
-    { key: 'retake_survey', emoji: '📋', title: 'Retake Your Survey',    color: BLUE,
+    { key: 'retake_survey', Icon: ClipboardIcon, title: 'Retake Your Survey',    color: BLUE,
       desc: 'Update your goals, position, and preferences to generate a fresh personalized blueprint.' },
-    { key: 'wait_for_coach',emoji: '🎯', title: 'Wait for Your Coach',   color: YELLOW,
+    { key: 'wait_for_coach', Icon: TargetIcon,   title: 'Wait for Your Coach',   color: YELLOW,
       desc: "Notify your coach you're ready. They'll review your progress and assign your next program." },
   ]
   if (chosen) {
@@ -38,7 +42,7 @@ function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
   }
   return (
     <div style={cb.banner}>
-      <div style={cb.iconRow}><span style={cb.trophy}>🏆</span></div>
+      <div style={cb.iconRow}><TrophyIcon size={44} color={ORANGE} /></div>
       <h2 style={cb.heading}>You completed your {plan.num_weeks}-week program</h2>
       <p style={cb.sub}>Choose what happens next</p>
       <div style={cb.cards}>
@@ -49,7 +53,7 @@ function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
               opacity: choosing && choosing !== opt.key ? 0.45 : 1 }}
             onClick={() => onChoose(opt.key, navigate)}
             disabled={Boolean(choosing)}>
-            <span style={cb.cardEmoji}>{opt.emoji}</span>
+            <opt.Icon size={28} color={opt.color} />
             <span style={{ ...cb.cardTitle, color: opt.color }}>{opt.title}</span>
             <span style={cb.cardDesc}>{opt.desc}</span>
             {choosing === opt.key && <span style={cb.cardSpinner} className="survey-spinner-sm" />}
@@ -61,7 +65,7 @@ function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
 }
 const cb = {
   banner: { background:'linear-gradient(135deg,rgba(247,87,9,.07) 0%,rgba(48,142,189,.05) 100%)', border:`1px solid ${ORANGE}33`, borderRadius:20, padding:'28px 20px 24px', marginBottom:28, textAlign:'center' },
-  iconRow: { marginBottom:10 }, trophy: { fontSize:36 },
+  iconRow: { display:'flex', justifyContent:'center', marginBottom:14 },
   heading: { fontSize:'clamp(18px,4vw,22px)', fontWeight:800, color:'var(--text)', margin:'0 0 6px', fontFamily:"'Calibri','Trebuchet MS',sans-serif" },
   sub:     { fontSize:13, color:'var(--text-2)', margin:'0 0 20px' },
   cards:   { display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(180px,100%),1fr))', gap:10, textAlign:'left' },
@@ -102,7 +106,7 @@ function ExerciseRow({ exercise, maxes, locked = false }) {
       <div style={ex.right}>
         <span style={ex.setsReps}>{setsRepsStr}</span>
         {locked && pct ? (
-          <span style={ex.locked}>🔒 ██ lbs</span>
+          <span style={ex.locked}><LockIcon size={11} color="currentColor" /> ██ lbs</span>
         ) : weightLine ? (
           <span style={maxLbs ? ex.calc : ex.prompt}>{weightLine}</span>
         ) : null}
@@ -124,10 +128,10 @@ const ex = {
 // ── Workout logging bottom sheet ──────────────────────────────────────────────
 
 const STATUS_OPTIONS = [
-  { key:'completed',      label:'Completed',       emoji:'✅', color:'#2e7d32', bg:'rgba(46,125,50,.15)',  border:'rgba(46,125,50,.5)' },
-  { key:'partial',        label:'Partial',          emoji:'⚡', color:'#b45309', bg:'rgba(180,83,9,.12)',   border:'rgba(180,83,9,.4)' },
-  { key:'skipped',        label:'Skipped',          emoji:'⏭',  color:'#888',    bg:'rgba(128,128,128,.1)', border:'rgba(128,128,128,.35)' },
-  { key:'skipped_injury', label:'Skipped — Injury', emoji:'🤕', color:'#c73820', bg:'rgba(199,56,32,.12)',  border:'rgba(199,56,32,.4)' },
+  { key:'completed',      label:'Completed',       Icon: StatusCompleteIcon, color:'#2e7d32', bg:'rgba(46,125,50,.15)',  border:'rgba(46,125,50,.5)' },
+  { key:'partial',        label:'Partial',          Icon: StatusPartialIcon,  color:'#b45309', bg:'rgba(180,83,9,.12)',   border:'rgba(180,83,9,.4)' },
+  { key:'skipped',        label:'Skipped',          Icon: StatusSkippedIcon,  color:'#888',    bg:'rgba(128,128,128,.1)', border:'rgba(128,128,128,.35)' },
+  { key:'skipped_injury', label:'Skipped — Injury', Icon: StatusInjuryIcon,   color:'#c73820', bg:'rgba(199,56,32,.12)',  border:'rgba(199,56,32,.4)' },
 ]
 
 function LogSheet({ session, weekId, sessionIndex, existing, onClose, onSave }) {
@@ -191,7 +195,7 @@ function LogSheet({ session, weekId, sessionIndex, existing, onClose, onSave }) 
               }}
               onClick={() => { setStatus(opt.key); setErr('') }}
             >
-              <span style={ls.statusEmoji}>{opt.emoji}</span>
+              <opt.Icon size={28} color="currentColor" />
               <span style={ls.statusLabel}>{opt.label}</span>
             </button>
           ))}
@@ -318,8 +322,7 @@ const ls = {
     cursor:'pointer', transition:'all .15s',
     minHeight: 80,
   },
-  statusEmoji: { fontSize:26, lineHeight:1 },
-  statusLabel: { fontSize:13, fontWeight:700, lineHeight:1.3, textAlign:'center' },
+  statusLabel: { fontSize:13, fontWeight:700, lineHeight:1.3, textAlign:'center', marginTop:2 },
   effortRow:  { display:'flex', gap:5, marginBottom:20, flexWrap:'wrap' },
   effortBtn:  {
     width:44, height:44, borderRadius:10, border:'1.5px solid',
@@ -457,7 +460,9 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, inj
                         </div>
                       ) : s.description ? (
                         locked ? (
-                          <div style={styles.lockedDesc}>🔒 Detailed coaching notes unlock when you join your team</div>
+                          <div style={styles.lockedDesc}>
+                            <LockIcon size={13} color="var(--text-3)" /> Detailed coaching notes unlock when you join your team
+                          </div>
                         ) : (
                           <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
                         )
@@ -478,7 +483,10 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, inj
                           }}
                           onClick={() => setLogSheet({ weekId: week.id, sessionIndex: i, session: s })}
                         >
-                          {logged ? `✓ ${statusInfo.label} — Update` : '+ Log Session'}
+                          {logged
+                            ? <><StatusCompleteIcon size={16} color="currentColor" /> {statusInfo.label} — Update</>
+                            : '+ Log Session'
+                          }
                         </button>
                       )}
                     </div>
@@ -631,7 +639,9 @@ export default function AthletePlan() {
         coachPlan ? (
           <div style={styles.planSection}>
             <div style={styles.labelRow}>
-              <span style={styles.coachLabel}>📋 Assigned by Coach — {coachPlan.title}</span>
+              <span style={styles.coachLabel}>
+                <ClipboardIcon size={13} color={BLUE} /> Assigned by Coach — {coachPlan.title}
+              </span>
             </div>
             <PlanView
               plan={coachPlan}
@@ -653,7 +663,10 @@ export default function AthletePlan() {
         <div style={styles.planSection}>
           <div style={styles.labelRow}>
             <span style={previewMode ? styles.previewLabel : styles.autoLabel}>
-              {previewMode ? `👁 Preview — ${autoPlan.title}` : '⚡ Personalized Plan — Generated from Your Survey'}
+              {previewMode
+                ? <><EyeIcon size={13} color="currentColor" /> Preview — {autoPlan.title}</>
+                : <><BoltIcon size={13} color={ORANGE} /> Personalized Plan — Generated from Your Survey</>
+              }
             </span>
           </div>
           <PlanView

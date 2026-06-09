@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
-import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon } from '../components/Icons'
+import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 
 const ORANGE = '#F75709'
@@ -344,7 +344,7 @@ export default function AthleteMyProfile() {
 
         {coachPlan && (
           <div style={{ marginBottom: autoPlan ? 18 : 0 }}>
-            <span style={styles.coachBadge}>📋 Assigned by Coach</span>
+            <span style={styles.coachBadge}><ClipboardIcon size={12} color="#308EBD" /> Assigned by Coach</span>
             <p style={{ ...styles.planName, marginTop: 8 }}>{coachPlan.title}</p>
             <p style={styles.planMeta}>{coachPlan.num_weeks}-week plan · Started {fmtDate(coachPlan.starts_on)}</p>
           </div>
@@ -352,7 +352,7 @@ export default function AthleteMyProfile() {
 
         {autoPlan && (
           <div>
-            <span style={styles.autoBadge}>⚡ Personalized Plan — Generated from Your Survey</span>
+            <span style={styles.autoBadge}><BoltIcon size={12} color="#F75709" /> Personalized Plan — Generated from Your Survey</span>
             <p style={{ ...styles.planName, marginTop: 8 }}>{autoPlan.title}</p>
             <p style={styles.planMeta}>{autoPlan.num_weeks}-week plan · Started {fmtDate(autoPlan.starts_on)}</p>
           </div>

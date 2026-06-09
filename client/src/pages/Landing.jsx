@@ -1,6 +1,7 @@
 ﻿import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { BoltIcon } from '../components/Icons'
 
 const LOGO   = '/Offseaz_Logo__White_Letter__Dark_PNG.png'
 const ORANGE = '#F75709'
@@ -1072,7 +1073,7 @@ export default function Landing() {
           {/* Weight callout */}
           <div style={sp.callout}>
             <div style={sp.calloutIconWrap}>
-              <span style={sp.calloutIconText}>⚡</span>
+              <BoltIcon size={24} color="#F75709" />
             </div>
             <div>
               <p style={sp.calloutHeading}>No math. No guesswork. Just lift.</p>

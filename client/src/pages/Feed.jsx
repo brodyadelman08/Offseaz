@@ -5,7 +5,7 @@ import { useTeam } from '../context/TeamContext'
 import PreviewBanner from '../components/PreviewBanner'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
-import { HeartIcon, HeartFilledIcon, MessageIcon } from '../components/Icons'
+import { HeartIcon, HeartFilledIcon, MessageIcon, AlertIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -464,7 +464,7 @@ export default function Feed() {
         )}
 
         {photoErr && (
-          <p style={st.photoErr}>⚠ {photoErr}</p>
+          <p style={st.photoErr}><AlertIcon size={14} color="#c73820" /> {photoErr}</p>
         )}
 
         {/* Hidden file input */}
@@ -525,7 +525,7 @@ export default function Feed() {
         )}
       </form>
 
-      {error && <div style={st.errorMsg}>⚠ {error}</div>}
+      {error && <div style={st.errorMsg}><AlertIcon size={14} color="#c73820" /> {error}</div>}
 
       {loading ? (
         <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>

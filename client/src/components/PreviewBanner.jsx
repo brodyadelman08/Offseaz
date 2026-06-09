@@ -1,4 +1,5 @@
 import { useNavigate } from 'react-router-dom'
+import { LockIcon, UnlockIcon } from './Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -14,7 +15,7 @@ export default function PreviewBanner({ noun = 'plan', compact = false }) {
   if (compact) {
     return (
       <div style={styles.compact}>
-        <span style={styles.compactIcon}>🔒</span>
+        <span style={styles.compactIcon}><LockIcon size={20} color={ORANGE} /></span>
         <div style={styles.compactText}>
           <p style={styles.compactTitle}>Join your team to unlock {noun}</p>
           <p style={styles.compactSub}>Ask your coach for the invite code</p>
@@ -44,7 +45,7 @@ export default function PreviewBanner({ noun = 'plan', compact = false }) {
 
       {/* CTA */}
       <button style={styles.unlockBtn} onClick={() => navigate('/athlete')}>
-        🔓 Enter Invite Code
+        <UnlockIcon size={16} color="#fff" /> Enter Invite Code
       </button>
     </div>
   )

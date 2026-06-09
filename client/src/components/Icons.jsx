@@ -583,3 +583,100 @@ export function FileTextIcon({ size = 20, color = 'currentColor' }) {
     </svg>
   )
 }
+
+// ── Status icons — workout logging ─────────────────────────────────────────────
+// These replace emoji-based status indicators throughout the app.
+// All are stroke-only so they inherit the parent button's text/icon color.
+
+/** Completed workout — circle with bold checkmark */
+export function StatusCompleteIcon({ size = 24, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color, 2)} viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" />
+      <polyline points="7.5 12 10.5 15.5 16.5 8.5" />
+    </svg>
+  )
+}
+
+/** Partial workout — circle split into filled / empty halves */
+export function StatusPartialIcon({ size = 24, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color, 1.75)} viewBox="0 0 24 24">
+      {/* Full outer ring (dim) */}
+      <circle cx="12" cy="12" r="9" strokeOpacity="0.35" />
+      {/* Left half arc (solid) — 180° from bottom to top via left */}
+      <path d="M 12 3 A 9 9 0 0 0 12 21" />
+      {/* Centre dividing line */}
+      <line x1="12" y1="3" x2="12" y2="21" />
+    </svg>
+  )
+}
+
+/** Skipped workout — circle with media-skip symbol (right bar + chevron) */
+export function StatusSkippedIcon({ size = 24, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color, 1.75)} viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" strokeOpacity="0.35" />
+      {/* Forward chevron */}
+      <polyline points="9 8.5 13.5 12 9 15.5" />
+      {/* Vertical end-bar */}
+      <line x1="15.5" y1="8.5" x2="15.5" y2="15.5" />
+    </svg>
+  )
+}
+
+/** Skipped — Injury — circle with medical cross */
+export function StatusInjuryIcon({ size = 24, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color, 1.75)} viewBox="0 0 24 24">
+      <circle cx="12" cy="12" r="9" />
+      {/* Medical cross */}
+      <line x1="12" y1="7.5" x2="12" y2="16.5" strokeWidth="2" />
+      <line x1="7.5" y1="12" x2="16.5" y2="12" strokeWidth="2" />
+    </svg>
+  )
+}
+
+// ── Utility icons ──────────────────────────────────────────────────────────────
+
+/** Open padlock — "unlocked / enter code" */
+export function UnlockIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <rect x="3" y="11" width="18" height="11" rx="2" />
+      {/* Shackle open on right */}
+      <path d="M7 11V7a5 5 0 0 1 9.9-1" />
+    </svg>
+  )
+}
+
+/** Eye — preview / visibility */
+export function EyeIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z" />
+      <circle cx="12" cy="12" r="3" />
+    </svg>
+  )
+}
+
+/** X / close / dismiss */
+export function XIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <line x1="18" y1="6" x2="6" y2="18" />
+      <line x1="6" y1="6" x2="18" y2="18" />
+    </svg>
+  )
+}
+
+/** Warning triangle — API errors, alerts */
+export function WarningIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z" />
+      <line x1="12" y1="9" x2="12" y2="13" />
+      <circle cx="12" cy="17" r="0.5" fill={color} />
+    </svg>
+  )
+}

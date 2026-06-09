@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
+import { CheckIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -115,7 +116,7 @@ export default function Contact() {
         <div style={s.sectionInner}>
           {submitted ? (
             <div style={s.success}>
-              <div style={s.checkCircle}>✓</div>
+              <div style={s.checkCircle}><CheckIcon size={28} color="#fff" /></div>
               <h2 style={s.successTitle}>Message received!</h2>
               <p style={s.successBody}>
                 Thanks for reaching out. We'll get back to you at{' '}

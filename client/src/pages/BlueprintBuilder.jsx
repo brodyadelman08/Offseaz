@@ -1,7 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon } from '../components/Icons'
+import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon, LockIcon, UnlockIcon } from '../components/Icons'
 import { SPORT_TEMPLATES, TEMPLATE_GOALS } from '../data/blueprintTemplates'
 
 const ORANGE = '#F75709'
@@ -89,7 +89,10 @@ function EditDrawer({ cell, weekNum, dayIdx, onChange, onClose, onCopy, onPaste,
             style={{ ...dr.actionBtn, background: cell.locked ? 'rgba(247,87,9,0.12)' : 'var(--card-inner)', color: cell.locked ? ORANGE : 'var(--text-2)', border: `1px solid ${cell.locked ? ORANGE : 'var(--border)'}` }}
             onClick={onLock}
           >
-            {cell.locked ? '🔐 Locked' : '🔓 Unlocked'}
+            {cell.locked
+              ? <><LockIcon size={14} color="currentColor" /> Locked</>
+              : <><UnlockIcon size={14} color="currentColor" /> Unlocked</>
+            }
           </button>
           <button style={{ ...dr.actionBtn, background: 'var(--card-inner)', color: 'var(--text-2)', border: '1px solid var(--border)', display: 'inline-flex', alignItems: 'center', gap: 6 }} onClick={onCopy}>
             <CopyIcon size={13} color="var(--text-2)" /> Copy Session
@@ -455,7 +458,7 @@ export default function BlueprintBuilder() {
                 <div key={di} style={{ ...g.mobileCard, ...(cell?.locked ? g.mobileCardLocked : {}) }}>
                   <div style={g.mobileCardHeader}>
                     <span style={g.mobileCardDay}>{cell?.day || `Day ${di + 1}`}</span>
-                    {cell?.locked && <span style={g.lockBadge}>🔐 Locked</span>}
+                    {cell?.locked && <span style={g.lockBadge}><LockIcon size={12} color={ORANGE} /> Locked</span>}
                     <div style={g.mobileCardBtns}>
                       <button style={g.mobileActionBtn} onClick={() => copyCell(activeWeek, di)} title="Copy session"><CopyIcon size={15} color="var(--text-2)" /></button>
                       {clipboard && <button style={{ ...g.mobileActionBtn, color: ORANGE }} onClick={() => pasteCell(activeWeek, di)} title="Paste">⬇</button>}
@@ -519,7 +522,7 @@ export default function BlueprintBuilder() {
                         <input type="checkbox" style={g.checkbox} checked={isSel}
                           onClick={e => { e.stopPropagation(); toggleSelect(wi, di) }}
                           onChange={() => {}} />
-                        {cell?.locked && <span style={g.lockIcon} title="Locked">🔐</span>}
+                        {cell?.locked && <span style={g.lockIcon} title="Locked"><LockIcon size={13} color={ORANGE} /></span>}
                         {cell?.focus
                           ? <span style={g.cellFocus}>{cell.focus}</span>
                           : <span style={g.cellEmpty}>Empty — click to add</span>

@@ -1,6 +1,6 @@
 import { useState, useEffect, Component } from 'react'
 import api from '../services/api'
-import { ClipboardIcon, FlameIcon } from '../components/Icons'
+import { ClipboardIcon, FlameIcon, AlertIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const YELLOW = '#F0BE24'
@@ -159,7 +159,7 @@ function AccountabilityInner() {
       {/* API error banner — visible above the empty state so we can debug on device */}
       {apiError && !loading && (
         <div style={{ background: 'rgba(199,56,32,0.10)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 10, padding: '10px 14px', fontSize: 13, marginBottom: 16 }}>
-          ⚠ API error: {apiError}
+          <AlertIcon size={14} color="#c73820" /> API error: {apiError}
         </div>
       )}
 
