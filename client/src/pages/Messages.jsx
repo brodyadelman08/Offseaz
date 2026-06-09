@@ -412,8 +412,16 @@ export default function Messages() {
         </div>
 
         {loadingConvs ? (
-          <div style={{ display: 'flex', justifyContent: 'center', padding: '32px 0' }}>
-            <div className="survey-spinner" />
+          <div style={{ padding: '8px' }}>
+            {[1,2,3,4].map(i => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 11, padding: '10px 12px' }}>
+                <div className="skeleton" style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0 }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7 }}>
+                  <div className="skeleton" style={{ width: '55%', height: 14 }} />
+                  <div className="skeleton" style={{ width: '75%', height: 12 }} />
+                </div>
+              </div>
+            ))}
           </div>
         ) : convs.length === 0 ? (
           <div style={st.emptyConvs}>

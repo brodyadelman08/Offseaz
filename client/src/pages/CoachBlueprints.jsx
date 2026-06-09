@@ -62,12 +62,29 @@ export default function CoachBlueprints() {
       </div>
 
       {loading ? (
-        <p style={styles.empty}>Loading…</p>
+        <div style={styles.grid}>
+          {[1,2,3,4,5,6].map(i => (
+            <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: '20px 18px', display: 'flex', flexDirection: 'column', gap: 10 }}>
+              <div className="skeleton" style={{ width: '75%', height: 17 }} />
+              <div className="skeleton" style={{ width: '90%', height: 13 }} />
+              <div className="skeleton" style={{ width: '55%', height: 13 }} />
+              <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 4 }}>
+                <div className="skeleton" style={{ width: 50, height: 12 }} />
+                <div className="skeleton" style={{ width: 64, height: 22, borderRadius: 6 }} />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : blueprints.length === 0 ? (
         <div style={styles.emptyState}>
+          <div style={styles.emptyIconWrap}>
+            <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="1.6" strokeLinecap="round" strokeLinejoin="round">
+              <rect x="3" y="3" width="18" height="18" rx="2"/><path d="M3 9h18M9 21V9"/>
+            </svg>
+          </div>
           <p style={styles.emptyTitle}>No blueprints yet</p>
           <p style={styles.emptyDesc}>
-            Create a training blueprint to assign structured plans to your athletes.
+            Build your first training blueprint to start assigning structured plans to your athletes.
           </p>
           <button
             style={styles.emptyCreateBtn}
@@ -204,9 +221,10 @@ const styles = {
   },
 
   empty: { color: 'var(--text-3)', fontSize: 15 },
-  emptyState: { textAlign: 'center', paddingTop: 60 },
+  emptyState: { textAlign: 'center', paddingTop: 60, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 },
+  emptyIconWrap: { width: 72, height: 72, borderRadius: '50%', background: `rgba(247,87,9,0.08)`, border: `1px solid ${ORANGE}22`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 },
   emptyTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
-  emptyDesc: { fontSize: 14, color: 'var(--text-2)', marginBottom: 24 },
+  emptyDesc: { fontSize: 14, color: 'var(--text-2)', marginBottom: 24, maxWidth: 340, lineHeight: 1.55 },
   emptyCreateBtn: {
     padding: '11px 24px',
     fontSize: 14,

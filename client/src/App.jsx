@@ -148,6 +148,7 @@ import AthleteRoster from './pages/AthleteRoster'
 import AthleteTeammateProfile from './pages/AthleteTeammateProfile'
 import Feed from './pages/Feed'
 import AthleteReport from './pages/AthleteReport'
+import NotFound from './pages/NotFound'
 
 // Smart redirect for /messages → role-based destination
 function MessagesRedirect() {
@@ -244,7 +245,7 @@ export default function App() {
             <Route path="/blueprints/new" element={<Navigate to="/coach/blueprints/new" replace />} />
             <Route path="/messages" element={<MessagesRedirect />} />
 
-            <Route path="*" element={<Navigate to="/" replace />} />
+            <Route path="*" element={<NotFound />} />
           </Routes>
           </TeamProvider>
         </AuthProvider>

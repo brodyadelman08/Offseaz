@@ -218,13 +218,33 @@ export default function CoachAthletes() {
       {/* ── Athletes tab ──────────────────────────────────────────────────────── */}
       {activeTab === 'athletes' && (
         athLoading ? (
-          <p style={styles.empty}>Loading…</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[1,2,3,4].map(i => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '12px 16px', background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 12 }}>
+                <div className="skeleton" style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0 }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7 }}>
+                  <div className="skeleton" style={{ width: '40%', height: 14 }} />
+                  <div className="skeleton" style={{ width: '55%', height: 12 }} />
+                </div>
+                <div className="skeleton" style={{ width: 60, height: 24, borderRadius: 6 }} />
+              </div>
+            ))}
+          </div>
         ) : sorted.length === 0 ? (
-          <div style={styles.emptyState}>
+          <div style={{ ...styles.emptyState, gap: 0 }}>
+            <div style={{ width: 72, height: 72, borderRadius: '50%', background: 'rgba(247,87,9,0.08)', border: '1px solid rgba(247,87,9,0.15)', display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
+              <UsersIcon size={32} color={ORANGE} />
+            </div>
             <p style={styles.emptyTitle}>No athletes yet</p>
             <p style={styles.emptyDesc}>
-              Share your athlete invite code from the Dashboard to get your team started.
+              Share your athlete invite code from the Dashboard — athletes enter it to join your roster instantly.
             </p>
+            <button
+              style={{ padding: '10px 22px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 10px rgba(247,87,9,0.30)' }}
+              onClick={() => navigate('/coach')}
+            >
+              Get your invite code
+            </button>
           </div>
         ) : isMobile ? (
           /* Mobile card layout */
@@ -536,9 +556,9 @@ const styles = {
   },
 
   empty: { color: 'var(--text-3)', fontSize: 15 },
-  emptyState: { textAlign: 'center', paddingTop: 60 },
+  emptyState: { textAlign: 'center', paddingTop: 60, display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0 },
   emptyTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
-  emptyDesc:  { fontSize: 14, color: 'var(--text-2)' },
+  emptyDesc:  { fontSize: 14, color: 'var(--text-2)', marginBottom: 20, maxWidth: 340, lineHeight: 1.55 },
 
   // Desktop athlete table
   card: {

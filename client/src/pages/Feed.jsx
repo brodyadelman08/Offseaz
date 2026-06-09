@@ -540,14 +540,28 @@ export default function Feed() {
       {error && <div style={st.errorMsg}>⚠ {error}</div>}
 
       {loading ? (
-        <div style={st.loadingWrap}><div className="survey-spinner" /></div>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
+          {[1,2,3].map(i => (
+            <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 18 }}>
+              <div style={{ display: 'flex', gap: 12, alignItems: 'center', marginBottom: 12 }}>
+                <div className="skeleton" style={{ width: 40, height: 40, borderRadius: '50%', flexShrink: 0 }} />
+                <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 6 }}>
+                  <div className="skeleton" style={{ width: '45%', height: 14 }} />
+                  <div className="skeleton" style={{ width: '25%', height: 12 }} />
+                </div>
+              </div>
+              <div className="skeleton" style={{ width: '80%', height: 14, marginBottom: 6 }} />
+              <div className="skeleton" style={{ width: '60%', height: 14 }} />
+            </div>
+          ))}
+        </div>
       ) : posts.length === 0 ? (
         <div style={st.emptyState}>
           <div style={st.emptyIcon}>
-            <MessageIcon size={32} color="var(--text-3)" />
+            <MessageIcon size={32} color={ORANGE} />
           </div>
           <p style={st.emptyTitle}>No posts yet</p>
-          <p style={st.emptySub}>Be the first to share something with your team.</p>
+          <p style={st.emptySub}>Be the first to post — share a workout, PR, or update with your team.</p>
         </div>
       ) : (
         <div style={st.feedList}>

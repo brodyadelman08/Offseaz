@@ -415,6 +415,24 @@ select {
   }
 }
 
+/* ── Skeleton loading placeholders ─────────────────────────────────────────── */
+@keyframes skeleton-shimmer {
+  0%   { background-position: -400px 0; }
+  100% { background-position:  400px 0; }
+}
+
+.skeleton {
+  background: linear-gradient(
+    90deg,
+    var(--card-inner) 25%,
+    #2a2a2a 50%,
+    var(--card-inner) 75%
+  );
+  background-size: 800px 100%;
+  animation: skeleton-shimmer 1.4s ease-in-out infinite;
+  border-radius: 6px;
+}
+
 /* ── Blueprint card trash button hover state ────────────────────────────────── */
 /* Inline styles cannot target :hover — this class provides the red tint on     */
 /* pointer-over so the icon signals "destructive action" before the click.      */

@@ -206,7 +206,39 @@ export default function CoachDashboard() {
       )}
 
       {loading ? (
-        <p style={styles.loadingText}>Loading…</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {/* Stat cards skeleton */}
+          <div style={{ display: 'grid', gridTemplateColumns: 'repeat(3,1fr)', gap: 12 }}>
+            {[1,2,3].map(i => (
+              <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: '22px 12px', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8 }}>
+                <div className="skeleton" style={{ width: 32, height: 32, borderRadius: '50%' }} />
+                <div className="skeleton" style={{ width: 40, height: 22 }} />
+                <div className="skeleton" style={{ width: 56, height: 12 }} />
+              </div>
+            ))}
+          </div>
+          {/* Team card skeleton */}
+          <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24 }}>
+            <div className="skeleton" style={{ width: 80, height: 11, marginBottom: 8 }} />
+            <div className="skeleton" style={{ width: 180, height: 22, marginBottom: 20 }} />
+            <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: 12 }}>
+              {[1,2].map(i => <div key={i} className="skeleton" style={{ height: 72, borderRadius: 12 }} />)}
+            </div>
+          </div>
+          {/* Activity skeleton */}
+          <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24 }}>
+            <div className="skeleton" style={{ width: 110, height: 11, marginBottom: 16 }} />
+            {[1,2,3,4].map(i => (
+              <div key={i} style={{ display: 'flex', justifyContent: 'space-between', padding: '10px 0', borderBottom: '1px solid var(--border-light)' }}>
+                <div style={{ display: 'flex', gap: 10, alignItems: 'center' }}>
+                  <div className="skeleton" style={{ width: 90, height: 14 }} />
+                  <div className="skeleton" style={{ width: 60, height: 12 }} />
+                </div>
+                <div className="skeleton" style={{ width: 60, height: 22, borderRadius: 4 }} />
+              </div>
+            ))}
+          </div>
+        </div>
       ) : team ? (
         <>
           {/* Injury notifications */}

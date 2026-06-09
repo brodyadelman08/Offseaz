@@ -14,19 +14,34 @@ export default function Register() {
   const [password, setPassword] = useState('')
   const [role, setRole] = useState(inviteCode ? 'athlete' : '')
   const [error, setError] = useState('')
+  const [fieldErrors, setFieldErrors] = useState({})
   const [loading, setLoading] = useState(false)
 
   const accentColor = role === 'athlete' ? '#308EBD' : '#F75709'
 
+  function validateFields() {
+    const errs = {}
+    if (!fullName.trim()) errs.fullName = 'Name is required.'
+    if (!email.trim()) {
+      errs.email = 'Email is required.'
+    } else if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email.trim())) {
+      errs.email = 'Enter a valid email address.'
+    }
+    if (!password) {
+      errs.password = 'Password is required.'
+    } else if (password.length < 8) {
+      errs.password = 'Password must be at least 8 characters.'
+    }
+    if (!inviteCode && !role) errs.role = 'Please select a role.'
+    return errs
+  }
+
   async function handleSubmit(e) {
     e.preventDefault()
     setError('')
-
-    if (!role) {
-      setError('Please select a role.')
-      return
-    }
-
+    const errs = validateFields()
+    if (Object.keys(errs).length > 0) { setFieldErrors(errs); return }
+    setFieldErrors({})
     setLoading(true)
 
     const { data, error: signUpError } = await supabase.auth.signUp({
@@ -78,38 +93,44 @@ export default function Register() {
           {error && <div style={styles.errorBox}>{error}</div>}
 
           <form onSubmit={handleSubmit} style={styles.form}>
-            <input
-              style={styles.input}
-              type="text"
-              placeholder="Full name"
-              value={fullName}
-              onChange={e => setFullName(e.target.value)}
-              required
-              autoComplete="name"
-            />
-            <input
-              style={styles.input}
-              type="email"
-              placeholder="Email address"
-              value={email}
-              onChange={e => setEmail(e.target.value)}
-              required
-              autoComplete="email"
-            />
-            <input
-              style={styles.input}
-              type="password"
-              placeholder="Password (min 6 characters)"
-              value={password}
-              onChange={e => setPassword(e.target.value)}
-              required
-              minLength={6}
-              autoComplete="new-password"
-            />
+            <div>
+              <input
+                style={{ ...styles.input, ...(fieldErrors.fullName ? styles.inputError : {}) }}
+                type="text"
+                placeholder="Full name"
+                value={fullName}
+                onChange={e => { setFullName(e.target.value); setFieldErrors(p => ({ ...p, fullName: '' })) }}
+                autoComplete="name"
+              />
+              {fieldErrors.fullName && <p style={styles.fieldErr}>{fieldErrors.fullName}</p>}
+            </div>
+            <div>
+              <input
+                style={{ ...styles.input, ...(fieldErrors.email ? styles.inputError : {}) }}
+                type="email"
+                placeholder="Email address"
+                value={email}
+                onChange={e => { setEmail(e.target.value); setFieldErrors(p => ({ ...p, email: '' })) }}
+                autoComplete="email"
+              />
+              {fieldErrors.email && <p style={styles.fieldErr}>{fieldErrors.email}</p>}
+            </div>
+            <div>
+              <input
+                style={{ ...styles.input, ...(fieldErrors.password ? styles.inputError : {}) }}
+                type="password"
+                placeholder="Password (min 8 characters)"
+                value={password}
+                onChange={e => { setPassword(e.target.value); setFieldErrors(p => ({ ...p, password: '' })) }}
+                autoComplete="new-password"
+              />
+              {fieldErrors.password && <p style={styles.fieldErr}>{fieldErrors.password}</p>}
+            </div>
 
             {!inviteCode && (
               <div>
                 <p style={styles.roleLabel}>I am a…</p>
+                {fieldErrors.role && <p style={{ ...styles.fieldErr, marginBottom: 6 }}>{fieldErrors.role}</p>}
                 <div style={styles.roleRow}>
                   <button
                     type="button"
@@ -150,6 +171,11 @@ export default function Register() {
             >
               {loading ? 'Creating account…' : 'Create account →'}
             </button>
+
+            {/* Fix 5 — beta note */}
+            <p style={styles.betaNote}>
+              ✅ You can log in immediately after creating your account — no email confirmation required during beta.
+            </p>
           </form>
 
           <p style={styles.switchLink}>
@@ -304,5 +330,22 @@ const styles = {
     fontSize: 13,
     color: 'var(--text-2)',
     marginTop: 20,
+  },
+  inputError: {
+    borderColor: '#c73820',
+    boxShadow: '0 0 0 2px rgba(199,56,32,0.15)',
+  },
+  fieldErr: {
+    fontSize: 12,
+    color: '#c73820',
+    margin: '5px 0 0',
+    lineHeight: 1.4,
+  },
+  betaNote: {
+    fontSize: 12,
+    color: 'var(--text-3)',
+    textAlign: 'center',
+    margin: '4px 0 0',
+    lineHeight: 1.5,
   },
 }

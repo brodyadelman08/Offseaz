@@ -179,7 +179,15 @@ export default function AthleteDashboard() {
       </div>
 
       {loading ? (
-        <p style={styles.loadingText}>Loading…</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+          {[90, 70, 80].map((w, i) => (
+            <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24 }}>
+              <div className="skeleton" style={{ width: `${w}px`, height: 11, marginBottom: 10 }} />
+              <div className="skeleton" style={{ width: '60%', height: 20, marginBottom: 8 }} />
+              <div className="skeleton" style={{ width: '40%', height: 13 }} />
+            </div>
+          ))}
+        </div>
       ) : (
         <div style={styles.stack}>
           {/* Team card */}

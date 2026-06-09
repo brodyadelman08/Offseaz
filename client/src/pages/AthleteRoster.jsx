@@ -58,7 +58,18 @@ export default function AthleteRoster() {
       </div>
 
       {loading ? (
-        <p style={styles.empty}>Loading…</p>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+          {[1,2,3,4,5].map(i => (
+            <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 14, padding: '14px 0', borderBottom: '1px solid var(--border-light)' }}>
+              <div className="skeleton" style={{ width: 44, height: 44, borderRadius: '50%', flexShrink: 0 }} />
+              <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: 7 }}>
+                <div className="skeleton" style={{ width: '45%', height: 15 }} />
+                <div className="skeleton" style={{ width: '30%', height: 12 }} />
+              </div>
+              <div className="skeleton" style={{ width: 24, height: 24, borderRadius: '50%' }} />
+            </div>
+          ))}
+        </div>
       ) : !team ? (
         <div style={styles.emptyState}>
           <PreviewBanner noun="team roster" />
