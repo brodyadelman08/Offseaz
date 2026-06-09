@@ -11,7 +11,10 @@ const {
 async function conversations(req, res) {
   try {
     const profile = await getProfile(req.user.id)
-    const list = await getConversationList(req.user.id, profile.role)
+    // Optional ?team_id lets multi-team coaches and athletes scope the
+    // conversation list to their currently-selected team.
+    const teamId = req.query.team_id || null
+    const list = await getConversationList(req.user.id, profile.role, teamId)
     res.json({ conversations: list })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -23,7 +26,8 @@ async function thread(req, res) {
   const { convId } = req.params
   try {
     const profile  = await getProfile(req.user.id)
-    const messages = await getConversationThread(req.user.id, profile.role, convId)
+    const teamId   = req.query.team_id || null
+    const messages = await getConversationThread(req.user.id, profile.role, convId, teamId)
     res.json({ messages })
   } catch (err) {
     res.status(500).json({ error: err.message })

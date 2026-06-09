@@ -1,6 +1,7 @@
 import { useState, useEffect, useRef, useCallback } from 'react'
 import { useAuth } from '../context/AuthContext'
 import { useTeam } from '../context/TeamContext'
+import { useCoachAccess } from '../context/CoachAccessContext'
 import PreviewBanner from '../components/PreviewBanner'
 import api from '../services/api'
 
@@ -219,8 +220,19 @@ function dayLabel(dateStr) {
 // ── Main component ────────────────────────────────────────────────────────────
 
 export default function Messages() {
-  const { profile }                       = useAuth()
-  const activeTeam                        = useTeam()?.activeTeam ?? null
+  const { profile }  = useAuth()
+  // CoachAccessContext is only provided inside /coach routes.
+  // On /athlete routes useCoachAccess() returns null — guard every access.
+  const coachCtx     = useCoachAccess()
+  const teamCtx      = useTeam()
+  const activeTeam   = teamCtx?.activeTeam ?? null
+
+  // Unified active-team ID: coaches use CoachAccessContext (multi-team),
+  // athletes use TeamContext.  This drives all conversation reloads.
+  const activeTeamId = profile?.role === 'coach'
+    ? (coachCtx?.activeTeamId ?? null)
+    : (teamCtx?.activeTeam?.id ?? null)
+
   const [convs, setConvs]                 = useState([])
   const [activeId, setActiveId]           = useState(null)
   const [messages, setMessages]           = useState([])
@@ -231,13 +243,15 @@ export default function Messages() {
   const [mobileView, setMobileView]       = useState('list')   // 'list' | 'chat'
   const [sendErr, setSendErr]             = useState('')
 
-  const threadRef      = useRef(null)
-  const inputRef       = useRef(null)
-  const pollRef        = useRef(null)
-  const autoScrollRef  = useRef(true)    // scroll to bottom on update?
-  const activeIdRef    = useRef(null)    // tracks activeId without stale closure
+  const threadRef        = useRef(null)
+  const inputRef         = useRef(null)
+  const pollRef          = useRef(null)
+  const autoScrollRef    = useRef(true)       // scroll to bottom on update?
+  const activeIdRef      = useRef(null)       // tracks activeId without stale closure
+  const activeTeamIdRef  = useRef(activeTeamId) // tracks teamId without stale closure
 
-  activeIdRef.current = activeId
+  activeIdRef.current     = activeId
+  activeTeamIdRef.current = activeTeamId
 
   // ── Scroll helpers ──────────────────────────────────────────────────────────
 
@@ -257,9 +271,15 @@ export default function Messages() {
 
   // ── Data loaders ────────────────────────────────────────────────────────────
 
-  async function loadConvs() {
+  // Both loaders accept an explicit teamId so they can be called with the
+  // current active team without relying on a stale closure over state.
+
+  async function loadConvs(teamId) {
     try {
-      const { data } = await api.get('/api/messages/conversations')
+      const url = teamId
+        ? `/api/messages/conversations?team_id=${encodeURIComponent(teamId)}`
+        : '/api/messages/conversations'
+      const { data } = await api.get(url)
       const list = data.conversations || []
       // Pin group chat to the top of the list so it's always first on mobile
       list.sort((a, b) => {
@@ -271,10 +291,13 @@ export default function Messages() {
     } catch { /* silence */ }
   }
 
-  async function loadThread(convId, isPoll = false) {
+  async function loadThread(convId, teamId, isPoll = false) {
     if (!isPoll) setLoadingThread(true)
     try {
-      const { data } = await api.get(`/api/messages/thread/${convId}`)
+      const url = teamId
+        ? `/api/messages/thread/${convId}?team_id=${encodeURIComponent(teamId)}`
+        : `/api/messages/thread/${convId}`
+      const { data } = await api.get(url)
       const incoming = data.messages || []
       setMessages(prev => {
         if (isPoll) {
@@ -283,7 +306,7 @@ export default function Messages() {
         }
         return incoming
       })
-      if (!isPoll) loadConvs()
+      if (!isPoll) loadConvs(teamId)
     } catch { /* silence */ }
     finally { if (!isPoll) setLoadingThread(false) }
   }
@@ -297,7 +320,7 @@ export default function Messages() {
     setText('')
     autoScrollRef.current = true
     setMobileView('chat')
-    loadThread(convId)
+    loadThread(convId, activeTeamIdRef.current)
     setTimeout(() => inputRef.current?.focus(), 80)
   }
 
@@ -314,7 +337,7 @@ export default function Messages() {
     try {
       const { data } = await api.post(`/api/messages/thread/${activeId}`, { content })
       setMessages(prev => [...prev, data.message])
-      loadConvs()
+      loadConvs(activeTeamIdRef.current)
     } catch (err) {
       setSendErr(err.response?.data?.error || 'Failed to send.')
       setText(content)
@@ -336,10 +359,29 @@ export default function Messages() {
 
   // ── Effects ─────────────────────────────────────────────────────────────────
 
-  // Initial conversation list
+  // Reload conversations whenever the active team changes (or on initial mount).
+  // Also resets any open thread so the user isn't left viewing a conversation
+  // that belongs to the previous team.
   useEffect(() => {
-    loadConvs().finally(() => setLoadingConvs(false))
-  }, [])
+    // Athletes with no team see the preview banner — nothing to load
+    if (profile?.role === 'athlete' && !activeTeamId) {
+      setLoadingConvs(false)
+      return
+    }
+
+    // Reset all chat state before loading the new team's conversations
+    setActiveId(null)
+    setMessages([])
+    setConvs([])
+    setSendErr('')
+    setText('')
+    setMobileView('list')
+    if (pollRef.current) clearInterval(pollRef.current)
+
+    setLoadingConvs(true)
+    loadConvs(activeTeamId).finally(() => setLoadingConvs(false))
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [activeTeamId])
 
   // Scroll to bottom when messages change
   useEffect(() => {
@@ -349,12 +391,12 @@ export default function Messages() {
     }
   }, [messages, scrollBottom])
 
-  // Poll active thread every 8 s
+  // Poll active thread every 8 s — passes activeTeamId via ref so no stale closure
   useEffect(() => {
     if (pollRef.current) clearInterval(pollRef.current)
     if (!activeId) return
     pollRef.current = setInterval(() => {
-      if (activeIdRef.current) loadThread(activeIdRef.current, true)
+      if (activeIdRef.current) loadThread(activeIdRef.current, activeTeamIdRef.current, true)
     }, 8000)
     return () => clearInterval(pollRef.current)
   }, [activeId])

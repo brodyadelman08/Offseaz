@@ -21,24 +21,30 @@ function shapeMessage(m, viewerId) {
   }
 }
 
-// Returns { teamId, coachId } or null
+// Returns { teamId, coachId } or null.
+// When teamId is supplied, only that specific team is considered — used when
+// the client passes ?team_id= after a multi-team switch.
 async function getUserTeamInfo(userId, role, teamId = null) {
   if (role === 'coach') {
-    // Head coach: look up by coach_id (supports multi-team via CoachAccessContext-chosen team)
+    // Head coach: look up by coach_id. Honour explicit teamId if given.
     let query = supabaseAdmin.from('teams').select('id, coach_id').eq('coach_id', userId)
     if (teamId) query = query.eq('id', teamId)
     const { data: owned, error: ownErr } = await query.order('created_at', { ascending: true }).limit(1)
     if (ownErr && ownErr.code !== 'PGRST116') throw ownErr
     if (owned?.length) return { teamId: owned[0].id, coachId: userId }
 
-    // Assistant coach: team_members row
-    const { data: memberships, error: memErr } = await supabaseAdmin
+    // Assistant coach: team_members row. Filter by teamId when provided.
+    let memQuery = supabaseAdmin
       .from('team_members')
       .select('team_id')
       .eq('athlete_id', userId)
       .in('access_level', ['view_only', 'admin_coach'])
-      .order('joined_at', { ascending: true })
-      .limit(1)
+    if (teamId) {
+      memQuery = memQuery.eq('team_id', teamId)
+    } else {
+      memQuery = memQuery.order('joined_at', { ascending: true }).limit(1)
+    }
+    const { data: memberships, error: memErr } = await memQuery
     if (memErr && memErr.code !== 'PGRST116') throw memErr
     if (!memberships?.length) return null
     const tm = memberships[0]
@@ -47,14 +53,20 @@ async function getUserTeamInfo(userId, role, teamId = null) {
     if (!teamRow) return null
     return { teamId: teamRow.id, coachId: teamRow.coach_id }
   }
-  // Athlete — use limit(1) to avoid PGRST116 when on multiple teams
-  const { data: rows, error } = await supabaseAdmin
+
+  // Athlete — filter by explicit teamId when provided; otherwise default to
+  // the first joined team (join order) to preserve legacy single-team behaviour.
+  let athQuery = supabaseAdmin
     .from('team_members')
     .select('team_id, teams!inner(coach_id)')
     .eq('athlete_id', userId)
     .eq('access_level', 'athlete')
-    .order('joined_at', { ascending: true })
-    .limit(1)
+  if (teamId) {
+    athQuery = athQuery.eq('team_id', teamId)
+  } else {
+    athQuery = athQuery.order('joined_at', { ascending: true }).limit(1)
+  }
+  const { data: rows, error } = await athQuery
   if (error && error.code !== 'PGRST116') throw error
   if (!rows?.length) return null
   return { teamId: rows[0].team_id, coachId: rows[0].teams.coach_id }
@@ -93,8 +105,8 @@ async function fetchDMMessages(teamId, userA, userB, ascending = true) {
 
 // ── Conversation list (sidebar) ───────────────────────────────────────────────
 
-async function getConversationList(userId, role) {
-  const info = await getUserTeamInfo(userId, role)
+async function getConversationList(userId, role, teamId = null) {
+  const info = await getUserTeamInfo(userId, role, teamId)
   if (!info) return []
   const { teamId, coachId } = info
 
@@ -215,8 +227,8 @@ async function getConversationList(userId, role) {
 
 // ── Full thread for one conversation ─────────────────────────────────────────
 
-async function getConversationThread(userId, role, conversationId) {
-  const info = await getUserTeamInfo(userId, role)
+async function getConversationThread(userId, role, conversationId, teamId = null) {
+  const info = await getUserTeamInfo(userId, role, teamId)
   if (!info) return []
   const { teamId } = info
 
