@@ -1520,10 +1520,15 @@ const s = {
     color: '#555',
     fontSize: 14,
     cursor: 'pointer',
-    padding: '2px 6px',
+    padding: '8px 10px',
     lineHeight: 1,
-    borderRadius: 4,
+    borderRadius: 6,
     transition: 'color 0.15s',
+    minWidth: 36,
+    minHeight: 36,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 
   // Navbar — GPU-composited so position:fixed works reliably on iOS

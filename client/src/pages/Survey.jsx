@@ -463,11 +463,8 @@ function DayPicker({ value, onChange }) {
   const [hovered, setHovered] = useState(null)
 
   return (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(4, 1fr)',
-      gap: 12,
-    }}>
+    // CSS class handles 4-col desktop → 2-col mobile (see index.css .survey-day-picker)
+    <div className="survey-day-picker">
       {[3, 4, 5, 6].map(d => {
         const sel = value === d
         const hov = hovered === d && !sel
@@ -685,8 +682,8 @@ export default function Survey() {
         <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={st.logo} />
 
         <div style={st.stepPill}>
-          <span style={st.stepPillName}>{meta.tag}</span>
-          <span style={st.stepPillDivider} />
+          <span className="survey-pill-name" style={st.stepPillName}>{meta.tag}</span>
+          <span className="survey-pill-divider" style={st.stepPillDivider} />
           <span style={st.stepPillCount}>{step}<span style={{ opacity: 0.5 }}> / {TOTAL_STEPS}</span></span>
         </div>
 
@@ -758,7 +755,7 @@ export default function Survey() {
                     placeholder="Your full name"
                     value={form.full_name}
                     onChange={e => set('full_name', e.target.value)}
-                    autoFocus
+                    autoComplete="name"
                   />
                 </div>
 
@@ -1021,13 +1018,14 @@ const st = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'space-between',
-    padding: '0 28px',
+    padding: '0 clamp(14px, 4vw, 28px)',
     height: 56,
     background: 'rgba(15,15,15,0.92)',
     backdropFilter: 'blur(12px)',
     WebkitBackdropFilter: 'blur(12px)',
     borderBottom: '1px solid var(--border)',
     flexShrink: 0,
+    gap: 8,
   },
   logo: {
     height: 26,
@@ -1080,7 +1078,7 @@ const st = {
   progressBar: {
     display: 'flex',
     gap: 3,
-    padding: '0 28px',
+    padding: '0 clamp(14px, 4vw, 28px)',
     height: 34,
     alignItems: 'center',
     background: 'var(--bg)',
@@ -1096,7 +1094,7 @@ const st = {
   container: {
     maxWidth: 640,
     margin: '0 auto',
-    padding: '44px 28px 100px',
+    padding: 'clamp(24px, 5vw, 44px) clamp(16px, 5vw, 28px) 100px',
   },
 
   // Step header

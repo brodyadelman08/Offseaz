@@ -21,6 +21,9 @@ html {
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-rendering: optimizeLegibility;
+  /* Prevent iOS from adjusting font sizes after orientation change */
+  -webkit-text-size-adjust: 100%;
+  text-size-adjust: 100%;
 }
 
 body {
@@ -55,11 +58,17 @@ p {
 button {
   font-family: inherit;
   cursor: pointer;
+  /* Eliminate 300ms tap delay on iOS Safari / older Android */
+  touch-action: manipulation;
 }
 
 input, textarea, select {
   font-family: inherit;
   font-size: inherit;
+  /* Prevent iOS Safari from auto-zooming when an input is focused.
+     font-size must be >= 16px; we inherit from body (16px) so this is
+     already satisfied, but explicitly set here as a safety guard. */
+  font-size: max(16px, 1em);
 }
 
 a {
@@ -138,6 +147,11 @@ select:focus {
 @keyframes spin {
   from { transform: rotate(0deg); }
   to   { transform: rotate(360deg); }
+}
+
+@keyframes sheetUp {
+  from { transform: translateY(100%); opacity: 0.6; }
+  to   { transform: translateY(0);    opacity: 1; }
 }
 
 @keyframes surveyFadeIn {
@@ -292,8 +306,10 @@ select {
 
 @media (max-width: 700px) {
   .chat-shell {
-    /* Subtract top padding (24) + bottom padding (80) + iOS safe area */
+    /* Use dvh (dynamic viewport height) so the shell shrinks when the
+       browser address bar is visible. Falls back to 100vh on older Safari. */
     height: calc(100vh - 104px - env(safe-area-inset-bottom, 0px));
+    height: calc(100dvh - 104px - env(safe-area-inset-bottom, 0px));
     border-radius: 14px;
   }
 
@@ -431,6 +447,51 @@ select {
   background-size: 800px 100%;
   animation: skeleton-shimmer 1.4s ease-in-out infinite;
   border-radius: 6px;
+}
+
+/* ── Survey day-picker grid: 4-col desktop → 2-col mobile ────────────────── */
+.survey-day-picker {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 12px;
+}
+@media (max-width: 540px) {
+  .survey-day-picker {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+/* ── Survey step-pill tag: hide label text on narrow screens ─────────────── */
+@media (max-width: 480px) {
+  .survey-pill-name   { display: none; }
+  .survey-pill-divider{ display: none; }
+}
+
+/* ── Action row: stack button below text on narrow phones ────────────────── */
+.action-row-mobile {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+}
+@media (max-width: 420px) {
+  .action-row-mobile {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+  .action-row-mobile > button {
+    width: 100%;
+  }
+}
+
+/* ── Feed post card hover — desktop only (hover media query avoids iOS stuck-hover) */
+@media (hover: hover) {
+  .feed-post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 8px 28px rgba(0,0,0,0.30), inset 0 1px 0 rgba(255,255,255,0.06) !important;
+    border-color: rgba(247,87,9,0.28) !important;
+    transition: transform 0.18s ease, box-shadow 0.18s ease, border-color 0.18s ease;
+  }
 }
 
 /* ── Blueprint card trash button hover state ────────────────────────────────── */

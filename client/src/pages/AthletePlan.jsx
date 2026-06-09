@@ -1,7 +1,7 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { DumbbellIcon, CheckCircleIcon, ArrowLeftIcon } from '../components/Icons'
+import { DumbbellIcon, CheckCircleIcon } from '../components/Icons'
 import SessionDescription from '../components/SessionDescription'
 import PreviewBanner from '../components/PreviewBanner'
 import { useTeam } from '../context/TeamContext'
@@ -15,31 +15,14 @@ const YELLOW = '#F0BE24'
 function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
   const navigate = useNavigate()
   const options = [
-    {
-      key:   'retest_maxes',
-      emoji: '🏋️',
-      title: 'Retest Your Maxes',
-      desc:  'Log updated 1RMs so your next program auto-calculates weights from your new strength levels.',
-      color: ORANGE,
-    },
-    {
-      key:   'retake_survey',
-      emoji: '📋',
-      title: 'Retake Your Survey',
-      desc:  'Update your goals, position, and preferences to generate a fresh personalized blueprint.',
-      color: BLUE,
-    },
-    {
-      key:   'wait_for_coach',
-      emoji: '🎯',
-      title: 'Wait for Your Coach',
-      desc:  "Notify your coach you're ready. They'll review your progress and assign your next program.",
-      color: YELLOW,
-    },
+    { key: 'retest_maxes',  emoji: '🏋️', title: 'Retest Your Maxes',    color: ORANGE,
+      desc: 'Log updated 1RMs so your next program auto-calculates weights from your new strength levels.' },
+    { key: 'retake_survey', emoji: '📋', title: 'Retake Your Survey',    color: BLUE,
+      desc: 'Update your goals, position, and preferences to generate a fresh personalized blueprint.' },
+    { key: 'wait_for_coach',emoji: '🎯', title: 'Wait for Your Coach',   color: YELLOW,
+      desc: "Notify your coach you're ready. They'll review your progress and assign your next program." },
   ]
-
   if (chosen) {
-    const opt = options.find(o => o.key === chosen)
     return (
       <div style={cb.banner}>
         <div style={cb.checkRow}>
@@ -53,144 +36,324 @@ function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
       </div>
     )
   }
-
   return (
     <div style={cb.banner}>
-      <div style={cb.iconRow}>
-        <span style={cb.trophy}>🏆</span>
-      </div>
+      <div style={cb.iconRow}><span style={cb.trophy}>🏆</span></div>
       <h2 style={cb.heading}>You completed your {plan.num_weeks}-week program</h2>
       <p style={cb.sub}>Choose what happens next</p>
-
       <div style={cb.cards}>
         {options.map(opt => (
-          <button
-            key={opt.key}
-            style={{
-              ...cb.card,
-              borderColor: choosing === opt.key ? opt.color : 'var(--border)',
-              background:  choosing === opt.key ? `${opt.color}10` : 'var(--card-inner)',
-              opacity:     choosing && choosing !== opt.key ? 0.45 : 1,
-            }}
+          <button key={opt.key}
+            style={{ ...cb.card, borderColor: choosing === opt.key ? opt.color : 'var(--border)',
+              background: choosing === opt.key ? `${opt.color}10` : 'var(--card-inner)',
+              opacity: choosing && choosing !== opt.key ? 0.45 : 1 }}
             onClick={() => onChoose(opt.key, navigate)}
-            disabled={Boolean(choosing)}
-          >
+            disabled={Boolean(choosing)}>
             <span style={cb.cardEmoji}>{opt.emoji}</span>
             <span style={{ ...cb.cardTitle, color: opt.color }}>{opt.title}</span>
             <span style={cb.cardDesc}>{opt.desc}</span>
-            {choosing === opt.key && (
-              <span style={{ ...cb.cardSpinner, borderTopColor: opt.color }} className="survey-spinner-sm" />
-            )}
+            {choosing === opt.key && <span style={cb.cardSpinner} className="survey-spinner-sm" />}
           </button>
         ))}
       </div>
     </div>
   )
 }
-
 const cb = {
-  banner: {
-    background: 'linear-gradient(135deg, rgba(247,87,9,0.07) 0%, rgba(48,142,189,0.05) 100%)',
-    border: `1px solid ${ORANGE}33`,
-    borderRadius: 20,
-    padding: '32px 28px 28px',
-    marginBottom: 28,
-    textAlign: 'center',
-  },
-  iconRow:  { marginBottom: 12 },
-  trophy:   { fontSize: 40 },
-  heading:  { fontSize: 22, fontWeight: 800, color: 'var(--text)', margin: '0 0 6px', fontFamily: "'Calibri','Trebuchet MS',sans-serif" },
-  sub:      { fontSize: 14, color: 'var(--text-2)', margin: '0 0 24px' },
-  cards:    { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px,100%),1fr))', gap: 12, textAlign: 'left' },
-  card: {
-    display: 'flex', flexDirection: 'column', gap: 6,
-    padding: '18px 16px', borderRadius: 14, border: '1px solid',
-    cursor: 'pointer', textAlign: 'left',
-    transition: 'border-color 0.18s, background 0.18s, opacity 0.18s',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.14)',
-  },
-  cardEmoji: { fontSize: 24 },
-  cardTitle: { fontSize: 14, fontWeight: 700, lineHeight: 1.2 },
-  cardDesc:  { fontSize: 12, color: 'var(--text-2)', lineHeight: 1.55 },
-  cardSpinner: {
-    display: 'inline-block', width: 14, height: 14,
-    border: '2px solid var(--border)', borderRadius: '50%',
-    animation: 'spin 0.65s linear infinite', alignSelf: 'center',
-  },
-  checkRow:  { display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 10 },
-  doneTitle: { fontSize: 15, fontWeight: 600, color: 'var(--text)' },
+  banner: { background:'linear-gradient(135deg,rgba(247,87,9,.07) 0%,rgba(48,142,189,.05) 100%)', border:`1px solid ${ORANGE}33`, borderRadius:20, padding:'28px 20px 24px', marginBottom:28, textAlign:'center' },
+  iconRow: { marginBottom:10 }, trophy: { fontSize:36 },
+  heading: { fontSize:'clamp(18px,4vw,22px)', fontWeight:800, color:'var(--text)', margin:'0 0 6px', fontFamily:"'Calibri','Trebuchet MS',sans-serif" },
+  sub:     { fontSize:13, color:'var(--text-2)', margin:'0 0 20px' },
+  cards:   { display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(180px,100%),1fr))', gap:10, textAlign:'left' },
+  card:    { display:'flex', flexDirection:'column', gap:5, padding:'16px 14px', borderRadius:12, border:'1px solid', cursor:'pointer', textAlign:'left', transition:'border-color .18s,background .18s,opacity .18s', boxShadow:'0 2px 6px rgba(0,0,0,.14)', minHeight:48 },
+  cardEmoji: { fontSize:20 }, cardTitle: { fontSize:13, fontWeight:700, lineHeight:1.2 },
+  cardDesc:  { fontSize:11, color:'var(--text-2)', lineHeight:1.5 },
+  cardSpinner:{ display:'inline-block', width:14, height:14, border:'2px solid var(--border)', borderRadius:'50%', animation:'spin .65s linear infinite', alignSelf:'center' },
+  checkRow:{ display:'flex', alignItems:'center', justifyContent:'center', gap:10 },
+  doneTitle:{ fontSize:14, fontWeight:600, color:'var(--text)' },
 }
+
+// ── Exercise row (wraps on small screens) ─────────────────────────────────────
 
 const LIFT_LABELS = {
-  bench_press:       'Bench Press',
-  squat:             'Squat',
-  deadlift:          'Deadlift',
-  trap_bar_deadlift: 'Trap Bar Deadlift',
-  overhead_press:    'Overhead Press',
-  power_clean:       'Power Clean',
-  hang_clean:        'Hang Clean',
-  clean:             'Clean',
-  front_squat:       'Front Squat',
-  romanian_deadlift: 'Romanian Deadlift',
-  reverse_lunge:     'Reverse Lunge',
+  bench_press:'Bench Press', squat:'Squat', deadlift:'Deadlift',
+  trap_bar_deadlift:'Trap Bar Deadlift', overhead_press:'Overhead Press',
+  power_clean:'Power Clean', hang_clean:'Hang Clean', clean:'Clean',
+  front_squat:'Front Squat', romanian_deadlift:'Romanian Deadlift', reverse_lunge:'Reverse Lunge',
 }
-
-/** Round to nearest 5 lbs */
-function calcWeight(maxLbs, pct) {
-  return Math.round((maxLbs * pct) / 5) * 5
-}
+function calcWeight(maxLbs, pct) { return Math.round((maxLbs * pct) / 5) * 5 }
 
 function ExerciseRow({ exercise, maxes, locked = false }) {
   const { name, sets, reps, pct, lift_key, warmup, note } = exercise
   const maxEntry = lift_key ? maxes?.[lift_key]?.current : null
   const maxLbs   = maxEntry?.weight_lbs
-
   let weightLine = null
   if (pct && lift_key) {
     if (maxLbs) {
-      const w = calcWeight(maxLbs, pct)
-      weightLine = `at ${Math.round(pct * 100)}% of your max → ${w} lbs`
+      weightLine = `${Math.round(pct * 100)}% → ${calcWeight(maxLbs, pct)} lbs`
     } else {
-      weightLine = `Log your ${LIFT_LABELS[lift_key] || lift_key} max to see your personalized weight`
+      weightLine = `Log your ${LIFT_LABELS[lift_key] || lift_key} max to see your weight`
     }
   }
-
-  const setsRepsStr = warmup
-    ? `${warmup} warmup, ${sets}×${reps} working`
-    : `${sets}×${reps}`
-
+  const setsRepsStr = warmup ? `${warmup} warmup, ${sets}×${reps} working` : `${sets}×${reps}`
   return (
-    <div style={exStyles.row}>
-      <div style={exStyles.left}>
-        <span style={exStyles.exerciseName}>{name}</span>
-        {!locked && note && <span style={exStyles.exerciseNote}> ({note})</span>}
-      </div>
-      <div style={exStyles.right}>
-        <span style={exStyles.setsReps}>{setsRepsStr}</span>
+    <div style={ex.row}>
+      <span style={ex.name}>{name}{!locked && note ? <span style={ex.note}> ({note})</span> : null}</span>
+      <div style={ex.right}>
+        <span style={ex.setsReps}>{setsRepsStr}</span>
         {locked && pct ? (
-          /* Replace weight line with a locked placeholder */
-          <span style={exStyles.lockedWeight}>🔒 ██ lbs · unlock to see</span>
+          <span style={ex.locked}>🔒 ██ lbs</span>
         ) : weightLine ? (
-          <span style={maxLbs ? exStyles.weightCalc : exStyles.weightPrompt}>
-            {weightLine}
-          </span>
+          <span style={maxLbs ? ex.calc : ex.prompt}>{weightLine}</span>
         ) : null}
       </div>
     </div>
   )
 }
-
-const exStyles = {
-  row:           { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 12, padding: '6px 0', borderBottom: '1px solid var(--border-light)' },
-  left:          { flex: 1 },
-  right:         { textAlign: 'right', flexShrink: 0 },
-  exerciseName:  { fontSize: 14, fontWeight: 600, color: 'var(--text)' },
-  exerciseNote:  { fontSize: 13, color: 'var(--text-3)' },
-  setsReps:      { display: 'block', fontSize: 13, color: 'var(--text-2)' },
-  weightCalc:    { display: 'block', fontSize: 12, fontWeight: 700, color: ORANGE, marginTop: 2 },
-  weightPrompt:  { display: 'block', fontSize: 11, color: 'var(--text-3)', fontStyle: 'italic', marginTop: 2, maxWidth: 200 },
-  lockedWeight:  { display: 'block', fontSize: 12, color: 'var(--text-3)', marginTop: 2, letterSpacing: 0.5, userSelect: 'none' },
+const ex = {
+  row:      { display:'flex', alignItems:'flex-start', justifyContent:'space-between', gap:10, padding:'7px 0', borderBottom:'1px solid var(--border-light)', flexWrap:'wrap' },
+  name:     { fontSize:14, fontWeight:600, color:'var(--text)', flex:'1 1 140px', minWidth:0 },
+  note:     { fontSize:12, color:'var(--text-3)' },
+  right:    { display:'flex', flexDirection:'column', alignItems:'flex-end', flexShrink:0 },
+  setsReps: { fontSize:13, color:'var(--text-2)', whiteSpace:'nowrap' },
+  calc:     { fontSize:12, fontWeight:700, color:ORANGE, marginTop:2, whiteSpace:'nowrap' },
+  prompt:   { fontSize:11, color:'var(--text-3)', fontStyle:'italic', marginTop:2, maxWidth:180, textAlign:'right', lineHeight:1.3 },
+  locked:   { fontSize:12, color:'var(--text-3)', marginTop:2, letterSpacing:.5, userSelect:'none' },
 }
+
+// ── Workout logging bottom sheet ──────────────────────────────────────────────
+
+const STATUS_OPTIONS = [
+  { key:'completed',      label:'Completed',       emoji:'✅', color:'#2e7d32', bg:'rgba(46,125,50,.15)',  border:'rgba(46,125,50,.5)' },
+  { key:'partial',        label:'Partial',          emoji:'⚡', color:'#b45309', bg:'rgba(180,83,9,.12)',   border:'rgba(180,83,9,.4)' },
+  { key:'skipped',        label:'Skipped',          emoji:'⏭',  color:'#888',    bg:'rgba(128,128,128,.1)', border:'rgba(128,128,128,.35)' },
+  { key:'skipped_injury', label:'Skipped — Injury', emoji:'🤕', color:'#c73820', bg:'rgba(199,56,32,.12)',  border:'rgba(199,56,32,.4)' },
+]
+
+function LogSheet({ session, weekId, sessionIndex, existing, onClose, onSave }) {
+  const [status,  setStatus]  = useState(existing?.status  || '')
+  const [effort,  setEffort]  = useState(existing?.effort  || null)
+  const [note,    setNote]    = useState(existing?.note    || '')
+  const [saving,  setSaving]  = useState(false)
+  const [err,     setErr]     = useState('')
+  const sheetRef = useRef(null)
+
+  // Dismiss on backdrop tap
+  function handleBackdrop(e) {
+    if (e.target === e.currentTarget) onClose()
+  }
+
+  const isSkip = status === 'skipped' || status === 'skipped_injury'
+
+  async function handleSubmit() {
+    if (!status) { setErr('Choose how the session went.'); return }
+    setSaving(true); setErr('')
+    try {
+      const body = { blueprint_week_id: weekId, session_index: sessionIndex, status }
+      if (!isSkip && effort) body.effort = effort
+      if (note.trim()) body.note = note.trim()
+      const { data } = await api.post('/api/workouts', body)
+      onSave(data.workout)
+      onClose()
+    } catch (e) {
+      setErr(e.response?.data?.error || 'Failed to save. Try again.')
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div style={ls.backdrop} onClick={handleBackdrop}>
+      <div ref={sheetRef} style={ls.sheet} role="dialog" aria-modal="true">
+        {/* Drag handle */}
+        <div style={ls.handle} />
+
+        {/* Header */}
+        <div style={ls.header}>
+          <div style={{ flex: 1 }}>
+            <span style={ls.dayLabel}>{session.day || `Session ${sessionIndex + 1}`}</span>
+            <p style={ls.focusLabel}>{session.focus}</p>
+          </div>
+          <button style={ls.closeBtn} onClick={onClose} aria-label="Close">✕</button>
+        </div>
+
+        {/* Status picker */}
+        <p style={ls.sectionLabel}>How did it go?</p>
+        <div style={ls.statusGrid}>
+          {STATUS_OPTIONS.map(opt => (
+            <button
+              key={opt.key}
+              style={{
+                ...ls.statusBtn,
+                borderColor:   status === opt.key ? opt.border : 'var(--border)',
+                background:    status === opt.key ? opt.bg     : 'var(--card-inner)',
+                color:         status === opt.key ? opt.color  : 'var(--text-2)',
+              }}
+              onClick={() => { setStatus(opt.key); setErr('') }}
+            >
+              <span style={ls.statusEmoji}>{opt.emoji}</span>
+              <span style={ls.statusLabel}>{opt.label}</span>
+            </button>
+          ))}
+        </div>
+
+        {/* Effort rating — only for non-skip */}
+        {status && !isSkip && (
+          <>
+            <p style={ls.sectionLabel}>Effort <span style={ls.effortVal}>{effort ? `${effort}/10` : '—'}</span></p>
+            <div style={ls.effortRow}>
+              {[1,2,3,4,5,6,7,8,9,10].map(n => (
+                <button
+                  key={n}
+                  style={{
+                    ...ls.effortBtn,
+                    background: effort === n ? ORANGE : effort && n <= effort ? `${ORANGE}30` : 'var(--card-inner)',
+                    borderColor: effort === n ? ORANGE : 'var(--border)',
+                    color: effort === n ? '#fff' : 'var(--text-2)',
+                    fontWeight: effort === n ? 700 : 500,
+                  }}
+                  onClick={() => setEffort(effort === n ? null : n)}
+                >
+                  {n}
+                </button>
+              ))}
+            </div>
+          </>
+        )}
+
+        {/* Note */}
+        <p style={ls.sectionLabel}>
+          {status === 'skipped_injury' ? 'Which exercises? / injury notes (optional)' : 'Notes (optional)'}
+        </p>
+        <textarea
+          style={ls.noteInput}
+          value={note}
+          onChange={e => setNote(e.target.value)}
+          placeholder={status === 'skipped_injury' ? 'e.g. Shoulder pain, skipped Bench Press' : 'How did it feel? Any PRs?'}
+          rows={3}
+          onFocus={e => {
+            // On iOS, scroll the textarea into view after the keyboard appears
+            setTimeout(() => e.target.scrollIntoView({ behavior: 'smooth', block: 'nearest' }), 350)
+          }}
+        />
+
+        {err && <p style={ls.errMsg}>{err}</p>}
+
+        {/* Action buttons */}
+        <div style={ls.actionRow}>
+          <button style={ls.cancelBtn} onClick={onClose} disabled={saving}>Cancel</button>
+          <button
+            style={{ ...ls.saveBtn, opacity: !status || saving ? 0.5 : 1 }}
+            onClick={handleSubmit}
+            disabled={!status || saving}
+          >
+            {saving ? 'Saving…' : existing ? 'Update Log' : 'Log Session'}
+          </button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
+const ls = {
+  backdrop: {
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,0,0,0.60)',
+    zIndex: 200,
+    display: 'flex',
+    alignItems: 'flex-end',
+    justifyContent: 'center',
+    // Smooth entry handled by sheet translateY animation via CSS
+  },
+  sheet: {
+    width: '100%',
+    maxWidth: 540,
+    background: 'var(--card)',
+    borderTop: '1px solid var(--border)',
+    borderRadius: '20px 20px 0 0',
+    padding: '10px 20px calc(24px + env(safe-area-inset-bottom))',
+    maxHeight: '88vh',
+    overflowY: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    boxShadow: '0 -8px 40px rgba(0,0,0,0.50)',
+    animation: 'sheetUp 0.26s cubic-bezier(0.34,1.06,0.64,1)',
+  },
+  handle: {
+    width: 40, height: 4, borderRadius: 2,
+    background: 'rgba(255,255,255,0.18)',
+    margin: '0 auto 16px',
+  },
+  header: {
+    display: 'flex', alignItems: 'flex-start',
+    gap: 12, marginBottom: 20,
+  },
+  dayLabel: {
+    fontSize: 10, fontWeight: 700, color: BLUE,
+    textTransform: 'uppercase', letterSpacing: 0.6,
+    background: 'rgba(48,142,189,0.12)',
+    padding: '3px 8px', borderRadius: 6, display: 'inline-block', marginBottom: 4,
+  },
+  focusLabel: { fontSize: 17, fontWeight: 700, color: 'var(--text)', margin: 0 },
+  closeBtn: {
+    background: 'var(--card-inner)',
+    border: '1px solid var(--border)',
+    borderRadius: 10,
+    cursor: 'pointer',
+    fontSize: 18,
+    color: 'var(--text-3)',
+    lineHeight: 1,
+    flexShrink: 0,
+    width: 44,
+    height: 44,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: 0,
+  },
+  sectionLabel: { fontSize:12, fontWeight:700, color:'var(--text-2)', textTransform:'uppercase', letterSpacing:.5, margin:'0 0 10px' },
+  statusGrid: { display:'grid', gridTemplateColumns:'1fr 1fr', gap:10, marginBottom:20 },
+  statusBtn: {
+    display:'flex', flexDirection:'column', alignItems:'center', gap:6,
+    padding:'16px 10px', borderRadius:14, border:'1.5px solid',
+    cursor:'pointer', transition:'all .15s',
+    minHeight: 80,
+  },
+  statusEmoji: { fontSize:26, lineHeight:1 },
+  statusLabel: { fontSize:13, fontWeight:700, lineHeight:1.3, textAlign:'center' },
+  effortRow:  { display:'flex', gap:5, marginBottom:20, flexWrap:'wrap' },
+  effortBtn:  {
+    width:44, height:44, borderRadius:10, border:'1.5px solid',
+    cursor:'pointer', fontSize:15, fontWeight:600, transition:'all .15s',
+    display:'flex', alignItems:'center', justifyContent:'center',
+    flexShrink: 0,
+  },
+  effortVal:  { fontWeight:700, color:ORANGE, marginLeft:6 },
+  noteInput: {
+    width:'100%', padding:'12px 14px', fontSize:14,
+    borderRadius:10, border:'1px solid var(--input-border)',
+    background:'var(--input-bg)', color:'var(--text)',
+    resize:'vertical', fontFamily:'inherit', outline:'none',
+    lineHeight:1.5, boxSizing:'border-box', marginBottom:16,
+  },
+  errMsg:    { color:'#c73820', fontSize:13, marginBottom:12 },
+  actionRow: { display:'flex', gap:10 },
+  cancelBtn: {
+    flex:1, padding:'15px 0', fontSize:14, fontWeight:600,
+    borderRadius:12, border:'1px solid var(--border)',
+    background:'transparent', color:'var(--text-2)', cursor:'pointer',
+    minHeight: 54,
+  },
+  saveBtn: {
+    flex:2, padding:'15px 0', fontSize:16, fontWeight:700,
+    borderRadius:12, border:'none',
+    background:ORANGE, color:'#fff', cursor:'pointer',
+    boxShadow:'0 2px 14px rgba(247,87,9,0.40)',
+    transition:'opacity .15s',
+    minHeight: 54,
+  },
+}
+
+// ── PlanView ──────────────────────────────────────────────────────────────────
 
 function calcCurrentWeek(startsOn, numWeeks) {
   const msPerWeek = 7 * 24 * 60 * 60 * 1000
@@ -200,50 +363,54 @@ function calcCurrentWeek(startsOn, numWeeks) {
 }
 
 const LOG_STATUS = {
-  completed:       { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9' },
-  partial:         { label: 'Partial',          color: '#b45309', bg: '#fef3c7' },
-  skipped:         { label: 'Skipped',          color: '#888',    bg: '#f0f0f0' },
-  skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
+  completed:       { label:'Completed',        color:'#2e7d32', bg:'#e8f5e9' },
+  partial:         { label:'Partial',          color:'#b45309', bg:'#fef3c7' },
+  skipped:         { label:'Skipped',          color:'#888',    bg:'#f0f0f0' },
+  skipped_injury:  { label:'Skipped — Injury', color:'#c73820', bg:'#fce8e6' },
 }
 
-// ── Sub-component: renders one plan's week navigator + content ──────────────
-
-function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas, locked = false }) {
+function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, injuryAreas, locked = false }) {
   const week = plan?.weeks?.find(w => w.week_number === currentWeek)
+
+  // Which session log sheet is open: { weekId, sessionIndex, session } or null
+  const [logSheet, setLogSheet] = useState(null)
 
   function getLog(weekId, sessionIndex) {
     return logs.find(l => l.blueprint_week_id === weekId && l.session_index === sessionIndex) || null
+  }
+
+  function handleSave(newLog) {
+    setLogs(prev => {
+      const filtered = prev.filter(
+        l => !(l.blueprint_week_id === newLog.blueprint_week_id && l.session_index === newLog.session_index)
+      )
+      return [...filtered, newLog]
+    })
   }
 
   return (
     <>
       <p style={styles.planMeta}>
         {plan.num_weeks}-week plan · Started{' '}
-        {new Date(plan.starts_on).toLocaleDateString('en-US', {
-          month: 'short', day: 'numeric', year: 'numeric',
-        })}
+        {new Date(plan.starts_on).toLocaleDateString('en-US', { month:'short', day:'numeric', year:'numeric' })}
       </p>
 
       {/* Week navigator */}
       <div style={styles.weekNav}>
         <button
-          style={{ ...styles.navBtn, opacity: currentWeek === 1 ? 0.3 : 1 }}
+          style={{ ...styles.navBtn, opacity: currentWeek === 1 ? 0.35 : 1 }}
           onClick={() => setCurrentWeek(w => Math.max(1, w - 1))}
           disabled={currentWeek === 1}
-        >
-          ←
-        </button>
+        >←</button>
         <div style={styles.weekInfo}>
           <span style={styles.weekLabel}>Week {currentWeek}</span>
           <span style={styles.weekOf}>of {plan.num_weeks}</span>
         </div>
         <button
-          style={{ ...styles.navBtn, opacity: currentWeek === plan.num_weeks ? 0.3 : 1 }}
+          style={{ ...styles.navBtn, opacity: currentWeek === plan.num_weeks ? 0.35 : 1 }}
           onClick={() => setCurrentWeek(w => Math.min(plan.num_weeks, w + 1))}
           disabled={currentWeek === plan.num_weeks}
-        >
-          →
-        </button>
+        >→</button>
       </div>
 
       {/* Current week card */}
@@ -263,19 +430,25 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
             ) : (
               <div style={styles.sessionList}>
                 {week.sessions.map((s, i) => {
-                  const logged = getLog(week.id, i)
+                  const logged     = getLog(week.id, i)
                   const statusInfo = logged ? LOG_STATUS[logged.status] : null
                   return (
-                    <div key={i} style={styles.sessionCard}>
+                    <div key={i} style={{
+                      ...styles.sessionCard,
+                      ...(logged ? { borderColor: `${statusInfo.color}44` } : {}),
+                    }}>
+                      {/* Session header */}
                       <div style={styles.sessionHeader}>
                         <span style={styles.sessionDay}>{s.day || `Session ${i + 1}`}</span>
                         <span style={styles.sessionFocus}>{s.focus}</span>
                         {logged && statusInfo && (
                           <span style={{ ...styles.logBadge, color: statusInfo.color, background: statusInfo.bg }}>
-                            {statusInfo.label}{logged.effort ? ` · ${logged.effort}` : ''}
+                            {statusInfo.label}{logged.effort ? ` · ${logged.effort}/10` : ''}
                           </span>
                         )}
                       </div>
+
+                      {/* Session content */}
                       {s.exercises && s.exercises.length > 0 ? (
                         <div style={styles.exerciseList}>
                           {s.exercises.map((ex, ei) => (
@@ -284,13 +457,30 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
                         </div>
                       ) : s.description ? (
                         locked ? (
-                          <div style={styles.lockedDesc}>
-                            🔒 Detailed coaching notes unlock when you join your team
-                          </div>
+                          <div style={styles.lockedDesc}>🔒 Detailed coaching notes unlock when you join your team</div>
                         ) : (
                           <SessionDescription description={s.description} injuryAreas={injuryAreas} maxes={maxes} style={styles.sessionDesc} />
                         )
                       ) : null}
+
+                      {/* Log button — only when not locked */}
+                      {!locked && (
+                        <button
+                          style={{
+                            ...styles.logBtn,
+                            ...(logged
+                              ? {
+                                  background: `${statusInfo.color}15`,
+                                  borderColor: `${statusInfo.color}55`,
+                                  color: statusInfo.color,
+                                }
+                              : styles.logBtnUnlogged),
+                          }}
+                          onClick={() => setLogSheet({ weekId: week.id, sessionIndex: i, session: s })}
+                        >
+                          {logged ? `✓ ${statusInfo.label} — Update` : '+ Log Session'}
+                        </button>
+                      )}
                     </div>
                   )
                 })}
@@ -300,7 +490,7 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
         )}
       </div>
 
-      {/* Week dots */}
+      {/* Week dots — wrap so 16 dots don't overflow on narrow screens */}
       <div style={styles.weekDots}>
         {Array.from({ length: plan.num_weeks }, (_, i) => i + 1).map(n => {
           const isPast = n < calcCurrentWeek(plan.starts_on, plan.num_weeks)
@@ -314,10 +504,23 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
               }}
               onClick={() => setCurrentWeek(n)}
               title={`Week ${n}`}
+              aria-label={`Week ${n}`}
             />
           )
         })}
       </div>
+
+      {/* Workout log sheet */}
+      {logSheet && (
+        <LogSheet
+          session={logSheet.session}
+          weekId={logSheet.weekId}
+          sessionIndex={logSheet.sessionIndex}
+          existing={getLog(logSheet.weekId, logSheet.sessionIndex)}
+          onClose={() => setLogSheet(null)}
+          onSave={handleSave}
+        />
+      )}
     </>
   )
 }
@@ -325,36 +528,29 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, maxes, injuryAreas,
 // ── Main page ─────────────────────────────────────────────────────────────────
 
 export default function AthletePlan() {
-  const navigate = useNavigate()
+  const navigate   = useNavigate()
   const activeTeam = useTeam()?.activeTeam ?? null
-  const hasTeam = Boolean(activeTeam)
+  const hasTeam    = Boolean(activeTeam)
 
   const [coachPlan, setCoachPlan]  = useState(undefined)
   const [autoPlan,  setAutoPlan]   = useState(undefined)
-  const [logs,        setLogs]     = useState([])
-  const [maxes,       setMaxes]    = useState({})
+  const [logs,      setLogs]       = useState([])
+  const [maxes,     setMaxes]      = useState({})
   const [injuryAreas, setInjuryAreas] = useState([])
-  const [loading,     setLoading]  = useState(true)
+  const [loading,   setLoading]    = useState(true)
   const [currentWeekCoach, setCurrentWeekCoach] = useState(1)
   const [currentWeekAuto,  setCurrentWeekAuto]  = useState(1)
 
-  // Program completion flow
-  const [choosingAction, setChoosingAction] = useState(null)   // action key being submitted
-  const [chosenAction,   setChosenAction]   = useState(null)   // action confirmed
+  const [choosingAction, setChoosingAction] = useState(null)
+  const [chosenAction,   setChosenAction]   = useState(null)
 
   async function handleProgramComplete(action, nav) {
     setChoosingAction(action)
     try {
       const activePlan = coachPlan || autoPlan
-      await api.post('/api/programs/complete', {
-        blueprint_id: activePlan?.id || null,
-        action,
-      })
+      await api.post('/api/programs/complete', { blueprint_id: activePlan?.id || null, action })
       setChosenAction(action)
-      // Route immediately for retake_survey; profile nav is shown in banner
-      if (action === 'retake_survey') {
-        setTimeout(() => nav('/survey', { state: { retake: true } }), 800)
-      }
+      if (action === 'retake_survey') setTimeout(() => nav('/survey', { state: { retake: true } }), 800)
     } catch (err) {
       console.error('[AthletePlan] handleProgramComplete:', err)
     } finally {
@@ -385,33 +581,26 @@ export default function AthletePlan() {
 
   const hasAny = coachPlan || autoPlan
 
-  // No team + no plan at all = haven't taken survey yet
   if (!hasAny && !hasTeam) {
     return (
       <div style={styles.container}>
         <PreviewBanner noun="training plan" />
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>
-            <DumbbellIcon size={36} color="var(--text-3)" />
-          </div>
+          <div style={styles.emptyIcon}><DumbbellIcon size={36} color="var(--text-3)" /></div>
           <h2 style={styles.emptyTitle}>Complete your survey to preview your plan</h2>
           <p style={styles.emptyDesc}>
             We'll generate a personalized training plan matched to your sport and goals.
-            You can preview it now and unlock the full version when you join your coach's team.
           </p>
         </div>
       </div>
     )
   }
 
-  // Has a team but no plan yet
   if (!hasAny && hasTeam) {
     return (
       <div style={styles.container}>
         <div style={styles.emptyState}>
-          <div style={styles.emptyIcon}>
-            <DumbbellIcon size={36} color="var(--text-3)" />
-          </div>
+          <div style={styles.emptyIcon}><DumbbellIcon size={36} color="var(--text-3)" /></div>
           <h2 style={styles.emptyTitle}>No plan assigned yet</h2>
           <p style={styles.emptyDesc}>Your coach is working on your training plan. Check back soon.</p>
         </div>
@@ -419,22 +608,15 @@ export default function AthletePlan() {
     )
   }
 
-  // Locked preview: has auto plan but no team
-  const previewMode = !hasTeam && Boolean(autoPlan)
-
-  // Show completion banner on the final week of the active plan (coach-assigned takes priority)
-  const activePlan        = coachPlan || autoPlan
+  const previewMode      = !hasTeam && Boolean(autoPlan)
+  const activePlan       = coachPlan || autoPlan
   const activeCurrentWeek = coachPlan ? currentWeekCoach : currentWeekAuto
-  const showCompletion    = !previewMode && activePlan &&
-    activeCurrentWeek >= activePlan.num_weeks
+  const showCompletion   = !previewMode && activePlan && activeCurrentWeek >= activePlan.num_weeks
 
   return (
     <div style={styles.container}>
-
-      {/* ── Preview banner (shown when athlete has no team) ─────────────── */}
       {previewMode && <PreviewBanner noun="training plan" />}
 
-      {/* ── Program completion banner — shown on final week ──────────────── */}
       {showCompletion && (
         <ProgramCompletionBanner
           plan={activePlan}
@@ -444,7 +626,7 @@ export default function AthletePlan() {
         />
       )}
 
-      {/* ── Coach plan section ─────────────────────────────────────────── */}
+      {/* Coach plan */}
       {hasTeam && (
         coachPlan ? (
           <div style={styles.planSection}>
@@ -456,24 +638,22 @@ export default function AthletePlan() {
               currentWeek={currentWeekCoach}
               setCurrentWeek={setCurrentWeekCoach}
               logs={logs}
+              setLogs={setLogs}
               maxes={maxes}
               injuryAreas={injuryAreas}
             />
           </div>
         ) : (
-          <div style={styles.noCoachNotice}>
-            Your coach has not assigned a training plan yet.
-          </div>
+          <div style={styles.noCoachNotice}>Your coach has not assigned a training plan yet.</div>
         )
       )}
 
-      {/* ── Auto-generated plan section ────────────────────────────────── */}
+      {/* Auto plan */}
       {autoPlan && (
         <div style={styles.planSection}>
           <div style={styles.labelRow}>
             <span style={previewMode ? styles.previewLabel : styles.autoLabel}>
-              {previewMode ? '👁 Preview — ' : '⚡ '}
-              {previewMode ? `${autoPlan.title}` : 'Personalized Plan — Generated from Your Survey'}
+              {previewMode ? `👁 Preview — ${autoPlan.title}` : '⚡ Personalized Plan — Generated from Your Survey'}
             </span>
           </div>
           <PlanView
@@ -481,85 +661,104 @@ export default function AthletePlan() {
             currentWeek={currentWeekAuto}
             setCurrentWeek={setCurrentWeekAuto}
             logs={previewMode ? [] : logs}
+            setLogs={setLogs}
             maxes={previewMode ? {} : maxes}
             injuryAreas={injuryAreas}
             locked={previewMode}
           />
         </div>
       )}
-
     </div>
   )
 }
 
 const styles = {
-  center: { color: 'var(--text-3)', fontSize: 15 },
-  container: { maxWidth: 660, margin: '0 auto' },
+  center:    { color:'var(--text-3)', fontSize:15 },
+  container: { maxWidth:660, margin:'0 auto' },
 
-  emptyState: { textAlign: 'center', paddingTop: 80 },
-  emptyIcon: { display: 'flex', justifyContent: 'center', marginBottom: 20 },
-  emptyTitle: { fontSize: 22, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
-  emptyDesc: { color: 'var(--text-2)', fontSize: 15 },
+  emptyState: { textAlign:'center', paddingTop:80 },
+  emptyIcon:  { display:'flex', justifyContent:'center', marginBottom:20 },
+  emptyTitle: { fontSize:22, fontWeight:700, color:'var(--text)', marginBottom:8 },
+  emptyDesc:  { color:'var(--text-2)', fontSize:15, lineHeight:1.6 },
 
-  planSection: { marginBottom: 40 },
-  labelRow: { marginBottom: 14 },
-  coachLabel: {
-    display: 'inline-block', fontSize: 13, fontWeight: 700, color: BLUE,
-    background: 'rgba(48,142,189,0.12)', border: '1px solid rgba(48,142,189,0.25)',
-    padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
-  },
-  autoLabel: {
-    display: 'inline-block', fontSize: 13, fontWeight: 700, color: ORANGE,
-    background: 'rgba(247,87,9,0.08)', border: '1px solid rgba(247,87,9,0.2)',
-    padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
-  },
-  previewLabel: {
-    display: 'inline-block', fontSize: 13, fontWeight: 700, color: 'var(--text-3)',
-    background: 'rgba(255,255,255,0.05)', border: '1px solid rgba(255,255,255,0.12)',
-    padding: '6px 16px', borderRadius: 20, letterSpacing: 0.2,
-  },
-  lockedDesc: {
-    fontSize: 13, color: 'var(--text-3)', fontStyle: 'italic',
-    padding: '8px 12px', background: 'rgba(255,255,255,0.04)',
-    borderRadius: 8, marginTop: 6, userSelect: 'none',
-  },
-  noCoachNotice: {
-    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 14,
-    padding: '16px 20px', marginBottom: 28, color: 'var(--text-2)', fontSize: 14,
-    fontStyle: 'italic',
-  },
+  planSection:  { marginBottom:40 },
+  labelRow:     { marginBottom:14 },
+  coachLabel:   { display:'inline-block', fontSize:13, fontWeight:700, color:BLUE, background:'rgba(48,142,189,.12)', border:'1px solid rgba(48,142,189,.25)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
+  autoLabel:    { display:'inline-block', fontSize:13, fontWeight:700, color:ORANGE, background:'rgba(247,87,9,.08)', border:'1px solid rgba(247,87,9,.2)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
+  previewLabel: { display:'inline-block', fontSize:13, fontWeight:700, color:'var(--text-3)', background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.12)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
+  lockedDesc:   { fontSize:13, color:'var(--text-3)', fontStyle:'italic', padding:'8px 12px', background:'rgba(255,255,255,.04)', borderRadius:8, marginTop:6, userSelect:'none' },
+  noCoachNotice:{ background:'var(--card)', border:'1px solid var(--border)', borderRadius:14, padding:'16px 20px', marginBottom:28, color:'var(--text-2)', fontSize:14, fontStyle:'italic' },
 
-  planMeta: { color: 'var(--text-3)', fontSize: 13, margin: '0 0 16px' },
+  planMeta:   { color:'var(--text-3)', fontSize:13, margin:'0 0 16px' },
 
-  weekNav: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', marginBottom: 16 },
-  navBtn: { padding: '8px 20px', fontSize: 18, borderRadius: 10, border: '1px solid var(--border)', background: 'var(--card)', color: 'var(--text)', cursor: 'pointer', lineHeight: 1, boxShadow: '0 1px 3px rgba(0,0,0,0.18)' },
-  weekInfo: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2 },
-  weekLabel: { fontSize: 18, fontWeight: 700, color: 'var(--text)' },
-  weekOf: { fontSize: 12, color: 'var(--text-3)' },
+  weekNav:    { display:'flex', alignItems:'center', justifyContent:'space-between', marginBottom:16 },
+  navBtn:     { padding:'12px 20px', fontSize:20, borderRadius:12, border:'1px solid var(--border)', background:'var(--card)', color:'var(--text)', cursor:'pointer', lineHeight:1, boxShadow:'0 1px 3px rgba(0,0,0,.18)', minWidth:56, minHeight:50 },
+  weekInfo:   { display:'flex', flexDirection:'column', alignItems:'center', gap:2 },
+  weekLabel:  { fontSize:18, fontWeight:700, color:'var(--text)' },
+  weekOf:     { fontSize:12, color:'var(--text-3)' },
 
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, marginBottom: 20, boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
-  objectiveBlock: { background: 'rgba(48,142,189,0.08)', borderLeft: `3px solid ${BLUE}`, padding: '12px 16px', borderRadius: '0 12px 12px 0', marginBottom: 20 },
-  objectiveLabel: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', letterSpacing: 0.5, margin: '0 0 4px' },
-  objectiveText: { fontSize: 15, color: 'var(--text)', margin: 0 },
-  emptyWeek: { color: 'var(--text-3)', fontSize: 14, textAlign: 'center', padding: '20px 0' },
+  card:        { background:'var(--card)', border:'1px solid var(--border)', borderRadius:16, padding:'20px 16px', marginBottom:20, boxShadow:'0 2px 8px rgba(0,0,0,.18),inset 0 1px 0 rgba(255,255,255,.04)' },
+  objectiveBlock: { background:'rgba(48,142,189,.08)', borderLeft:`3px solid ${BLUE}`, padding:'12px 16px', borderRadius:'0 12px 12px 0', marginBottom:20 },
+  objectiveLabel: { fontSize:11, fontWeight:700, color:BLUE, textTransform:'uppercase', letterSpacing:.5, margin:'0 0 4px' },
+  objectiveText:  { fontSize:15, color:'var(--text)', margin:0 },
+  emptyWeek:      { color:'var(--text-3)', fontSize:14, textAlign:'center', padding:'20px 0' },
 
-  sessionList: { display: 'flex', flexDirection: 'column', gap: 12 },
+  sessionList: { display:'flex', flexDirection:'column', gap:14 },
   sessionCard: {
-    background: 'linear-gradient(135deg, rgba(48,142,189,0.04) 0%, var(--card-inner) 100%)',
-    border: '1px solid var(--border)',
-    borderRadius: 14,
-    padding: 16,
-    boxShadow: '0 1px 4px rgba(0,0,0,0.14), inset 0 1px 0 rgba(255,255,255,0.04)',
+    background:'linear-gradient(135deg,rgba(48,142,189,.04) 0%,var(--card-inner) 100%)',
+    border:'1px solid var(--border)',
+    borderRadius:14,
+    padding:'14px 14px 12px',
+    boxShadow:'0 1px 4px rgba(0,0,0,.14),inset 0 1px 0 rgba(255,255,255,.04)',
+    transition:'border-color .18s',
   },
-  sessionHeader: { display: 'flex', alignItems: 'center', gap: 10, marginBottom: 6, flexWrap: 'wrap' },
-  sessionDay: { fontSize: 11, fontWeight: 700, color: BLUE, textTransform: 'uppercase', background: 'rgba(48,142,189,0.12)', padding: '3px 8px', borderRadius: 6, letterSpacing: 0.3 },
-  sessionFocus: { fontSize: 15, fontWeight: 700, color: 'var(--text)', flex: 1 },
-  sessionDesc: { fontSize: 14, color: 'var(--text-2)', margin: 0, lineHeight: 1.6 },
-  exerciseList: { marginTop: 4 },
-  logBadge: { marginLeft: 'auto', fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 6, whiteSpace: 'nowrap', flexShrink: 0 },
+  sessionHeader: { display:'flex', alignItems:'center', gap:8, marginBottom:10, flexWrap:'wrap' },
+  sessionDay:    { fontSize:10, fontWeight:700, color:BLUE, textTransform:'uppercase', background:'rgba(48,142,189,.12)', padding:'3px 7px', borderRadius:5, letterSpacing:.3, flexShrink:0 },
+  sessionFocus:  { fontSize:15, fontWeight:700, color:'var(--text)', flex:1, minWidth:0 },
+  sessionDesc:   { fontSize:14, color:'var(--text-2)', margin:0, lineHeight:1.6 },
+  exerciseList:  { marginTop:4 },
+  logBadge:      { fontSize:11, fontWeight:700, padding:'4px 9px', borderRadius:6, whiteSpace:'nowrap', flexShrink:0 },
 
-  weekDots: { display: 'flex', justifyContent: 'center', gap: 8 },
-  dot: { width: 10, height: 10, borderRadius: '50%', background: 'var(--border)', border: 'none', cursor: 'pointer', padding: 0, transition: 'transform 0.15s' },
-  dotActive: { background: BLUE, transform: 'scale(1.4)' },
-  dotPast: { background: 'var(--text-3)' },
+  // The Log Session button — large tap target, full-width on mobile
+  logBtn: {
+    marginTop: 14,
+    width: '100%',
+    padding: '14px 0',
+    fontSize: 15,
+    fontWeight: 700,
+    borderRadius: 10,
+    border: '1.5px solid',
+    cursor: 'pointer',
+    letterSpacing: 0.2,
+    transition: 'all .15s',
+    minHeight: 52,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 6,
+  },
+  // Prominent orange style when session has NOT been logged yet
+  logBtnUnlogged: {
+    background: ORANGE,
+    borderColor: ORANGE,
+    color: '#fff',
+    boxShadow: '0 2px 14px rgba(247,87,9,0.35)',
+  },
+
+  // Week dots — wrap on narrow screens (16 dots would overflow otherwise)
+  // Each button is 32×32 touch target; the coloured dot is 12×12 centred inside
+  weekDots: { display:'flex', justifyContent:'center', gap:2, flexWrap:'wrap', padding:'4px 0 8px' },
+  // Each dot button is 32×32 touch area; the circle fills the full button.
+  dot: {
+    width: 32, height: 32,
+    borderRadius: '50%',
+    background: 'var(--border)',   // default: gray
+    border: 'none',
+    cursor: 'pointer',
+    padding: 0,
+    transition: 'background .15s, transform .15s, box-shadow .15s',
+    flexShrink: 0,
+  },
+  dotActive: { background: BLUE, transform: 'scale(1.15)', boxShadow: `0 0 0 3px rgba(48,142,189,0.25)` },
+  dotPast:   { background: 'var(--text-3)' },
 }

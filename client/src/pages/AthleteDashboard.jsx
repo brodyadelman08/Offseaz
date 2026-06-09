@@ -202,7 +202,7 @@ export default function AthleteDashboard() {
                   <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
                   <p style={styles.teamName}>{activeTeam.name}</p>
                   {teams.length > 1 && (
-                    <p style={styles.teamCount}>{teams.length} teams — use sidebar to switch</p>
+                    <p style={styles.teamCount}>{teams.length} teams joined</p>
                   )}
                 </div>
                 <button
@@ -284,8 +284,8 @@ export default function AthleteDashboard() {
                 </div>
               </div>
             ) : (
-              <div style={styles.actionRow}>
-                <div>
+              <div className="action-row-mobile" style={styles.actionRow}>
+                <div style={{ minWidth: 0 }}>
                   <p style={styles.actionTitle}>Complete your athlete profile</p>
                   <p style={styles.actionSub}>Help your coach build the right plan for you.</p>
                 </div>
@@ -299,8 +299,8 @@ export default function AthleteDashboard() {
           {/* Training plan card */}
           <div style={styles.card}>
             {plan ? (
-              <div style={styles.actionRow}>
-                <div>
+              <div className="action-row-mobile" style={styles.actionRow}>
+                <div style={{ minWidth: 0 }}>
                   <p style={styles.cardLabel}>Training Plan</p>
                   <p style={styles.planTitle}>{plan.title}</p>
                   <p style={styles.planMeta}>{plan.num_weeks}-week plan</p>
@@ -508,7 +508,7 @@ const styles = {
   actionRow: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
   actionTitle: { fontWeight: 700, fontSize: 15, color: 'var(--text)', margin: '0 0 3px' },
   actionSub: { fontSize: 13, color: 'var(--text-2)', margin: 0 },
-  actionBtn: { padding: '10px 18px', fontSize: 13, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 2px 8px rgba(247,87,9,0.28)', letterSpacing: 0.1 },
+  actionBtn: { padding: '12px 20px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 2px 8px rgba(247,87,9,0.28)', letterSpacing: 0.1, minHeight: 44 },
 
   planTitle: { fontWeight: 700, fontSize: 16, color: 'var(--text)', margin: '2px 0' },
   planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
@@ -521,8 +521,8 @@ const styles = {
     display: 'inline-flex',
     alignItems: 'center',
     gap: 6,
-    padding: '7px 14px',
-    fontSize: 12,
+    padding: '10px 16px',
+    fontSize: 13,
     fontWeight: 700,
     borderRadius: 10,
     border: 'none',
@@ -532,6 +532,7 @@ const styles = {
     whiteSpace: 'nowrap',
     flexShrink: 0,
     boxShadow: '0 2px 8px rgba(247,87,9,0.25)',
+    minHeight: 44,
   },
   progressTrack: { height: 4, background: 'var(--border)', borderRadius: 6, marginBottom: 14, overflow: 'hidden' },
   progressFill: { height: '100%', background: BLUE, borderRadius: 4, transition: 'width 0.4s' },
@@ -540,16 +541,16 @@ const styles = {
   goalInput: { width: '100%', padding: '9px 12px', fontSize: 14, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' },
   goalDateLabel: { display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-3)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 },
   goalFormRow: { display: 'flex', gap: 10, alignItems: 'flex-end', flexWrap: 'wrap' },
-  goalFormBtns: { display: 'flex', gap: 8, flexShrink: 0 },
-  cancelGoalBtn: { padding: '9px 16px', fontSize: 13, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' },
-  saveGoalBtn: { padding: '9px 18px', fontSize: 13, fontWeight: 700, borderRadius: 10, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 8px rgba(48,142,189,0.28)' },
+  goalFormBtns: { display: 'flex', gap: 8, flexShrink: 0, marginLeft: 'auto' },
+  cancelGoalBtn: { padding: '11px 16px', fontSize: 13, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer', minHeight: 44 },
+  saveGoalBtn: { padding: '11px 18px', fontSize: 13, fontWeight: 700, borderRadius: 10, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 8px rgba(48,142,189,0.28)', minHeight: 44 },
 
   noGoals: { fontSize: 14, color: 'var(--text-3)', margin: 0 },
   goalList: { display: 'flex', flexDirection: 'column', gap: 0 },
-  goalRow: { display: 'flex', alignItems: 'flex-start', gap: 10, padding: '10px 0', borderBottom: '1px solid var(--border-light)' },
+  goalRow: { display: 'flex', alignItems: 'flex-start', gap: 8, padding: '12px 0', borderBottom: '1px solid var(--border-light)' },
   checkBtn: {
-    width: 20,
-    height: 20,
+    width: 28,
+    height: 28,
     borderRadius: '50%',
     border: '2px solid var(--border)',
     background: 'transparent',
@@ -559,12 +560,18 @@ const styles = {
     alignItems: 'center',
     justifyContent: 'center',
     padding: 0,
-    marginTop: 1,
+    marginTop: 0,
     transition: 'all 0.15s',
   },
   goalContent: { flex: 1, display: 'flex', flexDirection: 'column', gap: 2 },
   goalTitle:  { fontSize: 14, fontWeight: 600, lineHeight: 1.4 },
   goalTarget: { fontSize: 13, color: 'var(--text-2)' },
   goalDue:    { fontSize: 12, color: 'var(--text-3)' },
-  deleteGoalBtn: { background: 'none', border: 'none', color: 'var(--text-3)', fontSize: 18, cursor: 'pointer', lineHeight: 1, padding: 0, flexShrink: 0, marginTop: 1 },
+  deleteGoalBtn: {
+    background: 'none', border: 'none', color: 'var(--text-3)',
+    fontSize: 18, cursor: 'pointer', lineHeight: 1,
+    padding: '4px 6px', flexShrink: 0,
+    minWidth: 36, minHeight: 36,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+  },
 }

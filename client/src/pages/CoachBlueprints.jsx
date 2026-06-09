@@ -12,6 +12,10 @@ export default function CoachBlueprints() {
   const [blueprints, setBlueprints] = useState([])
   const [loading, setLoading]       = useState(true)
 
+  // On touch devices the trash icon is always visible; on pointer devices it shows on hover.
+  const [isTouchDevice] = useState(() =>
+    typeof window !== 'undefined' && window.matchMedia('(hover: none)').matches
+  )
   // Which card is being hovered (id or null)
   const [hoveredId, setHoveredId]   = useState(null)
   // Which blueprint is awaiting delete confirmation (id or null)
@@ -102,9 +106,10 @@ export default function CoachBlueprints() {
             return (
               <div
                 key={bp.id}
+                className="bp-card"
                 style={{
                   ...styles.card,
-                  ...(isHovered && !isConfirming ? {
+                  ...(isHovered && !isConfirming && !isTouchDevice ? {
                     borderColor: ORANGE,
                     transform: 'translateY(-2px)',
                     boxShadow: '0 8px 24px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.05)',
@@ -117,17 +122,17 @@ export default function CoachBlueprints() {
                   position: 'relative',
                 }}
                 onClick={() => !isConfirming && navigate(`/coach/blueprints/${bp.id}`)}
-                onMouseEnter={() => setHoveredId(bp.id)}
-                onMouseLeave={() => { setHoveredId(null); if (!isConfirming) setDeleteErr('') }}
+                onMouseEnter={() => !isTouchDevice && setHoveredId(bp.id)}
+                onMouseLeave={() => { if (!isTouchDevice) setHoveredId(null); if (!isConfirming) setDeleteErr('') }}
               >
-                {/* ── Trash icon — appears on hover, top-right corner ── */}
+                {/* ── Trash icon — always visible on touch, hover-only on desktop ── */}
                 {!isConfirming && (
                   <button
                     className="bp-trash-btn"
                     style={{
                       ...styles.trashBtn,
-                      opacity: isHovered ? 1 : 0,
-                      pointerEvents: isHovered ? 'auto' : 'none',
+                      opacity: isTouchDevice || isHovered ? 1 : 0,
+                      pointerEvents: isTouchDevice || isHovered ? 'auto' : 'none',
                     }}
                     onClick={e => { e.stopPropagation(); setConfirmId(bp.id); setDeleteErr('') }}
                     title="Delete blueprint"
@@ -260,10 +265,10 @@ const styles = {
   // Trash icon button — absolutely positioned top-right of the card
   trashBtn: {
     position: 'absolute',
-    top: 10,
-    right: 10,
-    width: 28,
-    height: 28,
+    top: 8,
+    right: 8,
+    width: 36,
+    height: 36,
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
@@ -273,7 +278,6 @@ const styles = {
     cursor: 'pointer',
     transition: 'opacity 0.15s, background 0.15s, border-color 0.15s',
     zIndex: 2,
-    '&:hover': { background: 'rgba(199,56,32,0.10)', borderColor: 'rgba(199,56,32,0.35)' },
   },
 
   // Inline confirmation overlay sits on top of the card content

@@ -664,12 +664,12 @@ const styles = {
   goalViewTarget: { fontSize: 13, color: 'var(--text-2)' },
   completedTag: { fontSize: 11, fontWeight: 700, color: '#2e7d32', background: '#e8f5e9', padding: '2px 8px', borderRadius: 4, whiteSpace: 'nowrap', flexShrink: 0 },
 
-  athleteHeader: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
-  athleteName: { fontSize: 24, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
+  athleteHeader: { display: 'flex', alignItems: 'flex-start', gap: 14, marginBottom: 24, flexWrap: 'wrap' },
+  athleteName: { fontSize: 'clamp(20px, 5vw, 24px)', fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   subline: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 2px' },
   surveyDate: { fontSize: 12, color: 'var(--text-3)', margin: 0 },
 
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 'clamp(16px, 4vw, 24px)', boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
   cardLabel: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 16px' },
   empty: { color: 'var(--text-3)', fontSize: 14, margin: 0 },
 

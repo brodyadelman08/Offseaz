@@ -329,7 +329,7 @@ const styles = {
   feedRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', padding: '10px 0', borderBottom: '1px solid var(--border-light)', gap: 8, flexWrap: 'wrap' },
   feedLeft: { display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap', minWidth: 0, flex: 1 },
   feedName: { fontSize: 14, fontWeight: 600, color: 'var(--text)', whiteSpace: 'nowrap' },
-  feedFocus: { fontSize: 13, color: 'var(--text-2)', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 200 },
+  feedFocus: { fontSize: 13, color: 'var(--text-2)', overflow: 'hidden', textOverflow: 'ellipsis', maxWidth: 'clamp(100px, 30vw, 200px)' },
   feedWeek: { fontSize: 11, color: 'var(--text-3)', whiteSpace: 'nowrap' },
   feedRight: { display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 },
   feedBadge: { fontSize: 12, fontWeight: 600, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },

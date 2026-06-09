@@ -604,7 +604,8 @@ const st = {
   // Input
   inputBar: {
     borderTop: '1px solid var(--border)',
-    padding: '10px 14px 12px',
+    padding: '10px 14px',
+    paddingBottom: 'max(12px, env(safe-area-inset-bottom, 12px))',
     background: 'var(--card)',
     flexShrink: 0,
   },
@@ -635,7 +636,7 @@ const st = {
     scrollbarWidth: 'none',
   },
   sendBtn: {
-    width: 40, height: 40, borderRadius: '50%', border: 'none',
+    width: 44, height: 44, borderRadius: '50%', border: 'none',
     background: ORANGE, color: '#fff', flexShrink: 0,
     display: 'flex', alignItems: 'center', justifyContent: 'center',
     boxShadow: '0 2px 10px rgba(247,87,9,0.35)',

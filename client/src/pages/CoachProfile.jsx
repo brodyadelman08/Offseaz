@@ -352,12 +352,12 @@ const styles = {
   headerCard: {
     display: 'flex',
     alignItems: 'flex-start',
-    gap: 20,
+    gap: 16,
     background: 'var(--card)',
     border: '1px solid var(--border)',
     borderLeft: `3px solid ${ORANGE}`,
     borderRadius: '0 16px 16px 0',
-    padding: '20px 24px',
+    padding: 'clamp(16px, 4vw, 24px)',
     boxShadow: '0 2px 8px rgba(0,0,0,0.15)',
   },
   headerInfo: {
@@ -579,8 +579,8 @@ const styles = {
     display: 'flex',
     alignItems: 'center',
     justifyContent: 'center',
-    width: 30,
-    height: 30,
+    width: 36,
+    height: 36,
     borderRadius: 8,
     border: '1px solid var(--border)',
     background: 'var(--card)',
@@ -600,7 +600,7 @@ const styles = {
     fontWeight: 600,
   },
   confirmYesBtn: {
-    padding: '4px 10px',
+    padding: '8px 14px',
     fontSize: 12,
     fontWeight: 700,
     borderRadius: 6,
@@ -608,9 +608,10 @@ const styles = {
     background: '#c73820',
     color: '#fff',
     cursor: 'pointer',
+    minHeight: 36,
   },
   confirmNoBtn: {
-    padding: '4px 10px',
+    padding: '8px 14px',
     fontSize: 12,
     fontWeight: 600,
     borderRadius: 6,
@@ -618,6 +619,7 @@ const styles = {
     background: 'var(--card)',
     color: 'var(--text-2)',
     cursor: 'pointer',
+    minHeight: 36,
   },
 
   // Leave / transfer ownership

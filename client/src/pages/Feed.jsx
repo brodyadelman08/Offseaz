@@ -127,19 +127,7 @@ function PostCard({ post, currentUserId, role, onDelete, onLike, onComment, onDe
   const canDelete = role === 'coach' || post.author_id === currentUserId
 
   return (
-    <div
-      style={st.postCard}
-      onMouseEnter={e => {
-        e.currentTarget.style.transform    = 'translateY(-2px)'
-        e.currentTarget.style.boxShadow    = T.shadowHov
-        e.currentTarget.style.borderColor  = 'rgba(247,87,9,0.28)'
-      }}
-      onMouseLeave={e => {
-        e.currentTarget.style.transform    = ''
-        e.currentTarget.style.boxShadow    = T.shadowBase
-        e.currentTarget.style.borderColor  = 'var(--border)'
-      }}
-    >
+    <div className="feed-post-card" style={st.postCard}>
       {/* Header */}
       <div style={st.postHeader}>
         <AvatarUpload
@@ -672,6 +660,7 @@ const st = {
     marginTop: 12,
     paddingTop: 12,
     borderTop: '1px solid var(--border-light)',
+    flexWrap: 'wrap',
   },
   photoBtn: {
     display: 'inline-flex',
@@ -728,8 +717,9 @@ const st = {
   deleteBtn: {
     background: 'none', border: 'none', color: 'var(--text-3)',
     fontSize: 22, cursor: 'pointer', lineHeight: 1,
-    padding: '0 4px', borderRadius: 6, alignSelf: 'flex-start',
+    padding: '6px 8px', borderRadius: 6, alignSelf: 'flex-start',
     opacity: 0.6, transition: 'opacity 0.12s',
+    minWidth: 36, minHeight: 36, display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
   postContent: { fontSize: 15, color: 'var(--text)', lineHeight: 1.65, margin: '0 0 14px', whiteSpace: 'pre-wrap' },
 
@@ -788,7 +778,8 @@ const st = {
   deleteSmall: {
     background: 'none', border: 'none', color: 'var(--text-3)',
     fontSize: 18, cursor: 'pointer', lineHeight: 1,
-    padding: '4px 0', flexShrink: 0, opacity: 0.5,
+    padding: '6px 6px', flexShrink: 0, opacity: 0.5,
+    minWidth: 32, minHeight: 32, display: 'flex', alignItems: 'center', justifyContent: 'center',
   },
 
   commentForm:   { display: 'flex', gap: 8 },

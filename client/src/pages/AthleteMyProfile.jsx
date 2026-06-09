@@ -566,8 +566,8 @@ const styles = {
   loading: { color: 'var(--text-3)', fontSize: 15 },
   container: { maxWidth: 700, margin: '0 auto' },
 
-  profileHeader: { display: 'flex', alignItems: 'center', gap: 18, marginBottom: 28 },
-  name: { fontSize: 26, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
+  profileHeader: { display: 'flex', alignItems: 'center', gap: 16, marginBottom: 28, flexWrap: 'wrap' },
+  name: { fontSize: 'clamp(20px, 5vw, 26px)', fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   subline: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 2px' },
   photoHint: { fontSize: 11, color: 'var(--text-3)', margin: 0, fontStyle: 'italic' },
 
@@ -576,7 +576,7 @@ const styles = {
   statVal: { fontSize: 22, fontWeight: 700, color: 'var(--text)', lineHeight: 1.2 },
   statLabel: { fontSize: 12, color: 'var(--text-3)' },
 
-  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 'clamp(16px, 4vw, 24px)', boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)' },
   cardHeader: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: 16 },
   cardLabel: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: 0 },
   editBtn: { display: 'inline-flex', alignItems: 'center', gap: 5, fontSize: 12, fontWeight: 600, color: BLUE, background: 'none', border: `1px solid ${BLUE}`, borderRadius: 8, padding: '4px 10px', cursor: 'pointer', transition: 'background 0.15s' },
@@ -623,15 +623,15 @@ const styles = {
   liftDate: { fontSize: 11, color: 'var(--text-3)', margin: 0 },
   liftEmpty: { fontSize: 12, color: 'var(--text-3)', margin: 0, fontStyle: 'italic' },
 
-  logPRBtn: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 12, fontWeight: 600, color: ORANGE, background: 'rgba(247,87,9,0.08)', border: `1px solid rgba(247,87,9,0.25)`, borderRadius: 6, padding: '5px 10px', cursor: 'pointer', marginTop: 2, alignSelf: 'flex-start' },
+  logPRBtn: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: ORANGE, background: 'rgba(247,87,9,0.08)', border: `1px solid rgba(247,87,9,0.25)`, borderRadius: 8, padding: '10px 14px', cursor: 'pointer', marginTop: 4, alignSelf: 'flex-start', minHeight: 40 },
 
   logForm: { display: 'flex', flexDirection: 'column', gap: 6, marginTop: 2 },
   weightInput: { padding: '7px 10px', fontSize: 14, borderRadius: 6, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', width: '100%', boxSizing: 'border-box' },
   notesInput: { padding: '6px 10px', fontSize: 12, borderRadius: 6, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', width: '100%', boxSizing: 'border-box' },
   logFormBtns: { display: 'flex', gap: 6 },
   saveError: { fontSize: 12, color: '#c73820', background: '#fce8e6', border: '1px solid #fca5a5', borderRadius: 6, padding: '5px 8px', margin: 0 },
-  saveBtn: { flex: 1, padding: '7px 0', fontSize: 13, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 6px rgba(247,87,9,0.28)' },
-  cancelBtn: { padding: '7px 12px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' },
+  saveBtn: { flex: 1, padding: '11px 0', fontSize: 14, fontWeight: 700, borderRadius: 8, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 6px rgba(247,87,9,0.28)', minHeight: 44 },
+  cancelBtn: { padding: '11px 14px', fontSize: 13, fontWeight: 600, borderRadius: 8, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer', minHeight: 44 },
 
   historyToggle: { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 11, fontWeight: 600, color: 'var(--text-3)', background: 'none', border: 'none', cursor: 'pointer', padding: '2px 0', marginTop: 2 },
   historyList: { borderTop: '1px solid var(--border-light)', paddingTop: 8, display: 'flex', flexDirection: 'column', gap: 4 },
@@ -641,7 +641,7 @@ const styles = {
   historyDate: { fontSize: 11, color: 'var(--text-3)' },
 
   // Privacy
-  privacyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 16 },
+  privacyRow: { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 12, flexWrap: 'wrap' },
   privacyTitle: { fontSize: 15, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   privacySub: { fontSize: 13, color: 'var(--text-2)', margin: 0, lineHeight: 1.5 },
   privacyBtn: {

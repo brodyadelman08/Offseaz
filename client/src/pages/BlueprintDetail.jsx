@@ -363,8 +363,8 @@ const s = {
     background: 'none', border: 'none', cursor: 'pointer', padding: '0 0 20px',
   },
 
-  titleRow: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24 },
-  lockWrap:  { display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 8, paddingTop: 24, flexShrink: 0 },
+  titleRow: { display: 'flex', alignItems: 'flex-start', gap: 16, marginBottom: 24, flexWrap: 'wrap' },
+  lockWrap:  { display: 'flex', flexDirection: 'row', alignItems: 'center', gap: 8, flexShrink: 0, flexWrap: 'wrap' },
   lockedBadge: {
     fontSize: 12, fontWeight: 700, color: '#b45309',
     background: '#fef3c7', border: '1px solid #f59e0b', borderRadius: 6, padding: '3px 10px',

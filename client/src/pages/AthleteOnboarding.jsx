@@ -564,7 +564,7 @@ const styles = {
 
   // Typography
   bigTitle: {
-    fontSize: 38,
+    fontSize: 'clamp(26px, 8vw, 38px)',
     fontWeight: 800,
     color: 'var(--text)',
     margin: 0,

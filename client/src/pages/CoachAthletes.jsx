@@ -674,12 +674,12 @@ const styles = {
   coachName:   { fontSize: 14, fontWeight: 600, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
   coachJoined: { fontSize: 12, color: 'var(--text-3)' },
 
-  coachControls: { display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0 },
+  coachControls: { display: 'flex', alignItems: 'center', gap: 8, flexShrink: 0, flexWrap: 'wrap', justifyContent: 'flex-end' },
 
   accessToggleBtn: {
-    padding: '6px 12px', fontSize: 12, fontWeight: 700,
+    padding: '8px 12px', fontSize: 12, fontWeight: 700,
     borderRadius: 8, border: 'none', cursor: 'pointer',
-    transition: 'all 0.15s', whiteSpace: 'nowrap',
+    transition: 'all 0.15s', whiteSpace: 'nowrap', minHeight: 36,
   },
   accessTogglePromote: {
     background: 'rgba(48,142,189,0.12)', color: BLUE,
@@ -691,7 +691,7 @@ const styles = {
   },
   removeCoachBtn: {
     display: 'flex', alignItems: 'center', justifyContent: 'center',
-    width: 30, height: 30, borderRadius: 8,
+    width: 36, height: 36, borderRadius: 8,
     border: '1px solid var(--border)', background: 'var(--card)',
     cursor: 'pointer', flexShrink: 0, transition: 'border-color 0.14s',
   },

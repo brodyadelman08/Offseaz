@@ -480,7 +480,7 @@ const styles = {
   loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
   notifSection: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 },
-  notifRow: { display: 'flex', alignItems: 'center', gap: 12, padding: '12px 16px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 12, textAlign: 'left' },
+  notifRow: { display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 12, textAlign: 'left', flexWrap: 'wrap' },
   notifIcon: { fontSize: 18, flexShrink: 0 },
   notifMsg: { flex: 1, fontSize: 14, fontWeight: 600, color: '#7f1d1d' },
   notifCta: { fontSize: 13, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', flexShrink: 0, cursor: 'pointer' },
@@ -497,15 +497,15 @@ const styles = {
     flexDirection: 'column',
     alignItems: 'center',
     gap: 6,
-    padding: '22px 12px',
+    padding: 'clamp(14px, 3vw, 22px) clamp(6px, 2vw, 12px)',
     background: 'var(--card)',
     border: '1px solid var(--border)',
     borderRadius: 16,
     cursor: 'pointer',
     boxShadow: '0 1px 4px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
-  statVal: { fontSize: 28, fontWeight: 700, color: 'var(--text)', lineHeight: 1 },
-  statLabel: { fontSize: 12, color: 'var(--text-3)', fontWeight: 600, letterSpacing: 0.2 },
+  statVal: { fontSize: 'clamp(22px, 5vw, 28px)', fontWeight: 700, color: 'var(--text)', lineHeight: 1 },
+  statLabel: { fontSize: 'clamp(10px, 2.5vw, 12px)', color: 'var(--text-3)', fontWeight: 600, letterSpacing: 0.2, textAlign: 'center' },
 
   card: {
     background: 'var(--card)',
@@ -621,10 +621,10 @@ const styles = {
   activityRow: {
     display: 'flex',
     justifyContent: 'space-between',
-    alignItems: 'center',
+    alignItems: 'flex-start',
     padding: '10px 0',
     borderBottom: '1px solid var(--border-light)',
-    gap: 12,
+    gap: 8,
   },
   activityLeft: {
     display: 'flex',

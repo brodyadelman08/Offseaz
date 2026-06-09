@@ -438,6 +438,14 @@ export default function BlueprintBuilder() {
               </button>
             ))}
           </div>
+          {/* Week objective (mobile only) */}
+          {form.weeks[activeWeek]?.objective && (
+            <div style={g.mobileObjective}>
+              <span style={g.mobileObjectiveLabel}>Focus</span>
+              <span style={g.mobileObjectiveText}>{form.weeks[activeWeek].objective}</span>
+            </div>
+          )}
+
           {/* Day cards */}
           <div style={g.mobileCards}>
             {form.weeks[activeWeek] && Array.from({ length: maxDays }, (_, di) => {
@@ -624,10 +632,11 @@ const g = {
 
   topBar: { display: 'flex', alignItems: 'center', gap: 10, padding: '12px 0 16px', flexWrap: 'wrap' },
   backBtn: { fontSize: 13, fontWeight: 500, color: 'var(--text-2)', background: 'none', border: 'none', cursor: 'pointer', padding: 0, whiteSpace: 'nowrap', flexShrink: 0 },
-  titleGroup: { flex: 1, display: 'flex', gap: 8, minWidth: 0 },
+  // titleGroup takes full row on mobile by breaking at flex wrap point
+  titleGroup: { flex: 1, minWidth: '200px', display: 'flex', gap: 8 },
   titleInput: { flex: 1, padding: '9px 13px', fontSize: 15, fontWeight: 600, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', minWidth: 0 },
   weeksSelect: { padding: '9px 10px', fontSize: 13, borderRadius: 8, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', cursor: 'pointer', flexShrink: 0 },
-  saveBtn: { padding: '9px 22px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 10px rgba(247,87,9,0.35)', flexShrink: 0 },
+  saveBtn: { padding: '11px 22px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 10px rgba(247,87,9,0.35)', flexShrink: 0, minHeight: 44 },
   errorBox: { background: 'rgba(199,56,32,0.08)', border: '1px solid rgba(199,56,32,0.25)', color: '#c73820', borderRadius: 8, padding: '10px 14px', fontSize: 13, marginBottom: 12 },
 
   clipBar: { display: 'flex', alignItems: 'center', gap: 12, padding: '10px 16px', background: 'rgba(247,87,9,0.07)', border: `1px solid rgba(247,87,9,0.25)`, borderRadius: 10, marginBottom: 10, flexWrap: 'wrap' },
@@ -678,6 +687,9 @@ const g = {
 
   // Mobile — no flex:1 so the wrapper grows with content and parent <main> scrolls
   mobileWrap: { display: 'flex', flexDirection: 'column', gap: 12, paddingBottom: 16 },
+  mobileObjective: { display: 'flex', alignItems: 'baseline', gap: 8, padding: '8px 12px', background: 'rgba(48,142,189,0.07)', border: '1px solid rgba(48,142,189,0.18)', borderRadius: 10 },
+  mobileObjectiveLabel: { fontSize: 10, fontWeight: 700, color: 'var(--text-3)', textTransform: 'uppercase', letterSpacing: 0.8, flexShrink: 0 },
+  mobileObjectiveText: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
   weekTabs: { display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4, WebkitOverflowScrolling: 'touch' },
   weekTab: { flexShrink: 0, padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer' },
   weekTabActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.08)' },
@@ -688,7 +700,7 @@ const g = {
   mobileCardDay: { fontSize: 13, fontWeight: 700, color: 'var(--text)', flex: 1 },
   lockBadge: { fontSize: 11, color: ORANGE, fontWeight: 600 },
   mobileCardBtns: { display: 'flex', gap: 6 },
-  mobileActionBtn: { fontSize: 16, background: 'none', border: 'none', cursor: 'pointer', padding: '2px 4px', color: 'var(--text-2)' },
+  mobileActionBtn: { fontSize: 18, background: 'none', border: 'none', cursor: 'pointer', padding: '6px 8px', color: 'var(--text-2)', minWidth: 36, minHeight: 36, display: 'flex', alignItems: 'center', justifyContent: 'center' },
   mobileCardFocus: { fontSize: 14, fontWeight: 700, color: 'var(--text)', marginBottom: 4 },
   mobileCardDesc: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.5 },
   emptyCell: { fontSize: 13, color: 'var(--text-3)', fontStyle: 'italic' },
