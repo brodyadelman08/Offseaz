@@ -108,7 +108,7 @@ async function fetchDMMessages(teamId, userA, userB, ascending = true) {
 async function getConversationList(userId, role, teamId = null) {
   const info = await getUserTeamInfo(userId, role, teamId)
   if (!info) return []
-  const { teamId, coachId } = info
+  const { teamId: resolvedTeamId, coachId } = info
 
   const sel = `id, content, created_at, sender_id,
     sender:profiles!team_messages_sender_id_fkey(full_name)`
@@ -118,14 +118,14 @@ async function getConversationList(userId, role, teamId = null) {
     supabaseAdmin
       .from('team_messages')
       .select(sel)
-      .eq('team_id', teamId)
+      .eq('team_id', resolvedTeamId)
       .is('recipient_id', null)
       .order('created_at', { ascending: false })
       .limit(1),
     supabaseAdmin
       .from('team_messages')
       .select('id', { count: 'exact', head: true })
-      .eq('team_id', teamId)
+      .eq('team_id', resolvedTeamId)
       .is('recipient_id', null)
       .eq('is_read', false)
       .neq('sender_id', userId),
@@ -151,7 +151,7 @@ async function getConversationList(userId, role, teamId = null) {
     const { data: members } = await supabaseAdmin
       .from('team_members')
       .select('athlete_id')
-      .eq('team_id', teamId)
+      .eq('team_id', resolvedTeamId)
       .eq('access_level', 'athlete')
 
     // Fetch profiles separately to avoid FK hint fragility
@@ -167,11 +167,11 @@ async function getConversationList(userId, role, teamId = null) {
       const athleteName = profileMap[athleteId] || 'Athlete'
 
       const [dmAll, { count: unread }] = await Promise.all([
-        fetchDMMessages(teamId, userId, athleteId, false),
+        fetchDMMessages(resolvedTeamId, userId, athleteId, false),
         supabaseAdmin
           .from('team_messages')
           .select('id', { count: 'exact', head: true })
-          .eq('team_id', teamId)
+          .eq('team_id', resolvedTeamId)
           .eq('sender_id', athleteId)
           .eq('recipient_id', userId)
           .eq('is_read', false),
@@ -196,11 +196,11 @@ async function getConversationList(userId, role, teamId = null) {
     // Athlete: DM with coach
     const [{ data: coachProfile }, dmAll, { count: unread }] = await Promise.all([
       supabaseAdmin.from('profiles').select('full_name').eq('id', coachId).single(),
-      fetchDMMessages(teamId, userId, coachId, false),
+      fetchDMMessages(resolvedTeamId, userId, coachId, false),
       supabaseAdmin
         .from('team_messages')
         .select('id', { count: 'exact', head: true })
-        .eq('team_id', teamId)
+        .eq('team_id', resolvedTeamId)
         .eq('sender_id', coachId)
         .eq('recipient_id', userId)
         .eq('is_read', false),
@@ -230,7 +230,7 @@ async function getConversationList(userId, role, teamId = null) {
 async function getConversationThread(userId, role, conversationId, teamId = null) {
   const info = await getUserTeamInfo(userId, role, teamId)
   if (!info) return []
-  const { teamId } = info
+  const { teamId: resolvedTeamId } = info
 
   let rows
 
@@ -239,7 +239,7 @@ async function getConversationThread(userId, role, conversationId, teamId = null
       .from('team_messages')
       .select(`id, content, created_at, sender_id,
         sender:profiles!team_messages_sender_id_fkey(full_name)`)
-      .eq('team_id', teamId)
+      .eq('team_id', resolvedTeamId)
       .is('recipient_id', null)
       .order('created_at', { ascending: true })
     if (error) throw error
@@ -249,18 +249,18 @@ async function getConversationThread(userId, role, conversationId, teamId = null
     await supabaseAdmin
       .from('team_messages')
       .update({ is_read: true })
-      .eq('team_id', teamId)
+      .eq('team_id', resolvedTeamId)
       .is('recipient_id', null)
       .eq('is_read', false)
       .neq('sender_id', userId)
   } else {
-    rows = await fetchDMMessages(teamId, userId, conversationId, true)
+    rows = await fetchDMMessages(resolvedTeamId, userId, conversationId, true)
 
     // Mark messages from the other person as read
     await supabaseAdmin
       .from('team_messages')
       .update({ is_read: true })
-      .eq('team_id', teamId)
+      .eq('team_id', resolvedTeamId)
       .eq('sender_id', conversationId)
       .eq('recipient_id', userId)
       .eq('is_read', false)
