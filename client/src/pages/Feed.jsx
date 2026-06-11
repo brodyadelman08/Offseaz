@@ -253,6 +253,9 @@ export default function Feed() {
   const [composeText, setComposeText]   = useState('')
   const [posting, setPosting]           = useState(false)
   const [composeFocused, setComposeFocused] = useState(false)
+  const [feedBetaDismissed, setFeedBetaDismissed] = useState(
+    () => localStorage.getItem('offseaz_feed_beta_dismissed') === '1'
+  )
 
   // Photo state
   const [photoPreview, setPhotoPreview] = useState(null)   // data URL for preview
@@ -426,6 +429,27 @@ export default function Feed() {
         <h1 style={st.pageTitle}>Team Feed</h1>
         <p style={st.pageSub}>Stay connected with your team.</p>
       </div>
+
+      {/* Beta notice */}
+      {!feedBetaDismissed && (
+        <div style={st.feedBetaBanner}>
+          <span style={st.feedBetaText}>
+            <span style={st.feedBetaBadge}>BETA</span>
+            Offseaz is currently in beta — photo storage is limited. Keep photos under 5MB for best performance.{' '}
+            <span style={st.feedBetaHighlight}>Video posting is coming soon.</span>
+          </span>
+          <button
+            style={st.feedBetaClose}
+            onClick={() => {
+              setFeedBetaDismissed(true)
+              localStorage.setItem('offseaz_feed_beta_dismissed', '1')
+            }}
+            aria-label="Dismiss"
+          >
+            <XIcon size={12} />
+          </button>
+        </div>
+      )}
 
       {/* Compose box */}
       <form onSubmit={handlePost} style={{
@@ -820,5 +844,58 @@ const st = {
   ghostContent: { flex: 1 },
   ghostLine: {
     height: 12, borderRadius: 6, background: 'var(--border)',
+  },
+
+  // ── Feed beta notice ──────────────────────────────────────────────────────
+  feedBetaBanner: {
+    width: '100%',
+    background: '#111',
+    border: '1px solid rgba(247,87,9,0.25)',
+    borderRadius: 10,
+    padding: '9px 4px 9px 16px',
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    gap: 12,
+    marginBottom: 20,
+  },
+  feedBetaText: {
+    fontSize: 13,
+    color: '#AAAAAA',
+    lineHeight: 1.5,
+    flex: 1,
+  },
+  feedBetaBadge: {
+    display: 'inline-block',
+    fontSize: 10,
+    fontWeight: 800,
+    letterSpacing: 1,
+    color: ORANGE,
+    background: 'rgba(247,87,9,0.15)',
+    border: '1px solid rgba(247,87,9,0.35)',
+    padding: '2px 7px',
+    borderRadius: 4,
+    marginRight: 8,
+    verticalAlign: 'middle',
+  },
+  feedBetaHighlight: {
+    color: ORANGE,
+    fontWeight: 600,
+  },
+  feedBetaClose: {
+    flexShrink: 0,
+    background: 'transparent',
+    border: 'none',
+    color: '#555',
+    cursor: 'pointer',
+    padding: '6px 10px',
+    lineHeight: 1,
+    borderRadius: 6,
+    transition: 'color 0.15s',
+    minWidth: 32,
+    minHeight: 32,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
   },
 }
