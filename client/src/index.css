@@ -24,6 +24,9 @@ html {
   /* Prevent iOS from adjusting font sizes after orientation change */
   -webkit-text-size-adjust: 100%;
   text-size-adjust: 100%;
+  /* Disable double-tap zoom and gesture-based zoom on iOS Safari + Android Chrome */
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
 }
 
 body {
@@ -39,6 +42,9 @@ body {
   overflow-x: hidden;
   /* Prevent iOS rubber-band overscroll from surfacing elements below the tab bar */
   overscroll-behavior: none;
+  /* Disable double-tap zoom and gesture-based zoom on iOS Safari + Android Chrome */
+  touch-action: manipulation;
+  -ms-touch-action: manipulation;
 }
 
 #root {

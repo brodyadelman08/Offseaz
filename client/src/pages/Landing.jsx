@@ -852,12 +852,17 @@ const s = {
 
   // Beta banner
   betaBanner: {
+    width: '100%', boxSizing: 'border-box', overflow: 'hidden',
     background: '#111', borderBottom: '1px solid rgba(247,87,9,0.22)',
     padding: '9px clamp(16px,4vw,40px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
     position: 'relative', zIndex: 200,
   },
-  betaText:  { fontSize: 13, color: '#AAA', lineHeight: 1.5, textAlign: 'center', flex: 1, margin: 0 },
+  betaText: {
+    fontSize: 13, color: '#AAA', lineHeight: 1.5, textAlign: 'center',
+    flex: 1, minWidth: 0, margin: 0,
+    wordBreak: 'break-word', overflowWrap: 'break-word',
+  },
   betaBadge: {
     display: 'inline-block', fontSize: 10, fontWeight: 800, letterSpacing: 1,
     color: ORANGE, background: 'rgba(247,87,9,0.15)', border: '1px solid rgba(247,87,9,0.35)',
@@ -946,7 +951,8 @@ const s = {
   heroSub:  { fontSize: 'clamp(15px,2vw,18px)', color: '#777', lineHeight: 1.8, maxWidth: 580, marginBottom: 40 },
   heroCtas: { display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 },
   mockupWrap: {
-    position: 'relative', width: '100%', display: 'flex', justifyContent: 'center',
+    position: 'relative', width: '100%', overflow: 'hidden',
+    display: 'flex', justifyContent: 'center',
     padding: 'clamp(24px,4vw,32px) clamp(0px,4vw,24px) 0',
   },
   mockupGlow: {
