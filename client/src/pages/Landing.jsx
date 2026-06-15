@@ -36,6 +36,8 @@ const PILLARS = [
   },
 ]
 
+const NAV_IDS = ['coaches', 'athletes', 'program', 'how-it-works', 'story']
+
 const SPORTS = [
   { emoji: '🏈', name: 'Football'      },
   { emoji: '🏀', name: 'Basketball'    },
@@ -436,6 +438,7 @@ export default function Landing() {
   const [betaDismissed, setBetaDismissed] = useState(
     () => sessionStorage.getItem('offseaz_beta_dismissed') === '1'
   )
+  const [activeId, setActiveId] = useState('')
 
   function scrollToSection(id) {
     const el = document.getElementById(id)
@@ -458,6 +461,30 @@ export default function Landing() {
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
   }, [])
+
+  // Track which section is in the viewport as the user scrolls
+  useEffect(() => {
+    function updateActive() {
+      let current = ''
+      for (const id of NAV_IDS) {
+        const el = document.getElementById(id)
+        if (!el) continue
+        // Section top has passed the anchor nav height (≈114px) — it's active
+        if (el.getBoundingClientRect().top <= 130) current = id
+      }
+      setActiveId(current)
+    }
+    window.addEventListener('scroll', updateActive, { passive: true })
+    updateActive()
+    return () => window.removeEventListener('scroll', updateActive)
+  }, [])
+
+  // Scroll the active nav tab into view on mobile when activeId changes
+  useEffect(() => {
+    if (!activeId) return
+    const btn = document.querySelector(`[data-navid="${activeId}"]`)
+    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+  }, [activeId])
 
   return (
     <div style={s.root}>
@@ -542,17 +569,30 @@ export default function Landing() {
             { id: 'program',      label: 'The Program'  },
             { id: 'how-it-works', label: 'How It Works' },
             { id: 'story',        label: 'Our Story'    },
-          ].map(({ id, label }) => (
-            <button
-              key={id}
-              style={s.anchorLink}
-              onClick={() => scrollToSection(id)}
-              onMouseEnter={e => { e.currentTarget.style.color = ORANGE; e.currentTarget.style.background = 'rgba(247,87,9,0.08)' }}
-              onMouseLeave={e => { e.currentTarget.style.color = '#777'; e.currentTarget.style.background = 'transparent' }}
-            >
-              {label}
-            </button>
-          ))}
+          ].map(({ id, label }) => {
+            const isActive = activeId === id
+            return (
+              <button
+                key={id}
+                data-navid={id}
+                style={{
+                  ...s.anchorLink,
+                  color: isActive ? ORANGE : '#666',
+                  borderBottomColor: isActive ? ORANGE : 'transparent',
+                  fontWeight: isActive ? 700 : 600,
+                }}
+                onClick={() => scrollToSection(id)}
+                onMouseEnter={e => {
+                  if (!isActive) e.currentTarget.style.color = '#DDD'
+                }}
+                onMouseLeave={e => {
+                  if (!isActive) e.currentTarget.style.color = '#666'
+                }}
+              >
+                {label}
+              </button>
+            )
+          })}
         </div>
       </nav>
 
@@ -891,23 +931,33 @@ const s = {
     background: ORANGE, boxShadow: '0 2px 14px rgba(247,87,9,0.32)',
   },
 
-  // Anchor nav
+  // Anchor nav — centered on desktop, horizontally scrollable on mobile
   anchorNav: {
     position: 'sticky', top: 0, zIndex: 90,
     background: 'rgba(10,10,10,0.97)',
     backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
     borderBottom: '1px solid rgba(255,255,255,0.07)',
+    display: 'flex', justifyContent: 'center',
     overflowX: 'auto', WebkitOverflowScrolling: 'touch',
     scrollbarWidth: 'none', msOverflowStyle: 'none',
   },
   anchorNavInner: {
-    display: 'flex', alignItems: 'center', gap: 2,
-    padding: '0 clamp(16px,4vw,40px)', minWidth: 'max-content',
+    // flex-shrink:0 means this won't compress below content width;
+    // on desktop (<content width) it stays centered via the parent justify-content;
+    // on mobile (>viewport width) parent overflows and becomes scrollable
+    display: 'flex', flexShrink: 0, alignItems: 'stretch',
+    padding: '0 clamp(8px,3vw,24px)',
   },
   anchorLink: {
-    flexShrink: 0, background: 'transparent', border: 'none', color: '#777',
-    fontSize: 13, fontWeight: 600, cursor: 'pointer', padding: '14px 18px',
-    letterSpacing: 0.2, transition: 'background 0.15s, color 0.15s', whiteSpace: 'nowrap',
+    flexShrink: 0, background: 'transparent',
+    border: 'none',
+    borderBottom: '2px solid transparent', // active tab overrides this color
+    color: '#666',
+    fontSize: 13, fontWeight: 600, cursor: 'pointer',
+    padding: '0 clamp(12px,2.5vw,20px)', minHeight: 48,
+    display: 'flex', alignItems: 'center',
+    letterSpacing: 0.2, whiteSpace: 'nowrap',
+    transition: 'color 0.2s ease, border-color 0.2s ease, font-weight 0.1s',
   },
 
   // Hero
