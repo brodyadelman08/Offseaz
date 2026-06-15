@@ -1,4 +1,4 @@
-﻿import { useEffect, useState } from 'react'
+import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { BoltIcon } from '../components/Icons'
@@ -10,13 +10,6 @@ const YELLOW = '#F0BE24'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
-const STATS = [
-  { value: '4×',   label: 'More coach visibility',       color: ORANGE },
-  { value: '100%', label: 'Structured offseason plans',   color: BLUE   },
-  { value: '2×',   label: 'Faster athlete development',   color: YELLOW },
-  { value: '0',    label: 'Missed workouts go unnoticed', color: ORANGE },
-]
-
 const FEATURES = [
   {
     num: '01', color: ORANGE, tag: 'Assessment',
@@ -25,7 +18,7 @@ const FEATURES = [
     body: 'Athletes complete a detailed needs-analysis covering goals, position, injury history, and available equipment — giving coaches the full picture before writing a single rep.',
   },
   {
-    num: '02', color: BLUE, tag: 'Blueprints',
+    num: '02', color: BLUE, tag: 'Blueprint',
     icon: BlueprintIcon,
     title: 'Sport-Specific Programs',
     body: 'Build periodized training plans with position-tailored templates, percentage-based loading, and week-by-week progression that scales with every athlete.',
@@ -37,7 +30,7 @@ const FEATURES = [
     body: 'Athletes log every session with effort scores and notes. Coaches see real-time completion rates, flagged injuries, and roster-wide accountability at a glance.',
   },
   {
-    num: '04', color: BLUE, tag: 'Communication',
+    num: '04', color: BLUE, tag: 'Coach Connect',
     icon: MessageIcon,
     title: 'Coach–Athlete Messaging',
     body: 'Keep momentum going all offseason. Send team announcements or direct messages — answer questions, give feedback, and stay connected from last game to first practice.',
@@ -77,25 +70,6 @@ const SPORTS = [
   { emoji: '🏃', name: 'Track & Field' },
   { emoji: '🌲', name: 'Cross Country' },
   { emoji: '🥍', name: 'Lacrosse' },
-  { emoji: '🏊', name: 'Swimming' },
-]
-
-const BLUEPRINT_STEPS = [
-  {
-    num: '01', color: ORANGE,
-    title: 'Athlete Completes the Needs Analysis Survey',
-    body: 'Athletes fill out a detailed intake survey selecting their sport, position, primary goal, experience level, and days available — giving their coach the full picture instantly.',
-  },
-  {
-    num: '02', color: BLUE,
-    title: 'Offseaz Generates a Personalized Blueprint',
-    body: 'The platform automatically builds a training program based on their survey answers. Percentage-based weights are calculated from their logged maxes — no manual math required.',
-  },
-  {
-    num: '03', color: YELLOW,
-    title: 'Coach Reviews, Customizes, and Assigns',
-    body: 'Coaches review every generated blueprint, customize any exercise or loading scheme, assign it to the whole team or individual athletes, and lock it so athletes follow the program as designed.',
-  },
 ]
 
 // ── Icon components (inline SVG) ─────────────────────────────────────────────
@@ -761,7 +735,7 @@ const sp = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fill, minmax(min(120px, 100%), 1fr))',
     gap: 10,
-    marginBottom: 72,
+    marginBottom: 56,
   },
   sportChip: {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
@@ -776,7 +750,7 @@ const sp = {
   sectionDivider: {
     height: 1,
     background: 'linear-gradient(to right, transparent, #2A2A2A, transparent)',
-    margin: '0 0 72px',
+    margin: '0 0 56px',
   },
 
   stepsGrid: {
@@ -809,7 +783,7 @@ const sp = {
     borderLeft: `3px solid ${ORANGE}`,
     borderRadius: 16,
     padding: '28px 32px',
-    marginBottom: 20,
+    marginBottom: 0,
   },
   calloutIconWrap: {
     width: 48, height: 48, borderRadius: 12, flexShrink: 0, marginTop: 2,
@@ -824,7 +798,7 @@ const sp = {
     display: 'flex', alignItems: 'flex-start', gap: 16,
     background: '#111', border: '1px solid #1E1E1E',
     borderRadius: 14, padding: '22px 28px',
-    maxWidth: 700, margin: '0 auto',
+    maxWidth: 700, margin: '0 auto 56px',
   },
   customNoteIcon: { fontSize: 18, flexShrink: 0, marginTop: 1 },
   customNoteText: { fontSize: 14, color: '#555', lineHeight: 1.7, margin: 0 },
@@ -835,15 +809,20 @@ const sp = {
 export default function Landing() {
   const { session, profile, loading } = useAuth()
   const navigate = useNavigate()
-  const [scrolled, setScrolled]       = useState(false)
+  const [scrolled, setScrolled] = useState(false)
   const [betaDismissed, setBetaDismissed] = useState(
     () => sessionStorage.getItem('offseaz_beta_dismissed') === '1'
   )
 
+  function scrollToSection(id) {
+    const el = document.getElementById(id)
+    if (!el) return
+    // Account for fixed nav (64px) + anchor nav (50px)
+    const top = el.getBoundingClientRect().top + window.scrollY - 114
+    window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
+  }
+
   useEffect(() => {
-    // Only redirect once auth is fully resolved AND we have a confirmed profile.
-    // The `loading` flag is reset to true whenever the session changes (see
-    // AuthContext), so this never fires mid-profile-fetch.
     if (loading) return
     if (session && profile) {
       navigate(profile.role === 'coach' ? '/coach' : '/athlete', { replace: true })
@@ -854,8 +833,8 @@ export default function Landing() {
     function onScroll() {
       const y = window.scrollY
       setScrolled(prev => {
-        if (prev) return y > 10   // already shown — hide only when truly at top
-        return y > 80             // not shown yet — appear after 80px
+        if (prev) return y > 10
+        return y > 80
       })
     }
     window.addEventListener('scroll', onScroll, { passive: true })
@@ -886,7 +865,7 @@ export default function Landing() {
         </div>
       )}
 
-      {/* ── Navbar — fades in after 80px scroll, stays until back at top ── */}
+      {/* ── Navbar — fades in after 80px scroll ── */}
       <nav style={{
         ...s.nav,
         opacity: scrolled ? 1 : 0,
@@ -910,7 +889,6 @@ export default function Landing() {
           background: 'radial-gradient(ellipse, rgba(48,142,189,0.07) 0%, transparent 60%)' }} />
 
         <div style={s.heroInner}>
-          {/* Brand logo — bold, first thing seen */}
           <img
             src={LOGO}
             alt="Offseaz"
@@ -932,7 +910,6 @@ export default function Landing() {
             Sport-specific blueprints. Real accountability. Built for coaches and athletes who take the offseason seriously.
           </p>
 
-          {/* FIX 1 — Coach CTA orange filled, Athlete CTA blue outlined */}
           <div style={s.heroCtas}>
             <Link to="/register" className="land-cta-orange" style={s.ctaCoach}>
               Get Started as Coach
@@ -948,7 +925,6 @@ export default function Landing() {
 
           <div style={s.heroScrollLine} />
 
-          {/* FIX 3 — Dual-panel mockup */}
           <div style={s.mockupWrap}>
             <div style={s.mockupGlow} />
             <DualDashboardMockup />
@@ -956,59 +932,209 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Stats bar ──────────────────────────────────────────────────── */}
-      <div style={s.statsBar}>
-        <div style={s.statsInner}>
-          {STATS.map((stat, i) => (
-            <div key={i} className="land-stat-card" style={s.statItem}>
-              <span style={{ ...s.statValue, color: stat.color }}>{stat.value}</span>
-              <span style={s.statLabel}>{stat.label}</span>
-            </div>
+      {/* ── Sticky anchor navigation ────────────────────────────────────── */}
+      <nav style={s.anchorNav}>
+        <div style={s.anchorNavInner}>
+          {[
+            { id: 'coaches',      label: 'For Coaches'  },
+            { id: 'athletes',     label: 'For Athletes' },
+            { id: 'program',      label: 'The Program'  },
+            { id: 'how-it-works', label: 'How It Works' },
+            { id: 'story',        label: 'Our Story'    },
+          ].map(({ id, label }) => (
+            <button
+              key={id}
+              style={s.anchorLink}
+              onClick={() => scrollToSection(id)}
+              onMouseEnter={e => {
+                e.currentTarget.style.background = 'rgba(247,87,9,0.10)'
+                e.currentTarget.style.color = ORANGE
+              }}
+              onMouseLeave={e => {
+                e.currentTarget.style.background = 'transparent'
+                e.currentTarget.style.color = '#888'
+              }}
+            >
+              {label}
+            </button>
           ))}
         </div>
-      </div>
+      </nav>
 
-      {/* ── Problem ────────────────────────────────────────────────────── */}
-      <section style={s.problemSection}>
+      {/* ── For Coaches ─────────────────────────────────────────────────── */}
+      <section id="coaches" style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818' }}>
         <div style={s.inner}>
-          <div style={s.sectionHead}>
-            <span style={s.eyebrow}>The Problem</span>
-            <h2 style={s.sectionH2}>The Offseason Is Broken</h2>
+
+          <div style={{ ...s.sectionHead, maxWidth: 680, margin: '0 auto 56px', textAlign: 'center' }}>
+            <span style={s.eyebrow}>For Coaches</span>
+            <h2 style={s.sectionH2}>The Offseason Is No Longer a Black Box</h2>
             <p style={s.sectionP}>
-              Between the final whistle and the first practice, most athletes are on their own — and most coaches have no visibility into what's happening.
+              Real-time visibility into who is logging, who is skipping, and who flagged an injury —
+              across your entire roster. Built for coaches who refuse to go dark between seasons.
             </p>
           </div>
-          <div style={s.problemGrid}>
+
+          {/* Accountability dashboard mockup */}
+          <div style={{ display: 'flex', justifyContent: 'center', position: 'relative', marginBottom: 64 }}>
+            <div style={{ position: 'absolute', top: '50%', left: '50%', transform: 'translate(-50%,-50%)', width: 700, height: 350, pointerEvents: 'none', background: 'radial-gradient(ellipse, rgba(247,87,9,0.10) 0%, transparent 65%)', borderRadius: '50%', zIndex: 0 }} />
+            <div style={{ position: 'relative', zIndex: 1, width: '100%' }}>
+              <DualDashboardMockup />
+            </div>
+          </div>
+
+          {/* Pain-point solution cards */}
+          <div style={s.threeColGrid}>
             {[
-              { color: ORANGE, title: 'Athletes Drift Without Structure',
-                body: 'No plan means no progress. Athletes train randomly or not at all — showing up to the next season less prepared than they could have been.' },
-              { color: BLUE, title: 'Coaches Lose All Visibility',
-                body: 'After the final game, coaches have no way to monitor effort, track compliance, or guide development in real time. The offseason is a black box.' },
-              { color: YELLOW, title: 'The Gap Costs You Games',
-                body: 'The athletes who win championships are the ones who closed the offseason gap. Your competitors are training smart — is your roster?' },
+              { color: ORANGE, title: 'Real-Time Roster Visibility',
+                body: "See every athlete's completion rate, streak, and session logs the moment they submit. Know exactly who is working and who isn't — every single day." },
+              { color: BLUE, title: 'Injury Flags Surface Instantly',
+                body: 'When an athlete flags an injury during workout logging, it appears immediately on your accountability dashboard. Catch problems before they become season-ending.' },
+              { color: YELLOW, title: 'Auto-Generated Accountability Reports',
+                body: 'Weekly reports show who trained, who skipped, and who improved — giving you the data to have conversations that actually change behavior.' },
             ].map((item, i) => (
               <div key={i} className="land-feature-card" style={{ ...s.problemCard, borderTop: `2px solid ${item.color}` }}>
-                <div style={{ width: 36, height: 36, borderRadius: 10, background: item.color + '18', border: `1px solid ${item.color}33`, display: 'flex', alignItems: 'center', justifyContent: 'center', marginBottom: 20 }}>
-                  <div style={{ width: 10, height: 10, borderRadius: 2, background: item.color }} />
-                </div>
                 <h3 style={s.cardTitle}>{item.title}</h3>
                 <p style={s.cardBody}>{item.body}</p>
               </div>
             ))}
           </div>
+
+          {/* Benefits + live dashboard stat strip */}
+          <div style={{ ...s.splitRow, marginTop: 64 }}>
+            <div style={s.splitText}>
+              <h3 style={s.subHeading}>
+                Everything you need to run a world-class offseason program
+              </h3>
+              <ul style={s.benefitList}>
+                {COACH_BENEFITS.map((b, i) => (
+                  <li key={i} style={s.benefitItem}>
+                    <CheckIcon color={ORANGE} />
+                    <span style={s.benefitText}>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link to="/register" className="land-cta-orange" style={{ ...s.ctaCoach, marginTop: 32, display: 'inline-flex' }}>
+                Get Started as Coach
+              </Link>
+            </div>
+            <div style={s.splitVisual}>
+              <div style={s.statStripCard}>
+                <p style={{ fontSize: 11, fontWeight: 700, letterSpacing: 2, color: ORANGE, textTransform: 'uppercase', marginBottom: 18, margin: '0 0 18px' }}>
+                  Coach Dashboard
+                </p>
+                {[
+                  { label: 'Athletes logged today',     val: '14 / 18', color: ORANGE  },
+                  { label: 'Average completion rate',   val: '84%',     color: BLUE    },
+                  { label: 'Active streaks on roster',  val: '11',      color: YELLOW  },
+                  { label: 'Injuries flagged this week',val: '2',       color: '#c73820' },
+                ].map((row, i, arr) => (
+                  <div key={i} style={{
+                    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+                    padding: '12px 0',
+                    borderBottom: i < arr.length - 1 ? '1px solid #1E1E1E' : 'none',
+                  }}>
+                    <span style={{ fontSize: 13, color: '#666' }}>{row.label}</span>
+                    <span style={{ fontSize: 16, fontWeight: 800, color: row.color }}>{row.val}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
         </div>
       </section>
 
-      {/* ── Features ───────────────────────────────────────────────────── */}
-      <section style={s.section}>
+      {/* ── For Athletes ────────────────────────────────────────────────── */}
+      <section id="athletes" style={{ ...s.section, borderTop: '1px solid #181818' }}>
         <div style={s.inner}>
-          <div style={s.sectionHead}>
-            <span style={s.eyebrow}>Platform Features</span>
+
+          <div style={{ ...s.sectionHead, maxWidth: 680, margin: '0 auto 56px', textAlign: 'center' }}>
+            <span style={s.eyebrow}>For Athletes</span>
+            <h2 style={s.sectionH2}>Your Plan. Your Weights. Your Progress.</h2>
+            <p style={s.sectionP}>
+              A personalized blueprint built for your sport and position — with exact weights
+              auto-calculated from your logged maxes. No guesswork. Just lift.
+            </p>
+          </div>
+
+          {/* Survey → Blueprint flow (3 steps) */}
+          <div style={{ ...sp.stepsGrid, marginBottom: 64 }}>
+            {[
+              { color: ORANGE, num: '01',
+                title: 'Complete the Needs Analysis',
+                body: 'Fill out a detailed intake survey: sport, position, goals, experience level, available equipment, and injury history.' },
+              { color: BLUE, num: '02',
+                title: 'Get a Personalized Blueprint',
+                body: 'Offseaz builds a training program from your survey answers. Percentage-based weights are auto-calculated from your logged one-rep maxes.' },
+              { color: YELLOW, num: '03',
+                title: 'Track Streaks & Progress',
+                body: 'Log every session, build your streak, and watch your PRs climb. Your coach sees every rep. Your teammates see your work on the feed.' },
+            ].map((step, i) => (
+              <div key={i} style={{ ...sp.stepCard, borderTop: `2px solid ${step.color}` }}>
+                <span style={{ ...sp.stepNum, color: step.color }}>{step.num}</span>
+                <h4 style={sp.stepTitle}>{step.title}</h4>
+                <p style={sp.stepBody}>{step.body}</p>
+              </div>
+            ))}
+          </div>
+
+          {/* Team feed visual + athlete benefits */}
+          <div style={s.splitRow}>
+            <div style={s.splitVisual}>
+              <div style={{ ...s.visualGlow, background: 'radial-gradient(ellipse, rgba(48,142,189,0.12) 0%, transparent 65%)' }} />
+              <FeedMockup />
+            </div>
+            <div style={s.splitText}>
+              <span style={s.eyebrow}>Team Feed & Streak Tracking</span>
+              <h3 style={s.subHeading}>
+                When teammates see each other work, everyone works harder
+              </h3>
+              <p style={{ ...s.cardBody, marginBottom: 28, fontSize: 15, lineHeight: 1.75, color: '#666' }}>
+                The team feed turns individual effort into shared accountability.
+                Post workout photos, see who put in work this week, and build team
+                culture across the entire offseason.
+              </p>
+              <ul style={s.benefitList}>
+                {ATHLETE_BENEFITS.map((b, i) => (
+                  <li key={i} style={s.benefitItem}>
+                    <CheckIcon color={BLUE} />
+                    <span style={s.benefitText}>{b}</span>
+                  </li>
+                ))}
+              </ul>
+              <Link to="/register" className="land-cta-blue" style={{ ...s.ctaAthlete, marginTop: 32, display: 'inline-flex' }}>
+                Get Started as Athlete
+              </Link>
+            </div>
+          </div>
+
+          {/* Auto-calculated weights callout */}
+          <div style={{ ...sp.callout, marginTop: 64 }}>
+            <div style={sp.calloutIconWrap}>
+              <BoltIcon size={24} color={ORANGE} />
+            </div>
+            <div>
+              <p style={sp.calloutHeading}>No math. No guesswork. Just lift.</p>
+              <p style={sp.calloutBody}>
+                Every lift shows the exact weight to use based on your personal one-rep max — calculated automatically from your logged maxes. Athletes see the number. They just lift it.
+              </p>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      {/* ── The Program ─────────────────────────────────────────────────── */}
+      <section id="program" style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818', borderBottom: '1px solid #181818' }}>
+        <div style={s.inner}>
+
+          <div style={{ ...s.sectionHead, maxWidth: 680, margin: '0 auto 56px', textAlign: 'center' }}>
+            <span style={s.eyebrow}>The Program</span>
             <h2 style={s.sectionH2}>Four Pillars. One Platform.</h2>
             <p style={s.sectionP}>
               Everything a coach needs to run an elite offseason program — and everything an athlete needs to execute one.
             </p>
           </div>
+
+          {/* Four pillars */}
           <div style={s.featuresGrid}>
             {FEATURES.map(f => (
               <div key={f.num} className="land-feature-card" style={s.featureCard}>
@@ -1024,23 +1150,19 @@ export default function Landing() {
               </div>
             ))}
           </div>
-        </div>
-      </section>
 
-      {/* ── Sports & Blueprint section ─────────────────────────────── */}
-      <section style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818', borderBottom: '1px solid #181818' }}>
-        <div style={s.inner}>
+          <div style={{ ...sp.sectionDivider, margin: '72px 0 64px' }} />
 
-          {/* Header */}
-          <div style={{ ...s.sectionHead, maxWidth: 700 }}>
+          {/* Sport grid */}
+          <div style={{ textAlign: 'center', marginBottom: 48 }}>
             <span style={s.eyebrow}>Sport-Specific Training</span>
-            <h2 style={s.sectionH2}>Built for Every Sport and Every Athlete</h2>
-            <p style={s.sectionP}>
-              Offseaz ships with training templates built for 15 sports — and a fully customizable blueprint builder so coaches can design their own programs from scratch.
+            <h3 style={{ ...s.sectionH2, marginBottom: 14 }}>Built for 14 Sports</h3>
+            <p style={{ ...s.sectionP, maxWidth: 560, margin: '0 auto' }}>
+              Templates built for every major high school and college sport — with a fully
+              customizable blueprint builder for coaches who want total control.
             </p>
           </div>
 
-          {/* Sports grid */}
           <div style={sp.sportGrid}>
             {SPORTS.map((sport, i) => (
               <div key={i} className="land-feature-card" style={sp.sportChip}>
@@ -1050,220 +1172,34 @@ export default function Landing() {
             ))}
           </div>
 
-          {/* Divider */}
-          <div style={sp.sectionDivider} />
-
-          {/* How it works heading */}
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span style={s.eyebrow}>How the Blueprint System Works</span>
-            <h3 style={{ ...s.sectionH2, marginBottom: 0 }}>From Survey to Program in Seconds</h3>
-          </div>
-
-          {/* 3-step cards */}
-          <div style={sp.stepsGrid}>
-            {BLUEPRINT_STEPS.map((step, i) => (
-              <div key={i} style={{ ...sp.stepCard, borderTop: `2px solid ${step.color}` }}>
-                <span style={{ ...sp.stepNum, color: step.color }}>{step.num}</span>
-                <h4 style={sp.stepTitle}>{step.title}</h4>
-                <p style={sp.stepBody}>{step.body}</p>
-              </div>
-            ))}
-          </div>
-
-          {/* Weight callout */}
-          <div style={sp.callout}>
-            <div style={sp.calloutIconWrap}>
-              <BoltIcon size={24} color="#F75709" />
-            </div>
-            <div>
-              <p style={sp.calloutHeading}>No math. No guesswork. Just lift.</p>
-              <p style={sp.calloutBody}>
-                Every lift shows the exact weight the athlete should use based on their personal max — automatically calculated from their logged One Rep Maxes. Athletes see the number. They just lift it.
-              </p>
-            </div>
-          </div>
-
-          {/* Custom plans note */}
+          {/* 16-week program structure note */}
           <div style={sp.customNote}>
-            <span style={sp.customNoteIcon}>🔧</span>
+            <span style={sp.customNoteIcon}>📅</span>
             <p style={sp.customNoteText}>
-              <strong style={{ color: '#CCC', fontWeight: 700 }}>Prefer to build your own?</strong>{' '}
-              Coaches can build completely custom plans from scratch using the blueprint builder — full control over exercises, sets, reps, progressions, and weekly scheduling.
+              <strong style={{ color: '#CCC', fontWeight: 700 }}>16-Week Periodized Structure.</strong>{' '}
+              Every program follows a full 16-week offseason arc — Foundation, Strength, Power, and Competition Prep phases — with progressive overload built in from week one to week sixteen.
             </p>
           </div>
 
-        </div>
-      </section>
-
-      {/* FIX 5 ── Team Activity Feed section ──────────────────────────── */}
-      <section style={{ ...s.altSection, borderTop: '1px solid #181818' }}>
-        <div style={s.inner}>
-          <div style={s.splitRow}>
-            {/* Text side */}
-            <div style={s.splitText}>
-              <span style={s.eyebrow}>Team Activity Feed</span>
-              <h2 style={s.sectionH2}>When Teammates See Each Other Work, Everyone Works Harder</h2>
-              <p style={{ ...s.sectionP, marginBottom: 32 }}>
-                The team feed turns individual effort into shared accountability. Athletes post workout photos and updates visible to the whole team — creating the kind of peer motivation that no coach can manufacture alone.
-              </p>
-              <div style={s.bulletList}>
-                {[
-                  { color: ORANGE, text: 'Athletes post workout photos directly from their phone' },
-                  { color: BLUE,   text: 'The whole team sees who put in work this week' },
-                  { color: YELLOW, text: 'Likes and comments build team culture across the offseason' },
-                  { color: ORANGE, text: 'Coaches can post announcements and training reminders' },
-                  { color: BLUE,   text: 'Peer visibility creates competition without extra pressure' },
-                ].map((b, i) => (
-                  <div key={i} style={s.bulletItem}>
-                    <CheckIcon color={b.color} />
-                    <span style={s.benefitText}>{b.text}</span>
-                  </div>
-                ))}
+          {/* Stats row */}
+          <div style={s.platformStatsGrid}>
+            {[
+              { value: '14',    label: 'Sports Supported',                  color: ORANGE },
+              { value: '16 Wk', label: 'Offseason Programs',                color: BLUE   },
+              { value: '80+',   label: 'Exercises Explained',               color: YELLOW },
+              { value: '%',     label: 'Weights Calculated Automatically',  color: ORANGE },
+            ].map((stat, i) => (
+              <div key={i} style={{ ...s.platformStatItem, borderTop: `2px solid ${stat.color}` }}>
+                <span style={{ ...s.platformStatValue, color: stat.color }}>{stat.value}</span>
+                <span style={s.platformStatLabel}>{stat.label}</span>
               </div>
-            </div>
-            {/* Visual side */}
-            <div style={s.splitVisual}>
-              <div style={s.visualGlow} />
-              <FeedMockup />
-            </div>
+            ))}
           </div>
         </div>
       </section>
 
-      {/* FIX 6 ── Goals & Progress section ────────────────────────────── */}
-      <section style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818' }}>
-        <div style={s.inner}>
-          <div style={{ ...s.splitRow, flexDirection: 'row-reverse' }}>
-            {/* Text side */}
-            <div style={s.splitText}>
-              <span style={s.eyebrow}>Goal Tracking & PR Progress</span>
-              <h2 style={s.sectionH2}>Set Goals in Week One. Prove the Results by Week Eight.</h2>
-              <p style={{ ...s.sectionP, marginBottom: 32 }}>
-                Athletes set offseason goals at the start of the program and track them week by week. Lifting PRs update automatically from logged maxes — so every athlete can see exactly how far they've come since day one.
-              </p>
-              <div style={s.bulletList}>
-                {[
-                  { color: ORANGE, text: 'Athletes set position-specific strength and performance goals' },
-                  { color: BLUE,   text: 'Lifting maxes tracked with automatic percentage calculations' },
-                  { color: YELLOW, text: 'Week-by-week progress charts show improvement over time' },
-                  { color: ORANGE, text: 'Coaches see goal completion rates across the entire roster' },
-                  { color: BLUE,   text: 'Athletes enter next season knowing exactly how much they improved' },
-                ].map((b, i) => (
-                  <div key={i} style={s.bulletItem}>
-                    <CheckIcon color={b.color} />
-                    <span style={s.benefitText}>{b.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Visual side */}
-            <div style={s.splitVisual}>
-              <div style={{ ...s.visualGlow, background: 'radial-gradient(ellipse, rgba(48,142,189,0.12) 0%, transparent 65%)' }} />
-              <GoalsMockup />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Exercise Info section ──────────────────────────────────────── */}
-      <section style={{ ...s.section, borderTop: '1px solid #181818' }}>
-        <div style={s.inner}>
-          <div style={s.splitRow}>
-            {/* Text side */}
-            <div style={s.splitText}>
-              <span style={s.eyebrow}>Exercise Guidance</span>
-              <h2 style={s.sectionH2}>Every Lift. Explained.</h2>
-              <p style={{ ...s.sectionP, marginBottom: 32 }}>
-                Every exercise in every blueprint has a{' '}
-                <span style={{
-                  display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-                  width: 18, height: 18, borderRadius: '50%',
-                  border: `1.5px solid ${BLUE}`,
-                  fontSize: 11, fontWeight: 800, color: BLUE,
-                  verticalAlign: 'middle', margin: '0 3px', lineHeight: 1,
-                }}>i</span>
-                {' '}button next to it. Tap it and see exactly how to perform the movement, which muscles it targets, and a direct link to a video demo. No guessing, no bad form, no confusion — just clear guidance so every athlete trains with confidence.
-              </p>
-              <div style={s.bulletList}>
-                {[
-                  { color: BLUE,   text: 'Step-by-step technique cues for every exercise' },
-                  { color: ORANGE, text: 'Primary and secondary muscles clearly identified' },
-                  { color: YELLOW, text: 'Direct link to a video demonstration for every lift' },
-                  { color: BLUE,   text: 'Available on every blueprint, on any device' },
-                  { color: ORANGE, text: 'Built for athletes who want to train right, not just train hard' },
-                ].map((b, i) => (
-                  <div key={i} style={s.bulletItem}>
-                    <CheckIcon color={b.color} />
-                    <span style={s.benefitText}>{b.text}</span>
-                  </div>
-                ))}
-              </div>
-            </div>
-            {/* Visual side */}
-            <div style={s.splitVisual}>
-              <div style={{ ...s.visualGlow, background: `radial-gradient(ellipse, rgba(48,142,189,0.12) 0%, transparent 65%)` }} />
-              <ExerciseInfoMockup />
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── Coach vs Athlete feature breakdown ───────────────────────── */}
-      <section style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818' }}>
-        <div style={s.inner}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span style={s.eyebrow}>Who It's For</span>
-            <h2 style={{ ...s.sectionH2, marginBottom: 0 }}>Built for Coaches. Designed for Athletes.</h2>
-          </div>
-          <div style={s.roleGrid}>
-            <div style={{ ...s.roleCard, borderTop: `2px solid ${ORANGE}` }}>
-              <span style={{ ...s.rolePill, background: ORANGE + '18', color: ORANGE, border: `1px solid ${ORANGE}33` }}>For Coaches</span>
-              <ul style={s.roleList}>
-                {[
-                  'Create and manage your team',
-                  'Build sport-specific training blueprints',
-                  "Track every athlete's progress in real time",
-                  'Get notified when athletes flag injuries',
-                  'Send group and direct messages',
-                  'Generate end of offseason reports',
-                ].map((item, i) => (
-                  <li key={i} style={s.roleItem}>
-                    <CheckIcon color={ORANGE} />
-                    <span style={s.benefitText}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/register" className="land-cta-orange" style={{ ...s.roleCtaBtn, background: ORANGE, color: '#fff', boxShadow: `0 4px 20px ${ORANGE}44` }}>
-                Get Started as Coach
-              </Link>
-            </div>
-            <div style={{ ...s.roleCard, borderTop: `2px solid ${BLUE}` }}>
-              <span style={{ ...s.rolePill, background: BLUE + '18', color: BLUE, border: `1px solid ${BLUE}33` }}>For Athletes</span>
-              <ul style={s.roleList}>
-                {[
-                  'Get a personalized training plan built for your sport and goals',
-                  'See your exact weights calculated from your personal maxes',
-                  'Log every session and track your streaks',
-                  'Set offseason goals and mark them complete',
-                  'Post to the team feed and see teammates working',
-                  'View your lifting PRs and progress over time',
-                ].map((item, i) => (
-                  <li key={i} style={s.roleItem}>
-                    <CheckIcon color={BLUE} />
-                    <span style={s.benefitText}>{item}</span>
-                  </li>
-                ))}
-              </ul>
-              <Link to="/register" className="land-cta-blue" style={{ ...s.roleCtaBtn, background: 'transparent', color: BLUE, border: `1.5px solid ${BLUE}66` }}>
-                Get Started as Athlete
-              </Link>
-            </div>
-          </div>
-        </div>
-      </section>
-
-      {/* ── How It Works ───────────────────────────────────────────────── */}
-      <section style={{ ...s.section, borderTop: '1px solid #181818' }}>
+      {/* ── How It Works ────────────────────────────────────────────────── */}
+      <section id="how-it-works" style={{ ...s.section, borderTop: '1px solid #181818' }}>
         <div style={s.inner}>
           <div style={{ textAlign: 'center', marginBottom: 56 }}>
             <span style={s.eyebrow}>How It Works</span>
@@ -1273,18 +1209,18 @@ export default function Landing() {
             {[
               {
                 num: '01', color: ORANGE,
-                title: 'Coach Creates a Team and Builds a Blueprint',
-                body: 'Sign up, create your team, and build a sport-specific training program using the blueprint builder. Your program is ready to assign before a single athlete joins.',
+                title: 'Coach Creates a Team and Builds a Sport-Specific Blueprint',
+                body: 'Sign up, create your team, and build a training program using the blueprint builder. Your program is ready to assign before a single athlete joins.',
               },
               {
                 num: '02', color: BLUE,
-                title: 'Athletes and Coaches Join With Their Invite Code',
-                body: 'Athletes join using the athlete code. Assistant coaches join using the coach code. Everyone completes their setup and is ready to train or coach instantly.',
+                title: 'Athletes and Assistant Coaches Join With Their Unique Invite Code and Get Their Plan Instantly',
+                body: 'Athletes join, complete the needs analysis, and immediately receive a personalized program with exact weights calculated from their logged maxes.',
               },
               {
                 num: '03', color: YELLOW,
-                title: 'Everyone Trains. Coach Sees Everything.',
-                body: 'Athletes log every session from their phone. The coach sees real-time compliance, flags injuries, sends messages, and tracks progress across the entire roster.',
+                title: 'Everyone Trains, Logs Workouts, and the Coach Sees Everything in Real Time',
+                body: 'Athletes log every session from their phone. Coaches see real-time compliance, flag injuries, send messages, and track progress across the entire roster all offseason long.',
               },
             ].map((step, i) => (
               <div key={i} style={{ ...sp.stepCard, borderTop: `2px solid ${step.color}` }}>
@@ -1297,94 +1233,24 @@ export default function Landing() {
         </div>
       </section>
 
-      {/* ── Platform stats ──────────────────────────────────────────────── */}
-      <section style={{ background: '#0F0F0F', borderTop: '1px solid #181818', borderBottom: '1px solid #181818', padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 56px)' }}>
+      {/* ── Our Story ───────────────────────────────────────────────────── */}
+      <section id="story" style={{ ...s.section, background: '#0F0F0F', borderTop: '1px solid #181818' }}>
         <div style={s.inner}>
-          <div style={{ textAlign: 'center', marginBottom: 56 }}>
-            <span style={s.eyebrow}>By the Numbers</span>
-            <h2 style={{ ...s.sectionH2, marginBottom: 0 }}>Everything You Need. Nothing You Don't.</h2>
-          </div>
-          <div style={s.platformStatsGrid}>
-            {[
-              { value: '11',   label: 'Sports Supported',                  color: ORANGE },
-              { value: '16 Wk',label: 'Offseason Programs',                color: BLUE   },
-              { value: '80+',  label: 'Exercises Explained',               color: YELLOW },
-              { value: '%',    label: 'Weights Calculated Automatically',  color: ORANGE },
-            ].map((stat, i) => (
-              <div key={i} style={{ ...s.platformStatItem, borderTop: `2px solid ${stat.color}` }}>
-                <span style={{ ...s.platformStatValue, color: stat.color }}>{stat.value}</span>
-                <span style={s.platformStatLabel}>{stat.label}</span>
-              </div>
-            ))}
-          </div>
-        </div>
-      </section>
-
-      {/* ── For Coaches / For Athletes ─────────────────────────────────── */}
-      <section style={{ ...s.audienceSection }}>
-        <div style={s.inner}>
-          <div style={s.audienceGrid}>
-
-            {/* Coaches */}
-            <div style={{ ...s.audienceCard, borderColor: ORANGE + '33' }}>
-              <div style={s.audienceHeader}>
-                <div style={{ ...s.audienceIcon, background: ORANGE + '18', border: `1px solid ${ORANGE}33` }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2"/>
-                    <circle cx="9" cy="7" r="4"/>
-                    <path d="M23 21v-2a4 4 0 0 0-3-3.87M16 3.13a4 4 0 0 1 0 7.75"/>
-                  </svg>
-                </div>
-                <span style={{ ...s.audiencePill, background: ORANGE + '18', color: ORANGE, border: `1px solid ${ORANGE}33` }}>For Coaches</span>
-              </div>
-              <h3 style={s.audienceTitle}>Run a world-class offseason program</h3>
-              <p style={{ ...s.cardBody, marginBottom: 24 }}>
-                Stop relying on hope that your athletes are working. Get the tools to build, assign, and monitor training — without adding hours to your day.
-              </p>
-              <ul style={s.benefitList}>
-                {COACH_BENEFITS.map((b, i) => (
-                  <li key={i} style={s.benefitItem}>
-                    <CheckIcon color={ORANGE} />
-                    <span style={s.benefitText}>{b}</span>
-                  </li>
-                ))}
-              </ul>
-              {/* FIX 1 — orange filled */}
-              <Link to="/register" className="land-cta-orange" style={{ ...s.audienceCta, background: ORANGE, color: '#fff', boxShadow: `0 4px 20px ${ORANGE}44` }}>
-                Get Started as Coach
-              </Link>
-            </div>
-
-            {/* Athletes */}
-            <div style={{ ...s.audienceCard, borderColor: BLUE + '33' }}>
-              <div style={s.audienceHeader}>
-                <div style={{ ...s.audienceIcon, background: BLUE + '18', border: `1px solid ${BLUE}33` }}>
-                  <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke={BLUE} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-                    <circle cx="12" cy="12" r="10"/>
-                    <polygon points="10 8 16 12 10 16 10 8"/>
-                  </svg>
-                </div>
-                <span style={{ ...s.audiencePill, background: BLUE + '18', color: BLUE, border: `1px solid ${BLUE}33` }}>For Athletes</span>
-              </div>
-              <h3 style={s.audienceTitle}>Enter next season ahead of the competition</h3>
-              {/* FIX 4 — no recruiting language */}
-              <p style={{ ...s.cardBody, marginBottom: 24 }}>
-                Get a structured program built for your position, track every workout, and prove your offseason commitment with documented results your coach can see.
-              </p>
-              <ul style={s.benefitList}>
-                {ATHLETE_BENEFITS.map((b, i) => (
-                  <li key={i} style={s.benefitItem}>
-                    <CheckIcon color={BLUE} />
-                    <span style={s.benefitText}>{b}</span>
-                  </li>
-                ))}
-              </ul>
-              {/* FIX 1 — blue outlined */}
-              <Link to="/register" className="land-cta-blue" style={{ ...s.audienceCta, background: 'transparent', color: BLUE, border: `1.5px solid ${BLUE}66` }}>
-                Get Started as Athlete
-              </Link>
-            </div>
-
+          <div style={{ maxWidth: 680, margin: '0 auto', textAlign: 'center' }}>
+            <span style={s.eyebrow}>Our Story</span>
+            <h2 style={{ ...s.sectionH2, marginBottom: 24 }}>Built by an Athlete. For Athletes.</h2>
+            <p style={{ ...s.sectionP, marginBottom: 20 }}>
+              Offseaz was built by Brody Adelman — a multi-sport varsity athlete who watched firsthand
+              how unstructured and unaccountable offseason training was for most high school athletes.
+              No plan. No visibility. No accountability.
+            </p>
+            <p style={{ fontSize: 17, color: '#555', lineHeight: 1.8, marginBottom: 40 }}>
+              He built the platform he wished he had: sport-specific blueprints, personalized to each
+              athlete, with coaches getting real-time visibility into who is actually putting in the work.
+            </p>
+            <Link to="/about" style={s.storyLink}>
+              Read the full story <ArrowRight size={14} />
+            </Link>
           </div>
         </div>
       </section>
@@ -1403,7 +1269,6 @@ export default function Landing() {
             <p style={s.ctaSub}>
               Join coaches and athletes who are turning the offseason into their biggest competitive advantage. Free to start — no credit card required.
             </p>
-            {/* FIX 1 — dual CTAs in final section too */}
             <div style={s.ctaBtns}>
               <Link to="/register" className="land-cta-orange" style={s.ctaCoach}>
                 Get Started as Coach
@@ -1443,13 +1308,12 @@ export default function Landing() {
             <Link to="/accessibility" style={s.footerLink}>Accessibility</Link>
           </div>
 
-          {/* Social handles */}
           <div style={s.footerSocials}>
             {[
-              { href: 'https://x.com/Offseaz',            label: '@Offseaz',  color: '#fff',   icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
-              { href: 'https://instagram.com/0ffseaz',     label: '@0ffseaz',  color: ORANGE,  icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill={ORANGE} stroke="none"/></svg> },
-              { href: 'https://facebook.com/Offseaz',      label: 'Offseaz',   color: BLUE,    icon: <svg width="15" height="15" viewBox="0 0 24 24" fill={BLUE}><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> },
-              { href: 'https://tiktok.com/@0ffseaz',       label: '@0ffseaz',  color: YELLOW,  icon: <svg width="15" height="15" viewBox="0 0 24 24" fill={YELLOW}><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.35 6.35 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.15a8.24 8.24 0 004.83 1.55V7.28a4.85 4.85 0 01-1.06-.59z"/></svg> },
+              { href: 'https://x.com/Offseaz',        label: '@Offseaz',  color: '#fff',   icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
+              { href: 'https://instagram.com/0ffseaz', label: '@0ffseaz',  color: ORANGE,   icon: <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill={ORANGE} stroke="none"/></svg> },
+              { href: 'https://facebook.com/Offseaz',  label: 'Offseaz',   color: BLUE,     icon: <svg width="15" height="15" viewBox="0 0 24 24" fill={BLUE}><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> },
+              { href: 'https://tiktok.com/@0ffseaz',   label: '@0ffseaz',  color: YELLOW,   icon: <svg width="15" height="15" viewBox="0 0 24 24" fill={YELLOW}><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.35 6.35 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.15a8.24 8.24 0 004.83 1.55V7.28a4.85 4.85 0 01-1.06-.59z"/></svg> },
             ].map(({ href, label, color, icon }) => (
               <a key={href} href={href} target="_blank" rel="noopener noreferrer" style={{ ...s.footerSocialLink, color }}>
                 {icon}
@@ -1473,8 +1337,6 @@ const s = {
     background: '#0A0A0A',
     color: '#EFEFEF',
     fontFamily: "Inter, system-ui, -apple-system, sans-serif",
-    /* overflow-x is set on body in index.css — do NOT set it here,
-       overflow:hidden on any div ancestor breaks position:fixed on iOS Safari */
   },
 
   // ── Beta banner ────────────────────────────────────────────────────────────
@@ -1488,7 +1350,7 @@ const s = {
     justifyContent: 'center',
     gap: 12,
     position: 'relative',
-    zIndex: 200, // above the fixed nav (zIndex 100)
+    zIndex: 200,
   },
   betaText: {
     fontSize: 13,
@@ -1532,7 +1394,7 @@ const s = {
     justifyContent: 'center',
   },
 
-  // Navbar — GPU-composited so position:fixed works reliably on iOS
+  // ── Fixed scrolled navbar ──────────────────────────────────────────────────
   nav: {
     position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
@@ -1556,6 +1418,44 @@ const s = {
     boxShadow: '0 2px 14px rgba(247,87,9,0.32)',
   },
 
+  // ── Sticky anchor nav ──────────────────────────────────────────────────────
+  anchorNav: {
+    position: 'sticky',
+    top: 0,
+    zIndex: 90,
+    background: 'rgba(10,10,10,0.97)',
+    backdropFilter: 'blur(20px)',
+    WebkitBackdropFilter: 'blur(20px)',
+    borderBottom: '1px solid rgba(255,255,255,0.07)',
+    overflowX: 'auto',
+    WebkitOverflowScrolling: 'touch',
+    scrollbarWidth: 'none',
+    msOverflowStyle: 'none',
+  },
+  anchorNavInner: {
+    display: 'flex',
+    alignItems: 'center',
+    gap: 2,
+    padding: '0 clamp(16px, 4vw, 40px)',
+    minWidth: 'max-content',
+    width: '100%',
+  },
+  anchorLink: {
+    flexShrink: 0,
+    background: 'transparent',
+    border: 'none',
+    color: '#888',
+    fontSize: 13,
+    fontWeight: 600,
+    cursor: 'pointer',
+    padding: '14px 18px',
+    letterSpacing: 0.2,
+    transition: 'background 0.15s, color 0.15s',
+    whiteSpace: 'nowrap',
+    borderBottom: '2px solid transparent',
+  },
+
+  // ── Shared ──────────────────────────────────────────────────────────────────
   glow: {
     position: 'absolute', pointerEvents: 'none',
     transform: 'translate(-50%, -50%)',
@@ -1563,7 +1463,7 @@ const s = {
   },
   inner: { maxWidth: 1120, margin: '0 auto' },
 
-  // Hero
+  // ── Hero ───────────────────────────────────────────────────────────────────
   hero: {
     position: 'relative', overflow: 'hidden',
     minHeight: '100vh',
@@ -1610,8 +1510,6 @@ const s = {
   heroCtas: {
     display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20,
   },
-
-  // FIX 1 — Coach CTA: orange filled
   ctaCoach: {
     display: 'inline-flex', alignItems: 'center', gap: 8,
     padding: '13px 30px', fontSize: 15, fontWeight: 700,
@@ -1620,7 +1518,6 @@ const s = {
     boxShadow: '0 4px 28px rgba(247,87,9,0.40)',
     border: 'none',
   },
-  // FIX 1 — Athlete CTA: blue outlined
   ctaAthlete: {
     display: 'inline-flex', alignItems: 'center', gap: 8,
     padding: '13px 30px', fontSize: 15, fontWeight: 700,
@@ -1628,7 +1525,6 @@ const s = {
     background: 'transparent', color: BLUE, textDecoration: 'none',
     border: `1.5px solid ${BLUE}`,
   },
-
   heroTrust: {
     fontSize: 12, color: '#444', letterSpacing: 0.5, marginBottom: 56,
   },
@@ -1649,51 +1545,12 @@ const s = {
     borderRadius: '50%',
   },
 
-  // Stats bar
-  statsBar: {
-    background: '#0F0F0F',
-    borderTop: '1px solid #1A1A1A', borderBottom: '1px solid #1A1A1A',
-    padding: 'clamp(28px, 4vw, 40px) clamp(20px, 5vw, 56px)',
-  },
-  statsInner: {
-    maxWidth: 1120, margin: '0 auto',
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(200px,100%), 1fr))',
-    gap: 2,
-  },
-  statItem: {
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 6,
-    padding: '20px 16px', borderRadius: 12,
-    background: '#141414', border: '1px solid #1E1E1E',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.18)', cursor: 'default',
-  },
-  statValue: {
-    fontSize: 'clamp(28px, 4vw, 42px)',
-    fontWeight: 900, lineHeight: 1, letterSpacing: '-0.02em',
-    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
-  },
-  statLabel: { fontSize: 12, color: '#555', letterSpacing: 0.3, textAlign: 'center', lineHeight: 1.4 },
-
-  // Sections
+  // ── Sections ───────────────────────────────────────────────────────────────
   section: {
     padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 56px)',
     background: '#0A0A0A',
   },
-  altSection: {
-    padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 56px)',
-    background: '#0A0A0A',
-  },
-  problemSection: {
-    padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 56px)',
-    background: '#0F0F0F',
-    borderTop: '1px solid #181818', borderBottom: '1px solid #181818',
-  },
-  audienceSection: {
-    padding: 'clamp(72px, 9vw, 120px) clamp(20px, 5vw, 56px)',
-    background: '#0F0F0F',
-    borderTop: '1px solid #181818',
-  },
-  sectionHead: { maxWidth: 600, marginBottom: 56 },
+  sectionHead: { marginBottom: 56 },
   eyebrow: {
     display: 'block', fontSize: 11, fontWeight: 700, letterSpacing: 2.5,
     color: ORANGE, textTransform: 'uppercase', marginBottom: 16,
@@ -1707,23 +1564,36 @@ const s = {
   },
   sectionP: { fontSize: 17, color: '#666', lineHeight: 1.8 },
 
-  // Problem
-  problemGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px,100%), 1fr))',
-    gap: 16,
-  },
-  problemCard: {
-    background: '#141414', border: '1px solid #202020',
-    borderRadius: 16, padding: '28px 24px',
-    boxShadow: '0 2px 8px rgba(0,0,0,0.20)', cursor: 'default',
+  subHeading: {
+    fontSize: 'clamp(20px, 2.8vw, 28px)',
+    fontWeight: 800, color: '#E8E8E8',
+    marginBottom: 20, lineHeight: 1.25,
+    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+    letterSpacing: '-0.02em',
   },
 
-  // Features
+  // ── Grids ──────────────────────────────────────────────────────────────────
+  threeColGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(280px, 100%), 1fr))',
+    gap: 16,
+  },
   featuresGrid: {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(min(260px,100%), 1fr))',
     gap: 16,
+  },
+  platformStatsGrid: {
+    display: 'grid',
+    gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
+    gap: 16,
+  },
+
+  // ── Cards ──────────────────────────────────────────────────────────────────
+  problemCard: {
+    background: '#141414', border: '1px solid #202020',
+    borderRadius: 16, padding: '28px 24px',
+    boxShadow: '0 2px 8px rgba(0,0,0,0.20)', cursor: 'default',
   },
   featureCard: {
     background: '#141414', border: '1px solid #202020',
@@ -1731,23 +1601,41 @@ const s = {
     boxShadow: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03)',
     cursor: 'default',
   },
+  platformStatItem: {
+    background: '#141414', border: '1px solid #202020',
+    borderRadius: 16, padding: '32px 28px',
+    boxShadow: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03)',
+    display: 'flex', flexDirection: 'column', alignItems: 'center',
+    textAlign: 'center', gap: 10,
+  },
+  statStripCard: {
+    background: 'rgba(247,87,9,0.04)',
+    border: '1px solid rgba(247,87,9,0.14)',
+    borderRadius: 16, padding: '24px 28px',
+    width: '100%',
+  },
+
+  // Card text
   featureNum:   { fontSize: 13, fontWeight: 800, letterSpacing: 1 },
   featureTag:   { fontSize: 11, fontWeight: 700, letterSpacing: 1.8, textTransform: 'uppercase', marginBottom: 10, display: 'block' },
   featureTitle: { fontSize: 17, fontWeight: 700, color: '#E8E8E8', marginBottom: 12, fontFamily: "'Calibri', 'Trebuchet MS', sans-serif", letterSpacing: '-0.01em' },
   cardTitle:    { fontSize: 17, fontWeight: 700, color: '#E8E8E8', marginBottom: 10, fontFamily: "'Calibri', 'Trebuchet MS', sans-serif", letterSpacing: '-0.01em' },
   cardBody:     { fontSize: 14, color: '#666', lineHeight: 1.75 },
+  platformStatValue: {
+    fontSize: 'clamp(38px, 5vw, 58px)',
+    fontWeight: 900, lineHeight: 1, letterSpacing: '-0.03em',
+    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+  },
+  platformStatLabel: { fontSize: 14, color: '#666', fontWeight: 600, lineHeight: 1.4 },
 
-  // Split layout (FIX 5 & 6)
+  // ── Split layout ───────────────────────────────────────────────────────────
   splitRow: {
     display: 'flex',
     gap: 'clamp(40px, 6vw, 80px)',
     alignItems: 'center',
     flexWrap: 'wrap',
   },
-  splitText: {
-    flex: '1 1 340px',
-    minWidth: 0,
-  },
+  splitText: { flex: '1 1 340px', minWidth: 0 },
   splitVisual: {
     flex: '0 0 auto',
     display: 'flex', justifyContent: 'center',
@@ -1762,35 +1650,13 @@ const s = {
     background: 'radial-gradient(ellipse, rgba(247,87,9,0.10) 0%, transparent 65%)',
     borderRadius: '50%', zIndex: 0,
   },
-  bulletList: { display: 'flex', flexDirection: 'column', gap: 12 },
-  bulletItem: { display: 'flex', alignItems: 'flex-start', gap: 10 },
+
+  // ── Benefit lists ──────────────────────────────────────────────────────────
+  benefitList: { listStyle: 'none', padding: 0, margin: 0, display: 'flex', flexDirection: 'column', gap: 11 },
+  benefitItem: { display: 'flex', alignItems: 'flex-start', gap: 10 },
   benefitText: { fontSize: 14, color: '#888', lineHeight: 1.55 },
 
-  // Audience
-  audienceGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px,100%), 1fr))',
-    gap: 20,
-  },
-  audienceCard: {
-    background: '#141414', border: '1px solid',
-    borderRadius: 20, padding: 'clamp(28px, 4vw, 40px)',
-    boxShadow: '0 2px 16px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.03)',
-    display: 'flex', flexDirection: 'column',
-  },
-  audienceHeader: { display: 'flex', alignItems: 'center', gap: 12, marginBottom: 24 },
-  audienceIcon: { width: 44, height: 44, borderRadius: 12, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  audiencePill: { fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase', padding: '5px 12px', borderRadius: 100 },
-  audienceTitle: { fontSize: 'clamp(18px, 2.5vw, 22px)', fontWeight: 800, color: '#E8E8E8', marginBottom: 14, fontFamily: "'Calibri', 'Trebuchet MS', sans-serif", letterSpacing: '-0.02em', lineHeight: 1.25 },
-  benefitList: { listStyle: 'none', padding: 0, margin: '0 0 32px', display: 'flex', flexDirection: 'column', gap: 11, flex: 1 },
-  benefitItem: { display: 'flex', alignItems: 'flex-start', gap: 10 },
-  audienceCta: {
-    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    padding: '12px 24px', fontSize: 14, fontWeight: 700,
-    borderRadius: 10, textDecoration: 'none', letterSpacing: 0.1, alignSelf: 'flex-start',
-  },
-
-  // CTA section
+  // ── CTA section ────────────────────────────────────────────────────────────
   ctaSection: {
     position: 'relative', overflow: 'hidden',
     padding: 'clamp(80px, 10vw, 140px) clamp(20px, 5vw, 56px)',
@@ -1806,75 +1672,27 @@ const s = {
   ctaSub: { fontSize: 17, color: '#666', lineHeight: 1.75, maxWidth: 520, marginBottom: 44 },
   ctaBtns: { display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap' },
 
-  // Footer
+  // ── Our Story link ─────────────────────────────────────────────────────────
+  storyLink: {
+    display: 'inline-flex', alignItems: 'center', gap: 8,
+    color: ORANGE, fontWeight: 700, fontSize: 15, textDecoration: 'none',
+    padding: '12px 28px', borderRadius: 10,
+    border: `1.5px solid rgba(247,87,9,0.35)`,
+    background: 'rgba(247,87,9,0.06)',
+    transition: 'background 0.15s',
+  },
+
+  // ── Footer ─────────────────────────────────────────────────────────────────
   footer: {
     padding: 'clamp(40px, 5vw, 64px) clamp(20px, 5vw, 56px) clamp(28px, 3vw, 40px)',
     background: '#080808', borderTop: '1px solid #1A1A1A',
   },
-  footerCenter: {
-    textAlign: 'center',
-  },
-  footerTagline: {
-    fontSize: 13, color: '#EFEFEF', margin: '0 0 20px', fontWeight: 400,
-    letterSpacing: 0.1,
-  },
-  footerLinks: {
-    display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-    alignItems: 'center', gap: '6px 10px', marginBottom: 16,
-  },
-  footerLink:  { fontSize: 13, color: BLUE, textDecoration: 'none', fontWeight: 500 },
-  footerDot:   { fontSize: 13, color: YELLOW },
-  footerSocials: { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px 22px', margin: '14px 0' },
+  footerCenter:   { textAlign: 'center' },
+  footerTagline:  { fontSize: 13, color: '#EFEFEF', margin: '0 0 20px', fontWeight: 400, letterSpacing: 0.1 },
+  footerLinks:    { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: '6px 10px', marginBottom: 16 },
+  footerLink:     { fontSize: 13, color: BLUE, textDecoration: 'none', fontWeight: 500 },
+  footerDot:      { fontSize: 13, color: YELLOW },
+  footerSocials:  { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', gap: '10px 22px', margin: '14px 0' },
   footerSocialLink: { display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 13, fontWeight: 600, opacity: 0.8, transition: 'opacity 0.15s' },
-  footerCopy:  { fontSize: 12, color: '#888', margin: 0 },
-
-  // Role breakdown section
-  roleGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(320px, 100%), 1fr))',
-    gap: 20,
-  },
-  roleCard: {
-    background: '#141414', border: '1px solid #202020',
-    borderRadius: 20, padding: 'clamp(28px, 4vw, 40px)',
-    boxShadow: '0 2px 16px rgba(0,0,0,0.24), inset 0 1px 0 rgba(255,255,255,0.03)',
-    display: 'flex', flexDirection: 'column',
-  },
-  rolePill: {
-    display: 'inline-block', alignSelf: 'flex-start',
-    fontSize: 11, fontWeight: 700, letterSpacing: 1.5, textTransform: 'uppercase',
-    padding: '5px 14px', borderRadius: 100, marginBottom: 28,
-  },
-  roleList: {
-    listStyle: 'none', padding: 0, margin: '0 0 32px',
-    display: 'flex', flexDirection: 'column', gap: 11, flex: 1,
-  },
-  roleItem: { display: 'flex', alignItems: 'flex-start', gap: 10 },
-  roleCtaBtn: {
-    display: 'inline-flex', alignItems: 'center', justifyContent: 'center',
-    padding: '12px 24px', fontSize: 14, fontWeight: 700,
-    borderRadius: 10, textDecoration: 'none', letterSpacing: 0.1, alignSelf: 'flex-start',
-  },
-
-  // Platform stats section
-  platformStatsGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fit, minmax(min(220px, 100%), 1fr))',
-    gap: 16,
-  },
-  platformStatItem: {
-    background: '#141414', border: '1px solid #202020',
-    borderRadius: 16, padding: '32px 28px',
-    boxShadow: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03)',
-    display: 'flex', flexDirection: 'column', alignItems: 'center',
-    textAlign: 'center', gap: 10,
-  },
-  platformStatValue: {
-    fontSize: 'clamp(38px, 5vw, 58px)',
-    fontWeight: 900, lineHeight: 1, letterSpacing: '-0.03em',
-    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
-  },
-  platformStatLabel: {
-    fontSize: 14, color: '#666', fontWeight: 600, lineHeight: 1.4,
-  },
+  footerCopy:     { fontSize: 12, color: '#888', margin: 0 },
 }
