@@ -28,8 +28,8 @@ function B({ children }) {
 }
 function Email() {
   return (
-    <a href="mailto:offseaz@hotmail.com" style={ls.emailLink}>
-      offseaz@hotmail.com
+    <a href="mailto:brody@offseaz.com" style={ls.emailLink}>
+      brody@offseaz.com
     </a>
   )
 }
