@@ -173,21 +173,37 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
           const isFlagged = flaggedSet.has(name.toLowerCase())
 
           // ── Percentage-based weight calculation ──────────────────────────
-          const pctMatch = rest.match(/@\s*(\d+)%/)
-          if (pctMatch) {
-            const pct = parseInt(pctMatch[1], 10) / 100
-            const nameLower = name.toLowerCase()
-            const liftKey = LIFT_KEY_MAP[nameLower]
-            const maxEntry = liftKey ? maxes?.[liftKey] : null
-            const maxLbs = maxEntry?.current?.weight_lbs ?? null
-            const pctLabel = `${Math.round(pct * 100)}%`
+          const nameLower = name.toLowerCase()
+          const liftKey   = LIFT_KEY_MAP[nameLower]
+          const maxEntry  = liftKey ? maxes?.[liftKey] : null
+          const maxLbs    = maxEntry?.current?.weight_lbs ?? null
 
-            if (maxLbs) {
-              const lbs = calcWeight(maxLbs, pct)
-              rest = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
-            } else if (liftKey) {
+          // Ramping sets: "40%×10, 50%×8, 60%×6, 70%×5, 75%×3"
+          if (/\d+%[×x]\d+/.test(rest) && liftKey) {
+            rest = rest.replace(/(\d+)%([×x])(\d+)/g, (_, pctStr, sep, repsStr) => {
+              const pct = parseInt(pctStr, 10) / 100
+              if (maxLbs) {
+                return `${pctStr}%${sep}${repsStr} (${calcWeight(maxLbs, pct)} lbs)`
+              }
+              return `${pctStr}%${sep}${repsStr}`
+            })
+            if (!maxLbs) {
               const label = LIFT_LABELS[liftKey] || liftKey
-              rest = rest.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
+              rest += ` — log your ${label} max to see weights`
+            }
+          } else if (liftKey) {
+            // Single-percentage format: "@ XX%"
+            const pctMatch = rest.match(/@\s*(\d+)%/)
+            if (pctMatch) {
+              const pct = parseInt(pctMatch[1], 10) / 100
+              const pctLabel = `${Math.round(pct * 100)}%`
+              if (maxLbs) {
+                const lbs = calcWeight(maxLbs, pct)
+                rest = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
+              } else {
+                const label = LIFT_LABELS[liftKey] || liftKey
+                rest = rest.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
+              }
             }
           }
 
