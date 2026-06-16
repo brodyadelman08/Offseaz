@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import WeightRoomGraphic from './WeightRoomGraphic'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -557,6 +558,8 @@ export default function Landing() {
           </div>
         </div>
       </section>
+
+      <WeightRoomGraphic />
 
       {/* ══════════════════════════════════════════════════════════════════════
           STICKY ANCHOR NAV
