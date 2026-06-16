@@ -19,7 +19,7 @@ router.post('/', async (req, res) => {
   }
 
   const resend    = new Resend(key)
-  const from      = process.env.RESEND_FROM || 'Offseaz <onboarding@resend.dev>'
+  const from      = 'Offseaz <brody@offseaz.com>'
   const roleLabel = ROLE_LABELS[role] || role
   const safeMsg   = message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')
 
@@ -70,19 +70,19 @@ router.post('/', async (req, res) => {
     const { error } = await resend.emails.send({
       from,
       to:       TO_EMAIL,
-      reply_to: email,
+      replyTo:  email,
       subject:  `Contact: ${name} (${roleLabel})`,
       html,
     })
 
     if (error) {
-      console.error('[Contact] Resend error:', error)
-      return res.status(500).json({ error: 'Failed to send message. Please try again.' })
+      console.error('[Contact] Resend error:', JSON.stringify(error))
+      return res.status(500).json({ error: error.message || 'Failed to send message. Please try again.' })
     }
 
     return res.json({ ok: true })
   } catch (err) {
-    console.error('[Contact] Unexpected error:', err.message)
+    console.error('[Contact] Unexpected error:', err.message, err.stack)
     return res.status(500).json({ error: 'Failed to send message. Please try again.' })
   }
 })
