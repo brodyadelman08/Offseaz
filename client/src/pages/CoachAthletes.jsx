@@ -1,7 +1,7 @@
 import { useState, useEffect, useMemo } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { CheckIcon, TrashIcon, AlertIcon } from '../components/Icons'
+import { CheckIcon, TrashIcon, AlertIcon, UsersIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 import { useIsMobile } from '../components/Sidebar'
 import { useCoachAccess } from '../context/CoachAccessContext'
