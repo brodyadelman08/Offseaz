@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { useTeam } from '../context/TeamContext'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
 import PreviewBanner from '../components/PreviewBanner'
@@ -20,12 +21,17 @@ const LIFT_ABBREVS = [
 export default function AthleteRoster() {
   const { profile } = useAuth()
   const navigate = useNavigate()
+  const { activeTeamId } = useTeam()
   const [team, setTeam] = useState(null)
   const [roster, setRoster] = useState([])
   const [loading, setLoading] = useState(true)
 
   useEffect(() => {
-    api.get('/api/roster')
+    setLoading(true)
+    setTeam(null)
+    setRoster([])
+    const url = activeTeamId ? `/api/roster?team_id=${activeTeamId}` : '/api/roster'
+    api.get(url)
       .then(r => {
         setTeam(r.data.team)
         setRoster(r.data.roster || [])
@@ -34,7 +40,7 @@ export default function AthleteRoster() {
         console.error('[AthleteRoster] failed to load roster:', err?.response?.data?.error || err.message)
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [activeTeamId])
 
   // Split self out from teammates
   const self = roster.find(a => a.id === profile?.id)
