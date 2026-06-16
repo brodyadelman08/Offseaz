@@ -479,11 +479,16 @@ export default function Landing() {
     return () => window.removeEventListener('scroll', updateActive)
   }, [])
 
-  // Scroll the active nav tab into view on mobile when activeId changes
+  // Scroll only the nav's horizontal scroller to keep the active tab visible on mobile.
+  // Never call scrollIntoView here — it triggers vertical page scroll on sticky elements.
   useEffect(() => {
     if (!activeId) return
     const btn = document.querySelector(`[data-navid="${activeId}"]`)
-    if (btn) btn.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' })
+    if (!btn) return
+    const scroller = btn.parentElement?.parentElement // anchorNavInner → anchorNav
+    if (!scroller) return
+    const scrollLeft = btn.offsetLeft - (scroller.offsetWidth - btn.offsetWidth) / 2
+    scroller.scrollTo({ left: Math.max(0, scrollLeft), behavior: 'smooth' })
   }, [activeId])
 
   return (
