@@ -77,6 +77,8 @@ function LegalLayout({ title, lastUpdated, intro, children }) {
           <Link to="/refund"        style={ls.footerLink}>Refund Policy</Link>
           <span style={ls.dot}>·</span>
           <Link to="/accessibility" style={ls.footerLink}>Accessibility</Link>
+          <span style={ls.dot}>·</span>
+          <a href="mailto:brody@offseaz.com" style={ls.footerLink}>brody@offseaz.com</a>
         </div>
         <p style={ls.copy}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
       </footer>

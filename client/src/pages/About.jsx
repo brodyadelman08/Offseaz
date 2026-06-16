@@ -202,6 +202,8 @@ export default function About() {
           <Link to="/privacy" style={s.footerLink}>Privacy</Link>
           <span style={s.dot}>·</span>
           <Link to="/terms"   style={s.footerLink}>Terms</Link>
+          <span style={s.dot}>·</span>
+          <a href="mailto:brody@offseaz.com" style={s.footerLink}>brody@offseaz.com</a>
         </div>
         <p style={s.copy}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
       </footer>

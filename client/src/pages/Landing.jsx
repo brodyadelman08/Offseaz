@@ -878,6 +878,9 @@ export default function Landing() {
               </a>
             ))}
           </div>
+          <p style={{ fontSize: 13, color: '#555', margin: 0 }}>
+            <a href="mailto:brody@offseaz.com" style={{ color: BLUE, textDecoration: 'none', fontWeight: 500 }}>brody@offseaz.com</a>
+          </p>
           <p style={{ fontSize: 12, color: '#888', margin: 0 }}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
         </div>
       </footer>

@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CheckIcon } from '../components/Icons'
+import api from '../services/api'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -54,6 +55,7 @@ const SOCIALS = [
 export default function Contact() {
   const [form, setForm]           = useState({ name: '', email: '', role: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
+  const [sending, setSending]     = useState(false)
   const [error, setError]         = useState('')
 
   function handleChange(e) {
@@ -61,13 +63,22 @@ export default function Contact() {
     setError('')
   }
 
-  function handleSubmit(e) {
+  async function handleSubmit(e) {
     e.preventDefault()
     if (!form.name.trim() || !form.email.trim() || !form.role || !form.message.trim()) {
       setError('Please fill in all fields.')
       return
     }
-    setSubmitted(true)
+    setSending(true)
+    setError('')
+    try {
+      await api.post('/api/contact', form)
+      setSubmitted(true)
+    } catch (err) {
+      setError(err.response?.data?.error || 'Failed to send message. Please try again.')
+    } finally {
+      setSending(false)
+    }
   }
 
   return (
@@ -165,7 +176,9 @@ export default function Contact() {
 
                 {error && <p style={s.errorMsg}>{error}</p>}
 
-                <button type="submit" style={s.submitBtn}>Send Message</button>
+                <button type="submit" disabled={sending} style={{ ...s.submitBtn, opacity: sending ? 0.6 : 1, cursor: sending ? 'default' : 'pointer' }}>
+                  {sending ? 'Sending…' : 'Send Message'}
+                </button>
               </form>
             </>
           )}
@@ -181,6 +194,8 @@ export default function Contact() {
         <Link to="/privacy" style={s.footerLink}>Privacy</Link>
         <span style={s.dot}>·</span>
         <Link to="/terms"   style={s.footerLink}>Terms</Link>
+        <span style={s.dot}>·</span>
+        <a href="mailto:brody@offseaz.com" style={s.footerLink}>brody@offseaz.com</a>
         <p style={s.copy}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
       </footer>
 

@@ -16,6 +16,7 @@ const feedRoutes = require('./routes/feed')
 const goalsRoutes = require('./routes/goals')
 const reportRoutes   = require('./routes/report')
 const programRoutes  = require('./routes/programs')
+const contactRoutes  = require('./routes/contact')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -45,6 +46,7 @@ app.use('/api/feed', feedRoutes)
 app.use('/api/goals', goalsRoutes)
 app.use('/api/report', reportRoutes)
 app.use('/api/programs', programRoutes)
+app.use('/api/contact', contactRoutes)
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
