@@ -237,13 +237,13 @@ export default function CoachAthletes() {
             </div>
             <p style={styles.emptyTitle}>No athletes yet</p>
             <p style={styles.emptyDesc}>
-              Share your athlete invite code from the Dashboard — athletes enter it to join your roster instantly.
+              Share your athlete invite code from the dashboard to get your first athlete on the roster.
             </p>
             <button
               style={{ padding: '10px 22px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 10px rgba(247,87,9,0.30)' }}
               onClick={() => navigate('/coach')}
             >
-              Get your invite code
+              Get My Invite Code
             </button>
           </div>
         ) : isMobile ? (
