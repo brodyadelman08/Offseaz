@@ -979,7 +979,7 @@ const s = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
   },
   heroLogo: {
-    width: 'clamp(400px, 70vw, 700px)', maxWidth: 'none', height: 'auto', objectFit: 'contain',
+    width: 'clamp(280px, 50vw, 480px)', maxWidth: 'none', height: 'auto', objectFit: 'contain',
     display: 'block', marginBottom: 48,
   },
   heroBadge: {
