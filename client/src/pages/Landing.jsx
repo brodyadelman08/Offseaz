@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import { ArrowRightIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -93,13 +94,6 @@ function MessageIcon({ size = 22, color = 'currentColor' }) {
   )
 }
 
-function ArrowRightIcon({ size = 14 }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 14 14" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M2 7h10M8 3l4 4-4 4"/>
-    </svg>
-  )
-}
 
 // ── Dual-panel hero mockup ─────────────────────────────────────────────────────
 
@@ -985,8 +979,8 @@ const s = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
   },
   heroLogo: {
-    height: 'clamp(48px,8vw,80px)', width: 'auto', objectFit: 'contain',
-    display: 'block', marginBottom: 32,
+    width: 'clamp(320px, 55vw, 560px)', height: 'auto', objectFit: 'contain',
+    display: 'block', marginBottom: 40,
   },
   heroBadge: {
     display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32,
