@@ -680,3 +680,30 @@ export function WarningIcon({ size = 20, color = 'currentColor' }) {
     </svg>
   )
 }
+
+export function ArrowRightIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <line x1="5" y1="12" x2="19" y2="12" />
+      <polyline points="12 5 19 12 12 19" />
+    </svg>
+  )
+}
+
+export function SendIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <line x1="22" y1="2" x2="11" y2="13" />
+      <polygon points="22 2 15 22 11 13 2 9 22 2" />
+    </svg>
+  )
+}
+
+export function CameraIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z" />
+      <circle cx="12" cy="13" r="4" />
+    </svg>
+  )
+}
