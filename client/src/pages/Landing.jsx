@@ -973,14 +973,14 @@ const s = {
     background: 'radial-gradient(ellipse, rgba(247,87,9,0.13) 0%, rgba(48,142,189,0.05) 40%, transparent 65%)',
   },
   heroInner: {
-    position: 'relative', zIndex: 1, width: '100%', maxWidth: 960,
+    position: 'relative', zIndex: 1, width: '100%', maxWidth: 1200,
     padding: 'clamp(60px,8vw,100px) clamp(20px,5vw,40px) 0',
     margin: '0 auto',
     display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center',
   },
   heroLogo: {
-    width: 'clamp(320px, 55vw, 560px)', height: 'auto', objectFit: 'contain',
-    display: 'block', marginBottom: 40,
+    width: 'clamp(400px, 70vw, 700px)', maxWidth: 'none', height: 'auto', objectFit: 'contain',
+    display: 'block', marginBottom: 48,
   },
   heroBadge: {
     display: 'inline-flex', alignItems: 'center', gap: 8, marginBottom: 32,
