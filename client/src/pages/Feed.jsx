@@ -5,7 +5,7 @@ import { useTeam } from '../context/TeamContext'
 import PreviewBanner from '../components/PreviewBanner'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
-import { HeartIcon, HeartFilledIcon, MessageIcon, AlertIcon } from '../components/Icons'
+import { HeartIcon, HeartFilledIcon, MessageIcon, AlertIcon, CameraIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -31,16 +31,6 @@ function timeAgo(dateStr) {
   return new Date(dateStr).toLocaleDateString('en-US', { month: 'short', day: 'numeric' })
 }
 
-// ── Camera icon (inline SVG) ──────────────────────────────────────────────────
-function CameraIcon({ size = 18, color = 'currentColor' }) {
-  return (
-    <svg width={size} height={size} viewBox="0 0 24 24" fill="none"
-      stroke={color} strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round">
-      <path d="M23 19a2 2 0 0 1-2 2H3a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h4l2-3h6l2 3h4a2 2 0 0 1 2 2z"/>
-      <circle cx="12" cy="13" r="4"/>
-    </svg>
-  )
-}
 
 function XIcon({ size = 14 }) {
   return (
