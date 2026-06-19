@@ -516,11 +516,11 @@ function trackSprintSess(info) {
   const ph = info.phaseNum
   return [
     { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 5x3\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg` },
+      description: `Power Clean: 5x3\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nCopenhagen Adductor: 3x8 each leg\nBanded Hip Flexion: 3x12 each leg\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15` },
+      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${coreBlock(ph)}` },
     { day: 'Day 3', focus: 'Explosion',
-      description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nBounding: 3x20m\nWicket Drills: 3x30m` },
+      description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nBounding: 3x20m\nWicket Drills: 3x30m\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Posterior Chain',
       description: `Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
   ]
@@ -547,11 +547,11 @@ function trackJumpSess(info) {
   const singleLegDepth = ph >= 3 ? '\nSingle Leg Depth Jump: 4x4 each leg' : ''
   return [
     { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 5x3\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\n${phasePlyo(ph)}${singleLegDepth}\nSingle Leg RDL: 3x8 each leg\nApproach Jump Work: 3 sets` },
+      description: `Power Clean: 5x3\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 4x8\n${phasePlyo(ph)}${singleLegDepth}\nSingle Leg RDL: 3x8 each leg\nTerminal Knee Extension: 3x15 each leg\nApproach Jump Work: 3 sets\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper',
       description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15` },
     { day: 'Day 3', focus: 'Explosion — Jumps Focus',
-      description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nBounding: 3x20m${ph >= 2 ? '\nSingle Leg Broad Jump: 3x3 each leg' : ''}\nSingle Leg Box Jump: 3x5 each leg\nApproach Jump Work: 3 sets` },
+      description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nBounding: 3x20m${ph >= 2 ? '\nSingle Leg Broad Jump: 3x3 each leg' : ''}\nSingle Leg Box Jump: 3x5 each leg\nApproach Jump Work: 3 sets\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Posterior Chain',
       description: `Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
   ]
@@ -630,9 +630,9 @@ function lacrosseSess(info) {
     { day: 'Day 1', focus: 'Lower Power',
       description: `Power Clean: 4x3\nBack Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: 4x5 each side\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nPull-ups: 4xAMAP\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nBand External Rotation: 3x15` },
+      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nPull-ups: 4xAMAP\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nBand External Rotation: 3x15\nGrip Work: 3x30s each` },
     { day: 'Day 3', focus: 'Explosion',
-      description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nSled Sprint: 6x20 yds` },
+      description: `Hang Clean: 4x3\nFront Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Conditioning & COD',
       description: `V Drill: 4x3\nStar Drill: 3x3\nSled Sprint: 6x20 yds\n200m Intervals: 8x1 @ 80-85% effort (90 sec rest)\nBroad Jump: 3x3\nCopenhagen Adductor: 3x8 each leg\n${coreBlock(ph)}` },
   ]
@@ -1020,7 +1020,7 @@ function softball4Day(wp, phase) {
   const p3 = phase >= 3
   return [
     makeBaseballSession('Day 1', 'Upper Building', [
-      { name: 'Hang Clean',                                    sets: 3, reps: '8' },
+      { name: 'Hang Clean',                                    ramp: '40%×3, 50%×3, 60%×3' },
       { name: 'DB Bench',                                      sets: 3, reps: p3 ? '6' : '8' },
       { name: 'Tricep Pushdowns',                              sets: 2, reps: '8',    note: '+ 1xAMAP' },
       { name: 'Bench Curls',                                   sets: 3, reps: '8' },
@@ -1031,6 +1031,7 @@ function softball4Day(wp, phase) {
       { name: 'Sit-ups',                                       sets: 4, reps: '12' },
     ]),
     makeBaseballSession('Day 2', 'Lower Building', [
+      { name: 'Goblet Squat',                                  sets: 4, reps: '10' },
       { name: 'Reverse Lunge',                                 sets: 3, reps: '5',    note: 'each leg' },
       { name: 'Box Drop',                                      sets: 3, reps: '3' },
       { name: 'Bulgarian Split Squat',                         sets: 3, reps: '6',    note: 'each leg' },
@@ -1117,7 +1118,7 @@ function hockeyForwardsSess(info) {
     { day: 'Day 1', focus: 'Lower Power & First-Step Explosion',
       description: `Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nHang Power Clean: 4x3\nBulgarian Split Squat: 4x6 each leg\nSled Sprint: 8x20 yds\nNordic Hamstring Curl: 3x5\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Strength',
-      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Pull-ups: 5x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass into Wall: 4x8\nOverhead Press: 3x10\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Pull-ups: 5x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass into Wall: 4x8\nOverhead Press: 3x10\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x15\n${coreBlock(ph)}` },
     { day: 'Day 3', focus: 'Acceleration & Lateral Power',
       description: `Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nSplit Squat Jump: 4x5 each leg\nLateral Bound: 5x5 each side\nHip Thrust: 3x8\nResistance Band Sprint: 8x30 yds\nCalf Raises: 3xAMAP\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Full Body Power',
@@ -1132,7 +1133,7 @@ function hockeyDefenseSess(info) {
     { day: 'Day 1', focus: 'Lower Lateral Strength & Hip Stability',
       description: `Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nCossack Squat: 4x5 each side\nCopenhagen Adductor: 4x10 each leg\nLateral Bound: 5x5 each side\nCopenhagen Plank: 3x20s each side\nSingle Leg RDL: 3x8 each leg\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Strength & Rotational Power',
-      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x10 each side\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x10 each side\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x15\n${coreBlock(ph)}` },
     { day: 'Day 3', focus: 'Lateral Explosion & Backward Skating Mechanics',
       description: `Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nLateral Sled Drag: 6x20 yds each side\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\n${phasePlyo(ph)}\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\nHip 90/90 Hold: 3x30s each side\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power & Core Stability',
@@ -1269,7 +1270,7 @@ function golfSess(info) {
   const ph = info.phaseNum
   return [
     { day: 'Day 1', focus: 'Lower Power & Ground Force',
-      description: `Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3 (explosive intent)\nLandmine RDL: 3x8 each side\nLandmine Thruster: 3x6 each side\nDB Squat Jump: 4x5\nCore Pallof Press: 3x10 each side\nDead Bug: 3x10` },
+      description: `Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3 (explosive intent)\nTrap Bar Deadlift: 40%×8, 50%×6, ${q}×3\nNordic Hamstring Curl: 3x5\nLandmine RDL: 3x8 each side\nLandmine Thruster: 3x6 each side\nDB Squat Jump: 4x5\nCore Pallof Press: 3x10 each side\nDead Bug: 3x10` },
     { day: 'Day 2', focus: 'Upper & Rotational Power',
       description: `Single Arm DB Row: 4x8 each arm\nDB Bench Press: 4x8\nLandmine Press: 3x8 each arm\nSplit Stance Cable Row: 3x10 each side\nRotational Cable Pull: 4x8 each side\nMed Ball Rotational Throw: 4x6 each side\nBand Pull-Aparts: 3x20\nCore Cable Woodchop: 3x10 each side` },
     { day: 'Day 3', focus: 'Full Body Power & Speed',
