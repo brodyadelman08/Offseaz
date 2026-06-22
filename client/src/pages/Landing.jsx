@@ -430,7 +430,7 @@ export default function Landing() {
   const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
   const [betaDismissed, setBetaDismissed] = useState(
-    () => sessionStorage.getItem('offseaz_beta_dismissed') === '1'
+    () => localStorage.getItem('offseaz_beta_dismissed') === '1'
   )
   const [activeId, setActiveId] = useState('')
 
@@ -458,7 +458,7 @@ export default function Landing() {
 
   useEffect(() => {
     function onScroll() {
-      setScrolled(prev => (prev ? window.scrollY > 10 : window.scrollY > 80))
+      setScrolled(window.scrollY > 1)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -501,19 +501,19 @@ export default function Landing() {
         <div ref={bannerRef} style={s.betaBanner}>
           <p style={s.betaText}>
             <span style={s.betaBadge}>BETA</span>
-            Offseaz is currently free — features are actively being developed.{' '}
-            <span style={{ color: YELLOW, fontWeight: 600 }}>A paid version is coming soon.</span>
+            Offseaz is currently in free beta — features are actively being developed based on coach and athlete feedback.{' '}
+            <span style={{ color: YELLOW, fontWeight: 600 }}>A paid version with additional features is coming soon.</span>
           </p>
           <button
             style={s.betaClose}
-            onClick={() => { setBetaDismissed(true); sessionStorage.setItem('offseaz_beta_dismissed', '1') }}
+            onClick={() => { setBetaDismissed(true); localStorage.setItem('offseaz_beta_dismissed', '1') }}
             aria-label="Dismiss"
           >✕</button>
         </div>
       )}
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
-      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: scrolled ? 1 : 0, pointerEvents: scrolled ? 'auto' : 'none' }}>
+      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: scrolled ? 1 : 0, transform: scrolled ? 'translateY(0)' : 'translateY(-10px)', pointerEvents: scrolled ? 'auto' : 'none' }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link to="/login" style={s.navLink}>Sign In</Link>
@@ -932,7 +932,7 @@ const s = {
     background: 'rgba(10,10,10,0.94)',
     backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
     borderBottom: '1px solid rgba(255,255,255,0.06)',
-    transition: 'opacity 0.22s ease',
+    transition: 'opacity 0.22s ease, transform 0.22s ease',
   },
   navLink: { color: '#888', fontWeight: 500, fontSize: 14, textDecoration: 'none', padding: '8px 14px', borderRadius: 8 },
   navCta: {
