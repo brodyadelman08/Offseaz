@@ -802,17 +802,20 @@ button[disabled] {
   height: auto;
   display: block;
   object-fit: contain;
+  margin: 0 auto;
 }
 .logo-auth {
   width: clamp(180px, 40vw, 220px);
   height: auto;
   display: block;
+  margin: 0 auto;
 }
 .logo-sidebar {
-  height: 44px;
+  height: 52px;
   width: auto;
   display: block;
   cursor: pointer;
+  margin: 0 auto;
 }
 .logo-nav {
   height: 32px;
