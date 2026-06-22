@@ -63,7 +63,7 @@ export default function Contact() {
   useEffect(() => {
     function onScroll() {
       const y = window.scrollY
-      if (y < 10) {
+      if (y < 300) {
         setNavVisible(true)
       } else if (y > lastScrollY.current) {
         setNavVisible(false)

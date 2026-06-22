@@ -431,7 +431,7 @@ export default function Landing() {
   const [scrolled, setScrolled] = useState(false)
   const [navHidden, setNavHidden] = useState(false)
   const [betaDismissed, setBetaDismissed] = useState(
-    () => localStorage.getItem('offseaz_beta_dismissed') === '1'
+    () => localStorage.getItem('offseaz_beta_dismissed_v1') === '1'
   )
   const [activeId, setActiveId] = useState('')
 
@@ -462,7 +462,7 @@ export default function Landing() {
     function onScroll() {
       const y = window.scrollY
       setScrolled(y > 1)
-      if (y > lastScrollY.current && y > 80) {
+      if (y > lastScrollY.current && y > 300) {
         setNavHidden(true)
       } else if (y < lastScrollY.current) {
         setNavHidden(false)
@@ -521,7 +521,7 @@ export default function Landing() {
           </p>
           <button
             style={s.betaClose}
-            onClick={() => { setBetaDismissed(true); localStorage.setItem('offseaz_beta_dismissed', '1') }}
+            onClick={() => { setBetaDismissed(true); localStorage.setItem('offseaz_beta_dismissed_v1', '1') }}
             aria-label="Dismiss"
           >✕</button>
         </div>
