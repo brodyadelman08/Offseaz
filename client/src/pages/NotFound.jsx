@@ -20,7 +20,7 @@ export default function NotFound() {
       <div style={styles.card}>
         {/* Logo */}
         <img
-          src="/Offseaz_Logo__White_Letter__Dark_PNG.png"
+          src="/Offseaz Logo (White Letter) Dark.PNG"
           alt="Offseaz"
           style={styles.logo}
         />

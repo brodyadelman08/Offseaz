@@ -679,7 +679,7 @@ export default function Survey() {
 
       {/* ── Top bar ─────────────────────────────────────────────────────────── */}
       <div style={st.topBar}>
-        <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={st.logo} />
+        <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={st.logo} />
 
         <div style={st.stepPill}>
           <span className="survey-pill-name" style={st.stepPillName}>{meta.tag}</span>

@@ -8,7 +8,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
   if (loading) {
     return (
       <div style={styles.loading}>
-        <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={styles.logo} />
+        <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={styles.logo} />
         <p style={styles.loadingText}>Loading…</p>
       </div>
     )

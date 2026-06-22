@@ -75,7 +75,7 @@ export default function Register() {
       <div style={styles.content}>
         <div style={styles.brand}>
           <Link to="/" style={{ display: 'block' }}>
-            <img src="/Offseaz_Logo__White_Letter__Dark_PNG.png" alt="Offseaz" style={styles.logoHero} />
+            <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={styles.logoHero} />
           </Link>
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
