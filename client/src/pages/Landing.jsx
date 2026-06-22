@@ -497,9 +497,9 @@ export default function Landing() {
     <div style={s.root}>
       <style>{`
         .lp-card  { transition: border-color 0.2s ease; }
-        .lp-card:hover  { border-color: #F75709; }
+        .lp-card:hover  { border-color: #F75709 !important; }
         .lp-sport { transition: border-color 0.2s ease; }
-        .lp-sport:hover { border-color: #F75709; }
+        .lp-sport:hover { border-color: #F75709 !important; }
       `}</style>
 
       {/* ── Beta banner ──────────────────────────────────────────────────────── */}
@@ -517,6 +517,9 @@ export default function Landing() {
           >✕</button>
         </div>
       )}
+
+      {/* Banner spacer — preserves layout space while banner is fixed/out-of-flow */}
+      <div style={{ height: betaDismissed ? 0 : bannerH, transition: 'height 0.22s ease', overflow: 'hidden' }} />
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
       <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: scrolled ? 1 : 0, transform: scrolled ? 'translateY(0)' : 'translateY(-10px)', pointerEvents: scrolled ? 'auto' : 'none' }}>
@@ -908,11 +911,11 @@ const s = {
 
   // Beta banner
   betaBanner: {
-    width: '100%', boxSizing: 'border-box', overflow: 'hidden',
+    boxSizing: 'border-box', overflow: 'hidden',
     background: '#111', borderBottom: '1px solid rgba(247,87,9,0.22)',
     padding: '9px clamp(16px,4vw,40px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-    position: 'sticky', top: 0, zIndex: 300,
+    position: 'fixed', left: 0, right: 0, top: 0, zIndex: 300,
   },
   betaText: {
     fontSize: 13, color: '#AAA', lineHeight: 1.5, textAlign: 'center',
@@ -938,7 +941,7 @@ const s = {
     background: 'rgba(10,10,10,0.94)',
     backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
     borderBottom: '1px solid rgba(255,255,255,0.06)',
-    transition: 'opacity 0.22s ease, transform 0.22s ease',
+    transition: 'opacity 0.22s ease, transform 0.22s ease, top 0.22s ease',
   },
   navLink: { color: '#888', fontWeight: 500, fontSize: 14, textDecoration: 'none', padding: '8px 14px', borderRadius: 8 },
   navCta: {
@@ -1088,6 +1091,7 @@ const s = {
     background: '#141414', border: '1px solid #202020', borderRadius: 16,
     padding: 'clamp(20px,3vw,28px)',
     boxShadow: '0 2px 12px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03)',
+    transition: 'border-color 0.2s ease',
   },
   cardTitle: {
     fontSize: 16, fontWeight: 700, color: '#E8E8E8', marginBottom: 10,
@@ -1099,6 +1103,7 @@ const s = {
     display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 10,
     padding: '20px 12px', background: '#141414', border: '1px solid #202020',
     borderRadius: 14, boxShadow: '0 2px 8px rgba(0,0,0,0.20)',
+    transition: 'border-color 0.2s ease',
   },
 
   programNote: {
