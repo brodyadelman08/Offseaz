@@ -558,7 +558,7 @@ export default function Landing() {
 
           <div style={s.heroCtas}>
             <Link to="/register" style={s.btnOrange}>Get Started as Coach</Link>
-            <Link to="/register" style={s.btnBlueOutline}>Get Started as Athlete</Link>
+            <Link to="/register" style={s.btnBlue}>Get Started as Athlete</Link>
           </div>
 
           <p style={{ fontSize: 12, color: '#444', letterSpacing: 0.3, marginBottom: 52 }}>
@@ -577,7 +577,7 @@ export default function Landing() {
       {/* ══════════════════════════════════════════════════════════════════════
           STICKY ANCHOR NAV
       ══════════════════════════════════════════════════════════════════════ */}
-      <nav style={{ ...s.anchorNav, top: betaDismissed ? 0 : bannerH }}>
+      <nav style={{ ...s.anchorNav, top: (betaDismissed ? 0 : bannerH) + 64 }}>
         <div style={s.anchorNavInner}>
           {[
             { id: 'coaches',      label: 'For Coaches'  },
@@ -593,16 +593,16 @@ export default function Landing() {
                 data-navid={id}
                 style={{
                   ...s.anchorLink,
-                  color: isActive ? ORANGE : '#666',
+                  color: isActive ? ORANGE : YELLOW,
                   borderBottomColor: isActive ? ORANGE : 'transparent',
                   fontWeight: isActive ? 700 : 600,
                 }}
                 onClick={() => scrollToSection(id)}
                 onMouseEnter={e => {
-                  if (!isActive) e.currentTarget.style.color = '#DDD'
+                  if (!isActive) e.currentTarget.style.color = ORANGE
                 }}
                 onMouseLeave={e => {
-                  if (!isActive) e.currentTarget.style.color = '#666'
+                  if (!isActive) e.currentTarget.style.color = YELLOW
                 }}
               >
                 {label}
@@ -702,7 +702,7 @@ export default function Landing() {
           </div>
 
           <div style={s.sectionCta}>
-            <Link to="/register" style={s.btnBlueOutline}>Get Started as Athlete</Link>
+            <Link to="/register" style={s.btnBlue}>Get Started as Athlete</Link>
           </div>
         </div>
       </section>
@@ -843,7 +843,7 @@ export default function Landing() {
           </p>
           <div style={{ display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 24 }}>
             <Link to="/register" style={s.btnOrange}>Get Started as Coach</Link>
-            <Link to="/register" style={s.btnBlueOutline}>Get Started as Athlete</Link>
+            <Link to="/register" style={s.btnBlue}>Get Started as Athlete</Link>
           </div>
           <p style={{ fontSize: 14, color: '#444' }}>
             Already have an account?{' '}
@@ -971,7 +971,7 @@ const s = {
     flexShrink: 0, background: 'transparent',
     border: 'none',
     borderBottom: '2px solid transparent', // active tab overrides this color
-    color: '#666',
+    color: YELLOW,
     fontSize: 13, fontWeight: 600, cursor: 'pointer',
     padding: '0 clamp(12px,2.5vw,20px)', minHeight: 48,
     display: 'flex', alignItems: 'center',
@@ -1125,11 +1125,11 @@ const s = {
     background: ORANGE, color: '#fff', textDecoration: 'none',
     boxShadow: '0 4px 28px rgba(247,87,9,0.40)',
   },
-  btnBlueOutline: {
+  btnBlue: {
     display: 'inline-flex', alignItems: 'center', gap: 8,
     padding: '13px 30px', fontSize: 15, fontWeight: 700, borderRadius: 10,
-    background: 'transparent', color: BLUE, textDecoration: 'none',
-    border: `1.5px solid ${BLUE}`,
+    background: BLUE, color: '#fff', textDecoration: 'none',
+    boxShadow: '0 4px 28px rgba(48,142,189,0.40)',
   },
 
   // Story
