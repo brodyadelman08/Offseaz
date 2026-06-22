@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react'
+import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { ArrowRightIcon } from '../components/Icons'
@@ -434,10 +434,18 @@ export default function Landing() {
   )
   const [activeId, setActiveId] = useState('')
 
+  const bannerRef = useRef(null)
+  const [bannerH, setBannerH] = useState(40)
+
+  useLayoutEffect(() => {
+    if (bannerRef.current) setBannerH(bannerRef.current.offsetHeight)
+  }, [betaDismissed])
+
   function scrollToSection(id) {
     const el = document.getElementById(id)
     if (!el) return
-    const top = el.getBoundingClientRect().top + window.scrollY - 114
+    const offset = 114 + (betaDismissed ? 0 : bannerH)
+    const top = el.getBoundingClientRect().top + window.scrollY - offset
     window.scrollTo({ top: Math.max(0, top), behavior: 'smooth' })
   }
 
@@ -490,7 +498,7 @@ export default function Landing() {
 
       {/* ── Beta banner ──────────────────────────────────────────────────────── */}
       {!betaDismissed && (
-        <div style={s.betaBanner}>
+        <div ref={bannerRef} style={s.betaBanner}>
           <p style={s.betaText}>
             <span style={s.betaBadge}>BETA</span>
             Offseaz is currently free — features are actively being developed.{' '}
@@ -505,7 +513,7 @@ export default function Landing() {
       )}
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
-      <nav style={{ ...s.nav, opacity: scrolled ? 1 : 0, pointerEvents: scrolled ? 'auto' : 'none' }}>
+      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: scrolled ? 1 : 0, pointerEvents: scrolled ? 'auto' : 'none' }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link to="/login" style={s.navLink}>Sign In</Link>
@@ -560,7 +568,7 @@ export default function Landing() {
       {/* ══════════════════════════════════════════════════════════════════════
           STICKY ANCHOR NAV
       ══════════════════════════════════════════════════════════════════════ */}
-      <nav style={s.anchorNav}>
+      <nav style={{ ...s.anchorNav, top: betaDismissed ? 0 : bannerH }}>
         <div style={s.anchorNavInner}>
           {[
             { id: 'coaches',      label: 'For Coaches'  },
@@ -898,7 +906,7 @@ const s = {
     background: '#111', borderBottom: '1px solid rgba(247,87,9,0.22)',
     padding: '9px clamp(16px,4vw,40px)',
     display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 12,
-    position: 'relative', zIndex: 200,
+    position: 'sticky', top: 0, zIndex: 300,
   },
   betaText: {
     fontSize: 13, color: '#AAA', lineHeight: 1.5, textAlign: 'center',
