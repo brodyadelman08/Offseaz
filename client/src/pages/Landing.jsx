@@ -429,14 +429,12 @@ export default function Landing() {
   const { session, profile, loading } = useAuth()
   const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
-  const [navHidden, setNavHidden] = useState(false)
   const [betaDismissed, setBetaDismissed] = useState(
     () => localStorage.getItem('offseaz_beta_dismissed_v1') === '1'
   )
   const [activeId, setActiveId] = useState('')
 
   const bannerRef = useRef(null)
-  const lastScrollY = useRef(0)
   const [bannerH, setBannerH] = useState(40)
 
   useLayoutEffect(() => {
@@ -460,14 +458,7 @@ export default function Landing() {
 
   useEffect(() => {
     function onScroll() {
-      const y = window.scrollY
-      setScrolled(y > 1)
-      if (y > lastScrollY.current && y > 300) {
-        setNavHidden(true)
-      } else if (y < lastScrollY.current) {
-        setNavHidden(false)
-      }
-      lastScrollY.current = y
+      setScrolled(window.scrollY > 1)
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -531,7 +522,7 @@ export default function Landing() {
       <div style={{ height: betaDismissed ? 0 : bannerH, transition: 'height 0.22s ease', overflow: 'hidden' }} />
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
-      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: (scrolled && !navHidden) ? 1 : 0, transform: (scrolled && !navHidden) ? 'translateY(0)' : 'translateY(-100%)', pointerEvents: (scrolled && !navHidden) ? 'auto' : 'none' }}>
+      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.4)' : 'none' }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link to="/login" style={s.navLink}>Sign In</Link>
@@ -950,7 +941,7 @@ const s = {
     background: 'rgba(10,10,10,0.94)',
     backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
     borderBottom: '1px solid rgba(255,255,255,0.06)',
-    transition: 'opacity 0.22s ease, transform 0.22s ease, top 0.22s ease',
+    transition: 'top 0.22s ease, box-shadow 0.22s ease',
   },
   navLink: { color: '#888', fontWeight: 500, fontSize: 14, textDecoration: 'none', padding: '8px 14px', borderRadius: 8 },
   navCta: {
