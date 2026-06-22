@@ -6,7 +6,7 @@ import { ArrowRightIcon } from '../components/Icons'
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
-const LOGO   = '/Offseaz Logo (White Letter) Dark.PNG'
+const LOGO   = '/Offseaz-Logo-White-Letter-Dark.png'
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 

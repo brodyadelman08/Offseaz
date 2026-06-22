@@ -37,7 +37,7 @@ export default function About() {
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
       <nav style={s.nav}>
         <Link to="/" style={s.navLogo}>
-          <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={{ height: 34 }} />
+          <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={{ height: 34 }} />
         </Link>
         <div style={s.navLinks}>
           <Link to="/contact" style={s.navLink}>Contact</Link>
@@ -50,7 +50,7 @@ export default function About() {
         <img src="/about-deadlift.webp" alt="" style={s.heroBg} className="about-hero-bg" />
         <div style={s.heroOverlay} className="about-hero-overlay" />
         <div style={s.heroContent}>
-          <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={s.heroLogo} className="about-hero-logo" />
+          <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={s.heroLogo} className="about-hero-logo" />
           <h1 style={s.heroHeadline}>
             Built by an Athlete.<br />
             <span style={{ color: ORANGE }}>Built for Athletes.</span>
@@ -191,7 +191,7 @@ export default function About() {
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
       <footer style={s.footer}>
-        <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={{ height: 26, opacity: 0.65 }} />
+        <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={{ height: 26, opacity: 0.65 }} />
         <div style={s.footerLinks}>
           <Link to="/"        style={s.footerLink}>Home</Link>
           <span style={s.dot}>·</span>

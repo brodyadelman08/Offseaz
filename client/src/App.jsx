@@ -69,7 +69,7 @@ class ErrorBoundary extends React.Component {
           flexDirection: 'column', gap: 16, padding: '40px 20px', textAlign: 'center',
         }}>
           <img
-            src="/Offseaz Logo (White Letter) Dark.PNG"
+            src="/Offseaz-Logo-White-Letter-Dark.png"
             alt="Offseaz"
             style={{ height: 48, display: 'block' }}
           />

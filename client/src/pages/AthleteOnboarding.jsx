@@ -138,7 +138,7 @@ export default function AthleteOnboarding() {
 
       {/* Top bar */}
       <div style={styles.topBar}>
-        <img src="/Offseaz Logo (White Letter) Dark.PNG" alt="Offseaz" style={styles.logo} />
+        <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={styles.logo} />
         <button style={styles.exitBtn} onClick={() => finishAndGo('/athlete')}>
           Exit setup
         </button>
