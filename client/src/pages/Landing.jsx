@@ -495,6 +495,12 @@ export default function Landing() {
 
   return (
     <div style={s.root}>
+      <style>{`
+        .lp-card  { transition: border-color 0.2s ease; }
+        .lp-card:hover  { border-color: #F75709; }
+        .lp-sport { transition: border-color 0.2s ease; }
+        .lp-sport:hover { border-color: #F75709; }
+      `}</style>
 
       {/* ── Beta banner ──────────────────────────────────────────────────────── */}
       {!betaDismissed && (
@@ -714,7 +720,7 @@ export default function Landing() {
 
           <div style={s.fourGrid}>
             {PILLARS.map(p => (
-              <div key={p.num} style={s.card}>
+              <div key={p.num} className="lp-card" style={s.card}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 18 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: p.color + '18', border: `1px solid ${p.color}33`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <p.Icon size={20} color={p.color} />
@@ -737,7 +743,7 @@ export default function Landing() {
 
           <div style={s.sportGrid}>
             {SPORTS.map((sport, i) => (
-              <div key={i} style={s.sportChip}>
+              <div key={i} className="lp-sport" style={s.sportChip}>
                 <span style={{ fontSize: 28, lineHeight: 1 }}>{sport.emoji}</span>
                 <span style={{ fontSize: 12, fontWeight: 600, color: '#666', textAlign: 'center', lineHeight: 1.3 }}>{sport.name}</span>
               </div>

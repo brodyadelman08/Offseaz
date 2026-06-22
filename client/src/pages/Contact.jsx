@@ -205,10 +205,10 @@ export default function Contact() {
 
 // ── Styles ────────────────────────────────────────────────────────────────────
 const s = {
-  page: { minHeight: '100vh', background: '#0A0A0A', color: '#EFEFEF', fontFamily: "Inter, system-ui, -apple-system, sans-serif" },
+  page: { minHeight: '100vh', background: '#0A0A0A', color: '#EFEFEF', fontFamily: "Inter, system-ui, -apple-system, sans-serif", paddingTop: 64 },
 
   nav: {
-    position: 'sticky', top: 0, zIndex: 100,
+    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
     display: 'flex', alignItems: 'center', justifyContent: 'space-between',
     padding: '0 clamp(20px, 5vw, 56px)', height: 64,
     background: 'rgba(10,10,10,0.92)',
