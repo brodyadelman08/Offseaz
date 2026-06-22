@@ -1,3 +1,4 @@
+import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const ORANGE = '#F75709'
@@ -31,13 +32,32 @@ const PILLARS = [
 ]
 
 export default function About() {
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
+
+  useEffect(() => {
+    function onScroll() {
+      const y = window.scrollY
+      if (y < 10) {
+        setNavVisible(true)
+      } else if (y > lastScrollY.current) {
+        setNavVisible(false)
+      } else {
+        setNavVisible(true)
+      }
+      lastScrollY.current = y
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div style={s.page}>
 
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
-      <nav style={s.nav}>
+      <nav style={{ ...s.nav, transform: navVisible ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 200ms ease-out' }}>
         <Link to="/" style={s.navLogo}>
-          <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={{ height: 34 }} />
+          <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" className="logo-nav" />
         </Link>
         <div style={s.navLinks}>
           <Link to="/contact" style={s.navLink}>Contact</Link>

@@ -42,7 +42,7 @@ export default function Login() {
       <div style={styles.content}>
         <div style={styles.brand}>
           <Link to="/" style={{ display: 'block' }}>
-            <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={styles.logoHero} />
+            <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" className="logo-auth" />
           </Link>
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
@@ -72,7 +72,7 @@ export default function Login() {
               required
               autoComplete="current-password"
             />
-            <button style={styles.primaryBtn} type="submit" disabled={loading}>
+            <button className="auth-btn-primary" style={styles.primaryBtn} type="submit" disabled={loading}>
               {loading ? 'Signing in…' : 'Sign in →'}
             </button>
           </form>

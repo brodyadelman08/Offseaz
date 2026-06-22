@@ -1,5 +1,6 @@
 /* Dark-mode defaults — applied before React loads to prevent flash */
 :root {
+  /* ── Surface palette ───────────────────────────────────────────────────── */
   --bg:           #0F0F0F;
   --card:         #1A1A1A;
   --card-inner:   #252525;
@@ -11,6 +12,74 @@
   --input-bg:     #252525;
   --input-border: #3A3A3A;
   --shadow:       0 1px 3px rgba(0,0,0,0.5), 0 1px 2px rgba(0,0,0,0.3);
+
+  /* ── Brand colors ──────────────────────────────────────────────────────── */
+  --orange: #F75709;
+  --blue:   #308EBD;
+  --yellow: #F0BE24;
+
+  /* ── Typography scale ──────────────────────────────────────────────────── */
+  --font-display: clamp(36px, 5vw, 48px);
+  --font-heading: clamp(24px, 3vw, 32px);
+  --font-subhead: 20px;
+  --font-body:    16px;
+  --font-small:   13px;
+  --font-micro:   11px;
+
+  --fw-black: 900;
+  --fw-bold:  700;
+  --fw-semi:  600;
+  --fw-med:   500;
+  --fw-reg:   400;
+
+  --lh-tight:  1.15;
+  --lh-normal: 1.6;
+  --lh-loose:  1.8;
+
+  --ls-tight:  -0.02em;
+  --ls-normal:  0em;
+  --ls-wide:    0.01em;
+  --ls-wider:   0.06em;
+
+  /* ── Spacing (4px grid) ────────────────────────────────────────────────── */
+  --sp-1:  4px;
+  --sp-2:  8px;
+  --sp-3:  12px;
+  --sp-4:  16px;
+  --sp-5:  20px;
+  --sp-6:  24px;
+  --sp-8:  32px;
+  --sp-10: 40px;
+  --sp-12: 48px;
+  --sp-16: 64px;
+  --sp-20: 80px;
+
+  /* ── Border radius ─────────────────────────────────────────────────────── */
+  --r-xs:   4px;
+  --r-sm:   6px;
+  --r-md:   12px;
+  --r-lg:   16px;
+  --r-xl:   20px;
+  --r-pill: 100px;
+
+  /* ── Shadows (brand-tinted) ────────────────────────────────────────────── */
+  --shadow-xs:   0 1px 3px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.03);
+  --shadow-sm:   0 2px 8px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-md:   0 4px 20px rgba(0,0,0,0.36), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-lg:   0 8px 40px rgba(0,0,0,0.52), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-card-hover: 0 8px 32px rgba(0,0,0,0.40), 0 0 0 1px rgba(247,87,9,0.32), inset 0 1px 0 rgba(255,255,255,0.05);
+
+  /* ── Animation timing ──────────────────────────────────────────────────── */
+  --t-fast:   150ms ease-out;
+  --t-std:    200ms ease-out;
+  --t-slow:   300ms cubic-bezier(0.22, 1, 0.36, 1);
+  --t-spring: 280ms cubic-bezier(0.34, 1.06, 0.64, 1);
+
+  /* Legacy shadow alias */
+  --shadow-card:  0 2px 8px rgba(0,0,0,0.22), inset 0 1px 0 rgba(255,255,255,0.04);
+  --shadow-hover: 0 8px 24px rgba(0,0,0,0.28), inset 0 1px 0 rgba(255,255,255,0.05);
+  --radius-card:  16px;
+  --radius-btn:   10px;
 }
 
 *, *::before, *::after {
@@ -83,7 +152,7 @@ a {
 }
 
 a:hover {
-  text-decoration: underline;
+  text-decoration: none;
 }
 
 /* ── Premium design token extensions ──────────────────────────────────────── */
@@ -509,4 +578,244 @@ select {
 }
 .bp-trash-btn:hover svg {
   stroke: #c73820;
+}
+
+/* ══════════════════════════════════════════════════════════════════════════════
+   OFFSEAZ PREMIUM DESIGN SYSTEM — GLOBAL RULES
+   All tokens defined in :root above. These rules apply site-wide.
+   ══════════════════════════════════════════════════════════════════════════════ */
+
+/* ── Smooth page scrolling ─────────────────────────────────────────────────── */
+html {
+  scroll-behavior: smooth;
+}
+
+/* ── Focus ring — orange, WCAG AA compliant ────────────────────────────────── */
+:focus-visible {
+  outline: 2px solid var(--orange);
+  outline-offset: 2px;
+}
+
+/* ── Universal card hover — add data-card="" to any card element ────────────
+   Uses box-shadow ring so it never conflicts with colored border-top accents.  */
+@media (hover: hover) {
+  [data-card] {
+    transition: transform var(--t-std), box-shadow var(--t-std);
+  }
+  [data-card]:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+  }
+}
+
+/* ── Primary orange button — global hover lift ──────────────────────────────── */
+@media (hover: hover) {
+  .btn-primary {
+    transition: transform var(--t-fast), box-shadow var(--t-fast), opacity var(--t-fast);
+  }
+  .btn-primary:not([disabled]):hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 24px rgba(247,87,9,0.45) !important;
+  }
+  .btn-primary:not([disabled]):active {
+    transform: scale(0.98);
+    transition-duration: 70ms;
+  }
+}
+
+/* ── Nav — hide-on-scroll-down helper ─────────────────────────────────────── */
+.nav-scroll-hidden {
+  transform: translateY(-100%) !important;
+  pointer-events: none !important;
+}
+
+/* ── Sidebar nav item — hover glow ─────────────────────────────────────────── */
+@media (hover: hover) {
+  .sidebar-nav-item:hover {
+    background: rgba(255,255,255,0.05) !important;
+  }
+}
+
+/* ── Landing page — universal card hover for lp-card and lp-sport ──────────
+   Already have border-color from the inline <style> block in Landing.jsx;
+   add lift and shadow here for the full premium feel.                         */
+@media (hover: hover) {
+  .lp-card,
+  .lp-sport {
+    transition: transform var(--t-std), box-shadow var(--t-std), border-color var(--t-std) !important;
+  }
+  .lp-card:hover,
+  .lp-sport:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+    border-color: var(--orange) !important;
+  }
+}
+
+/* ── Feature card on landing ────────────────────────────────────────────────── */
+@media (hover: hover) {
+  .land-feature-card {
+    transition: transform var(--t-std), box-shadow var(--t-std), border-color var(--t-std);
+  }
+  .land-feature-card:hover {
+    transform: translateY(-3px);
+    box-shadow: var(--shadow-card-hover) !important;
+    border-color: rgba(247,87,9,0.35) !important;
+    text-decoration: none !important;
+  }
+}
+
+/* ── Stat card on landing ───────────────────────────────────────────────────── */
+@media (hover: hover) {
+  .lp-stat {
+    transition: transform var(--t-std), box-shadow var(--t-std);
+  }
+  .lp-stat:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+  }
+}
+
+/* ── Feed post card — updated to use design tokens ─────────────────────────── */
+@media (hover: hover) {
+  .feed-post-card {
+    transition: transform var(--t-std), box-shadow var(--t-std), border-color var(--t-std);
+  }
+  .feed-post-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+    border-color: rgba(247,87,9,0.28) !important;
+  }
+}
+
+/* ── Auth page — primary button hover ─────────────────────────────────────── */
+@media (hover: hover) {
+  .auth-btn-primary {
+    transition: transform var(--t-fast), box-shadow var(--t-fast);
+  }
+  .auth-btn-primary:not([disabled]):hover {
+    transform: scale(1.02);
+    box-shadow: 0 6px 24px rgba(247,87,9,0.45) !important;
+  }
+  .auth-btn-primary:not([disabled]):active {
+    transform: scale(0.98);
+    transition-duration: 70ms;
+  }
+}
+
+/* ── Role card (Register) hover ──────────────────────────────────────────── */
+@media (hover: hover) {
+  .role-card:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.05) !important;
+  }
+}
+
+/* ── Sign-out button hover ─────────────────────────────────────────────────── */
+@media (hover: hover) {
+  .sign-out-btn:hover {
+    background: rgba(199,56,32,0.14) !important;
+    border-color: rgba(199,56,32,0.40) !important;
+  }
+}
+
+/* ── Team pill hover ─────────────────────────────────────────────────────── */
+@media (hover: hover) {
+  .team-pill:hover {
+    border-color: var(--border) !important;
+    background: rgba(255,255,255,0.04) !important;
+    color: var(--text) !important;
+  }
+}
+
+/* ── About page stat card hover ─────────────────────────────────────────── */
+@media (hover: hover) {
+  .about-stat-card {
+    transition: transform var(--t-std), box-shadow var(--t-std);
+  }
+  .about-stat-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+  }
+}
+
+/* ── Contact social card hover ─────────────────────────────────────────── */
+@media (hover: hover) {
+  .social-card {
+    transition: transform var(--t-std), box-shadow var(--t-std) !important;
+  }
+  .social-card:hover {
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-card-hover) !important;
+  }
+}
+
+/* ── Legal nav link hover ───────────────────────────────────────────────── */
+@media (hover: hover) {
+  .pub-nav-link:hover {
+    color: var(--text) !important;
+  }
+}
+
+/* ── Disabled button baseline ────────────────────────────────────────────── */
+button[disabled] {
+  opacity: 0.4;
+  cursor: not-allowed !important;
+  pointer-events: auto;
+}
+
+/* ── Typography utility classes ──────────────────────────────────────────── */
+.text-display {
+  font-size: var(--font-display);
+  font-weight: var(--fw-black);
+  line-height: var(--lh-tight);
+  letter-spacing: var(--ls-tight);
+}
+.text-heading {
+  font-size: var(--font-heading);
+  font-weight: var(--fw-bold);
+  line-height: var(--lh-tight);
+}
+.text-subhead {
+  font-size: var(--font-subhead);
+  font-weight: var(--fw-semi);
+  line-height: var(--lh-normal);
+}
+.text-body {
+  font-size: var(--font-body);
+  font-weight: var(--fw-reg);
+  line-height: var(--lh-normal);
+}
+.text-small {
+  font-size: var(--font-small);
+  font-weight: var(--fw-med);
+  letter-spacing: var(--ls-wide);
+}
+.text-micro {
+  font-size: var(--font-micro);
+  font-weight: var(--fw-reg);
+}
+
+/* ── Responsive logo sizing ──────────────────────────────────────────────── */
+.logo-footer {
+  width: clamp(160px, 22vw, 200px);
+  height: auto;
+  display: block;
+  object-fit: contain;
+}
+.logo-auth {
+  width: clamp(180px, 40vw, 220px);
+  height: auto;
+  display: block;
+}
+.logo-sidebar {
+  height: 44px;
+  width: auto;
+  display: block;
+  cursor: pointer;
+}
+.logo-nav {
+  height: 32px;
+  width: auto;
+  display: block;
 }

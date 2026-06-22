@@ -429,12 +429,14 @@ export default function Landing() {
   const { session, profile, loading } = useAuth()
   const navigate = useNavigate()
   const [scrolled, setScrolled] = useState(false)
+  const [navHidden, setNavHidden] = useState(false)
   const [betaDismissed, setBetaDismissed] = useState(
     () => localStorage.getItem('offseaz_beta_dismissed') === '1'
   )
   const [activeId, setActiveId] = useState('')
 
   const bannerRef = useRef(null)
+  const lastScrollY = useRef(0)
   const [bannerH, setBannerH] = useState(40)
 
   useLayoutEffect(() => {
@@ -458,7 +460,14 @@ export default function Landing() {
 
   useEffect(() => {
     function onScroll() {
-      setScrolled(window.scrollY > 1)
+      const y = window.scrollY
+      setScrolled(y > 1)
+      if (y > lastScrollY.current && y > 80) {
+        setNavHidden(true)
+      } else if (y < lastScrollY.current) {
+        setNavHidden(false)
+      }
+      lastScrollY.current = y
     }
     window.addEventListener('scroll', onScroll, { passive: true })
     return () => window.removeEventListener('scroll', onScroll)
@@ -522,7 +531,7 @@ export default function Landing() {
       <div style={{ height: betaDismissed ? 0 : bannerH, transition: 'height 0.22s ease', overflow: 'hidden' }} />
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
-      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: scrolled ? 1 : 0, transform: scrolled ? 'translateY(0)' : 'translateY(-10px)', pointerEvents: scrolled ? 'auto' : 'none' }}>
+      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, opacity: (scrolled && !navHidden) ? 1 : 0, transform: (scrolled && !navHidden) ? 'translateY(0)' : 'translateY(-100%)', pointerEvents: (scrolled && !navHidden) ? 'auto' : 'none' }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link to="/login" style={s.navLink}>Sign In</Link>
@@ -639,7 +648,7 @@ export default function Landing() {
               { color: BLUE,   title: 'Injury Flags Surface Instantly',     body: 'When an athlete flags an injury during logging, it appears immediately on your accountability dashboard.' },
               { color: YELLOW, title: 'Auto-Generated Weekly Reports',      body: 'See who trained, who skipped, and who improved — with the data to have accountability conversations that change behavior.' },
             ].map((item, i) => (
-              <div key={i} style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
+              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
                 <h3 style={s.cardTitle}>{item.title}</h3>
                 <p style={s.cardBody}>{item.body}</p>
               </div>
@@ -673,7 +682,7 @@ export default function Landing() {
               { num: '02', color: BLUE,   title: 'Get a Personalized Blueprint',         body: 'Offseaz builds your program from your answers. Weights are auto-calculated from your logged one-rep maxes — no math required.' },
               { num: '03', color: YELLOW, title: 'Track Streaks and Progress',           body: 'Log every session, build your streak, and watch your PRs climb. Your coach sees every rep. Teammates see your work on the feed.' },
             ].map((step, i) => (
-              <div key={i} style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
+              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
                 <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Calibri', 'Trebuchet MS', sans-serif" }}>{step.num}</span>
                 <h3 style={s.cardTitle}>{step.title}</h3>
                 <p style={s.cardBody}>{step.body}</p>
@@ -694,7 +703,7 @@ export default function Landing() {
               { color: ORANGE, title: 'Log Workouts from Anywhere',           body: 'Log every session from your phone. Effort scores, notes, and performance data all go straight to your coach.' },
               { color: YELLOW, title: 'Build a Documented Training History',  body: 'Every logged session is permanently recorded. Your coach can see your full offseason history at any time.' },
             ].map((item, i) => (
-              <div key={i} style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
+              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
                 <h3 style={s.cardTitle}>{item.title}</h3>
                 <p style={s.cardBody}>{item.body}</p>
               </div>
@@ -768,7 +777,7 @@ export default function Landing() {
               { value: '80+',   label: 'Exercises Explained',             color: YELLOW },
               { value: '%',     label: 'Weights Calculated Automatically', color: ORANGE },
             ].map((stat, i) => (
-              <div key={i} style={{ ...s.statItem, borderTop: `2px solid ${stat.color}` }}>
+              <div key={i} className="lp-stat" style={{ ...s.statItem, borderTop: `2px solid ${stat.color}` }}>
                 <span style={{ fontSize: 'clamp(36px,5vw,54px)', fontWeight: 900, color: stat.color, lineHeight: 1, letterSpacing: '-0.03em', fontFamily: "'Calibri','Trebuchet MS',sans-serif" }}>{stat.value}</span>
                 <span style={{ fontSize: 13, color: '#555', fontWeight: 600, textAlign: 'center', lineHeight: 1.4 }}>{stat.label}</span>
               </div>
@@ -794,7 +803,7 @@ export default function Landing() {
               { num: '02', color: BLUE,   title: 'Athletes and Assistant Coaches Join With Their Invite Code',           body: 'Athletes join, complete the needs analysis, and immediately receive a personalized program with exact weights calculated from their logged maxes.' },
               { num: '03', color: YELLOW, title: 'Everyone Trains, Logs Workouts, and the Coach Sees Everything',       body: 'Athletes log every session from their phone. Coaches see real-time compliance, flag injuries, send messages, and track progress across the roster all offseason.' },
             ].map((step, i) => (
-              <div key={i} style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
+              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
                 <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Calibri', 'Trebuchet MS', sans-serif" }}>{step.num}</span>
                 <h3 style={s.cardTitle}>{step.title}</h3>
                 <p style={s.cardBody}>{step.body}</p>
@@ -857,7 +866,7 @@ export default function Landing() {
       ══════════════════════════════════════════════════════════════════════ */}
       <footer style={s.footer}>
         <div style={{ textAlign: 'center' }}>
-          <img src={LOGO} alt="Offseaz" style={{ width: 170, height: 'auto', display: 'block', objectFit: 'contain', margin: '0 auto 14px' }} />
+          <img src={LOGO} alt="Offseaz" className="logo-footer" style={{ margin: '0 auto 14px' }} />
           <p style={{ fontSize: 13, color: '#EEE', margin: '0 0 20px' }}>
             Built for coaches and athletes who take the offseason seriously.
           </p>

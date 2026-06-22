@@ -1,4 +1,4 @@
-﻿import { useEffect } from 'react'
+﻿import { useEffect, useRef, useState } from 'react'
 import { Link } from 'react-router-dom'
 
 const LOGO   = '/Offseaz-Logo-White-Letter-Dark.png'
@@ -36,14 +36,33 @@ function Email() {
 
 // ── Shared page layout ────────────────────────────────────────────────────────
 function LegalLayout({ title, lastUpdated, intro, children }) {
+  const [navVisible, setNavVisible] = useState(true)
+  const lastScrollY = useRef(0)
+
+  useEffect(() => {
+    function onScroll() {
+      const y = window.scrollY
+      if (y < 10) {
+        setNavVisible(true)
+      } else if (y > lastScrollY.current) {
+        setNavVisible(false)
+      } else {
+        setNavVisible(true)
+      }
+      lastScrollY.current = y
+    }
+    window.addEventListener('scroll', onScroll, { passive: true })
+    return () => window.removeEventListener('scroll', onScroll)
+  }, [])
+
   return (
     <div style={ls.root}>
       <ScrollTop />
 
-      {/* Sticky nav */}
-      <nav style={ls.nav}>
+      {/* Fixed nav with hide-on-scroll-down */}
+      <nav style={{ ...ls.nav, transform: navVisible ? 'translateY(0)' : 'translateY(-100%)', transition: 'transform 200ms ease-out' }}>
         <Link to="/" style={{ display: 'block', flexShrink: 0 }}>
-          <img src={LOGO} alt="Offseaz" style={{ height: 30, width: 'auto', display: 'block' }} />
+          <img src={LOGO} alt="Offseaz" className="logo-nav" />
         </Link>
         <div style={{ display: 'flex', alignItems: 'center', gap: 20 }}>
           <Link to="/login"    style={ls.navLink}>Sign In</Link>

@@ -126,7 +126,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
         <img
           src="/Offseaz-Logo-White-Letter-Dark.png"
           alt="Offseaz"
-          style={styles.logo}
+          className="logo-sidebar"
           onClick={() => navigate(nav[0].path)}
         />
       </div>
@@ -227,7 +227,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
             </span>
           </div>
         </div>
-        <button style={styles.signOutBtn} onClick={signOut}>
+        <button className="sign-out-btn" style={styles.signOutBtn} onClick={signOut}>
           <SignOutIcon size={15} color="#c73820" />
           <span>Sign out</span>
         </button>

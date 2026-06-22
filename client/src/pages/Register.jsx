@@ -75,7 +75,7 @@ export default function Register() {
       <div style={styles.content}>
         <div style={styles.brand}>
           <Link to="/" style={{ display: 'block' }}>
-            <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={styles.logoHero} />
+            <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" className="logo-auth" />
           </Link>
           <p style={styles.tagline}>The coach-first offseason training platform</p>
         </div>
@@ -165,6 +165,7 @@ export default function Register() {
             )}
 
             <button
+              className="auth-btn-primary"
               style={{ ...styles.primaryBtn, background: accentColor }}
               type="submit"
               disabled={loading}
