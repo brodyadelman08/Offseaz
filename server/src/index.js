@@ -17,6 +17,7 @@ const goalsRoutes = require('./routes/goals')
 const reportRoutes   = require('./routes/report')
 const programRoutes  = require('./routes/programs')
 const contactRoutes  = require('./routes/contact')
+const digestRoutes   = require('./routes/digest') // TODO: REMOVE BEFORE LAUNCH
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -47,6 +48,7 @@ app.use('/api/goals', goalsRoutes)
 app.use('/api/report', reportRoutes)
 app.use('/api/programs', programRoutes)
 app.use('/api/contact', contactRoutes)
+app.use('/api/digest', digestRoutes) // TODO: REMOVE BEFORE LAUNCH
 
 app.listen(PORT, () => {
   console.log(`Server running on port ${PORT}`)
