@@ -143,7 +143,7 @@ async function sendSummaryEmail(coachEmail, teamName, weekLabel, athletes, stats
   if (!key) throw new Error('RESEND_API_KEY is not set in environment')
   const resend = new Resend(key)
 
-  const from = process.env.RESEND_FROM || 'Offseaz <onboarding@resend.dev>'
+  const from = 'Offseaz <notifications@offseaz.com>'
   const html = buildEmailHtml(teamName, weekLabel, athletes, stats)
 
   const { error } = await resend.emails.send({

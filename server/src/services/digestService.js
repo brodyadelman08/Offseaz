@@ -527,7 +527,7 @@ async function processTeam(team, week) {
 
   // ── 5. Send to every coach, skipping if already sent this week ──
   const resend = new Resend(process.env.RESEND_API_KEY)
-  const from   = process.env.RESEND_FROM || 'Offseaz <onboarding@resend.dev>'
+  const from   = 'Offseaz <notifications@offseaz.com>'
   console.log(`[Digest] Using from address: "${from}"`)
 
   for (const coach of coaches) {
