@@ -178,6 +178,17 @@ function substitutePercentage(text, maxes) {
 }
 
 /**
+ * Returns the length of the exercise name at the start of a comma-separated
+ * segment (letters/hyphens before the first space+digit or @ sign).
+ * Returns 0 for segments starting with a digit (no extractable name).
+ */
+function segmentNameLength(seg) {
+  if (!/^[A-Za-z]/.test(seg)) return 0
+  const idx = seg.search(/\s+(?:\d|@)/)
+  return idx > 0 ? idx : seg.length
+}
+
+/**
  * Renders a multi-line session description with:
  *  - Inline ⓘ buttons for exercises in the library
  *  - Yellow caution tags for exercises matching the athlete's injury areas
@@ -244,7 +255,7 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
 
           rendered = (
             <span>
-              <span style={{ fontWeight: hasInfo || isFlagged ? 600 : 'inherit' }}>{name}</span>
+              <span style={{ fontWeight: 600 }}>{name}</span>
               {hasInfo && <ExerciseInfoButton exerciseName={name} />}
               {isFlagged && (
                 <span style={CAUTION_BADGE_STYLE}>
@@ -259,33 +270,38 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
           const segments = line.split(/, ?/)
           const hasPercent = /@\s*\d+%/.test(line)
 
-          if (!hasPercent && flaggedSet.size === 0) {
-            rendered = <span>{line}</span>
-          } else {
-            rendered = (
-              <span>
-                {segments.map((seg, si) => {
-                  const trimmed = seg.trim()
-                  const processed = hasPercent ? substitutePercentage(trimmed, maxes) : trimmed
-                  const flaggedName = findFlagAtStart(trimmed, flaggedSet)
+          rendered = (
+            <span>
+              {segments.map((seg, si) => {
+                const trimmed = seg.trim()
+                const processed = hasPercent ? substitutePercentage(trimmed, maxes) : trimmed
+                const flaggedName = findFlagAtStart(trimmed, flaggedSet)
+                if (flaggedName) {
                   return (
                     <span key={si}>
                       {si > 0 && ', '}
-                      {flaggedName ? (
-                        <>
-                          <span style={{ fontWeight: 600 }}>{trimmed.slice(0, flaggedName.length)}</span>
-                          <span style={CAUTION_BADGE_STYLE}>
-                            <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
-                          </span>
-                          {processed.slice(flaggedName.length)}
-                        </>
-                      ) : processed}
+                      <span style={{ fontWeight: 600 }}>{trimmed.slice(0, flaggedName.length)}</span>
+                      <span style={CAUTION_BADGE_STYLE}>
+                        <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
+                      </span>
+                      {processed.slice(flaggedName.length)}
                     </span>
                   )
-                })}
-              </span>
-            )
-          }
+                }
+                const nameLen = segmentNameLength(trimmed)
+                if (nameLen > 0) {
+                  return (
+                    <span key={si}>
+                      {si > 0 && ', '}
+                      <span style={{ fontWeight: 600 }}>{processed.slice(0, nameLen)}</span>
+                      {processed.slice(nameLen)}
+                    </span>
+                  )
+                }
+                return <span key={si}>{si > 0 && ', '}{processed}</span>
+              })}
+            </span>
+          )
         }
 
         return (

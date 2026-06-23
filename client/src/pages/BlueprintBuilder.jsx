@@ -135,6 +135,42 @@ function BulkEditModal({ count, focus, desc, onFocusChange, onDescChange, onAppl
   )
 }
 
+// ─── Description preview with bolded exercise names ──────────────────────────
+
+function BoldDesc({ text, maxChars }) {
+  if (!text) return null
+  const display = maxChars && text.length > maxChars ? text.slice(0, maxChars) + '…' : text
+  const lines = display.split('\n')
+  return (
+    <>
+      {lines.map((line, i) => {
+        const colonIdx = line.indexOf(':')
+        let content
+        if (colonIdx > 0) {
+          content = (
+            <><span style={{ fontWeight: 600 }}>{line.slice(0, colonIdx)}</span>{line.slice(colonIdx)}</>
+          )
+        } else {
+          const segs = line.split(/, ?/)
+          content = segs.map((seg, si) => {
+            if (!/^[A-Za-z]/.test(seg)) return <span key={si}>{si > 0 && ', '}{seg}</span>
+            const idx = seg.search(/\s+(?:\d|@)/)
+            const nameLen = idx > 0 ? idx : seg.length
+            return (
+              <span key={si}>
+                {si > 0 && ', '}
+                <span style={{ fontWeight: 600 }}>{seg.slice(0, nameLen)}</span>
+                {seg.slice(nameLen)}
+              </span>
+            )
+          })
+        }
+        return <span key={i}>{content}{i < lines.length - 1 && <br />}</span>
+      })}
+    </>
+  )
+}
+
 // ─── Main component ───────────────────────────────────────────────────────────
 
 export default function BlueprintBuilder() {
@@ -466,7 +502,7 @@ export default function BlueprintBuilder() {
                     </div>
                   </div>
                   {cell?.focus && <p style={g.mobileCardFocus}>{cell.focus}</p>}
-                  {cell?.description && <p style={g.mobileCardDesc}>{cell.description}</p>}
+                  {cell?.description && <p style={g.mobileCardDesc}><BoldDesc text={cell.description} /></p>}
                   {!cell?.focus && !cell?.description && <p style={g.emptyCell}>Tap edit to add session</p>}
                 </div>
               )
@@ -529,7 +565,7 @@ export default function BlueprintBuilder() {
                         }
                       </div>
                       {cell?.description && (
-                        <p style={g.cellDesc}>{cell.description.slice(0, 80)}{cell.description.length > 80 ? '…' : ''}</p>
+                        <p style={g.cellDesc}><BoldDesc text={cell.description} maxChars={80} /></p>
                       )}
                       <div style={g.cellFooter}>
                         <button style={{ ...g.cellBtn, display: 'inline-flex', alignItems: 'center', gap: 4 }} onClick={e => { e.stopPropagation(); copyCell(wi, di) }} title="Copy session"><CopyIcon size={11} color="var(--text-3)" /> Copy</button>
