@@ -449,8 +449,10 @@ async function processTeam(team, week) {
   const emailMap = {}
   for (let i = 0; i < coaches.length; i++) {
     const u = emailResults[i]?.data?.user
+    console.log(`[Digest] Coach lookup — id:${coaches[i].id} name:"${coaches[i].full_name}" email:${u?.email || 'NOT FOUND'} authErr:${emailResults[i]?.error?.message || 'none'}`)
     if (u?.email) emailMap[coaches[i].id] = u.email
   }
+  console.log(`[Digest] Team "${teamName}" — resolved coach emails:`, Object.values(emailMap))
 
   // ── 2. Athletes on this team ──
   const { data: memberRows, error: memberErr } = await supabaseAdmin
@@ -469,6 +471,7 @@ async function processTeam(team, week) {
     full_name: m.profiles?.full_name || 'Athlete',
   }))
 
+  console.log(`[Digest] Team "${teamName}" — ${athletes.length} athlete(s) found`)
   if (!athletes.length) {
     console.log(`[Digest] Team "${teamName}" has no athletes — skipping`)
     return
@@ -525,6 +528,7 @@ async function processTeam(team, week) {
   // ── 5. Send to every coach, skipping if already sent this week ──
   const resend = new Resend(process.env.RESEND_API_KEY)
   const from   = process.env.RESEND_FROM || 'Offseaz <onboarding@resend.dev>'
+  console.log(`[Digest] Using from address: "${from}"`)
 
   for (const coach of coaches) {
     const email = emailMap[coach.id]
@@ -533,17 +537,21 @@ async function processTeam(team, week) {
       continue
     }
 
-    // Deduplication: skip if a digest for this coach + week already exists
-    const { data: existing } = await supabaseAdmin
-      .from('weekly_digests')
-      .select('id')
-      .eq('coach_id', coach.id)
-      .eq('week_start_date', week.weekStartDate)
-      .limit(1)
+    // Deduplication: skip if a digest for this coach + week already exists (bypass with force=true)
+    if (!week.force) {
+      const { data: existing } = await supabaseAdmin
+        .from('weekly_digests')
+        .select('id')
+        .eq('coach_id', coach.id)
+        .eq('week_start_date', week.weekStartDate)
+        .limit(1)
 
-    if (existing?.length) {
-      console.log(`[Digest] Already sent to ${email} for week ${week.weekStartDate} — skipping`)
-      continue
+      if (existing?.length) {
+        console.log(`[Digest] Already sent to ${email} for week ${week.weekStartDate} — skipping (pass force=true to override)`)
+        continue
+      }
+    } else {
+      console.log(`[Digest] force=true — bypassing dedup check for ${email}`)
     }
 
     const html = buildDigestHtml({
@@ -555,15 +563,17 @@ async function processTeam(team, week) {
       inviteCode,
     })
 
+    console.log(`[Digest] Attempting send → from:"${from}" to:"${email}" subject:"Weekly Digest — ${teamName} · ${week.label}"`)
     let status = 'sent'
     try {
-      const { error: sendErr } = await resend.emails.send({
+      const resendRes = await resend.emails.send({
         from,
         to:      email,
         subject: `Weekly Digest — ${teamName} · ${week.label}`,
         html,
       })
-      if (sendErr) throw new Error(sendErr.message || 'Resend error')
+      console.log(`[Digest] Resend raw response:`, JSON.stringify({ data: resendRes.data, error: resendRes.error }))
+      if (resendRes.error) throw new Error(resendRes.error.message || JSON.stringify(resendRes.error))
       console.log(`[Digest] ✓ Sent to ${email} (${coach.isAssistant ? 'asst' : 'head'}) — ${teamName}`)
     } catch (err) {
       console.error(`[Digest] ✗ Email failed → ${email}:`, err.message)
@@ -581,14 +591,14 @@ async function processTeam(team, week) {
 }
 
 // ─── Entry point ──────────────────────────────────────────────────────────────
-async function runWeeklyDigest() {
+async function runWeeklyDigest({ force = false } = {}) {
   if (!process.env.RESEND_API_KEY) {
     console.error('[Digest] RESEND_API_KEY not set — aborting')
     return
   }
 
-  const week = getPreviousWeekRange()
-  console.log(`[Digest] Starting weekly digest for ${week.label}`)
+  const week = { ...getPreviousWeekRange(), force }
+  console.log(`[Digest] Starting weekly digest for ${week.label} (force=${force})`)
 
   const { data: teams, error } = await supabaseAdmin
     .from('teams')

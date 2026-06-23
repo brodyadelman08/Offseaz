@@ -13,7 +13,7 @@ router.post('/send-now', async (req, res) => {
   }
 
   try {
-    await runWeeklyDigest()
+    await runWeeklyDigest({ force: true })
     res.json({ ok: true, message: 'Digest sent successfully' })
   } catch (err) {
     console.error('[DigestRoute] Error:', err.message)
