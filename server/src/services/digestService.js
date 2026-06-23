@@ -8,35 +8,46 @@ const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 const BLACK  = '#0A0A0A'
 
-// ─── Previous-week window ─────────────────────────────────────────────────────
-// Returns the Mon 00:00 → Sun 23:59:59 window for the week just completed.
-// Always relative to the current week start, so a delayed cron still picks
-// the correct window (e.g. fires Tuesday → still covers last Mon–Sun).
-function getPreviousWeekRange() {
+// ─── Week window helpers ──────────────────────────────────────────────────────
+const fmtDate = d =>
+  d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC' })
+
+function getThisMonday() {
   const now = new Date()
-  const dow = now.getUTCDay() // 0 = Sun, 1 = Mon, …
+  const dow = now.getUTCDay()
+  const mon = new Date(now)
+  mon.setUTCHours(0, 0, 0, 0)
+  mon.setUTCDate(now.getUTCDate() - (dow === 0 ? 6 : dow - 1))
+  return mon
+}
 
-  // Start of THIS week (Monday 00:00 UTC)
-  const thisMon = new Date(now)
-  thisMon.setUTCHours(0, 0, 0, 0)
-  thisMon.setUTCDate(now.getUTCDate() - (dow === 0 ? 6 : dow - 1))
-
+// Production: Mon 00:00 → Sun 23:59:59 of the week just completed.
+// Always relative to the current week start so a delayed cron covers
+// the right window (e.g. fires Tuesday → still covers last Mon–Sun).
+function getPreviousWeekRange() {
+  const thisMon = getThisMonday()
   const prevMon = new Date(thisMon)
   prevMon.setUTCDate(thisMon.getUTCDate() - 7)
-
-  // One millisecond before this Monday = last Sunday 23:59:59.999
-  const prevSun = new Date(thisMon.getTime() - 1)
-
-  const fmt = d =>
-    d.toLocaleDateString('en-US', {
-      month: 'short', day: 'numeric', year: 'numeric', timeZone: 'UTC',
-    })
+  const prevSun = new Date(thisMon.getTime() - 1) // 1ms before this Monday
 
   return {
     start:         prevMon,
     end:           prevSun,
-    label:         `${fmt(prevMon)} – ${fmt(prevSun)}`,
+    label:         `${fmtDate(prevMon)} – ${fmtDate(prevSun)}`,
     weekStartDate: prevMon.toISOString().split('T')[0],
+  }
+}
+
+// Test/force mode: Mon 00:00 → now, so mid-week test triggers see real data.
+function getCurrentWeekRange() {
+  const thisMon = getThisMonday()
+  const now     = new Date()
+
+  return {
+    start:         thisMon,
+    end:           now,
+    label:         `${fmtDate(thisMon)} – ${fmtDate(now)} (test)`,
+    weekStartDate: thisMon.toISOString().split('T')[0],
   }
 }
 
@@ -318,9 +329,11 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
       </table>
       <table width="100%" cellpadding="0" cellspacing="0" role="presentation" style="padding:28px 32px 26px;">
         <tr><td>
-          <p style="margin:0 0 22px;font-size:26px;font-weight:900;color:#FFFFFF;letter-spacing:-0.5px;">
-            Off<span style="color:${ORANGE};">seaz</span>
-          </p>
+          <img src="https://offseaz.com/Offseaz-Logo-White-Letter-Dark.png"
+               alt="Offseaz"
+               width="140"
+               style="display:block;margin:0 0 22px;border:0;outline:none;text-decoration:none;max-width:140px;"
+          />
           <p style="margin:0 0 5px;font-size:11px;font-weight:700;color:#555555;text-transform:uppercase;letter-spacing:1.4px;">Weekly Coach Digest</p>
           <p style="margin:0;font-size:24px;font-weight:700;color:#FFFFFF;">Hi, ${esc(coachName)} &#128075;</p>
           ${isAssistant
@@ -480,8 +493,10 @@ async function processTeam(team, week) {
   const athleteIds = athletes.map(a => a.id)
 
   // ── 3. Logs + surveys in parallel ──
+  console.log(`[Digest] Team "${teamName}" — querying ${athleteIds.length} athlete(s): [${athleteIds.join(', ')}]`)
+  console.log(`[Digest] Week log window: ${week.start.toISOString()} → ${week.end.toISOString()}`)
   const [weekLogsRes, allLogsRes, injuryRes, surveyRes] = await Promise.all([
-    // All logs in the previous week (for session counts)
+    // All logs in the week window (for session counts)
     supabaseAdmin
       .from('workout_logs')
       .select('athlete_id, status, logged_at')
@@ -510,6 +525,10 @@ async function processTeam(team, week) {
       .order('created_at', { ascending: false }),
   ])
 
+  console.log(`[Digest] weekLogs: ${weekLogsRes.data?.length ?? 'ERR'} rows, err: ${weekLogsRes.error?.message || 'none'}`)
+  console.log(`[Digest] weekLogs statuses:`, JSON.stringify((weekLogsRes.data || []).map(l => l.status)))
+  console.log(`[Digest] allLogs: ${allLogsRes.data?.length ?? 'ERR'} rows total`)
+
   // Most-recent survey per athlete (query is already DESC, first-wins)
   const surveyMap = {}
   for (const s of (surveyRes.data || [])) {
@@ -527,7 +546,7 @@ async function processTeam(team, week) {
 
   // ── 5. Send to every coach, skipping if already sent this week ──
   const resend = new Resend(process.env.RESEND_API_KEY)
-  const from   = 'Offseaz <notifications@offseaz.com>'
+  const from   = 'Offseaz <brody@offseaz.com>'
   console.log(`[Digest] Using from address: "${from}"`)
 
   for (const coach of coaches) {
@@ -597,8 +616,9 @@ async function runWeeklyDigest({ force = false } = {}) {
     return
   }
 
-  const week = { ...getPreviousWeekRange(), force }
+  const week = { ...(force ? getCurrentWeekRange() : getPreviousWeekRange()), force }
   console.log(`[Digest] Starting weekly digest for ${week.label} (force=${force})`)
+  console.log(`[Digest] Query window: ${week.start.toISOString()} → ${week.end.toISOString()}`)
 
   const { data: teams, error } = await supabaseAdmin
     .from('teams')
