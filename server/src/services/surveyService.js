@@ -151,7 +151,7 @@ async function getTeamSurveys(coachId, teamId = null) {
       .in('id', athleteIds),
     supabaseAdmin
       .from('survey_responses')
-      .select('athlete_id, sport, position, goals, weaknesses, injury_history, equipment, time_per_week, primary_goal, experience_level, equipment_tier, grade, age, height_feet, height_inches, weight_lbs, completed_at')
+      .select('athlete_id, sport, position, goals, weaknesses, injury_history, injury_areas, injury_other, injury_notes, equipment, time_per_week, primary_goal, experience_level, equipment_tier, grade, age, height_feet, height_inches, weight_lbs, completed_at')
       .in('athlete_id', athleteIds),
   ])
 

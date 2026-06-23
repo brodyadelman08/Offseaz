@@ -91,6 +91,41 @@ const LIFT_LABELS = {
   reverse_lunge:     'Reverse Lunge',
 }
 
+const CAUTION_BADGE_STYLE = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  gap: 3,
+  marginLeft: 6,
+  padding: '1px 7px',
+  fontSize: 11,
+  fontWeight: 700,
+  color: '#92400e',
+  background: '#fef3c7',
+  border: '1px solid #fde68a',
+  borderRadius: 10,
+  verticalAlign: 'middle',
+  lineHeight: 1.4,
+  whiteSpace: 'nowrap',
+}
+
+/**
+ * Find the longest flagged exercise name at the start of a segment.
+ * Returns the matched lowercase name or null.
+ */
+function findFlagAtStart(seg, flaggedSet) {
+  const segLower = seg.toLowerCase()
+  let best = null
+  for (const name of flaggedSet) {
+    if (segLower.startsWith(name)) {
+      const after = seg[name.length]
+      if (!after || !/[a-zA-Z]/.test(after)) {
+        if (!best || name.length > best.length) best = name
+      }
+    }
+  }
+  return best
+}
+
 /**
  * Build a Set of lowercase exercise names that should be flagged
  * given the athlete's reported injury areas.
@@ -212,22 +247,7 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
               <span style={{ fontWeight: hasInfo || isFlagged ? 600 : 'inherit' }}>{name}</span>
               {hasInfo && <ExerciseInfoButton exerciseName={name} />}
               {isFlagged && (
-                <span style={{
-                  display: 'inline-flex',
-                  alignItems: 'center',
-                  gap: 3,
-                  marginLeft: 6,
-                  padding: '1px 7px',
-                  fontSize: 11,
-                  fontWeight: 700,
-                  color: '#92400e',
-                  background: '#fef3c7',
-                  border: '1px solid #fde68a',
-                  borderRadius: 10,
-                  verticalAlign: 'middle',
-                  lineHeight: 1.4,
-                  whiteSpace: 'nowrap',
-                }}>
+                <span style={CAUTION_BADGE_STYLE}>
                   <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
                 </span>
               )}
@@ -235,15 +255,36 @@ export default function SessionDescription({ description, injuryAreas = [], maxe
             </span>
           )
         } else {
-          // No colon — handle comma-separated builder format (e.g. "Back squat 4x6 @ 65%, Leg press 3x10")
-          if (/@\s*\d+%/.test(line)) {
-            const processed = line
-              .split(/, ?/)
-              .map(seg => substitutePercentage(seg.trim(), maxes))
-              .join(', ')
-            rendered = <span>{processed}</span>
-          } else {
+          // No colon — comma-separated builder format (e.g. "Back squat 4x6 @ 65%, Leg press 3x10")
+          const segments = line.split(/, ?/)
+          const hasPercent = /@\s*\d+%/.test(line)
+
+          if (!hasPercent && flaggedSet.size === 0) {
             rendered = <span>{line}</span>
+          } else {
+            rendered = (
+              <span>
+                {segments.map((seg, si) => {
+                  const trimmed = seg.trim()
+                  const processed = hasPercent ? substitutePercentage(trimmed, maxes) : trimmed
+                  const flaggedName = findFlagAtStart(trimmed, flaggedSet)
+                  return (
+                    <span key={si}>
+                      {si > 0 && ', '}
+                      {flaggedName ? (
+                        <>
+                          <span style={{ fontWeight: 600 }}>{trimmed.slice(0, flaggedName.length)}</span>
+                          <span style={CAUTION_BADGE_STYLE}>
+                            <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
+                          </span>
+                          {processed.slice(flaggedName.length)}
+                        </>
+                      ) : processed}
+                    </span>
+                  )
+                })}
+              </span>
+            )
           }
         }
 

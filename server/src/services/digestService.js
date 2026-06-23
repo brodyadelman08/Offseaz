@@ -172,7 +172,6 @@ function computeDigestStats({ athletes, weekLogs, allLogs, surveyMap, injuryLogs
   const totalSessions = withSessions.reduce((s, a) => s + a.sessionsThisWeek, 0)
   const completionRate = athletes.length ? Math.round(withSessions.length / athletes.length * 100) : 0
   const activeStreaks  = athleteData.filter(a => a.streak > 0).length
-  const injuryCount   = injuryLogs.length
   const hasActivity   = totalSessions > 0
 
   // ── Section 2: Athlete of the Week ──
@@ -210,7 +209,7 @@ function computeDigestStats({ athletes, weekLogs, allLogs, surveyMap, injuryLogs
     .sort((a, b) => b.streak - a.streak)
     .slice(0, 5)
 
-  // ── Section 6: Injury Flags ──
+  // ── Section 6: Injury Flags — skipped_injury logs this week ──
   const injuryFlags = injuryLogs
     .sort((a, b) => new Date(a.logged_at) - new Date(b.logged_at))
     .map(l => ({
@@ -219,6 +218,31 @@ function computeDigestStats({ athletes, weekLogs, allLogs, surveyMap, injuryLogs
       logged_at: l.logged_at,
       note:      l.note,
     }))
+
+  // ── Section 6b: Athletes with survey-reported injury areas ──
+  const skippedInjuryIds = new Set(injuryLogs.map(l => l.athlete_id))
+  const surveyInjuries = athleteData
+    .map(a => {
+      const survey = surveyMap[a.id] || {}
+      const areas  = (survey.injury_areas || []).filter(x => x && x !== 'None')
+      if (!areas.length) return null
+      return {
+        full_name:         a.full_name,
+        emoji:             a.emoji,
+        injury_areas:      areas,
+        injury_other:      survey.injury_other || null,
+        sessionsThisWeek:  a.sessionsThisWeek,
+        alsoSkippedInjury: skippedInjuryIds.has(a.id),
+      }
+    })
+    .filter(Boolean)
+    .sort((a, b) => (a.full_name || '').localeCompare(b.full_name || ''))
+
+  // Unique athletes with any injury concern (skipped_injury log OR survey areas)
+  const injuryCount = new Set([
+    ...injuryLogs.map(l => l.athlete_id),
+    ...athleteData.filter(a => (surveyMap[a.id]?.injury_areas || []).some(x => x && x !== 'None')).map(a => a.id),
+  ]).size
 
   // ── Section 7: Weekly Wins (new PRs this week) ──
   const weeklyPRs = []
@@ -245,7 +269,7 @@ function computeDigestStats({ athletes, weekLogs, allLogs, surveyMap, injuryLogs
 
   return {
     totalSessions, completionRate, activeStreaks, injuryCount, hasActivity,
-    topPerformer, rosterBreakdown, needsAttention, streakLeaders, injuryFlags, weeklyPRs,
+    topPerformer, rosterBreakdown, needsAttention, streakLeaders, injuryFlags, surveyInjuries, weeklyPRs,
   }
 }
 
@@ -262,7 +286,7 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
 
   const {
     totalSessions, completionRate, activeStreaks, injuryCount, hasActivity,
-    topPerformer, rosterBreakdown, needsAttention, streakLeaders, injuryFlags, weeklyPRs,
+    topPerformer, rosterBreakdown, needsAttention, streakLeaders, injuryFlags, surveyInjuries, weeklyPRs,
   } = stats
 
   // ── Shared components ──────────────────────────────────────────────────────
@@ -381,11 +405,13 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
       </table>
     </td></tr>` : ''
 
-  // ── Section 6: Injury Flags ──────────────────────────────────────────────────
-  const injuryHtml = injuryFlags.length ? `
+  // ── Section 6: Injury Watch ───────────────────────────────────────────────────
+  const injuryHtml = (injuryFlags.length || surveyInjuries.length) ? `
     <tr><td style="padding:0 24px 20px;">
-      ${sectionHeader('🚑 Injury Flags This Week', '#D97706')}
-      <table width="100%" cellpadding="0" cellspacing="0" style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;overflow:hidden;">
+      ${sectionHeader('🚑 Injury Watch', '#D97706')}
+      ${injuryFlags.length ? `
+      <p style="margin:0 0 8px;font-size:11px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.6px;">Skipped this week — injury</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;overflow:hidden;margin-bottom:16px;">
         <tbody>${injuryFlags.map(f => {
           const dateStr = new Date(f.logged_at).toLocaleDateString('en-US', { month: 'short', day: 'numeric', timeZone: 'UTC' })
           const detail  = f.note ? esc(String(f.note).slice(0, 120)) : 'No additional details'
@@ -397,7 +423,26 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
           </tr>`
         }).join('')}
         </tbody>
-      </table>
+      </table>` : ''}
+      ${surveyInjuries.length ? `
+      <p style="margin:0 0 8px;font-size:11px;font-weight:700;color:#92400E;text-transform:uppercase;letter-spacing:0.6px;">Athletes with reported injury areas</p>
+      <table width="100%" cellpadding="0" cellspacing="0" style="background:#FFFBEB;border:1px solid #FDE68A;border-radius:10px;overflow:hidden;">
+        <tbody>${surveyInjuries.map(s => {
+          const areaText  = esc(s.injury_areas.join(', ') + (s.injury_other ? ` (${s.injury_other.slice(0, 60)})` : ''))
+          const sessionTxt = s.sessionsThisWeek > 0
+            ? `${s.sessionsThisWeek} session${s.sessionsThisWeek !== 1 ? 's' : ''} logged this week`
+            : 'No sessions logged this week'
+          const skipNote  = s.alsoSkippedInjury ? ' &middot; also skipped due to injury' : ''
+          return `<tr>
+            <td style="padding:12px 18px;border-bottom:1px solid #FEF3C7;">
+              <p style="margin:0 0 3px;font-size:14px;font-weight:700;color:${BLACK};">${esc(s.emoji)} ${esc(s.full_name)}</p>
+              <p style="margin:0 0 2px;font-size:12px;color:#92400E;font-weight:600;">Flagged: ${areaText}</p>
+              <p style="margin:0;font-size:12px;color:#888888;">${sessionTxt}${skipNote}</p>
+            </td>
+          </tr>`
+        }).join('')}
+        </tbody>
+      </table>` : ''}
     </td></tr>` : ''
 
   // ── Section 7: Weekly Wins ───────────────────────────────────────────────────
@@ -627,7 +672,7 @@ async function processTeam(team, week) {
       .lte('logged_at', week.end.toISOString()),
     supabaseAdmin
       .from('survey_responses')
-      .select('athlete_id, sport, position')
+      .select('athlete_id, sport, position, injury_areas, injury_other')
       .in('athlete_id', athleteIds)
       .eq('team_id', teamId)
       .order('created_at', { ascending: false }),

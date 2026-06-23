@@ -884,7 +884,7 @@ export default function Survey() {
             {step === 8 && (
               <>
                 <MultiCards
-                  options={['Shoulder', 'Knee', 'Back', 'Hip', 'Ankle', 'None', 'Other']}
+                  options={['Shoulder', 'Knee', 'Back', 'Hip', 'Ankle', 'Elbow', 'Wrist', 'None', 'Other']}
                   value={form.injury_areas}
                   onChange={v => set('injury_areas', v)}
                 />
