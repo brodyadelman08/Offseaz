@@ -167,7 +167,7 @@ function fbLinemenMGSess(info) {
   const q = info.pct
   return [
     { day: 'Day 1', focus: 'Lower Power — Hypertrophy',
-      description: `${WU_LOWER}Power Clean from floor: 4x3\nBack Squat: 6x8-10 @ ${q}\nBulgarian Split Squat: 4x8 each leg\nLeg Curl: 3x12\nDouble Leg Calf Raise: 4x15\nBicep Curls: 3x12\nTricep Extensions: 3x12` },
+      description: `${WU_LOWER}Power Clean from floor: 4x3\nBack Squat: 6x8-10 @ ${q}\nBulgarian Split Squat: 3x10 each leg\nLeg Curl: 3x12\nDouble Leg Calf Raise: 4x15\nBicep Curls: 3x12\nTricep Extensions: 3x12` },
     { day: 'Day 2', focus: 'Upper Strength — Hypertrophy',
       description: `${WU_UPPER}Bench Press: 6x8-10 @ ${q}\nIncline DB Press: 5x10\nDB Fly: 3x12\nWeighted Pull-ups: 5x6\nBB Row: 5x10\nLateral Raises: 3x15\nFace Pulls: 4x15\nTricep Pushdowns: 4x12${NECK}` },
     { day: 'Day 3', focus: 'Lower Strength — Hypertrophy',
@@ -1305,11 +1305,11 @@ function generalSess(info) {
   const ph = info.phaseNum
   return [
     { day: 'Day 1', focus: 'Lower Strength',
-      description: `Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nRomanian Deadlift: 4x6\nBulgarian Split Squat: 3x8 each leg\nHip Thrust: 3x10\nCalf Raises: 3xAMAP` },
+      description: `Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nBulgarian Split Squat: 3x6 each leg\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\nCalf Raises: 3xAMAP\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Strength',
       description: `Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nOverhead Press: 3x10\nFace Pulls: 3x15` },
     { day: 'Day 3', focus: 'Full Body Power',
-      description: `Power Clean: 4x3\nTrap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\nCore Circuit: 3 rounds` },
+      description: `Power Clean: 4x3\nTrap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, ${q}×3\n${phasePlyo(ph)}\n${coreBlock(ph)}` },
   ]
 }
 
