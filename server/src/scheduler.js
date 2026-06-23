@@ -1,17 +1,18 @@
+'use strict'
 const cron = require('node-cron')
-const { runWeeklySummary } = require('./services/summaryService')
+const { runWeeklyDigest } = require('./services/digestService')
 
-// Every Sunday at 8:00 PM server time
-cron.schedule('0 20 * * 0', async () => {
-  console.log('[Scheduler] Running weekly summary...')
+// Monday at 08:00 AM server time — covers the previous Mon–Sun window
+cron.schedule('0 8 * * 1', async () => {
+  console.log('[Scheduler] Firing weekly coach digest...')
   try {
-    await runWeeklySummary()
-    console.log('[Scheduler] Done')
+    await runWeeklyDigest()
+    console.log('[Scheduler] Digest complete')
   } catch (err) {
     console.error('[Scheduler] Fatal error:', err.message)
   }
 })
 
-console.log('[Scheduler] Weekly summary job registered (Sundays 8pm)')
+console.log('[Scheduler] Weekly digest job registered (Mondays 08:00)')
 
 module.exports = {}
