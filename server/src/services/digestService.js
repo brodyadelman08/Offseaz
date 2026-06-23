@@ -599,13 +599,14 @@ async function processTeam(team, week) {
       status = 'failed'
     }
 
-    await supabaseAdmin.from('weekly_digests').insert({
+    const { error: insertErr } = await supabaseAdmin.from('weekly_digests').insert({
       team_id:         teamId,
       coach_id:        coach.id,
       sent_at:         new Date().toISOString(),
       week_start_date: week.weekStartDate,
       status,
     })
+    if (insertErr) console.warn(`[Digest] weekly_digests insert warn (${email}):`, insertErr.message)
   }
 }
 
