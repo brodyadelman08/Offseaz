@@ -822,3 +822,71 @@ button[disabled] {
   width: auto;
   display: block;
 }
+
+/* ── Effort slider — workout log bottom sheet ───────────────────────────────── */
+.effort-slider {
+  -webkit-appearance: none;
+  appearance: none;
+  width: 100%;
+  height: 6px;
+  border-radius: 3px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.08s;
+  display: block;
+}
+
+/* Thumb — WebKit (Chrome, Safari, Edge, iOS) */
+.effort-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #F0BE24;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35), 0 0 0 0px rgba(240,190,36,0);
+  cursor: grab;
+  transition: transform 0.12s cubic-bezier(0.34,1.06,0.64,1), box-shadow 0.12s ease;
+  margin-top: -12px;
+}
+.effort-slider:active::-webkit-slider-thumb {
+  cursor: grabbing;
+  transform: scale(1.22);
+  box-shadow: 0 4px 18px rgba(240,190,36,0.55), 0 0 0 6px rgba(240,190,36,0.18);
+}
+
+/* Track — WebKit */
+.effort-slider::-webkit-slider-runnable-track {
+  height: 6px;
+  border-radius: 3px;
+}
+
+/* Thumb — Firefox */
+.effort-slider::-moz-range-thumb {
+  width: 30px;
+  height: 30px;
+  border-radius: 50%;
+  background: #ffffff;
+  border: 3px solid #F0BE24;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.35);
+  cursor: grab;
+  transition: transform 0.12s cubic-bezier(0.34,1.06,0.64,1);
+}
+.effort-slider:active::-moz-range-thumb {
+  cursor: grabbing;
+  transform: scale(1.22);
+}
+
+/* Track — Firefox */
+.effort-slider::-moz-range-track {
+  height: 6px;
+  border-radius: 3px;
+  background: rgba(255,255,255,0.18);
+}
+
+/* Filled portion — Firefox */
+.effort-slider::-moz-range-progress {
+  height: 6px;
+  border-radius: 3px;
+  background: #F0BE24;
+}

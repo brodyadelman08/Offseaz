@@ -203,26 +203,34 @@ function LogSheet({ session, weekId, sessionIndex, existing, onClose, onSave }) 
 
         {/* Effort rating — only for non-skip */}
         {status && !isSkip && (
-          <>
-            <p style={ls.sectionLabel}>Effort <span style={ls.effortVal}>{effort ? `${effort}/10` : '—'}</span></p>
-            <div style={ls.effortRow}>
-              {[1,2,3,4,5,6,7,8,9,10].map(n => (
-                <button
-                  key={n}
-                  style={{
-                    ...ls.effortBtn,
-                    background: effort === n ? ORANGE : effort && n <= effort ? `${ORANGE}30` : 'var(--card-inner)',
-                    borderColor: effort === n ? ORANGE : 'var(--border)',
-                    color: effort === n ? '#fff' : 'var(--text-2)',
-                    fontWeight: effort === n ? 700 : 500,
-                  }}
-                  onClick={() => setEffort(effort === n ? null : n)}
-                >
-                  {n}
-                </button>
-              ))}
+          <div style={ls.effortSection}>
+            <div style={ls.effortHeader}>
+              <p style={{ ...ls.sectionLabel, marginBottom: 0 }}>Effort</p>
+              {effort
+                ? <span style={ls.effortBigVal}>{effort}<span style={ls.effortOfTen}>/10</span></span>
+                : <span style={ls.effortHint}>drag to rate</span>
+              }
             </div>
-          </>
+            <input
+              type="range"
+              className="effort-slider"
+              min={1}
+              max={10}
+              step={1}
+              value={effort ?? 5}
+              onPointerDown={() => { if (!effort) setEffort(5) }}
+              onChange={e => setEffort(parseInt(e.target.value, 10))}
+              style={{
+                background: effort
+                  ? `linear-gradient(to right, ${YELLOW} 0%, ${YELLOW} ${((effort - 1) / 9) * 100}%, rgba(255,255,255,0.18) ${((effort - 1) / 9) * 100}%, rgba(255,255,255,0.18) 100%)`
+                  : 'rgba(255,255,255,0.18)',
+              }}
+            />
+            <div style={ls.effortRangeLabels}>
+              <span style={ls.effortRangeLabel}>Easy</span>
+              <span style={ls.effortRangeLabel}>Max</span>
+            </div>
+          </div>
         )}
 
         {/* Note */}
@@ -323,14 +331,13 @@ const ls = {
     minHeight: 80,
   },
   statusLabel: { fontSize:13, fontWeight:700, lineHeight:1.3, textAlign:'center', marginTop:2 },
-  effortRow:  { display:'flex', gap:5, marginBottom:20, flexWrap:'wrap' },
-  effortBtn:  {
-    width:44, height:44, borderRadius:10, border:'1.5px solid',
-    cursor:'pointer', fontSize:15, fontWeight:600, transition:'all .15s',
-    display:'flex', alignItems:'center', justifyContent:'center',
-    flexShrink: 0,
-  },
-  effortVal:  { fontWeight:700, color:ORANGE, marginLeft:6 },
+  effortSection:     { marginBottom: 20 },
+  effortHeader:      { display:'flex', alignItems:'baseline', justifyContent:'space-between', marginBottom:14 },
+  effortBigVal:      { fontSize:28, fontWeight:800, color:YELLOW, lineHeight:1 },
+  effortOfTen:       { fontSize:14, fontWeight:600, color:YELLOW, opacity:0.7, marginLeft:2 },
+  effortHint:        { fontSize:13, color:'var(--text-3)', fontStyle:'italic' },
+  effortRangeLabels: { display:'flex', justifyContent:'space-between', marginTop:8 },
+  effortRangeLabel:  { fontSize:11, fontWeight:600, color:'var(--text-3)', letterSpacing:.3 },
   noteInput: {
     width:'100%', padding:'12px 14px', fontSize:14,
     borderRadius:10, border:'1px solid var(--input-border)',
