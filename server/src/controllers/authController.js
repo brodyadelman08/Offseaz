@@ -159,4 +159,24 @@ async function updatePrivacy(req, res) {
   }
 }
 
-module.exports = { register, profile, updateAvatar, updateName, updatePrivacy }
+async function updateDigestPreference(req, res) {
+  const { digest_enabled } = req.body
+  if (typeof digest_enabled !== 'boolean') {
+    return res.status(400).json({ error: 'digest_enabled must be a boolean' })
+  }
+  try {
+    const { data, error } = await supabaseAdmin
+      .from('profiles')
+      .update({ digest_enabled })
+      .eq('id', req.user.id)
+      .select()
+      .single()
+    if (error) throw error
+    res.json({ profile: data })
+  } catch (err) {
+    console.error('[updateDigestPreference] error:', err.message)
+    res.status(500).json({ error: err.message })
+  }
+}
+
+module.exports = { register, profile, updateAvatar, updateName, updatePrivacy, updateDigestPreference }

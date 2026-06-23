@@ -24,6 +24,10 @@ export default function CoachProfile() {
   const [roster, setRoster]           = useState([])
   const [loading, setLoading]         = useState(true)
 
+  // ── Digest email preference ───────────────────────────────────────────────
+  const [digestEnabled, setDigestEnabled] = useState(profile?.digest_enabled !== false)
+  const [digestSaving,  setDigestSaving]  = useState(false)
+
   // ── Remove athlete flow ────────────────────────────────────────────────────
   const [confirmRemove, setConfirmRemove] = useState(null) // athlete object
   const [removing, setRemoving]           = useState(null) // athlete id being removed
@@ -57,6 +61,11 @@ export default function CoachProfile() {
 
   useEffect(() => { loadData() }, [loadData])
 
+  // Keep digestEnabled in sync if profile reloads
+  useEffect(() => {
+    setDigestEnabled(profile?.digest_enabled !== false)
+  }, [profile?.digest_enabled])
+
   // Keep nameInput in sync with profile (e.g. after avatar upload refreshes profile)
   useEffect(() => {
     if (!editingName) setNameInput(profile?.full_name || '')
@@ -75,6 +84,20 @@ export default function CoachProfile() {
       setNameError(err.response?.data?.error || 'Failed to update name.')
     } finally {
       setNameSaving(false)
+    }
+  }
+
+  async function toggleDigest(val) {
+    setDigestEnabled(val)
+    setDigestSaving(true)
+    try {
+      const res = await api.patch('/api/auth/digest-preference', { digest_enabled: val })
+      updateProfile(res.data.profile)
+    } catch (err) {
+      setDigestEnabled(!val) // revert on failure
+      console.error('[CoachProfile] digest toggle error:', err)
+    } finally {
+      setDigestSaving(false)
     }
   }
 
@@ -254,6 +277,35 @@ export default function CoachProfile() {
             ))}
           </div>
         )}
+      </div>
+
+      {/* ── Notifications ────────────────────────────────────────────────── */}
+      <div style={styles.card}>
+        <h2 style={styles.cardTitle}>Notifications</h2>
+        <div style={styles.toggleRow}>
+          <div style={styles.toggleInfo}>
+            <span style={styles.toggleLabel}>Weekly Digest Email</span>
+            <span style={styles.toggleDesc}>
+              Receive a summary of your team&apos;s activity every Monday morning.
+            </span>
+          </div>
+          <button
+            style={{
+              ...styles.toggleBtn,
+              background: digestEnabled ? ORANGE : 'var(--border)',
+              opacity: digestSaving ? 0.6 : 1,
+            }}
+            onClick={() => toggleDigest(!digestEnabled)}
+            disabled={digestSaving}
+            aria-pressed={digestEnabled}
+            aria-label="Toggle weekly digest email"
+          >
+            <span style={{
+              ...styles.toggleThumb,
+              transform: digestEnabled ? 'translateX(20px)' : 'translateX(0)',
+            }} />
+          </button>
+        </div>
       </div>
 
       {/* ── Leave Team / Transfer Ownership ──────────────────────────── */}
@@ -620,6 +672,53 @@ const styles = {
     color: 'var(--text-2)',
     cursor: 'pointer',
     minHeight: 36,
+  },
+
+  // Notifications toggle
+  toggleRow: {
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'space-between',
+    gap: 16,
+  },
+  toggleInfo: {
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 4,
+    flex: 1,
+  },
+  toggleLabel: {
+    fontSize: 14,
+    fontWeight: 600,
+    color: 'var(--text)',
+  },
+  toggleDesc: {
+    fontSize: 12,
+    color: 'var(--text-3)',
+    lineHeight: 1.5,
+  },
+  toggleBtn: {
+    position: 'relative',
+    width: 44,
+    height: 24,
+    borderRadius: 12,
+    border: 'none',
+    cursor: 'pointer',
+    flexShrink: 0,
+    transition: 'background 0.2s, opacity 0.15s',
+    padding: 0,
+  },
+  toggleThumb: {
+    position: 'absolute',
+    top: 3,
+    left: 3,
+    width: 18,
+    height: 18,
+    borderRadius: '50%',
+    background: '#fff',
+    transition: 'transform 0.2s',
+    display: 'block',
+    boxShadow: '0 1px 4px rgba(0,0,0,0.25)',
   },
 
   // Leave / transfer ownership
