@@ -3,40 +3,53 @@ const { getSurveyByAthlete } = require('./surveyService')
 const { getAthletePlan } = require('./blueprintService')
 
 async function getAthleteProfile(athleteId, coachId) {
+  console.log('[getAthleteProfile] start — athleteId=%s coachId=%s', athleteId, coachId)
+
   // Resolve team — head coaches own a team; assistant coaches are in team_members
+  // Use .limit(1) + array (never throws on 0 rows, never throws on multiple rows)
   let teamId = null
 
-  const { data: ownedTeam } = await supabaseAdmin
+  const { data: ownedTeams, error: ownedErr } = await supabaseAdmin
     .from('teams')
     .select('id')
     .eq('coach_id', coachId)
-    .maybeSingle()
+    .limit(1)
 
-  if (ownedTeam) {
-    teamId = ownedTeam.id
+  console.log('[getAthleteProfile] ownedTeams=%j ownedErr=%j', ownedTeams, ownedErr)
+
+  if (ownedTeams?.length) {
+    teamId = ownedTeams[0].id
+    console.log('[getAthleteProfile] head coach path — teamId=%s', teamId)
   } else {
-    const { data: assistantRow } = await supabaseAdmin
+    const { data: assistantRows, error: assistantErr } = await supabaseAdmin
       .from('team_members')
       .select('team_id')
       .eq('athlete_id', coachId)
       .in('access_level', ['view_only', 'admin_coach'])
       .limit(1)
-      .maybeSingle()
 
-    if (!assistantRow) throw Object.assign(new Error('No team found'), { status: 403 })
-    teamId = assistantRow.team_id
+    console.log('[getAthleteProfile] assistantRows=%j assistantErr=%j', assistantRows, assistantErr)
+
+    if (!assistantRows?.length) {
+      console.log('[getAthleteProfile] no team found for coachId=%s — throwing 403', coachId)
+      throw Object.assign(new Error('No team found'), { status: 403 })
+    }
+    teamId = assistantRows[0].team_id
+    console.log('[getAthleteProfile] assistant coach path — teamId=%s', teamId)
   }
 
   // Verify athlete is on coach's team
-  const { data: membership, error: memberError } = await supabaseAdmin
+  const { data: memberRows, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id')
     .eq('team_id', teamId)
     .eq('athlete_id', athleteId)
-    .single()
+    .limit(1)
 
-  if (memberError && memberError.code !== 'PGRST116') throw memberError
-  if (!membership) throw Object.assign(new Error('Athlete not on your team'), { status: 403 })
+  console.log('[getAthleteProfile] memberRows=%j memberError=%j', memberRows, memberError)
+
+  if (memberError) throw memberError
+  if (!memberRows?.length) throw Object.assign(new Error('Athlete not on your team'), { status: 403 })
 
   // Fetch profile name
   const { data: profile, error: profileError } = await supabaseAdmin
