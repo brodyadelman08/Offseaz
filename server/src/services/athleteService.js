@@ -3,21 +3,35 @@ const { getSurveyByAthlete } = require('./surveyService')
 const { getAthletePlan } = require('./blueprintService')
 
 async function getAthleteProfile(athleteId, coachId) {
-  // Get coach's team
-  const { data: team, error: teamError } = await supabaseAdmin
+  // Resolve team — head coaches own a team; assistant coaches are in team_members
+  let teamId = null
+
+  const { data: ownedTeam } = await supabaseAdmin
     .from('teams')
     .select('id')
     .eq('coach_id', coachId)
-    .single()
+    .maybeSingle()
 
-  if (teamError && teamError.code !== 'PGRST116') throw teamError
-  if (!team) throw Object.assign(new Error('No team found'), { status: 403 })
+  if (ownedTeam) {
+    teamId = ownedTeam.id
+  } else {
+    const { data: assistantRow } = await supabaseAdmin
+      .from('team_members')
+      .select('team_id')
+      .eq('athlete_id', coachId)
+      .in('access_level', ['view_only', 'admin_coach'])
+      .limit(1)
+      .maybeSingle()
+
+    if (!assistantRow) throw Object.assign(new Error('No team found'), { status: 403 })
+    teamId = assistantRow.team_id
+  }
 
   // Verify athlete is on coach's team
   const { data: membership, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id')
-    .eq('team_id', team.id)
+    .eq('team_id', teamId)
     .eq('athlete_id', athleteId)
     .single()
 
