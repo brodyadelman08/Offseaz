@@ -8,7 +8,21 @@ import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon, AlertIcon } f
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
+const RED    = '#c73820'
 const ACCENTS = [ORANGE, BLUE, YELLOW]
+
+// Notification type → priority, color, category label
+// Priority 0 (highest) = red injury, 1 = orange action, 2 = yellow achievement, 3 = blue info, 4 = white general
+const NOTIF_PRIORITY = {
+  injury_flag:        { priority: 0, color: RED,    label: 'Injury Alert' },
+  program_complete:   { priority: 2, color: YELLOW, label: 'Achievement'  },
+  blueprint_assigned: { priority: 3, color: BLUE,   label: 'Info'         },
+  coach_joined:       { priority: 3, color: BLUE,   label: 'Info'         },
+  ownership_transfer: { priority: 3, color: BLUE,   label: 'Info'         },
+}
+function notifCfg(type) {
+  return NOTIF_PRIORITY[type] || { priority: 4, color: '#FFFFFF', label: 'Notification' }
+}
 
 function timeAgo(dateStr) {
   const diff = Date.now() - new Date(dateStr).getTime()
@@ -241,29 +255,62 @@ export default function CoachDashboard() {
         </div>
       ) : team ? (
         <>
-          {/* Injury notifications */}
+          {/* Notifications — sorted by priority: red → orange → yellow → blue → white */}
           {notifications.length > 0 && (
             <div style={styles.notifSection}>
-              {notifications.map(n => (
-                <div key={n.id} style={styles.notifRow}>
-                  <AlertIcon size={18} color="#c73820" />
-                  <button
-                    style={{ flex: 1, background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', padding: 0 }}
-                    onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
-                  >
-                    <span style={styles.notifMsg}>{n.message}</span>
-                  </button>
-                  <span
-                    style={styles.notifCta}
-                    onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
-                  >View →</span>
-                  <button
-                    style={styles.notifDismiss}
-                    onClick={e => handleDismissNotification(e, n.athlete_id)}
-                    title="Dismiss"
-                  >✕</button>
-                </div>
-              ))}
+              {[...notifications]
+                .sort((a, b) => {
+                  const pa = notifCfg(a.type).priority
+                  const pb = notifCfg(b.type).priority
+                  if (pa !== pb) return pa - pb
+                  return new Date(b.created_at) - new Date(a.created_at)
+                })
+                .map(n => {
+                  const cfg = notifCfg(n.type)
+                  const isInjury = n.type === 'injury_flag'
+                  return (
+                    <div
+                      key={n.id}
+                      style={{
+                        ...styles.notifCard,
+                        borderLeft: `3px solid ${cfg.color}`,
+                        ...(isInjury ? {
+                          background: 'rgba(199,56,32,0.07)',
+                          boxShadow: `0 0 0 1px rgba(199,56,32,0.20), 0 2px 10px rgba(0,0,0,0.28)`,
+                        } : {}),
+                      }}
+                    >
+                      {/* Category label + badge dot */}
+                      <div style={styles.notifHeader}>
+                        <span style={{ ...styles.notifType, color: cfg.color }}>{cfg.label}</span>
+                        <span style={{ ...styles.notifBadgeDot, background: cfg.color }} />
+                      </div>
+                      {/* Message */}
+                      <button
+                        style={styles.notifMsgBtn}
+                        onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
+                      >
+                        <span style={styles.notifMsg}>{n.message}</span>
+                      </button>
+                      {/* Actions */}
+                      <div style={styles.notifActions}>
+                        <span
+                          style={{ ...styles.notifCta, color: cfg.color }}
+                          onClick={() => navigate(`/coach/athletes/${n.athlete_id}`)}
+                        >
+                          View →
+                        </span>
+                        <span style={styles.notifTime}>{timeAgo(n.created_at)}</span>
+                        <button
+                          style={styles.notifDismiss}
+                          onClick={e => handleDismissNotification(e, n.athlete_id)}
+                          title="Dismiss"
+                        >✕</button>
+                      </div>
+                    </div>
+                  )
+                })
+              }
             </div>
           )}
 
@@ -480,11 +527,25 @@ const styles = {
   loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
   notifSection: { display: 'flex', flexDirection: 'column', gap: 8, marginBottom: 16 },
-  notifRow: { display: 'flex', alignItems: 'center', gap: 10, padding: '12px 14px', background: '#fce8e6', border: '1px solid #f5c6c2', borderLeft: '4px solid #c73820', borderRadius: 12, textAlign: 'left', flexWrap: 'wrap' },
-  notifIcon: { fontSize: 18, flexShrink: 0 },
-  notifMsg: { flex: 1, fontSize: 14, fontWeight: 600, color: '#7f1d1d' },
-  notifCta: { fontSize: 13, fontWeight: 700, color: '#c73820', whiteSpace: 'nowrap', flexShrink: 0, cursor: 'pointer' },
-  notifDismiss: { background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, color: '#c73820', padding: '0 2px', opacity: 0.6, flexShrink: 0, lineHeight: 1 },
+  notifCard: {
+    background: 'var(--card)',
+    border: '1px solid var(--border)',
+    borderRadius: 12,
+    padding: '12px 14px',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 6,
+    boxShadow: '0 2px 8px rgba(0,0,0,0.18)',
+  },
+  notifHeader: { display: 'flex', alignItems: 'center', justifyContent: 'space-between' },
+  notifType: { fontSize: 10, fontWeight: 700, textTransform: 'uppercase', letterSpacing: 0.8 },
+  notifBadgeDot: { width: 8, height: 8, borderRadius: '50%', flexShrink: 0 },
+  notifMsgBtn: { background: 'none', border: 'none', cursor: 'pointer', textAlign: 'left', padding: 0 },
+  notifMsg: { fontSize: 14, fontWeight: 600, color: 'var(--text)', lineHeight: 1.4, display: 'block' },
+  notifActions: { display: 'flex', alignItems: 'center', gap: 10 },
+  notifCta: { fontSize: 13, fontWeight: 700, whiteSpace: 'nowrap', cursor: 'pointer' },
+  notifTime: { fontSize: 12, color: 'var(--text-3)', flex: 1, textAlign: 'right' },
+  notifDismiss: { background: 'none', border: 'none', cursor: 'pointer', fontSize: 14, color: 'var(--text-3)', padding: '0 2px', flexShrink: 0, lineHeight: 1 },
 
   statsRow: {
     display: 'grid',

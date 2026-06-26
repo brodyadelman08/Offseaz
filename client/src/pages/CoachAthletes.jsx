@@ -261,7 +261,11 @@ export default function CoachAthletes() {
                     <div style={{ minWidth: 0 }}>
                       <div style={styles.mobileAthleteNameRow}>
                         <span style={styles.athleteName}>{a.full_name}</span>
-                        {a.has_recent_injury && <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days"><AlertIcon size={12} color="#c73820" /></span>}
+                        {a.has_recent_injury && (
+                          <span style={styles.injuryFlag}>
+                            <AlertIcon size={11} color="#c73820" /> Injury
+                          </span>
+                        )}
                       </div>
                       {a.survey?.sport && (
                         <span style={styles.mobileSport}>{a.survey.sport}{a.survey.position ? ` · ${a.survey.position}` : ''}</span>
@@ -293,7 +297,11 @@ export default function CoachAthletes() {
               </thead>
               <tbody>
                 {sorted.map(a => (
-                  <tr key={a.id} style={styles.tr}
+                  <tr key={a.id}
+                    style={{
+                      ...styles.tr,
+                      ...(a.has_recent_injury ? { borderLeft: '3px solid #c73820' } : {}),
+                    }}
                     onClick={() => navigate(`/coach/athletes/${a.id}`)}
                     onMouseEnter={e => (e.currentTarget.style.background = 'var(--border-light)')}
                     onMouseLeave={e => (e.currentTarget.style.background = 'transparent')}
@@ -302,7 +310,11 @@ export default function CoachAthletes() {
                       <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
                         <AvatarUpload name={a.full_name} avatarUrl={a.avatar_url} size={34} color={ORANGE} editable={false} />
                         <span style={styles.athleteName}>{a.full_name}</span>
-                        {a.has_recent_injury && <span style={styles.injuryFlag} title="Flagged an injury in the last 7 days"><AlertIcon size={12} color="#c73820" /></span>}
+                        {a.has_recent_injury && (
+                          <span style={styles.injuryFlag}>
+                            <AlertIcon size={11} color="#c73820" /> Injury
+                          </span>
+                        )}
                       </div>
                     </td>
                     <td style={styles.td}>
@@ -607,8 +619,9 @@ const styles = {
 
   athleteName: { fontWeight: 600, fontSize: 14 },
   injuryFlag: {
-    fontSize: 12, color: '#c73820', background: '#fce8e6',
-    border: '1px solid rgba(199,56,32,0.25)', padding: '2px 6px',
+    display: 'inline-flex', alignItems: 'center', gap: 4,
+    fontSize: 11, color: '#c73820', background: '#fce8e6',
+    border: '1px solid rgba(199,56,32,0.30)', padding: '2px 7px',
     borderRadius: 4, fontWeight: 700, cursor: 'default', whiteSpace: 'nowrap',
   },
   sport:     { display: 'block', fontWeight: 600, color: 'var(--text)', fontSize: 13 },

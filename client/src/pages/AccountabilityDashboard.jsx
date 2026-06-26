@@ -5,9 +5,11 @@ import { ClipboardIcon, FlameIcon, AlertIcon } from '../components/Icons'
 const ORANGE = '#F75709'
 const YELLOW = '#F0BE24'
 
+// Brand color system: blue = informational (logged, no action needed)
+//                    orange = action required (not logged, coach should follow up)
 const STATUS = {
-  logged:    { label: 'Logged',     color: '#2e7d32', bg: '#e8f5e9', border: '#2e7d32' },
-  notLogged: { label: 'Not logged', color: '#b45309', bg: '#fef3c7', border: '#d97706' },
+  logged:    { label: 'Logged',     color: '#308EBD', bg: 'rgba(48,142,189,0.12)',  border: '#308EBD' },
+  notLogged: { label: 'Not logged', color: '#F75709', bg: 'rgba(247,87,9,0.10)',    border: '#F75709' },
 }
 
 const LOG_STATUS = {

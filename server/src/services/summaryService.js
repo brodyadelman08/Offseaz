@@ -44,21 +44,29 @@ function computeStats(athletes) {
 function buildEmailHtml(teamName, weekLabel, athletes, stats) {
   const { logged, notLogged, avgEffort, mostConsistent, needsAttention } = stats
 
+  // Offseaz brand colors
+  const brandOrange = '#F75709'
+  const brandBlue   = '#308EBD'
+  const brandYellow = '#F0BE24'
+
   const headerBg = '#1a1a1a'
-  const green = '#2e7d32'
-  const amber = '#b45309'
   const subtle = '#f9f9f9'
   const border = '#e5e5e5'
+
+  function sectionHeader(label, color) {
+    return `<p style="margin:0 0 12px;font-size:12px;font-weight:700;color:${color};text-transform:uppercase;letter-spacing:.5px;">${label}</p>`
+  }
 
   function athleteRow(a, didLog) {
     const sessions = didLog ? `${a.sessions_this_week} session${a.sessions_this_week !== 1 ? 's' : ''}` : '—'
     const effort = didLog && a.avg_effort_this_week != null ? a.avg_effort_this_week.toFixed(1) : '—'
     const streak = a.streak_weeks > 0 ? `${a.streak_weeks}wk` : '—'
-    const icon = didLog ? '✓' : '✗'
-    const iconColor = didLog ? green : amber
+    // Blue = logged (informational/good), Orange = not logged (action required)
+    const dotColor = didLog ? brandBlue : brandOrange
+    const dot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotColor};vertical-align:middle;"></span>`
     return `
       <tr>
-        <td style="padding:10px 12px;border-bottom:1px solid ${border};color:${iconColor};font-weight:700;font-size:13px;">${icon}</td>
+        <td style="padding:10px 12px;border-bottom:1px solid ${border};text-align:center;">${dot}</td>
         <td style="padding:10px 12px;border-bottom:1px solid ${border};font-size:14px;font-weight:600;color:#1a1a1a;">${a.full_name}</td>
         <td style="padding:10px 12px;border-bottom:1px solid ${border};font-size:13px;color:#555;text-align:center;">${sessions}</td>
         <td style="padding:10px 12px;border-bottom:1px solid ${border};font-size:13px;color:#555;text-align:center;">${effort}</td>
@@ -73,10 +81,10 @@ function buildEmailHtml(teamName, weekLabel, athletes, stats) {
 
   const highlights = []
   if (mostConsistent) {
-    highlights.push(`<tr><td style="padding:8px 0;font-size:14px;">⭐ <strong>Most consistent</strong> &nbsp; ${mostConsistent.full_name} &nbsp;<span style="color:#888;font-size:13px;">${mostConsistent.streak_weeks}-week streak</span></td></tr>`)
+    highlights.push(`<tr><td style="padding:8px 0;font-size:14px;border-left:3px solid ${brandYellow};padding-left:10px;"><strong style="color:${brandYellow};">Achievement</strong> &nbsp; ${mostConsistent.full_name} &nbsp;<span style="color:#888;font-size:13px;">${mostConsistent.streak_weeks}-week streak 🔥</span></td></tr>`)
   }
   if (needsAttention) {
-    highlights.push(`<tr><td style="padding:8px 0;font-size:14px;">⚠️ <strong>Needs attention</strong> &nbsp; ${needsAttention.full_name} &nbsp;<span style="color:#888;font-size:13px;">0 sessions this week</span></td></tr>`)
+    highlights.push(`<tr><td style="padding:8px 0;font-size:14px;border-left:3px solid ${brandOrange};padding-left:10px;margin-top:8px;"><strong style="color:${brandOrange};">Action Required</strong> &nbsp; ${needsAttention.full_name} &nbsp;<span style="color:#888;font-size:13px;">0 sessions this week</span></td></tr>`)
   }
 
   return `<!DOCTYPE html>
@@ -102,7 +110,7 @@ function buildEmailHtml(teamName, weekLabel, athletes, stats) {
 
         <!-- Athlete table -->
         <tr><td style="padding:24px 32px 0;">
-          <p style="margin:0 0 12px;font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;">Athlete Breakdown</p>
+          ${sectionHeader('Athlete Breakdown', brandBlue)}
           <table width="100%" cellpadding="0" cellspacing="0">
             <thead>
               <tr style="background:${subtle};">
@@ -120,8 +128,8 @@ function buildEmailHtml(teamName, weekLabel, athletes, stats) {
         <!-- Highlights -->
         ${highlights.length ? `
         <tr><td style="padding:24px 32px;border-top:1px solid ${border};margin-top:8px;">
-          <p style="margin:0 0 12px;font-size:12px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:.5px;">Highlights</p>
-          <table cellpadding="0" cellspacing="0"><tbody>${highlights.join('')}</tbody></table>
+          ${sectionHeader('Highlights', brandYellow)}
+          <table cellpadding="0" cellspacing="0" style="border-collapse:separate;border-spacing:0 6px;"><tbody>${highlights.join('')}</tbody></table>
         </td></tr>` : ''}
 
         <!-- Footer -->

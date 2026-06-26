@@ -8,6 +8,7 @@ import {
   HomeIcon, CalendarIcon, UserIcon, SignOutIcon, FeedIcon,
 } from './Icons'
 import AvatarUpload from './AvatarUpload'
+import api from '../services/api'
 
 const ORANGE  = '#F75709'
 const BLUE    = '#308EBD'
@@ -19,6 +20,24 @@ const ACCENT_BG  = [
   'rgba(240,190,36,0.10)',
 ]
 const SIDEBAR_W = 240
+
+// ─── Notification badge hook (coaches only) ───────────────────────────────────
+
+function useNotifBadge(isCoach) {
+  const [badge, setBadge] = useState({ count: 0, color: null })
+  useEffect(() => {
+    if (!isCoach) return
+    api.get('/api/notifications')
+      .then(r => {
+        const ns = r.data.notifications || []
+        if (!ns.length) { setBadge({ count: 0, color: null }); return }
+        const hasInjury = ns.some(n => n.type === 'injury_flag')
+        setBadge({ count: ns.length, color: hasInjury ? '#c73820' : ORANGE })
+      })
+      .catch(() => {})
+  }, [isCoach])
+  return badge
+}
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
 
@@ -114,6 +133,8 @@ function DesktopSidebar({ nav, profile, signOut }) {
 
   const activeCoachTeam = coachTeams.find(t => t.id === activeCoachTeamId) || coachTeams[0] || null
 
+  const notifBadge = useNotifBadge(profile?.role === 'coach')
+
   function isActive(path, exact) {
     if (exact) return pathname === path
     return pathname === path || pathname.startsWith(path + '/')
@@ -137,6 +158,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
           const active = isActive(path, exact)
           const accent = ACCENTS[i % 3]
           const accentBg = ACCENT_BG[i % 3]
+          const showBadge = exact && notifBadge.count > 0
           return (
             <button
               key={path}
@@ -150,9 +172,14 @@ function DesktopSidebar({ nav, profile, signOut }) {
             >
               <div style={styles.navBorder(active, accent)} />
               <Icon size={18} color={active ? accent : 'var(--text-3)'} />
-              <span style={{ ...styles.navLabel, color: active ? 'var(--text)' : 'var(--text-2)' }}>
+              <span style={{ ...styles.navLabel, color: active ? 'var(--text)' : 'var(--text-2)', flex: 1 }}>
                 {label}
               </span>
+              {showBadge && (
+                <span style={{ ...styles.notifBadge, background: notifBadge.color }}>
+                  {notifBadge.count}
+                </span>
+              )}
             </button>
           )
         })}
@@ -246,6 +273,7 @@ function BottomBar({ profile, signOut }) {
   const isCoach = profile?.role === 'coach'
   const primaryNav = isCoach ? COACH_PRIMARY : ATHLETE_PRIMARY
   const moreNav    = isCoach ? COACH_MORE    : ATHLETE_MORE
+  const notifBadge = useNotifBadge(isCoach)
 
   function isActive(path, exact) {
     if (exact) return pathname === path
@@ -316,6 +344,7 @@ function BottomBar({ profile, signOut }) {
       <div style={styles.bottomBar}>
         {primaryNav.map(({ path, label, Icon, exact }) => {
           const active = isActive(path, exact)
+          const showBadge = exact && notifBadge.count > 0
           return (
             <button
               key={path}
@@ -324,7 +353,20 @@ function BottomBar({ profile, signOut }) {
             >
               {/* Top indicator bar */}
               <div style={{ ...styles.tabIndicator, opacity: active ? 1 : 0 }} />
-              <Icon size={26} color={active ? ORANGE : 'var(--text-3)'} />
+              <div style={{ position: 'relative', display: 'inline-flex' }}>
+                <Icon size={26} color={active ? ORANGE : 'var(--text-3)'} />
+                {showBadge && (
+                  <span style={{
+                    ...styles.notifBadge,
+                    background: notifBadge.color,
+                    position: 'absolute',
+                    top: -4,
+                    right: -6,
+                  }}>
+                    {notifBadge.count}
+                  </span>
+                )}
+              </div>
               <span style={{ ...styles.tabLabel, color: active ? ORANGE : 'var(--text-3)' }}>
                 {label}
               </span>
@@ -518,6 +560,23 @@ const styles = {
     fontSize: 13, fontWeight: 600, color: 'var(--text-2)',
     margin: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap',
     padding: '2px 4px',
+  },
+
+  // Notification count badge (used in both desktop sidebar and mobile tab bar)
+  notifBadge: {
+    minWidth: 16,
+    height: 16,
+    borderRadius: 8,
+    color: '#fff',
+    fontSize: 10,
+    fontWeight: 700,
+    display: 'inline-flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    padding: '0 4px',
+    flexShrink: 0,
+    lineHeight: 1,
+    pointerEvents: 'none',
   },
 
   // ── Mobile bottom bar ────────────────────────────────────────────────────────
