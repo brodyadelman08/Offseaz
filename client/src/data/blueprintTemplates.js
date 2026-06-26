@@ -674,20 +674,24 @@ function swimSess(phaseNum) {
 }
 
 function swimDay4(phaseNum) {
+  const sets = phaseNum <= 2 ? 3 : 4
+  const s = (n) => `${sets}x${n}`
   return {
-    day: 'Day 4', focus: 'Core & Anti-Rotation',
-    description: `Pallof Press: 3x10 each side\nAnti-Rotation Press: 3x10 each side\nBird Dog: 3x10 each side\nDead Bug: 3x10 each side\n${coreBlock(phaseNum)}`,
+    day: 'Day 4', focus: 'Power & Explosiveness',
+    description: `Medicine Ball Overhead Throw: ${s(8)}\nBox Jump: ${s(5)}\nResistance Band Sprint: ${s(20)} yds\nAnkle Hops: ${s(20)}\nLateral Bound: ${s(5)} each side\n${coreBlock(phaseNum)}`,
   }
 }
-function swimDay5() {
+function swimDay5(phaseNum) {
+  const sets = phaseNum <= 2 ? 3 : 4
+  const s = (n) => `${sets}x${n}`
   return {
-    day: 'Day 5', focus: 'Explosive Upper & Shoulder Health',
-    description: `Explosive Push-ups: 4x8\nMed Ball Chest Pass: 4x8\nLat Pulldown: 4x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x20`,
+    day: 'Day 5', focus: 'Shoulder Health & Accessory',
+    description: `YTW Series: ${s(12)} each\nFace Pulls: ${s(15)}\nSerratus Wall Slides: ${s(12)}\nBand External Rotation: ${s(15)} each arm\nWrist Circles & Strengthening: 3x15 each direction\n${coreBlock(phaseNum)}`,
   }
 }
 const SWIM_DAY6 = {
-  day: 'Day 6', focus: 'Active Recovery',
-  description: `Foam Roll: Full body — 15 minutes\nShoulder Mobility: Arm Circles · Cross-body Stretch · Sleeper Stretch\nAnkle Mobility: Ankle Circles · Band Dorsiflexion — 3x10 each\nHip Flexor Stretch: 3x45s each leg`,
+  day: 'Day 6', focus: 'Recovery & Flexibility',
+  description: `Foam Roll: Full body — 10 minutes\nDownward Dog → Cobra flow: 3x10\nThoracic Rotation: 3x10 each side\nShoulder Cross-Body Stretch: 3x45s each arm\nHip 90/90 Hold: 2x45s each side`,
 }
 
 function generateSwimmingWeeks(_, goal, daysPerWeek = 3) {
@@ -695,17 +699,17 @@ function generateSwimmingWeeks(_, goal, daysPerWeek = 3) {
     const w   = i + 1
     const phi = Math.min(3, Math.floor((w - 1) / 4))
     const wip = ((w - 1) % 4) + 1
-    const ph  = phi + 1
-    let sessions = swimSess(ph)
-    if (daysPerWeek >= 4) sessions = [...sessions, swimDay4(ph)]
-    if (daysPerWeek >= 5) sessions = [...sessions, swimDay5()]
-    if (daysPerWeek >= 6) sessions = [...sessions, SWIM_DAY6]
+    const base = swimSess(phi + 1)
+    const extra = []
+    if (daysPerWeek >= 4) extra.push(swimDay4(phi + 1))
+    if (daysPerWeek >= 5) extra.push(swimDay5(phi + 1))
+    if (daysPerWeek >= 6) extra.push(SWIM_DAY6)
     return {
       week_number: w,
       objective: phi === 3 && wip === 4
         ? `Phase 4 — Taper · Week ${wip} of 4`
-        : `Phase ${ph} — ${SWIM_PHASE_LABELS[phi]} · Week ${wip} of 4`,
-      sessions,
+        : `Phase ${phi + 1} — ${SWIM_PHASE_LABELS[phi]} · Week ${wip} of 4`,
+      sessions: daysPerWeek <= base.length ? base.slice(0, Math.max(2, daysPerWeek)) : [...base, ...extra],
     }
   })
 }
