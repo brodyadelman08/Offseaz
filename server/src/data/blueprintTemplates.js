@@ -619,20 +619,36 @@ const XC_DAY3 = {
   day: 'Day 3', focus: 'Plyometrics & Injury Prevention',
   description: `Ankle Hops: 3x20\nSingle Leg Hop & Stick: 3x5 each leg\nBox Step-Up: 3x12 each leg\nGlute Bridge: 3x15\nHip 90/90 Hold: 2x45s each side\nCalf Raise: 3xAMAP\nBand Hip Abduction: 3x15 each side`,
 }
+const XC_DAY4 = {
+  day: 'Day 4', focus: 'Core & Hip Strength',
+  description: `Glute Bridge Hold: 3x60s\nSingle Leg Glute Bridge: 3x12 each leg\nCopenhagen Adductor: 3x8 each leg\nBird Dog: 3x10 each side\nDead Bug: 3x10 each side\nSide-Lying Hip Abduction: 3x15 each\nPlank with Hip Dip: 3x10 each side`,
+}
+const XC_DAY5 = {
+  day: 'Day 5', focus: 'Upper Body & Posterior Chain',
+  description: `Pull-ups: 3xAMAP\nFace Pulls: 3x15\nBand Pull-Aparts: 3x20\nDB Row: 3x12 each arm\nPush-ups: 3xAMAP\nYTW Series: 3x10 each\nFoam Roll: Upper back — 5 minutes`,
+}
+const XC_DAY6 = {
+  day: 'Day 6', focus: 'Active Recovery & Mobility',
+  description: `Foam Roll: Full body — 10 minutes\nHip Flexor Stretch: 3x45s each leg\nHamstring Eccentric: 3x8\nAnkle Circles: 3x20 each direction\nHip 90/90 Hold: 2x45s each side\nCalf Stretch: 3x45s each leg\nLight Walking Lunge: 2x10 each leg`,
+}
 
 function generateXCWeeks(_, goal, daysPerWeek = 2) {
   return Array.from({ length: 16 }, (_, i) => {
     const w   = i + 1
     const phi = Math.min(3, Math.floor((w - 1) / 4))
     const wip = ((w - 1) % 4) + 1
-    const base = xcSess()
-    const sessions = daysPerWeek >= 3 ? [...base, XC_DAY3] : base
+    const base  = xcSess()
+    const extra = []
+    if (daysPerWeek >= 3) extra.push(XC_DAY3)
+    if (daysPerWeek >= 4) extra.push(XC_DAY4)
+    if (daysPerWeek >= 5) extra.push(XC_DAY5)
+    if (daysPerWeek >= 6) extra.push(XC_DAY6)
     return {
       week_number: w,
       objective: phi === 3 && wip === 4
         ? `Phase 4 — Taper Week · Week ${wip} of 4`
         : `Phase ${phi + 1} — ${XC_PHASE_LABELS[phi]} · Week ${wip} of 4`,
-      sessions,
+      sessions: daysPerWeek <= base.length ? base.slice(0, Math.max(2, daysPerWeek)) : [...base, ...extra],
     }
   })
 }
