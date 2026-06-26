@@ -1,5 +1,6 @@
 const supabaseAdmin = require('../config/supabase')
 const { getTeamLogs } = require('./workoutService')
+const { computeStreakDays } = require('./streakService')
 
 function getMondayKey(date) {
   const d = new Date(date)
@@ -13,39 +14,21 @@ function getThisWeekMonday() {
   return getMondayKey(new Date())
 }
 
-function isSkip(status) {
-  return status === 'skipped' || status === 'skipped_injury'
-}
-
-function computeStreak(logs) {
-  const nonSkipped = logs.filter(l => !isSkip(l.status))
-  if (!nonSkipped.length) return 0
-  const loggedWeeks = new Set(nonSkipped.map(l => getMondayKey(l.logged_at)))
-  const latest = [...nonSkipped].sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at))[0]
-  const d = new Date(getMondayKey(latest.logged_at))
-  let streak = 0
-  while (loggedWeeks.has(d.toISOString().split('T')[0])) {
-    streak++
-    d.setDate(d.getDate() - 7)
-  }
-  return streak
-}
-
 function computeMetrics(logs, weekMonday) {
-  const thisWeekLogs = logs.filter(l => getMondayKey(l.logged_at) === weekMonday)
-  const nonSkippedThisWeek = thisWeekLogs.filter(l => !isSkip(l.status))
-  const efforts = nonSkippedThisWeek.filter(l => l.effort != null).map(l => l.effort)
-  const avgEffort = efforts.length
+  const thisWeekLogs       = logs.filter(l => getMondayKey(l.logged_at) === weekMonday)
+  const countingThisWeek   = thisWeekLogs.filter(l => l.status !== 'skipped')
+  const efforts            = countingThisWeek.filter(l => l.effort != null).map(l => l.effort)
+  const avgEffort          = efforts.length
     ? Math.round((efforts.reduce((a, b) => a + b, 0) / efforts.length) * 10) / 10
     : null
   const sorted = [...logs].sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at))
 
   return {
-    logged_this_week: thisWeekLogs.length > 0,
-    sessions_this_week: thisWeekLogs.length,
+    logged_this_week:    thisWeekLogs.length > 0,
+    sessions_this_week:  thisWeekLogs.length,
     avg_effort_this_week: avgEffort,
-    streak_weeks: computeStreak(logs),
-    last_logged_at: sorted[0]?.logged_at || null,
+    streak_days:         computeStreakDays(logs),
+    last_logged_at:      sorted[0]?.logged_at || null,
   }
 }
 

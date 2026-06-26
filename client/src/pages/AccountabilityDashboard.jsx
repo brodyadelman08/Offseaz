@@ -227,14 +227,14 @@ function AccountabilityInner() {
                       <div style={styles.statItem}>
                         <span style={{
                           ...styles.statVal,
-                          color: a.streak_weeks > 0 ? YELLOW : 'var(--text)',
-                          textShadow: a.streak_weeks > 0 ? '0 0 14px rgba(240,190,36,0.65)' : 'none',
+                          color: a.streak_days > 0 ? YELLOW : 'var(--text)',
+                          textShadow: a.streak_days > 0 ? '0 0 14px rgba(240,190,36,0.65)' : 'none',
                         }}>
-                          {a.streak_weeks > 0 ? `${a.streak_weeks}w` : '—'}
+                          {a.streak_days > 0 ? `${a.streak_days}d` : '—'}
                         </span>
                         <div style={styles.statLabelRow}>
                           <span style={styles.statLabel}>streak</span>
-                          {a.streak_weeks > 0 && <FlameIcon size={11} color={YELLOW} />}
+                          {a.streak_days > 0 && <FlameIcon size={11} color={YELLOW} />}
                         </div>
                       </div>
                       <div style={styles.statDivider} />
@@ -265,7 +265,7 @@ function AccountabilityInner() {
                   const ls = getLogStatus(log.status)
                   // Use idx as fallback key if log.id is missing
                   return (
-                    <div key={log.id ?? idx} style={styles.feedRow}>
+                    <div key={log.id ?? idx} style={{ ...styles.feedRow, borderLeft: `3px solid ${log.accent_color || 'transparent'}`, paddingLeft: 10 }}>
                       <div style={styles.feedLeft}>
                         <span style={styles.feedName}>{log.athlete_name}</span>
                         <span style={styles.feedFocus}>{log.session_focus || 'Session'}</span>

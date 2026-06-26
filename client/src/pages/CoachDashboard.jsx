@@ -35,10 +35,10 @@ function timeAgo(dateStr) {
 }
 
 const ACTIVITY_STATUS = {
-  completed:       { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9' },
-  partial:         { label: 'Partial',          color: '#b45309', bg: '#fef3c7' },
-  skipped:         { label: 'Skipped',          color: '#888',    bg: '#f0f0f0' },
-  skipped_injury:  { label: 'Skipped — Injury', color: '#c73820', bg: '#fce8e6' },
+  completed:       { label: 'Completed',        color: BLUE,   bg: 'rgba(48,142,189,0.12)'  },
+  partial:         { label: 'Partial',          color: YELLOW, bg: 'rgba(240,190,36,0.12)'  },
+  skipped:         { label: 'Skipped',          color: '#888', bg: '#f0f0f0'                },
+  skipped_injury:  { label: 'Skipped — Injury', color: RED,    bg: 'rgba(199,56,32,0.10)'   },
 }
 
 const EVENT_BADGE = {
@@ -415,14 +415,17 @@ export default function CoachDashboard() {
             ) : (
               <div style={styles.activityList}>
                 {activityLogs.slice(0, 10).map(log => {
-                  const isWorkout = log.type === 'workout' || !log.type
-                  const isInjury  = isWorkout && log.status === 'skipped_injury'
+                  const isWorkout   = log.type === 'workout' || !log.type
+                  const isInjury    = isWorkout && log.status === 'skipped_injury'
+                  const isMilestone = log.is_streak_milestone
 
-                  const badge = isInjury
-                    ? INJURY_BADGE
-                    : isWorkout
-                      ? (ACTIVITY_STATUS[log.status] || { label: log.status, color: '#888', bg: '#f0f0f0' })
-                      : (EVENT_BADGE[log.type]  || { label: log.type, color: '#888', bg: '#f0f0f0' })
+                  const badge = isMilestone
+                    ? { label: `${log.streak_days}d Streak 🔥`, color: YELLOW, bg: 'rgba(240,190,36,0.12)' }
+                    : isInjury
+                      ? INJURY_BADGE
+                      : isWorkout
+                        ? (ACTIVITY_STATUS[log.status] || { label: log.status, color: '#888', bg: '#f0f0f0' })
+                        : (EVENT_BADGE[log.type] || { label: log.type, color: '#888', bg: '#f0f0f0' })
 
                   let subtitle = ''
                   if (isInjury) {
@@ -440,7 +443,7 @@ export default function CoachDashboard() {
                   }
 
                   return (
-                    <div key={log.id} style={styles.activityRow}>
+                    <div key={log.id} style={{ ...styles.activityRow, borderLeft: `3px solid ${log.accent_color || 'transparent'}`, paddingLeft: 10 }}>
                       <div style={styles.activityLeft}>
                         <span style={styles.activityName}>{log.athlete_name}</span>
                         <span style={isInjury ? styles.activityInjurySub : styles.activityFocus}>

@@ -1,4 +1,24 @@
 const supabaseAdmin = require('../config/supabase')
+const { updateAthleteStreak } = require('./streakService')
+
+// Color priority for the activity feed (lower = more urgent)
+const ACCENT_RED    = '#c73820'
+const ACCENT_ORANGE = '#F75709'
+const ACCENT_YELLOW = '#F0BE24'
+const ACCENT_BLUE   = '#308EBD'
+const ACCENT_WHITE  = '#FFFFFF'
+
+function eventAccent(event) {
+  if (event.type === 'workout') {
+    if (event.status === 'skipped_injury') return { color: ACCENT_RED,    priority: 0 }
+    if (event.status === 'skipped')        return { color: ACCENT_ORANGE, priority: 1 }
+    return                                        { color: ACCENT_BLUE,   priority: 3 }
+  }
+  if (event.type === 'joined' || event.type === 'survey' || event.type === 'blueprint') {
+    return { color: ACCENT_BLUE, priority: 3 }
+  }
+  return { color: ACCENT_WHITE, priority: 4 }
+}
 
 async function logSession(athleteId, { blueprint_week_id, session_index, status, effort, note }) {
   const isSkip = status === 'skipped' || status === 'skipped_injury'
@@ -18,6 +38,12 @@ async function logSession(athleteId, { blueprint_week_id, session_index, status,
     .single()
 
   if (error) throw error
+
+  // Update streak immediately so the display reflects the new log
+  updateAthleteStreak(athleteId).catch(err =>
+    console.error('[logSession] streak update failed:', err.message)
+  )
+
   return data
 }
 
@@ -58,7 +84,7 @@ async function getTeamLogs(coachId, teamId = null) {
 
   // Fetch all activity sources in parallel — no FK hint joins (avoids PostgREST constraint name issues)
   const [profilesRes, logsRes, surveysRes, assignmentsRes] = await Promise.all([
-    supabaseAdmin.from('profiles').select('id, full_name').in('id', athleteIds),
+    supabaseAdmin.from('profiles').select('id, full_name, streak_days').in('id', athleteIds),
     supabaseAdmin.from('workout_logs')
       .select('id, athlete_id, blueprint_week_id, session_index, status, effort, note, logged_at')
       .in('athlete_id', athleteIds)
@@ -72,9 +98,13 @@ async function getTeamLogs(coachId, teamId = null) {
       .in('athlete_id', athleteIds),
   ])
 
-  // Build profile name map
+  // Build profile name + streak map
   const profileMap = {}
-  for (const p of profilesRes.data || []) profileMap[p.id] = p.full_name || 'Athlete'
+  const streakMap  = {}
+  for (const p of profilesRes.data || []) {
+    profileMap[p.id] = p.full_name || 'Athlete'
+    streakMap[p.id]  = p.streak_days || 0
+  }
 
   // Look up blueprint titles
   const bpIds = [...new Set((assignmentsRes.data || []).map(a => a.blueprint_id).filter(Boolean))]
@@ -104,10 +134,22 @@ async function getTeamLogs(coachId, teamId = null) {
     return match[1].split(',').map(s => s.trim()).filter(Boolean)
   }
 
+  const STREAK_MILESTONES = new Set([7, 14, 21])
+  // Track which athlete already has a milestone marked (only the most recent log)
+  const milestonedAthletes = new Set()
+
   // Workout log events
   for (const log of rawLogs) {
-    const week = weekMap[log.blueprint_week_id]
+    const week            = weekMap[log.blueprint_week_id]
     const injuryExercises = log.status === 'skipped_injury' ? parseInjuryExercises(log.note) : null
+    const streak          = streakMap[log.athlete_id] || 0
+    const isMilestone     = STREAK_MILESTONES.has(streak) && !milestonedAthletes.has(log.athlete_id)
+    if (isMilestone) milestonedAthletes.add(log.athlete_id)
+
+    const accent = isMilestone
+      ? { color: ACCENT_YELLOW, priority: 2 }
+      : eventAccent({ type: 'workout', status: log.status })
+
     events.push({
       id: `workout-${log.id}`,
       type: 'workout',
@@ -119,6 +161,10 @@ async function getTeamLogs(coachId, teamId = null) {
       session_focus: week?.sessions?.[log.session_index]?.focus ?? null,
       week_number: week?.week_number ?? null,
       injury_exercises: injuryExercises,
+      is_streak_milestone: isMilestone,
+      streak_days: isMilestone ? streak : undefined,
+      accent_color: accent.color,
+      color_priority: accent.priority,
     })
   }
 
@@ -126,12 +172,15 @@ async function getTeamLogs(coachId, teamId = null) {
   for (const athleteId of athleteIds) {
     const joinedAt = joinedMap[athleteId]
     if (joinedAt) {
+      const accent = eventAccent({ type: 'joined' })
       events.push({
         id: `joined-${athleteId}`,
         type: 'joined',
         athlete_id: athleteId,
         athlete_name: profileMap[athleteId] || 'Athlete',
         timestamp: joinedAt,
+        accent_color: accent.color,
+        color_priority: accent.priority,
       })
     }
   }
@@ -139,12 +188,15 @@ async function getTeamLogs(coachId, teamId = null) {
   // Survey submission events
   for (const survey of surveysRes.data || []) {
     if (survey.created_at) {
+      const accent = eventAccent({ type: 'survey' })
       events.push({
         id: `survey-${survey.athlete_id}`,
         type: 'survey',
         athlete_id: survey.athlete_id,
         athlete_name: profileMap[survey.athlete_id] || 'Athlete',
         timestamp: survey.created_at,
+        accent_color: accent.color,
+        color_priority: accent.priority,
       })
     }
   }
@@ -152,6 +204,7 @@ async function getTeamLogs(coachId, teamId = null) {
   // Blueprint assignment events (individual athlete assignments only)
   for (const assignment of assignmentsRes.data || []) {
     if (assignment.athlete_id && assignment.assigned_at) {
+      const accent = eventAccent({ type: 'blueprint' })
       events.push({
         id: `blueprint-${assignment.id}`,
         type: 'blueprint',
@@ -159,12 +212,17 @@ async function getTeamLogs(coachId, teamId = null) {
         athlete_name: profileMap[assignment.athlete_id] || 'Athlete',
         timestamp: assignment.assigned_at,
         blueprint_title: bpTitleMap[assignment.blueprint_id] ?? null,
+        accent_color: accent.color,
+        color_priority: accent.priority,
       })
     }
   }
 
-  // Sort newest-first, return top 20
-  events.sort((a, b) => new Date(b.timestamp) - new Date(a.timestamp))
+  // Sort by color priority (most urgent first), then by recency within each group
+  events.sort((a, b) => {
+    if (a.color_priority !== b.color_priority) return a.color_priority - b.color_priority
+    return new Date(b.timestamp) - new Date(a.timestamp)
+  })
   return events.slice(0, 20)
 }
 

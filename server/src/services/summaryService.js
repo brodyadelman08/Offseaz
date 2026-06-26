@@ -27,13 +27,13 @@ function computeStats(athletes) {
     ? Math.round((effortValues.reduce((a, b) => a + b, 0) / effortValues.length) * 10) / 10
     : null
 
-  const withStreak = [...athletes].filter(a => a.streak_weeks > 0)
+  const withStreak = [...athletes].filter(a => a.streak_days > 0)
   const mostConsistent = withStreak.length
-    ? withStreak.sort((a, b) => b.streak_weeks - a.streak_weeks)[0]
+    ? withStreak.sort((a, b) => b.streak_days - a.streak_days)[0]
     : null
 
   const needsAttention = notLogged.length
-    ? [...notLogged].sort((a, b) => a.streak_weeks - b.streak_weeks)[0]
+    ? [...notLogged].sort((a, b) => a.streak_days - b.streak_days)[0]
     : null
 
   return { logged, notLogged, avgEffort, mostConsistent, needsAttention }
@@ -60,7 +60,7 @@ function buildEmailHtml(teamName, weekLabel, athletes, stats) {
   function athleteRow(a, didLog) {
     const sessions = didLog ? `${a.sessions_this_week} session${a.sessions_this_week !== 1 ? 's' : ''}` : '—'
     const effort = didLog && a.avg_effort_this_week != null ? a.avg_effort_this_week.toFixed(1) : '—'
-    const streak = a.streak_weeks > 0 ? `${a.streak_weeks}wk` : '—'
+    const streak = a.streak_days > 0 ? `${a.streak_days}d` : '—'
     // Blue = logged (informational/good), Orange = not logged (action required)
     const dotColor = didLog ? brandBlue : brandOrange
     const dot = `<span style="display:inline-block;width:8px;height:8px;border-radius:50%;background:${dotColor};vertical-align:middle;"></span>`
@@ -81,7 +81,7 @@ function buildEmailHtml(teamName, weekLabel, athletes, stats) {
 
   const highlights = []
   if (mostConsistent) {
-    highlights.push(`<tr><td style="padding:8px 0;font-size:14px;border-left:3px solid ${brandYellow};padding-left:10px;"><strong style="color:${brandYellow};">Achievement</strong> &nbsp; ${mostConsistent.full_name} &nbsp;<span style="color:#888;font-size:13px;">${mostConsistent.streak_weeks}-week streak 🔥</span></td></tr>`)
+    highlights.push(`<tr><td style="padding:8px 0;font-size:14px;border-left:3px solid ${brandYellow};padding-left:10px;"><strong style="color:${brandYellow};">Achievement</strong> &nbsp; ${mostConsistent.full_name} &nbsp;<span style="color:#888;font-size:13px;">${mostConsistent.streak_days}-day streak 🔥</span></td></tr>`)
   }
   if (needsAttention) {
     highlights.push(`<tr><td style="padding:8px 0;font-size:14px;border-left:3px solid ${brandOrange};padding-left:10px;margin-top:8px;"><strong style="color:${brandOrange};">Action Required</strong> &nbsp; ${needsAttention.full_name} &nbsp;<span style="color:#888;font-size:13px;">0 sessions this week</span></td></tr>`)

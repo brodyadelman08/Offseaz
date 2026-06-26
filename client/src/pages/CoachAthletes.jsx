@@ -629,11 +629,11 @@ const styles = {
   dash:      { color: 'var(--text-3)', fontSize: 13 },
   badgeComplete: {
     display: 'inline-flex', alignItems: 'center', gap: 4,
-    background: '#e8f5e9', color: '#2e7d32',
+    background: 'rgba(48,142,189,0.12)', color: BLUE,
     fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 6, whiteSpace: 'nowrap',
   },
   badgePending: {
-    background: 'var(--border)', color: 'var(--text-3)',
+    background: 'rgba(247,87,9,0.10)', color: ORANGE,
     fontSize: 11, fontWeight: 600, padding: '3px 8px', borderRadius: 6, display: 'inline-block',
   },
   maxChip: {

@@ -1,6 +1,7 @@
 'use strict'
 const { Resend } = require('resend')
 const supabaseAdmin = require('../config/supabase')
+const { computeStreakDays } = require('./streakService')
 
 // ─── Brand colours ────────────────────────────────────────────────────────────
 const ORANGE = '#F75709'
@@ -96,20 +97,6 @@ function getMondayKey(dateStr) {
   return d.toISOString().split('T')[0]
 }
 
-function computeStreak(logs) {
-  const active = logs.filter(l => l.status !== 'skipped' && l.status !== 'skipped_injury')
-  if (!active.length) return 0
-  const weeks  = new Set(active.map(l => getMondayKey(l.logged_at)))
-  const latest = [...active].sort((a, b) => new Date(b.logged_at) - new Date(a.logged_at))[0]
-  const cur    = new Date(getMondayKey(latest.logged_at))
-  let streak   = 0
-  while (weeks.has(cur.toISOString().split('T')[0])) {
-    streak++
-    cur.setUTCDate(cur.getUTCDate() - 7)
-  }
-  return streak
-}
-
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 function esc(s) {
   if (s == null) return ''
@@ -144,7 +131,7 @@ function computeDigestStats({ athletes, weekLogs, allLogs, surveyMap, injuryLogs
     const lastLog      = [...aAllLogs].sort((x, y) => new Date(y.logged_at) - new Date(x.logged_at))[0]
 
     const sessionsThisWeek = aWeekActive.length
-    const streak           = computeStreak(aAllLogs)
+    const streak           = computeStreakDays(aAllLogs)
     const lastAt           = lastLog?.logged_at || null
     const daySince         = lastAt ? Math.floor((Date.now() - new Date(lastAt).getTime()) / 86400000) : null
     const completionRate   = Math.min(Math.round(sessionsThisWeek / 7 * 100), 100)
@@ -332,7 +319,7 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
                 <p style="margin:3px 0 0;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.8px;">Completion Rate</p>
               </td>
               <td>
-                <p style="margin:0;font-size:28px;font-weight:900;color:${BLUE};letter-spacing:-1px;">${topPerformer.streak}<span style="font-size:15px;font-weight:600;"> wk${topPerformer.streak !== 1 ? 's' : ''}</span></p>
+                <p style="margin:0;font-size:28px;font-weight:900;color:${BLUE};letter-spacing:-1px;">${topPerformer.streak}<span style="font-size:15px;font-weight:600;"> d</span></p>
                 <p style="margin:3px 0 0;font-size:10px;font-weight:700;color:#888;text-transform:uppercase;letter-spacing:0.8px;">Streak</p>
               </td>
             </tr>
@@ -347,7 +334,7 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
       <td style="padding:10px 14px;font-size:13px;font-weight:600;color:${BLACK};">${esc(a.emoji)} ${esc(a.full_name)}</td>
       <td style="padding:10px 14px;font-size:13px;color:#555555;text-align:center;">${a.sessionsThisWeek}</td>
       <td style="padding:10px 14px;font-size:13px;font-weight:700;color:${a.completionRate >= 80 ? GREEN : a.completionRate >= 50 ? AMBER : RED};text-align:center;">${a.completionRate}%</td>
-      <td style="padding:10px 14px;font-size:13px;font-weight:700;color:${YELLOW};text-align:center;">${a.streak > 0 ? `${a.streak}wk` : '—'}</td>
+      <td style="padding:10px 14px;font-size:13px;font-weight:700;color:${YELLOW};text-align:center;">${a.streak > 0 ? `${a.streak}d` : '—'}</td>
       <td style="padding:10px 14px;text-align:center;">${statusBadge(a.status)}</td>
     </tr>`).join('')
 
@@ -398,7 +385,7 @@ function buildDigestHtml({ coachName, isAssistant, teamName, weekLabel, stats, i
               <p style="margin:0;font-size:14px;font-weight:600;color:${BLACK};">${esc(a.emoji)} ${esc(a.full_name)}</p>
             </td>
             <td style="padding:12px 14px;border-bottom:1px solid ${BORDER};text-align:right;white-space:nowrap;">
-              <p style="margin:0;font-size:16px;font-weight:900;color:${YELLOW};">${a.streak}<span style="font-size:12px;font-weight:600;">&nbsp;wk${a.streak !== 1 ? 's' : ''}</span></p>
+              <p style="margin:0;font-size:16px;font-weight:900;color:${YELLOW};">${a.streak}<span style="font-size:12px;font-weight:600;">&nbsp;d</span></p>
             </td>
           </tr>`).join('')}
         </tbody>
