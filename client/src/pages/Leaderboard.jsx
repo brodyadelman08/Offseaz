@@ -7,9 +7,33 @@ const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 
 const TABS = [
-  { key: 'streak',          label: 'Streak',       emoji: '🔥', color: YELLOW, unit: 'd',  statKey: 'streak_days' },
-  { key: 'completion_rate', label: 'Completion',   emoji: '📊', color: BLUE,   unit: '%',  statKey: 'completion_rate' },
-  { key: 'sessions_total',  label: 'Sessions',     emoji: '💪', color: ORANGE, unit: '',   statKey: 'sessions_total' },
+  {
+    key: 'streak',
+    label: 'Streak',
+    emoji: '🔥',
+    color: YELLOW,
+    unit: 'd',
+    statKey: 'streak_days',
+    desc: 'Current consecutive days of logged sessions. Longest active streak wins.',
+  },
+  {
+    key: 'completion_rate',
+    label: 'Completion',
+    emoji: '📊',
+    color: BLUE,
+    unit: '%',
+    statKey: 'completion_rate',
+    desc: "This week's completed sessions divided by scheduled sessions.",
+  },
+  {
+    key: 'sessions_total',
+    label: 'Sessions',
+    emoji: '💪',
+    color: ORANGE,
+    unit: '',
+    statKey: 'sessions_total',
+    desc: 'Total sessions logged this entire offseason.',
+  },
 ]
 
 function medalFor(rank) {
@@ -21,9 +45,10 @@ function medalFor(rank) {
 
 export default function Leaderboard() {
   const { profile } = useAuth()
-  const [data,       setData]    = useState(null)
-  const [loading,    setLoading] = useState(true)
-  const [activeTab,  setActiveTab] = useState('streak')
+  const [data,      setData]      = useState(null)
+  const [loading,   setLoading]   = useState(true)
+  const [activeTab, setActiveTab] = useState('streak')
+  const [streakInfoOpen, setStreakInfoOpen] = useState(false)
 
   useEffect(() => {
     api.get('/api/leaderboard')
@@ -61,6 +86,23 @@ export default function Leaderboard() {
           </button>
         ))}
       </div>
+
+      {/* Category description */}
+      <div style={s.descRow}>
+        <p style={s.descText}>{tab.desc}</p>
+        {activeTab === 'streak' && (
+          <button style={s.infoToggle} onClick={() => setStreakInfoOpen(o => !o)}>
+            {streakInfoOpen ? '▲' : 'ⓘ'} How streaks work
+          </button>
+        )}
+      </div>
+      {activeTab === 'streak' && streakInfoOpen && (
+        <div style={s.streakInfo}>
+          🔥 Streaks grow when you log sessions (completed, partial, or injury). They reset
+          after <strong>36 hours</strong> of no activity. Taking a rest day? Log a Rest Day
+          check-in to keep your streak alive.
+        </div>
+      )}
 
       {loading ? (
         <div style={s.rows}>
@@ -116,7 +158,7 @@ export default function Leaderboard() {
                     <span style={{ color: YELLOW, fontSize: 13, marginRight: 3 }}>🔥</span>
                   )}
                   {activeTab === 'completion_rate' && (
-                    <div style={{ ...s.compBar, width: 48, marginRight: 6 }}>
+                    <div style={{ ...s.compBar, width: 40, marginRight: 6 }}>
                       <div style={{ ...s.compFill, width: `${Math.min(100, stat)}%` }} />
                     </div>
                   )}
@@ -135,19 +177,42 @@ export default function Leaderboard() {
 
 const s = {
   container: { maxWidth: 640, margin: '0 auto' },
-  header:    { marginBottom: 22 },
+  header:    { marginBottom: 20 },
   title:     { fontSize: 26, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   sub:       { fontSize: 14, color: 'var(--text-2)', margin: 0 },
 
-  tabRow: { display: 'flex', gap: 8, marginBottom: 18, flexWrap: 'wrap' },
+  tabRow: { display: 'flex', gap: 8, marginBottom: 12, flexWrap: 'wrap' },
   tab: {
     display: 'flex', alignItems: 'center', gap: 6,
     padding: '9px 16px', borderRadius: 22, cursor: 'pointer',
     fontSize: 13, fontWeight: 700, transition: 'all 0.15s', flex: 1, justifyContent: 'center',
   },
-  tabLabel: { display: 'none' },
+  tabLabel: {},
 
-  rows: { display: 'flex', flexDirection: 'column', gap: 6 },
+  descRow: {
+    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
+    gap: 10, marginBottom: 6,
+  },
+  descText: {
+    fontSize: 13, color: 'var(--text-2)', margin: 0, lineHeight: 1.45, flex: 1,
+  },
+  infoToggle: {
+    background: 'none', border: 'none', cursor: 'pointer',
+    color: YELLOW, fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', padding: 0,
+    flexShrink: 0,
+  },
+  streakInfo: {
+    background: 'rgba(240,190,36,0.08)',
+    border: '1px solid rgba(240,190,36,0.2)',
+    borderRadius: 10,
+    padding: '10px 14px',
+    fontSize: 13,
+    color: 'var(--text-2)',
+    lineHeight: 1.55,
+    marginBottom: 14,
+  },
+
+  rows: { display: 'flex', flexDirection: 'column', gap: 6, marginTop: 8 },
   row: {
     display: 'flex', alignItems: 'center', gap: 10,
     background: 'var(--card)', border: '1px solid var(--border)',
@@ -159,7 +224,10 @@ const s = {
     background: 'rgba(247,87,9,0.06)',
     boxShadow: `0 0 0 1px rgba(247,87,9,0.20), 0 2px 12px rgba(247,87,9,0.12)`,
   },
-  skeletonRow: { display: 'flex', alignItems: 'center', padding: '12px 16px', gap: 8, background: 'var(--card)', borderRadius: 14 },
+  skeletonRow: {
+    display: 'flex', alignItems: 'center', padding: '12px 16px',
+    gap: 8, background: 'var(--card)', borderRadius: 14,
+  },
 
   rankCell: { width: 32, display: 'flex', justifyContent: 'center', flexShrink: 0 },
   rankNum:  { fontSize: 16, fontWeight: 700 },
@@ -173,7 +241,7 @@ const s = {
   compBar:  { height: 5, background: 'var(--border)', borderRadius: 4, overflow: 'hidden' },
   compFill: { height: '100%', background: BLUE, borderRadius: 4, transition: 'width 0.4s' },
 
-  empty:     { textAlign: 'center', paddingTop: 60 },
-  emptyTitle:{ fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
-  emptySub:  { fontSize: 14, color: 'var(--text-3)' },
+  empty:      { textAlign: 'center', paddingTop: 60 },
+  emptyTitle: { fontSize: 18, fontWeight: 700, color: 'var(--text)', marginBottom: 8 },
+  emptySub:   { fontSize: 14, color: 'var(--text-3)' },
 }

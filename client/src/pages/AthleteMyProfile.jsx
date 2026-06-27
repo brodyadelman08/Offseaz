@@ -16,6 +16,7 @@ const LOG_STATUS = {
   skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
 }
 
+// TODO: allow custom athlete-defined lift names to reduce profile clutter
 const LIFTS = [
   { key: 'bench_press',       label: 'Bench Press' },
   { key: 'squat',             label: 'Squat' },

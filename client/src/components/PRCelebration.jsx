@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react'
+import { useState } from 'react'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -6,8 +6,9 @@ const YELLOW = '#F0BE24'
 const WHITE  = '#FFFFFF'
 const BLACK  = '#000000'
 
-const CONFETTI_COLORS = [ORANGE, BLUE, YELLOW, WHITE, '#F75709']
+const CONFETTI_COLORS = [ORANGE, BLUE, YELLOW, WHITE, ORANGE]
 
+// TODO: allow custom athlete-defined lift names to reduce profile clutter
 const LIFT_LABELS = {
   bench_press:       'Bench Press',
   squat:             'Squat',
@@ -22,81 +23,108 @@ const LIFT_LABELS = {
   reverse_lunge:     'Reverse Lunge',
 }
 
-// Generate share image via canvas
-function generateShareImage({ athleteName, sport, liftLabel, newWeight }) {
+// Premium 1080×1080 share graphic — async so we can load the logo image
+async function generateShareImage({ athleteName, sport, liftLabel, newWeight, previousBest }) {
   const SIZE = 1080
   const canvas = document.createElement('canvas')
   canvas.width = SIZE
   canvas.height = SIZE
   const ctx = canvas.getContext('2d')
 
-  // Background
+  // Black background
   ctx.fillStyle = BLACK
   ctx.fillRect(0, 0, SIZE, SIZE)
 
-  // Orange accent bar at top
+  // Subtle orange top accent bar
   ctx.fillStyle = ORANGE
-  ctx.fillRect(0, 0, SIZE, 12)
+  ctx.fillRect(0, 0, SIZE, 8)
 
-  // Logo text placeholder (uppercase brand name)
-  ctx.fillStyle = WHITE
-  ctx.font = 'bold 52px Arial, sans-serif'
+  // Load Offseaz logo (180px visual width at 1080)
+  await new Promise(resolve => {
+    const img = new Image()
+    img.onload = () => {
+      const logoW = 360
+      const logoH = Math.round((img.height / img.width) * logoW)
+      ctx.drawImage(img, (SIZE - logoW) / 2, 60, logoW, logoH)
+      resolve()
+    }
+    img.onerror = () => {
+      // Fallback: text logo
+      ctx.fillStyle = WHITE
+      ctx.font = 'bold 56px Arial, sans-serif'
+      ctx.textAlign = 'center'
+      ctx.fillText('OFFSEAZ', SIZE / 2, 110)
+      resolve()
+    }
+    img.src = '/Offseaz-Logo-White-Letter-Dark.png'
+  })
+
   ctx.textAlign = 'center'
-  ctx.fillText('OFFSEAZ', SIZE / 2, 100)
-
-  // PR label
-  ctx.fillStyle = ORANGE
-  ctx.font = 'bold 80px Arial, sans-serif'
-  ctx.fillText('NEW PR', SIZE / 2, 240)
-
-  // Lift name
-  ctx.fillStyle = WHITE
-  ctx.font = '500 44px Arial, sans-serif'
-  ctx.fillText(liftLabel, SIZE / 2, 320)
-
-  // Weight
-  ctx.fillStyle = ORANGE
-  ctx.font = 'bold 200px Arial, sans-serif'
-  ctx.fillText(`${newWeight}`, SIZE / 2, 560)
-  ctx.font = 'bold 60px Arial, sans-serif'
-  ctx.fillText('lbs', SIZE / 2, 640)
 
   // Athlete name
-  ctx.fillStyle = WHITE
-  ctx.font = '500 40px Arial, sans-serif'
-  ctx.fillText(athleteName || 'Athlete', SIZE / 2, 740)
+  if (athleteName) {
+    ctx.fillStyle = WHITE
+    ctx.font = '500 42px Arial, sans-serif'
+    ctx.fillText(athleteName, SIZE / 2, 260)
+  }
 
+  // Sport
   if (sport) {
     ctx.fillStyle = '#888'
     ctx.font = '36px Arial, sans-serif'
-    ctx.fillText(sport, SIZE / 2, 790)
+    ctx.fillText(sport, SIZE / 2, 310)
   }
 
-  // Bottom accent bar
-  ctx.fillStyle = ORANGE
-  ctx.fillRect(0, SIZE - 12, SIZE, 12)
+  // Lift name in blue
+  ctx.fillStyle = BLUE
+  ctx.font = 'bold 44px Arial, sans-serif'
+  ctx.fillText(liftLabel.toUpperCase(), SIZE / 2, 390)
 
-  // Tagline
-  ctx.fillStyle = '#555'
-  ctx.font = 'italic 32px Arial, sans-serif'
-  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, SIZE - 60)
+  // PR weight — massive orange (Calibri Bold → Arial Bold fallback)
+  ctx.fillStyle = ORANGE
+  ctx.font = 'bold 280px Arial, sans-serif'
+  ctx.fillText(String(newWeight), SIZE / 2, 710)
+
+  // lbs unit
+  ctx.fillStyle = ORANGE
+  ctx.font = 'bold 64px Arial, sans-serif'
+  ctx.fillText('lbs', SIZE / 2, 780)
+
+  // Previous record
+  if (previousBest !== null && previousBest !== undefined) {
+    const improvement = (newWeight - previousBest).toFixed(1)
+    ctx.fillStyle = WHITE
+    ctx.font = '38px Arial, sans-serif'
+    ctx.fillText(`Previous: ${previousBest} lbs`, SIZE / 2, 860)
+
+    // Yellow arrow + improvement
+    ctx.fillStyle = YELLOW
+    ctx.font = 'bold 38px Arial, sans-serif'
+    ctx.fillText(`↑ +${improvement} lbs`, SIZE / 2, 908)
+  }
+
+  // Tagline in yellow
+  ctx.fillStyle = YELLOW
+  ctx.font = 'italic 34px Arial, sans-serif'
+  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 984)
+
+  // Bottom orange accent bar
+  ctx.fillStyle = ORANGE
+  ctx.fillRect(0, SIZE - 8, SIZE, 8)
 
   return canvas.toDataURL('image/png')
 }
 
-// Single confetti piece
+// Confetti piece
 function ConfettiPiece({ color, x, delay, dur, size, rotate }) {
   return (
     <div style={{
-      position: 'absolute',
-      left: `${x}%`,
-      top: -20,
-      width: size,
-      height: size * 0.5,
-      background: color,
-      borderRadius: 2,
+      position: 'absolute', left: `${x}%`, top: -20,
+      width: size, height: size * 0.5,
+      background: color, borderRadius: 2,
       animation: `confettiFall ${dur}s ${delay}s ease-in infinite`,
       transform: `rotate(${rotate}deg)`,
+      pointerEvents: 'none',
     }} />
   )
 }
@@ -113,19 +141,31 @@ const CONFETTI_PIECES = Array.from({ length: 40 }, (_, i) => ({
 
 export default function PRCelebration({ lift, newWeight, previousBest, athleteName, sport, onClose }) {
   const liftLabel = LIFT_LABELS[lift] || lift
-  const improvement = previousBest ? (newWeight - previousBest).toFixed(1) : null
+  const improvement = (previousBest !== null && previousBest !== undefined)
+    ? (newWeight - previousBest).toFixed(1)
+    : null
 
-  function handleShare() {
-    const dataUrl = generateShareImage({ athleteName, sport, liftLabel, newWeight })
-    const a = document.createElement('a')
-    a.href = dataUrl
-    a.download = `offseaz-pr-${lift}-${newWeight}lbs.png`
-    a.click()
+  const [saving, setSaving] = useState(false)
+
+  async function handleSave() {
+    setSaving(true)
+    try {
+      const dataUrl = await generateShareImage({ athleteName, sport, liftLabel, newWeight, previousBest })
+      const a = document.createElement('a')
+      a.href = dataUrl
+      a.download = `offseaz-pr-${(lift || 'lift').replace(/_/g, '-')}-${newWeight}lbs.png`
+      document.body.appendChild(a)
+      a.click()
+      document.body.removeChild(a)
+    } catch (err) {
+      console.error('[PRCelebration] share failed:', err)
+    } finally {
+      setSaving(false)
+    }
   }
 
   return (
     <>
-      {/* Confetti keyframes injected once */}
       <style>{`
         @keyframes confettiFall {
           0%   { transform: translateY(0) rotate(0deg);   opacity: 1; }
@@ -133,69 +173,65 @@ export default function PRCelebration({ lift, newWeight, previousBest, athleteNa
           100% { transform: translateY(105vh) rotate(720deg); opacity: 0; }
         }
         @keyframes prPop {
-          0%   { transform: scale(0.6); opacity: 0; }
-          70%  { transform: scale(1.05); }
+          0%   { transform: scale(0.7); opacity: 0; }
+          70%  { transform: scale(1.04); }
           100% { transform: scale(1); opacity: 1; }
         }
-        @keyframes starPulse {
-          0%, 100% { transform: scale(1) rotate(0deg); }
-          50%       { transform: scale(1.08) rotate(8deg); }
+        @keyframes weightPulse {
+          0%, 100% { text-shadow: 0 0 30px rgba(247,87,9,0.5); }
+          50%       { text-shadow: 0 0 60px rgba(247,87,9,0.9), 0 0 100px rgba(247,87,9,0.4); }
         }
       `}</style>
 
       <div style={s.overlay}>
-        {/* Confetti */}
-        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none' }}>
+        {/* Confetti — sits in full overlay, behind card */}
+        <div style={{ position: 'absolute', inset: 0, overflow: 'hidden', pointerEvents: 'none', zIndex: 0 }}>
           {CONFETTI_PIECES.map(p => <ConfettiPiece key={p.id} {...p} />)}
         </div>
 
         {/* Card */}
         <div style={s.card}>
-          {/* Logo */}
-          <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={s.logo} />
+          {/* Logo — large and prominent for screenshots */}
+          <img
+            src="/Offseaz-Logo-White-Letter-Dark.png"
+            alt="Offseaz"
+            style={s.logo}
+          />
 
-          {/* NEW PR */}
-          <div style={s.newPrBadge}>NEW PR</div>
+          {/* NEW PR label */}
+          <p style={s.newPrLabel}>NEW PR</p>
 
-          {/* Starburst */}
-          <div style={s.starburst}>
-            <svg width="120" height="120" viewBox="0 0 120 120" style={{ animation: 'starPulse 2s ease-in-out infinite' }}>
-              {[0,30,60,90,120,150,180,210,240,270,300,330].map(deg => (
-                <line key={deg}
-                  x1="60" y1="60"
-                  x2={60 + 50 * Math.cos((deg * Math.PI) / 180)}
-                  y2={60 + 50 * Math.sin((deg * Math.PI) / 180)}
-                  stroke={deg % 90 === 0 ? ORANGE : deg % 60 === 0 ? YELLOW : BLUE}
-                  strokeWidth={deg % 90 === 0 ? 4 : 2}
-                  strokeLinecap="round"
-                />
-              ))}
-              <circle cx="60" cy="60" r="22" fill={ORANGE} />
-              <text x="60" y="67" textAnchor="middle" fill="#fff" fontSize="22" fontWeight="900">🏆</text>
-            </svg>
+          {/* Lift name */}
+          <p style={s.liftName}>{liftLabel}</p>
+
+          {/* Weight hero — the star of the show */}
+          <p style={s.weightHero}>
+            {newWeight}
+            <span style={s.lbsUnit}> lbs</span>
+          </p>
+
+          {/* Previous record */}
+          <div style={s.prevRow}>
+            {previousBest !== null && previousBest !== undefined ? (
+              <>
+                <span style={s.prevLabel}>Previous: {previousBest} lbs</span>
+                {improvement && (
+                  <span style={s.improvement}>
+                    <span style={s.yellowArrow}>↑</span> +{improvement} lbs
+                  </span>
+                )}
+              </>
+            ) : (
+              <span style={s.prevLabel}>First time logging this lift!</span>
+            )}
           </div>
 
-          {/* Lift + weight */}
-          <p style={s.liftName}>{liftLabel}</p>
-          <p style={s.newWeight}>{newWeight} <span style={s.lbsUnit}>lbs</span></p>
-
-          {/* Previous best */}
-          {previousBest !== null && (
-            <p style={s.prevRecord}>
-              <span style={s.greenArrow}>↑</span>
-              {' '}Previous: {previousBest} lbs
-              {improvement && <span style={s.improvement}> (+{improvement} lbs)</span>}
-            </p>
-          )}
-          {previousBest === null && (
-            <p style={s.prevRecord}>First time logging this lift — history starts now!</p>
-          )}
-
           {/* Buttons */}
-          <div style={s.btnRow}>
-            <button style={s.shareBtn} onClick={handleShare}>
-              📸 Share Your PR
+          <div style={s.btnStack}>
+            <button style={{ ...s.saveBtn, opacity: saving ? 0.7 : 1 }} onClick={handleSave} disabled={saving}>
+              {saving ? 'Generating…' : '📸 Save to Camera Roll'}
             </button>
+            <p style={s.saveCaption}>Save and share anywhere</p>
             <button style={s.continueBtn} onClick={onClose}>
               Continue
             </button>
@@ -208,40 +244,110 @@ export default function PRCelebration({ lift, newWeight, previousBest, athleteNa
 
 const s = {
   overlay: {
-    position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.92)',
-    zIndex: 9999, display: 'flex', alignItems: 'center', justifyContent: 'center',
-    padding: 16,
+    position: 'fixed', inset: 0,
+    background: 'rgba(0,0,0,0.94)',
+    zIndex: 9999,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: '16px',
+    overflowY: 'auto',
   },
   card: {
-    background: '#0d0d0d', border: '1px solid rgba(247,87,9,0.3)',
-    borderRadius: 24, padding: '32px 28px', width: '100%', maxWidth: 440,
-    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 8,
-    boxShadow: '0 0 60px rgba(247,87,9,0.25)',
-    animation: 'prPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both',
     position: 'relative', zIndex: 1,
+    background: '#080808',
+    border: `1px solid ${ORANGE}44`,
+    borderRadius: 24,
+    padding: '28px 24px 24px',
+    width: '100%', maxWidth: 420,
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 0,
+    boxShadow: `0 0 80px rgba(247,87,9,0.20), 0 0 0 1px rgba(247,87,9,0.15)`,
+    animation: 'prPop 0.4s cubic-bezier(0.34,1.56,0.64,1) both',
   },
-  logo: { height: 32, marginBottom: 4, opacity: 0.9 },
-  newPrBadge: {
-    fontSize: 48, fontWeight: 900, color: WHITE,
-    letterSpacing: 4, lineHeight: 1,
+
+  // Logo — prominent for screenshots: 200px min, never wider than card
+  logo: {
+    width: 200,
+    maxWidth: '80%',
+    height: 'auto',
+    display: 'block',
+    marginBottom: 14,
+    opacity: 0.95,
+  },
+
+  newPrLabel: {
+    fontSize: 13,
+    fontWeight: 900,
+    color: WHITE,
+    letterSpacing: 5,
+    textTransform: 'uppercase',
+    margin: '0 0 6px',
+    opacity: 0.7,
+  },
+
+  // Lift name
+  liftName: {
+    fontSize: 13,
+    fontWeight: 700,
+    color: BLUE,
+    textTransform: 'uppercase',
+    letterSpacing: 2,
+    margin: '0 0 4px',
+  },
+
+  // Weight is the hero — 96px minimum on mobile (card is max 420px wide)
+  weightHero: {
+    fontSize: 'clamp(96px, 26vw, 124px)',
+    fontWeight: 900,
+    color: ORANGE,
+    margin: '4px 0 0',
+    lineHeight: 1,
+    letterSpacing: -3,
     fontFamily: 'Calibri, Arial, sans-serif',
-    textShadow: `0 0 30px ${ORANGE}`,
+    animation: 'weightPulse 2.5s ease-in-out infinite',
   },
-  starburst: { margin: '8px 0' },
-  liftName: { fontSize: 18, fontWeight: 600, color: '#bbb', margin: '4px 0 0', textTransform: 'uppercase', letterSpacing: 1 },
-  newWeight: { fontSize: 72, fontWeight: 900, color: ORANGE, margin: 0, lineHeight: 1.1, letterSpacing: -2, textShadow: `0 0 40px ${ORANGE}55` },
-  lbsUnit: { fontSize: 28, fontWeight: 700, color: ORANGE },
-  prevRecord: { fontSize: 14, color: '#888', margin: '4px 0 12px', textAlign: 'center' },
-  greenArrow: { color: '#4caf50', fontWeight: 900, fontSize: 16 },
-  improvement: { color: '#4caf50', fontWeight: 700 },
-  btnRow: { display: 'flex', flexDirection: 'column', gap: 10, width: '100%', marginTop: 8 },
-  shareBtn: {
-    padding: '14px 0', background: ORANGE, border: 'none', borderRadius: 14,
-    color: '#fff', fontSize: 16, fontWeight: 700, cursor: 'pointer',
-    boxShadow: '0 4px 18px rgba(247,87,9,0.40)',
+  lbsUnit: {
+    fontSize: 'clamp(28px, 8vw, 38px)',
+    fontWeight: 700,
+    color: ORANGE,
+    letterSpacing: 0,
+  },
+
+  // Previous record row
+  prevRow: {
+    display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2,
+    marginTop: 10, marginBottom: 18,
+  },
+  prevLabel: { fontSize: 13, color: '#999' },
+  improvement: { fontSize: 14, fontWeight: 700, color: WHITE },
+  yellowArrow: { color: YELLOW, fontWeight: 900 },
+
+  // Button stack
+  btnStack: { display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 0, width: '100%' },
+  saveBtn: {
+    padding: '14px 0',
+    background: ORANGE,
+    border: 'none',
+    borderRadius: 14,
+    color: '#fff',
+    fontSize: 16,
+    fontWeight: 700,
+    cursor: 'pointer',
+    boxShadow: '0 4px 20px rgba(247,87,9,0.45)',
+    letterSpacing: 0.2,
+  },
+  saveCaption: {
+    textAlign: 'center',
+    fontSize: 11,
+    color: '#555',
+    margin: '5px 0 10px',
   },
   continueBtn: {
-    padding: '12px 0', background: 'transparent', border: `2px solid ${WHITE}33`,
-    borderRadius: 14, color: WHITE, fontSize: 14, fontWeight: 600, cursor: 'pointer',
+    padding: '12px 0',
+    background: 'transparent',
+    border: `1px solid rgba(255,255,255,0.15)`,
+    borderRadius: 14,
+    color: WHITE,
+    fontSize: 14,
+    fontWeight: 600,
+    cursor: 'pointer',
   },
 }
