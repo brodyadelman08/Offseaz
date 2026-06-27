@@ -5,7 +5,7 @@ import { useTeam } from '../context/TeamContext'
 import { useCoachAccess } from '../context/CoachAccessContext'
 import {
   GridIcon, UsersIcon, LayoutIcon, MessageIcon, BarChartIcon,
-  HomeIcon, CalendarIcon, UserIcon, SignOutIcon, FeedIcon,
+  HomeIcon, CalendarIcon, UserIcon, SignOutIcon, FeedIcon, TrophyIcon,
 } from './Icons'
 import AvatarUpload from './AvatarUpload'
 import api from '../services/api'
@@ -72,16 +72,18 @@ const COACH_NAV = [
   { path: '/coach/feed',          label: 'Feed',          Icon: FeedIcon,    exact: false },
   { path: '/coach/messages',      label: 'Messages',      Icon: MessageIcon, exact: false },
   { path: '/coach/accountability',label: 'Accountability',Icon: BarChartIcon,exact: false },
+  { path: '/coach/leaderboard',   label: 'Leaderboard',   Icon: TrophyIcon,  exact: false },
   { path: '/coach/profile',       label: 'My Profile',    Icon: UserIcon,    exact: false },
 ]
 
 const ATHLETE_NAV = [
-  { path: '/athlete',          label: 'Home',        Icon: HomeIcon,     exact: true },
-  { path: '/athlete/plan',     label: 'My Plan',     Icon: CalendarIcon, exact: false },
-  { path: '/athlete/feed',     label: 'Feed',        Icon: FeedIcon,     exact: false },
-  { path: '/athlete/roster',   label: 'Roster',      Icon: UsersIcon,    exact: false },
-  { path: '/athlete/messages', label: 'Messages',    Icon: MessageIcon,  exact: false },
-  { path: '/athlete/profile',  label: 'My Profile',  Icon: UserIcon,     exact: false },
+  { path: '/athlete',              label: 'Home',        Icon: HomeIcon,     exact: true },
+  { path: '/athlete/plan',         label: 'My Plan',     Icon: CalendarIcon, exact: false },
+  { path: '/athlete/feed',         label: 'Feed',        Icon: FeedIcon,     exact: false },
+  { path: '/athlete/roster',       label: 'Roster',      Icon: UsersIcon,    exact: false },
+  { path: '/athlete/leaderboard',  label: 'Leaderboard', Icon: TrophyIcon,   exact: false },
+  { path: '/athlete/messages',     label: 'Messages',    Icon: MessageIcon,  exact: false },
+  { path: '/athlete/profile',      label: 'My Profile',  Icon: UserIcon,     exact: false },
 ]
 
 // Mobile: 4 primary tabs + "More". Everything else lives in the More drawer.
@@ -94,6 +96,7 @@ const COACH_PRIMARY = [
 const COACH_MORE = [
   { path: '/coach/feed',           label: 'Feed',           Icon: FeedIcon,    exact: false },
   { path: '/coach/accountability', label: 'Accountability', Icon: BarChartIcon,exact: false },
+  { path: '/coach/leaderboard',    label: 'Leaderboard',    Icon: TrophyIcon,  exact: false },
   { path: '/coach/profile',        label: 'My Profile',     Icon: UserIcon,    exact: false },
 ]
 
@@ -104,8 +107,9 @@ const ATHLETE_PRIMARY = [
   { path: '/athlete/messages', label: 'Messages', Icon: MessageIcon,  exact: false },
 ]
 const ATHLETE_MORE = [
-  { path: '/athlete/roster',  label: 'Roster',     Icon: UsersIcon,   exact: false },
-  { path: '/athlete/profile', label: 'My Profile', Icon: UserIcon,    exact: false },
+  { path: '/athlete/roster',       label: 'Roster',      Icon: UsersIcon,  exact: false },
+  { path: '/athlete/leaderboard',  label: 'Leaderboard', Icon: TrophyIcon, exact: false },
+  { path: '/athlete/profile',      label: 'My Profile',  Icon: UserIcon,   exact: false },
 ]
 
 // ─── Desktop sidebar ──────────────────────────────────────────────────────────

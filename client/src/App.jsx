@@ -149,6 +149,7 @@ import AthleteTeammateProfile from './pages/AthleteTeammateProfile'
 import Feed from './pages/Feed'
 import AthleteReport from './pages/AthleteReport'
 import NotFound from './pages/NotFound'
+import Leaderboard from './pages/Leaderboard'
 
 // Smart redirect for /messages → role-based destination
 function MessagesRedirect() {
@@ -217,6 +218,7 @@ export default function App() {
               <Route path="messages" element={<Messages />} />
               <Route path="accountability" element={<AccountabilityDashboard />} />
               <Route path="feed" element={<Feed />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="athletes/:id/report" element={<AthleteReport />} />
               <Route path="profile" element={<CoachProfile />} />
             </Route>
@@ -235,6 +237,7 @@ export default function App() {
               <Route path="messages" element={<Messages />} />
               <Route path="roster" element={<AthleteRoster />} />
               <Route path="roster/:athleteId" element={<AthleteTeammateProfile />} />
+              <Route path="leaderboard" element={<Leaderboard />} />
               <Route path="profile" element={<AthleteMyProfile />} />
               <Route path="feed" element={<Feed />} />
             </Route>

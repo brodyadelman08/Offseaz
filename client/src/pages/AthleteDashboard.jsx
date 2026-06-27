@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import { useTeam } from '../context/TeamContext'
 import api from '../services/api'
 import { CheckCircleIcon, PlusIcon, CheckIcon } from '../components/Icons'
+import ReadinessCheckin from '../components/ReadinessCheckin'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -70,6 +71,7 @@ export default function AthleteDashboard() {
   const [joining, setJoining] = useState(false)
   const [joinError, setJoinError] = useState('')
   const [showJoinAnother, setShowJoinAnother] = useState(false)
+  const [showCheckin, setShowCheckin] = useState(false)
 
   // Goal form state
   const [showGoalForm, setShowGoalForm] = useState(false)
@@ -79,6 +81,11 @@ export default function AthleteDashboard() {
   const [savingGoal, setSavingGoal] = useState(false)
 
   useEffect(() => {
+    // Check if athlete has done today's readiness check-in
+    api.get('/api/checkins/today')
+      .then(r => { if (!r.data.checkin) setShowCheckin(true) })
+      .catch(() => {}) // don't block on failure
+
     Promise.all([
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
       api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
@@ -169,6 +176,15 @@ export default function AthleteDashboard() {
 
   return (
     <div style={styles.container}>
+      {showCheckin && (
+        <ReadinessCheckin
+          onComplete={({ is_rest_day }) => {
+            setShowCheckin(false)
+            if (!is_rest_day && plan) navigate('/athlete/plan')
+          }}
+          onDismiss={() => setShowCheckin(false)}
+        />
+      )}
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>
           {profile?.full_name?.split(' ')[0]

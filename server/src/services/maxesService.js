@@ -6,8 +6,21 @@ const VALID_LIFTS = [
   'hang_clean', 'clean', 'front_squat', 'romanian_deadlift', 'reverse_lunge',
 ]
 
+// Returns { max, is_pr, previous_best } — is_pr true when new weight > all prior entries
 async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   if (!VALID_LIFTS.includes(lift)) throw new Error(`Invalid lift: ${lift}`)
+
+  // Fetch prior best before inserting so we can detect a PR
+  const { data: prior } = await supabaseAdmin
+    .from('lifting_maxes')
+    .select('weight_lbs')
+    .eq('athlete_id', athleteId)
+    .eq('lift', lift)
+    .order('weight_lbs', { ascending: false })
+    .limit(1)
+
+  const previousBest = prior?.[0] ? Number(prior[0].weight_lbs) : null
+  const is_pr = previousBest === null || Number(weight_lbs) > previousBest
 
   const { data, error } = await supabaseAdmin
     .from('lifting_maxes')
@@ -16,11 +29,20 @@ async function logMax(athleteId, lift, weight_lbs, reps, notes) {
     .single()
 
   if (error) {
-    // Surface Supabase error detail (e.g. unique constraint violations)
     const detail = error.details || error.message || 'Database error'
     throw new Error(detail)
   }
-  return data
+
+  // Record the PR celebration in history
+  if (is_pr) {
+    supabaseAdmin.from('pr_celebrations').insert({
+      athlete_id: athleteId, lift,
+      new_weight_lbs: weight_lbs,
+      previous_weight_lbs: previousBest,
+    }).then(() => {}).catch(err => console.error('[maxesService] pr_celebrations insert failed:', err.message))
+  }
+
+  return { max: data, is_pr, previous_best: previousBest }
 }
 
 async function getMaxesByAthlete(athleteId) {
@@ -32,7 +54,6 @@ async function getMaxesByAthlete(athleteId) {
 
   if (error) throw error
 
-  // Build per-lift structure: history (chronological) + current (highest weight)
   const result = {}
   for (const lift of VALID_LIFTS) {
     result[lift] = { current: null, history: [] }
@@ -43,8 +64,6 @@ async function getMaxesByAthlete(athleteId) {
     result[row.lift].history.push(row)
   }
 
-  // current = entry with highest weight_lbs per lift
-  // Use Number() to handle Supabase returning NUMERIC columns as strings
   for (const lift of VALID_LIFTS) {
     const entries = result[lift].history
     if (entries.length > 0) {

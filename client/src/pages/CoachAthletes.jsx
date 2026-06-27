@@ -66,6 +66,7 @@ export default function CoachAthletes() {
   const [athletes,   setAthletes]   = useState([])
   const [athLoading, setAthLoading] = useState(true)
   const [sort,       setSort]       = useState('name')
+  const [checkinMap, setCheckinMap] = useState({}) // athleteId → { readiness_score }
 
   // ── Coaches tab state ──────────────────────────────────────────────────────
   const [coaches,    setCoaches]    = useState([])
@@ -76,13 +77,18 @@ export default function CoachAthletes() {
   const [removing,  setRemoving]    = useState(null)   // coachId being removed
   const [confirmRemove, setConfirmRemove] = useState(null)
 
-  // ── Load athletes ──────────────────────────────────────────────────────────
+  // ── Load athletes + today's check-ins ─────────────────────────────────────
   useEffect(() => {
     setAthLoading(true)
-    api.get(`/api/roster${team?.id ? `?team_id=${team.id}` : ''}`)
-      .then(r => setAthletes(r.data.roster || []))
-      .catch(() => setAthletes([]))
-      .finally(() => setAthLoading(false))
+    Promise.all([
+      api.get(`/api/roster${team?.id ? `?team_id=${team.id}` : ''}`).then(r => r.data.roster || []).catch(() => []),
+      api.get('/api/checkins/team').then(r => r.data.checkins || []).catch(() => []),
+    ]).then(([roster, checkins]) => {
+      setAthletes(roster)
+      const map = {}
+      for (const c of checkins) map[c.athlete_id] = c
+      setCheckinMap(map)
+    }).finally(() => setAthLoading(false))
   }, [team?.id])
 
   // ── Load coaches ───────────────────────────────────────────────────────────
@@ -266,6 +272,9 @@ export default function CoachAthletes() {
                             <AlertIcon size={11} color="#c73820" /> Injury
                           </span>
                         )}
+                        {checkinMap[a.id]?.readiness_score != null && checkinMap[a.id].readiness_score < 40 && (
+                          <span style={styles.readinessCaution}>⚠ Low</span>
+                        )}
                       </div>
                       {a.survey?.sport && (
                         <span style={styles.mobileSport}>{a.survey.sport}{a.survey.position ? ` · ${a.survey.position}` : ''}</span>
@@ -314,6 +323,9 @@ export default function CoachAthletes() {
                           <span style={styles.injuryFlag}>
                             <AlertIcon size={11} color="#c73820" /> Injury
                           </span>
+                        )}
+                        {checkinMap[a.id]?.readiness_score != null && checkinMap[a.id].readiness_score < 40 && (
+                          <span style={styles.readinessCaution}>⚠ Low</span>
                         )}
                       </div>
                     </td>
@@ -622,6 +634,12 @@ const styles = {
     display: 'inline-flex', alignItems: 'center', gap: 4,
     fontSize: 11, color: '#c73820', background: '#fce8e6',
     border: '1px solid rgba(199,56,32,0.30)', padding: '2px 7px',
+    borderRadius: 4, fontWeight: 700, cursor: 'default', whiteSpace: 'nowrap',
+  },
+  readinessCaution: {
+    display: 'inline-flex', alignItems: 'center',
+    fontSize: 11, color: YELLOW, background: 'rgba(240,190,36,0.12)',
+    border: '1px solid rgba(240,190,36,0.25)', padding: '2px 6px',
     borderRadius: 4, fontWeight: 700, cursor: 'default', whiteSpace: 'nowrap',
   },
   sport:     { display: 'block', fontWeight: 600, color: 'var(--text)', fontSize: 13 },

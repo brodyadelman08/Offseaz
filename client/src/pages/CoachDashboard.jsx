@@ -71,6 +71,9 @@ export default function CoachDashboard() {
   const [newTeamCreating, setNewTeamCreating] = useState(false)
   const [newTeamError, setNewTeamError] = useState('')
 
+  // Activity feed sort mode
+  const [feedSort, setFeedSort] = useState('priority') // 'priority' | 'recent'
+
   // Copy state for each code / link
   const [copiedAthleteCode, setCopiedAthleteCode] = useState(false)
   const [copiedCoachCode,   setCopiedCoachCode]   = useState(false)
@@ -401,20 +404,41 @@ export default function CoachDashboard() {
           <div style={{ ...styles.card, marginTop: 14 }}>
             <div style={styles.sectionHeader}>
               <p style={{ ...styles.cardLabel, color: YELLOW }}>Recent Activity</p>
-              {activityLogs.length > 10 && (
-                <button
-                  style={styles.viewAllBtn}
-                  onClick={() => navigate('/coach/accountability')}
-                >
-                  View all
-                </button>
-              )}
+              <div style={{ display: 'flex', alignItems: 'center', gap: 10 }}>
+                {/* Sort toggle */}
+                <div style={styles.sortToggle}>
+                  {[{ key: 'priority', label: 'Priority' }, { key: 'recent', label: 'Recent' }].map(opt => (
+                    <button
+                      key={opt.key}
+                      style={{
+                        ...styles.sortToggleBtn,
+                        background: feedSort === opt.key ? ORANGE : 'transparent',
+                        color: feedSort === opt.key ? '#fff' : 'var(--text-3)',
+                      }}
+                      onClick={() => setFeedSort(opt.key)}
+                    >
+                      {opt.label}
+                    </button>
+                  ))}
+                </div>
+                {activityLogs.length > 10 && (
+                  <button
+                    style={styles.viewAllBtn}
+                    onClick={() => navigate('/coach/accountability')}
+                  >
+                    View all
+                  </button>
+                )}
+              </div>
             </div>
             {activityLogs.length === 0 ? (
               <p style={styles.empty}>No sessions logged yet.</p>
             ) : (
               <div style={styles.activityList}>
-                {activityLogs.slice(0, 10).map(log => {
+                {(feedSort === 'recent'
+                  ? [...activityLogs].sort((a, b) => new Date(b.timestamp || b.logged_at) - new Date(a.timestamp || a.logged_at))
+                  : activityLogs
+                ).slice(0, 10).map(log => {
                   const isWorkout   = log.type === 'workout' || !log.type
                   const isInjury    = isWorkout && log.status === 'skipped_injury'
                   const isMilestone = log.is_streak_milestone
@@ -669,6 +693,26 @@ const styles = {
     justifyContent: 'space-between',
     alignItems: 'center',
     marginBottom: 14,
+    flexWrap: 'wrap',
+    gap: 8,
+  },
+  sortToggle: {
+    display: 'inline-flex',
+    background: 'var(--card-inner)',
+    border: '1px solid var(--border)',
+    borderRadius: 20,
+    padding: 2,
+    gap: 2,
+  },
+  sortToggleBtn: {
+    padding: '4px 12px',
+    borderRadius: 16,
+    border: 'none',
+    fontSize: 12,
+    fontWeight: 700,
+    cursor: 'pointer',
+    transition: 'all 0.15s',
+    letterSpacing: 0.1,
   },
   viewAllBtn: {
     fontSize: 12,

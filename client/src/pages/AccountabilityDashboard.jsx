@@ -4,6 +4,7 @@ import { ClipboardIcon, FlameIcon, AlertIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const YELLOW = '#F0BE24'
+const BLUE   = '#308EBD'
 
 // Brand color system: blue = informational (logged, no action needed)
 //                    orange = action required (not logged, coach should follow up)
@@ -209,12 +210,40 @@ function AccountabilityInner() {
                     <div style={styles.cardTop}>
                       <div style={styles.avatarRow}>
                         <div style={styles.avatar}>{initials(a.full_name)}</div>
-                        <span style={styles.athleteName}>{a.full_name}</span>
+                        <div>
+                          <span style={styles.athleteName}>{a.full_name}</span>
+                          {a.today_readiness !== null && a.today_readiness < 40 && (
+                            <span style={styles.cautionBadge}>⚠ Low readiness</span>
+                          )}
+                        </div>
                       </div>
-                      <span style={{ ...styles.statusBadge, color: s.color, background: s.bg }}>
-                        {s.label}
-                      </span>
+                      <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'flex-end', gap: 4, flexShrink: 0 }}>
+                        <span style={{ ...styles.statusBadge, color: s.color, background: s.bg }}>
+                          {s.label}
+                        </span>
+                        {a.today_is_rest_day && (
+                          <span style={styles.restDayChip}>😴 Rest Day</span>
+                        )}
+                      </div>
                     </div>
+                    {a.checked_in_today && a.today_readiness !== null && (
+                      <div style={styles.readinessRow}>
+                        <span style={styles.readinessLabel}>Readiness</span>
+                        <div style={styles.readinessBar}>
+                          <div style={{
+                            ...styles.readinessFill,
+                            width: `${a.today_readiness}%`,
+                            background: a.today_readiness >= 70 ? BLUE : a.today_readiness >= 40 ? YELLOW : ORANGE,
+                          }} />
+                        </div>
+                        <span style={{
+                          ...styles.readinessScore,
+                          color: a.today_readiness >= 70 ? BLUE : a.today_readiness >= 40 ? YELLOW : ORANGE,
+                        }}>
+                          {a.today_readiness}
+                        </span>
+                      </div>
+                    )}
 
                     <div style={styles.statsRow}>
                       <div style={styles.statItem}>
@@ -313,8 +342,15 @@ const styles = {
   cardTop: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 12 },
   avatarRow: { display: 'flex', alignItems: 'center', gap: 10, minWidth: 0 },
   avatar: { width: 36, height: 36, borderRadius: '50%', background: ORANGE, color: '#fff', fontSize: 13, fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
-  athleteName: { fontSize: 15, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  athleteName: { fontSize: 15, fontWeight: 700, color: 'var(--text)', overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap', display: 'block' },
+  cautionBadge: { display: 'inline-block', fontSize: 11, fontWeight: 700, color: YELLOW, background: 'rgba(240,190,36,0.12)', border: '1px solid rgba(240,190,36,0.25)', borderRadius: 4, padding: '1px 6px', marginTop: 3 },
   statusBadge: { fontSize: 12, fontWeight: 700, padding: '4px 10px', borderRadius: 6, whiteSpace: 'nowrap', flexShrink: 0 },
+  restDayChip: { fontSize: 11, fontWeight: 600, color: BLUE, background: 'rgba(48,142,189,0.10)', borderRadius: 4, padding: '2px 7px', whiteSpace: 'nowrap' },
+  readinessRow: { display: 'flex', alignItems: 'center', gap: 8, marginTop: 4 },
+  readinessLabel: { fontSize: 11, fontWeight: 600, color: 'var(--text-3)', whiteSpace: 'nowrap', minWidth: 58 },
+  readinessBar: { flex: 1, height: 5, background: 'var(--border)', borderRadius: 4, overflow: 'hidden' },
+  readinessFill: { height: '100%', borderRadius: 4, transition: 'width 0.4s' },
+  readinessScore: { fontSize: 13, fontWeight: 700, minWidth: 28, textAlign: 'right' },
 
   statsRow: { display: 'flex', alignItems: 'center', gap: 12 },
   statItem: { display: 'flex', flexDirection: 'column', alignItems: 'center', flex: 1 },

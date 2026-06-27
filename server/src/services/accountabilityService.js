@@ -1,6 +1,7 @@
 const supabaseAdmin = require('../config/supabase')
 const { getTeamLogs } = require('./workoutService')
 const { computeStreakDays } = require('./streakService')
+const { getTeamCheckins } = require('./checkinService')
 
 function getMondayKey(date) {
   const d = new Date(date)
@@ -55,22 +56,30 @@ async function getAccountabilityData(coachId, teamId = null) {
 
   const athleteIds = members.map(m => m.athlete_id)
 
-  // Fetch all logs for streak history (no limit)
-  const { data: allLogs, error: logsError } = await supabaseAdmin
-    .from('workout_logs')
-    .select('athlete_id, status, effort, logged_at')
-    .in('athlete_id', athleteIds)
+  // Fetch all logs for streak history + today's check-ins in parallel
+  const [logsRes, checkins] = await Promise.all([
+    supabaseAdmin.from('workout_logs').select('athlete_id, status, effort, logged_at').in('athlete_id', athleteIds),
+    getTeamCheckins(athleteIds),
+  ])
+  if (logsRes.error) throw logsRes.error
 
-  if (logsError) throw logsError
-
+  const allLogs   = logsRes.data || []
   const weekMonday = getThisWeekMonday()
+
+  // Build checkin map: athleteId → { readiness_score, is_rest_day }
+  const checkinMap = {}
+  for (const c of checkins) checkinMap[c.athlete_id] = c
 
   // Compute per-athlete metrics
   const athletes = members.map(m => {
-    const athleteLogs = (allLogs || []).filter(l => l.athlete_id === m.athlete_id)
+    const athleteLogs = allLogs.filter(l => l.athlete_id === m.athlete_id)
+    const ci = checkinMap[m.athlete_id] || null
     return {
       id: m.athlete_id,
       full_name: m.profiles.full_name,
+      today_readiness: ci?.readiness_score ?? null,
+      today_is_rest_day: ci?.is_rest_day ?? false,
+      checked_in_today: !!ci,
       ...computeMetrics(athleteLogs, weekMonday),
     }
   })

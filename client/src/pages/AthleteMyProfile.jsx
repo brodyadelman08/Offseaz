@@ -4,6 +4,7 @@ import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
 import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
+import PRCelebration from '../components/PRCelebration'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -62,6 +63,7 @@ export default function AthleteMyProfile() {
   const [submitting, setSubmitting] = useState(null) // lift key being submitted
   const [saveErrors, setSaveErrors] = useState({})   // { [liftKey]: errorString }
   const [savingPrivacy, setSavingPrivacy] = useState(false)
+  const [prCelebration, setPrCelebration] = useState(null) // { lift, newWeight, previousBest }
   const [physicalEditing, setPhysicalEditing] = useState(false)
   const [physicalForm, setPhysicalForm] = useState({ height_feet: '', height_inches: '', weight_lbs: '' })
   const [savingPhysical, setSavingPhysical] = useState(false)
@@ -129,10 +131,13 @@ export default function AthleteMyProfile() {
     setSubmitting(liftKey)
     setSaveErrors(prev => ({ ...prev, [liftKey]: null }))
     try {
-      await api.post('/api/maxes', { lift: liftKey, weight_lbs: w, reps: parseInt(form.reps) || 1, notes: form.notes || null })
+      const postRes = await api.post('/api/maxes', { lift: liftKey, weight_lbs: w, reps: parseInt(form.reps) || 1, notes: form.notes || null })
       const res = await api.get('/api/maxes')
       setMaxes(res.data.maxes)
       setLogForms(prev => ({ ...prev, [liftKey]: { open: false, weight: '', reps: '1', notes: '' } }))
+      if (postRes.data.is_pr) {
+        setPrCelebration({ lift: liftKey, newWeight: w, previousBest: postRes.data.previous_best ?? null })
+      }
     } catch (err) {
       const msg = err?.response?.data?.error || err?.message || 'Failed to save. Please try again.'
       console.error('Failed to log max:', err)
@@ -152,6 +157,16 @@ export default function AthleteMyProfile() {
 
   return (
     <div style={styles.container}>
+      {prCelebration && (
+        <PRCelebration
+          lift={prCelebration.lift}
+          newWeight={prCelebration.newWeight}
+          previousBest={prCelebration.previousBest}
+          athleteName={profile?.full_name}
+          sport={survey?.sport}
+          onClose={() => setPrCelebration(null)}
+        />
+      )}
 
       {/* Profile header */}
       <div style={styles.profileHeader}>
