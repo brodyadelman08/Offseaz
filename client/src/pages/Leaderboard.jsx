@@ -15,6 +15,8 @@ const TABS = [
     unit: 'd',
     statKey: 'streak_days',
     desc: 'Current consecutive days of logged sessions. Longest active streak wins.',
+    info: '🔥 Streaks grow when you log sessions (completed, partial, or injury). They reset after 36 hours of no activity. Taking a rest day? Log a Rest Day check-in to keep your streak alive.',
+    infoLabel: 'How streaks work',
   },
   {
     key: 'completion_rate',
@@ -24,6 +26,8 @@ const TABS = [
     unit: '%',
     statKey: 'completion_rate',
     desc: "This week's completed sessions divided by scheduled sessions.",
+    info: "📊 This is the percentage of your scheduled sessions you completed this week. 100% means you did not miss a single session. Falling below 80% puts you in the building zone. Below 50% puts you at risk.",
+    infoLabel: 'How this is calculated',
   },
   {
     key: 'sessions_total',
@@ -33,6 +37,8 @@ const TABS = [
     unit: '',
     statKey: 'sessions_total',
     desc: 'Total sessions logged this entire offseason.',
+    info: "💪 This is your total sessions logged since you joined Offseaz this offseason. Every session counts regardless of completion status. Partial and injury logs both count.",
+    infoLabel: 'What counts as a session',
   },
 ]
 
@@ -48,7 +54,7 @@ export default function Leaderboard() {
   const [data,      setData]      = useState(null)
   const [loading,   setLoading]   = useState(true)
   const [activeTab, setActiveTab] = useState('streak')
-  const [streakInfoOpen, setStreakInfoOpen] = useState(false)
+  const [infoOpen,  setInfoOpen]  = useState(false)
 
   useEffect(() => {
     api.get('/api/leaderboard')
@@ -56,6 +62,11 @@ export default function Leaderboard() {
       .catch(() => setData(null))
       .finally(() => setLoading(false))
   }, [])
+
+  function switchTab(key) {
+    setActiveTab(key)
+    setInfoOpen(false) // collapse info box whenever tab changes
+  }
 
   const tab    = TABS.find(t => t.key === activeTab)
   const ranked = data?.[activeTab] || []
@@ -79,7 +90,7 @@ export default function Leaderboard() {
               border:     `2px solid ${activeTab === t.key ? t.color : 'var(--border)'}`,
               boxShadow:  activeTab === t.key ? `0 2px 12px ${t.color}44` : 'none',
             }}
-            onClick={() => setActiveTab(t.key)}
+            onClick={() => switchTab(t.key)}
           >
             <span>{t.emoji}</span>
             <span style={s.tabLabel}>{t.label}</span>
@@ -87,20 +98,16 @@ export default function Leaderboard() {
         ))}
       </div>
 
-      {/* Category description */}
+      {/* Category description + info toggle */}
       <div style={s.descRow}>
         <p style={s.descText}>{tab.desc}</p>
-        {activeTab === 'streak' && (
-          <button style={s.infoToggle} onClick={() => setStreakInfoOpen(o => !o)}>
-            {streakInfoOpen ? '▲' : 'ⓘ'} How streaks work
-          </button>
-        )}
+        <button style={s.infoToggle} onClick={() => setInfoOpen(o => !o)}>
+          {infoOpen ? '▲' : 'ⓘ'} {tab.infoLabel}
+        </button>
       </div>
-      {activeTab === 'streak' && streakInfoOpen && (
-        <div style={s.streakInfo}>
-          🔥 Streaks grow when you log sessions (completed, partial, or injury). They reset
-          after <strong>36 hours</strong> of no activity. Taking a rest day? Log a Rest Day
-          check-in to keep your streak alive.
+      {infoOpen && (
+        <div style={s.infoBox}>
+          {tab.info}
         </div>
       )}
 
@@ -201,7 +208,7 @@ const s = {
     color: YELLOW, fontSize: 12, fontWeight: 700, whiteSpace: 'nowrap', padding: 0,
     flexShrink: 0,
   },
-  streakInfo: {
+  infoBox: {
     background: 'rgba(240,190,36,0.08)',
     border: '1px solid rgba(240,190,36,0.2)',
     borderRadius: 10,
