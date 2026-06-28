@@ -61,6 +61,59 @@ function calcCurrentWeek(startsOn, numWeeks) {
   return Math.min(Math.max(week, 1), numWeeks)
 }
 
+// ─── Performance metric display helpers (coach read-only) ─────────────────────
+
+const PERF_METRICS_COACH = {
+  forty_yard_dash:     { name: '40 Yard Dash',            unit: 'seconds',     lowerIsBetter: true  },
+  thirty_yard_dash:    { name: '30 Yard Dash',            unit: 'seconds',     lowerIsBetter: true  },
+  sixty_yard_dash:     { name: '60 Yard Dash',            unit: 'seconds',     lowerIsBetter: true  },
+  ten_yard_split:      { name: '10 Yard Split',           unit: 'seconds',     lowerIsBetter: true  },
+  pro_agility:         { name: 'Pro Agility 5-10-5',      unit: 'seconds',     lowerIsBetter: true  },
+  three_cone:          { name: '3 Cone L Drill',          unit: 'seconds',     lowerIsBetter: true  },
+  vertical_jump:       { name: 'Vertical Jump',           unit: 'inches',      lowerIsBetter: false },
+  broad_jump:          { name: 'Broad Jump',              unit: 'feet_inches', lowerIsBetter: false },
+  standing_long_jump:  { name: 'Standing Long Jump',      unit: 'feet_inches', lowerIsBetter: false },
+  box_jump:            { name: 'Box Jump Height',         unit: 'inches',      lowerIsBetter: false },
+  exit_velocity:       { name: 'Exit Velocity',           unit: 'mph',         lowerIsBetter: false },
+  pitch_velocity:      { name: 'Pitch Velocity',          unit: 'mph',         lowerIsBetter: false },
+  shot_put:            { name: 'Shot Put Distance',       unit: 'feet_inches', lowerIsBetter: false },
+  discus:              { name: 'Discus Distance',         unit: 'feet_inches', lowerIsBetter: false },
+  javelin:             { name: 'Javelin Distance',        unit: 'feet_inches', lowerIsBetter: false },
+  mile_time:           { name: 'Mile Time',               unit: 'min_sec',     lowerIsBetter: true  },
+  four_hundred_meter:  { name: '400 Meter',               unit: 'seconds',     lowerIsBetter: true  },
+  eight_hundred_meter: { name: '800 Meter',               unit: 'min_sec',     lowerIsBetter: true  },
+  bench_225_reps:      { name: '225 lb Bench Press Reps', unit: 'reps',        lowerIsBetter: false },
+}
+
+const THROWING_SUB_TYPES_COACH = {
+  infield:          { name: 'Infield Velocity',        unit: 'mph',     lowerIsBetter: false },
+  outfield:         { name: 'Outfield Velocity',       unit: 'mph',     lowerIsBetter: false },
+  football_pass:    { name: 'Football Pass Velocity',  unit: 'mph',     lowerIsBetter: false },
+  lacrosse_throw:   { name: 'Lacrosse Throw Velocity', unit: 'mph',     lowerIsBetter: false },
+  catcher_pop_time: { name: 'Catcher Pop Time',        unit: 'seconds', lowerIsBetter: true  },
+}
+
+function getPerfDefCoach(sel) {
+  if (sel.metric_id === 'throwing_velocity' && sel.sub_type_id) {
+    const st = THROWING_SUB_TYPES_COACH[sel.sub_type_id]
+    if (!st) return null
+    return { name: `Throwing Velocity — ${st.name}`, unit: st.unit, lowerIsBetter: st.lowerIsBetter }
+  }
+  return PERF_METRICS_COACH[sel.metric_id] || null
+}
+
+function fmtPerfCoach(val, unit) {
+  if (val == null) return '—'
+  const n = Number(val)
+  if (unit === 'feet_inches') { const ft = Math.floor(n / 12); const inch = parseFloat((n % 12).toFixed(1)); return `${ft}' ${inch}"` }
+  if (unit === 'min_sec')     { const min = Math.floor(n / 60); const sec = (n % 60).toFixed(2).padStart(5, '0'); return `${min}:${sec}` }
+  if (unit === 'seconds') return `${n}s`
+  if (unit === 'inches')  return `${n}"`
+  if (unit === 'mph')     return `${n} mph`
+  if (unit === 'reps')    return `${n} reps`
+  return String(n)
+}
+
 export default function AthleteProfile() {
   const { id } = useParams()
   const navigate = useNavigate()
@@ -76,6 +129,11 @@ export default function AthleteProfile() {
   const [noteSaved, setNoteSaved] = useState(false)
   const [noteUpdatedAt, setNoteUpdatedAt] = useState(null)
   const [goals, setGoals] = useState([])
+
+  // Performance PRs (coach read-only)
+  const [perfSelections, setPerfSelections]   = useState([])
+  const [perfHistOpen,   setPerfHistOpen]     = useState({})
+  const [perfHistData,   setPerfHistData]     = useState({})
 
   // ── Edit plan state ──────────────────────────────────────────────────────────
   const [editingPlan, setEditingPlan] = useState(false)
@@ -104,9 +162,29 @@ export default function AthleteProfile() {
       .catch(err => setError(err.response?.data?.error || 'Could not load profile.'))
       .finally(() => setLoading(false))
 
+    api.get(`/api/performance/athlete/${id}`)
+      .then(r => setPerfSelections(r.data.selections || []))
+      .catch(() => {})
+
     // Dismiss any pending injury notifications for this athlete (fire-and-forget)
     api.patch(`/api/notifications/dismiss-athlete/${id}`).catch(() => {})
   }, [id])
+
+  async function handleTogglePerfHistoryCoach(selId) {
+    if (perfHistOpen[selId]) {
+      setPerfHistOpen(prev => ({ ...prev, [selId]: false }))
+      return
+    }
+    setPerfHistOpen(prev => ({ ...prev, [selId]: true }))
+    if (!perfHistData[selId]) {
+      try {
+        const res = await api.get(`/api/performance/athlete/${id}/selections/${selId}/history`)
+        setPerfHistData(prev => ({ ...prev, [selId]: res.data.history || [] }))
+      } catch (err) {
+        console.error('[perf history coach]', err)
+      }
+    }
+  }
 
   async function handleOpenEditPlan() {
     setEditingPlan(true)
@@ -421,9 +499,9 @@ export default function AthleteProfile() {
         </div>
       )}
 
-      {/* Lifting Maxes */}
+      {/* Strength PRs */}
       <div style={{ ...styles.card, marginTop: 14 }}>
-        <p style={{ ...styles.cardLabel, color: YELLOW }}>Lifting Maxes</p>
+        <p style={{ ...styles.cardLabel, color: YELLOW }}>Strength PRs</p>
         {!hasAnyMax ? (
           <p style={styles.empty}>No maxes logged yet.</p>
         ) : (
@@ -476,6 +554,64 @@ export default function AthleteProfile() {
                           }}>
                             {entry.weight_lbs} lbs{entry.reps > 1 ? ` x ${entry.reps}` : ''}
                             {entry.id === current?.id && <span style={styles.prTag}> PR</span>}
+                          </span>
+                          <span style={styles.historyDate}>{fmtShortDate(entry.logged_at)}</span>
+                        </div>
+                      ))}
+                    </div>
+                  )}
+                </div>
+              )
+            })}
+          </div>
+        )}
+      </div>
+
+      {/* Performance PRs */}
+      <div style={{ ...styles.card, marginTop: 14 }}>
+        <p style={{ ...styles.cardLabel, color: BLUE }}>Performance PRs</p>
+        {perfSelections.length === 0 ? (
+          <p style={styles.empty}>No performance metrics selected by this athlete yet.</p>
+        ) : (
+          <div style={styles.maxesGrid}>
+            {perfSelections.map(sel => {
+              const def    = getPerfDefCoach(sel)
+              if (!def) return null
+              const pr      = sel.performance_prs?.[0] ?? null
+              const bestVal = pr ? Number(pr.best_value) : null
+              const hist    = perfHistData[sel.id] || []
+
+              return (
+                <div key={sel.id} style={styles.liftCard}>
+                  <div style={styles.liftTop}>
+                    <span style={styles.liftLabel}>{def.name}</span>
+                    {bestVal !== null && (
+                      <span style={{ ...styles.liftPR, fontSize: String(fmtPerfCoach(bestVal, def.unit)).length > 7 ? 14 : 20 }}>
+                        {fmtPerfCoach(bestVal, def.unit)}
+                      </span>
+                    )}
+                  </div>
+                  {pr ? (
+                    <p style={styles.liftDate}>Set {fmtShortDate(pr.updated_at)}</p>
+                  ) : (
+                    <p style={styles.liftEmpty}>No data</p>
+                  )}
+
+                  <button style={styles.historyToggle} onClick={() => handleTogglePerfHistoryCoach(sel.id)}>
+                    {perfHistOpen[sel.id]
+                      ? <><ChevronUpIcon size={12} color="var(--text-3)" /> Hide</>
+                      : <><ChevronDownIcon size={12} color="var(--text-3)" /> History</>}
+                  </button>
+
+                  {perfHistOpen[sel.id] && (
+                    <div style={styles.historyList}>
+                      {hist.length === 0 ? (
+                        <p style={{ fontSize: 11, color: 'var(--text-3)', margin: 0 }}>Loading…</p>
+                      ) : hist.map((entry, i) => (
+                        <div key={entry.id} style={styles.historyRow}>
+                          <span style={{ ...styles.historyWeight, color: i === 0 ? ORANGE : 'var(--text)', fontWeight: i === 0 ? 700 : 600 }}>
+                            {fmtPerfCoach(entry.value, def.unit)}
+                            {i === 0 && <span style={styles.prTag}> PR</span>}
                           </span>
                           <span style={styles.historyDate}>{fmtShortDate(entry.logged_at)}</span>
                         </div>

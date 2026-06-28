@@ -68,4 +68,6 @@ async function getLeaderboard(teamId) {
   }
 }
 
+// TODO: add sport-specific performance PR leaderboard categories once athlete metric selection data is available
+
 module.exports = { getLeaderboard }
