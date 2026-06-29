@@ -167,6 +167,67 @@ function PerfLogInput({ unit, val1, val2, onVal1, onVal2, inputStyle }) {
   )
 }
 
+function AddLiftsModal({ selectedLifts, onSave, onClose }) {
+  const [checked, setChecked] = useState(() => {
+    const init = {}
+    for (const { key } of LIFTS) init[key] = selectedLifts.includes(key)
+    return init
+  })
+  const [saving, setSaving] = useState(false)
+  const [err, setErr] = useState(null)
+
+  function toggle(key) {
+    setChecked(prev => ({ ...prev, [key]: !prev[key] }))
+  }
+
+  async function handleSave() {
+    setSaving(true)
+    setErr(null)
+    try {
+      const toAdd    = LIFTS.map(l => l.key).filter(k => checked[k]  && !selectedLifts.includes(k))
+      const toRemove = LIFTS.map(l => l.key).filter(k => !checked[k] &&  selectedLifts.includes(k))
+      await Promise.all([
+        ...toAdd.map(k    => api.post(`/api/maxes/selections/${k}`)),
+        ...toRemove.map(k => api.delete(`/api/maxes/selections/${k}`)),
+      ])
+      onSave(LIFTS.map(l => l.key).filter(k => checked[k]))
+    } catch (e) {
+      setErr('Failed to save. Please try again.')
+      console.error('[AddLifts]', e)
+    } finally {
+      setSaving(false)
+    }
+  }
+
+  return (
+    <div style={ms.overlay}>
+      <div style={ms.panel}>
+        <div style={ms.header}>
+          <h2 style={ms.title}>Select Lifts</h2>
+          <p style={ms.subtitle}>Choose which lifts appear in your Strength PRs section. Leave all unchecked to show everything.</p>
+        </div>
+        <div style={{ overflowY: 'auto', padding: '12px 20px 0', flex: 1 }}>
+          {LIFTS.map(({ key, label }) => (
+            <div key={key} style={ms.checkRow} onClick={() => toggle(key)}>
+              <div style={{ ...ms.checkbox, borderColor: checked[key] ? ORANGE : 'var(--border)', background: checked[key] ? ORANGE : 'transparent' }}>
+                {checked[key] && <span style={ms.checkmark}>✓</span>}
+              </div>
+              <span style={{ fontSize: 14, fontWeight: 600, color: 'var(--text)' }}>{label}</span>
+            </div>
+          ))}
+        </div>
+        {err && <p style={{ fontSize: 12, color: '#c73820', margin: '0 20px 8px', background: '#fce8e6', border: '1px solid #fca5a5', borderRadius: 6, padding: '5px 10px' }}>{err}</p>}
+        <div style={ms.footer}>
+          <button style={{ ...ms.saveBtn, opacity: saving ? 0.6 : 1 }} onClick={handleSave} disabled={saving}>
+            {saving ? 'Saving…' : 'Save'}
+          </button>
+          <button style={ms.cancelBtn} onClick={onClose}>Cancel</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 function AddMetricsModal({ existingSelections, onSave, onClose }) {
   const [checked, setChecked] = useState(() => {
     const init = {}
@@ -321,6 +382,10 @@ export default function AthleteMyProfile() {
   const [physicalForm, setPhysicalForm] = useState({ height_feet: '', height_inches: '', weight_lbs: '' })
   const [savingPhysical, setSavingPhysical] = useState(false)
 
+  // Lift selections state (Fix 4)
+  const [selectedLifts,  setSelectedLifts]  = useState([])
+  const [showAddLifts,   setShowAddLifts]   = useState(false)
+
   // Performance PRs state
   const [perfSelections, setPerfSelections] = useState([])
   const [perfLoading,    setPerfLoading]    = useState(true)
@@ -344,6 +409,10 @@ export default function AthleteMyProfile() {
       setLogs(l)
       setMaxes(m)
     }).finally(() => setLoading(false))
+
+    api.get('/api/maxes/selections')
+      .then(r => setSelectedLifts(r.data.selected_lifts || []))
+      .catch(() => {})
 
     api.get('/api/performance/mine')
       .then(r => setPerfSelections(r.data.selections || []))
@@ -488,6 +557,16 @@ export default function AthleteMyProfile() {
           unit={prCelebration.unit || 'lbs'}
           isLowerBetter={prCelebration.isLowerBetter || false}
           onClose={() => setPrCelebration(null)}
+        />
+      )}
+      {showAddLifts && (
+        <AddLiftsModal
+          selectedLifts={selectedLifts}
+          onSave={(newSelection) => {
+            setSelectedLifts(newSelection)
+            setShowAddLifts(false)
+          }}
+          onClose={() => setShowAddLifts(false)}
         />
       )}
       {showAddMetrics && (
@@ -661,11 +740,21 @@ export default function AthleteMyProfile() {
         )}
       </div>
 
-      {/* ── Strength PRs (formerly Lifting Maxes) ───────────────────────────── */}
+      {/* ── Strength PRs ────────────────────────────────────────────────────── */}
       <div style={{ ...styles.card, marginTop: 14 }}>
-        <p style={{ ...styles.cardLabel, color: ORANGE }}>Strength PRs</p>
+        <div style={styles.cardHeader}>
+          <p style={{ ...styles.cardLabel, color: ORANGE, marginBottom: 0 }}>Strength PRs</p>
+          <button style={styles.editBtn} onClick={() => setShowAddLifts(true)}>
+            <PlusIcon size={13} color={BLUE} /> Add Lifts
+          </button>
+        </div>
+        {(() => {
+          const visibleLifts = selectedLifts.length > 0
+            ? LIFTS.filter(l => selectedLifts.includes(l.key))
+            : LIFTS
+          return (
         <div style={styles.maxesGrid}>
-          {LIFTS.map(({ key, label }) => {
+          {visibleLifts.map(({ key, label }) => {
             const liftData = maxes?.[key]
             const current  = liftData?.current
             const history  = liftData?.history || []
@@ -735,6 +824,8 @@ export default function AthleteMyProfile() {
             )
           })}
         </div>
+          )
+        })()}
       </div>
 
       {/* ── Performance PRs ──────────────────────────────────────────────────── */}

@@ -1,23 +1,28 @@
 -- Performance PR tracking: athlete-selected metrics, log entries, current PRs
--- Run in Supabase SQL Editor
+-- Uses partial unique indexes instead of UNIQUE NULLS NOT DISTINCT for PG14 compatibility
 
--- Athlete's selected performance metrics
--- metric_id references the hardcoded METRIC_DEFS in performanceService.js
--- sub_type_id is used only for throwing_velocity (picks the specific throw type)
--- UNIQUE NULLS NOT DISTINCT: two NULLs are equal, preventing duplicate non-subtype selections
 CREATE TABLE IF NOT EXISTS athlete_metric_selections (
   id          UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   athlete_id  UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
   metric_id   TEXT NOT NULL,
   sub_type_id TEXT DEFAULT NULL,
-  created_at  TIMESTAMPTZ DEFAULT now(),
-  CONSTRAINT uq_athlete_metric_subtype UNIQUE NULLS NOT DISTINCT (athlete_id, metric_id, sub_type_id)
+  created_at  TIMESTAMPTZ DEFAULT now()
 );
 
 CREATE INDEX IF NOT EXISTS idx_ams_athlete ON athlete_metric_selections(athlete_id);
 
+-- Prevent duplicate non-subtype selections (sub_type_id IS NULL)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_ams_no_sub
+  ON athlete_metric_selections(athlete_id, metric_id)
+  WHERE sub_type_id IS NULL;
+
+-- Prevent duplicate subtype selections (sub_type_id IS NOT NULL)
+CREATE UNIQUE INDEX IF NOT EXISTS idx_ams_with_sub
+  ON athlete_metric_selections(athlete_id, metric_id, sub_type_id)
+  WHERE sub_type_id IS NOT NULL;
+
 -- Every logged value for a selected metric
--- value is always stored in base unit: seconds for time, total inches for feet/in, etc.
+-- value is stored in base unit: total seconds for time, total inches for feet/in
 CREATE TABLE IF NOT EXISTS performance_logs (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   athlete_id   UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,

@@ -72,6 +72,7 @@ export default function AthleteDashboard() {
   const [joinError, setJoinError] = useState('')
   const [showJoinAnother, setShowJoinAnother] = useState(false)
   const [showCheckin, setShowCheckin] = useState(false)
+  const [trainingCheckinDone, setTrainingCheckinDone] = useState(false)
 
   // Goal form state
   const [showGoalForm, setShowGoalForm] = useState(false)
@@ -180,7 +181,7 @@ export default function AthleteDashboard() {
         <ReadinessCheckin
           onComplete={({ is_rest_day }) => {
             setShowCheckin(false)
-            if (!is_rest_day && plan) navigate('/athlete/plan')
+            if (!is_rest_day) setTrainingCheckinDone(true)
           }}
           onDismiss={() => setShowCheckin(false)}
         />
@@ -313,16 +314,21 @@ export default function AthleteDashboard() {
           </div>
 
           {/* Training plan card */}
-          <div style={styles.card}>
+          <div style={{ ...styles.card, ...(trainingCheckinDone ? { border: `2px solid ${ORANGE}`, boxShadow: `0 4px 18px rgba(247,87,9,0.22)` } : {}) }}>
             {plan ? (
               <div className="action-row-mobile" style={styles.actionRow}>
                 <div style={{ minWidth: 0 }}>
-                  <p style={styles.cardLabel}>Training Plan</p>
+                  <p style={{ ...styles.cardLabel, color: trainingCheckinDone ? ORANGE : BLUE }}>
+                    {trainingCheckinDone ? "Today's Training Session" : 'Training Plan'}
+                  </p>
                   <p style={styles.planTitle}>{plan.title}</p>
                   <p style={styles.planMeta}>{plan.num_weeks}-week plan</p>
                 </div>
-                <button style={{ ...styles.actionBtn, background: BLUE }} onClick={() => navigate('/athlete/plan')}>
-                  View plan
+                <button
+                  style={{ ...styles.actionBtn, background: trainingCheckinDone ? ORANGE : BLUE }}
+                  onClick={() => navigate('/athlete/plan')}
+                >
+                  {trainingCheckinDone ? 'View Today\'s Session →' : 'View plan'}
                 </button>
               </div>
             ) : (

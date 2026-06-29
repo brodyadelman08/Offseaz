@@ -77,6 +77,43 @@ function drawPill(ctx, x, y, w, h) {
   ctx.fill()
 }
 
+// Fix 2: draw confetti frozen mid-fall directly onto the canvas
+function drawCanvasConfetti(ctx, size) {
+  const COLORS = [ORANGE, BLUE, YELLOW, WHITE, WHITE, '#111111']
+  const pieces = Array.from({ length: 80 }, (_, i) => ({
+    x:     Math.random() * size,
+    y:     Math.random() * size * 0.88,
+    w:     10 + Math.random() * 16,
+    h:     5  + Math.random() * 8,
+    rot:   Math.random() * Math.PI * 2,
+    color: COLORS[Math.floor(Math.random() * COLORS.length)],
+    shape: i % 3,
+    outl:  i % 5 === 4,
+  }))
+  for (const p of pieces) {
+    ctx.save()
+    ctx.translate(p.x, p.y)
+    ctx.rotate(p.rot)
+    ctx.fillStyle = p.color
+    if (p.outl) { ctx.strokeStyle = '#111'; ctx.lineWidth = 1.5 }
+    if (p.shape === 1) {
+      const r = p.w / 2
+      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill()
+      if (p.outl) ctx.stroke()
+    } else if (p.shape === 2) {
+      ctx.beginPath()
+      ctx.moveTo(0, -p.h); ctx.lineTo(p.w / 2, 0)
+      ctx.lineTo(0, p.h);  ctx.lineTo(-p.w / 2, 0)
+      ctx.closePath(); ctx.fill()
+      if (p.outl) ctx.stroke()
+    } else {
+      ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
+      if (p.outl) ctx.strokeRect(-p.w / 2, -p.h / 2, p.w, p.h)
+    }
+    ctx.restore()
+  }
+}
+
 async function generateShareImage({ athleteName, sport, liftLabel, newWeight, previousBest, unit, isLowerBetter }) {
   const SIZE = 1080
   const canvas = document.createElement('canvas')
@@ -84,25 +121,29 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   canvas.height = SIZE
   const ctx = canvas.getContext('2d')
 
+  // Background + top bar
   ctx.fillStyle = BLACK
   ctx.fillRect(0, 0, SIZE, SIZE)
-
   ctx.fillStyle = ORANGE
   ctx.fillRect(0, 0, SIZE, 14)
 
+  // Logo — track actual bottom so the accent line is always below it (Fix 1)
+  let logoBottomY = 140
   await new Promise(resolve => {
     const img = new Image()
     img.onload = () => {
       const logoW = 420
       const logoH = Math.round((img.height / img.width) * logoW)
-      ctx.drawImage(img, (SIZE - logoW) / 2, 46, logoW, logoH)
+      ctx.drawImage(img, (SIZE - logoW) / 2, 26, logoW, logoH)
+      logoBottomY = 26 + logoH
       resolve()
     }
     img.onerror = () => {
       ctx.fillStyle = WHITE
       ctx.font = 'bold 60px Arial, sans-serif'
       ctx.textAlign = 'center'
-      ctx.fillText('OFFSEAZ', SIZE / 2, 110)
+      ctx.fillText('OFFSEAZ', SIZE / 2, 95)
+      logoBottomY = 110
       resolve()
     }
     img.src = '/Offseaz-Logo-White-Letter-Dark.png'
@@ -110,70 +151,89 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
 
   ctx.textAlign = 'center'
 
+  // Orange accent line — always placed AFTER the logo (Fix 1)
+  const accentY = logoBottomY + 14
   ctx.fillStyle = ORANGE
-  ctx.fillRect(0, 178, SIZE, 3)
+  ctx.fillRect(0, accentY, SIZE, 3)
 
+  // Lift / metric name in blue
+  const nameY = accentY + 64
   ctx.fillStyle = BLUE
   ctx.font = 'bold 52px Arial, sans-serif'
-  ctx.fillText(liftLabel.toUpperCase(), SIZE / 2, 252)
+  ctx.fillText(liftLabel.toUpperCase(), SIZE / 2, nameY)
 
-  // Hero value — font size scales with string length for complex units
-  const heroStr = fmtValue(newWeight, unit) || String(newWeight)
-  const unitStr = unitLabel(unit)
-  const heroFontSize = heroStr.length > 6 ? 170 : heroStr.length > 4 ? 210 : 290
-  ctx.fillStyle = ORANGE
-  ctx.font = `bold ${heroFontSize}px Arial, sans-serif`
-  const heroBaseline = Math.min(260 + Math.round(heroFontSize * 0.75), 620)
-  ctx.fillText(heroStr, SIZE / 2, heroBaseline)
+  // Hero value + unit inline on same visual line (Fix 5)
+  const heroStr    = fmtValue(newWeight, unit) || String(newWeight)
+  const unitStr    = unitLabel(unit)
+  const heroFontSz = heroStr.length > 6 ? 160 : heroStr.length > 4 ? 200 : 280
+  const heroY      = nameY + Math.round(heroFontSz * 0.9)
+
+  ctx.font = `bold ${heroFontSz}px Arial, sans-serif`
+  const numW       = ctx.measureText(heroStr).width
+  const uFontSz    = unitStr ? Math.round(heroFontSz * 0.3) : 0
+  ctx.font         = unitStr ? `bold ${uFontSz}px Arial, sans-serif` : `bold ${heroFontSz}px Arial, sans-serif`
+  const unitW      = unitStr ? ctx.measureText(` ${unitStr}`).width : 0
+  const totalHeroW = numW + unitW
+  const heroStartX = (SIZE - totalHeroW) / 2
+
+  ctx.fillStyle  = ORANGE
+  ctx.textAlign  = 'left'
+  ctx.font       = `bold ${heroFontSz}px Arial, sans-serif`
+  ctx.fillText(heroStr, heroStartX, heroY)
 
   if (unitStr) {
-    ctx.font = 'bold 76px Arial, sans-serif'
-    ctx.fillText(unitStr, SIZE / 2, 706)
+    ctx.font      = `bold ${uFontSz}px Arial, sans-serif`
+    ctx.fillStyle = 'rgba(247,87,9,0.78)'
+    // baseline-align unit with the top quarter of the hero number
+    ctx.fillText(` ${unitStr}`, heroStartX + numW, heroY - Math.round(heroFontSz * 0.14))
   }
+  ctx.textAlign = 'center'
 
+  // "NEW PERSONAL RECORD" pill
+  const pillY = heroY + Math.round(heroFontSz * 0.22) + 18
   const pillLabel = 'NEW PERSONAL RECORD'
   ctx.font = 'bold 38px Arial, sans-serif'
   const pillW = ctx.measureText(pillLabel).width + 80
   const pillH = 68
-  const pillX = (SIZE - pillW) / 2
-  const pillY = 730
   ctx.fillStyle = YELLOW
-  drawPill(ctx, pillX, pillY, pillW, pillH)
+  drawPill(ctx, (SIZE - pillW) / 2, pillY, pillW, pillH)
   ctx.fillStyle = BLACK
   ctx.fillText(pillLabel, SIZE / 2, pillY + 44)
 
+  // Previous + improvement
+  const prevBlockY = pillY + pillH + 58
   if (previousBest !== null && previousBest !== undefined) {
-    const prevStr = fmtValue(previousBest, unit) || String(previousBest)
-    const rawDiff = isLowerBetter
+    const prevStr   = fmtValue(previousBest, unit) || String(previousBest)
+    const rawDiff   = isLowerBetter
       ? Number(previousBest) - Number(newWeight)
       : Number(newWeight) - Number(previousBest)
     const improvStr = fmtImprovement(rawDiff, unit)
-    const arrow = isLowerBetter ? '↓' : '↑'
-    const sign  = rawDiff >= 0 ? '+' : '−'
-
+    const arrow     = isLowerBetter ? '↓' : '↑'
+    const sign      = rawDiff >= 0 ? '+' : '−'
     ctx.fillStyle = WHITE
     ctx.font = '44px Arial, sans-serif'
-    ctx.fillText(`Previous: ${prevStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, 852)
+    ctx.fillText(`Previous: ${prevStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, prevBlockY)
     ctx.fillStyle = YELLOW
     ctx.font = 'bold 44px Arial, sans-serif'
-    ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, 906)
+    ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, prevBlockY + 58)
   }
 
+  // Blue accent + athlete info always near bottom
   ctx.fillStyle = BLUE
-  ctx.fillRect(80, 934, SIZE - 160, 3)
-
+  ctx.fillRect(80, 940, SIZE - 160, 3)
   if (athleteName) {
     ctx.fillStyle = WHITE
     ctx.font = '500 44px Arial, sans-serif'
     ctx.fillText(athleteName + (sport ? `  ${sport}` : ''), SIZE / 2, 992)
   }
-
   ctx.fillStyle = YELLOW
   ctx.font = 'italic 36px Arial, sans-serif'
-  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 1044)
-
+  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 1042)
   ctx.fillStyle = ORANGE
   ctx.fillRect(0, SIZE - 14, SIZE, 14)
+
+  // Confetti overlay drawn last so it appears on top of all content (Fix 2)
+  drawCanvasConfetti(ctx, SIZE)
 
   return canvas.toDataURL('image/png')
 }

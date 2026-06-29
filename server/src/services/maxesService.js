@@ -6,6 +6,8 @@ const VALID_LIFTS = [
   'hang_clean', 'clean', 'front_squat', 'romanian_deadlift', 'reverse_lunge',
 ]
 
+const VALID_LIFTS_SET = new Set(VALID_LIFTS)
+
 // Returns { max, is_pr, previous_best } — is_pr true when new weight > all prior entries
 async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   if (!VALID_LIFTS.includes(lift)) throw new Error(`Invalid lift: ${lift}`)
@@ -33,7 +35,6 @@ async function logMax(athleteId, lift, weight_lbs, reps, notes) {
     throw new Error(detail)
   }
 
-  // Record the PR celebration in history
   if (is_pr) {
     supabaseAdmin.from('pr_celebrations').insert({
       athlete_id: athleteId, lift,
@@ -76,4 +77,33 @@ async function getMaxesByAthlete(athleteId) {
   return result
 }
 
-module.exports = { logMax, getMaxesByAthlete, VALID_LIFTS }
+// ─── Lift selections ───────────────────────────────────────────────────────────
+
+async function getSelectedLifts(athleteId) {
+  const { data, error } = await supabaseAdmin
+    .from('athlete_lift_selections')
+    .select('lift_key')
+    .eq('athlete_id', athleteId)
+    .order('created_at', { ascending: true })
+  if (error) throw error
+  return (data || []).map(r => r.lift_key)
+}
+
+async function addLiftSelection(athleteId, liftKey) {
+  if (!VALID_LIFTS_SET.has(liftKey)) throw new Error(`Invalid lift: ${liftKey}`)
+  const { error } = await supabaseAdmin
+    .from('athlete_lift_selections')
+    .insert({ athlete_id: athleteId, lift_key: liftKey })
+  if (error && error.code !== '23505') throw error  // ignore duplicate key
+}
+
+async function removeLiftSelection(athleteId, liftKey) {
+  const { error } = await supabaseAdmin
+    .from('athlete_lift_selections')
+    .delete()
+    .eq('athlete_id', athleteId)
+    .eq('lift_key', liftKey)
+  if (error) throw error
+}
+
+module.exports = { logMax, getMaxesByAthlete, VALID_LIFTS, getSelectedLifts, addLiftSelection, removeLiftSelection }
