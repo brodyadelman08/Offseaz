@@ -281,7 +281,8 @@ function AddMetricsModal({ existingSelections, onSave, onClose }) {
 
       onSave()
     } catch (err) {
-      setSaveErr('Failed to save. Please try again.')
+      const msg = err?.response?.data?.error || err?.message || 'Failed to save. Please try again.'
+      setSaveErr(msg)
       console.error('[AddMetrics]', err)
     } finally {
       setSaving(false)
@@ -456,6 +457,15 @@ export default function AthleteMyProfile() {
       console.error('Failed to update privacy:', err)
     } finally {
       setSavingPrivacy(false)
+    }
+  }
+
+  async function handleRemoveLift(liftKey) {
+    try {
+      await api.delete(`/api/maxes/selections/${liftKey}`)
+      setSelectedLifts(prev => prev.filter(k => k !== liftKey))
+    } catch (err) {
+      console.error('[removeLift]', err)
     }
   }
 
@@ -745,7 +755,7 @@ export default function AthleteMyProfile() {
         <div style={styles.cardHeader}>
           <p style={{ ...styles.cardLabel, color: ORANGE, marginBottom: 0 }}>Strength PRs</p>
           <button style={styles.editBtn} onClick={() => setShowAddLifts(true)}>
-            <PlusIcon size={13} color={BLUE} /> Add Lifts
+            <PlusIcon size={13} color={BLUE} /> {selectedLifts.length > 0 ? 'Edit Lifts' : 'Add Lifts'}
           </button>
         </div>
         {(() => {
@@ -766,11 +776,20 @@ export default function AthleteMyProfile() {
               <div key={key} style={styles.liftCard}>
                 <div style={styles.liftTop}>
                   <span style={styles.liftLabel}>{label}</span>
-                  {current && (
-                    <span style={styles.liftPR}>
-                      {current.weight_lbs} <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
-                    </span>
-                  )}
+                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                    {current && (
+                      <span style={styles.liftPR}>
+                        {current.weight_lbs} <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
+                      </span>
+                    )}
+                    {selectedLifts.length > 0 && (
+                      <button
+                        style={{ background: 'none', border: 'none', color: 'var(--text-3)', fontSize: 16, lineHeight: 1, cursor: 'pointer', padding: '0 2px', flexShrink: 0 }}
+                        onClick={() => handleRemoveLift(key)}
+                        title="Remove lift"
+                      >×</button>
+                    )}
+                  </div>
                 </div>
                 {current ? (
                   <p style={styles.liftDate}>Set {fmtShortDate(current.logged_at)}{current.notes ? ` · ${current.notes}` : ''}</p>

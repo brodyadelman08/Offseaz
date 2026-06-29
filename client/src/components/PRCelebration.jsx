@@ -127,7 +127,10 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   ctx.fillStyle = ORANGE
   ctx.fillRect(0, 0, SIZE, 14)
 
-  // Logo — track actual bottom so the accent line is always below it (Fix 1)
+  // Confetti as background layer — drawn first so all content renders on top
+  drawCanvasConfetti(ctx, SIZE)
+
+  // Logo — track actual bottom so the accent line is always below it
   let logoBottomY = 140
   await new Promise(resolve => {
     const img = new Image()
@@ -231,9 +234,6 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 1042)
   ctx.fillStyle = ORANGE
   ctx.fillRect(0, SIZE - 14, SIZE, 14)
-
-  // Confetti overlay drawn last so it appears on top of all content (Fix 2)
-  drawCanvasConfetti(ctx, SIZE)
 
   return canvas.toDataURL('image/png')
 }

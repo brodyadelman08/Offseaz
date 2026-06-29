@@ -28,6 +28,14 @@ function surveyGoalsToSuggestions(surveyGoals = []) {
   return surveyGoals.map(g => MAP[g] || { title: g, target: '' }).filter(Boolean)
 }
 
+// Compute 1-based current week number clamped to [1, numWeeks]
+function currentWeekOf(startsOn, numWeeks) {
+  const msPerWeek = 7 * 24 * 60 * 60 * 1000
+  const elapsed   = Date.now() - new Date(startsOn).getTime()
+  const week      = Math.floor(elapsed / msPerWeek) + 1
+  return Math.min(Math.max(week, 1), numWeeks)
+}
+
 function GoalRow({ goal, onToggle, onDelete }) {
   return (
     <div style={styles.goalRow}>
@@ -57,46 +65,50 @@ function GoalRow({ goal, onToggle, onDelete }) {
 export default function AthleteDashboard() {
   const { profile } = useAuth()
   const teamCtx = useTeam()
-  const activeTeam     = teamCtx?.activeTeam     ?? null
-  const teams          = teamCtx?.teams          ?? []
-  const teamsLoading   = teamCtx?.teamsLoading   ?? false
-  const setActiveTeamId = teamCtx?.setActiveTeamId ?? (() => {})
-  const refreshTeams   = teamCtx?.refreshTeams   ?? (() => Promise.resolve())
+  const activeTeam      = teamCtx?.activeTeam      ?? null
+  const teams           = teamCtx?.teams            ?? []
+  const teamsLoading    = teamCtx?.teamsLoading     ?? false
+  const setActiveTeamId = teamCtx?.setActiveTeamId  ?? (() => {})
+  const refreshTeams    = teamCtx?.refreshTeams     ?? (() => Promise.resolve())
   const navigate = useNavigate()
-  const [survey, setSurvey] = useState(undefined)
-  const [plan, setPlan] = useState(undefined)
-  const [goals, setGoals] = useState([])
-  const [loading, setLoading] = useState(true)
-  const [joinCode, setJoinCode] = useState('')
-  const [joining, setJoining] = useState(false)
-  const [joinError, setJoinError] = useState('')
+
+  const [survey,    setSurvey]    = useState(undefined)
+  const [coachPlan, setCoachPlan] = useState(undefined)
+  const [autoPlan,  setAutoPlan]  = useState(undefined)
+  const [goals,     setGoals]     = useState([])
+  const [loading,   setLoading]   = useState(true)
+
+  const [joinCode,       setJoinCode]       = useState('')
+  const [joining,        setJoining]        = useState(false)
+  const [joinError,      setJoinError]      = useState('')
   const [showJoinAnother, setShowJoinAnother] = useState(false)
-  const [showCheckin, setShowCheckin] = useState(false)
+  const [showCheckin,    setShowCheckin]    = useState(false)
   const [trainingCheckinDone, setTrainingCheckinDone] = useState(false)
 
   // Goal form state
   const [showGoalForm, setShowGoalForm] = useState(false)
-  const [goalTitle, setGoalTitle] = useState('')
-  const [goalTarget, setGoalTarget] = useState('')
-  const [goalDue, setGoalDue] = useState('')
-  const [savingGoal, setSavingGoal] = useState(false)
+  const [goalTitle,    setGoalTitle]    = useState('')
+  const [goalTarget,   setGoalTarget]   = useState('')
+  const [goalDue,      setGoalDue]      = useState('')
+  const [savingGoal,   setSavingGoal]   = useState(false)
 
   useEffect(() => {
-    // Check if athlete has done today's readiness check-in
     api.get('/api/checkins/today')
       .then(r => { if (!r.data.checkin) setShowCheckin(true) })
-      .catch(() => {}) // don't block on failure
+      .catch(() => {})
 
     Promise.all([
       api.get('/api/survey/my').then(r => r.data.survey).catch(() => null),
-      api.get('/api/blueprints/my-plan').then(r => r.data.plan).catch(() => null),
+      api.get('/api/blueprints/my-plan')
+        .then(r => ({ coach: r.data.coach_plan || null, auto: r.data.auto_plan || null }))
+        .catch(() => ({ coach: null, auto: null })),
       api.get('/api/goals').then(r => r.data.goals).catch(() => []),
-    ]).then(([surveyData, planData, goalsData]) => {
+    ]).then(([surveyData, plans, goalsData]) => {
       setSurvey(surveyData)
-      setPlan(planData)
+      setCoachPlan(plans.coach)
+      setAutoPlan(plans.auto)
       setGoals(goalsData)
 
-      // Seed suggested goals from survey if no goals exist yet
       if (goalsData.length === 0 && surveyData?.offseason_goals?.length > 0) {
         const suggestions = surveyGoalsToSuggestions(surveyData.offseason_goals)
         Promise.all(
@@ -175,6 +187,77 @@ export default function AthleteDashboard() {
 
   const completedCount = goals.filter(g => g.completed).length
 
+  // Active plan: coach takes priority over auto
+  const activePlan  = coachPlan ?? autoPlan ?? null
+  const isCoachPlan = !!coachPlan
+
+  // Render the today's session card based on survey + plan state
+  function renderSessionCard() {
+    // No survey yet
+    if (survey === null) {
+      return (
+        <div style={styles.card}>
+          <p style={{ ...styles.cardLabel, color: ORANGE }}>Get Started</p>
+          <p style={styles.actionTitle}>Complete your needs analysis</p>
+          <p style={{ ...styles.actionSub, marginBottom: 14 }}>
+            Answer a few questions so we can build your personalized training plan.
+          </p>
+          <button style={{ ...styles.actionBtn, background: ORANGE, alignSelf: 'flex-start' }} onClick={() => navigate('/survey')}>
+            Start now →
+          </button>
+        </div>
+      )
+    }
+
+    // Has survey but no plan at all
+    if (!activePlan) {
+      return (
+        <div style={styles.card}>
+          <p style={{ ...styles.cardLabel, color: BLUE }}>Training Plan</p>
+          <p style={styles.noPlan}>Your coach is setting up your training plan. Check back soon.</p>
+        </div>
+      )
+    }
+
+    // Has a plan — show today's session card
+    const week = currentWeekOf(activePlan.starts_on, activePlan.num_weeks)
+    const highlighted = trainingCheckinDone
+    return (
+      <div style={{
+        ...styles.card,
+        ...(highlighted ? {
+          border: `2px solid ${ORANGE}`,
+          boxShadow: `0 4px 20px rgba(247,87,9,0.25)`,
+        } : {}),
+      }}>
+        <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
+          <div style={{ minWidth: 0, flex: 1 }}>
+            <p style={{ ...styles.cardLabel, color: highlighted ? ORANGE : BLUE, marginBottom: 4 }}>
+              {highlighted ? "Today's Training Session" : (isCoachPlan ? 'Coach Blueprint' : 'Personalized Plan')}
+            </p>
+            <p style={styles.planTitle}>{activePlan.title}</p>
+            <p style={styles.planMeta}>
+              Week {week} of {activePlan.num_weeks}
+              {isCoachPlan && <span style={styles.coachTag}> · Coach assigned</span>}
+            </p>
+          </div>
+          <button
+            style={{
+              ...styles.actionBtn,
+              background: highlighted ? ORANGE : BLUE,
+              flexShrink: 0,
+              fontSize: 13,
+              padding: '10px 16px',
+            }}
+            onClick={() => navigate('/athlete/plan')}
+          >
+            {highlighted ? 'View Session →' : 'View plan'}
+          </button>
+        </div>
+      </div>
+    )
+  }
+
   return (
     <div style={styles.container}>
       {showCheckin && (
@@ -186,6 +269,7 @@ export default function AthleteDashboard() {
           onDismiss={() => setShowCheckin(false)}
         />
       )}
+
       <div style={styles.pageHeader}>
         <h1 style={styles.pageTitle}>
           {profile?.full_name?.split(' ')[0]
@@ -196,9 +280,9 @@ export default function AthleteDashboard() {
       </div>
 
       {loading ? (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: 14 }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: 12 }}>
           {[90, 70, 80].map((w, i) => (
-            <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24 }}>
+            <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20 }}>
               <div className="skeleton" style={{ width: `${w}px`, height: 11, marginBottom: 10 }} />
               <div className="skeleton" style={{ width: '60%', height: 20, marginBottom: 8 }} />
               <div className="skeleton" style={{ width: '40%', height: 13 }} />
@@ -207,15 +291,19 @@ export default function AthleteDashboard() {
         </div>
       ) : (
         <div style={styles.stack}>
-          {/* Team card */}
+
+          {/* ── Today's session (top priority) ── */}
+          {renderSessionCard()}
+
+          {/* ── Team card ── */}
           {teamsLoading ? (
             <div style={styles.card}>
               <p style={styles.loadingText}>Loading team…</p>
             </div>
           ) : activeTeam ? (
             <div style={styles.card}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start' }}>
-                <div>
+              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', gap: 8 }}>
+                <div style={{ minWidth: 0 }}>
                   <p style={{ ...styles.cardLabel, color: BLUE }}>Your Team</p>
                   <p style={styles.teamName}>{activeTeam.name}</p>
                   {teams.length > 1 && (
@@ -226,7 +314,7 @@ export default function AthleteDashboard() {
                   style={styles.joinAnotherBtn}
                   onClick={() => { setShowJoinAnother(s => !s); setJoinError('') }}
                 >
-                  {showJoinAnother ? 'Cancel' : '+ Join another team'}
+                  {showJoinAnother ? 'Cancel' : '+ Join another'}
                 </button>
               </div>
               {showJoinAnother && (
@@ -284,9 +372,9 @@ export default function AthleteDashboard() {
             </div>
           )}
 
-          {/* Survey card */}
-          <div style={styles.card}>
-            {survey ? (
+          {/* ── Survey complete badge ── */}
+          {survey && (
+            <div style={styles.card}>
               <div style={styles.surveyComplete}>
                 <div style={styles.checkIcon}>
                   <CheckCircleIcon size={22} color={BLUE} />
@@ -300,46 +388,8 @@ export default function AthleteDashboard() {
                   </p>
                 </div>
               </div>
-            ) : (
-              <div className="action-row-mobile" style={styles.actionRow}>
-                <div style={{ minWidth: 0 }}>
-                  <p style={styles.actionTitle}>Complete your athlete profile</p>
-                  <p style={styles.actionSub}>Help your coach build the right plan for you.</p>
-                </div>
-                <button style={{ ...styles.actionBtn, background: YELLOW, color: '#1a1a1a' }} onClick={() => navigate('/survey')}>
-                  Start survey
-                </button>
-              </div>
-            )}
-          </div>
-
-          {/* Training plan card */}
-          <div style={{ ...styles.card, ...(trainingCheckinDone ? { border: `2px solid ${ORANGE}`, boxShadow: `0 4px 18px rgba(247,87,9,0.22)` } : {}) }}>
-            {plan ? (
-              <div className="action-row-mobile" style={styles.actionRow}>
-                <div style={{ minWidth: 0 }}>
-                  <p style={{ ...styles.cardLabel, color: trainingCheckinDone ? ORANGE : BLUE }}>
-                    {trainingCheckinDone ? "Today's Training Session" : 'Training Plan'}
-                  </p>
-                  <p style={styles.planTitle}>{plan.title}</p>
-                  <p style={styles.planMeta}>{plan.num_weeks}-week plan</p>
-                </div>
-                <button
-                  style={{ ...styles.actionBtn, background: trainingCheckinDone ? ORANGE : BLUE }}
-                  onClick={() => navigate('/athlete/plan')}
-                >
-                  {trainingCheckinDone ? 'View Today\'s Session →' : 'View plan'}
-                </button>
-              </div>
-            ) : (
-              <div>
-                <p style={styles.cardLabel}>Training Plan</p>
-                <p style={styles.noPlan}>
-                  Your coach is setting up your training plan. Check back soon.
-                </p>
-              </div>
-            )}
-          </div>
+            </div>
+          )}
 
           {/* ── Goals card ── */}
           <div style={styles.card}>
@@ -347,28 +397,21 @@ export default function AthleteDashboard() {
               <div>
                 <p style={{ ...styles.cardLabel, color: ORANGE, marginBottom: 0 }}>Offseason Goals</p>
                 {goals.length > 0 && (
-                  <p style={styles.goalProgress}>
-                    {completedCount}/{goals.length} completed
-                  </p>
+                  <p style={styles.goalProgress}>{completedCount}/{goals.length} completed</p>
                 )}
               </div>
-              <button
-                style={styles.addGoalBtn}
-                onClick={() => setShowGoalForm(s => !s)}
-              >
+              <button style={styles.addGoalBtn} onClick={() => setShowGoalForm(s => !s)}>
                 <PlusIcon size={14} color="#fff" />
                 Add goal
               </button>
             </div>
 
-            {/* Progress bar */}
             {goals.length > 0 && (
               <div style={styles.progressTrack}>
                 <div style={{ ...styles.progressFill, width: `${Math.round((completedCount / goals.length) * 100)}%` }} />
               </div>
             )}
 
-            {/* Add goal form */}
             {showGoalForm && (
               <form onSubmit={handleAddGoal} style={styles.goalForm}>
                 <input
@@ -387,14 +430,9 @@ export default function AthleteDashboard() {
                   maxLength={200}
                 />
                 <div style={styles.goalFormRow}>
-                  <div style={{ flex: 1 }}>
+                  <div style={{ flex: 1, minWidth: 0 }}>
                     <label style={styles.goalDateLabel}>Due date (optional)</label>
-                    <input
-                      type="date"
-                      style={styles.goalInput}
-                      value={goalDue}
-                      onChange={e => setGoalDue(e.target.value)}
-                    />
+                    <input type="date" style={styles.goalInput} value={goalDue} onChange={e => setGoalDue(e.target.value)} />
                   </div>
                   <div style={styles.goalFormBtns}>
                     <button
@@ -421,16 +459,12 @@ export default function AthleteDashboard() {
             ) : (
               <div style={styles.goalList}>
                 {goals.map(goal => (
-                  <GoalRow
-                    key={goal.id}
-                    goal={goal}
-                    onToggle={handleToggleGoal}
-                    onDelete={handleDeleteGoal}
-                  />
+                  <GoalRow key={goal.id} goal={goal} onToggle={handleToggleGoal} onDelete={handleDeleteGoal} />
                 ))}
               </div>
             )}
           </div>
+
         </div>
       )}
     </div>
@@ -440,155 +474,127 @@ export default function AthleteDashboard() {
 const styles = {
   container: { maxWidth: 640, margin: '0 auto' },
 
-  pageHeader: { marginBottom: 28 },
-  pageTitle: { fontSize: 24, fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
-  pageSub: { fontSize: 14, color: 'var(--text-2)', fontStyle: 'italic', margin: 0 },
-  loadingText: { color: 'var(--text-3)', fontSize: 15 },
+  pageHeader: { marginBottom: 20 },
+  pageTitle:  { fontSize: 'clamp(18px, 5vw, 24px)', fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
+  pageSub:    { fontSize: 13, color: 'var(--text-2)', fontStyle: 'italic', margin: 0 },
+  loadingText:{ color: 'var(--text-3)', fontSize: 15 },
 
-  stack: { display: 'flex', flexDirection: 'column', gap: 14 },
+  stack: { display: 'flex', flexDirection: 'column', gap: 12 },
 
   card: {
     background: 'var(--card)',
     borderRadius: 16,
-    padding: 24,
+    padding: 'clamp(14px, 4vw, 22px)',
     border: '1px solid var(--border)',
     boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 0,
   },
   cardLabel: {
-    fontSize: 11,
-    fontWeight: 700,
-    color: ORANGE,
-    textTransform: 'uppercase',
-    letterSpacing: 0.8,
-    margin: '0 0 8px',
+    fontSize: 11, fontWeight: 700, color: ORANGE,
+    textTransform: 'uppercase', letterSpacing: 0.8, margin: '0 0 6px',
   },
-  teamName: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: '0 0 2px' },
-  teamCount: { fontSize: 12, color: 'var(--text-3)', margin: 0, marginTop: 2 },
+
+  // Plan / session card
+  planTitle:  { fontWeight: 700, fontSize: 'clamp(14px, 4vw, 16px)', color: 'var(--text)', margin: '2px 0' },
+  planMeta:   { fontSize: 12, color: 'var(--text-3)', margin: 0 },
+  coachTag:   { color: BLUE },
+  noPlan:     { color: 'var(--text-3)', fontSize: 14, margin: 0 },
+  actionTitle:{ fontWeight: 700, fontSize: 'clamp(14px, 4vw, 15px)', color: 'var(--text)', margin: '0 0 3px' },
+  actionSub:  { fontSize: 13, color: 'var(--text-2)', margin: 0 },
+  actionBtn:  {
+    padding: '11px 18px', fontSize: 14, fontWeight: 700, borderRadius: 10,
+    border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer',
+    whiteSpace: 'nowrap', flexShrink: 0,
+    boxShadow: '0 2px 8px rgba(247,87,9,0.28)', letterSpacing: 0.1, minHeight: 44,
+  },
+
+  // Team
+  teamName:   { fontSize: 'clamp(16px, 4vw, 20px)', fontWeight: 700, color: 'var(--text)', margin: '0 0 2px' },
+  teamCount:  { fontSize: 12, color: 'var(--text-3)', margin: 0, marginTop: 2 },
   joinAnotherBtn: {
-    padding: '6px 12px', fontSize: 11, fontWeight: 700, borderRadius: 8,
+    padding: '6px 10px', fontSize: 11, fontWeight: 700, borderRadius: 8,
     border: `1px solid ${BLUE}44`, background: 'transparent', color: BLUE,
     cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, letterSpacing: 0.1,
   },
-  joinAnotherPanel: {
-    marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border)',
-  },
+  joinAnotherPanel: { marginTop: 14, paddingTop: 14, borderTop: '1px solid var(--border)' },
   joinInputSmall: {
-    width: '100%',
-    padding: '11px 14px',
-    fontSize: 16,
-    fontFamily: 'monospace',
-    letterSpacing: 4,
-    textAlign: 'center',
-    borderRadius: 10,
-    border: '1px solid var(--input-border)',
-    background: 'var(--input-bg)',
-    color: 'var(--text)',
-    textTransform: 'uppercase',
-    outline: 'none',
-    boxSizing: 'border-box',
-    marginBottom: 8,
+    width: '100%', padding: '11px 14px', fontSize: 16, fontFamily: 'monospace',
+    letterSpacing: 4, textAlign: 'center', borderRadius: 10,
+    border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)',
+    textTransform: 'uppercase', outline: 'none', boxSizing: 'border-box', marginBottom: 8,
   },
-
   joinHeroCard: {
-    background: 'var(--card)',
-    borderRadius: 18,
-    padding: '28px 28px 24px',
-    border: '1px solid var(--border)',
-    borderLeft: `4px solid ${ORANGE}`,
-    display: 'flex',
-    flexDirection: 'column',
-    gap: 10,
+    background: 'var(--card)', borderRadius: 18, padding: 'clamp(16px, 4vw, 28px)',
+    border: '1px solid var(--border)', borderLeft: `4px solid ${ORANGE}`,
+    display: 'flex', flexDirection: 'column', gap: 10,
     boxShadow: '0 2px 8px rgba(0,0,0,0.18), inset 0 1px 0 rgba(255,255,255,0.04)',
   },
   joinHeroLabel: { fontSize: 11, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 0.8, margin: 0 },
-  joinHeroTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: 0, lineHeight: 1.3 },
-  joinHeroDesc: { fontSize: 14, color: 'var(--text-2)', margin: '0 0 4px', lineHeight: 1.5 },
+  joinHeroTitle: { fontSize: 'clamp(16px, 4vw, 20px)', fontWeight: 700, color: 'var(--text)', margin: 0, lineHeight: 1.3 },
+  joinHeroDesc:  { fontSize: 13, color: 'var(--text-2)', margin: '0 0 4px', lineHeight: 1.5 },
   joinFormStack: { display: 'flex', flexDirection: 'column', gap: 10 },
   joinInputLarge: {
-    width: '100%',
-    padding: '14px 18px',
-    fontSize: 24,
-    fontFamily: 'monospace',
-    letterSpacing: 6,
-    textAlign: 'center',
-    borderRadius: 10,
-    border: '1px solid var(--input-border)',
-    background: 'var(--input-bg)',
-    color: 'var(--text)',
-    textTransform: 'uppercase',
-    outline: 'none',
-    boxSizing: 'border-box',
+    width: '100%', padding: '13px 18px', fontSize: 'clamp(18px, 5vw, 24px)',
+    fontFamily: 'monospace', letterSpacing: 6, textAlign: 'center', borderRadius: 10,
+    border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)',
+    textTransform: 'uppercase', outline: 'none', boxSizing: 'border-box',
   },
-  joinBtnFull: { width: '100%', padding: '13px 0', fontSize: 15, fontWeight: 700, borderRadius: 10, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 10px rgba(48,142,189,0.30)', letterSpacing: 0.2 },
+  joinBtnFull: {
+    width: '100%', padding: '13px 0', fontSize: 15, fontWeight: 700, borderRadius: 10,
+    border: 'none', background: BLUE, color: '#fff', cursor: 'pointer',
+    boxShadow: '0 2px 10px rgba(48,142,189,0.30)', letterSpacing: 0.2,
+  },
   joinError: { color: '#c73820', fontSize: 13, marginTop: 4 },
 
-  surveyComplete: { display: 'flex', alignItems: 'center', gap: 14 },
-  checkIcon: { width: 40, height: 40, borderRadius: '50%', background: 'rgba(48,142,189,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
+  // Survey badge
+  surveyComplete:      { display: 'flex', alignItems: 'center', gap: 14 },
+  checkIcon:           { width: 40, height: 40, borderRadius: '50%', background: 'rgba(48,142,189,0.1)', display: 'flex', alignItems: 'center', justifyContent: 'center', flexShrink: 0 },
   surveyCompleteTitle: { fontWeight: 700, fontSize: 15, color: BLUE, margin: '0 0 2px' },
-  surveyCompleteSub: { fontSize: 13, color: 'var(--text-2)', margin: 0 },
-
-  actionRow: { display: 'flex', alignItems: 'center', justifyContent: 'space-between', gap: 16 },
-  actionTitle: { fontWeight: 700, fontSize: 15, color: 'var(--text)', margin: '0 0 3px' },
-  actionSub: { fontSize: 13, color: 'var(--text-2)', margin: 0 },
-  actionBtn: { padding: '12px 20px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 2px 8px rgba(247,87,9,0.28)', letterSpacing: 0.1, minHeight: 44 },
-
-  planTitle: { fontWeight: 700, fontSize: 16, color: 'var(--text)', margin: '2px 0' },
-  planMeta: { fontSize: 13, color: 'var(--text-3)', margin: 0 },
-  noPlan: { color: 'var(--text-3)', fontSize: 14 },
+  surveyCompleteSub:   { fontSize: 13, color: 'var(--text-2)', margin: 0 },
 
   // Goals
-  goalCardHeader: { display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 12 },
-  goalProgress: { fontSize: 12, color: 'var(--text-3)', marginTop: 4 },
+  goalCardHeader: { display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 10, gap: 8 },
+  goalProgress:   { fontSize: 12, color: 'var(--text-3)', marginTop: 4 },
   addGoalBtn: {
-    display: 'inline-flex',
-    alignItems: 'center',
-    gap: 6,
-    padding: '10px 16px',
-    fontSize: 13,
-    fontWeight: 700,
-    borderRadius: 10,
-    border: 'none',
-    background: ORANGE,
-    color: '#fff',
-    cursor: 'pointer',
-    whiteSpace: 'nowrap',
-    flexShrink: 0,
-    boxShadow: '0 2px 8px rgba(247,87,9,0.25)',
-    minHeight: 44,
+    display: 'inline-flex', alignItems: 'center', gap: 6,
+    padding: '9px 14px', fontSize: 13, fontWeight: 700, borderRadius: 10,
+    border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer',
+    whiteSpace: 'nowrap', flexShrink: 0, boxShadow: '0 2px 8px rgba(247,87,9,0.25)', minHeight: 40,
   },
-  progressTrack: { height: 4, background: 'var(--border)', borderRadius: 6, marginBottom: 14, overflow: 'hidden' },
-  progressFill: { height: '100%', background: BLUE, borderRadius: 4, transition: 'width 0.4s' },
+  progressTrack: { height: 4, background: 'var(--border)', borderRadius: 6, marginBottom: 12, overflow: 'hidden' },
+  progressFill:  { height: '100%', background: BLUE, borderRadius: 4, transition: 'width 0.4s' },
 
-  goalForm: { display: 'flex', flexDirection: 'column', gap: 8, background: 'var(--card-inner)', borderRadius: 12, padding: '14px 16px', marginBottom: 12, border: '1px solid var(--border)' },
-  goalInput: { width: '100%', padding: '9px 12px', fontSize: 14, borderRadius: 10, border: '1px solid var(--input-border)', background: 'var(--input-bg)', color: 'var(--text)', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box' },
+  goalForm: {
+    display: 'flex', flexDirection: 'column', gap: 8,
+    background: 'var(--card-inner)', borderRadius: 12,
+    padding: '12px 14px', marginBottom: 10, border: '1px solid var(--border)',
+  },
+  goalInput: {
+    width: '100%', padding: '9px 12px', fontSize: 14, borderRadius: 10,
+    border: '1px solid var(--input-border)', background: 'var(--input-bg)',
+    color: 'var(--text)', outline: 'none', fontFamily: 'inherit', boxSizing: 'border-box',
+  },
   goalDateLabel: { display: 'block', fontSize: 11, fontWeight: 600, color: 'var(--text-3)', marginBottom: 4, textTransform: 'uppercase', letterSpacing: 0.3 },
-  goalFormRow: { display: 'flex', gap: 10, alignItems: 'flex-end', flexWrap: 'wrap' },
-  goalFormBtns: { display: 'flex', gap: 8, flexShrink: 0, marginLeft: 'auto' },
-  cancelGoalBtn: { padding: '11px 16px', fontSize: 13, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer', minHeight: 44 },
-  saveGoalBtn: { padding: '11px 18px', fontSize: 13, fontWeight: 700, borderRadius: 10, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 8px rgba(48,142,189,0.28)', minHeight: 44 },
+  goalFormRow:   { display: 'flex', gap: 10, alignItems: 'flex-end', flexWrap: 'wrap' },
+  goalFormBtns:  { display: 'flex', gap: 8, flexShrink: 0, marginLeft: 'auto' },
+  cancelGoalBtn: { padding: '10px 14px', fontSize: 13, fontWeight: 600, borderRadius: 10, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer', minHeight: 42 },
+  saveGoalBtn:   { padding: '10px 16px', fontSize: 13, fontWeight: 700, borderRadius: 10, border: 'none', background: BLUE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 8px rgba(48,142,189,0.28)', minHeight: 42 },
 
   noGoals: { fontSize: 14, color: 'var(--text-3)', margin: 0 },
-  goalList: { display: 'flex', flexDirection: 'column', gap: 0 },
-  goalRow: { display: 'flex', alignItems: 'flex-start', gap: 8, padding: '12px 0', borderBottom: '1px solid var(--border-light)' },
+  goalList:{ display: 'flex', flexDirection: 'column', gap: 0 },
+  goalRow: { display: 'flex', alignItems: 'flex-start', gap: 8, padding: '11px 0', borderBottom: '1px solid var(--border-light)' },
   checkBtn: {
-    width: 28,
-    height: 28,
-    borderRadius: '50%',
-    border: '2px solid var(--border)',
-    background: 'transparent',
-    cursor: 'pointer',
-    flexShrink: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    padding: 0,
-    marginTop: 0,
-    transition: 'all 0.15s',
+    width: 28, height: 28, borderRadius: '50%', border: '2px solid var(--border)',
+    background: 'transparent', cursor: 'pointer', flexShrink: 0,
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: 0, transition: 'all 0.15s',
   },
   goalContent: { flex: 1, display: 'flex', flexDirection: 'column', gap: 2 },
-  goalTitle:  { fontSize: 14, fontWeight: 600, lineHeight: 1.4 },
-  goalTarget: { fontSize: 13, color: 'var(--text-2)' },
-  goalDue:    { fontSize: 12, color: 'var(--text-3)' },
+  goalTitle:   { fontSize: 14, fontWeight: 600, lineHeight: 1.4 },
+  goalTarget:  { fontSize: 13, color: 'var(--text-2)' },
+  goalDue:     { fontSize: 12, color: 'var(--text-3)' },
   deleteGoalBtn: {
     background: 'none', border: 'none', color: 'var(--text-3)',
     fontSize: 18, cursor: 'pointer', lineHeight: 1,

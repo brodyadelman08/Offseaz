@@ -84,8 +84,11 @@ async function addSelection(athleteId, metricId, subTypeId) {
     .single()
 
   if (error) {
+    console.error('[performanceService] addSelection DB error:', {
+      code: error.code, message: error.message, details: error.details, hint: error.hint,
+    })
     if (error.code === '23505') throw new Error('That metric is already on your profile.')
-    throw error
+    throw new Error(error.message || error.details || 'Database error inserting metric selection')
   }
   return data
 }

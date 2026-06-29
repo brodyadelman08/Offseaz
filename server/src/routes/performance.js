@@ -28,8 +28,13 @@ router.post('/selections', verifyToken, async (req, res) => {
     const selection = await svc.addSelection(req.user.id, metric_id, sub_type_id || null)
     res.status(201).json({ selection })
   } catch (err) {
-    console.error('[performance] addSelection:', err.message)
-    res.status(err.message.includes('already') ? 409 : 400).json({ error: err.message })
+    console.error('[performance] addSelection:', err)
+    const msg = err?.message || 'Failed to add metric'
+    if (msg.includes('already')) return res.status(409).json({ error: msg })
+    if (msg.includes('Unknown') || msg.includes('requires') || msg.includes('does not accept')) {
+      return res.status(400).json({ error: msg })
+    }
+    res.status(500).json({ error: msg })
   }
 })
 
