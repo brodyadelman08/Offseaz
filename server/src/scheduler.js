@@ -3,7 +3,9 @@ const cron = require('node-cron')
 const { runWeeklyDigest }   = require('./services/digestService')
 const { runNightlyStreakReset } = require('./services/streakService')
 
-// Monday at 08:00 AM server time — covers the previous Mon–Sun window
+// Monday at 08:00 AM Central Time — covers the previous Mon–Sun window.
+// Explicit timezone so this fires at 8am Central regardless of what timezone
+// the Railway container defaults to (Railway runs UTC by default).
 cron.schedule('0 8 * * 1', async () => {
   console.log('[Scheduler] Firing weekly coach digest...')
   try {
@@ -12,7 +14,7 @@ cron.schedule('0 8 * * 1', async () => {
   } catch (err) {
     console.error('[Scheduler] Digest fatal error:', err.message)
   }
-})
+}, { timezone: 'America/Chicago' })
 
 // Every day at midnight UTC — reset streaks for athletes who missed 2+ consecutive days
 cron.schedule('0 0 * * *', async () => {
@@ -25,6 +27,6 @@ cron.schedule('0 0 * * *', async () => {
   }
 })
 
-console.log('[Scheduler] Weekly digest (Mon 08:00) and nightly streak reset (00:00 UTC) registered')
+console.log('[Scheduler] Weekly digest (Mon 08:00 America/Chicago) and nightly streak reset (00:00 UTC) registered')
 
 module.exports = {}
