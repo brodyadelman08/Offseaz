@@ -15,8 +15,8 @@ router.get('/mine', verifyToken, async (req, res) => {
     const selections = await svc.getSelections(req.user.id)
     res.json({ selections })
   } catch (err) {
-    console.error('[performance] getSelections:', err.message)
-    res.status(500).json({ error: err.message })
+    console.error('[performance] getSelections:', err)
+    res.status(500).json({ error: err.message || 'Failed to load performance metrics' })
   }
 })
 

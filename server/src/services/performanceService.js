@@ -61,18 +61,56 @@ function validateSelection(metricId, subTypeId) {
 // ─── Service functions ─────────────────────────────────────────────────────────
 
 async function getSelections(athleteId) {
-  const { data, error } = await supabaseAdmin
+  // Two flat queries merged in JS instead of a nested PostgREST embed.
+  // The embed (`performance_prs (...)`) depends on PostgREST's schema-cache
+  // having picked up the FK between athlete_metric_selections and
+  // performance_prs — if that cache is stale the whole request 500s, even for
+  // selections that have nothing to do with the missing PR row. Flat queries
+  // can't fail that way, and a selection with no logged value yet just gets
+  // an empty performance_prs array instead of crashing the response.
+  const { data: selections, error: selErr } = await supabaseAdmin
     .from('athlete_metric_selections')
-    .select(`
-      id, metric_id, sub_type_id, created_at,
-      performance_prs (best_value, previous_value, updated_at)
-    `)
+    .select('id, metric_id, sub_type_id, created_at')
     .eq('athlete_id', athleteId)
     .order('created_at', { ascending: true })
 
-  if (error) throw error
-  console.log(`[performanceService] getSelections(${athleteId}) -> ${(data || []).length} rows:`, (data || []).map(d => ({ id: d.id, metric_id: d.metric_id, sub_type_id: d.sub_type_id })))
-  return data || []
+  if (selErr) {
+    console.error('[performanceService] getSelections — selection query error:', {
+      code: selErr.code, message: selErr.message, details: selErr.details, hint: selErr.hint, athleteId,
+    })
+    throw new Error(selErr.message || selErr.details || 'Database error fetching metric selections')
+  }
+
+  const rows = selections || []
+  if (rows.length === 0) {
+    console.log(`[performanceService] getSelections(${athleteId}) -> 0 rows`)
+    return []
+  }
+
+  const selectionIds = rows.map(r => r.id)
+  const { data: prs, error: prErr } = await supabaseAdmin
+    .from('performance_prs')
+    .select('selection_id, best_value, previous_value, updated_at')
+    .in('selection_id', selectionIds)
+
+  if (prErr) {
+    // Don't let a PR-fetch failure take down the whole list — log it and fall
+    // back to "no PR logged yet" for every selection instead of throwing.
+    console.error('[performanceService] getSelections — PR query error (continuing with empty PRs):', {
+      code: prErr.code, message: prErr.message, details: prErr.details, hint: prErr.hint, athleteId,
+    })
+  }
+
+  const prMap = {}
+  for (const pr of (prs || [])) prMap[pr.selection_id] = pr
+
+  const result = rows.map(r => ({
+    ...r,
+    performance_prs: prMap[r.id] ? [prMap[r.id]] : [],
+  }))
+
+  console.log(`[performanceService] getSelections(${athleteId}) -> ${result.length} rows:`, result.map(d => ({ id: d.id, metric_id: d.metric_id, sub_type_id: d.sub_type_id, has_pr: d.performance_prs.length > 0 })))
+  return result
 }
 
 async function addSelection(athleteId, metricId, subTypeId) {

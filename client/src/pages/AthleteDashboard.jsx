@@ -146,7 +146,16 @@ export default function AthleteDashboard() {
 
   useEffect(() => {
     api.get('/api/checkins/today')
-      .then(r => { if (!r.data.checkin) setShowCheckin(true) })
+      .then(r => {
+        if (!r.data.checkin) {
+          setShowCheckin(true)
+        } else {
+          // A checkin already exists for today — hydrate the highlighted
+          // Today's Session card state from it instead of only relying on the
+          // live modal's onComplete callback, so it persists across reloads.
+          setTrainingCheckinDone(!r.data.checkin.is_rest_day)
+        }
+      })
       .catch(() => {})
 
     Promise.all([
