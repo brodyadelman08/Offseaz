@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
@@ -392,6 +392,11 @@ export default function AthleteMyProfile() {
   // Lift selections state (Fix 4)
   const [selectedLifts,  setSelectedLifts]  = useState([])
   const [showAddLifts,   setShowAddLifts]   = useState(false)
+  // Synchronous mirror of selectedLifts — read by handleRemoveLift so that two
+  // deletes fired back-to-back (before the first one's setState has committed
+  // and re-rendered) never both decide from the same stale value.
+  const selectedLiftsRef = useRef(selectedLifts)
+  useEffect(() => { selectedLiftsRef.current = selectedLifts }, [selectedLifts])
 
   // Performance PRs state
   const [perfSelections, setPerfSelections] = useState([])
@@ -476,18 +481,32 @@ export default function AthleteMyProfile() {
   }
 
   async function handleRemoveLift(liftKey) {
+    // Read from the ref, not the closed-over selectedLifts value, so a second
+    // delete fired before the first one's setState has committed still sees
+    // the result of the first one instead of stale [] / a stale list.
+    const current    = selectedLiftsRef.current
+    const wasDefault = current.length === 0
+    const visible     = wasDefault ? LIFTS.map(l => l.key) : current
+    const next        = visible.filter(k => k !== liftKey)
+    selectedLiftsRef.current = next
+
     try {
-      if (selectedLifts.length === 0) {
+      if (wasDefault) {
         // No explicit selection yet (all lifts showing by default) — persist an
         // explicit selection of every other lift so the removal actually sticks.
-        const keep = LIFTS.map(l => l.key).filter(k => k !== liftKey)
-        await Promise.all(keep.map(k => api.post(`/api/maxes/selections/${k}`).catch(() => {})))
-        setSelectedLifts(keep)
+        await Promise.all(next.map(k => api.post(`/api/maxes/selections/${k}`).catch(() => {})))
       } else {
         await api.delete(`/api/maxes/selections/${liftKey}`)
-        setSelectedLifts(prev => prev.filter(k => k !== liftKey))
       }
+      // Functional update — always filters the latest committed state, never
+      // a value captured when this handler was created, so back-to-back
+      // deletes never clobber each other.
+      setSelectedLifts(prev => {
+        const prevVisible = prev.length === 0 ? LIFTS.map(l => l.key) : prev
+        return prevVisible.filter(k => k !== liftKey)
+      })
     } catch (err) {
+      selectedLiftsRef.current = current
       console.error('[removeLift]', err)
     }
   }
