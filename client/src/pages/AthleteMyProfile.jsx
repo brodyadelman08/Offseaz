@@ -2,7 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
-import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon } from '../components/Icons'
+import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon, StatusInjuryIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 import PRCelebration from '../components/PRCelebration'
 
@@ -10,13 +10,16 @@ const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 
-const RED = '#c73820'
+const RED  = '#DC2626'
+const GREY = '#666666'
 
+// Brand-color-only status system — no green anywhere. Completed uses blue,
+// not the traditional green "success" color, to stay within the 5 Offseaz colors.
 const LOG_STATUS = {
-  completed:      { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9', border: BLUE   },
-  partial:        { label: 'Partial',          color: '#b45309', bg: '#fef3c7', border: YELLOW },
-  skipped:        { label: 'Skipped',          color: '#888',    bg: '#f0f0f0', border: ORANGE },
-  skipped_injury: { label: 'Skipped — Injury', color: RED,       bg: '#fce8e6', border: RED    },
+  completed:      { label: 'Completed',        color: BLUE, bg: 'rgba(48,142,189,0.12)', border: BLUE   },
+  partial:        { label: 'Partial',          color: '#9a6b00', bg: 'rgba(240,190,36,0.15)', border: YELLOW },
+  skipped:        { label: 'Skipped',          color: GREY, bg: 'rgba(102,102,102,0.12)', border: GREY   },
+  skipped_injury: { label: 'Skipped — Injury', color: RED,  bg: 'rgba(220,38,38,0.10)',   border: RED    },
 }
 
 // TODO: allow custom athlete-defined lift names to reduce profile clutter
@@ -463,6 +466,15 @@ export default function AthleteMyProfile() {
     }
   }
 
+  async function handleRemovePerfSelection(selId) {
+    try {
+      await api.delete(`/api/performance/selections/${selId}`)
+      setPerfSelections(prev => prev.filter(s => s.id !== selId))
+    } catch (err) {
+      console.error('[removePerfSelection]', err)
+    }
+  }
+
   async function handleRemoveLift(liftKey) {
     try {
       if (selectedLifts.length === 0) {
@@ -889,11 +901,19 @@ export default function AthleteMyProfile() {
                 <div key={sel.id} style={styles.liftCard}>
                   <div style={styles.liftTop}>
                     <span style={styles.liftLabel}>{def.name}</span>
-                    {bestVal !== null && (
-                      <span style={{ ...styles.liftPR, fontSize: bestVal >= 100 ? 16 : 22 }}>
-                        {fmtPerfValue(bestVal, def.unit)}
-                      </span>
-                    )}
+                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
+                      {bestVal !== null && (
+                        <span style={{ ...styles.liftPR, fontSize: bestVal >= 100 ? 16 : 22 }}>
+                          {fmtPerfValue(bestVal, def.unit)}
+                        </span>
+                      )}
+                      <button
+                        style={styles.removeLiftBtn}
+                        onClick={() => handleRemovePerfSelection(sel.id)}
+                        title="Remove metric"
+                        aria-label={`Remove ${def.name}`}
+                      >×</button>
+                    </div>
                   </div>
 
                   {pr ? (
@@ -1002,10 +1022,14 @@ export default function AthleteMyProfile() {
           <div style={styles.logList}>
             {logs.map((log, i) => {
               const s = LOG_STATUS[log.status] || LOG_STATUS.skipped
+              const isInjury = log.status === 'skipped_injury'
               return (
                 <div key={log.id} style={{ ...styles.logRow, borderLeft: `3px solid ${s.border}`, marginTop: i > 0 ? 8 : 0 }}>
                   <div style={styles.logTop}>
-                    <span style={{ ...styles.logBadge, color: s.color, background: s.bg }}>{s.label}</span>
+                    <span style={{ ...styles.logBadge, color: s.color, background: s.bg, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                      {isInjury && <StatusInjuryIcon size={11} color={RED} />}
+                      {s.label}
+                    </span>
                     {log.session_focus && <span style={styles.logFocus}>{log.session_focus}</span>}
                     {log.effort != null && <span style={styles.logEffort}>{log.effort}/10</span>}
                     {log.week_number != null && <span style={styles.logWeek}>Wk {log.week_number}</span>}
