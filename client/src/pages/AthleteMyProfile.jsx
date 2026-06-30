@@ -500,10 +500,15 @@ export default function AthleteMyProfile() {
       }
       // Functional update — always filters the latest committed state, never
       // a value captured when this handler was created, so back-to-back
-      // deletes never clobber each other.
+      // deletes never clobber each other. The ref is re-synced inside this
+      // same callback (not via the separate useEffect, which only fires one
+      // tick after commit) so a delete fired immediately after this one can
+      // never read a not-yet-resynced ref value.
       setSelectedLifts(prev => {
         const prevVisible = prev.length === 0 ? LIFTS.map(l => l.key) : prev
-        return prevVisible.filter(k => k !== liftKey)
+        const result = prevVisible.filter(k => k !== liftKey)
+        selectedLiftsRef.current = result
+        return result
       })
     } catch (err) {
       selectedLiftsRef.current = current
