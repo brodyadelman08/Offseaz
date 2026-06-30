@@ -10,10 +10,13 @@ const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 
+const RED = '#c73820'
+
 const LOG_STATUS = {
-  completed: { label: 'Completed', color: '#2e7d32', bg: '#e8f5e9' },
-  partial:   { label: 'Partial',   color: '#b45309', bg: '#fef3c7' },
-  skipped:   { label: 'Skipped',   color: '#888',    bg: '#f0f0f0' },
+  completed:      { label: 'Completed',        color: '#2e7d32', bg: '#e8f5e9', border: BLUE   },
+  partial:        { label: 'Partial',          color: '#b45309', bg: '#fef3c7', border: YELLOW },
+  skipped:        { label: 'Skipped',          color: '#888',    bg: '#f0f0f0', border: ORANGE },
+  skipped_injury: { label: 'Skipped — Injury', color: RED,       bg: '#fce8e6', border: RED    },
 }
 
 // TODO: allow custom athlete-defined lift names to reduce profile clutter
@@ -462,8 +465,16 @@ export default function AthleteMyProfile() {
 
   async function handleRemoveLift(liftKey) {
     try {
-      await api.delete(`/api/maxes/selections/${liftKey}`)
-      setSelectedLifts(prev => prev.filter(k => k !== liftKey))
+      if (selectedLifts.length === 0) {
+        // No explicit selection yet (all lifts showing by default) — persist an
+        // explicit selection of every other lift so the removal actually sticks.
+        const keep = LIFTS.map(l => l.key).filter(k => k !== liftKey)
+        await Promise.all(keep.map(k => api.post(`/api/maxes/selections/${k}`).catch(() => {})))
+        setSelectedLifts(keep)
+      } else {
+        await api.delete(`/api/maxes/selections/${liftKey}`)
+        setSelectedLifts(prev => prev.filter(k => k !== liftKey))
+      }
     } catch (err) {
       console.error('[removeLift]', err)
     }
@@ -782,13 +793,12 @@ export default function AthleteMyProfile() {
                         {current.weight_lbs} <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
                       </span>
                     )}
-                    {selectedLifts.length > 0 && (
-                      <button
-                        style={{ background: 'none', border: 'none', color: 'var(--text-3)', fontSize: 16, lineHeight: 1, cursor: 'pointer', padding: '0 2px', flexShrink: 0 }}
-                        onClick={() => handleRemoveLift(key)}
-                        title="Remove lift"
-                      >×</button>
-                    )}
+                    <button
+                      style={styles.removeLiftBtn}
+                      onClick={() => handleRemoveLift(key)}
+                      title="Remove lift"
+                      aria-label={`Remove ${label}`}
+                    >×</button>
                   </div>
                 </div>
                 {current ? (
@@ -993,7 +1003,7 @@ export default function AthleteMyProfile() {
             {logs.map((log, i) => {
               const s = LOG_STATUS[log.status] || LOG_STATUS.skipped
               return (
-                <div key={log.id} style={{ ...styles.logRow, borderTop: i > 0 ? '1px solid var(--border-light)' : 'none' }}>
+                <div key={log.id} style={{ ...styles.logRow, borderLeft: `3px solid ${s.border}`, marginTop: i > 0 ? 8 : 0 }}>
                   <div style={styles.logTop}>
                     <span style={{ ...styles.logBadge, color: s.color, background: s.bg }}>{s.label}</span>
                     {log.session_focus && <span style={styles.logFocus}>{log.session_focus}</span>}
@@ -1066,6 +1076,12 @@ const styles = {
   liftUnit:  { fontSize: 12, fontWeight: 600, color: 'var(--text-3)' },
   liftDate:  { fontSize: 11, color: 'var(--text-3)', margin: 0 },
   liftEmpty: { fontSize: 12, color: 'var(--text-3)', margin: 0, fontStyle: 'italic' },
+  removeLiftBtn: {
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    width: 22, height: 22, borderRadius: '50%', flexShrink: 0,
+    background: 'rgba(247,87,9,0.12)', border: '1px solid rgba(247,87,9,0.35)',
+    color: ORANGE, fontSize: 14, fontWeight: 700, lineHeight: 1, cursor: 'pointer', padding: 0,
+  },
 
   logPRBtn:  { display: 'inline-flex', alignItems: 'center', gap: 4, fontSize: 13, fontWeight: 700, color: ORANGE, background: 'rgba(247,87,9,0.08)', border: `1px solid rgba(247,87,9,0.25)`, borderRadius: 8, padding: '10px 14px', cursor: 'pointer', marginTop: 4, alignSelf: 'flex-start', minHeight: 40 },
 
@@ -1090,7 +1106,7 @@ const styles = {
   privacyBtn:   { flexShrink: 0, padding: '8px 16px', fontSize: 13, fontWeight: 700, borderRadius: 10, border: '1px solid var(--border)', background: 'none', cursor: 'pointer', whiteSpace: 'nowrap' },
 
   logList: { display: 'flex', flexDirection: 'column' },
-  logRow:  { padding: '12px 0' },
+  logRow:  { padding: '10px 12px', background: 'var(--card-inner)', borderRadius: '0 8px 8px 0' },
   logTop:  { display: 'flex', alignItems: 'center', gap: 8, flexWrap: 'wrap' },
   logBadge:{ fontSize: 11, fontWeight: 700, padding: '3px 8px', borderRadius: 4, whiteSpace: 'nowrap' },
   logFocus:{ fontSize: 14, fontWeight: 600, color: 'var(--text)' },

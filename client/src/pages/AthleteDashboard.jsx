@@ -36,6 +36,58 @@ function currentWeekOf(startsOn, numWeeks) {
   return Math.min(Math.max(week, 1), numWeeks)
 }
 
+const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+
+// Find today's session within the active plan's current week
+function findTodaySession(plan) {
+  if (!plan?.weeks?.length) return null
+  const weekNum = currentWeekOf(plan.starts_on, plan.num_weeks)
+  const week = plan.weeks.find(w => w.week_number === weekNum) || plan.weeks[0]
+  if (!week?.sessions?.length) return null
+
+  const todayName = DAY_NAMES[new Date().getDay()]
+  const match = week.sessions.find(s => typeof s.day === 'string' && s.day.toLowerCase() === todayName.toLowerCase())
+  return match || week.sessions[0]
+}
+
+// Prominent dashboard moment shown after the athlete checks in and picks Training Day
+function TodaySessionCard({ activePlan, onStart }) {
+  const session   = findTodaySession(activePlan)
+  const exercises = session?.exercises?.slice(0, 3) || []
+  const descLines = !exercises.length && session?.description
+    ? session.description.split('\n').filter(Boolean).slice(0, 3)
+    : []
+
+  return (
+    <div style={styles.todayCard}>
+      <p style={styles.todayLabel}>Today's Training Session</p>
+      {session?.day && <span style={styles.todayDay}>{session.day}</span>}
+      <p style={styles.todayFocus}>{session?.focus || activePlan.title}</p>
+
+      {exercises.length > 0 ? (
+        <div style={styles.todayExList}>
+          {exercises.map((ex, i) => (
+            <div key={i} style={styles.todayExRow}>
+              <span style={styles.todayExName}>{ex.name}</span>
+              <span style={styles.todayExSets}>
+                {ex.warmup ? `${ex.warmup} warmup, ` : ''}{ex.sets}×{ex.reps}
+              </span>
+            </div>
+          ))}
+        </div>
+      ) : descLines.length > 0 ? (
+        <div style={styles.todayExList}>
+          {descLines.map((line, i) => <p key={i} style={styles.todayDescLine}>{line}</p>)}
+        </div>
+      ) : null}
+
+      <button style={styles.startSessionBtn} onClick={onStart}>
+        Start Session →
+      </button>
+    </div>
+  )
+}
+
 function GoalRow({ goal, onToggle, onDelete }) {
   return (
     <div style={styles.goalRow}>
@@ -219,21 +271,19 @@ export default function AthleteDashboard() {
       )
     }
 
-    // Has a plan — show today's session card
+    // Check-in complete + Training Day selected — show the dedicated session card
+    if (trainingCheckinDone) {
+      return <TodaySessionCard activePlan={activePlan} onStart={() => navigate('/athlete/plan')} />
+    }
+
+    // Default — plain plan summary card
     const week = currentWeekOf(activePlan.starts_on, activePlan.num_weeks)
-    const highlighted = trainingCheckinDone
     return (
-      <div style={{
-        ...styles.card,
-        ...(highlighted ? {
-          border: `2px solid ${ORANGE}`,
-          boxShadow: `0 4px 20px rgba(247,87,9,0.25)`,
-        } : {}),
-      }}>
+      <div style={styles.card}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
           <div style={{ minWidth: 0, flex: 1 }}>
-            <p style={{ ...styles.cardLabel, color: highlighted ? ORANGE : BLUE, marginBottom: 4 }}>
-              {highlighted ? "Today's Training Session" : (isCoachPlan ? 'Coach Blueprint' : 'Personalized Plan')}
+            <p style={{ ...styles.cardLabel, color: BLUE, marginBottom: 4 }}>
+              {isCoachPlan ? 'Coach Blueprint' : 'Personalized Plan'}
             </p>
             <p style={styles.planTitle}>{activePlan.title}</p>
             <p style={styles.planMeta}>
@@ -242,16 +292,10 @@ export default function AthleteDashboard() {
             </p>
           </div>
           <button
-            style={{
-              ...styles.actionBtn,
-              background: highlighted ? ORANGE : BLUE,
-              flexShrink: 0,
-              fontSize: 13,
-              padding: '10px 16px',
-            }}
+            style={{ ...styles.actionBtn, background: BLUE, flexShrink: 0, fontSize: 13, padding: '10px 16px' }}
             onClick={() => navigate('/athlete/plan')}
           >
-            {highlighted ? 'View Session →' : 'View plan'}
+            View plan
           </button>
         </div>
       </div>
@@ -508,6 +552,46 @@ const styles = {
     border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer',
     whiteSpace: 'nowrap', flexShrink: 0,
     boxShadow: '0 2px 8px rgba(247,87,9,0.28)', letterSpacing: 0.1, minHeight: 44,
+  },
+
+  // Today's Session card (shown after check-in + Training Day selection)
+  todayCard: {
+    background: 'var(--card)',
+    borderRadius: 16,
+    border: '1px solid var(--border)',
+    borderLeft: `4px solid ${ORANGE}`,
+    padding: 'clamp(16px, 4vw, 22px)',
+    boxShadow: '0 4px 24px rgba(247,87,9,0.22)',
+    display: 'flex',
+    flexDirection: 'column',
+    gap: 8,
+  },
+  todayLabel: {
+    fontSize: 11, fontWeight: 700, color: ORANGE,
+    textTransform: 'uppercase', letterSpacing: 0.8, margin: 0,
+  },
+  todayDay: {
+    fontSize: 10, fontWeight: 700, color: BLUE, textTransform: 'uppercase',
+    background: 'rgba(48,142,189,0.12)', padding: '3px 8px', borderRadius: 6,
+    display: 'inline-block', alignSelf: 'flex-start', letterSpacing: 0.4,
+  },
+  todayFocus: {
+    fontSize: 'clamp(18px, 5vw, 22px)', fontWeight: 700, color: 'var(--text)',
+    fontFamily: "Calibri, 'Trebuchet MS', sans-serif", margin: '0 0 4px',
+  },
+  todayExList: { display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 4 },
+  todayExRow: {
+    display: 'flex', justifyContent: 'space-between', alignItems: 'center',
+    padding: '8px 0', borderBottom: '1px solid var(--border-light)', gap: 10,
+  },
+  todayExName: { fontSize: 14, fontWeight: 600, color: 'var(--text)', minWidth: 0 },
+  todayExSets: { fontSize: 13, color: 'var(--text-2)', whiteSpace: 'nowrap', flexShrink: 0 },
+  todayDescLine: { fontSize: 13, color: 'var(--text-2)', margin: '4px 0', lineHeight: 1.5 },
+  startSessionBtn: {
+    marginTop: 8, padding: '15px 0', fontSize: 16, fontWeight: 700,
+    borderRadius: 12, border: 'none', background: ORANGE, color: '#fff',
+    cursor: 'pointer', boxShadow: '0 4px 20px rgba(247,87,9,0.40)',
+    minHeight: 52, width: '100%', letterSpacing: 0.2,
   },
 
   // Team

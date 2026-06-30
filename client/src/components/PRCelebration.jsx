@@ -77,38 +77,43 @@ function drawPill(ctx, x, y, w, h) {
   ctx.fill()
 }
 
-// Fix 2: draw confetti frozen mid-fall directly onto the canvas
+// Draw confetti directly onto the canvas as a background layer.
+// Called BEFORE logo/text so all content renders on top.
 function drawCanvasConfetti(ctx, size) {
-  const COLORS = [ORANGE, BLUE, YELLOW, WHITE, WHITE, '#111111']
+  const COLORS = [ORANGE, ORANGE, BLUE, BLUE, YELLOW, YELLOW, WHITE, WHITE, '#1a1a1a']
   const pieces = Array.from({ length: 80 }, (_, i) => ({
     x:     Math.random() * size,
-    y:     Math.random() * size * 0.88,
-    w:     10 + Math.random() * 16,
-    h:     5  + Math.random() * 8,
+    y:     Math.random() * size,           // full canvas — no cap
+    w:     45 + Math.random() * 55,        // 45–100 px wide
+    h:     14 + Math.random() * 22,        // 14–36 px tall
     rot:   Math.random() * Math.PI * 2,
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
-    shape: i % 3,
-    outl:  i % 5 === 4,
+    shape: i % 3,                           // 0=rect, 1=circle, 2=diamond
+    alpha: 0.70 + Math.random() * 0.30,    // 70–100 % opacity
   }))
   for (const p of pieces) {
     ctx.save()
+    ctx.globalAlpha = p.alpha
     ctx.translate(p.x, p.y)
     ctx.rotate(p.rot)
     ctx.fillStyle = p.color
-    if (p.outl) { ctx.strokeStyle = '#111'; ctx.lineWidth = 1.5 }
     if (p.shape === 1) {
-      const r = p.w / 2
-      ctx.beginPath(); ctx.arc(0, 0, r, 0, Math.PI * 2); ctx.fill()
-      if (p.outl) ctx.stroke()
-    } else if (p.shape === 2) {
+      // circle
       ctx.beginPath()
-      ctx.moveTo(0, -p.h); ctx.lineTo(p.w / 2, 0)
-      ctx.lineTo(0, p.h);  ctx.lineTo(-p.w / 2, 0)
-      ctx.closePath(); ctx.fill()
-      if (p.outl) ctx.stroke()
+      ctx.arc(0, 0, p.h / 2, 0, Math.PI * 2)
+      ctx.fill()
+    } else if (p.shape === 2) {
+      // diamond
+      ctx.beginPath()
+      ctx.moveTo(0, -p.h)
+      ctx.lineTo(p.w / 2, 0)
+      ctx.lineTo(0, p.h)
+      ctx.lineTo(-p.w / 2, 0)
+      ctx.closePath()
+      ctx.fill()
     } else {
+      // rectangle
       ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h)
-      if (p.outl) ctx.strokeRect(-p.w / 2, -p.h / 2, p.w, p.h)
     }
     ctx.restore()
   }

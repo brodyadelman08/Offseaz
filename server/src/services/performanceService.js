@@ -71,26 +71,52 @@ async function getSelections(athleteId) {
     .order('created_at', { ascending: true })
 
   if (error) throw error
+  console.log(`[performanceService] getSelections(${athleteId}) -> ${(data || []).length} rows:`, (data || []).map(d => ({ id: d.id, metric_id: d.metric_id, sub_type_id: d.sub_type_id })))
   return data || []
 }
 
 async function addSelection(athleteId, metricId, subTypeId) {
   validateSelection(metricId, subTypeId || null)
+  const normalizedSubType = subTypeId || null
 
   const { data, error } = await supabaseAdmin
     .from('athlete_metric_selections')
-    .insert({ athlete_id: athleteId, metric_id: metricId, sub_type_id: subTypeId || null })
+    .insert({ athlete_id: athleteId, metric_id: metricId, sub_type_id: normalizedSubType })
     .select()
     .single()
 
-  if (error) {
-    console.error('[performanceService] addSelection DB error:', {
-      code: error.code, message: error.message, details: error.details, hint: error.hint,
-    })
-    if (error.code === '23505') throw new Error('That metric is already on your profile.')
-    throw new Error(error.message || error.details || 'Database error inserting metric selection')
+  if (!error) return data
+
+  console.error('[performanceService] addSelection DB error:', {
+    code: error.code, message: error.message, details: error.details, hint: error.hint,
+    athleteId, metricId, subTypeId: normalizedSubType,
+  })
+
+  if (error.code === '23505') {
+    // Unique violation — check whether THIS athlete genuinely already has this
+    // exact selection. If so it's a real duplicate; return it instead of erroring
+    // so the UI can treat the add as a no-op success.
+    let existingQuery = supabaseAdmin
+      .from('athlete_metric_selections')
+      .select('id, metric_id, sub_type_id, created_at')
+      .eq('athlete_id', athleteId)
+      .eq('metric_id', metricId)
+    existingQuery = normalizedSubType
+      ? existingQuery.eq('sub_type_id', normalizedSubType)
+      : existingQuery.is('sub_type_id', null)
+    const { data: existingRows, error: existingErr } = await existingQuery
+
+    if (!existingErr && existingRows && existingRows.length > 0) {
+      console.log('[performanceService] addSelection: genuine duplicate for this athlete, returning existing row', existingRows[0])
+      return existingRows[0]
+    }
+
+    // The conflict did NOT come from a row belonging to this athlete — the unique
+    // index is most likely missing athlete_id and is colliding across athletes.
+    console.error('[performanceService] PHANTOM CONFLICT: unique constraint hit but no matching row exists for this athlete. Check that the partial unique indexes on athlete_metric_selections include athlete_id in the key.')
+    throw new Error('Unable to add this metric right now. Please try again in a moment.')
   }
-  return data
+  throw new Error(error.message || error.details || 'Database error inserting metric selection')
 }
 
 async function removeSelection(athleteId, selectionId) {
