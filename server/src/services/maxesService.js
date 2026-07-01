@@ -98,6 +98,14 @@ async function addLiftSelection(athleteId, liftKey) {
 }
 
 async function removeLiftSelection(athleteId, liftKey) {
+  // Cascade-delete all logged maxes for this lift before removing the selection row
+  const { error: maxesErr } = await supabaseAdmin
+    .from('lifting_maxes')
+    .delete()
+    .eq('athlete_id', athleteId)
+    .eq('lift', liftKey)
+  if (maxesErr) throw maxesErr
+
   const { error } = await supabaseAdmin
     .schema('public').from('athlete_lift_selections')
     .delete()

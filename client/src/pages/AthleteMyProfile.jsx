@@ -5,6 +5,7 @@ import api from '../services/api'
 import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon, StatusInjuryIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 import PRCelebration from '../components/PRCelebration'
+import { Wordmark } from '../components/Wordmark'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -401,6 +402,7 @@ export default function AthleteMyProfile() {
   const [perfLogForms,   setPerfLogForms]   = useState({}) // { [selectionId]: { open, val1, val2, submitting, error } }
   const [perfHistOpen,   setPerfHistOpen]   = useState({}) // { [selectionId]: bool }
   const [perfHistData,   setPerfHistData]   = useState({}) // { [selectionId]: entries[] }
+  const [confirmRemove, setConfirmRemove] = useState(null) // { type: 'lift'|'metric', key?, label?, selId?, name? }
 
   useEffect(() => {
     Promise.all([
@@ -473,6 +475,31 @@ export default function AthleteMyProfile() {
       setPerfSelections(prev => prev.filter(s => s.id !== selId))
     } catch (err) {
       console.error('[removePerfSelection]', err)
+    }
+  }
+
+  async function handleConfirmRemove() {
+    const target = confirmRemove
+    setConfirmRemove(null)
+    if (target.type === 'lift') {
+      const current = selectedLiftsRef.current
+      const visible = current.length === 0 ? LIFTS.map(l => l.key) : current
+      const next    = visible.filter(k => k !== target.key)
+      selectedLiftsRef.current = next
+      try {
+        await api.delete(`/api/maxes/selections/${target.key}`)
+        setSelectedLifts(next)
+      } catch (err) {
+        selectedLiftsRef.current = current
+        console.error('[removeLift]', err)
+      }
+    } else if (target.type === 'metric') {
+      try {
+        await api.delete(`/api/performance/selections/${target.selId}`)
+        setPerfSelections(prev => prev.filter(s => s.id !== target.selId))
+      } catch (err) {
+        console.error('[removePerfSelection]', err)
+      }
     }
   }
 
@@ -615,6 +642,29 @@ export default function AthleteMyProfile() {
           }}
           onClose={() => setShowAddMetrics(false)}
         />
+      )}
+      {confirmRemove && (
+        <div style={cs.overlay} onClick={() => setConfirmRemove(null)}>
+          <div style={cs.card} onClick={e => e.stopPropagation()}>
+            <div style={{ textAlign: 'center', marginBottom: 20 }}>
+              <Wordmark size={28} />
+            </div>
+            <h3 style={cs.headline}>
+              {confirmRemove.type === 'lift'
+                ? 'Remove this lift from your profile'
+                : 'Remove this metric from your profile'}
+            </h3>
+            <p style={cs.body}>
+              {confirmRemove.type === 'lift'
+                ? 'Your PR history and all logged data for this lift will be permanently deleted. This cannot be undone.'
+                : 'Your logged values and PR history for this metric will be permanently deleted. This cannot be undone.'}
+            </p>
+            <div style={cs.btnRow}>
+              <button style={cs.keepBtn} onClick={() => setConfirmRemove(null)}>Keep It</button>
+              <button style={cs.deleteBtn} onClick={handleConfirmRemove}>Yes, Remove and Delete History</button>
+            </div>
+          </div>
+        </div>
       )}
 
       {/* Profile header */}
@@ -810,7 +860,7 @@ export default function AthleteMyProfile() {
                     )}
                     <button
                       style={styles.removeLiftBtn}
-                      onClick={() => handleRemoveLift(key)}
+                      onClick={() => setConfirmRemove({ type: 'lift', key, label })}
                       title="Remove lift"
                       aria-label={`Remove ${label}`}
                     >×</button>
@@ -912,7 +962,7 @@ export default function AthleteMyProfile() {
                       )}
                       <button
                         style={styles.removeLiftBtn}
-                        onClick={() => handleRemovePerfSelection(sel.id)}
+                        onClick={() => setConfirmRemove({ type: 'metric', selId: sel.id, name: def.name })}
                         title="Remove metric"
                         aria-label={`Remove ${def.name}`}
                       >×</button>
@@ -1170,4 +1220,15 @@ const ms = {
 
   saveBtn:   { flex: 1, padding: '12px 0', fontSize: 15, fontWeight: 700, borderRadius: 12, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer', boxShadow: '0 2px 8px rgba(247,87,9,0.3)' },
   cancelBtn: { padding: '12px 20px', fontSize: 14, fontWeight: 600, borderRadius: 12, border: '1px solid var(--border)', background: 'none', color: 'var(--text-2)', cursor: 'pointer' },
+}
+
+// Confirm-remove modal styles
+const cs = {
+  overlay:   { position: 'fixed', inset: 0, zIndex: 9500, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
+  card:      { background: '#111111', borderRadius: 16, padding: '32px 28px', maxWidth: 360, width: '90%', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' },
+  headline:  { fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif", fontWeight: 700, fontSize: 20, color: '#FFFFFF', margin: '0 0 12px', textAlign: 'center', lineHeight: 1.3 },
+  body:      { fontFamily: "'Inter', system-ui, sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.85)', textAlign: 'center', margin: '0 0 24px', lineHeight: 1.55 },
+  btnRow:    { display: 'flex', gap: 10 },
+  keepBtn:   { flex: 1, padding: '11px 0', background: 'transparent', border: '1.5px solid #FFFFFF', borderRadius: 8, color: '#FFFFFF', fontWeight: 600, fontSize: 14, cursor: 'pointer' },
+  deleteBtn: { flex: 1, padding: '11px 0', background: RED, border: 'none', borderRadius: 8, color: '#FFFFFF', fontWeight: 700, fontSize: 14, cursor: 'pointer' },
 }
