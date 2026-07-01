@@ -184,18 +184,40 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
 
   ctx.textAlign = 'center'
 
-  // Blue header divider — 1px, 80px margins
-  const headerDivY = logoBottomY + 26
+  // Blue header divider — 1px, 80px margins (Fix 3: tighter to logo, −30%)
+  const headerDivY = logoBottomY + 18   // was 26
   ctx.fillStyle = BLUE
   ctx.fillRect(80, headerDivY, SIZE - 160, 1)
 
+  // ── Section 3: Footer — calculated FIRST so card can avoid it (Fix 2) ─────
+  // Layout upward from the bottom bar:
+  //   bottom bar (12px) | tagline | generous gap | sport | athlete name | divider
+  const taglineBaseline = SIZE - 12 - 26   // = 1042
+  const hasAthlete = Boolean(athleteName)
+  const hasSport   = Boolean(sport)
+
+  let footerDivY, athleteBaseline, sportBaseline
+  if (hasAthlete) {
+    if (hasSport) {
+      sportBaseline   = taglineBaseline - 64
+      athleteBaseline = sportBaseline - 60
+      footerDivY      = athleteBaseline - 52
+    } else {
+      athleteBaseline = taglineBaseline - 64
+      footerDivY      = athleteBaseline - 52
+    }
+  } else {
+    footerDivY = taglineBaseline - 80
+  }
+
   // ── Section 2: Performance card ───────────────────────────────────────────
-  const CARD_X      = 52
-  const CARD_W      = SIZE - 104
-  const CARD_Y      = headerDivY + 36
-  const CARD_RADIUS = 28
-  const CARD_PAD_V  = 42   // top & bottom padding inside card
-  const CARD_PAD_H  = 52   // horizontal inset used for hero overflow check
+  const CARD_X       = 52
+  const CARD_W       = SIZE - 104
+  const CARD_Y       = headerDivY + 25   // Fix 3: was +36 (−30%)
+  const CARD_RADIUS  = 28
+  const CARD_PAD_TOP = 74   // Fix 4: extra top breathing room (was 42)
+  const CARD_PAD_V   = 42   // bottom padding
+  const CARD_PAD_H   = 52   // horizontal inset for hero overflow check
 
   const heroStr = fmtValue(newWeight, unit) || String(newWeight)
   const unitStr = unitLabel(unit)
@@ -218,12 +240,6 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ;({ nW: numW, uFs: uFontSz, uW: unitW } = reCalc())
   }
 
-  // Badge dimensions
-  ctx.font = 'bold 34px Arial, sans-serif'
-  const PILL_LABEL = 'NEW PERSONAL RECORD'
-  const pillW = ctx.measureText(PILL_LABEL).width + 56
-  const PILL_H = 50
-
   // — Metric name: scale down then word-wrap if still too wide —
   const METRIC_MAX_W = CARD_W - CARD_PAD_H * 2
   const metricText   = liftLabel.toUpperCase()
@@ -245,7 +261,6 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
       else break
     }
     metricLines = [words.slice(0, split).join(' '), words.slice(split).join(' ')].filter(Boolean)
-    // Scale down further if either line still overflows
     while (metricFontSz > 22) {
       ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
       if (Math.max(...metricLines.map(l => ctx.measureText(l).width)) <= METRIC_MAX_W) break
@@ -253,20 +268,30 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     }
   }
   const METRIC_LINE_GAP = 8
-  const metricTotalH    = metricLines.length === 2
+  const metricTotalH = metricLines.length === 2
     ? metricFontSz + METRIC_LINE_GAP + metricFontSz
     : metricFontSz
 
-  // Card height from content (uses metricTotalH to accommodate possible two-line name)
-  const prevSecH = hasPrev ? 80 : 44
-  const cardH    = CARD_PAD_V + metricTotalH + 20 + heroFontSz + 20 + PILL_H + 14 + prevSecH + CARD_PAD_V
+  // Fix 1: pill label flips based on whether this is the first entry ever
+  ctx.font = 'bold 34px Arial, sans-serif'
+  const PILL_LABEL = hasPrev ? 'NEW PERSONAL RECORD' : '★ FIRST TIME LOGGED'
+  const pillW = ctx.measureText(PILL_LABEL).width + 56
+  const PILL_H = 50
+
+  // Card height: Fix 1 removes the separate prev-section for first-time entries
+  const prevSecH = hasPrev ? 80 : 0
+  const cardH    = CARD_PAD_TOP + metricTotalH + 20 + heroFontSz + 20 + PILL_H
+    + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
+
+  // Fix 2: enforce 40px minimum gap between card bottom and footer divider
+  const safeCardH = Math.min(cardH, footerDivY - 40 - CARD_Y)
 
   // Draw card background (#1A1A1A rounded rect)
   ctx.fillStyle = '#1A1A1A'
-  fillRoundRect(ctx, CARD_X, CARD_Y, CARD_W, cardH, CARD_RADIUS)
+  fillRoundRect(ctx, CARD_X, CARD_Y, CARD_W, safeCardH, CARD_RADIUS)
 
   // — Metric / exercise name (single or two-line) —
-  let cy = CARD_Y + CARD_PAD_V
+  let cy = CARD_Y + CARD_PAD_TOP   // Fix 4: use larger top padding
   ctx.fillStyle = BLUE
   ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
   ctx.textAlign = 'center'
@@ -291,17 +316,17 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ctx.fillText(` ${unitStr}`, heroX + numW, heroBaseline - Math.round(heroFontSz * 0.10))
   }
   ctx.textAlign = 'center'
-  cy += heroFontSz + 20   // advance past hero + gap
+  cy += heroFontSz + 20
 
-  // — NEW PERSONAL RECORD pill (tighter than before) —
+  // — Badge pill: Fix 1 — FIRST TIME LOGGED or NEW PERSONAL RECORD, never both —
   ctx.fillStyle = YELLOW
   drawPill(ctx, (SIZE - pillW) / 2, cy, pillW, PILL_H)
   ctx.fillStyle = BLACK
   ctx.font = 'bold 34px Arial, sans-serif'
   ctx.fillText(PILL_LABEL, SIZE / 2, cy + 34)
-  cy += PILL_H + 14   // advance past badge + gap
+  cy += PILL_H + 14
 
-  // — Previous record or first-time label —
+  // — Previous record + improvement (returning PRs only — Fix 1) —
   if (hasPrev) {
     const prevStr   = fmtValue(previousBest, unit) || String(previousBest)
     const rawDiff   = isLowerBetter
@@ -316,40 +341,12 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ctx.fillStyle = YELLOW
     ctx.font = 'bold 36px Arial, sans-serif'
     ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, cy + 78)
-  } else {
-    ctx.fillStyle = YELLOW
-    ctx.font = 'bold 36px Arial, sans-serif'
-    ctx.fillText('★ FIRST TIME LOGGED', SIZE / 2, cy + 36)
   }
 
-  const cardBottomY = CARD_Y + cardH
-
-  // ── Section 3: Athlete footer — anchored from canvas bottom ───────────────
-  // Layout upward from the bottom bar:
-  //   bottom bar (12px) | tagline | generous gap | sport | athlete name | divider
-  const taglineBaseline  = SIZE - 12 - 26   // = 1042
-  const hasAthlete = Boolean(athleteName)
-  const hasSport   = Boolean(sport)
-
-  let footerDivY, athleteBaseline, sportBaseline
-  if (hasAthlete) {
-    if (hasSport) {
-      sportBaseline   = taglineBaseline - 64   // generous gap above tagline
-      athleteBaseline = sportBaseline - 60     // 60 = 24px gap + 36px sport font
-      footerDivY      = athleteBaseline - 52
-    } else {
-      athleteBaseline = taglineBaseline - 64
-      footerDivY      = athleteBaseline - 52
-    }
-  } else {
-    footerDivY = taglineBaseline - 80
-  }
-
-  // Blue footer divider — 1px, 80px margins
+  // ── Section 3: Athlete footer — draw after card content ──────────────────
   ctx.fillStyle = BLUE
   ctx.fillRect(80, footerDivY, SIZE - 160, 1)
 
-  // Athlete name
   if (hasAthlete) {
     ctx.fillStyle = WHITE
     ctx.font = 'bold 48px Arial, sans-serif'
@@ -361,7 +358,6 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     }
   }
 
-  // Tagline
   ctx.fillStyle = YELLOW
   ctx.font = 'bold italic 38px Arial, sans-serif'
   ctx.textAlign = 'center'
