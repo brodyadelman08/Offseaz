@@ -79,19 +79,24 @@ function drawPill(ctx, x, y, w, h) {
 
 // Draw confetti directly onto the canvas as a background layer.
 // Called BEFORE logo/text so all content renders on top.
+// Protected zone (15%–85% height, 10%–90% width) is left clear so the
+// hero number and text in the center are always fully readable.
 function drawCanvasConfetti(ctx, size) {
   const COLORS = [ORANGE, ORANGE, BLUE, BLUE, YELLOW, YELLOW, WHITE, WHITE, '#1a1a1a']
-  const pieces = Array.from({ length: 80 }, (_, i) => ({
+  const pieces = Array.from({ length: 130 }, (_, i) => ({
     x:     Math.random() * size,
-    y:     Math.random() * size,           // full canvas — no cap
-    w:     45 + Math.random() * 55,        // 45–100 px wide
-    h:     14 + Math.random() * 22,        // 14–36 px tall
+    y:     Math.random() * size,
+    w:     20 + Math.random() * 30,        // 20–50 px wide
+    h:     6 + Math.random() * 12,         // 6–18 px tall
     rot:   Math.random() * Math.PI * 2,
     color: COLORS[Math.floor(Math.random() * COLORS.length)],
     shape: i % 3,                           // 0=rect, 1=circle, 2=diamond
     alpha: 0.70 + Math.random() * 0.30,    // 70–100 % opacity
   }))
   for (const p of pieces) {
+    // Skip any piece whose center falls inside the protected central zone
+    if (p.x > size * 0.10 && p.x < size * 0.90 &&
+        p.y > size * 0.15 && p.y < size * 0.85) continue
     ctx.save()
     ctx.globalAlpha = p.alpha
     ctx.translate(p.x, p.y)
@@ -140,7 +145,7 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   await new Promise(resolve => {
     const img = new Image()
     img.onload = () => {
-      const logoW = 420
+      const logoW = 520
       const logoH = Math.round((img.height / img.width) * logoW)
       ctx.drawImage(img, (SIZE - logoW) / 2, 26, logoW, logoH)
       logoBottomY = 26 + logoH
@@ -239,8 +244,8 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ctx.fillText(athleteName + (sport ? `  ${sport}` : ''), SIZE / 2, 992)
   }
   ctx.fillStyle = YELLOW
-  ctx.font = 'italic 36px Arial, sans-serif'
-  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 1042)
+  ctx.font = 'bold italic 42px Arial, sans-serif'
+  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 1044)
   ctx.fillStyle = ORANGE
   ctx.fillRect(0, SIZE - 14, SIZE, 14)
 

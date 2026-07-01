@@ -158,6 +158,8 @@ async function addSelection(athleteId, metricId, subTypeId) {
 }
 
 async function removeSelection(athleteId, selectionId) {
+  console.log('[removeSelection] called', { athleteId, selectionId })
+
   // Verify ownership before touching any associated data
   const { data: sel, error: checkErr } = await supabaseAdmin
     .from('athlete_metric_selections')
@@ -167,26 +169,40 @@ async function removeSelection(athleteId, selectionId) {
     .maybeSingle()
   if (checkErr) throw checkErr
   if (!sel) throw new Error('Selection not found or access denied')
+  console.log('[removeSelection] ownership verified, sel.id:', sel.id)
 
-  // Cascade-delete all associated data so a re-added metric starts fresh
-  const { error: logsErr } = await supabaseAdmin
+  // Delete related logs first
+  const { data: deletedLogs, error: logsErr } = await supabaseAdmin
     .from('performance_logs')
     .delete()
     .eq('selection_id', selectionId)
-  if (logsErr) console.error('[removeSelection] logs delete error (continuing):', logsErr)
+    .select()
+  if (logsErr) {
+    console.error('[removeSelection] performance_logs delete FAILED:', { code: logsErr.code, message: logsErr.message, hint: logsErr.hint })
+  } else {
+    console.log('[removeSelection] performance_logs deleted:', deletedLogs?.length ?? 0, 'rows')
+  }
 
-  const { error: prsErr } = await supabaseAdmin
+  // Delete related PR record
+  const { data: deletedPRs, error: prsErr } = await supabaseAdmin
     .from('performance_prs')
     .delete()
     .eq('selection_id', selectionId)
-  if (prsErr) console.error('[removeSelection] prs delete error (continuing):', prsErr)
+    .select()
+  if (prsErr) {
+    console.error('[removeSelection] performance_prs delete FAILED:', { code: prsErr.code, message: prsErr.message, hint: prsErr.hint })
+  } else {
+    console.log('[removeSelection] performance_prs deleted:', deletedPRs?.length ?? 0, 'rows')
+  }
 
+  // Delete the selection itself
   const { error } = await supabaseAdmin
     .from('athlete_metric_selections')
     .delete()
     .eq('id', selectionId)
     .eq('athlete_id', athleteId)
   if (error) throw error
+  console.log('[removeSelection] athlete_metric_selections row deleted for id:', selectionId)
 }
 
 async function logValue(athleteId, selectionId, value) {
