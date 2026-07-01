@@ -190,13 +190,9 @@ function AddLiftsModal({ selectedLifts, onSave, onClose }) {
     setSaving(true)
     setErr(null)
     try {
-      const toAdd    = LIFTS.map(l => l.key).filter(k => checked[k]  && !selectedLifts.includes(k))
-      const toRemove = LIFTS.map(l => l.key).filter(k => !checked[k] &&  selectedLifts.includes(k))
-      await Promise.all([
-        ...toAdd.map(k    => api.post(`/api/maxes/selections/${k}`)),
-        ...toRemove.map(k => api.delete(`/api/maxes/selections/${k}`)),
-      ])
-      onSave(LIFTS.map(l => l.key).filter(k => checked[k]))
+      const newLifts = LIFTS.map(l => l.key).filter(k => checked[k])
+      await api.put('/api/maxes/selections', { lifts: newLifts })
+      onSave(newLifts)
     } catch (e) {
       setErr('Failed to save. Please try again.')
       console.error('[AddLifts]', e)
@@ -481,37 +477,20 @@ export default function AthleteMyProfile() {
   }
 
   async function handleRemoveLift(liftKey) {
-    // Read from the ref, not the closed-over selectedLifts value, so a second
-    // delete fired before the first one's setState has committed still sees
-    // the result of the first one instead of stale [] / a stale list.
-    const current    = selectedLiftsRef.current
-    const wasDefault = current.length === 0
-    const visible     = wasDefault ? LIFTS.map(l => l.key) : current
-    const next        = visible.filter(k => k !== liftKey)
-    selectedLiftsRef.current = next
+    // Read from ref so rapid back-to-back clicks see the result of the
+    // previous removal rather than stale closed-over selectedLifts.
+    const current = selectedLiftsRef.current
+    const visible = current.length === 0 ? LIFTS.map(l => l.key) : current
+    const next    = visible.filter(k => k !== liftKey)
+    selectedLiftsRef.current = next  // claim immediately
 
     try {
-      if (wasDefault) {
-        // No explicit selection yet (all lifts showing by default) — persist an
-        // explicit selection of every other lift so the removal actually sticks.
-        await Promise.all(next.map(k => api.post(`/api/maxes/selections/${k}`).catch(() => {})))
-      } else {
-        await api.delete(`/api/maxes/selections/${liftKey}`)
-      }
-      // Functional update — always filters the latest committed state, never
-      // a value captured when this handler was created, so back-to-back
-      // deletes never clobber each other. The ref is re-synced inside this
-      // same callback (not via the separate useEffect, which only fires one
-      // tick after commit) so a delete fired immediately after this one can
-      // never read a not-yet-resynced ref value.
-      setSelectedLifts(prev => {
-        const prevVisible = prev.length === 0 ? LIFTS.map(l => l.key) : prev
-        const result = prevVisible.filter(k => k !== liftKey)
-        selectedLiftsRef.current = result
-        return result
-      })
+      // Single PUT replaces the full list atomically — no wasDefault branching,
+      // no individual DELETEs that silently fail when the DB row is missing.
+      await api.put('/api/maxes/selections', { lifts: next })
+      setSelectedLifts(next)
     } catch (err) {
-      selectedLiftsRef.current = current
+      selectedLiftsRef.current = current  // revert on failure
       console.error('[removeLift]', err)
     }
   }

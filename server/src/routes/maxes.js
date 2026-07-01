@@ -3,7 +3,7 @@ const express = require('express')
 const router = express.Router()
 const verifyToken = require('../middleware/verifyToken')
 const { getMyMaxes, addMax, getAthleteMaxes } = require('../controllers/maxesController')
-const { getSelectedLifts, addLiftSelection, removeLiftSelection } = require('../services/maxesService')
+const { getSelectedLifts, addLiftSelection, removeLiftSelection, updateLiftSelections } = require('../services/maxesService')
 
 // ── Lift selections (must be before /:athleteId to avoid route conflict) ───────
 
@@ -34,6 +34,18 @@ router.delete('/selections/:liftKey', verifyToken, async (req, res) => {
   } catch (err) {
     console.error('[maxes] removeLiftSelection:', err.message)
     res.status(500).json({ error: err.message })
+  }
+})
+
+router.put('/selections', verifyToken, async (req, res) => {
+  const { lifts } = req.body
+  if (!Array.isArray(lifts)) return res.status(400).json({ error: 'lifts must be an array' })
+  try {
+    await updateLiftSelections(req.user.id, lifts)
+    res.json({ ok: true, lifts })
+  } catch (err) {
+    console.error('[maxes] updateLiftSelections:', err.message)
+    res.status(err.message.includes('Invalid') ? 400 : 500).json({ error: err.message })
   }
 })
 

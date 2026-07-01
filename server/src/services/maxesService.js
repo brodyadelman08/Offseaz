@@ -106,4 +106,24 @@ async function removeLiftSelection(athleteId, liftKey) {
   if (error) throw error
 }
 
-module.exports = { logMax, getMaxesByAthlete, VALID_LIFTS, getSelectedLifts, addLiftSelection, removeLiftSelection }
+// Atomically replaces all lift selections for an athlete with the provided list.
+// Runs DELETE (all rows for athlete) then INSERT (new rows) in sequence.
+async function updateLiftSelections(athleteId, liftKeys) {
+  for (const key of liftKeys) {
+    if (!VALID_LIFTS_SET.has(key)) throw new Error(`Invalid lift: ${key}`)
+  }
+  const { error: delErr } = await supabaseAdmin
+    .from('athlete_lift_selections')
+    .delete()
+    .eq('athlete_id', athleteId)
+  if (delErr) throw delErr
+  if (liftKeys.length > 0) {
+    const rows = liftKeys.map(k => ({ athlete_id: athleteId, lift_key: k }))
+    const { error: insErr } = await supabaseAdmin
+      .from('athlete_lift_selections')
+      .insert(rows)
+    if (insErr) throw insErr
+  }
+}
+
+module.exports = { logMax, getMaxesByAthlete, VALID_LIFTS, getSelectedLifts, addLiftSelection, removeLiftSelection, updateLiftSelections }
