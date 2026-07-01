@@ -38,6 +38,7 @@ router.delete('/selections/:liftKey', verifyToken, async (req, res) => {
 })
 
 router.put('/selections', verifyToken, async (req, res) => {
+  console.log('[maxes PUT /selections] body:', JSON.stringify(req.body), '| user:', req.user?.id)
   const { lifts } = req.body
   if (!Array.isArray(lifts)) return res.status(400).json({ error: 'lifts must be an array' })
   try {
