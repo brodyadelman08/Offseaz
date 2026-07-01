@@ -82,8 +82,8 @@ function drawPill(ctx, x, y, w, h) {
 // Protected zone (15%–85% height, 10%–90% width) is left clear so the
 // hero number and text in the center are always fully readable.
 function drawCanvasConfetti(ctx, size) {
-  const COLORS = [ORANGE, ORANGE, BLUE, BLUE, YELLOW, YELLOW, WHITE, WHITE, '#1a1a1a']
-  const pieces = Array.from({ length: 130 }, (_, i) => ({
+  const COLORS = [ORANGE, ORANGE, BLUE, BLUE, YELLOW, YELLOW, WHITE, WHITE, BLACK, BLACK]
+  const pieces = Array.from({ length: 104 }, (_, i) => ({
     x:     Math.random() * size,
     y:     Math.random() * size,
     w:     20 + Math.random() * 30,        // 20–50 px wide
@@ -124,6 +124,21 @@ function drawCanvasConfetti(ctx, size) {
   }
 }
 
+function fillRoundRect(ctx, x, y, w, h, r) {
+  ctx.beginPath()
+  ctx.moveTo(x + r, y)
+  ctx.lineTo(x + w - r, y)
+  ctx.arcTo(x + w, y,     x + w, y + r,     r)
+  ctx.lineTo(x + w, y + h - r)
+  ctx.arcTo(x + w, y + h, x + w - r, y + h, r)
+  ctx.lineTo(x + r, y + h)
+  ctx.arcTo(x,      y + h, x,       y + h - r, r)
+  ctx.lineTo(x,     y + r)
+  ctx.arcTo(x,      y,     x + r,   y,         r)
+  ctx.closePath()
+  ctx.fill()
+}
+
 async function generateShareImage({ athleteName, sport, liftLabel, newWeight, previousBest, unit, isLowerBetter }) {
   const SIZE = 1080
   const canvas = document.createElement('canvas')
@@ -131,32 +146,37 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   canvas.height = SIZE
   const ctx = canvas.getContext('2d')
 
-  // Background + top bar
+  // ── Black background ──────────────────────────────────────────────────────
   ctx.fillStyle = BLACK
   ctx.fillRect(0, 0, SIZE, SIZE)
-  ctx.fillStyle = ORANGE
-  ctx.fillRect(0, 0, SIZE, 14)
 
-  // Confetti as background layer — drawn first so all content renders on top
+  // ── Confetti behind everything ────────────────────────────────────────────
   drawCanvasConfetti(ctx, SIZE)
 
-  // Logo — track actual bottom so the accent line is always below it
-  let logoBottomY = 140
+  // ── Orange accent bars — top and bottom edges ─────────────────────────────
+  ctx.fillStyle = ORANGE
+  ctx.fillRect(0, 0, SIZE, 12)
+  ctx.fillRect(0, SIZE - 12, SIZE, 12)
+
+  // ── Section 1: Header ────────────────────────────────────────────────────
+  const LOGO_W    = 520
+  const LOGO_Y    = 22
+  let logoBottomY = LOGO_Y + 115   // fallback if image fails to load
+
   await new Promise(resolve => {
     const img = new Image()
     img.onload = () => {
-      const logoW = 520
-      const logoH = Math.round((img.height / img.width) * logoW)
-      ctx.drawImage(img, (SIZE - logoW) / 2, 26, logoW, logoH)
-      logoBottomY = 26 + logoH
+      const logoH = Math.round((img.height / img.width) * LOGO_W)
+      ctx.drawImage(img, (SIZE - LOGO_W) / 2, LOGO_Y, LOGO_W, logoH)
+      logoBottomY = LOGO_Y + logoH
       resolve()
     }
     img.onerror = () => {
       ctx.fillStyle = WHITE
-      ctx.font = 'bold 60px Arial, sans-serif'
       ctx.textAlign = 'center'
-      ctx.fillText('OFFSEAZ', SIZE / 2, 95)
-      logoBottomY = 110
+      ctx.font = 'bold 64px Arial, sans-serif'
+      ctx.fillText('OFFSEAZ', SIZE / 2, LOGO_Y + 75)
+      logoBottomY = LOGO_Y + 95
       resolve()
     }
     img.src = '/Offseaz-Logo-White-Letter-Dark.png'
@@ -164,58 +184,88 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
 
   ctx.textAlign = 'center'
 
-  // Orange accent line — always placed AFTER the logo (Fix 1)
-  const accentY = logoBottomY + 14
-  ctx.fillStyle = ORANGE
-  ctx.fillRect(0, accentY, SIZE, 3)
-
-  // Lift / metric name in blue
-  const nameY = accentY + 64
+  // Blue header divider — 1px, 80px margins
+  const headerDivY = logoBottomY + 26
   ctx.fillStyle = BLUE
-  ctx.font = 'bold 52px Arial, sans-serif'
-  ctx.fillText(liftLabel.toUpperCase(), SIZE / 2, nameY)
+  ctx.fillRect(80, headerDivY, SIZE - 160, 1)
 
-  // Hero value + unit inline on same visual line (Fix 5)
-  const heroStr    = fmtValue(newWeight, unit) || String(newWeight)
-  const unitStr    = unitLabel(unit)
-  const heroFontSz = heroStr.length > 6 ? 160 : heroStr.length > 4 ? 200 : 280
-  const heroY      = nameY + Math.round(heroFontSz * 0.9)
+  // ── Section 2: Performance card ───────────────────────────────────────────
+  const CARD_X      = 52
+  const CARD_W      = SIZE - 104
+  const CARD_Y      = headerDivY + 36
+  const CARD_RADIUS = 28
+  const CARD_PAD_V  = 42   // top & bottom padding inside card
+  const CARD_PAD_H  = 52   // horizontal inset used for hero overflow check
 
-  ctx.font = `bold ${heroFontSz}px Arial, sans-serif`
-  const numW       = ctx.measureText(heroStr).width
-  const uFontSz    = unitStr ? Math.round(heroFontSz * 0.3) : 0
-  ctx.font         = unitStr ? `bold ${uFontSz}px Arial, sans-serif` : `bold ${heroFontSz}px Arial, sans-serif`
-  const unitW      = unitStr ? ctx.measureText(` ${unitStr}`).width : 0
-  const totalHeroW = numW + unitW
-  const heroStartX = (SIZE - totalHeroW) / 2
+  const heroStr = fmtValue(newWeight, unit) || String(newWeight)
+  const unitStr = unitLabel(unit)
+  const hasPrev = previousBest != null && previousBest !== undefined
 
-  ctx.fillStyle  = ORANGE
-  ctx.textAlign  = 'left'
-  ctx.font       = `bold ${heroFontSz}px Arial, sans-serif`
-  ctx.fillText(heroStr, heroStartX, heroY)
+  // Pick starting hero font size, then scale down if the number is too wide
+  let heroFontSz = heroStr.length > 6 ? 148 : heroStr.length > 4 ? 188 : 228
+  const reCalc = () => {
+    ctx.font = `bold ${heroFontSz}px Calibri, Arial Black, sans-serif`
+    const nW = ctx.measureText(heroStr).width
+    const uFs = unitStr ? Math.round(heroFontSz * 0.30) : 0
+    ctx.font = unitStr ? `bold ${uFs}px Arial, sans-serif` : ''
+    const uW = unitStr ? ctx.measureText(` ${unitStr}`).width : 0
+    return { nW, uFs, uW }
+  }
+  let { nW: numW, uFs: uFontSz, uW: unitW } = reCalc()
+  const availHeroW = CARD_W - CARD_PAD_H * 2
+  while (numW + unitW > availHeroW && heroFontSz > 80) {
+    heroFontSz -= 6
+    ;({ nW: numW, uFs: uFontSz, uW: unitW } = reCalc())
+  }
 
+  // Badge dimensions
+  ctx.font = 'bold 34px Arial, sans-serif'
+  const PILL_LABEL = 'NEW PERSONAL RECORD'
+  const pillW = ctx.measureText(PILL_LABEL).width + 56
+  const PILL_H = 50
+
+  // Card height from content
+  const METRIC_SZ = 52
+  const prevSecH  = hasPrev ? 80 : 44
+  const cardH     = CARD_PAD_V + METRIC_SZ + 20 + heroFontSz + 20 + PILL_H + 14 + prevSecH + CARD_PAD_V
+
+  // Draw card background (#1A1A1A rounded rect)
+  ctx.fillStyle = '#1A1A1A'
+  fillRoundRect(ctx, CARD_X, CARD_Y, CARD_W, cardH, CARD_RADIUS)
+
+  // — Metric / exercise name —
+  let cy = CARD_Y + CARD_PAD_V + METRIC_SZ
+  ctx.fillStyle = BLUE
+  ctx.font = `bold ${METRIC_SZ}px Arial, sans-serif`
+  ctx.textAlign = 'center'
+  ctx.fillText(liftLabel.toUpperCase(), SIZE / 2, cy)
+  cy += 20   // gap below name
+
+  // — Hero number + unit —
+  const heroBaseline = cy + heroFontSz * 0.84
+  const heroX = (SIZE - numW - unitW) / 2
+  ctx.fillStyle = ORANGE
+  ctx.textAlign = 'left'
+  ctx.font = `bold ${heroFontSz}px Calibri, Arial Black, sans-serif`
+  ctx.fillText(heroStr, heroX, heroBaseline)
   if (unitStr) {
     ctx.font      = `bold ${uFontSz}px Arial, sans-serif`
-    ctx.fillStyle = 'rgba(247,87,9,0.78)'
-    // baseline-align unit with the top quarter of the hero number
-    ctx.fillText(` ${unitStr}`, heroStartX + numW, heroY - Math.round(heroFontSz * 0.14))
+    ctx.fillStyle = 'rgba(247,87,9,0.82)'
+    ctx.fillText(` ${unitStr}`, heroX + numW, heroBaseline - Math.round(heroFontSz * 0.10))
   }
   ctx.textAlign = 'center'
+  cy += heroFontSz + 20   // advance past hero + gap
 
-  // "NEW PERSONAL RECORD" pill
-  const pillY = heroY + Math.round(heroFontSz * 0.22) + 18
-  const pillLabel = 'NEW PERSONAL RECORD'
-  ctx.font = 'bold 38px Arial, sans-serif'
-  const pillW = ctx.measureText(pillLabel).width + 80
-  const pillH = 68
+  // — NEW PERSONAL RECORD pill (tighter than before) —
   ctx.fillStyle = YELLOW
-  drawPill(ctx, (SIZE - pillW) / 2, pillY, pillW, pillH)
+  drawPill(ctx, (SIZE - pillW) / 2, cy, pillW, PILL_H)
   ctx.fillStyle = BLACK
-  ctx.fillText(pillLabel, SIZE / 2, pillY + 44)
+  ctx.font = 'bold 34px Arial, sans-serif'
+  ctx.fillText(PILL_LABEL, SIZE / 2, cy + 34)
+  cy += PILL_H + 14   // advance past badge + gap
 
-  // Previous + improvement, or first-time badge
-  const prevBlockY = pillY + pillH + 58
-  if (previousBest !== null && previousBest !== undefined) {
+  // — Previous record or first-time label —
+  if (hasPrev) {
     const prevStr   = fmtValue(previousBest, unit) || String(previousBest)
     const rawDiff   = isLowerBetter
       ? Number(previousBest) - Number(newWeight)
@@ -223,31 +273,62 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     const improvStr = fmtImprovement(rawDiff, unit)
     const arrow     = isLowerBetter ? '↓' : '↑'
     const sign      = rawDiff >= 0 ? '+' : '−'
-    ctx.fillStyle = WHITE
-    ctx.font = '44px Arial, sans-serif'
-    ctx.fillText(`Previous: ${prevStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, prevBlockY)
+    ctx.fillStyle = 'rgba(255,255,255,0.60)'
+    ctx.font = '36px Arial, sans-serif'
+    ctx.fillText(`Previous: ${prevStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, cy + 36)
     ctx.fillStyle = YELLOW
-    ctx.font = 'bold 44px Arial, sans-serif'
-    ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, prevBlockY + 58)
+    ctx.font = 'bold 36px Arial, sans-serif'
+    ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, cy + 78)
   } else {
     ctx.fillStyle = YELLOW
-    ctx.font = 'bold 46px Arial, sans-serif'
-    ctx.fillText('★ FIRST TIME LOGGED', SIZE / 2, prevBlockY)
+    ctx.font = 'bold 36px Arial, sans-serif'
+    ctx.fillText('★ FIRST TIME LOGGED', SIZE / 2, cy + 36)
   }
 
-  // Blue accent + athlete info always near bottom
-  ctx.fillStyle = BLUE
-  ctx.fillRect(80, 940, SIZE - 160, 3)
-  if (athleteName) {
-    ctx.fillStyle = WHITE
-    ctx.font = '500 44px Arial, sans-serif'
-    ctx.fillText(athleteName + (sport ? `  ${sport}` : ''), SIZE / 2, 992)
+  const cardBottomY = CARD_Y + cardH
+
+  // ── Section 3: Athlete footer — anchored from canvas bottom ───────────────
+  // Layout upward from the bottom bar:
+  //   bottom bar (12px) | tagline | generous gap | sport | athlete name | divider
+  const taglineBaseline  = SIZE - 12 - 26   // = 1042
+  const hasAthlete = Boolean(athleteName)
+  const hasSport   = Boolean(sport)
+
+  let footerDivY, athleteBaseline, sportBaseline
+  if (hasAthlete) {
+    if (hasSport) {
+      sportBaseline   = taglineBaseline - 64   // generous gap above tagline
+      athleteBaseline = sportBaseline - 60     // 60 = 24px gap + 36px sport font
+      footerDivY      = athleteBaseline - 52
+    } else {
+      athleteBaseline = taglineBaseline - 64
+      footerDivY      = athleteBaseline - 52
+    }
+  } else {
+    footerDivY = taglineBaseline - 80
   }
+
+  // Blue footer divider — 1px, 80px margins
+  ctx.fillStyle = BLUE
+  ctx.fillRect(80, footerDivY, SIZE - 160, 1)
+
+  // Athlete name
+  if (hasAthlete) {
+    ctx.fillStyle = WHITE
+    ctx.font = 'bold 48px Arial, sans-serif'
+    ctx.textAlign = 'center'
+    ctx.fillText(athleteName, SIZE / 2, athleteBaseline)
+    if (hasSport) {
+      ctx.font = '400 36px Arial, sans-serif'
+      ctx.fillText(sport, SIZE / 2, sportBaseline)
+    }
+  }
+
+  // Tagline
   ctx.fillStyle = YELLOW
-  ctx.font = 'bold italic 42px Arial, sans-serif'
-  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, 1044)
-  ctx.fillStyle = ORANGE
-  ctx.fillRect(0, SIZE - 14, SIZE, 14)
+  ctx.font = 'bold italic 38px Arial, sans-serif'
+  ctx.textAlign = 'center'
+  ctx.fillText('Champions are made in the Offseaz.', SIZE / 2, taglineBaseline)
 
   return canvas.toDataURL('image/png')
 }
