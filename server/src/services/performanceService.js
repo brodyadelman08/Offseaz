@@ -225,6 +225,7 @@ async function logValue(athleteId, selectionId, value) {
   console.log('[logValue] isPR:', isPR, 'previousBest:', previousBest, 'numValue:', numValue)
 
   // Insert log entry
+  console.log('[logValue] inserting into performance_logs:', { athlete_id: athleteId, selection_id: selectionId, value: numValue })
   const { data: log, error: logErr } = await supabaseAdmin
     .from('performance_logs')
     .insert({ athlete_id: athleteId, selection_id: selectionId, value: numValue })
@@ -232,24 +233,26 @@ async function logValue(athleteId, selectionId, value) {
     .single()
 
   if (logErr) {
-    console.error('[logValue] log insert failed:', { code: logErr.code, message: logErr.message, details: logErr.details })
+    console.error('[logValue] performance_logs insert FAILED:', { code: logErr.code, message: logErr.message, details: logErr.details, hint: logErr.hint })
     throw logErr
   }
-  console.log('[logValue] log inserted, id:', log?.id)
+  console.log('[logValue] performance_logs insert OK — id:', log?.id, 'value:', log?.value)
 
-  // Upsert PR if new best — log_id intentionally omitted (not a column in performance_prs)
+  // Upsert PR if new best
   if (isPR) {
-    const { error: prErr } = await supabaseAdmin
+    const prPayload = { selection_id: selectionId, best_value: numValue, previous_value: previousBest, updated_at: new Date().toISOString() }
+    console.log('[logValue] upserting into performance_prs:', prPayload)
+    const { data: prData, error: prErr } = await supabaseAdmin
       .from('performance_prs')
-      .upsert(
-        { selection_id: selectionId, best_value: numValue, previous_value: previousBest, updated_at: new Date().toISOString() },
-        { onConflict: 'selection_id' }
-      )
+      .upsert(prPayload, { onConflict: 'selection_id' })
+      .select()
     if (prErr) {
-      console.error('[logValue] PR upsert failed:', { code: prErr.code, message: prErr.message, details: prErr.details })
+      console.error('[logValue] performance_prs upsert FAILED:', { code: prErr.code, message: prErr.message, details: prErr.details, hint: prErr.hint })
       throw prErr
     }
-    console.log('[logValue] PR upserted for selection', selectionId)
+    console.log('[logValue] performance_prs upsert OK — rows written:', prData?.length, 'data:', JSON.stringify(prData))
+  } else {
+    console.log('[logValue] not a PR — skipping performance_prs upsert')
   }
 
   return { log, is_pr: isPR, previous_best: previousBest }
