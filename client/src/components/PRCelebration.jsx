@@ -208,7 +208,7 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   ctx.fillStyle = BLACK
   ctx.fillText(pillLabel, SIZE / 2, pillY + 44)
 
-  // Previous + improvement
+  // Previous + improvement, or first-time badge
   const prevBlockY = pillY + pillH + 58
   if (previousBest !== null && previousBest !== undefined) {
     const prevStr   = fmtValue(previousBest, unit) || String(previousBest)
@@ -224,6 +224,10 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ctx.fillStyle = YELLOW
     ctx.font = 'bold 44px Arial, sans-serif'
     ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, prevBlockY + 58)
+  } else {
+    ctx.fillStyle = YELLOW
+    ctx.font = 'bold 46px Arial, sans-serif'
+    ctx.fillText('★ FIRST TIME LOGGED', SIZE / 2, prevBlockY)
   }
 
   // Blue accent + athlete info always near bottom
@@ -415,7 +419,7 @@ export default function PRCelebration({
                 )}
               </>
             ) : (
-              <span style={s.prevLabel}>First time logging this metric!</span>
+              <span style={s.firstTime}>★ FIRST TIME LOGGED</span>
             )}
           </div>
 
@@ -461,6 +465,7 @@ const s = {
   },
   prevRow: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, marginBottom: 16 },
   prevLabel:   { fontSize: 12, color: '#777' },
+  firstTime:   { fontSize: 13, fontWeight: 700, color: YELLOW, letterSpacing: 0.5 },
   improvement: { fontSize: 13, fontWeight: 700, color: WHITE },
   btnStack: { display: 'flex', flexDirection: 'column', alignItems: 'stretch', gap: 0, width: '100%' },
   saveBtn: {

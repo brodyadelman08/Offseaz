@@ -158,16 +158,40 @@ async function addSelection(athleteId, metricId, subTypeId) {
 }
 
 async function removeSelection(athleteId, selectionId) {
+  // Verify ownership before touching any associated data
+  const { data: sel, error: checkErr } = await supabaseAdmin
+    .from('athlete_metric_selections')
+    .select('id')
+    .eq('id', selectionId)
+    .eq('athlete_id', athleteId)
+    .maybeSingle()
+  if (checkErr) throw checkErr
+  if (!sel) throw new Error('Selection not found or access denied')
+
+  // Cascade-delete all associated data so a re-added metric starts fresh
+  const { error: logsErr } = await supabaseAdmin
+    .from('performance_logs')
+    .delete()
+    .eq('selection_id', selectionId)
+  if (logsErr) console.error('[removeSelection] logs delete error (continuing):', logsErr)
+
+  const { error: prsErr } = await supabaseAdmin
+    .from('performance_prs')
+    .delete()
+    .eq('selection_id', selectionId)
+  if (prsErr) console.error('[removeSelection] prs delete error (continuing):', prsErr)
+
   const { error } = await supabaseAdmin
     .from('athlete_metric_selections')
     .delete()
     .eq('id', selectionId)
     .eq('athlete_id', athleteId)
-
   if (error) throw error
 }
 
 async function logValue(athleteId, selectionId, value) {
+  console.log('[logValue] called', { athleteId, selectionId, value })
+
   // Verify ownership and get metric info
   const { data: sel, error: selErr } = await supabaseAdmin
     .from('athlete_metric_selections')
@@ -176,7 +200,10 @@ async function logValue(athleteId, selectionId, value) {
     .eq('athlete_id', athleteId)
     .single()
 
-  if (selErr || !sel) throw new Error('Selection not found or access denied')
+  if (selErr || !sel) {
+    console.error('[logValue] selection lookup failed', { selErr })
+    throw new Error('Selection not found or access denied')
+  }
 
   const def = effectiveDef(sel.metric_id, sel.sub_type_id)
   if (!def) throw new Error('Cannot determine metric definition')
@@ -185,33 +212,44 @@ async function logValue(athleteId, selectionId, value) {
   if (!isFinite(numValue) || numValue <= 0) throw new Error('Value must be a positive number')
 
   // Read current PR before inserting
-  const { data: currentPR } = await supabaseAdmin
+  const { data: currentPR, error: prReadErr } = await supabaseAdmin
     .from('performance_prs')
     .select('best_value')
     .eq('selection_id', selectionId)
     .maybeSingle()
+  if (prReadErr) console.error('[logValue] PR read error (non-fatal):', prReadErr)
 
   const previousBest = currentPR ? Number(currentPR.best_value) : null
   const isPR = previousBest === null
     || (def.lowerIsBetter ? numValue < previousBest : numValue > previousBest)
+  console.log('[logValue] isPR:', isPR, 'previousBest:', previousBest, 'numValue:', numValue)
 
-  // Insert log
+  // Insert log entry
   const { data: log, error: logErr } = await supabaseAdmin
     .from('performance_logs')
     .insert({ athlete_id: athleteId, selection_id: selectionId, value: numValue })
     .select()
     .single()
 
-  if (logErr) throw logErr
+  if (logErr) {
+    console.error('[logValue] log insert failed:', { code: logErr.code, message: logErr.message, details: logErr.details })
+    throw logErr
+  }
+  console.log('[logValue] log inserted, id:', log?.id)
 
-  // Upsert PR record if new best
+  // Upsert PR if new best — log_id intentionally omitted (not a column in performance_prs)
   if (isPR) {
-    await supabaseAdmin
+    const { error: prErr } = await supabaseAdmin
       .from('performance_prs')
       .upsert(
-        { selection_id: selectionId, best_value: numValue, previous_value: previousBest, log_id: log.id, updated_at: new Date().toISOString() },
+        { selection_id: selectionId, best_value: numValue, previous_value: previousBest, updated_at: new Date().toISOString() },
         { onConflict: 'selection_id' }
       )
+    if (prErr) {
+      console.error('[logValue] PR upsert failed:', { code: prErr.code, message: prErr.message, details: prErr.details })
+      throw prErr
+    }
+    console.log('[logValue] PR upserted for selection', selectionId)
   }
 
   return { log, is_pr: isPR, previous_best: previousBest }
