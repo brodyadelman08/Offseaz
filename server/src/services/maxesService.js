@@ -81,7 +81,7 @@ async function getMaxesByAthlete(athleteId) {
 
 async function getSelectedLifts(athleteId) {
   const { data, error } = await supabaseAdmin
-    .from('athlete_lift_selections')
+    .schema('public').from('athlete_lift_selections')
     .select('lift_key')
     .eq('athlete_id', athleteId)
     .order('created_at', { ascending: true })
@@ -92,14 +92,14 @@ async function getSelectedLifts(athleteId) {
 async function addLiftSelection(athleteId, liftKey) {
   if (!VALID_LIFTS_SET.has(liftKey)) throw new Error(`Invalid lift: ${liftKey}`)
   const { error } = await supabaseAdmin
-    .from('athlete_lift_selections')
+    .schema('public').from('athlete_lift_selections')
     .insert({ athlete_id: athleteId, lift_key: liftKey })
   if (error && error.code !== '23505') throw error  // ignore duplicate key
 }
 
 async function removeLiftSelection(athleteId, liftKey) {
   const { error } = await supabaseAdmin
-    .from('athlete_lift_selections')
+    .schema('public').from('athlete_lift_selections')
     .delete()
     .eq('athlete_id', athleteId)
     .eq('lift_key', liftKey)
@@ -113,14 +113,14 @@ async function updateLiftSelections(athleteId, liftKeys) {
     if (!VALID_LIFTS_SET.has(key)) throw new Error(`Invalid lift: ${key}`)
   }
   const { error: delErr } = await supabaseAdmin
-    .from('athlete_lift_selections')
+    .schema('public').from('athlete_lift_selections')
     .delete()
     .eq('athlete_id', athleteId)
   if (delErr) throw delErr
   if (liftKeys.length > 0) {
     const rows = liftKeys.map(k => ({ athlete_id: athleteId, lift_key: k }))
     const { error: insErr } = await supabaseAdmin
-      .from('athlete_lift_selections')
+      .schema('public').from('athlete_lift_selections')
       .insert(rows)
     if (insErr) throw insErr
   }

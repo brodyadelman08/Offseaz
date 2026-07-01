@@ -69,7 +69,7 @@ async function getSelections(athleteId) {
   // can't fail that way, and a selection with no logged value yet just gets
   // an empty performance_prs array instead of crashing the response.
   const { data: selections, error: selErr } = await supabaseAdmin
-    .from('athlete_metric_selections')
+    .schema('public').from('athlete_metric_selections')
     .select('id, metric_id, sub_type_id, created_at')
     .eq('athlete_id', athleteId)
     .order('created_at', { ascending: true })
@@ -118,7 +118,7 @@ async function addSelection(athleteId, metricId, subTypeId) {
   const normalizedSubType = subTypeId || null
 
   const { data, error } = await supabaseAdmin
-    .from('athlete_metric_selections')
+    .schema('public').from('athlete_metric_selections')
     .insert({ athlete_id: athleteId, metric_id: metricId, sub_type_id: normalizedSubType })
     .select()
     .single()
@@ -135,7 +135,7 @@ async function addSelection(athleteId, metricId, subTypeId) {
     // exact selection. If so it's a real duplicate; return it instead of erroring
     // so the UI can treat the add as a no-op success.
     let existingQuery = supabaseAdmin
-      .from('athlete_metric_selections')
+      .schema('public').from('athlete_metric_selections')
       .select('id, metric_id, sub_type_id, created_at')
       .eq('athlete_id', athleteId)
       .eq('metric_id', metricId)
@@ -162,7 +162,7 @@ async function removeSelection(athleteId, selectionId) {
 
   // Verify ownership before touching any associated data
   const { data: sel, error: checkErr } = await supabaseAdmin
-    .from('athlete_metric_selections')
+    .schema('public').from('athlete_metric_selections')
     .select('id')
     .eq('id', selectionId)
     .eq('athlete_id', athleteId)
@@ -197,7 +197,7 @@ async function removeSelection(athleteId, selectionId) {
 
   // Delete the selection itself
   const { error } = await supabaseAdmin
-    .from('athlete_metric_selections')
+    .schema('public').from('athlete_metric_selections')
     .delete()
     .eq('id', selectionId)
     .eq('athlete_id', athleteId)
@@ -210,7 +210,7 @@ async function logValue(athleteId, selectionId, value) {
 
   // Verify ownership and get metric info
   const { data: sel, error: selErr } = await supabaseAdmin
-    .from('athlete_metric_selections')
+    .schema('public').from('athlete_metric_selections')
     .select('id, metric_id, sub_type_id')
     .eq('id', selectionId)
     .eq('athlete_id', athleteId)
