@@ -1,4 +1,14 @@
 const supabaseAdmin = require('../config/supabase')
+const { createClient } = require('@supabase/supabase-js')
+
+// @supabase/supabase-js v2.105.4
+// Separate anon-key client for athlete_lift_selections.
+// Both clients hit the same PostgREST endpoint, but a distinct connection
+// can sometimes bypass a stale schema-cache entry on the service-role path.
+// Falls back to the admin client if SUPABASE_ANON_KEY is not set in env.
+const supabaseAnon = process.env.SUPABASE_ANON_KEY
+  ? createClient(process.env.SUPABASE_URL, process.env.SUPABASE_ANON_KEY)
+  : supabaseAdmin
 
 const VALID_LIFTS = [
   'bench_press', 'squat', 'deadlift', 'trap_bar_deadlift',
@@ -80,7 +90,7 @@ async function getMaxesByAthlete(athleteId) {
 // ─── Lift selections ───────────────────────────────────────────────────────────
 
 async function getSelectedLifts(athleteId) {
-  const { data, error } = await supabaseAdmin
+  const { data, error } = await supabaseAnon
     .from('athlete_lift_selections')
     .select('lift_key')
     .eq('athlete_id', athleteId)
@@ -91,14 +101,14 @@ async function getSelectedLifts(athleteId) {
 
 async function addLiftSelection(athleteId, liftKey) {
   if (!VALID_LIFTS_SET.has(liftKey)) throw new Error(`Invalid lift: ${liftKey}`)
-  const { error } = await supabaseAdmin
+  const { error } = await supabaseAnon
     .from('athlete_lift_selections')
     .insert({ athlete_id: athleteId, lift_key: liftKey })
   if (error && error.code !== '23505') throw error  // ignore duplicate key
 }
 
 async function removeLiftSelection(athleteId, liftKey) {
-  const { error } = await supabaseAdmin
+  const { error } = await supabaseAnon
     .from('athlete_lift_selections')
     .delete()
     .eq('athlete_id', athleteId)
@@ -112,14 +122,14 @@ async function updateLiftSelections(athleteId, liftKeys) {
   for (const key of liftKeys) {
     if (!VALID_LIFTS_SET.has(key)) throw new Error(`Invalid lift: ${key}`)
   }
-  const { error: delErr } = await supabaseAdmin
+  const { error: delErr } = await supabaseAnon
     .from('athlete_lift_selections')
     .delete()
     .eq('athlete_id', athleteId)
   if (delErr) throw delErr
   if (liftKeys.length > 0) {
     const rows = liftKeys.map(k => ({ athlete_id: athleteId, lift_key: k }))
-    const { error: insErr } = await supabaseAdmin
+    const { error: insErr } = await supabaseAnon
       .from('athlete_lift_selections')
       .insert(rows)
     if (insErr) throw insErr
