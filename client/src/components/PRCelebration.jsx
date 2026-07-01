@@ -159,7 +159,7 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   ctx.fillRect(0, SIZE - 12, SIZE, 12)
 
   // ── Section 1: Header ────────────────────────────────────────────────────
-  const LOGO_W    = 520
+  const LOGO_W    = 580
   const LOGO_Y    = 22
   let logoBottomY = LOGO_Y + 115   // fallback if image fails to load
 
@@ -224,21 +224,58 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   const pillW = ctx.measureText(PILL_LABEL).width + 56
   const PILL_H = 50
 
-  // Card height from content
-  const METRIC_SZ = 52
-  const prevSecH  = hasPrev ? 80 : 44
-  const cardH     = CARD_PAD_V + METRIC_SZ + 20 + heroFontSz + 20 + PILL_H + 14 + prevSecH + CARD_PAD_V
+  // — Metric name: scale down then word-wrap if still too wide —
+  const METRIC_MAX_W = CARD_W - CARD_PAD_H * 2
+  const metricText   = liftLabel.toUpperCase()
+  let metricFontSz   = 52
+  ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
+  while (ctx.measureText(metricText).width > METRIC_MAX_W && metricFontSz > 32) {
+    metricFontSz -= 2
+    ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
+  }
+  // Still overflows at 32px min — split onto two lines at a comfortable size
+  let metricLines = [metricText]
+  if (ctx.measureText(metricText).width > METRIC_MAX_W) {
+    metricFontSz = 38
+    const words = metricText.split(' ')
+    let split = 1
+    for (let i = 1; i < words.length; i++) {
+      ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
+      if (ctx.measureText(words.slice(0, i + 1).join(' ')).width <= METRIC_MAX_W) split = i + 1
+      else break
+    }
+    metricLines = [words.slice(0, split).join(' '), words.slice(split).join(' ')].filter(Boolean)
+    // Scale down further if either line still overflows
+    while (metricFontSz > 22) {
+      ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
+      if (Math.max(...metricLines.map(l => ctx.measureText(l).width)) <= METRIC_MAX_W) break
+      metricFontSz -= 2
+    }
+  }
+  const METRIC_LINE_GAP = 8
+  const metricTotalH    = metricLines.length === 2
+    ? metricFontSz + METRIC_LINE_GAP + metricFontSz
+    : metricFontSz
+
+  // Card height from content (uses metricTotalH to accommodate possible two-line name)
+  const prevSecH = hasPrev ? 80 : 44
+  const cardH    = CARD_PAD_V + metricTotalH + 20 + heroFontSz + 20 + PILL_H + 14 + prevSecH + CARD_PAD_V
 
   // Draw card background (#1A1A1A rounded rect)
   ctx.fillStyle = '#1A1A1A'
   fillRoundRect(ctx, CARD_X, CARD_Y, CARD_W, cardH, CARD_RADIUS)
 
-  // — Metric / exercise name —
-  let cy = CARD_Y + CARD_PAD_V + METRIC_SZ
+  // — Metric / exercise name (single or two-line) —
+  let cy = CARD_Y + CARD_PAD_V
   ctx.fillStyle = BLUE
-  ctx.font = `bold ${METRIC_SZ}px Arial, sans-serif`
+  ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
   ctx.textAlign = 'center'
-  ctx.fillText(liftLabel.toUpperCase(), SIZE / 2, cy)
+  cy += metricFontSz
+  ctx.fillText(metricLines[0], SIZE / 2, cy)
+  if (metricLines.length === 2) {
+    cy += METRIC_LINE_GAP + metricFontSz
+    ctx.fillText(metricLines[1], SIZE / 2, cy)
+  }
   cy += 20   // gap below name
 
   // — Hero number + unit —
@@ -346,12 +383,12 @@ const PIECE_DEFS = [
 
 function rnd(a, b) { return a + Math.random() * (b - a) }
 
-const CONFETTI_PIECES = Array.from({ length: 70 }, (_, i) => {
+const CONFETTI_PIECES = Array.from({ length: 150 }, (_, i) => {
   const shape  = SHAPES[i % 3]
   const def    = PIECE_DEFS[i % 5]
   const isCirc = shape === 'circle'
   const isDiam = shape === 'diamond'
-  const sz     = rnd(7, 14)
+  const sz     = rnd(8, 18)
   return {
     id:       i,
     color:    def.color,
@@ -361,18 +398,18 @@ const CONFETTI_PIECES = Array.from({ length: 70 }, (_, i) => {
     w: isCirc ? sz : isDiam ? sz      : sz * 1.7,
     h: isCirc ? sz : isDiam ? sz      : sz * 0.42,
     x:        rnd(0, 100),
-    delay:    Math.pow(Math.random(), 2) * 0.9,
-    dur:      rnd(2.5, 3.6),
-    drift:    rnd(-100, 100),
+    delay:    Math.pow(Math.random(), 2) * 2.5,
+    dur:      rnd(1.4, 2.8),
+    drift:    rnd(-130, 130),
     startRot: rnd(0, 360),
   }
 })
 
 const CONFETTI_CSS = CONFETTI_PIECES.map(p => `
   @keyframes c${p.id} {
-    0%  { transform: translateY(-24px) translateX(0px) rotate(${p.startRot}deg); opacity: 1; }
-    85% { opacity: 1; }
-    100%{ transform: translateY(108vh) translateX(${p.drift}px) rotate(${p.startRot + 580}deg); opacity: 0; }
+    0%  { transform: translateY(-50px) translateX(0px) rotate(${p.startRot}deg); opacity: 1; }
+    75% { opacity: 1; }
+    100%{ transform: translateY(120vh) translateX(${p.drift}px) rotate(${p.startRot + 720}deg); opacity: 0; }
   }
 `).join('')
 
@@ -475,8 +512,8 @@ export default function PRCelebration({
       <div style={s.overlay}>
         <div style={{
           position: 'absolute', inset: 0, overflow: 'hidden',
-          pointerEvents: 'none', zIndex: 0,
-          opacity: confettiOn ? 1 : 0, transition: 'opacity 0.9s ease',
+          pointerEvents: 'none', zIndex: 2,
+          opacity: confettiOn ? 1 : 0, transition: 'opacity 1.1s ease',
         }}>
           {CONFETTI_PIECES.map(p => <ConfettiPiece key={p.id} {...p} />)}
         </div>
