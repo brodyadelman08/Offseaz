@@ -139,7 +139,7 @@ function fillRoundRect(ctx, x, y, w, h, r) {
   ctx.fill()
 }
 
-async function generateShareImage({ athleteName, sport, liftLabel, newWeight, previousBest, unit, isLowerBetter }) {
+async function generateShareImage({ athleteName, sport, liftLabel, newWeight, reps, estimated1rm, previousBest, unit, isLowerBetter }) {
   const SIZE = 1080
   const canvas = document.createElement('canvas')
   canvas.width  = SIZE
@@ -278,10 +278,17 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   const pillW = ctx.measureText(PILL_LABEL).width + 56
   const PILL_H = 50
 
+  // Reps + Est. 1RM rows are shown only when the set was more than 1 rep
+  const showRepsRow   = (reps || 1) > 1
+  const showEst1rmRow = showRepsRow && estimated1rm != null
+  const REPS_ROW_H    = showRepsRow   ? 52 : 0   // 40px font + 12px gap
+  const EST1RM_ROW_H  = showEst1rmRow ? 54 : 0   // 38px font + 16px gap
+
   // Card height: Fix 1 removes the separate prev-section for first-time entries
   const prevSecH = hasPrev ? 80 : 0
-  const cardH    = CARD_PAD_TOP + metricTotalH + 20 + heroFontSz + 20 + PILL_H
-    + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
+  const cardH    = CARD_PAD_TOP + metricTotalH + 20 + heroFontSz + 20
+    + REPS_ROW_H + EST1RM_ROW_H
+    + PILL_H + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
 
   // Fix 2: enforce 40px minimum gap between card bottom and footer divider
   const safeCardH = Math.min(cardH, footerDivY - 40 - CARD_Y)
@@ -317,6 +324,22 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   }
   ctx.textAlign = 'center'
   cy += heroFontSz + 20
+
+  // — Reps line (only for multi-rep sets) —
+  if (showRepsRow) {
+    ctx.fillStyle = 'rgba(255,255,255,0.72)'
+    ctx.font = '400 40px Arial, sans-serif'
+    ctx.fillText(`× ${reps} reps`, SIZE / 2, cy + 40)
+    cy += 52
+  }
+
+  // — Est. 1RM line in blue (only for multi-rep sets) —
+  if (showEst1rmRow) {
+    ctx.fillStyle = BLUE
+    ctx.font = '600 38px Arial, sans-serif'
+    ctx.fillText(`Est. 1RM ${Math.round(estimated1rm)} ${unitStr || 'lbs'}`, SIZE / 2, cy + 38)
+    cy += 54
+  }
 
   // — Badge pill: Fix 1 — FIRST TIME LOGGED or NEW PERSONAL RECORD, never both —
   ctx.fillStyle = YELLOW
@@ -450,6 +473,8 @@ function ConfettiPiece({ id, color, outline, w, h, x, delay, dur, borderRadius, 
 export default function PRCelebration({
   lift,
   newWeight,
+  reps = 1,
+  estimated1rm = null,
   previousBest,
   athleteName,
   sport,
@@ -484,7 +509,7 @@ export default function PRCelebration({
   async function handleSave() {
     setSaving(true)
     try {
-      const dataUrl = await generateShareImage({ athleteName, sport, liftLabel, newWeight, previousBest, unit, isLowerBetter })
+      const dataUrl = await generateShareImage({ athleteName, sport, liftLabel, newWeight, reps, estimated1rm, previousBest, unit, isLowerBetter })
       const res  = await fetch(dataUrl)
       const blob = await res.blob()
       const file = new File([blob], `offseaz-pr-${Date.now()}.png`, { type: 'image/png' })
@@ -523,6 +548,11 @@ export default function PRCelebration({
             {heroStr}
             {unitStr && <span style={s.lbsUnit}> {unitStr}</span>}
           </p>
+
+          {reps > 1 && <p style={s.repsLine}>× {reps} reps</p>}
+          {estimated1rm != null && reps > 1 && (
+            <p style={s.est1rmLine}>Est. 1RM {Math.round(estimated1rm)} {unitStr || 'lbs'}</p>
+          )}
 
           <div style={s.prBadge}>NEW PERSONAL RECORD</div>
 
@@ -582,6 +612,8 @@ const s = {
     marginTop: 10, marginBottom: 10, padding: '6px 18px', background: YELLOW, color: BLACK,
     borderRadius: 100, fontSize: 11, fontWeight: 900, letterSpacing: 1.5, textTransform: 'uppercase',
   },
+  repsLine:    { fontSize: 15, fontWeight: 600, color: 'rgba(255,255,255,0.72)', margin: '2px 0 2px', letterSpacing: 0.3 },
+  est1rmLine:  { fontSize: 13, fontWeight: 600, color: BLUE, margin: '0 0 8px', letterSpacing: 0.3 },
   prevRow: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 2, marginBottom: 16 },
   prevLabel:   { fontSize: 12, color: '#777' },
   firstTime:   { fontSize: 13, fontWeight: 700, color: YELLOW, letterSpacing: 0.5 },

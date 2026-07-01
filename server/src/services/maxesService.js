@@ -8,25 +8,36 @@ const VALID_LIFTS = [
 
 const VALID_LIFTS_SET = new Set(VALID_LIFTS)
 
-// Returns { max, is_pr, previous_best } — is_pr true when new weight > all prior entries
+// Epley formula: for 1 rep use the exact weight; for multiple reps estimate the theoretical 1RM.
+// Training max calculations elsewhere continue to use raw weight_lbs — this is for PR detection only.
+function calcEstimated1rm(weight, reps) {
+  const r = Number(reps) || 1
+  return r <= 1 ? Number(weight) : Number(weight) * (1 + r / 30)
+}
+
+// Returns { max, is_pr, previous_best, estimated_1rm }
+// is_pr is true when the new estimated 1RM exceeds the athlete's previous best estimated 1RM
 async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   if (!VALID_LIFTS.includes(lift)) throw new Error(`Invalid lift: ${lift}`)
 
-  // Fetch prior best before inserting so we can detect a PR
+  const repCount     = Number(reps) || 1
+  const estimated_1rm = calcEstimated1rm(weight_lbs, repCount)
+
+  // Fetch prior best estimated_1rm for PR comparison
   const { data: prior } = await supabaseAdmin
     .from('lifting_maxes')
-    .select('weight_lbs')
+    .select('estimated_1rm')
     .eq('athlete_id', athleteId)
     .eq('lift', lift)
-    .order('weight_lbs', { ascending: false })
+    .order('estimated_1rm', { ascending: false })
     .limit(1)
 
-  const previousBest = prior?.[0] ? Number(prior[0].weight_lbs) : null
-  const is_pr = previousBest === null || Number(weight_lbs) > previousBest
+  const previousBest1rm = prior?.[0]?.estimated_1rm != null ? Number(prior[0].estimated_1rm) : null
+  const is_pr = previousBest1rm === null || estimated_1rm > previousBest1rm
 
   const { data, error } = await supabaseAdmin
     .from('lifting_maxes')
-    .insert({ athlete_id: athleteId, lift, weight_lbs, reps: reps || 1, notes: notes || null })
+    .insert({ athlete_id: athleteId, lift, weight_lbs, reps: repCount, notes: notes || null, estimated_1rm })
     .select()
     .single()
 
@@ -39,11 +50,11 @@ async function logMax(athleteId, lift, weight_lbs, reps, notes) {
     supabaseAdmin.from('pr_celebrations').insert({
       athlete_id: athleteId, lift,
       new_weight_lbs: weight_lbs,
-      previous_weight_lbs: previousBest,
+      previous_weight_lbs: previousBest1rm,
     }).then(() => {}).catch(err => console.error('[maxesService] pr_celebrations insert failed:', err.message))
   }
 
-  return { max: data, is_pr, previous_best: previousBest }
+  return { max: data, is_pr, previous_best: previousBest1rm, estimated_1rm }
 }
 
 async function getMaxesByAthlete(athleteId) {
