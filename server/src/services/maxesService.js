@@ -98,20 +98,28 @@ async function addLiftSelection(athleteId, liftKey) {
 }
 
 async function removeLiftSelection(athleteId, liftKey) {
+  console.log('[removeLiftSelection] START — athleteId:', athleteId, '| liftKey:', liftKey)
+
   // Cascade-delete all logged maxes for this lift before removing the selection row
-  const { error: maxesErr } = await supabaseAdmin
+  const { data: deletedMaxes, error: maxesErr } = await supabaseAdmin
     .from('lifting_maxes')
     .delete()
     .eq('athlete_id', athleteId)
     .eq('lift', liftKey)
+    .select()
+  console.log('[removeLiftSelection] lifting_maxes delete — rows affected:', deletedMaxes?.length ?? 'unknown', '| error:', maxesErr ? JSON.stringify(maxesErr) : 'none')
   if (maxesErr) throw maxesErr
 
-  const { error } = await supabaseAdmin
+  const { data: deletedSel, error } = await supabaseAdmin
     .schema('public').from('athlete_lift_selections')
     .delete()
     .eq('athlete_id', athleteId)
     .eq('lift_key', liftKey)
+    .select()
+  console.log('[removeLiftSelection] athlete_lift_selections delete — rows affected:', deletedSel?.length ?? 'unknown', '| error:', error ? JSON.stringify(error) : 'none')
   if (error) throw error
+
+  console.log('[removeLiftSelection] DONE — athleteId:', athleteId, '| liftKey:', liftKey)
 }
 
 // Atomically replaces all lift selections for an athlete with the provided list.

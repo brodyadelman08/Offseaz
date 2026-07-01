@@ -5,7 +5,6 @@ import api from '../services/api'
 import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon, StatusInjuryIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 import PRCelebration from '../components/PRCelebration'
-import { Wordmark } from '../components/Wordmark'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -647,7 +646,7 @@ export default function AthleteMyProfile() {
         <div style={cs.overlay} onClick={() => setConfirmRemove(null)}>
           <div style={cs.card} onClick={e => e.stopPropagation()}>
             <div style={{ textAlign: 'center', marginBottom: 20 }}>
-              <Wordmark size={28} />
+              <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={{ width: 140, display: 'block', margin: '0 auto' }} />
             </div>
             <h3 style={cs.headline}>
               {confirmRemove.type === 'lift'
