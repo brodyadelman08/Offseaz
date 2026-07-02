@@ -240,20 +240,28 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ;({ nW: numW, uFs: uFontSz, uW: unitW } = reCalc())
   }
 
-  // — Metric name: scale down then word-wrap if still too wide —
-  const METRIC_MAX_W = CARD_W - CARD_PAD_H * 2
-  const metricText   = liftLabel.toUpperCase()
-  let metricFontSz   = 52
+  // — Metric name: sub-type metrics get a structured two-line display —
+  const METRIC_MAX_W  = CARD_W - CARD_PAD_H * 2
+  const METRIC_LINE_GAP = 8
+
+  const dashIdx    = liftLabel.indexOf(' — ')
+  const hasSubType = dashIdx !== -1
+  const mainText   = hasSubType ? liftLabel.slice(0, dashIdx).toUpperCase() : liftLabel.toUpperCase()
+  const subText    = hasSubType ? liftLabel.slice(dashIdx + 3) : null
+
+  let metricFontSz = 52
+  let metricLines  = null   // used only for non-sub-type word-wrap path
+
   ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
-  while (ctx.measureText(metricText).width > METRIC_MAX_W && metricFontSz > 32) {
+  while (ctx.measureText(mainText).width > METRIC_MAX_W && metricFontSz > 32) {
     metricFontSz -= 2
     ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
   }
-  // Still overflows at 32px min — split onto two lines at a comfortable size
-  let metricLines = [metricText]
-  if (ctx.measureText(metricText).width > METRIC_MAX_W) {
+
+  if (!hasSubType && ctx.measureText(mainText).width > METRIC_MAX_W) {
+    // Word-wrap fallback for long single-line names
     metricFontSz = 38
-    const words = metricText.split(' ')
+    const words = mainText.split(' ')
     let split = 1
     for (let i = 1; i < words.length; i++) {
       ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
@@ -267,10 +275,11 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
       metricFontSz -= 2
     }
   }
-  const METRIC_LINE_GAP = 8
-  const metricTotalH = metricLines.length === 2
-    ? metricFontSz + METRIC_LINE_GAP + metricFontSz
-    : metricFontSz
+
+  const subFontSz    = Math.round(metricFontSz * 0.75)
+  const metricTotalH = hasSubType
+    ? metricFontSz + METRIC_LINE_GAP + subFontSz
+    : (metricLines?.length === 2 ? metricFontSz + METRIC_LINE_GAP + metricFontSz : metricFontSz)
 
   // Fix 1: pill label flips based on whether this is the first entry ever
   ctx.font = 'bold 34px Arial, sans-serif'
@@ -283,8 +292,8 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   const cardH    = CARD_PAD_TOP + metricTotalH + 20 + heroFontSz + 20
     + PILL_H + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
 
-  // Enforce 60px minimum gap between card bottom and footer divider
-  const safeCardH = Math.min(cardH, footerDivY - 60 - CARD_Y)
+  // Enforce 80px minimum gap between card bottom and footer divider
+  const safeCardH = Math.min(cardH, footerDivY - 80 - CARD_Y)
 
   // Draw card background (#1A1A1A rounded rect)
   ctx.fillStyle = '#1A1A1A'
@@ -296,15 +305,21 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   ctx.rect(CARD_X, CARD_Y, CARD_W, safeCardH)
   ctx.clip()
 
-  // — Metric / exercise name (single or two-line) —
+  // — Metric / exercise name —
   let cy = CARD_Y + CARD_PAD_TOP
+  ctx.textAlign = 'center'
   ctx.fillStyle = BLUE
   ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
-  ctx.textAlign = 'center'
   cy += metricFontSz
-  ctx.fillText(metricLines[0], SIZE / 2, cy)
-  if (metricLines.length === 2) {
+  ctx.fillText(mainText, SIZE / 2, cy)
+  if (hasSubType) {
+    cy += METRIC_LINE_GAP + subFontSz
+    ctx.fillStyle = 'rgba(180,220,240,0.88)'
+    ctx.font = `${subFontSz}px Arial, sans-serif`
+    ctx.fillText(subText, SIZE / 2, cy)
+  } else if (metricLines?.length === 2) {
     cy += METRIC_LINE_GAP + metricFontSz
+    ctx.fillStyle = BLUE
     ctx.fillText(metricLines[1], SIZE / 2, cy)
   }
   cy += 20   // gap below name
