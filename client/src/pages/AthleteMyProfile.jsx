@@ -402,6 +402,12 @@ export default function AthleteMyProfile() {
   const [perfHistOpen,   setPerfHistOpen]   = useState({}) // { [selectionId]: bool }
   const [perfHistData,   setPerfHistData]   = useState({}) // { [selectionId]: entries[] }
   const [confirmRemove, setConfirmRemove] = useState(null) // { type: 'lift'|'metric', key?, label?, selId?, name? }
+  const [isMobile, setIsMobile] = useState(() => window.innerWidth < 600)
+  useEffect(() => {
+    const check = () => setIsMobile(window.innerWidth < 600)
+    window.addEventListener('resize', check)
+    return () => window.removeEventListener('resize', check)
+  }, [])
 
   useEffect(() => {
     Promise.all([
@@ -606,6 +612,11 @@ export default function AthleteMyProfile() {
     : null
 
   if (loading) return <div style={styles.loading}>Loading…</div>
+
+  const mGrid    = isMobile ? { ...styles.maxesGrid, gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 } : styles.maxesGrid
+  const mCard    = isMobile ? { ...styles.liftCard, padding: '12px 16px' } : styles.liftCard
+  const mLabel   = isMobile ? { ...styles.liftLabel, fontSize: 13 } : styles.liftLabel
+  const mLogBtn  = isMobile ? { ...styles.logPRBtn, fontSize: 12, padding: '6px 10px', minHeight: 32 } : styles.logPRBtn
 
   return (
     <div style={styles.container}>
@@ -838,7 +849,7 @@ export default function AthleteMyProfile() {
             ? LIFTS.filter(l => selectedLifts.includes(l.key))
             : LIFTS
           return (
-        <div style={styles.maxesGrid}>
+        <div style={mGrid}>
           {visibleLifts.map(({ key, label }) => {
             const liftData = maxes?.[key]
             const current  = liftData?.current
@@ -848,9 +859,9 @@ export default function AthleteMyProfile() {
             const isSubmitting = submitting === key
 
             return (
-              <div key={key} style={styles.liftCard}>
+              <div key={key} style={mCard}>
                 <div style={styles.liftTop}>
-                  <span style={styles.liftLabel}>{label}</span>
+                  <span style={mLabel}>{label}</span>
                   <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
                     {current && (
                       <span style={styles.liftPR}>
@@ -871,7 +882,7 @@ export default function AthleteMyProfile() {
                   <p style={styles.liftEmpty}>No max logged yet</p>
                 )}
                 {!form.open ? (
-                  <button style={styles.logPRBtn} onClick={() => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], open: true } }))}>
+                  <button style={mLogBtn} onClick={() => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], open: true } }))}>
                     <PlusIcon size={13} color={ORANGE} /> Log PR
                   </button>
                 ) : (
@@ -940,7 +951,7 @@ export default function AthleteMyProfile() {
             </button>
           </div>
         ) : (
-          <div style={styles.maxesGrid}>
+          <div style={mGrid}>
             {perfSelections.map(sel => {
               const def = getSelectionDef(sel)
               if (!def) return null
@@ -950,9 +961,9 @@ export default function AthleteMyProfile() {
               const hist    = perfHistData[sel.id] || []
 
               return (
-                <div key={sel.id} style={styles.liftCard}>
+                <div key={sel.id} style={mCard}>
                   <div style={styles.liftTop}>
-                    <span style={styles.liftLabel}>{def.name}</span>
+                    <span style={mLabel}>{def.name}</span>
                     <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
                       {bestVal !== null && (
                         <span style={{ ...styles.liftPR, fontSize: bestVal >= 100 ? 16 : 22 }}>
@@ -975,7 +986,7 @@ export default function AthleteMyProfile() {
                   )}
 
                   {!form.open ? (
-                    <button style={styles.logPRBtn} onClick={() => setPerfForm(sel.id, { open: true })}>
+                    <button style={mLogBtn} onClick={() => setPerfForm(sel.id, { open: true })}>
                       <PlusIcon size={13} color={ORANGE} /> Log New
                     </button>
                   ) : (
