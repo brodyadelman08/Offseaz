@@ -533,15 +533,7 @@ export default function AthleteMyProfile() {
       setMaxes(res.data.maxes)
       setLogForms(prev => ({ ...prev, [liftKey]: { open: false, weight: '', reps: '1', notes: '' } }))
       if (postRes.data.is_pr) {
-        setPrCelebration({
-          lift: liftKey,
-          newWeight: w,
-          reps: parseInt(form.reps) || 1,
-          estimated1rm: postRes.data.estimated_1rm ?? null,
-          previousBest: postRes.data.previous_best ?? null,
-          unit: 'lbs',
-          isLowerBetter: false,
-        })
+        setPrCelebration({ lift: liftKey, newWeight: w, previousBest: postRes.data.previous_best ?? null, unit: 'lbs', isLowerBetter: false })
       }
     } catch (err) {
       const msg = err?.response?.data?.error || err?.message || 'Failed to save. Please try again.'
@@ -621,8 +613,6 @@ export default function AthleteMyProfile() {
         <PRCelebration
           lift={prCelebration.lift}
           newWeight={prCelebration.newWeight}
-          reps={prCelebration.reps}
-          estimated1rm={prCelebration.estimated1rm}
           previousBest={prCelebration.previousBest}
           athleteName={profile?.full_name}
           sport={survey?.sport}

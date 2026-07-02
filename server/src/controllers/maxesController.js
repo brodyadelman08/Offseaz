@@ -28,8 +28,8 @@ async function addMax(req, res) {
     if (profile.role !== 'athlete') {
       return res.status(403).json({ error: 'Only athletes can log maxes' })
     }
-    const { max, is_pr, previous_best, estimated_1rm } = await logMax(req.user.id, lift, weight_lbs, reps, notes)
-    res.status(201).json({ max, is_pr, previous_best, estimated_1rm })
+    const { max, is_pr, previous_best } = await logMax(req.user.id, lift, weight_lbs, reps, notes)
+    res.status(201).json({ max, is_pr, previous_best })
   } catch (err) {
     console.error('[addMax] failed for lift=%s user=%s: %s', lift, req.user?.id, err.message)
     res.status(400).json({ error: err.message })
