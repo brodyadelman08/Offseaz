@@ -98,17 +98,23 @@ async function addLiftSelection(athleteId, liftKey) {
 }
 
 async function removeLiftSelection(athleteId, liftKey) {
-  console.log('[removeLiftSelection] START — athleteId:', athleteId, '| liftKey:', liftKey)
+  console.log('[removeLiftSelection] START — athleteId:', athleteId, '| liftKey:', liftKey, '| querying lifting_maxes column "lift"')
 
-  // Cascade-delete all logged maxes for this lift before removing the selection row
   const { data: deletedMaxes, error: maxesErr } = await supabaseAdmin
     .from('lifting_maxes')
     .delete()
     .eq('athlete_id', athleteId)
     .eq('lift', liftKey)
     .select()
-  console.log('[removeLiftSelection] lifting_maxes delete — rows affected:', deletedMaxes?.length ?? 'unknown', '| error:', maxesErr ? JSON.stringify(maxesErr) : 'none')
+
+  const rowsDeleted = Array.isArray(deletedMaxes) ? deletedMaxes.length : 0
+  console.log('[removeLiftSelection] lifting_maxes delete — athleteId:', athleteId, '| liftKey:', liftKey, '| rows deleted:', rowsDeleted, '| error:', maxesErr ? JSON.stringify(maxesErr) : 'none')
   if (maxesErr) throw maxesErr
+  if (rowsDeleted === 0) {
+    const err = new Error(`lifting_maxes delete returned 0 rows for athleteId:${athleteId} lift:${liftKey} — column "lift" used, verify data exists in table`)
+    console.error('[removeLiftSelection] ZERO ROWS DELETED:', err.message)
+    throw err
+  }
 
   const { data: deletedSel, error } = await supabaseAdmin
     .schema('public').from('athlete_lift_selections')
@@ -116,7 +122,7 @@ async function removeLiftSelection(athleteId, liftKey) {
     .eq('athlete_id', athleteId)
     .eq('lift_key', liftKey)
     .select()
-  console.log('[removeLiftSelection] athlete_lift_selections delete — rows affected:', deletedSel?.length ?? 'unknown', '| error:', error ? JSON.stringify(error) : 'none')
+  console.log('[removeLiftSelection] athlete_lift_selections delete — rows deleted:', Array.isArray(deletedSel) ? deletedSel.length : 'unknown', '| error:', error ? JSON.stringify(error) : 'none')
   if (error) throw error
 
   console.log('[removeLiftSelection] DONE — athleteId:', athleteId, '| liftKey:', liftKey)

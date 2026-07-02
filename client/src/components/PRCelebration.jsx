@@ -283,15 +283,21 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   const cardH    = CARD_PAD_TOP + metricTotalH + 20 + heroFontSz + 20
     + PILL_H + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
 
-  // Fix 2: enforce 40px minimum gap between card bottom and footer divider
-  const safeCardH = Math.min(cardH, footerDivY - 40 - CARD_Y)
+  // Enforce 60px minimum gap between card bottom and footer divider
+  const safeCardH = Math.min(cardH, footerDivY - 60 - CARD_Y)
 
   // Draw card background (#1A1A1A rounded rect)
   ctx.fillStyle = '#1A1A1A'
   fillRoundRect(ctx, CARD_X, CARD_Y, CARD_W, safeCardH, CARD_RADIUS)
 
+  // Clip all card content so no text can bleed into the footer zone
+  ctx.save()
+  ctx.beginPath()
+  ctx.rect(CARD_X, CARD_Y, CARD_W, safeCardH)
+  ctx.clip()
+
   // — Metric / exercise name (single or two-line) —
-  let cy = CARD_Y + CARD_PAD_TOP   // Fix 4: use larger top padding
+  let cy = CARD_Y + CARD_PAD_TOP
   ctx.fillStyle = BLUE
   ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
   ctx.textAlign = 'center'
@@ -326,7 +332,7 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   ctx.fillText(PILL_LABEL, SIZE / 2, cy + 34)
   cy += PILL_H + 14
 
-  // — Previous record + improvement (returning PRs only — Fix 1) —
+  // — Previous record + improvement (returning PRs only) —
   if (hasPrev) {
     const prevStr   = fmtValue(previousBest, unit) || String(previousBest)
     const rawDiff   = isLowerBetter
@@ -342,6 +348,9 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     ctx.font = 'bold 36px Arial, sans-serif'
     ctx.fillText(`${arrow} ${sign}${improvStr}${unitStr ? ' ' + unitStr : ''}`, SIZE / 2, cy + 78)
   }
+
+  // End card content clip region
+  ctx.restore()
 
   // ── Section 3: Athlete footer — draw after card content ──────────────────
   ctx.fillStyle = BLUE
@@ -524,11 +533,10 @@ export default function PRCelebration({
             {unitStr && <span style={s.lbsUnit}> {unitStr}</span>}
           </p>
 
-          <div style={s.prBadge}>NEW PERSONAL RECORD</div>
-
-          <div style={s.prevRow}>
-            {prevStr ? (
-              <>
+          {previousBest != null ? (
+            <>
+              <div style={s.prBadge}>NEW PERSONAL RECORD</div>
+              <div style={s.prevRow}>
                 <span style={s.prevLabel}>Previous: {prevStr}{unitStr ? ' ' + unitStr : ''}</span>
                 {improvStr && rawDiff !== null && Math.abs(rawDiff) > 0 && (
                   <span style={s.improvement}>
@@ -536,11 +544,11 @@ export default function PRCelebration({
                     {' '}{improvSign}{improvStr}{unitStr ? ' ' + unitStr : ''}
                   </span>
                 )}
-              </>
-            ) : (
-              <span style={s.firstTime}>★ FIRST TIME LOGGED</span>
-            )}
-          </div>
+              </div>
+            </>
+          ) : (
+            <div style={s.prBadge}>★ FIRST TIME LOGGED</div>
+          )}
 
           <div style={s.btnStack}>
             <button style={{ ...s.saveBtn, opacity: saving ? 0.65 : 1 }} onClick={handleSave} disabled={saving}>
