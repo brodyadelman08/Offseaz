@@ -213,9 +213,8 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   // ── Section 2: Performance card ───────────────────────────────────────────
   const CARD_X       = 52
   const CARD_W       = SIZE - 104
-  const CARD_Y       = headerDivY + 25   // Fix 3: was +36 (−30%)
   const CARD_RADIUS  = 28
-  const CARD_PAD_TOP = 74   // Fix 4: extra top breathing room (was 42)
+  const CARD_PAD_TOP = 74
   const CARD_PAD_V   = 42   // bottom padding
   const CARD_PAD_H   = 52   // horizontal inset for hero overflow check
 
@@ -292,8 +291,10 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
     + PILL_H + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
     + (hasSubType ? 40 : 0)
 
-  // Enforce 80px minimum gap between card bottom and footer divider
-  const safeCardH = Math.min(cardH, footerDivY - 80 - CARD_Y)
+  // Center the card in the space between the two blue divider lines
+  const availH    = footerDivY - headerDivY
+  const safeCardH = Math.min(cardH, availH - 80)   // 40px minimum gap each side
+  const CARD_Y    = headerDivY + Math.round((availH - safeCardH) / 2)
 
   // Draw card background (#1A1A1A rounded rect)
   ctx.fillStyle = '#1A1A1A'
