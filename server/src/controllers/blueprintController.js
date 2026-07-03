@@ -1,5 +1,6 @@
 const { getProfile } = require('../services/authService')
 const { resolveCoachTeamAndAccess, getAthleteTeam } = require('../services/teamsService')
+const { SPORT_TEMPLATES, TEMPLATE_GOALS } = require('../data/blueprintTemplates')
 const {
   createBlueprint,
   getBlueprintsByCoach,
@@ -15,6 +16,52 @@ const {
   saveAthleteOverrides,
 } = require('../services/blueprintService')
 const { createPost } = require('../services/feedService')
+
+// Coach-facing template catalog for the manual blueprint builder. This is the
+// same server-authoritative data (and generator functions) used by auto-assign —
+// there is no separate client-side copy of the exercise-selection logic.
+async function listTemplates(req, res) {
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can view blueprint templates' })
+    }
+    // generateWeeks is a function on each sport entry — JSON.stringify drops it
+    // automatically, so only the display metadata (id, label, positions, phases, etc.) is sent.
+    res.json({ sports: SPORT_TEMPLATES, goals: TEMPLATE_GOALS })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
+async function generateFromTemplate(req, res) {
+  const { sport_id, position_id, goal_id, days_per_week } = req.body
+
+  if (!sport_id || !position_id) {
+    return res.status(400).json({ error: 'sport_id and position_id are required' })
+  }
+
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can generate blueprint templates' })
+    }
+
+    const sport = SPORT_TEMPLATES.find(s => s.id === sport_id)
+    if (!sport) return res.status(400).json({ error: 'Unknown sport template' })
+
+    const position = sport.positions.find(p => p.id === position_id)
+    if (!position) return res.status(400).json({ error: 'Unknown position for this sport' })
+
+    const goal = goal_id === 'muscle_gain' ? 'muscle_gain' : 'standard'
+    const days = days_per_week ? parseInt(days_per_week, 10) : undefined
+
+    const weeks = sport.generateWeeks(position_id, goal, days)
+    res.json({ weeks })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
 
 async function create(req, res) {
   const { title, description, num_weeks, weeks, locked } = req.body
@@ -297,4 +344,4 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { create, list, detail, assign, bulkAssign, myPlan, lock, remove, getOverrides, saveOverrides }
+module.exports = { listTemplates, generateFromTemplate, create, list, detail, assign, bulkAssign, myPlan, lock, remove, getOverrides, saveOverrides }

@@ -1,1 +1,1 @@
-{"version":"0.0.1","configurations":[{"name":"offseaz-client","runtimeExecutable":"npm","runtimeArgs":["run","dev"],"cwd":"client","port":5173}]}
+{"version":"0.0.1","configurations":[{"name":"offseaz-client","runtimeExecutable":"npm","runtimeArgs":["run","dev"],"cwd":"client","port":5173},{"name":"offseaz-server","runtimeExecutable":"npm","runtimeArgs":["run","dev"],"cwd":"server","port":3000}]}

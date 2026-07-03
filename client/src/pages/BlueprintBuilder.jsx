@@ -2,7 +2,6 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon, LockIcon, UnlockIcon } from '../components/Icons'
-import { SPORT_TEMPLATES, TEMPLATE_GOALS } from '../data/blueprintTemplates'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -183,6 +182,25 @@ export default function BlueprintBuilder() {
   const [goalPick, setGoalPick] = useState(null)
   const [isMobile, setIsMobile] = useState(typeof window !== 'undefined' && window.innerWidth < 768)
 
+  // Sport templates come from the server — the same generator functions that
+  // power auto-assign, so manual builds and auto-assigned plans never diverge.
+  const [sportTemplates, setSportTemplates] = useState([])
+  const [templateGoals, setTemplateGoals] = useState([])
+  const [templatesLoading, setTemplatesLoading] = useState(true)
+  const [templatesError, setTemplatesError] = useState('')
+  const [generating, setGenerating] = useState(false)
+  const [generateError, setGenerateError] = useState('')
+
+  useEffect(() => {
+    api.get('/api/blueprints/templates')
+      .then(res => {
+        setSportTemplates(res.data.sports || [])
+        setTemplateGoals(res.data.goals || [])
+      })
+      .catch(err => setTemplatesError(err.response?.data?.error || 'Failed to load blueprint templates.'))
+      .finally(() => setTemplatesLoading(false))
+  }, [])
+
   const [form, setForm] = useState({ title: '', description: '', num_weeks: 4, weeks: makeWeeks(4) })
 
   // Grid state
@@ -208,20 +226,38 @@ export default function BlueprintBuilder() {
     setPhase('build')
   }
 
-  function selectDayPickerTemplate(daysPerWeek) {
+  async function selectDayPickerTemplate(daysPerWeek) {
     const { sport, pos } = daysPick
-    const weeks = sport.generateWeeks(pos.id, 'standard', daysPerWeek)
-    setForm({ title: `${sport.label} — 16-Week Offseason (${daysPerWeek} Days/Week)`, description: sport.templateDescription || `16-week program for ${sport.label.toLowerCase()} athletes.`, num_weeks: 16, weeks })
-    setDaysPick(null)
-    setPhase('build')
+    setGenerateError(''); setGenerating(true)
+    try {
+      const res = await api.post('/api/blueprints/templates/generate', {
+        sport_id: sport.id, position_id: pos.id, goal_id: 'standard', days_per_week: daysPerWeek,
+      })
+      setForm({ title: `${sport.label} — 16-Week Offseason (${daysPerWeek} Days/Week)`, description: sport.templateDescription || `16-week program for ${sport.label.toLowerCase()} athletes.`, num_weeks: 16, weeks: res.data.weeks })
+      setDaysPick(null)
+      setPhase('build')
+    } catch (err) {
+      setGenerateError(err.response?.data?.error || 'Failed to generate this template. Please try again.')
+    } finally {
+      setGenerating(false)
+    }
   }
 
-  function selectSportTemplate(sport, pos, goal) {
-    const weeks = sport.generateWeeks(pos.id, goal.id)
-    const goalSuffix = goal.id === 'muscle_gain' ? ' — Muscle Gain' : ''
-    setForm({ title: `${sport.label} — ${pos.label} 16-Week Offseason${goalSuffix}`, description: `16-week offseason for ${pos.label} (${pos.sublabel}). ${goal.desc}`, num_weeks: 16, weeks })
-    setGoalPick(null)
-    setPhase('build')
+  async function selectSportTemplate(sport, pos, goal) {
+    setGenerateError(''); setGenerating(true)
+    try {
+      const res = await api.post('/api/blueprints/templates/generate', {
+        sport_id: sport.id, position_id: pos.id, goal_id: goal.id,
+      })
+      const goalSuffix = goal.id === 'muscle_gain' ? ' — Muscle Gain' : ''
+      setForm({ title: `${sport.label} — ${pos.label} 16-Week Offseason${goalSuffix}`, description: `16-week offseason for ${pos.label} (${pos.sublabel}). ${goal.desc}`, num_weeks: 16, weeks: res.data.weeks })
+      setGoalPick(null)
+      setPhase('build')
+    } catch (err) {
+      setGenerateError(err.response?.data?.error || 'Failed to generate this template. Please try again.')
+    } finally {
+      setGenerating(false)
+    }
   }
 
   // ── Grid operations ─────────────────────────────────────────────────────────
@@ -327,9 +363,10 @@ export default function BlueprintBuilder() {
           <button style={s.textBackBtn} onClick={() => setDaysPick(null)}>← Back to {sport.label}</button>
           <h1 style={s.pageTitle}>{sport.label} — 16-Week Offseason</h1>
           <p style={s.pageDesc}>How many days per week will your athletes train?</p>
+          {generateError && <div style={s.errorBox}>{generateError}</div>}
           <div style={s.dayGrid}>
             {sport.daysOptions.map(opt => (
-              <button key={opt.days} style={s.dayCard} onClick={() => selectDayPickerTemplate(opt.days)}
+              <button key={opt.days} style={{ ...s.dayCard, ...(generating ? { opacity: 0.6, cursor: 'default' } : {}) }} disabled={generating} onClick={() => selectDayPickerTemplate(opt.days)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
                 onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
                 <span style={s.dayNumber}>{opt.days}</span>
@@ -351,9 +388,11 @@ export default function BlueprintBuilder() {
           <h1 style={s.pageTitle}>{sport.label} — {pos.label}</h1>
           <p style={s.pageDesc}>{pos.desc}</p>
           <p style={{ ...s.sportMeta, marginBottom: 24 }}>{sport.daysPerWeek} days/week · 16 weeks · 4 phases</p>
+          {generateError && <div style={s.errorBox}>{generateError}</div>}
           <div style={s.dayGrid}>
-            {TEMPLATE_GOALS.map(goal => (
-              <button key={goal.id} style={{ ...s.templateCard, ...(goal.id === 'muscle_gain' ? s.templateCardFeatured : {}) }}
+            {templateGoals.map(goal => (
+              <button key={goal.id} style={{ ...s.templateCard, ...(goal.id === 'muscle_gain' ? s.templateCardFeatured : {}), ...(generating ? { opacity: 0.6, cursor: 'default' } : {}) }}
+                disabled={generating}
                 onClick={() => selectSportTemplate(sport, pos, goal)}
                 onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
                 onMouseLeave={e => e.currentTarget.style.borderColor = goal.id === 'muscle_gain' ? 'rgba(240,190,36,0.4)' : 'var(--border)'}>
@@ -367,14 +406,16 @@ export default function BlueprintBuilder() {
       )
     }
 
-    const activeSport = SPORT_TEMPLATES.find(sp => sp.id === sportTab)
+    const activeSport = sportTemplates.find(sp => sp.id === sportTab)
     return (
       <div style={s.container}>
         <h1 style={s.pageTitle}>Create Blueprint</h1>
         <p style={s.pageDesc}>Choose a sport-specific template or start from scratch.</p>
+        {templatesError && <div style={s.errorBox}>{templatesError}</div>}
         <div style={s.sportTabBar}>
           <button style={{ ...s.sportTabBtn, ...(sportTab === 'general' ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab('general')}>General</button>
-          {SPORT_TEMPLATES.map(sp => (
+          {templatesLoading && <span style={s.pageDesc}>Loading sport templates…</span>}
+          {sportTemplates.map(sp => (
             <button key={sp.id} style={{ ...s.sportTabBtn, ...(sportTab === sp.id ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab(sp.id)}>
               {SPORT_EMOJIS[sp.id] && <span style={{ marginRight: 5 }}>{SPORT_EMOJIS[sp.id]}</span>}{sp.label}
             </button>

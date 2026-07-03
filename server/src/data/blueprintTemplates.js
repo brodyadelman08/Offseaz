@@ -1422,4 +1422,375 @@ function generateBlueprintForAthlete(survey) {
   return { title, description, num_weeks: 16, weeks }
 }
 
-module.exports = { generateBlueprintForAthlete }
+// ─── Coach-facing template catalog (manual blueprint builder) ─────────────────
+// This is the single source of truth for both auto-assign (generateBlueprintForAthlete
+// above) and the coach's manual "build from template" tool. generateWeeks always
+// calls the same safety-corrected generator functions defined in this file — there
+// is no separate client-side copy of the exercise-selection logic.
+
+const TEMPLATE_GOALS = [
+  {
+    id: 'standard',
+    label: 'Standard Training',
+    desc: 'Sport-specific power, speed, and strength per the full template design',
+  },
+  {
+    id: 'muscle_gain',
+    label: 'Muscle Gain',
+    desc: 'Higher volume (8–12 reps), +1–2 sets, added isolation work, 65–78% loading',
+  },
+]
+
+const SPORT_TEMPLATES = [
+  {
+    id: 'baseball',
+    label: 'Baseball',
+    daysPerWeekPicker: true,
+    templateDescription: '16-week phase-based offseason program for baseball athletes. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.',
+    daysOptions: [
+      { days: 3, desc: 'Full Body split (3 sessions)' },
+      { days: 4, desc: 'Upper/Lower split (4 sessions)' },
+      { days: 5, desc: 'Upper/Lower + Arm Care' },
+      { days: 6, desc: 'Upper/Lower + Arm Care + Light Day' },
+    ],
+    positions: [
+      { id: 'baseball', label: 'Position Player', sublabel: '16-Week Offseason', desc: 'Catcher, 1B, 2B, 3B, SS, Outfield, DH — 4-phase program. Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.' },
+      { id: 'pitcher',  label: 'Pitcher',          sublabel: '16-Week Offseason', desc: 'No overhead pressing. Enhanced hip stability and arm care every session. 4-phase program. Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '70%', weeks: '1–4'   },
+      { num: 2, label: 'Development', pct: '75%', weeks: '5–8'   },
+      { num: 3, label: 'Strength',    pct: '80%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
+    ],
+    generateWeeks: (posId, goal, daysPerWeek) =>
+      posId === 'pitcher'
+        ? generatePitcherBaseballWeeks(goal, daysPerWeek)
+        : generateBaseballWeeks(posId, goal, daysPerWeek),
+  },
+  {
+    id: 'softball',
+    label: 'Softball',
+    daysPerWeekPicker: true,
+    // Softball uses the same core programming as baseball (no dedicated softball
+    // session set exists server-side) — this keeps the manual builder consistent
+    // with what auto-assign already does for softball survey responses.
+    templateDescription: '16-week phase-based offseason program for softball athletes, built on the same core programming as our baseball template. Phase 1 (70%) → Phase 2 (75%) → Phase 3 (80%) → Phase 4 (85%). Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.',
+    daysOptions: [
+      { days: 3, desc: 'Full Body split (3 sessions)' },
+      { days: 4, desc: 'Upper/Lower split (4 sessions)' },
+      { days: 5, desc: 'Upper/Lower + Arm Care' },
+      { days: 6, desc: 'Upper/Lower + Arm Care + Light Day' },
+    ],
+    positions: [
+      { id: 'softball', label: 'Softball', sublabel: '16-Week Offseason', desc: '4-phase program built for softball athletes. Squat and Trap Bar Deadlift weights auto-calculate from logged maxes.' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '70%', weeks: '1–4'   },
+      { num: 2, label: 'Development', pct: '75%', weeks: '5–8'   },
+      { num: 3, label: 'Strength',    pct: '80%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '85%', weeks: '13–16' },
+    ],
+    generateWeeks: (posId, goal, daysPerWeek) => generateBaseballWeeks(posId, goal, daysPerWeek),
+  },
+  {
+    id: 'football',
+    label: 'Football',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Upper + Lower (2 sessions)' },
+      { days: 3, desc: 'Upper + Lower + Power (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Speed & Conditioning' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'linemen', label: 'Linemen',  sublabel: 'OL / DL',         desc: 'Maximum strength and size' },
+      { id: 'skill',   label: 'Skill',    sublabel: 'WR / DB / RB',    desc: 'Speed, explosion, change of direction' },
+      { id: 'hybrid',  label: 'Hybrid',   sublabel: 'LB / TE / FB',    desc: 'Strength plus athleticism' },
+      { id: 'qb',      label: 'QB',       sublabel: 'Quarterback',     desc: 'Rotational power, arm health, lower body' },
+    ],
+    phases: [
+      { num: 1, label: 'Accumulation',   pct: '65–75%', weeks: '1–4'   },
+      { num: 2, label: 'Strength Build', pct: '75–82%', weeks: '5–8'   },
+      { num: 3, label: 'Peak Strength',  pct: '82–88%', weeks: '9–12'  },
+      { num: 4, label: 'Maximum Output', pct: '88–93%', weeks: '13–16' },
+    ],
+    generateWeeks: generateFootballWeeks,
+  },
+  {
+    id: 'basketball',
+    label: 'Basketball',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Court Conditioning' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'guards', label: 'Guards',           sublabel: 'PG / SG', desc: 'Lateral quickness, first-step acceleration, defensive slide, change of direction' },
+      { id: 'wings',  label: 'Wings / Forwards', sublabel: 'SF / PF', desc: 'Vertical power, multi-directional movement, approach jumps, reactive strength' },
+      { id: 'bigs',   label: 'Bigs',             sublabel: 'C',       desc: 'Force production, jumping, contact durability, post conditioning' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',       pct: '65–72%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',         pct: '72–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Conversion', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',             pct: '80–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateBasketballWeeks,
+  },
+  {
+    id: 'soccer',
+    label: 'Soccer',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Full Body Power (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Speed & COD' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'goalkeeper',  label: 'Goalkeeper',  sublabel: 'GK',        desc: 'Explosive lateral power, butterfly mechanics, hip mobility, reactive lateral movement, shoulder durability' },
+      { id: 'center_back', label: 'Center Back', sublabel: 'CB',        desc: 'Max strength, aerial ability, deceleration, physical contact, neck work' },
+      { id: 'fullback',    label: 'Fullback',    sublabel: 'LB / RB',   desc: 'Repeat sprint ability, acceleration, hip mobility, lateral speed' },
+      { id: 'midfielder',  label: 'Midfielder',  sublabel: 'CM / DM / AM', desc: 'Aerobic capacity, change of direction, high work capacity, all-around conditioning' },
+      { id: 'winger',      label: 'Winger',      sublabel: 'LW / RW',   desc: 'Top-end speed, reactive acceleration, elasticity, game-pace sprint conditioning' },
+      { id: 'striker',     label: 'Striker',     sublabel: 'ST / CF',   desc: 'Explosive power, jump height, shot power, approach jumps, game-speed conditioning' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',     pct: '65–72%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',       pct: '72–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power-Strength', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',           pct: '82–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateSoccerWeeks,
+  },
+  {
+    id: 'hockey',
+    label: 'Hockey',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Lateral Conditioning' },
+      { days: 6, desc: '5-day + Active Recovery & Hip Care' },
+    ],
+    positions: [
+      { id: 'forwards', label: 'Forwards', sublabel: 'F', desc: 'First-step explosiveness, acceleration, puck battle strength, lower body power, sled sprints, split squat jumps' },
+      { id: 'defense',  label: 'Defense',  sublabel: 'D', desc: 'Lateral mobility, crossover strength, backward skating mechanics, hip mobility, Cossack squats, Copenhagen planks, lateral sled drags' },
+      { id: 'goalie',   label: 'Goalie',   sublabel: 'G', desc: 'Butterfly recovery mechanics, lateral explosive power, hip mobility, reactive lateral movement, shoulder protection' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '65–73%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',    pct: '73–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Build', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '82–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateHockeyWeeks,
+  },
+  {
+    id: 'rugby',
+    label: 'Rugby',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Power Conditioning' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'forwards', label: 'Forwards', sublabel: 'Prop · Hooker · Lock · Flanker · No.8', desc: 'Maximum strength, contact durability, scrummaging power. Neck work, sled, and farmer carries emphasis.' },
+      { id: 'backs',    label: 'Backs',    sublabel: 'SH · FH · Centre · Wing · Fullback',    desc: 'Speed, explosion, and agility. Sprint work replaces sled on Days 1 & 3. Lateral bounds added to Day 3.' },
+    ],
+    phases: [
+      { num: 1, label: 'Accumulation',   pct: '65–75%', weeks: '1–4'   },
+      { num: 2, label: 'Strength Build', pct: '75–82%', weeks: '5–8'   },
+      { num: 3, label: 'Peak Strength',  pct: '82–88%', weeks: '9–12'  },
+      { num: 4, label: 'Maximum Output', pct: '88–93%', weeks: '13–16' },
+    ],
+    generateWeeks: generateRugbyWeeks,
+  },
+  {
+    id: 'tennis',
+    label: 'Tennis',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Lateral Movement & Wrist Health' },
+      { days: 6, desc: '5-day + Active Recovery & Shoulder Care' },
+    ],
+    positions: [
+      { id: 'tennis', label: 'All Players', sublabel: 'Singles & Doubles', desc: 'Lateral power, rotational strength, shoulder health, wrist and forearm conditioning. 4-day program built around court demands.' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '65–72%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',    pct: '72–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Build', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '82–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateTennisWeeks,
+  },
+  {
+    id: 'golf',
+    label: 'Golf',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper/Rotational (2 sessions)' },
+      { days: 3, desc: 'Full 3-day split (recommended)' },
+      { days: 4, desc: '3-day + Mobility & Rotation Maintenance' },
+      { days: 5, desc: '4-day + Rotational Power Peak' },
+      { days: 6, desc: '5-day + Active Recovery & Mobility' },
+    ],
+    positions: [
+      { id: 'golf', label: 'All Players', sublabel: 'Golfers of all levels', desc: 'Ground force power, rotational strength, landmine work, anti-rotation core. Program designed around swing mechanics.' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',     pct: '60–70%', weeks: '1–4'   },
+      { num: 2, label: 'Strength Build', pct: '70–78%', weeks: '5–8'   },
+      { num: 3, label: 'Power Build',    pct: '75–82%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',           pct: '80–85%', weeks: '13–16' },
+    ],
+    generateWeeks: generateGolfWeeks,
+  },
+  {
+    id: 'wrestling',
+    label: 'Wrestling',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosive Power (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Mat Conditioning' },
+      { days: 6, desc: '5-day + Recovery & Maintenance' },
+    ],
+    positions: [
+      { id: 'wrestling', label: 'Wrestling', sublabel: 'All weight classes', desc: 'Maximal strength, isometric holds, weight class management' },
+    ],
+    phases: [
+      { num: 1, label: 'Accumulation',   pct: '70–80%', weeks: '1–4'   },
+      { num: 2, label: 'Strength Build', pct: '80–87%', weeks: '5–8'   },
+      { num: 3, label: 'Peak Strength',  pct: '87–92%', weeks: '9–12'  },
+      { num: 4, label: 'Max Strength',   pct: '88–95%', weeks: '13–16' },
+    ],
+    generateWeeks: generateWrestlingWeeks,
+  },
+  {
+    id: 'volleyball',
+    label: 'Volleyball',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Full 3-day split (recommended)' },
+      { days: 4, desc: '3-day + Shoulder Health & Conditioning' },
+      { days: 5, desc: '4-day + Jump Training & Court Work' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'volleyball', label: 'Volleyball', sublabel: 'All positions', desc: 'Vertical jump, shoulder durability, elastic power' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',       pct: '65–72%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',         pct: '72–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Conversion', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',             pct: '80–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateVolleyballWeeks,
+  },
+  {
+    id: 'track',
+    label: 'Track & Field',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Speed/Power/Jump Work' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'sprint', label: 'Sprinters', sublabel: '100m – 400m',            desc: 'Power, posterior chain, elastic speed' },
+      { id: 'throw',  label: 'Throwers',  sublabel: 'Shot · Discus · Javelin', desc: 'Maximum strength plus rotational power' },
+      { id: 'jump',   label: 'Jumpers',   sublabel: 'HJ · LJ · TJ',            desc: 'Single leg power and elastic strength' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',  pct: '65–73%', weeks: '1–4'   },
+      { num: 2, label: 'Strength',    pct: '73–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Blend', pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',        pct: '82–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateTrackWeeks,
+  },
+  {
+    id: 'cross_country',
+    label: 'Cross Country',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Full 2-day split (recommended for high mileage)' },
+      { days: 3, desc: '2-day + Injury Prevention & Prehab' },
+    ],
+    positions: [
+      { id: 'cross_country', label: 'Cross Country', sublabel: 'All distances', desc: 'Injury prevention, aerobic support, minimal lifting fatigue' },
+    ],
+    phases: [
+      { num: 1, label: 'Injury Prevention', pct: '65–70%', weeks: '1–4'   },
+      { num: 2, label: 'Base Strength',     pct: '65–70%', weeks: '5–8'   },
+      { num: 3, label: 'Maintenance',       pct: '65–70%', weeks: '9–12'  },
+      { num: 4, label: 'Pre-Season Taper',  pct: '60–65%', weeks: '13–16' },
+    ],
+    generateWeeks: generateXCWeeks,
+  },
+  {
+    id: 'lacrosse',
+    label: 'Lacrosse',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Lower + Upper (2 sessions)' },
+      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 4, desc: 'Full 4-day split (recommended)' },
+      { days: 5, desc: '4-day + Lacrosse Conditioning' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'lacrosse', label: 'Lacrosse', sublabel: 'All positions', desc: 'Power, conditioning, COD — full sport-specific program' },
+    ],
+    phases: [
+      { num: 1, label: 'Foundation',     pct: '65–73%', weeks: '1–4'   },
+      { num: 2, label: 'Strength Build', pct: '73–80%', weeks: '5–8'   },
+      { num: 3, label: 'Power Blend',    pct: '78–85%', weeks: '9–12'  },
+      { num: 4, label: 'Peak',           pct: '82–88%', weeks: '13–16' },
+    ],
+    generateWeeks: generateLacrosseWeeks,
+  },
+  {
+    id: 'swimming',
+    label: 'Swimming',
+    daysPerWeekPicker: true,
+    daysOptions: [
+      { days: 2, desc: 'Upper + Core (2 sessions)' },
+      { days: 3, desc: 'Full 3-day dryland split (recommended)' },
+      { days: 4, desc: '3-day + Core & Anti-Rotation' },
+      { days: 5, desc: '4-day + Explosive Upper & Shoulder Health' },
+      { days: 6, desc: '5-day + Active Recovery' },
+    ],
+    positions: [
+      { id: 'swimming', label: 'Swimming', sublabel: 'Dryland only', desc: 'Shoulder stability, core strength, lat development' },
+    ],
+    phases: [
+      { num: 1, label: 'Base Dryland',     pct: 'Bodyweight', weeks: '1–4'   },
+      { num: 2, label: 'Build Dryland',    pct: 'Bodyweight', weeks: '5–8'   },
+      { num: 3, label: 'Strength Dryland', pct: 'Bodyweight', weeks: '9–12'  },
+      { num: 4, label: 'Peak Dryland',     pct: 'Bodyweight', weeks: '13–16' },
+    ],
+    generateWeeks: generateSwimmingWeeks,
+  },
+]
+
+module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS }
