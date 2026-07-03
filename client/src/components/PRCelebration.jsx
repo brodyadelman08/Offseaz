@@ -249,7 +249,7 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   const mainText   = hasSubType ? liftLabel.slice(0, dashIdx).toUpperCase() : liftLabel.toUpperCase()
   const subText    = hasSubType ? liftLabel.slice(dashIdx + 3) : null
 
-  let metricFontSz = 52
+  let metricFontSz = hasSubType ? 44 : 52
   let metricLines  = null   // used only for non-sub-type word-wrap path
 
   ctx.font = `bold ${metricFontSz}px Arial, sans-serif`
@@ -287,10 +287,10 @@ async function generateShareImage({ athleteName, sport, liftLabel, newWeight, pr
   const pillW = ctx.measureText(PILL_LABEL).width + 56
   const PILL_H = 50
 
-  // Card height: Fix 1 removes the separate prev-section for first-time entries
   const prevSecH = hasPrev ? 80 : 0
   const cardH    = CARD_PAD_TOP + metricTotalH + 20 + heroFontSz + 20
     + PILL_H + (hasPrev ? 14 + prevSecH : 0) + CARD_PAD_V
+    + (hasSubType ? 40 : 0)
 
   // Enforce 80px minimum gap between card bottom and footer divider
   const safeCardH = Math.min(cardH, footerDivY - 80 - CARD_Y)
