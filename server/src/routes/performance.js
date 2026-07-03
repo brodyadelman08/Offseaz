@@ -3,6 +3,8 @@ const express = require('express')
 const router = express.Router()
 const verifyToken = require('../middleware/verifyToken')
 const svc = require('../services/performanceService')
+const { getProfile } = require('../services/authService')
+const { getAthleteProfile } = require('../services/athleteService')
 
 // Public metric catalog
 router.get('/definitions', (req, res) => {
@@ -76,10 +78,15 @@ router.get('/selections/:selectionId/history', verifyToken, async (req, res) => 
 // Coach: read an athlete's selections + current PRs
 router.get('/athlete/:athleteId', verifyToken, async (req, res) => {
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') return res.status(403).json({ error: 'Coach only' })
+    // Verify the athlete is on this coach's team
+    await getAthleteProfile(req.params.athleteId, req.user.id)
     const selections = await svc.getAthleteSelections(req.params.athleteId)
     res.json({ selections })
   } catch (err) {
     console.error('[performance] getAthleteSelections:', err.message)
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 })
@@ -87,10 +94,15 @@ router.get('/athlete/:athleteId', verifyToken, async (req, res) => {
 // Coach: read log history for one of an athlete's selections
 router.get('/athlete/:athleteId/selections/:selectionId/history', verifyToken, async (req, res) => {
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') return res.status(403).json({ error: 'Coach only' })
+    // Verify the athlete is on this coach's team
+    await getAthleteProfile(req.params.athleteId, req.user.id)
     const history = await svc.getHistory(req.params.athleteId, req.params.selectionId)
     res.json({ history })
   } catch (err) {
     console.error('[performance] getAthleteHistory:', err.message)
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 })
