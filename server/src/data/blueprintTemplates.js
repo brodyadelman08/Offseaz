@@ -1,9 +1,14 @@
 // ─── Server-side blueprint template generator (CommonJS) ──────────────────────
-// Mirrors client/src/data/blueprintTemplates.js — same sessions, same phase math.
+// Single source of truth for both auto-assign (generateBlueprintForAthlete) and
+// the coach's manual "build from template" tool (SPORT_TEMPLATES, below).
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
 function pct(f) { return `${Math.round(f * 100)}%` }
+
+// A real deload cuts intensity 15-20% below what the athlete actually lifted
+// the week before, not a flat arbitrary number — 17.5% is the midpoint.
+const DELOAD_PCT_CUT = 0.175
 
 function getPhaseInfo(weekNum, phases) {
   const idx  = Math.min(3, Math.floor((weekNum - 1) / 4))
@@ -12,7 +17,14 @@ function getPhaseInfo(weekNum, phases) {
   const t    = (wip - 1) / 3
   const f    = ph.low + (ph.high - ph.low) * t
   const deload = !!ph.deload && wip === 4
-  const f2   = deload ? 0.60 : Math.round(f * 100) / 100
+  let f2
+  if (deload) {
+    const prevT = (wip - 2) / 3 // interpolation factor for the immediately preceding week
+    const prevF = ph.low + (ph.high - ph.low) * prevT
+    f2 = Math.round(prevF * (1 - DELOAD_PCT_CUT) * 100) / 100
+  } else {
+    f2 = Math.round(f * 100) / 100
+  }
   return { phaseNum: idx + 1, phaseLabel: ph.label, f: f2, pct: pct(f2), wip, deload }
 }
 
@@ -23,7 +35,7 @@ function buildWeeks(n, phases, sessionsFn) {
     return {
       week_number: w,
       objective: info.deload
-        ? `Phase ${info.phaseNum} — Deload (60%) · Week ${info.wip} of 4`
+        ? `Phase ${info.phaseNum} — Deload (${info.pct}) · Week ${info.wip} of 4`
         : `Phase ${info.phaseNum} — ${info.phaseLabel} (${info.pct}) · Week ${info.wip} of 4`,
       sessions: sessionsFn(info),
     }
@@ -604,10 +616,12 @@ function generateTrackWeeks(subtype, goal, daysPerWeek = 4) {
 
 // ─── Cross Country ────────────────────────────────────────────────────────────
 
-function xcSess() {
+function xcSess(deload = false) {
+  const lo = deload ? Math.round(65 * (1 - DELOAD_PCT_CUT)) : 65
+  const hi = deload ? Math.round(70 * (1 - DELOAD_PCT_CUT)) : 70
   return [
     { day: 'Day 1', focus: 'Lower (Low Load)',
-      description: `Back Squat: 3x8 @ 65-70% only — no heavy loading\nSingle Leg RDL: 3x10 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 4xAMAP\nHip Thrust: 3x12\nCopenhagen Adductor: 3x8 each leg\nDead Bug: 3x10 each side\nPlank: 3x30 seconds` },
+      description: `Back Squat: 3x8 @ ${lo}-${hi}% only — no heavy loading\nSingle Leg RDL: 3x10 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 4xAMAP\nHip Thrust: 3x12\nCopenhagen Adductor: 3x8 each leg\nDead Bug: 3x10 each side\nPlank: 3x30 seconds` },
     { day: 'Day 2', focus: 'Full Body Light',
       description: `Goblet Squat: 3x12\nPull-ups: 3xAMAP\nPush-ups: 3xAMAP\nSingle Leg RDL: 3x10 each leg\nBand Work: Hip Abduction · External Rotation — 3x15 each\nCore Circuit: 3 rounds` },
   ]
@@ -637,7 +651,8 @@ function generateXCWeeks(_, goal, daysPerWeek = 2) {
     const w   = i + 1
     const phi = Math.min(3, Math.floor((w - 1) / 4))
     const wip = ((w - 1) % 4) + 1
-    const base  = xcSess()
+    const isDeload = phi === 3 && wip === 4
+    const base  = xcSess(isDeload)
     const extra = []
     if (daysPerWeek >= 3) extra.push(XC_DAY3)
     if (daysPerWeek >= 4) extra.push(XC_DAY4)
@@ -882,8 +897,9 @@ function generateBaseballWeeks(_, goal, daysPerWeek) {
   for (let w = 1; w <= 16; w++) {
     const phaseIdx    = Math.floor((w - 1) / 4)
     const phase       = phaseIdx + 1
-    const wp          = BASEBALL_PHASE_PCTS[phaseIdx]
     const weekInPhase = ((w - 1) % 4) + 1
+    const isDeload    = phaseIdx === 3 && weekInPhase === 4
+    const wp          = isDeload ? BASEBALL_PHASE_PCTS[phaseIdx] * (1 - DELOAD_PCT_CUT) : BASEBALL_PHASE_PCTS[phaseIdx]
 
     let sessions
     if (daysPerWeek === 3) {
@@ -896,7 +912,9 @@ function generateBaseballWeeks(_, goal, daysPerWeek) {
 
     weeks.push({
       week_number: w,
-      objective: `Phase ${phase} — ${BASEBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
+      objective: isDeload
+        ? `Phase ${phase} — Deload (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`
+        : `Phase ${phase} — ${BASEBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
       sessions,
     })
   }
@@ -1016,8 +1034,9 @@ function generatePitcherBaseballWeeks(goal, daysPerWeek) {
   for (let w = 1; w <= 16; w++) {
     const phaseIdx    = Math.floor((w - 1) / 4)
     const phase       = phaseIdx + 1
-    const wp          = BASEBALL_PHASE_PCTS[phaseIdx]
     const weekInPhase = ((w - 1) % 4) + 1
+    const isDeload    = phaseIdx === 3 && weekInPhase === 4
+    const wp          = isDeload ? BASEBALL_PHASE_PCTS[phaseIdx] * (1 - DELOAD_PCT_CUT) : BASEBALL_PHASE_PCTS[phaseIdx]
 
     let sessions
     if (daysPerWeek === 3) {
@@ -1030,7 +1049,9 @@ function generatePitcherBaseballWeeks(goal, daysPerWeek) {
 
     weeks.push({
       week_number: w,
-      objective: `Phase ${phase} — ${BASEBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
+      objective: isDeload
+        ? `Phase ${phase} — Deload (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`
+        : `Phase ${phase} — ${BASEBALL_PHASE_LABELS[phaseIdx]} (${Math.round(wp * 100)}% working max) · Week ${weekInPhase} of 4`,
       sessions,
     })
   }
@@ -1608,6 +1629,161 @@ function applyInjuryAdjustments(weeks, injuryAreasRaw) {
   }))
 }
 
+// ─── Real deload weeks ─────────────────────────────────────────────────────────
+// Previously the only thing that changed on a deload week was one compound
+// lift's top-set percentage (a flat 60%, unrelated to what the athlete had
+// actually been lifting) — every accessory set/rep count, all conditioning,
+// and all plyometric work stayed identical to every other week. A real
+// deload cuts total volume 40-60%, not just one number on one lift.
+//
+// The top-set percentage itself is already fixed at the source: getPhaseInfo()
+// (used by football/basketball/soccer/wrestling/volleyball/track/lacrosse/
+// rugby/tennis/golf/hockey/general), generateBaseballWeeks/
+// generatePitcherBaseballWeeks (their own BASEBALL_PHASE_PCTS system), and
+// generateXCWeeks (its static "65-70%" range) all now compute the deload
+// week's percentage as 15-20% below the immediately preceding week, instead
+// of a flat number. Swimming has no percentage-based lifts, so there's
+// nothing to change there.
+//
+// Everything else — halving accessory volume, stripping conditioning and
+// plyometric work entirely, and the session note — is sport-agnostic text
+// applied here in one pass over the LAST generated week (every sport/position/
+// goal combination in this file produces exactly 16 weeks, and the deload/
+// taper week is always the last one), exactly like applyExperienceAdjustments
+// and applyInjuryAdjustments above.
+
+const CONDITIONING_HEADER_RE = /^[\w &]*Conditioning:$/
+const CONDITIONING_EXERCISE_RE = /^(Sprint Work|Sprint Ladder|Sprint \+ Close Out|Sprint \+ Jog Ladder|Repeat Sprint|300 Yard Shuttle|Flying 20s|17s Drill|Baseline Sprint|Defensive Slide(?: Sprint)?|Post Sprint|Box Out Drill|Shuffle Step|Full Court Sprint|V Drill|Star Drill|200m Intervals|400m [Rr]epeats|Isometric (?:Squat|Pull) Hold|Weighted Carries(?: Medley)?|Farmer Carr(?:y|ies)|Battle Rope|Wrestle-Outs|Sled Push|Sled Sprint|Sled Drag|Pro Agility(?: Drill)?|5-10-5(?: Shuttle)?|Cone Drill(?:\s*\(5-10-5\))?|Deceleration Drill|Lateral Shuffle(?: Sprint)?|T-Drill|Aerobic Finish|Tempo [Rr]un)\b/
+
+// Exercise names that are unambiguously mobility/warm-up/prehab work wherever
+// they appear (exact match on the trimmed, lowercased name before the colon —
+// not a substring match, so e.g. "Bird Dog Row" — a loaded accessory that
+// merely shares two words with the "Bird Dog" stability drill — is never
+// caught by this).
+const MOBILITY_EXACT_EXEMPT = new Set([
+  'dead bug', 'ab wheel', 'plank', 'pallof press', 'half kneeling cable press',
+  'cable woodchop', 'copenhagen adductor', 'suitcase carry', 'bird dog',
+  'glute bridge', 'glute bridge hold', 'single leg glute bridge',
+  'ytw series', 'ytw shoulder series', 'band external rotation', 'band pull-aparts',
+  'hip 90/90 hold', 'hip 90/90 stretch', 'hip 90/90 rotations', 'ankle circles',
+  'ankle mobility circles', 'cat-cow', 'downward dog',
+])
+
+function isMobilityCoreExempt(name) {
+  const n = name.toLowerCase().trim()
+  if (MOBILITY_EXACT_EXEMPT.has(n)) return true
+  return /stretch|mobility|foam roll/i.test(n)
+}
+
+const DELOAD_NOTE = 'Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.'
+
+function isConditioningLine(line) {
+  return CONDITIONING_HEADER_RE.test(line) || CONDITIONING_EXERCISE_RE.test(line)
+}
+
+function isPlyoLine(line) {
+  const colonIdx = line.indexOf(':')
+  const name = colonIdx > 0 ? line.slice(0, colonIdx) : line
+  return PLYO_KEYWORDS.test(name)
+}
+
+// Halves accessory set counts (4 -> 2, 3 -> 2) and cuts reps 20-30% (25%
+// midpoint). Never called on lines the caller has already decided are exempt
+// (mobility/core work, or anything without a plain "Name: SxR" shape — ramps,
+// warm-up preambles, AMAP-only cues all pass through reduceAccessoryVolume
+// unchanged since they don't match the patterns below).
+function reduceAccessoryVolume(line) {
+  // Baseball's dual-prescription format, e.g. "Power Clean: 2x2 warmup, 3x2
+  // working" — the plain-SxR regex below only ever matches the first clause,
+  // silently leaving the actual working sets (the part that matters) at full
+  // volume. Reduce the set count on both clauses; reps stay as-is since these
+  // are already low (2-3 reps) technical-lift prescriptions.
+  const dual = line.match(/^(.*?):\s*(\d+)x(\d+)\s*warmup,\s*(\d+)x(\d+[a-zA-Z]*|AMAP)\s*working(.*)$/)
+  if (dual) {
+    const [, name, wSets, wReps, sSets, sReps, rest] = dual
+    const newWSets = Math.max(1, Math.round(parseInt(wSets, 10) * 0.50))
+    const newSSets = Math.max(1, Math.round(parseInt(sSets, 10) * 0.50))
+    return `${name}: ${newWSets}x${wReps} warmup, ${newSSets}x${sReps} working${rest}`
+  }
+
+  const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
+  if (!m) return line
+  const [, name, sets, reps, rest] = m
+
+  const newSets = Math.max(1, Math.round(parseInt(sets, 10) * 0.50))
+  let newReps = reps
+  if (reps !== 'AMAP') {
+    const repsNum  = parseInt(reps, 10)
+    const suffix   = reps.replace(/^\d+/, '') // trailing unit glued to the number, e.g. "20m"
+    newReps = `${Math.max(1, Math.round(repsNum * 0.75))}${suffix}`
+  }
+  return `${name}: ${newSets}x${newReps}${rest}`
+}
+
+// A handful of exercise names (Med Ball Rotational Throw, Cable Woodchop,
+// etc.) are genuinely ambiguous — coreBlock() uses them as core/rotational-
+// stability work, but some sports also prescribe the same movement as a
+// standalone power accessory outside any core section. Rather than guess by
+// name alone, track whether we're inside a "Core — ..." labeled block (which
+// always runs until the next blank line in every session this file
+// generates) and only exempt on that basis for anything not already covered
+// by the unambiguous MOBILITY_EXACT_EXEMPT list above.
+function applyDeloadVolumeReduction(description) {
+  const rawLines = description.split('\n')
+  let inCoreBlock = false
+  const kept = []
+
+  for (const line of rawLines) {
+    if (isConditioningLine(line) || isPlyoLine(line)) continue
+
+    if (/^Core\s*—/.test(line)) {
+      inCoreBlock = true
+      kept.push(line)
+      continue
+    }
+    if (line === '') {
+      inCoreBlock = false
+      kept.push(line)
+      continue
+    }
+
+    const colonIdx = line.indexOf(':')
+    const name = colonIdx > 0 ? line.slice(0, colonIdx) : line
+    if (inCoreBlock || isMobilityCoreExempt(name)) {
+      kept.push(line)
+      continue
+    }
+    kept.push(reduceAccessoryVolume(line))
+  }
+
+  // Collapse any doubled-up blank lines left behind by removed blocks, and
+  // drop a trailing blank line.
+  const collapsed = []
+  for (const line of kept) {
+    if (line === '' && collapsed[collapsed.length - 1] === '') continue
+    collapsed.push(line)
+  }
+  while (collapsed.length && collapsed[collapsed.length - 1] === '') collapsed.pop()
+
+  return `${DELOAD_NOTE}\n\n${collapsed.join('\n')}`
+}
+
+function applyDeloadAdjustments(weeks) {
+  if (weeks.length === 0) return weeks
+  const deloadWeekNumber = weeks[weeks.length - 1].week_number
+
+  return weeks.map(week => {
+    if (week.week_number !== deloadWeekNumber) return week
+    return {
+      ...week,
+      sessions: week.sessions.map(session => ({
+        ...session,
+        description: applyDeloadVolumeReduction(session.description),
+      })),
+    }
+  })
+}
+
 // ─── Build human-readable title ───────────────────────────────────────────────
 
 const SPORT_LABELS = {
@@ -1676,6 +1852,7 @@ function generateBlueprintForAthlete(survey) {
 
   weeks = applyExperienceAdjustments(weeks, experience)
   weeks = applyInjuryAdjustments(weeks, survey.injury_areas)
+  weeks = applyDeloadAdjustments(weeks)
 
   const title = sport
     ? buildBlueprintTitle(sport, posId, goal)
@@ -2059,4 +2236,4 @@ const SPORT_TEMPLATES = [
   },
 ]
 
-module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS }
+module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments }

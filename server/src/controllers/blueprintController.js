@@ -1,6 +1,6 @@
 const { getProfile } = require('../services/authService')
 const { resolveCoachTeamAndAccess, getAthleteTeam } = require('../services/teamsService')
-const { SPORT_TEMPLATES, TEMPLATE_GOALS } = require('../data/blueprintTemplates')
+const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments } = require('../data/blueprintTemplates')
 const {
   createBlueprint,
   getBlueprintsByCoach,
@@ -56,7 +56,7 @@ async function generateFromTemplate(req, res) {
     const goal = goal_id === 'muscle_gain' ? 'muscle_gain' : 'standard'
     const days = days_per_week ? parseInt(days_per_week, 10) : undefined
 
-    const weeks = sport.generateWeeks(position_id, goal, days)
+    const weeks = applyDeloadAdjustments(sport.generateWeeks(position_id, goal, days))
     res.json({ weeks })
   } catch (err) {
     res.status(500).json({ error: err.message })
