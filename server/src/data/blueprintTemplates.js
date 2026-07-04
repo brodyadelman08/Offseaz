@@ -1457,6 +1457,157 @@ function applyExperienceAdjustments(weeks, experience) {
   })
 }
 
+// ─── Injury-area adjustments ───────────────────────────────────────────────────
+// Same rationale as applyExperienceAdjustments() above: a text-level post-
+// processing pass over the generated `weeks`, since every session across all
+// 14 sports/position groups is the same plain "ExerciseName: sets x reps
+// [@ pct%]" shape. Previously injury_areas only drove a cosmetic caution badge
+// (client/src/components/SessionDescription.jsx) with no effect on the actual
+// prescription — a shoulder-injured athlete still received full-intensity
+// Overhead Press and Bench Press, a knee-injured athlete still received full-
+// load Back Squat and Depth Jumps.
+//
+// It's safe to bake this directly into the STORED session text here because
+// auto-assigned blueprints (the only thing generateBlueprintForAthlete produces)
+// are already one-per-athlete. A team-wide/coach-built blueprint, by contrast,
+// can be shared across athletes with different injury profiles, so the
+// equivalent substitution there has to run at render time instead of being
+// written into shared storage — see applyInjurySubstitutions() in
+// client/src/components/SessionDescription.jsx, which mirrors these exact
+// rules and must be kept in sync with any change made here.
+
+function normalizeInjuryAreas(raw) {
+  if (!Array.isArray(raw)) return []
+  return raw.filter(a => a && a !== 'None')
+}
+
+// Scales every %-of-max figure on a line by `factor` — used for injury-driven
+// load reductions, where the whole prescription should come down, not just the
+// top set (contrast with scaleTopSetPercent() above, used for experience level).
+function scaleAllPercentages(text, factor) {
+  return text.replace(/(\d+)%/g, (_, p) => `${Math.max(1, Math.round(parseInt(p, 10) * factor))}%`)
+}
+
+function isUpperBodySession(focus, description) {
+  if (/upper/i.test(focus || '')) return true
+  return /^(Bench Press|DB Bench Press|Incline (DB )?Press|Close Grip Bench Press|Overhead Press|Push Press|Landmine Press|BB Split Jerk|Behind Neck Press|Arnold Press|DB Shoulder Press)\b/m.test(description)
+}
+
+// Ensures Band External Rotation and a YTW series are present and explicitly
+// marked as a required warm-up on any upper-body session, for shoulder-flagged
+// athletes — inserting them near the top (after any leading warm-up line) if
+// missing, or annotating the existing line if already programmed.
+function ensureShoulderWarmup(description, focus) {
+  if (!isUpperBodySession(focus, description)) return description
+  let text = description
+  const REQUIRED = ' (required warm-up)'
+
+  function ensure(matchRe, insertLine) {
+    if (matchRe.test(text)) {
+      text = text.replace(matchRe, line => (line.includes('(required warm-up)') ? line : line + REQUIRED))
+      return
+    }
+    const lines = text.split('\n')
+    let insertAt = 0
+    if (/warm-?up/i.test(lines[0] || '')) {
+      insertAt = 1
+      while (lines[insertAt] === '') insertAt++
+    }
+    lines.splice(insertAt, 0, insertLine)
+    text = lines.join('\n')
+  }
+
+  ensure(/^Band External Rotation:.*$/m, `Band External Rotation: 3x15 each arm${REQUIRED}`)
+  ensure(/^YTW( Shoulder)? Series:.*$/m, `YTW Series: 3x10 each${REQUIRED}`)
+
+  return text
+}
+
+function applyShoulderAdjustments(description, focus) {
+  const lines = description.split('\n').map(line => {
+    if (/^Overhead Press\b/.test(line)) {
+      const renamed = line.replace(/^Overhead Press/, 'Landmine Press')
+      const scaled = scaleAllPercentages(renamed, 0.70)
+      // Overhead Press is never percentage-ramped in these templates (plain
+      // sets x reps), so there's usually no numeric max to scale — make the
+      // load reduction explicit as text instead of silently doing nothing.
+      return scaled === renamed ? `${renamed} (70% of your usual Overhead Press load)` : scaled
+    }
+    if (/^Bench Press\b/.test(line)) {
+      return line.replace(/^Bench Press/, 'DB Bench Press') + ' (use a controlled range of motion)'
+    }
+    return line
+  })
+  return ensureShoulderWarmup(lines.join('\n'), focus)
+}
+
+function applyKneeAdjustments(description) {
+  return description.split('\n').map(line => {
+    if (/^Back Squat\b/.test(line)) {
+      return scaleAllPercentages(line.replace(/^Back Squat/, 'Goblet Squat'), 0.60)
+    }
+    if (/\bDepth Jumps?\b/.test(line)) {
+      return line.replace(/Depth Jumps?/, 'Box Step-Ups')
+    }
+    if (/^Bulgarian Split Squat\b/.test(line)) {
+      return line.replace(/^Bulgarian Split Squat/, 'Reverse Lunge') + ' (reduced load)'
+    }
+    return line
+  }).join('\n')
+}
+
+const SPINAL_FLEXION_RE = /^(Core — Sit-ups|Sit-ups|Ab Wheel|Good Mornings?|Weighted Sit-?ups?)\b/
+
+function applyBackAdjustments(description) {
+  return description.split('\n')
+    .filter(line => !SPINAL_FLEXION_RE.test(line))
+    .map(line => {
+      if (/^Trap Bar Deadlift\b/.test(line)) {
+        return scaleAllPercentages(line.replace(/^Trap Bar Deadlift/, 'Romanian Deadlift'), 0.70)
+      }
+      if (/^Hex Bar Deadlift\b/.test(line)) {
+        return scaleAllPercentages(line.replace(/^Hex Bar Deadlift/, 'Romanian Deadlift'), 0.70)
+      }
+      return line
+    }).join('\n')
+}
+
+function applyHipAdjustments(description) {
+  return description.split('\n').map(line => {
+    if (/^Bulgarian Split Squat\b/.test(line)) {
+      return line.replace(/^Bulgarian Split Squat/, 'Single Leg Press')
+    }
+    const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
+    if (m && /\bLunge\b/i.test(m[1])) {
+      const [, name, sets, reps, rest] = m
+      const newSets = Math.max(1, Math.round(parseInt(sets, 10) * 0.50))
+      return `${name}: ${newSets}x${reps}${rest}`
+    }
+    return line
+  }).join('\n')
+}
+
+function applyInjuryAdjustments(weeks, injuryAreasRaw) {
+  const areas = new Set(normalizeInjuryAreas(injuryAreasRaw))
+  if (areas.size === 0) return weeks
+
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(session => {
+      const original = session.description
+      let description = original
+
+      if (areas.has('Shoulder')) description = applyShoulderAdjustments(description, session.focus)
+      if (areas.has('Knee'))     description = applyKneeAdjustments(description)
+      if (areas.has('Back'))     description = applyBackAdjustments(description)
+      if (areas.has('Hip'))      description = applyHipAdjustments(description)
+
+      if (description === original) return session
+      return { ...session, description, injury_modified: true }
+    }),
+  }))
+}
+
 // ─── Build human-readable title ───────────────────────────────────────────────
 
 const SPORT_LABELS = {
@@ -1524,6 +1675,7 @@ function generateBlueprintForAthlete(survey) {
   else                           weeks = generateGeneralWeeks(posId, goal)
 
   weeks = applyExperienceAdjustments(weeks, experience)
+  weeks = applyInjuryAdjustments(weeks, survey.injury_areas)
 
   const title = sport
     ? buildBlueprintTitle(sport, posId, goal)
