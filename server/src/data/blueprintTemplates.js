@@ -1346,6 +1346,117 @@ function normalizeGoal(primary_goal) {
   return 'standard'
 }
 
+function normalizeExperience(raw) {
+  if (!raw) return 'intermediate'
+  const e = raw.toLowerCase().trim()
+  if (e.includes('beginn') || e.includes('novice') || e.includes('new')) return 'beginner'
+  if (e.includes('advanc') || e.includes('elite') || e.includes('expert')) return 'advanced'
+  return 'intermediate'
+}
+
+// ─── Experience-level adjustments ──────────────────────────────────────────────
+// Applied as a post-processing pass over the already-generated `weeks` array
+// instead of inside each of the ~60 sport/position session functions above —
+// every session across all 14 sports is plain-text `description` in the same
+// "ExerciseName: sets x reps [@ pct%]" shape, so one shared pass here reaches
+// every sport/position/goal combination uniformly and can't drift out of sync
+// with any single sport's hand-authored session content.
+//
+// Intermediate is the level the templates above are already calibrated for, so
+// it is a no-op. Beginner and advanced both operate on `session.description`
+// text only; nothing about set/rep/percentage math elsewhere in this file changes.
+
+// Scales only the LAST %-of-max figure on each line (the top/working set of a
+// ramp, e.g. the "65" in "40%×10, 50%×8, 60%×6, 70%×5, 65%×3"), leaving the
+// fixed warm-up ramp steps (40/50/60/70%) as clean, untouched numbers. A "lo-hi%"
+// range (e.g. Cross Country's "65-70% only" or a conditioning "80-85% effort")
+// is handled separately, scaling both bounds together — treating it as a single
+// trailing "%" would corrupt the range (e.g. "65-70%" -> the nonsensical "65-63%").
+function scaleTopSetPercent(text, factor) {
+  return text.split('\n').map(line => {
+    const rangeMatch = line.match(/(\d+)-(\d+)%/)
+    if (rangeMatch) {
+      const lo = Math.max(1, Math.round(parseInt(rangeMatch[1], 10) * factor))
+      const hi = Math.max(1, Math.round(parseInt(rangeMatch[2], 10) * factor))
+      return line.slice(0, rangeMatch.index) + `${lo}-${hi}%` + line.slice(rangeMatch.index + rangeMatch[0].length)
+    }
+    const matches = [...line.matchAll(/(\d+)%/g)]
+    if (matches.length === 0) return line
+    const last = matches[matches.length - 1]
+    const scaled = Math.max(1, Math.round(parseInt(last[1], 10) * factor))
+    return line.slice(0, last.index) + `${scaled}%` + line.slice(last.index + last[0].length)
+  }).join('\n')
+}
+
+// Appends one more work set at the (already scaled) top-set percentage to any
+// line that is a genuine multi-step ramp — i.e. a primary compound lift, not a
+// single-percentage accessory line.
+function addExtraTopSet(text) {
+  return text.split('\n').map(line => {
+    const matches = [...line.matchAll(/\d+%×\d+/g)]
+    if (matches.length < 2) return line
+    return `${line}, ${matches[matches.length - 1][0]}`
+  }).join('\n')
+}
+
+// Power Clean / Hang Clean (and hockey's "Hang Power Clean") are technical
+// Olympic-lift variants with no place in a beginner's first 8 weeks with no
+// technique-development period. Swap them for the hinge-pattern lift the "Fix
+// 1" corrections elsewhere in this file already prefer over redundant cleans —
+// keeping whatever sets/reps/ramp the original line had.
+function removeBeginnerOlyLifts(text) {
+  return text.split('\n').map(line => {
+    if (line.startsWith('Hang Power Clean')) return 'Trap Bar Deadlift' + line.slice('Hang Power Clean'.length)
+    if (line.startsWith('Power Clean from floor')) return 'Trap Bar Deadlift' + line.slice('Power Clean from floor'.length)
+    if (line.startsWith('Power Clean')) return 'Trap Bar Deadlift' + line.slice('Power Clean'.length)
+    if (line.startsWith('Hang Clean')) return 'Romanian Deadlift' + line.slice('Hang Clean'.length)
+    return line
+  }).join('\n')
+}
+
+const PLYO_KEYWORDS = /\b(Box Jumps?|Broad Jumps?|Hurdle Hops?|Depth Jumps?|Depth Drop|Snap Down|Squat Jumps?|Lateral Bounds?|Bounding|Approach Jumps?|Drop Jumps?|Reactive Box Jump|Ankle Hops?|Hop & Stick)\b/i
+
+// Reduces the SET count (not reps) on any line whose exercise name matches a
+// plyometric/jump/bound movement, e.g. "Box Jumps: 5x5" → "4x5" at factor 0.7.
+function reducePlyoVolume(text, factor) {
+  return text.split('\n').map(line => {
+    const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
+    if (!m) return line
+    const [, name, sets, reps, rest] = m
+    if (!PLYO_KEYWORDS.test(name)) return line
+    const newSets = Math.max(1, Math.round(parseInt(sets, 10) * factor))
+    return `${name}: ${newSets}x${reps}${rest}`
+  }).join('\n')
+}
+
+const BEGINNER_NOTE = '\n\nCoach note: Focus on form over weight — technique first, load second.'
+
+function applyExperienceAdjustments(weeks, experience) {
+  if (experience === 'intermediate') return weeks // current templates are calibrated for this level
+
+  return weeks.map(week => {
+    const phaseNum = Math.ceil(week.week_number / 4) // 1-4 -> 1, 5-8 -> 2, 9-12 -> 3, 13-16 -> 4
+    return {
+      ...week,
+      sessions: week.sessions.map(session => {
+        let description = session.description
+
+        if (experience === 'beginner') {
+          if (phaseNum <= 2) description = removeBeginnerOlyLifts(description)
+          description = scaleTopSetPercent(description, 0.90) // -10%, all phases
+          description = reducePlyoVolume(description, 0.70)    // -30%, all phases
+          description = description + BEGINNER_NOTE
+        } else if (experience === 'advanced' && phaseNum >= 3) {
+          description = scaleTopSetPercent(description, 1.05) // +5%, Phase 3-4 only
+          description = addExtraTopSet(description)            // +1 heavy set, Phase 3-4 only
+        }
+
+        return { ...session, description }
+      }),
+    }
+  })
+}
+
 // ─── Build human-readable title ───────────────────────────────────────────────
 
 const SPORT_LABELS = {
@@ -1384,10 +1495,11 @@ function buildBlueprintTitle(sport, posId, goal) {
  * Returns { title, description, num_weeks, weeks } or null if sport unknown.
  */
 function generateBlueprintForAthlete(survey) {
-  const sport   = normalizeSport(survey.sport)
-  const goal    = normalizeGoal(survey.primary_goal)
-  const posId   = normalizePosition(sport || 'general', survey.position)
-  const days    = parseInt(survey.time_per_week, 10) || 4
+  const sport      = normalizeSport(survey.sport)
+  const goal       = normalizeGoal(survey.primary_goal)
+  const posId      = normalizePosition(sport || 'general', survey.position)
+  const days       = parseInt(survey.time_per_week, 10) || 4
+  const experience = normalizeExperience(survey.experience_level)
 
   let weeks
 
@@ -1410,6 +1522,8 @@ function generateBlueprintForAthlete(survey) {
   else if (sport === 'tennis')   weeks = generateTennisWeeks(posId, goal, days)
   else if (sport === 'golf')     weeks = generateGolfWeeks(posId, goal, days)
   else                           weeks = generateGeneralWeeks(posId, goal)
+
+  weeks = applyExperienceAdjustments(weeks, experience)
 
   const title = sport
     ? buildBlueprintTitle(sport, posId, goal)
