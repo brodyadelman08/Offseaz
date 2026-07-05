@@ -702,17 +702,34 @@ async function processTeam(team, week) {
       return
     }
 
+    // Dedup is per coach per week, not per team per coach per week — a coach
+    // running several teams must get exactly one digest, whichever team's
+    // processTeam call reaches this first. weekly_digests' unique index is
+    // (coach_id, week_start_date), so claim that slot with an upsert BEFORE
+    // sending: ON CONFLICT DO NOTHING means only the team that wins the race
+    // gets a row back from .select(), and the losing team(s) — running
+    // concurrently via Promise.all — see an empty result and skip sending,
+    // instead of both passing a separate "already sent?" check before either
+    // insert lands.
+    let digestRowId = null
     if (!week.force) {
-      const { data: existing } = await supabaseAdmin
+      const { data: claimed, error: claimErr } = await supabaseAdmin
         .from('weekly_digests')
+        .upsert(
+          { team_id: teamId, coach_id: coach.id, sent_at: new Date().toISOString(), week_start_date: week.weekStartDate, status: 'sent' },
+          { onConflict: 'coach_id,week_start_date', ignoreDuplicates: true }
+        )
         .select('id')
-        .eq('coach_id', coach.id)
-        .eq('week_start_date', week.weekStartDate)
-        .limit(1)
 
-      if (existing?.length) {
+      if (claimErr) {
+        console.warn(`[Digest] weekly_digests claim warn (${email}):`, claimErr.message)
         return
       }
+      if (!claimed?.length) {
+        // Another team already claimed (or previously sent) this coach's digest for this week
+        return
+      }
+      digestRowId = claimed[0].id
     }
 
     const html = buildDigestHtml({
@@ -738,14 +755,27 @@ async function processTeam(team, week) {
       status = 'failed'
     }
 
-    const { error: insertErr } = await supabaseAdmin.from('weekly_digests').insert({
-      team_id:         teamId,
-      coach_id:        coach.id,
-      sent_at:         new Date().toISOString(),
-      week_start_date: week.weekStartDate,
-      status,
-    })
-    if (insertErr) console.warn(`[Digest] weekly_digests insert warn (${email}):`, insertErr.message)
+    if (week.force) {
+      // Force/test mode intentionally skips dedup above, so insert a fresh
+      // record here every time rather than updating a claimed row.
+      const { error: insertErr } = await supabaseAdmin.from('weekly_digests').insert({
+        team_id:         teamId,
+        coach_id:        coach.id,
+        sent_at:         new Date().toISOString(),
+        week_start_date: week.weekStartDate,
+        status,
+      })
+      if (insertErr) console.warn(`[Digest] weekly_digests insert warn (${email}):`, insertErr.message)
+    } else if (status === 'failed') {
+      // The claim above optimistically wrote status 'sent' so the slot was
+      // reserved before the send even started — correct it now that we know
+      // the send actually failed.
+      const { error: updateErr } = await supabaseAdmin
+        .from('weekly_digests')
+        .update({ status: 'failed' })
+        .eq('id', digestRowId)
+      if (updateErr) console.warn(`[Digest] weekly_digests status update warn (${email}):`, updateErr.message)
+    }
   }))
 }
 
