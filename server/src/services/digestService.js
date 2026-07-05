@@ -687,19 +687,19 @@ async function processTeam(team, week) {
     allMaxes:   allMaxesRes.data  || [],
   })
 
-  // ── 5. Send to each coach ──────────────────────────────────────────────────
+  // ── 5. Send to each coach (in parallel) ─────────────────────────────────────
   const resend = new Resend(process.env.RESEND_API_KEY)
   const from   = 'Offseaz <brody@offseaz.com>'
 
-  for (const coach of coaches) {
+  await Promise.all(coaches.map(async coach => {
     const email = emailMap[coach.id]
     if (!email) {
       console.warn(`[Digest] No email for coach ${coach.id} (${coach.full_name}) — skipping`)
-      continue
+      return
     }
 
     if (!coach.digest_enabled) {
-      continue
+      return
     }
 
     if (!week.force) {
@@ -711,7 +711,7 @@ async function processTeam(team, week) {
         .limit(1)
 
       if (existing?.length) {
-        continue
+        return
       }
     }
 
@@ -746,7 +746,7 @@ async function processTeam(team, week) {
       status,
     })
     if (insertErr) console.warn(`[Digest] weekly_digests insert warn (${email}):`, insertErr.message)
-  }
+  }))
 }
 
 // ─── Entry point ──────────────────────────────────────────────────────────────
@@ -770,13 +770,13 @@ async function runWeeklyDigest({ force = false } = {}) {
     return
   }
 
-  for (const team of teams) {
+  await Promise.all(teams.map(async team => {
     try {
       await processTeam(team, week)
     } catch (err) {
       console.error(`[Digest] Unhandled error for team ${team.id} ("${team.name}"):`, err.message)
     }
-  }
+  }))
 }
 
 module.exports = { runWeeklyDigest }
