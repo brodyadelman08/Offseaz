@@ -11,8 +11,17 @@ async function register(req, res) {
     return res.status(400).json({ error: 'Role must be coach or athlete' })
   }
 
-  // Verify the userId belongs to a real Supabase auth user before touching the DB
-  const { data: authData, error: authError } = await supabaseAdmin.auth.admin.getUserById(userId)
+  // Verify the userId belongs to a real Supabase auth user before touching the DB.
+  // getUserById throws synchronously (not just returning an error) for a
+  // malformed userId, so this must be inside a try/catch or a bad value
+  // crashes the handler with an unhandled rejection instead of a clean 400.
+  let authData, authError
+  try {
+    ;({ data: authData, error: authError } = await supabaseAdmin.auth.admin.getUserById(userId))
+  } catch (err) {
+    console.error('[register] getUserById threw:', err.message)
+    return res.status(400).json({ error: 'Invalid user ID' })
+  }
   if (authError || !authData?.user) {
     console.error('[register] getUserById failed:', authError?.message)
     return res.status(400).json({ error: 'Invalid user ID' })

@@ -309,8 +309,26 @@ async function getTeammateProfile(viewerId, targetId) {
  * Removes an athlete from a team by teamId, cascading cleanup of every
  * team-scoped record tied to that athlete so nothing resurfaces if they
  * rejoin (this team or another).
+ *
+ * Defense-in-depth: re-verifies the athlete is actually a member of teamId
+ * before deleting anything. This matters because workout_logs, athlete_goals,
+ * and daily_checkins have no team_id column at all — those deletes below can
+ * only be scoped by athlete_id, so without this guard a caller that skipped
+ * its own ownership check could wipe an athlete's data via any team_id that
+ * happens to be passed in, regardless of whether the athlete is on it.
  */
 async function removeAthlete(teamId, athleteId) {
+  const { data: membership, error: memberErr } = await supabaseAdmin
+    .from('team_members')
+    .select('athlete_id')
+    .eq('team_id', teamId)
+    .eq('athlete_id', athleteId)
+    .maybeSingle()
+  if (memberErr) throw memberErr
+  if (!membership) {
+    throw Object.assign(new Error('This athlete is not on your team'), { status: 403 })
+  }
+
   const { data: team } = await supabaseAdmin
     .from('teams')
     .select('coach_id')

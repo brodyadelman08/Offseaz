@@ -1,3 +1,4 @@
+const supabaseAdmin = require('../config/supabase')
 const { getProfile } = require('../services/authService')
 const { resolveCoachTeamAndAccess } = require('../services/teamsService')
 const {
@@ -76,6 +77,23 @@ async function removeAthleteFromTeam(req, res) {
     if (!team || accessLevel === 'view_only') {
       return res.status(403).json({ error: 'View-only coaches cannot remove athletes' })
     }
+
+    // Ownership check — the athleteId in the URL is fully caller-controlled,
+    // so we must verify it actually belongs to THIS coach's team before
+    // removeAthlete touches any of that athlete's data. Without this, a coach
+    // could pass any athlete UUID (from any team) and have their workout
+    // history, goals, and check-ins deleted.
+    const { data: membership, error: memberErr } = await supabaseAdmin
+      .from('team_members')
+      .select('athlete_id')
+      .eq('team_id', team.id)
+      .eq('athlete_id', req.params.athleteId)
+      .maybeSingle()
+    if (memberErr) throw memberErr
+    if (!membership) {
+      return res.status(403).json({ error: 'This athlete is not on your team' })
+    }
+
     await removeAthlete(team.id, req.params.athleteId)
     res.json({ success: true })
   } catch (err) {

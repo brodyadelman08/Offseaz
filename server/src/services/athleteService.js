@@ -61,7 +61,7 @@ async function getAthleteProfile(athleteId, coachId) {
   if (profileError) throw profileError
 
   // Fetch survey, plan, raw logs, and coach note in parallel
-  const [survey, plan, logsResult, noteResult] = await Promise.all([
+  const [survey, planResult, logsResult, noteResult] = await Promise.all([
     getSurveyByAthlete(athleteId),
     getAthletePlan(athleteId).catch(() => null),
     supabaseAdmin
@@ -76,6 +76,10 @@ async function getAthleteProfile(athleteId, coachId) {
       .eq('athlete_id', athleteId)
       .maybeSingle(),
   ])
+
+  // getAthletePlan returns { auto_plan, coach_plan } — prefer the
+  // coach-assigned plan, falling back to the auto-generated one.
+  const plan = planResult?.coach_plan || planResult?.auto_plan || null
 
   const rawLogs = logsResult.data || []
 

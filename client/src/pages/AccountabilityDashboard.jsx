@@ -288,7 +288,7 @@ function AccountabilityInner() {
                         <span style={{ ...styles.feedBadge, color: ls.color, background: ls.bg }}>
                           {ls.label}{log.effort ? ` · ${log.effort}` : ''}
                         </span>
-                        <span style={styles.feedTime}>{timeAgo(log.logged_at)}</span>
+                        <span style={styles.feedTime}>{timeAgo(log.timestamp)}</span>
                       </div>
                     </div>
                   )

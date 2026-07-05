@@ -377,7 +377,7 @@ export default function CoachProfile() {
               </p>
               <div style={{ display: 'flex', gap: 10 }}>
                 <button style={styles.cancelLeaveBtn} onClick={() => setShowLeave(false)}>Cancel</button>
-                <button style={styles.confirmTransferBtn} onClick={() => { signOut(); window.location.href = '/login' }}>
+                <button style={styles.confirmTransferBtn} onClick={async () => { await signOut(); window.location.href = '/login' }}>
                   Leave Team
                 </button>
               </div>
