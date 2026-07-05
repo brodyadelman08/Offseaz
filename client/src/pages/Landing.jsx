@@ -1,7 +1,13 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
-import { ArrowRightIcon } from '../components/Icons'
+import {
+  ArrowRightIcon, FlameIcon, HeartIcon, HeartFilledIcon, MessageIcon as ChatBubbleIcon,
+  CalendarIcon, StatusInjuryIcon,
+  FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon, SoccerIcon, HockeyIcon,
+  RugbyIcon, TennisIcon, GolfIcon, WrestlingIcon, VolleyballIcon, RunningIcon,
+  CrossCountryIcon, LacrosseIcon,
+} from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -40,20 +46,20 @@ const PILLARS = [
 const NAV_IDS = ['coaches', 'athletes', 'program', 'how-it-works', 'story']
 
 const SPORTS = [
-  { emoji: '🏈', name: 'Football'      },
-  { emoji: '🏀', name: 'Basketball'    },
-  { emoji: '⚾', name: 'Baseball'      },
-  { emoji: '🥎', name: 'Softball'      },
-  { emoji: '⚽', name: 'Soccer'        },
-  { emoji: '🏒', name: 'Hockey'        },
-  { emoji: '🏉', name: 'Rugby'         },
-  { emoji: '🎾', name: 'Tennis'        },
-  { emoji: '⛳', name: 'Golf'          },
-  { emoji: '🤼', name: 'Wrestling'     },
-  { emoji: '🏐', name: 'Volleyball'    },
-  { emoji: '🏃', name: 'Track & Field' },
-  { emoji: '🌲', name: 'Cross Country' },
-  { emoji: '🥍', name: 'Lacrosse'      },
+  { Icon: FootballIcon,     name: 'Football'      },
+  { Icon: BasketballIcon,   name: 'Basketball'    },
+  { Icon: BaseballIcon,     name: 'Baseball'      },
+  { Icon: SoftballIcon,     name: 'Softball'      },
+  { Icon: SoccerIcon,       name: 'Soccer'        },
+  { Icon: HockeyIcon,       name: 'Hockey'        },
+  { Icon: RugbyIcon,        name: 'Rugby'         },
+  { Icon: TennisIcon,       name: 'Tennis'        },
+  { Icon: GolfIcon,         name: 'Golf'          },
+  { Icon: WrestlingIcon,    name: 'Wrestling'     },
+  { Icon: VolleyballIcon,   name: 'Volleyball'    },
+  { Icon: RunningIcon,      name: 'Track & Field' },
+  { Icon: CrossCountryIcon, name: 'Cross Country' },
+  { Icon: LacrosseIcon,     name: 'Lacrosse'      },
 ]
 
 // ── Icons ─────────────────────────────────────────────────────────────────────
@@ -149,8 +155,8 @@ function DualDashboardMockup() {
                 </div>
                 <div style={{ display: 'flex', alignItems: 'center', gap: 2, flexShrink: 0 }}>
                   {a.streak > 0
-                    ? <><span style={{ fontSize: 8 }}>🔥</span><span style={{ fontSize: 7, color: YELLOW, fontWeight: 700 }}>{a.streak}</span></>
-                    : <span style={{ fontSize: 8 }}>⚑</span>}
+                    ? <><FlameIcon size={8} color={ORANGE} /><span style={{ fontSize: 7, color: YELLOW, fontWeight: 700 }}>{a.streak}</span></>
+                    : <StatusInjuryIcon size={8} color="#c73820" />}
                 </div>
               </div>
             ))}
@@ -302,9 +308,9 @@ function CoachRosterMockup() {
             </div>
             <div style={{ display: 'flex', alignItems: 'center', gap: 4, flexShrink: 0, marginLeft: 8 }}>
               {a.flag
-                ? <span style={{ fontSize: 10, background: 'rgba(199,56,32,0.15)', color: '#c73820', fontWeight: 700, padding: '2px 8px', borderRadius: 6, border: '1px solid rgba(199,56,32,0.35)', whiteSpace: 'nowrap' }}>⚑ Injury</span>
+                ? <span style={{ display: 'flex', alignItems: 'center', gap: 4, fontSize: 10, background: 'rgba(199,56,32,0.15)', color: '#c73820', fontWeight: 700, padding: '2px 8px', borderRadius: 6, border: '1px solid rgba(199,56,32,0.35)', whiteSpace: 'nowrap' }}><StatusInjuryIcon size={11} color="#c73820" /> Injury</span>
                 : a.streak > 0
-                  ? <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><span style={{ fontSize: 12 }}>🔥</span><span style={{ fontSize: 10, color: YELLOW, fontWeight: 700 }}>{a.streak}</span></span>
+                  ? <span style={{ display: 'flex', alignItems: 'center', gap: 3 }}><FlameIcon size={12} color={ORANGE} /><span style={{ fontSize: 10, color: YELLOW, fontWeight: 700 }}>{a.streak}</span></span>
                   : <span style={{ fontSize: 10, color: '#444' }}>–</span>}
             </div>
           </div>
@@ -386,11 +392,11 @@ function FeedMockup() {
             <p style={{ fontSize: 11, color: '#888', lineHeight: 1.55, margin: '0 0 8px' }}>{p.text}</p>
             <div style={{ display: 'flex', gap: 14, paddingTop: 6, borderTop: '1px solid #1E1E1E' }}>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: p.liked ? ORANGE : '#444' }}>
-                <span style={{ fontSize: 11 }}>♥</span>
+                {p.liked ? <HeartFilledIcon size={11} color={ORANGE} /> : <HeartIcon size={11} color="#444" />}
                 <span style={{ fontSize: 10, fontWeight: 700 }}>{p.likes}</span>
               </div>
               <div style={{ display: 'flex', alignItems: 'center', gap: 4, color: '#444' }}>
-                <span style={{ fontSize: 11 }}>💬</span>
+                <ChatBubbleIcon size={11} color="#444" />
                 <span style={{ fontSize: 10, fontWeight: 700 }}>{p.comments}</span>
               </div>
             </div>
@@ -593,7 +599,7 @@ export default function Landing() {
                 data-navid={id}
                 style={{
                   ...s.anchorLink,
-                  color: isActive ? ORANGE : YELLOW,
+                  color: isActive ? ORANGE : 'rgba(255,255,255,0.55)',
                   borderBottomColor: isActive ? ORANGE : 'transparent',
                   fontWeight: isActive ? 700 : 600,
                 }}
@@ -602,7 +608,7 @@ export default function Landing() {
                   if (!isActive) e.currentTarget.style.color = ORANGE
                 }}
                 onMouseLeave={e => {
-                  if (!isActive) e.currentTarget.style.color = YELLOW
+                  if (!isActive) e.currentTarget.style.color = 'rgba(255,255,255,0.55)'
                 }}
               >
                 {label}
@@ -674,7 +680,7 @@ export default function Landing() {
               { num: '03', color: YELLOW, title: 'Track Streaks and Progress',           body: 'Log every session, build your streak, and watch your PRs climb. Your coach sees every rep. Teammates see your work on the feed.' },
             ].map((step, i) => (
               <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
-                <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Calibri', 'Trebuchet MS', sans-serif" }}>{step.num}</span>
+                <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Manrope', 'Inter', sans-serif" }}>{step.num}</span>
                 <h3 style={s.cardTitle}>{step.title}</h3>
                 <p style={s.cardBody}>{step.body}</p>
               </div>
@@ -747,14 +753,14 @@ export default function Landing() {
           <div style={s.sportGrid}>
             {SPORTS.map((sport, i) => (
               <div key={i} className="lp-sport" style={s.sportChip}>
-                <span style={{ fontSize: 28, lineHeight: 1 }}>{sport.emoji}</span>
+                <sport.Icon size={28} />
                 <span style={{ fontSize: 12, fontWeight: 600, color: '#666', textAlign: 'center', lineHeight: 1.3 }}>{sport.name}</span>
               </div>
             ))}
           </div>
 
           <div style={s.programNote}>
-            <span style={{ fontSize: 16, flexShrink: 0 }}>📅</span>
+            <span style={{ flexShrink: 0 }}><CalendarIcon size={16} color={ORANGE} /></span>
             <p style={{ fontSize: 14, color: '#555', lineHeight: 1.7, margin: 0 }}>
               <strong style={{ color: '#BBB', fontWeight: 700 }}>16-Week Periodized Structure — </strong>
               every program follows a full 16-week offseason arc with progressive overload built in from week one to week sixteen.
@@ -769,7 +775,7 @@ export default function Landing() {
               { value: '%',     label: 'Weights Calculated Automatically', color: ORANGE },
             ].map((stat, i) => (
               <div key={i} className="lp-stat" style={{ ...s.statItem, borderTop: `2px solid ${stat.color}` }}>
-                <span style={{ fontSize: 'clamp(36px,5vw,54px)', fontWeight: 900, color: stat.color, lineHeight: 1, letterSpacing: '-0.03em', fontFamily: "'Calibri','Trebuchet MS',sans-serif" }}>{stat.value}</span>
+                <span style={{ fontSize: 'clamp(36px,5vw,54px)', fontWeight: 900, color: stat.color, lineHeight: 1, letterSpacing: '-0.03em', fontFamily: "'Manrope','Inter',sans-serif" }}>{stat.value}</span>
                 <span style={{ fontSize: 13, color: '#555', fontWeight: 600, textAlign: 'center', lineHeight: 1.4 }}>{stat.label}</span>
               </div>
             ))}
@@ -795,7 +801,7 @@ export default function Landing() {
               { num: '03', color: YELLOW, title: 'Everyone Trains, Logs Workouts, and the Coach Sees Everything',       body: 'Athletes log every session from their phone. Coaches see real-time compliance, flag injuries, send messages, and track progress across the roster all offseason.' },
             ].map((step, i) => (
               <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
-                <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Calibri', 'Trebuchet MS', sans-serif" }}>{step.num}</span>
+                <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Manrope', 'Inter', sans-serif" }}>{step.num}</span>
                 <h3 style={s.cardTitle}>{step.title}</h3>
                 <p style={s.cardBody}>{step.body}</p>
               </div>
@@ -1011,7 +1017,7 @@ const s = {
   headline: {
     fontSize: 'clamp(38px,7vw,80px)', fontWeight: 900, lineHeight: 1.06,
     letterSpacing: '-0.03em', color: '#EFEFEF', marginBottom: 28,
-    fontFamily: "'Calibri','Trebuchet MS',sans-serif",
+    fontFamily: "'Manrope','Inter',sans-serif",
   },
   headlineOrange: {
     background: `linear-gradient(135deg, ${ORANGE} 0%, #FF8A50 100%)`,
@@ -1042,7 +1048,7 @@ const s = {
   h2: {
     fontSize: 'clamp(28px,4vw,50px)', fontWeight: 800, letterSpacing: '-0.02em',
     color: '#EFEFEF', marginBottom: 16, lineHeight: 1.12,
-    fontFamily: "'Calibri','Trebuchet MS',sans-serif",
+    fontFamily: "'Manrope','Inter',sans-serif",
   },
   lead:   { fontSize: 17, color: '#666', lineHeight: 1.8, margin: 0 },
 
@@ -1095,7 +1101,7 @@ const s = {
   },
   cardTitle: {
     fontSize: 16, fontWeight: 700, color: '#E8E8E8', marginBottom: 10,
-    fontFamily: "'Calibri','Trebuchet MS',sans-serif", letterSpacing: '-0.01em', lineHeight: 1.3,
+    fontFamily: "'Manrope','Inter',sans-serif", letterSpacing: '-0.01em', lineHeight: 1.3,
   },
   cardBody: { fontSize: 14, color: '#666', lineHeight: 1.75, margin: 0 },
 
@@ -1154,7 +1160,7 @@ const s = {
   ctaH2: {
     fontSize: 'clamp(30px,5vw,58px)', fontWeight: 900, lineHeight: 1.1,
     letterSpacing: '-0.03em', color: '#EFEFEF', marginBottom: 20,
-    fontFamily: "'Calibri','Trebuchet MS',sans-serif",
+    fontFamily: "'Manrope','Inter',sans-serif",
   },
 
   // Footer

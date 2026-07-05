@@ -4,7 +4,7 @@ import { useTeam } from '../context/TeamContext'
 import { useCoachAccess } from '../context/CoachAccessContext'
 import PreviewBanner from '../components/PreviewBanner'
 import api from '../services/api'
-import { ArrowLeftIcon, SendIcon } from '../components/Icons'
+import { ArrowLeftIcon, SendIcon, MessageIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 
@@ -470,7 +470,7 @@ export default function Messages() {
       <div className={`chat-main${mobileView === 'list' ? ' chat-main-hidden' : ''}`}>
         {!activeId ? (
           <div style={st.noConv}>
-            <div style={st.noConvIcon}>💬</div>
+            <div style={st.noConvIcon}><MessageIcon size={40} color="var(--text-3)" /></div>
             <p style={st.noConvTitle}>Select a conversation</p>
             <p style={st.noConvSub}>Choose a chat from the sidebar to get started.</p>
           </div>
@@ -509,8 +509,10 @@ export default function Messages() {
               onScroll={handleThreadScroll}
             >
               {loadingThread ? (
-                <div style={{ display: 'flex', justifyContent: 'center', alignItems: 'center', height: '100%' }}>
-                  <div className="survey-spinner" />
+                <div style={{ display: 'flex', flexDirection: 'column', gap: 10, padding: '16px 4px' }}>
+                  <div className="skeleton" style={{ width: '55%', height: 36, borderRadius: 14, alignSelf: 'flex-start' }} />
+                  <div className="skeleton" style={{ width: '40%', height: 36, borderRadius: 14, alignSelf: 'flex-end' }} />
+                  <div className="skeleton" style={{ width: '60%', height: 36, borderRadius: 14, alignSelf: 'flex-start' }} />
                 </div>
               ) : messages.length === 0 ? (
                 <div style={st.emptyThread}>

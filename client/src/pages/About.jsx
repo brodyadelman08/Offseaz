@@ -236,7 +236,7 @@ const s = {
   heroOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(to bottom, rgba(10,10,10,0.50) 0%, rgba(10,10,10,0.75) 55%, rgba(10,10,10,0.97) 100%)' },
   heroContent: { position: 'relative', zIndex: 2, display: 'flex', flexDirection: 'column', alignItems: 'center', textAlign: 'center', padding: '0 24px', gap: 18 },
   heroLogo: { width: 'clamp(280px, 42vw, 480px)', height: 'auto', objectFit: 'contain', filter: 'drop-shadow(0 4px 24px rgba(0,0,0,0.6))' },
-  heroHeadline: { fontSize: 'clamp(28px, 5.5vw, 58px)', fontWeight: 800, lineHeight: 1.1, color: '#fff', margin: 0, textShadow: '0 2px 20px rgba(0,0,0,0.5)', fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  heroHeadline: { fontSize: 'clamp(28px, 5.5vw, 58px)', fontWeight: 800, lineHeight: 1.1, color: '#fff', margin: 0, textShadow: '0 2px 20px rgba(0,0,0,0.5)', fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
   heroSub: { fontSize: 'clamp(14px, 2vw, 19px)', color: 'rgba(255,255,255,0.55)', fontWeight: 400, margin: 0, letterSpacing: 0.3 },
 
   /* Founder */
@@ -248,7 +248,7 @@ const s = {
   founderName: { fontSize: 15, fontWeight: 700, color: '#fff', margin: '14px 0 3px', textAlign: 'center' },
   founderTitle: { fontSize: 11, fontWeight: 700, color: ORANGE, margin: 0, textTransform: 'uppercase', letterSpacing: 1.1, textAlign: 'center' },
   founderTextCol: { flex: 1, minWidth: 260 },
-  founderHeading: { fontSize: 'clamp(21px, 3.2vw, 32px)', fontWeight: 800, color: '#fff', margin: '0 0 22px', lineHeight: 1.2, fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  founderHeading: { fontSize: 'clamp(21px, 3.2vw, 32px)', fontWeight: 800, color: '#fff', margin: '0 0 22px', lineHeight: 1.2, fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
 
   /* Desktop photo grid — layout handled by CSS class, styles here */
   photoGridItem: { display: 'flex', flexDirection: 'column' },
@@ -266,7 +266,7 @@ const s = {
   statsSection: { padding: 'clamp(36px, 5vw, 60px) clamp(20px, 5vw, 64px)', background: '#111', borderBottom: '1px solid rgba(255,255,255,0.07)' },
   statsGrid: { maxWidth: 960, margin: '0 auto', display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(170px, 1fr))', gap: 18 },
   statCard: { background: '#171717', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 16, padding: '22px 18px', display: 'flex', flexDirection: 'column', gap: 5 },
-  statValue: { fontSize: 'clamp(20px, 2.8vw, 28px)', fontWeight: 800, lineHeight: 1, fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  statValue: { fontSize: 'clamp(20px, 2.8vw, 28px)', fontWeight: 800, lineHeight: 1, fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
   statLabel: { fontSize: 12, fontWeight: 600, color: '#666', textTransform: 'uppercase', letterSpacing: 0.6 },
 
   /* Action quote */
@@ -275,24 +275,24 @@ const s = {
   actionOverlay: { position: 'absolute', inset: 0, background: 'linear-gradient(135deg, rgba(10,10,10,0.84) 0%, rgba(10,10,10,0.62) 50%, rgba(10,10,10,0.82) 100%)' },
   actionContent: { position: 'relative', zIndex: 2, textAlign: 'center', padding: '0 clamp(20px, 6vw, 80px)', maxWidth: 680 },
   quoteMarks: { fontSize: 72, lineHeight: 0.6, color: ORANGE, margin: '0 0 6px', fontFamily: 'Georgia, serif', opacity: 0.9 },
-  quoteText: { fontSize: 'clamp(22px, 4.2vw, 44px)', fontWeight: 800, color: '#fff', margin: '0 0 18px', lineHeight: 1.15, textShadow: '0 2px 24px rgba(0,0,0,0.5)', fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  quoteText: { fontSize: 'clamp(22px, 4.2vw, 44px)', fontWeight: 800, color: '#fff', margin: '0 0 18px', lineHeight: 1.15, textShadow: '0 2px 24px rgba(0,0,0,0.5)', fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
   quoteDivider: { width: 44, height: 3, background: ORANGE, borderRadius: 2, margin: '0 auto 12px' },
   quoteAttrib: { fontSize: 13, fontWeight: 600, color: 'rgba(255,255,255,0.50)', margin: 0, letterSpacing: 0.3 },
 
   /* Mission */
   missionSection: { padding: 'clamp(60px, 8vw, 110px) clamp(20px, 5vw, 64px)', borderBottom: '1px solid rgba(255,255,255,0.07)' },
   missionInner: { maxWidth: 1080, margin: '0 auto' },
-  missionHeading: { fontSize: 'clamp(23px, 3.8vw, 38px)', fontWeight: 800, color: '#fff', margin: '12px 0 22px', lineHeight: 1.15, fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  missionHeading: { fontSize: 'clamp(23px, 3.8vw, 38px)', fontWeight: 800, color: '#fff', margin: '12px 0 22px', lineHeight: 1.15, fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
   pillarsGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(220px, 1fr))', gap: 20 },
   pillarCard: { background: '#111', border: '1px solid rgba(255,255,255,0.07)', borderRadius: 18, padding: '26px 22px' },
   pillarNum: { fontSize: 11, fontWeight: 800, letterSpacing: 1.5, marginBottom: 8 },
-  pillarName: { fontSize: 18, fontWeight: 700, margin: '0 0 10px', fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  pillarName: { fontSize: 18, fontWeight: 700, margin: '0 0 10px', fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
   pillarDesc: { fontSize: 14, color: '#888', lineHeight: 1.7, margin: 0 },
 
   /* CTA */
   ctaSection: { padding: 'clamp(68px, 9vw, 120px) 24px', textAlign: 'center', background: 'linear-gradient(180deg, #0A0A0A 0%, #111 100%)' },
   ctaInner: { maxWidth: 600, margin: '0 auto' },
-  ctaHeading: { fontSize: 'clamp(23px, 3.8vw, 38px)', fontWeight: 800, color: '#fff', margin: '0 0 12px', fontFamily: "'Calibri','Trebuchet MS','Segoe UI',Helvetica,Arial,sans-serif" },
+  ctaHeading: { fontSize: 'clamp(23px, 3.8vw, 38px)', fontWeight: 800, color: '#fff', margin: '0 0 12px', fontFamily: "'Manrope','Inter',system-ui,sans-serif" },
   ctaSub: { fontSize: 'clamp(14px, 1.7vw, 16px)', color: '#888', lineHeight: 1.7, margin: '0 0 36px' },
   ctaBtns: { display: 'flex', justifyContent: 'center', gap: 14, flexWrap: 'wrap' },
   ctaBtn: { display: 'inline-block', textDecoration: 'none', padding: 'clamp(12px, 1.3vw, 15px) clamp(22px, 2.8vw, 36px)', borderRadius: 13, fontSize: 'clamp(14px, 1.4vw, 16px)', fontWeight: 700, color: '#fff', transition: 'opacity 0.18s' },

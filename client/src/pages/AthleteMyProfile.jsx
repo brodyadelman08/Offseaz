@@ -628,7 +628,29 @@ export default function AthleteMyProfile() {
        logs.filter(l => l.effort != null).length).toFixed(1)
     : null
 
-  if (loading) return <div style={styles.loading}>Loading…</div>
+  if (loading) return (
+    <div style={styles.container}>
+      <div style={styles.profileHeader}>
+        <div className="skeleton" style={{ width: 72, height: 72, borderRadius: '50%' }} />
+        <div style={{ flex: 1, minWidth: 160 }}>
+          <div className="skeleton" style={{ width: 160, height: 22, marginBottom: 8 }} />
+          <div className="skeleton" style={{ width: 100, height: 14 }} />
+        </div>
+      </div>
+      <div style={styles.statsRow}>
+        {[1, 2, 3].map(i => (
+          <div key={i} style={styles.statCard}>
+            <div className="skeleton" style={{ width: 40, height: 22, marginBottom: 6 }} />
+            <div className="skeleton" style={{ width: 56, height: 12 }} />
+          </div>
+        ))}
+      </div>
+      <div style={styles.card}>
+        <div className="skeleton" style={{ width: 100, height: 12, marginBottom: 14 }} />
+        <div className="skeleton" style={{ width: '100%', height: 60, borderRadius: 12 }} />
+      </div>
+    </div>
+  )
 
   const mGrid    = isMobile ? { ...styles.maxesGrid, gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 } : styles.maxesGrid
   const mCard    = isMobile ? { ...styles.liftCard, padding: '12px 16px' } : styles.liftCard
@@ -959,7 +981,14 @@ export default function AthleteMyProfile() {
         </div>
 
         {perfLoading ? (
-          <p style={styles.emptyText}>Loading…</p>
+          <div style={mGrid}>
+            {[1, 2].map(i => (
+              <div key={i} style={mCard}>
+                <div className="skeleton" style={{ width: '70%', height: 13, marginBottom: 10 }} />
+                <div className="skeleton" style={{ width: '50%', height: 20 }} />
+              </div>
+            ))}
+          </div>
         ) : perfSelections.length === 0 ? (
           <div style={styles.emptyAction}>
             <p style={styles.emptyText}>No performance metrics selected yet.</p>
@@ -1284,7 +1313,7 @@ const ms = {
 const cs = {
   overlay:   { position: 'fixed', inset: 0, zIndex: 9500, background: 'rgba(0,0,0,0.8)', display: 'flex', alignItems: 'center', justifyContent: 'center' },
   card:      { background: '#111111', borderRadius: 16, padding: '32px 28px', maxWidth: 360, width: '90%', boxShadow: '0 8px 32px rgba(0,0,0,0.6)' },
-  headline:  { fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif", fontWeight: 700, fontSize: 20, color: '#FFFFFF', margin: '0 0 12px', textAlign: 'center', lineHeight: 1.3 },
+  headline:  { fontFamily: "'Manrope', 'Inter', system-ui, sans-serif", fontWeight: 700, fontSize: 20, color: '#FFFFFF', margin: '0 0 12px', textAlign: 'center', lineHeight: 1.3 },
   body:      { fontFamily: "'Inter', system-ui, sans-serif", fontSize: 14, color: 'rgba(255,255,255,0.85)', textAlign: 'center', margin: '0 0 24px', lineHeight: 1.55 },
   btnRow:    { display: 'flex', gap: 10 },
   keepBtn:   { flex: 1, padding: '11px 0', background: 'transparent', border: '1.5px solid #FFFFFF', borderRadius: 8, color: '#FFFFFF', fontWeight: 600, fontSize: 14, cursor: 'pointer' },

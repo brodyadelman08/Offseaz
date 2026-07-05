@@ -1,52 +1,67 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
 import api from '../services/api'
+import {
+  FlameIcon, BarChartIcon, DumbbellIcon, TrophyIcon,
+  FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon, SoccerIcon,
+  HockeyIcon, RugbyIcon, TennisIcon, GolfIcon, WrestlingIcon, VolleyballIcon,
+  RunningIcon, CrossCountryIcon, LacrosseIcon, SwimmingIcon, SportOtherIcon,
+} from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 
+const SPORT_ICONS = {
+  football: FootballIcon, basketball: BasketballIcon, baseball: BaseballIcon,
+  softball: SoftballIcon, soccer: SoccerIcon, hockey: HockeyIcon, rugby: RugbyIcon,
+  tennis: TennisIcon, golf: GolfIcon, wrestling: WrestlingIcon, volleyball: VolleyballIcon,
+  'track & field': RunningIcon, track: RunningIcon, 'cross country': CrossCountryIcon,
+  cross_country: CrossCountryIcon, lacrosse: LacrosseIcon, swimming: SwimmingIcon,
+}
+function sportIcon(sport) {
+  return SPORT_ICONS[(sport || '').toLowerCase()] || SportOtherIcon
+}
+
 const TABS = [
   {
     key: 'streak',
     label: 'Streak',
-    emoji: '🔥',
+    Icon: FlameIcon,
     color: YELLOW,
     unit: 'd',
     statKey: 'streak_days',
     desc: 'Current consecutive days of logged sessions. Longest active streak wins.',
-    info: '🔥 Streaks grow when you log sessions (completed, partial, or injury). They reset after 36 hours of no activity. Taking a rest day? Log a Rest Day check-in to keep your streak alive.',
+    info: 'Streaks grow when you log sessions (completed, partial, or injury). They reset after 36 hours of no activity. Taking a rest day? Log a Rest Day check-in to keep your streak alive.',
     infoLabel: 'How streaks work',
   },
   {
     key: 'completion_rate',
     label: 'Completion',
-    emoji: '📊',
+    Icon: BarChartIcon,
     color: BLUE,
     unit: '%',
     statKey: 'completion_rate',
     desc: "This week's completed sessions divided by scheduled sessions.",
-    info: "📊 This is the percentage of your scheduled sessions you completed this week. 100% means you did not miss a single session. Falling below 80% puts you in the building zone. Below 50% puts you at risk.",
+    info: "This is the percentage of your scheduled sessions you completed this week. 100% means you did not miss a single session. Falling below 80% puts you in the building zone. Below 50% puts you at risk.",
     infoLabel: 'How this is calculated',
   },
   {
     key: 'sessions_total',
     label: 'Sessions',
-    emoji: '💪',
+    Icon: DumbbellIcon,
     color: ORANGE,
     unit: '',
     statKey: 'sessions_total',
     desc: 'Total sessions logged this entire offseason.',
-    info: "💪 This is your total sessions logged since you joined Offseaz this offseason. Every session counts regardless of completion status. Partial and injury logs both count.",
+    info: "This is your total sessions logged since you joined Offseaz this offseason. Every session counts regardless of completion status. Partial and injury logs both count.",
     infoLabel: 'What counts as a session',
   },
 ]
 
-function medalFor(rank) {
-  if (rank === 1) return '🥇'
-  if (rank === 2) return '🥈'
-  if (rank === 3) return '🥉'
-  return null
+const MEDAL_COLORS = { 1: '#E8B923', 2: '#B9C0C7', 3: '#C87F3A' }
+function medalColorFor(rank) {
+  return MEDAL_COLORS[rank] || null
 }
 
 export default function Leaderboard() {
@@ -92,7 +107,7 @@ export default function Leaderboard() {
             }}
             onClick={() => switchTab(t.key)}
           >
-            <span>{t.emoji}</span>
+            <t.Icon size={16} color={activeTab === t.key ? '#fff' : t.color} />
             <span style={s.tabLabel}>{t.label}</span>
           </button>
         ))}
@@ -131,8 +146,9 @@ export default function Leaderboard() {
           {ranked.map((a, idx) => {
             const rank    = idx + 1
             const isMe    = a.id === profile?.id
-            const stat    = a[tab.statKey]
-            const medal   = medalFor(rank)
+            const stat        = a[tab.statKey]
+            const medalColor  = medalColorFor(rank)
+            const SportIcon   = sportIcon(a.sport)
             const display = tab.unit === '%' ? `${stat}%` : tab.unit ? `${stat}${tab.unit}` : String(stat)
 
             return (
@@ -146,14 +162,14 @@ export default function Leaderboard() {
               >
                 {/* Rank */}
                 <div style={s.rankCell}>
-                  {medal
-                    ? <span style={{ fontSize: 22 }}>{medal}</span>
+                  {medalColor
+                    ? <TrophyIcon size={22} color={medalColor} />
                     : <span style={{ ...s.rankNum, color: isMe ? ORANGE : 'var(--text-3)' }}>{rank}</span>
                   }
                 </div>
 
-                {/* Emoji + name */}
-                <span style={s.sportEmoji}>{a.sport_emoji}</span>
+                {/* Sport icon + name */}
+                <span style={s.sportEmoji}><SportIcon size={20} /></span>
                 <span style={{ ...s.athleteName, color: isMe ? ORANGE : 'var(--text)', fontWeight: isMe ? 700 : 600 }}>
                   {a.full_name}
                   {isMe && <span style={s.youBadge}> you</span>}
@@ -162,7 +178,7 @@ export default function Leaderboard() {
                 {/* Stat */}
                 <div style={s.statCell}>
                   {activeTab === 'streak' && (
-                    <span style={{ color: YELLOW, fontSize: 13, marginRight: 3 }}>🔥</span>
+                    <span style={{ marginRight: 3, display: 'inline-flex' }}><FlameIcon size={13} color={YELLOW} /></span>
                   )}
                   {activeTab === 'completion_rate' && (
                     <div style={{ ...s.compBar, width: 40, marginRight: 6 }}>

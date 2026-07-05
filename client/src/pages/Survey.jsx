@@ -5,29 +5,32 @@ import { useAuth } from '../context/AuthContext'
 import {
   DumbbellIcon, BarChartIcon, BoltIcon, TrophyIcon,
   SeedlingIcon, FlameIcon, BarbellIcon, UserIcon,
+  FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon, SoccerIcon, HockeyIcon,
+  RugbyIcon, TennisIcon, GolfIcon, VolleyballIcon, WrestlingIcon, RunningIcon,
+  CrossCountryIcon, LacrosseIcon, SwimmingIcon, SportOtherIcon,
 } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const TOTAL_STEPS = 10
 
-// Sport data — emojis for universal recognition, renders natively on every platform
+// Sport data — custom SVG icons for universal, brand-consistent rendering
 const SPORTS = [
-  { key: 'Football',        emoji: '🏈' },
-  { key: 'Basketball',      emoji: '🏀' },
-  { key: 'Baseball',        emoji: '⚾' },
-  { key: 'Softball',        emoji: '🥎' },
-  { key: 'Soccer',          emoji: '⚽' },
-  { key: 'Hockey',          emoji: '🏒' },
-  { key: 'Rugby',           emoji: '🏉' },
-  { key: 'Tennis',          emoji: '🎾' },
-  { key: 'Golf',            emoji: '⛳' },
-  { key: 'Volleyball',      emoji: '🏐' },
-  { key: 'Wrestling',       emoji: '🤼' },
-  { key: 'Track and Field', emoji: '🏃' },
-  { key: 'Cross Country',   emoji: '🏃‍♀️' },
-  { key: 'Lacrosse',        emoji: '🥍' },
-  { key: 'Swimming',        emoji: '🏊' },
-  { key: 'Other',           emoji: '🏋️' },
+  { key: 'Football',        Icon: FootballIcon },
+  { key: 'Basketball',      Icon: BasketballIcon },
+  { key: 'Baseball',        Icon: BaseballIcon },
+  { key: 'Softball',        Icon: SoftballIcon },
+  { key: 'Soccer',          Icon: SoccerIcon },
+  { key: 'Hockey',          Icon: HockeyIcon },
+  { key: 'Rugby',           Icon: RugbyIcon },
+  { key: 'Tennis',          Icon: TennisIcon },
+  { key: 'Golf',            Icon: GolfIcon },
+  { key: 'Volleyball',      Icon: VolleyballIcon },
+  { key: 'Wrestling',       Icon: WrestlingIcon },
+  { key: 'Track and Field', Icon: RunningIcon },
+  { key: 'Cross Country',   Icon: CrossCountryIcon },
+  { key: 'Lacrosse',        Icon: LacrosseIcon },
+  { key: 'Swimming',        Icon: SwimmingIcon },
+  { key: 'Other',           Icon: SportOtherIcon },
 ]
 
 const POSITIONS = {
@@ -298,7 +301,7 @@ function SportGrid({ options, value, onChange }) {
       gridTemplateColumns: 'repeat(auto-fill, minmax(108px, 1fr))',
       gap: 10,
     }}>
-      {options.map(({ key, emoji }) => {
+      {options.map(({ key, Icon }) => {
         const sel = value === key
         const hov = hovered === key && !sel
 
@@ -328,15 +331,13 @@ function SportGrid({ options, value, onChange }) {
           >
             <CheckBadge visible={sel} />
             <span style={{
-              fontSize: 34,
-              lineHeight: 1,
-              marginBottom: 10,
               display: 'block',
+              marginBottom: 10,
               transform: sel ? 'scale(1.12)' : hov ? 'scale(1.06)' : 'scale(1)',
               transition: 'transform 0.2s ease',
               userSelect: 'none',
             }}>
-              {emoji}
+              <Icon size={34} />
             </span>
             <span style={{
               fontSize: 11,
@@ -499,7 +500,7 @@ function DayPicker({ value, onChange }) {
               color: sel ? ORANGE : 'var(--text)',
               lineHeight: 1,
               letterSpacing: -1.5,
-              fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', sans-serif",
+              fontFamily: "'Manrope', 'Inter', system-ui, sans-serif",
               transition: 'color 0.15s',
             }}>
               {d}
@@ -652,8 +653,7 @@ export default function Survey() {
     return (
       <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100vh', background: 'var(--bg)' }}>
         <div style={{ textAlign: 'center' }}>
-          <div className="survey-spinner" />
-          <p style={{ fontSize: 14, color: 'var(--text-3)', marginTop: 12 }}>Loading…</p>
+          <div className="skeleton" style={{ width: 140, height: 12, borderRadius: 6, margin: '0 auto' }} />
         </div>
       </div>
     )
@@ -1122,7 +1122,7 @@ const st = {
     margin: '0 0 10px',
     lineHeight: 1.18,
     letterSpacing: -0.6,
-    fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif",
+    fontFamily: "'Manrope', 'Inter', system-ui, sans-serif",
   },
   desc: {
     fontSize: 15,

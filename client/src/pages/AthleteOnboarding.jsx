@@ -128,7 +128,11 @@ export default function AthleteOnboarding() {
   if (loading) {
     return (
       <div style={styles.fullPage}>
-        <div style={styles.loadingWrap}>Loading…</div>
+        <div style={{ maxWidth: 480, margin: '80px auto', padding: '0 20px' }}>
+          <div className="skeleton" style={{ width: 180, height: 24, marginBottom: 14 }} />
+          <div className="skeleton" style={{ width: '100%', height: 120, borderRadius: 16, marginBottom: 14 }} />
+          <div className="skeleton" style={{ width: '60%', height: 14 }} />
+        </div>
       </div>
     )
   }
@@ -489,14 +493,6 @@ const styles = {
     background: 'var(--bg)',
     display: 'flex',
     flexDirection: 'column',
-  },
-  loadingWrap: {
-    flex: 1,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    color: 'var(--text-3)',
-    fontSize: 15,
   },
 
   // Top bar

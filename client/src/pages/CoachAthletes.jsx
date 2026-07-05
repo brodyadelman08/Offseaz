@@ -353,7 +353,17 @@ export default function CoachAthletes() {
       {/* ── Coaches tab ───────────────────────────────────────────────────────── */}
       {activeTab === 'coaches' && (
         coachLoading ? (
-          <p style={styles.empty}>Loading…</p>
+          <div style={{ display: 'flex', flexDirection: 'column', gap: 10 }}>
+            {[1, 2].map(i => (
+              <div key={i} style={{ display: 'flex', alignItems: 'center', gap: 12, padding: '12px 0' }}>
+                <div className="skeleton" style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                <div style={{ flex: 1 }}>
+                  <div className="skeleton" style={{ width: 120, height: 14, marginBottom: 8 }} />
+                  <div className="skeleton" style={{ width: 80, height: 11 }} />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : (
           <div style={styles.coachesPanel}>
             {/* Explanation for view-only coaches */}

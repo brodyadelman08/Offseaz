@@ -1,7 +1,12 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
-import { PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon, LockIcon, UnlockIcon } from '../components/Icons'
+import {
+  PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon, LockIcon, UnlockIcon,
+  FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon, SoccerIcon, HockeyIcon,
+  RugbyIcon, TennisIcon, GolfIcon, WrestlingIcon, VolleyballIcon, RunningIcon,
+  CrossCountryIcon, LacrosseIcon, SwimmingIcon,
+} from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -9,11 +14,11 @@ const YELLOW = '#F0BE24'
 const CELL_W = 220
 const LABEL_W = 130
 
-const SPORT_EMOJIS = {
-  baseball: '⚾', softball: '🥎', football: '🏈', basketball: '🏀',
-  soccer: '⚽', hockey: '🏒', rugby: '🏉', tennis: '🎾', golf: '⛳',
-  wrestling: '🤼', volleyball: '🏐', track: '🏃', cross_country: '🏃‍♀️',
-  lacrosse: '🥍', swimming: '🏊',
+const SPORT_ICONS = {
+  baseball: BaseballIcon, softball: SoftballIcon, football: FootballIcon, basketball: BasketballIcon,
+  soccer: SoccerIcon, hockey: HockeyIcon, rugby: RugbyIcon, tennis: TennisIcon, golf: GolfIcon,
+  wrestling: WrestlingIcon, volleyball: VolleyballIcon, track: RunningIcon, cross_country: CrossCountryIcon,
+  lacrosse: LacrosseIcon, swimming: SwimmingIcon,
 }
 
 const TEMPLATES = [
@@ -414,12 +419,20 @@ export default function BlueprintBuilder() {
         {templatesError && <div style={s.errorBox}>{templatesError}</div>}
         <div style={s.sportTabBar}>
           <button style={{ ...s.sportTabBtn, ...(sportTab === 'general' ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab('general')}>General</button>
-          {templatesLoading && <span style={s.pageDesc}>Loading sport templates…</span>}
-          {sportTemplates.map(sp => (
-            <button key={sp.id} style={{ ...s.sportTabBtn, ...(sportTab === sp.id ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab(sp.id)}>
-              {SPORT_EMOJIS[sp.id] && <span style={{ marginRight: 5 }}>{SPORT_EMOJIS[sp.id]}</span>}{sp.label}
-            </button>
-          ))}
+          {templatesLoading && (
+            <>
+              <div className="skeleton" style={{ width: 90, height: 34, borderRadius: 8 }} />
+              <div className="skeleton" style={{ width: 90, height: 34, borderRadius: 8 }} />
+            </>
+          )}
+          {sportTemplates.map(sp => {
+            const SportIcon = SPORT_ICONS[sp.id]
+            return (
+              <button key={sp.id} style={{ ...s.sportTabBtn, ...(sportTab === sp.id ? s.sportTabBtnActive : {}) }} onClick={() => setSportTab(sp.id)}>
+                {SportIcon && <span style={{ marginRight: 5, display: 'inline-flex', verticalAlign: 'middle' }}><SportIcon size={18} /></span>}{sp.label}
+              </button>
+            )
+          })}
         </div>
         {sportTab === 'general' && (
           <div style={s.templateGrid}>

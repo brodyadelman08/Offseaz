@@ -21,7 +21,7 @@ async function log(req, res) {
       return res.status(403).json({ error: 'Only athletes can log sessions' })
     }
 
-    const workout = await logSession(req.user.id, {
+    const { workout, streak_days } = await logSession(req.user.id, {
       blueprint_week_id,
       session_index: parseInt(session_index, 10),
       status,
@@ -29,7 +29,7 @@ async function log(req, res) {
       note,
     })
 
-    res.status(201).json({ workout })
+    res.status(201).json({ workout, streak_days })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

@@ -59,7 +59,7 @@ const styles = {
     boxShadow: '0 8px 32px rgba(0,0,0,0.6)',
   },
   headline: {
-    fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif",
+    fontFamily: "'Manrope', 'Inter', system-ui, sans-serif",
     fontWeight: 700, fontSize: 20, color: '#FFFFFF',
     margin: '0 0 12px', textAlign: 'center', lineHeight: 1.3,
   },

@@ -129,7 +129,18 @@ export default function BlueprintDetail() {
     }
   }
 
-  if (loading) return <div style={s.center}>Loading…</div>
+  if (loading) return (
+    <div style={s.container}>
+      <div className="skeleton" style={{ width: 220, height: 24, marginBottom: 10 }} />
+      <div className="skeleton" style={{ width: 140, height: 14, marginBottom: 24 }} />
+      {[1, 2, 3].map(i => (
+        <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 14, padding: 18, marginBottom: 10 }}>
+          <div className="skeleton" style={{ width: 100, height: 13, marginBottom: 10 }} />
+          <div className="skeleton" style={{ width: '100%', height: 32, borderRadius: 8 }} />
+        </div>
+      ))}
+    </div>
+  )
   if (!blueprint) return null
 
   const allFilteredSelected =

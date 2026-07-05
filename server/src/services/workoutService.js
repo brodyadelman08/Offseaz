@@ -39,12 +39,17 @@ async function logSession(athleteId, { blueprint_week_id, session_index, status,
 
   if (error) throw error
 
-  // Update streak immediately so the display reflects the new log
-  updateAthleteStreak(athleteId).catch(err =>
+  // Update streak immediately (awaited) so the caller can compare the fresh
+  // streak_days against milestone thresholds right in the log response,
+  // instead of needing a separate profile re-fetch.
+  let streak_days = null
+  try {
+    streak_days = await updateAthleteStreak(athleteId)
+  } catch (err) {
     console.error('[logSession] streak update failed:', err.message)
-  )
+  }
 
-  return data
+  return { workout: data, streak_days }
 }
 
 async function getAthleteLog(athleteId) {

@@ -149,7 +149,19 @@ function AccountabilityInner() {
       )}
 
       {loading ? (
-        <p style={styles.loadingText}>Loading…</p>
+        <div style={styles.athleteGrid}>
+          {[1, 2, 3, 4].map(i => (
+            <div key={i} style={styles.athleteCard}>
+              <div style={styles.cardTop}>
+                <div style={styles.avatarRow}>
+                  <div className="skeleton" style={{ width: 40, height: 40, borderRadius: '50%' }} />
+                  <div className="skeleton" style={{ width: 110, height: 14 }} />
+                </div>
+                <div className="skeleton" style={{ width: 64, height: 20, borderRadius: 6 }} />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : athletes.length === 0 ? (
         <div style={styles.emptyState}>
           <ClipboardIcon size={40} color="var(--text-3)" />
@@ -195,7 +207,9 @@ function AccountabilityInner() {
                         <div>
                           <span style={styles.athleteName}>{a.full_name}</span>
                           {a.today_readiness !== null && a.today_readiness < 40 && (
-                            <span style={styles.cautionBadge}>⚠ Low readiness</span>
+                            <span style={{ ...styles.cautionBadge, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                              <AlertIcon size={11} color="currentColor" /> Low readiness
+                            </span>
                           )}
                         </div>
                       </div>
@@ -308,7 +322,6 @@ const styles = {
   pageHeader: { marginBottom: 24 },
   pageTitle: { fontSize: 26, fontWeight: 700, color: 'var(--text)', margin: '0 0 6px' },
   pageSubtitle: { fontSize: 14, color: 'var(--text-2)', margin: 0 },
-  loadingText: { color: 'var(--text-3)', fontSize: 15 },
 
   emptyState: { display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 12, paddingTop: 60 },
   emptyTitle: { fontSize: 20, fontWeight: 700, color: 'var(--text)', margin: 0 },

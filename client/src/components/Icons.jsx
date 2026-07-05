@@ -528,6 +528,57 @@ export function SwimmingIcon({ size = 40 }) {
   )
 }
 
+export function RugbyIcon({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <g transform="rotate(-28 20 20)">
+        <ellipse cx="20" cy="20" rx="17" ry="10" fill="#7a3b1e" />
+        <ellipse cx="20" cy="20" rx="17" ry="10" fill="none" stroke="#5c2b13" strokeWidth="0.8" />
+        {/* Lengthwise seam */}
+        <line x1="3" y1="20" x2="37" y2="20" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
+        {/* Lace-style stitch marks */}
+        <line x1="12" y1="18" x2="12" y2="22" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="20" y1="17.5" x2="20" y2="22.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+        <line x1="28" y1="18" x2="28" y2="22" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
+      </g>
+    </svg>
+  )
+}
+
+export function TennisIcon({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      <circle cx="20" cy="20" r="17" fill="#D5E326" />
+      <circle cx="20" cy="20" r="17" fill="none" stroke="#a7b01d" strokeWidth="0.8" />
+      {/* Curved seam */}
+      <path d="M 5 12 Q 16 20 5 28" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" />
+      <path d="M 35 12 Q 24 20 35 28" fill="none" stroke="white" strokeWidth="2" strokeLinecap="round" />
+    </svg>
+  )
+}
+
+export function GolfIcon({ size = 40 }) {
+  return (
+    <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
+      {/* Ball */}
+      <circle cx="16" cy="18" r="10" fill="white" />
+      <circle cx="16" cy="18" r="10" fill="none" stroke="#ccc" strokeWidth="1" />
+      {/* Dimples */}
+      <circle cx="12" cy="14" r="1" fill="#ddd" />
+      <circle cx="17" cy="13" r="1" fill="#ddd" />
+      <circle cx="21" cy="16" r="1" fill="#ddd" />
+      <circle cx="11" cy="19" r="1" fill="#ddd" />
+      <circle cx="16" cy="19" r="1" fill="#ddd" />
+      <circle cx="20" cy="21" r="1" fill="#ddd" />
+      <circle cx="13" cy="23" r="1" fill="#ddd" />
+      <circle cx="18" cy="24" r="1" fill="#ddd" />
+      {/* Flagstick */}
+      <line x1="30" y1="6" x2="30" y2="35" stroke="#555" strokeWidth="1.5" strokeLinecap="round" />
+      <path d="M 30 6 L 38 9.5 L 30 13 Z" fill="#F75709" />
+    </svg>
+  )
+}
+
 export function SportOtherIcon({ size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>

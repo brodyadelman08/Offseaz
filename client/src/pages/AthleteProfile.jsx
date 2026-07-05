@@ -246,7 +246,23 @@ export default function AthleteProfile() {
     }
   }
 
-  if (loading) return <div style={styles.center}>Loading…</div>
+  if (loading) return (
+    <div style={styles.container}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+        <div className="skeleton" style={{ width: 64, height: 64, borderRadius: '50%' }} />
+        <div style={{ flex: 1 }}>
+          <div className="skeleton" style={{ width: 160, height: 20, marginBottom: 8 }} />
+          <div className="skeleton" style={{ width: 100, height: 13 }} />
+        </div>
+      </div>
+      {[1, 2, 3].map(i => (
+        <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, marginBottom: 14 }}>
+          <div className="skeleton" style={{ width: 90, height: 11, marginBottom: 12 }} />
+          <div className="skeleton" style={{ width: '100%', height: 40, borderRadius: 8 }} />
+        </div>
+      ))}
+    </div>
+  )
   if (error)   return <div style={styles.center}>{error}</div>
   if (!athlete) return null
 
@@ -412,7 +428,11 @@ export default function AthleteProfile() {
 
           {/* Exercise toggles per session */}
           {overridesLoading ? (
-            <p style={{ color: 'var(--text-3)', fontSize: 14 }}>Loading exercises…</p>
+            <div style={{ display: 'flex', flexDirection: 'column', gap: 8 }}>
+              {[1, 2, 3].map(i => (
+                <div key={i} className="skeleton" style={{ width: '100%', height: 32, borderRadius: 8 }} />
+              ))}
+            </div>
           ) : (
             <div>
               <p style={{ ...styles.noteLabel, marginBottom: 12 }}>Toggle exercises to remove for this athlete</p>
@@ -606,7 +626,11 @@ export default function AthleteProfile() {
                   {perfHistOpen[sel.id] && (
                     <div style={styles.historyList}>
                       {hist.length === 0 ? (
-                        <p style={{ fontSize: 11, color: 'var(--text-3)', margin: 0 }}>Loading…</p>
+                        <div style={{ display: 'flex', flexDirection: 'column', gap: 6 }}>
+                          {[1, 2].map(i => (
+                            <div key={i} className="skeleton" style={{ width: '100%', height: 18, borderRadius: 4 }} />
+                          ))}
+                        </div>
                       ) : hist.map((entry, i) => (
                         <div key={entry.id} style={styles.historyRow}>
                           <span style={{ ...styles.historyWeight, color: i === 0 ? ORANGE : 'var(--text)', fontWeight: i === 0 ? 700 : 600 }}>

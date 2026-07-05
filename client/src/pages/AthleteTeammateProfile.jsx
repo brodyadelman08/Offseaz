@@ -49,7 +49,23 @@ export default function AthleteTeammateProfile() {
       .finally(() => setLoading(false))
   }, [athleteId])
 
-  if (loading) return <div style={styles.center}>Loading…</div>
+  if (loading) return (
+    <div style={styles.container}>
+      <div style={{ display: 'flex', alignItems: 'center', gap: 16, marginBottom: 24 }}>
+        <div className="skeleton" style={{ width: 64, height: 64, borderRadius: '50%' }} />
+        <div style={{ flex: 1 }}>
+          <div className="skeleton" style={{ width: 160, height: 20, marginBottom: 8 }} />
+          <div className="skeleton" style={{ width: 100, height: 13 }} />
+        </div>
+      </div>
+      {[1, 2].map(i => (
+        <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, marginBottom: 14 }}>
+          <div className="skeleton" style={{ width: 90, height: 11, marginBottom: 12 }} />
+          <div className="skeleton" style={{ width: '100%', height: 40, borderRadius: 8 }} />
+        </div>
+      ))}
+    </div>
+  )
   if (error)   return (
     <div style={styles.center}>
       <p style={{ color: 'var(--text-2)', marginBottom: 16 }}>{error}</p>

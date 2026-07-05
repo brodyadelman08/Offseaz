@@ -598,7 +598,7 @@ const s = {
   liftName: { fontSize: 12, fontWeight: 700, color: BLUE, textTransform: 'uppercase', letterSpacing: 2.5, margin: '0 0 4px' },
   weightHero: {
     fontSize: 'clamp(72px, 22vw, 124px)', fontWeight: 900, color: ORANGE, margin: '0',
-    lineHeight: 0.95, letterSpacing: -3, fontFamily: 'Calibri, Arial Black, sans-serif',
+    lineHeight: 0.95, letterSpacing: -3, fontFamily: "'Manrope', 'Inter', sans-serif",
     animation: 'weightGlow 2.8s ease-in-out infinite', textAlign: 'center',
   },
   lbsUnit: { fontSize: 'clamp(22px, 6vw, 36px)', fontWeight: 700, letterSpacing: 0, fontFamily: 'inherit' },

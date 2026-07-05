@@ -54,6 +54,9 @@ function computeStreakDays(logs, restDayDates = []) {
 }
 
 // Recompute streak_days for a single athlete and persist it to profiles.
+// Returns the freshly computed streak_days (or null on failure) so callers
+// that need the up-to-date value right away (e.g. milestone celebrations)
+// don't have to re-fetch the profile separately.
 async function updateAthleteStreak(athleteId) {
   try {
     const [logsRes, restRes] = await Promise.all([
@@ -63,7 +66,7 @@ async function updateAthleteStreak(athleteId) {
 
     if (logsRes.error) {
       console.error('[StreakService] Failed to fetch logs for', athleteId, logsRes.error.message)
-      return
+      return null
     }
 
     const restDayDates = (restRes.data || []).map(r => r.date)
@@ -72,9 +75,14 @@ async function updateAthleteStreak(athleteId) {
     const { error: updateErr } = await supabaseAdmin
       .from('profiles').update({ streak_days }).eq('id', athleteId)
 
-    if (updateErr) console.error('[StreakService] Failed to update streak for', athleteId, updateErr.message)
+    if (updateErr) {
+      console.error('[StreakService] Failed to update streak for', athleteId, updateErr.message)
+      return null
+    }
+    return streak_days
   } catch (err) {
     console.error('[StreakService] updateAthleteStreak error:', err.message)
+    return null
   }
 }
 

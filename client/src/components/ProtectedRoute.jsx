@@ -9,7 +9,7 @@ export default function ProtectedRoute({ children, requiredRole }) {
     return (
       <div style={styles.loading}>
         <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={styles.logo} />
-        <p style={styles.loadingText}>Loading…</p>
+        <div className="skeleton" style={{ width: 120, height: 12, borderRadius: 6 }} />
       </div>
     )
   }
@@ -43,8 +43,4 @@ const styles = {
     background: 'var(--bg)',
   },
   logo: { height: 48, display: 'block' },
-  loadingText: {
-    fontSize: 14,
-    color: 'var(--text-3)',
-  },
 }

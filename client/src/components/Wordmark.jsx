@@ -12,7 +12,7 @@ const LETTER_COLORS = [
 export function Wordmark({ size = 28 }) {
   return (
     <span style={{
-      fontFamily: "'Calibri', 'Trebuchet MS', 'Segoe UI', Helvetica, Arial, sans-serif",
+      fontFamily: "'Manrope', 'Inter', system-ui, sans-serif",
       fontSize: size,
       fontWeight: 700,
       letterSpacing: -0.5,

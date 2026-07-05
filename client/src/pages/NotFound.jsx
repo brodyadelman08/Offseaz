@@ -87,7 +87,7 @@ const styles = {
     fontWeight: 900,
     color: ORANGE,
     lineHeight: 1,
-    fontFamily: "'Calibri','Trebuchet MS',sans-serif",
+    fontFamily: "'Manrope','Inter',sans-serif",
     letterSpacing: '-0.04em',
   },
   codeIcon: {
@@ -101,7 +101,7 @@ const styles = {
     fontWeight: 700,
     color: '#EFEFEF',
     margin: '0 0 12px',
-    fontFamily: "'Calibri','Trebuchet MS',sans-serif",
+    fontFamily: "'Manrope','Inter',sans-serif",
   },
   sub: {
     fontSize: 14,

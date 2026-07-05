@@ -353,7 +353,8 @@ export default function AthleteDashboard() {
           {/* ── Team card ── */}
           {teamsLoading ? (
             <div style={styles.card}>
-              <p style={styles.loadingText}>Loading team…</p>
+              <div className="skeleton" style={{ width: 80, height: 11, marginBottom: 8 }} />
+              <div className="skeleton" style={{ width: 160, height: 20 }} />
             </div>
           ) : activeTeam ? (
             <div style={styles.card}>
@@ -532,7 +533,6 @@ const styles = {
   pageHeader: { marginBottom: 20 },
   pageTitle:  { fontSize: 'clamp(18px, 5vw, 24px)', fontWeight: 700, color: 'var(--text)', margin: '0 0 4px' },
   pageSub:    { fontSize: 13, color: 'var(--text-2)', fontStyle: 'italic', margin: 0 },
-  loadingText:{ color: 'var(--text-3)', fontSize: 15 },
 
   stack: { display: 'flex', flexDirection: 'column', gap: 12 },
 
@@ -588,7 +588,7 @@ const styles = {
   },
   todayFocus: {
     fontSize: 'clamp(18px, 5vw, 22px)', fontWeight: 700, color: 'var(--text)',
-    fontFamily: "Calibri, 'Trebuchet MS', sans-serif", margin: '0 0 4px',
+    fontFamily: "'Manrope', 'Inter', sans-serif", margin: '0 0 4px',
   },
   todayExList: { display: 'flex', flexDirection: 'column', gap: 0, marginBottom: 4 },
   todayExRow: {

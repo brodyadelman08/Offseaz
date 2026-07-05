@@ -8,7 +8,10 @@ import {
 } from '../components/Icons'
 import SessionDescription from '../components/SessionDescription'
 import PreviewBanner from '../components/PreviewBanner'
+import StreakMilestoneToast from '../components/StreakMilestoneToast'
 import { useTeam } from '../context/TeamContext'
+
+const STREAK_MILESTONES = new Set([7, 14, 21])
 
 const BLUE   = '#308EBD'
 const ORANGE = '#F75709'
@@ -66,7 +69,7 @@ function ProgramCompletionBanner({ plan, onChoose, chosen, choosing }) {
 const cb = {
   banner: { background:'linear-gradient(135deg,rgba(247,87,9,.07) 0%,rgba(48,142,189,.05) 100%)', border:`1px solid ${ORANGE}33`, borderRadius:20, padding:'28px 20px 24px', marginBottom:28, textAlign:'center' },
   iconRow: { display:'flex', justifyContent:'center', marginBottom:14 },
-  heading: { fontSize:'clamp(18px,4vw,22px)', fontWeight:800, color:'var(--text)', margin:'0 0 6px', fontFamily:"'Calibri','Trebuchet MS',sans-serif" },
+  heading: { fontSize:'clamp(18px,4vw,22px)', fontWeight:800, color:'var(--text)', margin:'0 0 6px', fontFamily:"'Manrope','Inter',sans-serif" },
   sub:     { fontSize:13, color:'var(--text-2)', margin:'0 0 20px' },
   cards:   { display:'grid', gridTemplateColumns:'repeat(auto-fit,minmax(min(180px,100%),1fr))', gap:10, textAlign:'left' },
   card:    { display:'flex', flexDirection:'column', gap:5, padding:'16px 14px', borderRadius:12, border:'1px solid', cursor:'pointer', textAlign:'left', transition:'border-color .18s,background .18s,opacity .18s', boxShadow:'0 2px 6px rgba(0,0,0,.14)', minHeight:48 },
@@ -157,7 +160,7 @@ function LogSheet({ session, weekId, sessionIndex, existing, onClose, onSave }) 
       if (!isSkip && effort) body.effort = effort
       if (note.trim()) body.note = note.trim()
       const { data } = await api.post('/api/workouts', body)
-      onSave(data.workout)
+      onSave(data.workout, data.streak_days)
       onClose()
     } catch (e) {
       setErr(e.response?.data?.error || 'Failed to save. Try again.')
@@ -384,18 +387,20 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, inj
 
   // Which session log sheet is open: { weekId, sessionIndex, session } or null
   const [logSheet, setLogSheet] = useState(null)
+  const [milestoneDays, setMilestoneDays] = useState(null)
 
   function getLog(weekId, sessionIndex) {
     return logs.find(l => l.blueprint_week_id === weekId && l.session_index === sessionIndex) || null
   }
 
-  function handleSave(newLog) {
+  function handleSave(newLog, streakDays) {
     setLogs(prev => {
       const filtered = prev.filter(
         l => !(l.blueprint_week_id === newLog.blueprint_week_id && l.session_index === newLog.session_index)
       )
       return [...filtered, newLog]
     })
+    if (STREAK_MILESTONES.has(streakDays)) setMilestoneDays(streakDays)
   }
 
   return (
@@ -536,6 +541,11 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, inj
           onSave={handleSave}
         />
       )}
+
+      {/* Streak milestone celebration */}
+      {milestoneDays != null && (
+        <StreakMilestoneToast days={milestoneDays} onDone={() => setMilestoneDays(null)} />
+      )}
     </>
   )
 }
@@ -592,7 +602,23 @@ export default function AthletePlan() {
     }).finally(() => setLoading(false))
   }, [])
 
-  if (loading) return <div style={styles.center}>Loading…</div>
+  if (loading) return (
+    <div style={styles.container}>
+      <div style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 20, marginBottom: 14 }}>
+        <div className="skeleton" style={{ width: 140, height: 20, marginBottom: 10 }} />
+        <div className="skeleton" style={{ width: '60%', height: 13 }} />
+      </div>
+      {[1, 2, 3].map(i => (
+        <div key={i} style={{ background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 14, padding: 16, marginBottom: 10, display: 'flex', alignItems: 'center', gap: 12 }}>
+          <div className="skeleton" style={{ width: 36, height: 36, borderRadius: '50%' }} />
+          <div style={{ flex: 1 }}>
+            <div className="skeleton" style={{ width: '50%', height: 14, marginBottom: 8 }} />
+            <div className="skeleton" style={{ width: '30%', height: 11 }} />
+          </div>
+        </div>
+      ))}
+    </div>
+  )
 
   const hasAny = coachPlan || autoPlan
 

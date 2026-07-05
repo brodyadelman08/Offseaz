@@ -3,7 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useCoachAccess } from '../context/CoachAccessContext'
 import api from '../services/api'
-import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon, AlertIcon } from '../components/Icons'
+import { CopyIcon, CheckIcon, UsersIcon, LayoutIcon, BarChartIcon, AlertIcon, FlameIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -445,7 +445,7 @@ export default function CoachDashboard() {
                   const isMilestone = log.is_streak_milestone
 
                   const badge = isMilestone
-                    ? { label: `${log.streak_days}d Streak 🔥`, color: YELLOW, bg: 'rgba(240,190,36,0.12)' }
+                    ? { label: `${log.streak_days}d Streak`, color: YELLOW, bg: 'rgba(240,190,36,0.12)', Icon: FlameIcon }
                     : isInjury
                       ? INJURY_BADGE
                       : isWorkout
@@ -479,7 +479,8 @@ export default function CoachDashboard() {
                         )}
                       </div>
                       <div style={styles.activityRight}>
-                        <span style={{ ...styles.activityBadge, color: badge.color, background: badge.bg }}>
+                        <span style={{ ...styles.activityBadge, color: badge.color, background: badge.bg, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                          {badge.Icon && <badge.Icon size={11} color={badge.color} />}
                           {badge.label}{isWorkout && !isInjury && log.effort ? ` · ${log.effort}` : ''}
                         </span>
                         <span style={styles.activityTime}>{timeAgo(log.timestamp || log.logged_at)}</span>

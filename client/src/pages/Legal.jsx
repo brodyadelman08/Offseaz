@@ -358,7 +358,7 @@ const ls = {
   pageTitle: {
     fontSize: 'clamp(28px, 5vw, 44px)',
     fontWeight: 900, letterSpacing: '-0.02em', color: '#EFEFEF',
-    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+    fontFamily: "'Manrope', 'Inter', sans-serif",
     margin: '0 0 12px',
   },
   lastUpdated: {
@@ -381,7 +381,7 @@ const ls = {
   secHead: {
     fontSize: 17, fontWeight: 700,
     color: '#E0E0E0',
-    fontFamily: "'Calibri', 'Trebuchet MS', sans-serif",
+    fontFamily: "'Manrope', 'Inter', sans-serif",
     letterSpacing: '-0.01em',
     margin: '36px 0 10px',
     paddingBottom: 8,

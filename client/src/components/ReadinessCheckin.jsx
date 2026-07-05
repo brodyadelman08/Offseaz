@@ -1,5 +1,6 @@
 import { useState } from 'react'
 import api from '../services/api'
+import { DumbbellIcon } from './Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -127,7 +128,7 @@ export default function ReadinessCheckin({ onComplete, onDismiss }) {
             disabled={!allAnswered || submitting}
             onClick={() => handleDayType(false)}
           >
-            <span style={{ fontSize: 22 }}>💪</span>
+            <DumbbellIcon size={22} color="#fff" />
             <span style={s.dayTypeBtnLabel}>Training Day</span>
           </button>
           <button

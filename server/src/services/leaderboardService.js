@@ -1,17 +1,6 @@
 'use strict'
 const supabaseAdmin = require('../config/supabase')
 
-const SPORT_EMOJIS = {
-  football: '🏈', basketball: '🏀', baseball: '⚾', soccer: '⚽',
-  hockey: '🏒', wrestling: '🤼', volleyball: '🏐',
-  'track & field': '🏃', track: '🏃', cross_country: '🏃',
-  lacrosse: '🥍', swimming: '🏊',
-}
-function sportEmoji(sport) {
-  if (!sport) return '⚡'
-  return SPORT_EMOJIS[(sport || '').toLowerCase()] || '⚡'
-}
-
 function getWeekMondayISO() {
   const d = new Date()
   const dow = d.getDay()
@@ -53,7 +42,7 @@ async function getLeaderboard(teamId) {
     return {
       id:               m.athlete_id,
       full_name:        m.profiles?.full_name || 'Athlete',
-      sport_emoji:      sportEmoji(survey?.sport),
+      sport:            survey?.sport || null,
       streak_days:      m.profiles?.streak_days || 0,
       sessions_this_week: weekLogs.length,
       completion_rate:  compRate,

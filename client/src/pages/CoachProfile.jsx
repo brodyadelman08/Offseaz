@@ -253,7 +253,16 @@ export default function CoachProfile() {
         </div>
 
         {loading ? (
-          <p style={styles.emptyText}>Loading…</p>
+          <div style={styles.athleteList}>
+            {[1, 2, 3].map(i => (
+              <div key={i} style={styles.athleteRow}>
+                <div className="skeleton" style={{ width: 36, height: 36, borderRadius: '50%' }} />
+                <div style={{ flex: 1 }}>
+                  <div className="skeleton" style={{ width: 120, height: 14 }} />
+                </div>
+              </div>
+            ))}
+          </div>
         ) : roster.length === 0 ? (
           <p style={styles.emptyText}>No athletes on your roster yet.</p>
         ) : (
