@@ -605,10 +605,8 @@ async function processTeam(team, week) {
   const emailMap = {}
   for (let i = 0; i < coaches.length; i++) {
     const u = emailResults[i]?.data?.user
-    console.log(`[Digest] Coach lookup — id:${coaches[i].id} name:"${coaches[i].full_name}" email:${u?.email || 'NOT FOUND'} digest_enabled:${coaches[i].digest_enabled}`)
     if (u?.email) emailMap[coaches[i].id] = u.email
   }
-  console.log(`[Digest] Team "${teamName}" — resolved coach emails:`, Object.values(emailMap))
 
   // ── 2. Athletes on this team ───────────────────────────────────────────────
   const { data: memberRows, error: memberErr } = await supabaseAdmin
@@ -627,18 +625,13 @@ async function processTeam(team, week) {
     full_name: m.profiles?.full_name || 'Athlete',
   }))
 
-  console.log(`[Digest] Team "${teamName}" — ${athletes.length} athlete(s) found`)
   if (!athletes.length) {
-    console.log(`[Digest] Team "${teamName}" has no athletes — skipping`)
     return
   }
 
   const athleteIds = athletes.map(a => a.id)
 
   // ── 3. Logs, surveys, and maxes in parallel ────────────────────────────────
-  console.log(`[Digest] Team "${teamName}" — querying ${athleteIds.length} athlete(s)`)
-  console.log(`[Digest] Week log window: ${week.start.toISOString()} → ${week.end.toISOString()}`)
-
   const [weekLogsRes, allLogsRes, injuryRes, surveyRes, weekMaxesRes, allMaxesRes] = await Promise.all([
     supabaseAdmin
       .from('workout_logs')
@@ -677,11 +670,6 @@ async function processTeam(team, week) {
       .in('athlete_id', athleteIds),
   ])
 
-  console.log(`[Digest] weekLogs: ${weekLogsRes.data?.length ?? 'ERR'} rows, err: ${weekLogsRes.error?.message || 'none'}`)
-  console.log(`[Digest] weekLogs statuses:`, JSON.stringify((weekLogsRes.data || []).map(l => l.status)))
-  console.log(`[Digest] allLogs: ${allLogsRes.data?.length ?? 'ERR'} rows total`)
-  console.log(`[Digest] weekMaxes: ${weekMaxesRes.data?.length ?? 'ERR'} rows`)
-
   // Most-recent survey per athlete (query is DESC, first-wins)
   const surveyMap = {}
   for (const s of (surveyRes.data || [])) {
@@ -702,7 +690,6 @@ async function processTeam(team, week) {
   // ── 5. Send to each coach ──────────────────────────────────────────────────
   const resend = new Resend(process.env.RESEND_API_KEY)
   const from   = 'Offseaz <brody@offseaz.com>'
-  console.log(`[Digest] Using from address: "${from}"`)
 
   for (const coach of coaches) {
     const email = emailMap[coach.id]
@@ -712,7 +699,6 @@ async function processTeam(team, week) {
     }
 
     if (!coach.digest_enabled) {
-      console.log(`[Digest] ${email} has digest disabled — skipping`)
       continue
     }
 
@@ -725,11 +711,8 @@ async function processTeam(team, week) {
         .limit(1)
 
       if (existing?.length) {
-        console.log(`[Digest] Already sent to ${email} for week ${week.weekStartDate} — skipping`)
         continue
       }
-    } else {
-      console.log(`[Digest] force=true — bypassing dedup for ${email}`)
     }
 
     const html = buildDigestHtml({
@@ -741,7 +724,6 @@ async function processTeam(team, week) {
       inviteCode,
     })
 
-    console.log(`[Digest] Attempting send → to:"${email}" subject:"Weekly Digest — ${teamName}"`)
     let status = 'sent'
     try {
       const resendRes = await resend.emails.send({
@@ -750,9 +732,7 @@ async function processTeam(team, week) {
         subject: `Weekly Digest — ${teamName} · ${week.label}`,
         html,
       })
-      console.log(`[Digest] Resend raw response:`, JSON.stringify({ data: resendRes.data, error: resendRes.error }))
       if (resendRes.error) throw new Error(resendRes.error.message || JSON.stringify(resendRes.error))
-      console.log(`[Digest] ✓ Sent to ${email} (${coach.isAssistant ? 'asst' : 'head'}) — ${teamName}`)
     } catch (err) {
       console.error(`[Digest] ✗ Email failed → ${email}:`, err.message)
       status = 'failed'
@@ -777,8 +757,6 @@ async function runWeeklyDigest({ force = false } = {}) {
   }
 
   const week = { ...(force ? getCurrentWeekRange() : getPreviousWeekRange()), force }
-  console.log(`[Digest] Starting weekly digest for ${week.label} (force=${force})`)
-  console.log(`[Digest] Query window: ${week.start.toISOString()} → ${week.end.toISOString()}`)
 
   const { data: teams, error } = await supabaseAdmin
     .from('teams')
@@ -789,11 +767,9 @@ async function runWeeklyDigest({ force = false } = {}) {
     return
   }
   if (!teams?.length) {
-    console.log('[Digest] No teams found')
     return
   }
 
-  console.log(`[Digest] Processing ${teams.length} team(s)`)
   for (const team of teams) {
     try {
       await processTeam(team, week)
@@ -801,7 +777,6 @@ async function runWeeklyDigest({ force = false } = {}) {
       console.error(`[Digest] Unhandled error for team ${team.id} ("${team.name}"):`, err.message)
     }
   }
-  console.log('[Digest] Done')
 }
 
 module.exports = { runWeeklyDigest }

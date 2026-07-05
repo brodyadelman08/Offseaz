@@ -98,34 +98,21 @@ async function addLiftSelection(athleteId, liftKey) {
 }
 
 async function removeLiftSelection(athleteId, liftKey) {
-  console.log('[removeLiftSelection] START — athleteId:', athleteId, '| liftKey:', liftKey, '| querying lifting_maxes column "lift"')
-
-  const { data: deletedMaxes, error: maxesErr } = await supabaseAdmin
+  // Zero rows deleted here is a legitimate no-op (the athlete never logged a
+  // max for this lift) — not an error condition.
+  const { error: maxesErr } = await supabaseAdmin
     .from('lifting_maxes')
     .delete()
     .eq('athlete_id', athleteId)
     .eq('lift', liftKey)
-    .select()
-
-  const rowsDeleted = Array.isArray(deletedMaxes) ? deletedMaxes.length : 0
-  console.log('[removeLiftSelection] lifting_maxes delete — athleteId:', athleteId, '| liftKey:', liftKey, '| rows deleted:', rowsDeleted, '| error:', maxesErr ? JSON.stringify(maxesErr) : 'none')
   if (maxesErr) throw maxesErr
-  if (rowsDeleted === 0) {
-    const err = new Error(`lifting_maxes delete returned 0 rows for athleteId:${athleteId} lift:${liftKey} — column "lift" used, verify data exists in table`)
-    console.error('[removeLiftSelection] ZERO ROWS DELETED:', err.message)
-    throw err
-  }
 
-  const { data: deletedSel, error } = await supabaseAdmin
+  const { error } = await supabaseAdmin
     .schema('public').from('athlete_lift_selections')
     .delete()
     .eq('athlete_id', athleteId)
     .eq('lift_key', liftKey)
-    .select()
-  console.log('[removeLiftSelection] athlete_lift_selections delete — rows deleted:', Array.isArray(deletedSel) ? deletedSel.length : 'unknown', '| error:', error ? JSON.stringify(error) : 'none')
   if (error) throw error
-
-  console.log('[removeLiftSelection] DONE — athleteId:', athleteId, '| liftKey:', liftKey)
 }
 
 // Atomically replaces all lift selections for an athlete with the provided list.

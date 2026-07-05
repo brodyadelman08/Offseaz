@@ -4,6 +4,8 @@ const { getAthleteProfile } = require('../services/athleteService')
 
 async function getMyGoals(req, res) {
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'athlete') return res.status(403).json({ error: 'Athlete only' })
     const goals = await getAthleteGoals(req.user.id)
     res.json({ goals })
   } catch (err) {
@@ -15,6 +17,8 @@ async function createGoalHandler(req, res) {
   const { title, target, due_date, source } = req.body
   if (!title?.trim()) return res.status(400).json({ error: 'Title is required' })
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'athlete') return res.status(403).json({ error: 'Athlete only' })
     const goal = await createGoal(req.user.id, {
       title: title.trim(),
       target: target?.trim() || null,
@@ -23,6 +27,7 @@ async function createGoalHandler(req, res) {
     })
     res.status(201).json({ goal })
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(400).json({ error: err.message })
   }
 }
@@ -30,9 +35,12 @@ async function createGoalHandler(req, res) {
 async function updateGoalHandler(req, res) {
   const { id } = req.params
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'athlete') return res.status(403).json({ error: 'Athlete only' })
     const goal = await updateGoal(id, req.user.id, req.body)
     res.json({ goal })
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(400).json({ error: err.message })
   }
 }
@@ -40,9 +48,12 @@ async function updateGoalHandler(req, res) {
 async function deleteGoalHandler(req, res) {
   const { id } = req.params
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'athlete') return res.status(403).json({ error: 'Athlete only' })
     await deleteGoal(id, req.user.id)
     res.json({ success: true })
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(400).json({ error: err.message })
   }
 }

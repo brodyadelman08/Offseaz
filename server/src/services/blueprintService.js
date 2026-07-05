@@ -234,6 +234,41 @@ async function getAthletePlan(athleteId) {
 async function deleteBlueprint(blueprintId) {
   // Delete child rows first so FK constraints don't block the parent delete.
   // (Supabase RLS / PostgREST needs explicit deletes unless DB-level CASCADE is set.)
+
+  // workout_logs is keyed by blueprint_week_id, not blueprint_id directly —
+  // look up this blueprint's week ids first so no log is left dangling.
+  const { data: weekRows, error: weekLookupErr } = await supabaseAdmin
+    .from('blueprint_weeks')
+    .select('id')
+    .eq('blueprint_id', blueprintId)
+  if (weekLookupErr) throw weekLookupErr
+
+  const weekIds = (weekRows || []).map(w => w.id)
+  if (weekIds.length > 0) {
+    const { error: logsErr } = await supabaseAdmin
+      .from('workout_logs')
+      .delete()
+      .in('blueprint_week_id', weekIds)
+    if (logsErr) throw logsErr
+  }
+
+  // athlete_plan_overrides is keyed by assignment_id, not blueprint_id directly —
+  // look up this blueprint's assignment ids first so no override is left orphaned.
+  const { data: assignmentRows, error: assignLookupErr } = await supabaseAdmin
+    .from('blueprint_assignments')
+    .select('id')
+    .eq('blueprint_id', blueprintId)
+  if (assignLookupErr) throw assignLookupErr
+
+  const assignmentIds = (assignmentRows || []).map(a => a.id)
+  if (assignmentIds.length > 0) {
+    const { error: overridesErr } = await supabaseAdmin
+      .from('athlete_plan_overrides')
+      .delete()
+      .in('assignment_id', assignmentIds)
+    if (overridesErr) throw overridesErr
+  }
+
   const { error: assignErr } = await supabaseAdmin
     .from('blueprint_assignments')
     .delete()

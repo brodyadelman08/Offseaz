@@ -367,8 +367,8 @@ export default function BlueprintBuilder() {
           <div style={s.dayGrid}>
             {sport.daysOptions.map(opt => (
               <button key={opt.days} style={{ ...s.dayCard, ...(generating ? { opacity: 0.6, cursor: 'default' } : {}) }} disabled={generating} onClick={() => selectDayPickerTemplate(opt.days)}
-                onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+                onMouseEnter={e => e.currentTarget.style.border = `2px solid ${ORANGE}`}
+                onMouseLeave={e => e.currentTarget.style.border = '2px solid var(--border)'}>
                 <span style={s.dayNumber}>{opt.days}</span>
                 <span style={s.dayLabel}>days / week</span>
                 <span style={s.dayDesc}>{opt.desc}</span>
@@ -394,8 +394,8 @@ export default function BlueprintBuilder() {
               <button key={goal.id} style={{ ...s.templateCard, ...(goal.id === 'muscle_gain' ? s.templateCardFeatured : {}), ...(generating ? { opacity: 0.6, cursor: 'default' } : {}) }}
                 disabled={generating}
                 onClick={() => selectSportTemplate(sport, pos, goal)}
-                onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = goal.id === 'muscle_gain' ? 'rgba(240,190,36,0.4)' : 'var(--border)'}>
+                onMouseEnter={e => e.currentTarget.style.border = `2px solid ${ORANGE}`}
+                onMouseLeave={e => e.currentTarget.style.border = goal.id === 'muscle_gain' ? '2px solid rgba(240,190,36,0.4)' : '2px solid var(--border)'}>
                 <span style={s.templateLabel}>{goal.label}</span>
                 <span style={s.templateDesc}>{goal.desc}</span>
               </button>
@@ -425,8 +425,8 @@ export default function BlueprintBuilder() {
           <div style={s.templateGrid}>
             {TEMPLATES.map(tpl => (
               <button key={tpl.label} style={s.templateCard} onClick={() => selectTemplate(tpl)}
-                onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                onMouseLeave={e => e.currentTarget.style.borderColor = 'var(--border)'}>
+                onMouseEnter={e => e.currentTarget.style.border = `2px solid ${ORANGE}`}
+                onMouseLeave={e => e.currentTarget.style.border = '2px solid var(--border)'}>
                 <div style={s.templateIconWrap}><tpl.Icon size={22} color={ORANGE} /></div>
                 <span style={s.templateLabel}>{tpl.label}</span>
                 <span style={s.templateDesc}>{tpl.description}</span>
@@ -441,8 +441,8 @@ export default function BlueprintBuilder() {
               {activeSport.positions.map(pos => (
                 <button key={pos.id} style={{ ...s.templateCard, ...s.templateCardFeatured }}
                   onClick={() => activeSport.daysPerWeekPicker ? setDaysPick({ sport: activeSport, pos }) : setGoalPick({ sport: activeSport, pos })}
-                  onMouseEnter={e => e.currentTarget.style.borderColor = ORANGE}
-                  onMouseLeave={e => e.currentTarget.style.borderColor = 'rgba(240,190,36,0.4)'}>
+                  onMouseEnter={e => e.currentTarget.style.border = `2px solid ${ORANGE}`}
+                  onMouseLeave={e => e.currentTarget.style.border = '2px solid rgba(240,190,36,0.4)'}>
                   <span style={s.templateLabel}>{pos.label}</span>
                   <span style={{ ...s.templateBadge, color: ORANGE, background: 'rgba(247,87,9,0.1)' }}>{pos.sublabel}</span>
                   <span style={s.templateDesc}>{pos.desc}</span>
@@ -702,7 +702,7 @@ const s = {
   phasePct: { fontSize: 12, fontWeight: 700, color: ORANGE, whiteSpace: 'nowrap' },
   sportTabBar: { display: 'flex', gap: 6, overflowX: 'auto', paddingBottom: 12, marginBottom: 16, scrollbarWidth: 'none' },
   sportTabBtn: { flexShrink: 0, padding: '7px 14px', fontSize: 13, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer', transition: 'all 0.15s', whiteSpace: 'nowrap' },
-  sportTabBtnActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.07)' },
+  sportTabBtnActive: { border: `1.5px solid ${ORANGE}`, color: ORANGE, background: 'rgba(247,87,9,0.07)' },
   sportMeta: { fontSize: 12, color: 'var(--text-3)', fontWeight: 600, marginBottom: 14, textTransform: 'uppercase', letterSpacing: 0.4 },
 }
 
@@ -772,10 +772,10 @@ const g = {
   mobileObjectiveText: { fontSize: 13, color: 'var(--text-2)', lineHeight: 1.4 },
   weekTabs: { display: 'flex', gap: 4, overflowX: 'auto', scrollbarWidth: 'none', paddingBottom: 4, WebkitOverflowScrolling: 'touch' },
   weekTab: { flexShrink: 0, padding: '6px 12px', fontSize: 12, fontWeight: 600, borderRadius: 20, border: '1.5px solid var(--border)', background: 'transparent', color: 'var(--text-2)', cursor: 'pointer' },
-  weekTabActive: { borderColor: ORANGE, color: ORANGE, background: 'rgba(247,87,9,0.08)' },
+  weekTabActive: { border: `1.5px solid ${ORANGE}`, color: ORANGE, background: 'rgba(247,87,9,0.08)' },
   mobileCards: { display: 'flex', flexDirection: 'column', gap: 10 },
   mobileCard: { padding: 14, borderRadius: 12, border: '1px solid var(--border)', background: 'var(--card)' },
-  mobileCardLocked: { borderColor: 'rgba(247,87,9,0.3)', background: 'rgba(247,87,9,0.03)' },
+  mobileCardLocked: { border: '1px solid rgba(247,87,9,0.3)', background: 'rgba(247,87,9,0.03)' },
   mobileCardHeader: { display: 'flex', alignItems: 'center', gap: 8, marginBottom: 8 },
   mobileCardDay: { fontSize: 13, fontWeight: 700, color: 'var(--text)', flex: 1 },
   lockBadge: { fontSize: 11, color: ORANGE, fontWeight: 600 },

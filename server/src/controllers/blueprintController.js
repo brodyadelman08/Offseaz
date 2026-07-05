@@ -73,6 +73,28 @@ async function create(req, res) {
     return res.status(400).json({ error: 'num_weeks must be between 1 and 16' })
   }
 
+  const numWeeksInt = parseInt(num_weeks, 10)
+
+  if (!Array.isArray(weeks) || weeks.length !== numWeeksInt) {
+    return res.status(400).json({ error: `weeks must be an array with exactly ${numWeeksInt} entries to match num_weeks` })
+  }
+
+  const seenWeekNumbers = new Set()
+  for (const week of weeks) {
+    const wn = week?.week_number
+    if (!Number.isInteger(wn) || wn < 1 || wn > numWeeksInt) {
+      return res.status(400).json({ error: `Each week must have a week_number between 1 and ${numWeeksInt}` })
+    }
+    if (seenWeekNumbers.has(wn)) {
+      return res.status(400).json({ error: `Duplicate week_number ${wn} found in weeks` })
+    }
+    seenWeekNumbers.add(wn)
+
+    if (week.sessions !== undefined && (!Array.isArray(week.sessions) || week.sessions.length > 20)) {
+      return res.status(400).json({ error: `Week ${wn} has too many sessions — max 20 sessions per week` })
+    }
+  }
+
   try {
     const profile = await getProfile(req.user.id)
     if (profile.role !== 'coach') {

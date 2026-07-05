@@ -50,12 +50,10 @@ async function complete(req, res) {
         action,
       })
 
-    // Non-fatal if the table doesn't exist yet — athlete flow still proceeds
-    if (insertErr) {
-      console.error('[programController/complete] insert error (non-fatal):', insertErr.message)
-    }
+    if (insertErr) throw insertErr
 
-    // Notify coach when athlete is waiting for a new plan
+    // Notify coach when athlete is waiting for a new plan — only after the
+    // completion event above is confirmed persisted.
     if (action === 'wait_for_coach' && team?.coach_id) {
       const athleteName = profile.full_name || 'An athlete'
       createProgramCompletionNotification(team.coach_id, req.user.id, athleteName).catch(e =>

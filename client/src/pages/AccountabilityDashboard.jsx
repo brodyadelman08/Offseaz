@@ -100,14 +100,8 @@ function AccountabilityInner() {
   const [apiError, setApiError] = useState(null)
 
   useEffect(() => {
-    console.log('[AccountabilityDashboard] Fetching accountability data…')
     api.get('/api/workouts/accountability')
       .then(res => {
-        console.log('[AccountabilityDashboard] Data received:', {
-          athletes: res.data?.athletes?.length,
-          logs: res.data?.logs?.length,
-          rawKeys: Object.keys(res.data || {}),
-        })
         setData(res.data)
       })
       .catch(err => {
@@ -120,18 +114,6 @@ function AccountabilityInner() {
 
   const athletes = data?.athletes || []
   const logs = data?.logs || []
-
-  // Log unexpected data shapes that could cause render crashes
-  if (!loading && data) {
-    logs.forEach((log, i) => {
-      if (!LOG_STATUS[log.status]) {
-        console.warn(`[AccountabilityDashboard] Log[${i}] has unknown status "${log.status}" — id:`, log.id)
-      }
-      if (!log.id) {
-        console.warn(`[AccountabilityDashboard] Log[${i}] has no id:`, log)
-      }
-    })
-  }
 
   const filtered = athletes.filter(a => {
     if (filter === 'logged')    return a.logged_this_week

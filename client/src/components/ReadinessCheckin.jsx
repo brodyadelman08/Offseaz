@@ -115,9 +115,9 @@ export default function ReadinessCheckin({ onComplete, onDismiss }) {
         </div>
 
         {/* Questions */}
-        <ScoreRow {...QUESTIONS[0]} value={sleep}    onChange={setSleep} />
-        <ScoreRow {...QUESTIONS[1]} value={soreness} onChange={setSoreness} />
-        <ScoreRow {...QUESTIONS[2]} value={energy}   onChange={setEnergy} />
+        <ScoreRow label={QUESTIONS[0].label} low={QUESTIONS[0].low} high={QUESTIONS[0].high} value={sleep}    onChange={setSleep} />
+        <ScoreRow label={QUESTIONS[1].label} low={QUESTIONS[1].low} high={QUESTIONS[1].high} value={soreness} onChange={setSoreness} />
+        <ScoreRow label={QUESTIONS[2].label} low={QUESTIONS[2].low} high={QUESTIONS[2].high} value={energy}   onChange={setEnergy} />
 
         {/* Training vs Rest */}
         <p style={s.dayTypeLabel}>Is today a training or rest day?</p>

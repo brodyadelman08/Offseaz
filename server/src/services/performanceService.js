@@ -83,7 +83,6 @@ async function getSelections(athleteId) {
 
   const rows = selections || []
   if (rows.length === 0) {
-    console.log(`[performanceService] getSelections(${athleteId}) -> 0 rows`)
     return []
   }
 
@@ -109,7 +108,6 @@ async function getSelections(athleteId) {
     performance_prs: prMap[r.id] ? [prMap[r.id]] : [],
   }))
 
-  console.log(`[performanceService] getSelections(${athleteId}) -> ${result.length} rows:`, result.map(d => ({ id: d.id, metric_id: d.metric_id, sub_type_id: d.sub_type_id, has_pr: d.performance_prs.length > 0 })))
   return result
 }
 
@@ -145,7 +143,6 @@ async function addSelection(athleteId, metricId, subTypeId) {
     const { data: existingRows, error: existingErr } = await existingQuery
 
     if (!existingErr && existingRows && existingRows.length > 0) {
-      console.log('[performanceService] addSelection: genuine duplicate for this athlete, returning existing row', existingRows[0])
       return existingRows[0]
     }
 
@@ -158,8 +155,6 @@ async function addSelection(athleteId, metricId, subTypeId) {
 }
 
 async function removeSelection(athleteId, selectionId) {
-  console.log('[removeSelection] called', { athleteId, selectionId })
-
   // Verify ownership before touching any associated data
   const { data: sel, error: checkErr } = await supabaseAdmin
     .schema('public').from('athlete_metric_selections')
@@ -169,30 +164,23 @@ async function removeSelection(athleteId, selectionId) {
     .maybeSingle()
   if (checkErr) throw checkErr
   if (!sel) throw new Error('Selection not found or access denied')
-  console.log('[removeSelection] ownership verified, sel.id:', sel.id)
 
   // Delete related logs first
-  const { data: deletedLogs, error: logsErr } = await supabaseAdmin
+  const { error: logsErr } = await supabaseAdmin
     .from('performance_logs')
     .delete()
     .eq('selection_id', selectionId)
-    .select()
   if (logsErr) {
     console.error('[removeSelection] performance_logs delete FAILED:', { code: logsErr.code, message: logsErr.message, hint: logsErr.hint })
-  } else {
-    console.log('[removeSelection] performance_logs deleted:', deletedLogs?.length ?? 0, 'rows')
   }
 
   // Delete related PR record
-  const { data: deletedPRs, error: prsErr } = await supabaseAdmin
+  const { error: prsErr } = await supabaseAdmin
     .from('performance_prs')
     .delete()
     .eq('selection_id', selectionId)
-    .select()
   if (prsErr) {
     console.error('[removeSelection] performance_prs delete FAILED:', { code: prsErr.code, message: prsErr.message, hint: prsErr.hint })
-  } else {
-    console.log('[removeSelection] performance_prs deleted:', deletedPRs?.length ?? 0, 'rows')
   }
 
   // Delete the selection itself
@@ -202,12 +190,9 @@ async function removeSelection(athleteId, selectionId) {
     .eq('id', selectionId)
     .eq('athlete_id', athleteId)
   if (error) throw error
-  console.log('[removeSelection] athlete_metric_selections row deleted for id:', selectionId)
 }
 
 async function logValue(athleteId, selectionId, value) {
-  console.log('[logValue] called', { athleteId, selectionId, value })
-
   // Verify ownership and get metric info
   const { data: sel, error: selErr } = await supabaseAdmin
     .schema('public').from('athlete_metric_selections')
@@ -238,10 +223,8 @@ async function logValue(athleteId, selectionId, value) {
   const previousBest = currentPR ? Number(currentPR.best_value) : null
   const isPR = previousBest === null
     || (def.lowerIsBetter ? numValue < previousBest : numValue > previousBest)
-  console.log('[logValue] isPR:', isPR, 'previousBest:', previousBest, 'numValue:', numValue)
 
   // Insert log entry
-  console.log('[logValue] inserting into performance_logs:', { athlete_id: athleteId, selection_id: selectionId, value: numValue })
   const { data: log, error: logErr } = await supabaseAdmin
     .from('performance_logs')
     .insert({ athlete_id: athleteId, selection_id: selectionId, value: numValue })
@@ -252,23 +235,17 @@ async function logValue(athleteId, selectionId, value) {
     console.error('[logValue] performance_logs insert FAILED:', { code: logErr.code, message: logErr.message, details: logErr.details, hint: logErr.hint })
     throw logErr
   }
-  console.log('[logValue] performance_logs insert OK — id:', log?.id, 'value:', log?.value)
 
   // Upsert PR if new best
   if (isPR) {
     const prPayload = { selection_id: selectionId, best_value: numValue, previous_value: previousBest, updated_at: new Date().toISOString() }
-    console.log('[logValue] upserting into performance_prs:', prPayload)
-    const { data: prData, error: prErr } = await supabaseAdmin
+    const { error: prErr } = await supabaseAdmin
       .from('performance_prs')
       .upsert(prPayload, { onConflict: 'selection_id' })
-      .select()
     if (prErr) {
       console.error('[logValue] performance_prs upsert FAILED:', { code: prErr.code, message: prErr.message, details: prErr.details, hint: prErr.hint })
       throw prErr
     }
-    console.log('[logValue] performance_prs upsert OK — rows written:', prData?.length, 'data:', JSON.stringify(prData))
-  } else {
-    console.log('[logValue] not a PR — skipping performance_prs upsert')
   }
 
   return { log, is_pr: isPR, previous_best: previousBest }
