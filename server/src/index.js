@@ -20,12 +20,45 @@ const contactRoutes  = require('./routes/contact')
 const checkinsRoutes     = require('./routes/checkins')
 const leaderboardRoutes  = require('./routes/leaderboard')
 const performanceRoutes  = require('./routes/performance')
+const { registrationLimiter, contactLimiter, inviteCodeLimiter } = require('./middleware/rateLimiter')
 
 const app = express()
 const PORT = process.env.PORT || 3000
 
+// Railway sits in front of this app as a reverse proxy, so req.ip is the
+// proxy's address unless we trust the X-Forwarded-For header it sets.
+// Required for express-rate-limit to key on the real client IP instead of
+// treating every request as coming from the same address.
+app.set('trust proxy', 1)
+
+// ─── CORS ───────────────────────────────────────────────────────────────────
+// CORS_ORIGIN should always be set explicitly in production (see
+// server/.env.example). If it's ever missing, do NOT silently fall back to
+// a wildcard in production — that would accept cross-origin requests from
+// any domain. Wildcard is only an acceptable default in local development.
+const PRODUCTION_DEFAULT_ORIGINS = ['https://offseaz.com', 'https://www.offseaz.com']
+const isProduction = process.env.NODE_ENV === 'production'
+const rawCorsOrigin = process.env.CORS_ORIGIN
+
+let corsOrigin
+let corsOriginSource
+if (rawCorsOrigin) {
+  corsOrigin = rawCorsOrigin.split(',').map(o => o.trim())
+  corsOriginSource = 'CORS_ORIGIN env var'
+} else if (isProduction) {
+  corsOrigin = PRODUCTION_DEFAULT_ORIGINS
+  corsOriginSource = 'CORS_ORIGIN not set — using hardcoded production default, NOT wildcard'
+} else {
+  corsOrigin = '*'
+  corsOriginSource = 'dev default (CORS_ORIGIN not set, NODE_ENV is not "production")'
+}
+
+// Always visible in Railway logs on every deploy so a missing/misconfigured
+// CORS_ORIGIN is never silent.
+console.log(`[CORS] Active origin: ${JSON.stringify(corsOrigin)} (${corsOriginSource})`)
+
 app.use(cors({
-  origin: process.env.CORS_ORIGIN || '*',
+  origin: corsOrigin,
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }))
@@ -34,6 +67,14 @@ app.use(express.json({ limit: '15mb' })) // avatar base64 uploads compressed cli
 app.get('/', (req, res) => {
   res.json({ status: 'ok' })
 })
+
+// ─── Rate limiters ──────────────────────────────────────────────────────────
+// Applied to specific sub-paths before the route modules that actually
+// handle them, so the limiter runs first and falls through via next().
+app.use('/api/auth/register', registrationLimiter)
+app.use('/api/contact', contactLimiter)
+app.use('/api/teams/join', inviteCodeLimiter)
+app.use('/api/teams/join-as-coach', inviteCodeLimiter)
 
 app.use('/api/auth', authRoutes)
 app.use('/api/teams', teamsRoutes)

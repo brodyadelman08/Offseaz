@@ -116,6 +116,19 @@ Both paths call `POST /api/teams/join` with `{ invite_code }`. The code is alway
 - **`PGRST116`** — Supabase "row not found". Treated as 404 in most controllers; triggers auto-create in the profile endpoint.
 - **`23505`** — Postgres unique constraint violation. Returned as 409 in register (duplicate profile) and join team (already a member).
 
+## Security
+
+**No Row Level Security (RLS) policies are configured on any Supabase table.** The database currently has zero RLS policies. The only thing preventing one user from reading or modifying another user's data is that:
+
+1. Every server-side query uses the Supabase **service-role key** (`SUPABASE_SERVICE_ROLE_KEY`), which bypasses RLS entirely, and
+2. All authorization — role checks, team-membership checks, ownership checks — is enforced by hand in application code inside route handlers and services, not by the database.
+
+This means the application relies **entirely on server-side authorization checks**, with no database-level safety net behind them. Concretely:
+
+- **The service-role key must never be exposed to the client.** It lives only in `server/.env` (never committed) and must never be sent in an API response, bundled into client-side code, or logged.
+- **Any new feature that queries Supabase must go through the server API layer — never directly from the browser.** `client/src/services/supabase.js` (the anon-key client) exists *only* for `supabase.auth.*` calls (sign up, sign in, session/token management). All data reads and writes must go through `client/src/services/api.js` → `server/src/routes` → `controllers` → `services`. A direct `supabase.from(...)` call from client code would bypass every authorization check this app has, since there's no RLS layer to catch what application code misses.
+- **Adding RLS policies is a planned improvement for a future security hardening pass** — it has not been done yet. Until it is, do not assume the database provides any protection on its own; every new endpoint needs its own explicit ownership/role check, following the existing pattern in `server/src/services/athleteService.js`'s `getAthleteProfile(athleteId, coachId)`.
+
 ## Brand colors (for UI work)
 
 ```
