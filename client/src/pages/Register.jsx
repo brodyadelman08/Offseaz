@@ -58,11 +58,32 @@ export default function Register() {
 
     try {
       await api.post('/api/auth/register', { userId: data.user.id, role, full_name: fullName })
+    } catch (err) {
+      const message = err.response?.data?.error || ''
+      const isAlreadyExists = err.response?.status === 409 && /already exists/i.test(message)
 
+      if (!isAlreadyExists) {
+        setError(message || 'Registration failed. Please try again.')
+        setLoading(false)
+        return
+      }
+
+      // The profile row was actually created — the server's self-heal path
+      // (GET /api/auth/profile auto-creating a missing row from user_metadata)
+      // won a race against this very insert. The account is real and these
+      // credentials are valid, so log the user in instead of showing an error.
+      const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
+      if (signInError) {
+        setError('Registration failed. Please try again.')
+        setLoading(false)
+        return
+      }
+    }
+
+    try {
       if (inviteCode && role === 'athlete') {
         await api.post('/api/teams/join', { invite_code: inviteCode })
       }
-
       navigate(role === 'coach' ? '/coach' : '/athlete')
     } catch (err) {
       setError(err.response?.data?.error || 'Registration failed. Please try again.')
