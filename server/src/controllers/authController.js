@@ -52,6 +52,18 @@ async function profile(req, res) {
         console.log('[authController] auto-created missing profile | userId:', req.user.id, '| role:', role)
         return res.json({ profile: created })
       } catch (createErr) {
+        if (createErr.code === '23505') {
+          // Profile was already created (e.g. by /register moments earlier) —
+          // this is not a failure, just a race with the read above.
+          try {
+            const existing = await getProfile(req.user.id)
+            console.log('[authController] self-heal race resolved, profile already existed | userId:', req.user.id)
+            return res.json({ profile: existing })
+          } catch (fetchErr) {
+            console.error('[authController] failed to fetch existing profile after duplicate-key race:', fetchErr.message, '| userId:', req.user.id)
+            return res.status(500).json({ error: fetchErr.message })
+          }
+        }
         console.error('[authController] auto-create profile failed:', createErr.message, '| userId:', req.user.id)
         return res.status(500).json({ error: createErr.message })
       }

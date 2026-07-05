@@ -275,11 +275,13 @@ async function logValue(athleteId, selectionId, value) {
 }
 
 async function getHistory(athleteId, selectionId) {
-  // Verify the selection belongs to this athlete (or allow any authenticated user for coach reads)
+  // Filter by both selection_id and athlete_id so a guessed/leaked selectionId
+  // can never return another athlete's logged history.
   const { data, error } = await supabaseAdmin
     .from('performance_logs')
     .select('id, value, logged_at')
     .eq('selection_id', selectionId)
+    .eq('athlete_id', athleteId)
     .order('logged_at', { ascending: false })
 
   if (error) throw error

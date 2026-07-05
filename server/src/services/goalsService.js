@@ -20,8 +20,13 @@ async function createGoal(athleteId, { title, target, due_date, source = 'custom
   return data
 }
 
+const UPDATABLE_FIELDS = ['title', 'target', 'due_date', 'completed']
+
 async function updateGoal(goalId, athleteId, updates) {
-  const patch = { ...updates }
+  const patch = {}
+  for (const field of UPDATABLE_FIELDS) {
+    if (Object.prototype.hasOwnProperty.call(updates, field)) patch[field] = updates[field]
+  }
   if (patch.completed === true && !patch.completed_at) {
     patch.completed_at = new Date().toISOString()
   } else if (patch.completed === false) {

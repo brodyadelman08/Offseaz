@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react'
+import { useState, useEffect, useRef } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
 import { useTeam } from '../context/TeamContext'
@@ -143,6 +143,7 @@ export default function AthleteDashboard() {
   const [goalTarget,   setGoalTarget]   = useState('')
   const [goalDue,      setGoalDue]      = useState('')
   const [savingGoal,   setSavingGoal]   = useState(false)
+  const hasSeededGoals = useRef(false)
 
   useEffect(() => {
     api.get('/api/checkins/today')
@@ -170,7 +171,8 @@ export default function AthleteDashboard() {
       setAutoPlan(plans.auto)
       setGoals(goalsData)
 
-      if (goalsData.length === 0 && surveyData?.offseason_goals?.length > 0) {
+      if (goalsData.length === 0 && surveyData?.offseason_goals?.length > 0 && !hasSeededGoals.current) {
+        hasSeededGoals.current = true
         const suggestions = surveyGoalsToSuggestions(surveyData.offseason_goals)
         Promise.all(
           suggestions.map(s =>

@@ -306,9 +306,42 @@ async function getTeammateProfile(viewerId, targetId) {
 // ─── Remove athlete from team ──────────────────────────────────────────────────
 
 /**
- * Removes an athlete from a team by teamId.
+ * Removes an athlete from a team by teamId, cascading cleanup of every
+ * team-scoped record tied to that athlete so nothing resurfaces if they
+ * rejoin (this team or another).
  */
 async function removeAthlete(teamId, athleteId) {
+  const { data: team } = await supabaseAdmin
+    .from('teams')
+    .select('coach_id')
+    .eq('id', teamId)
+    .maybeSingle()
+
+  // blueprint_assignments and survey_responses have both athlete_id and team_id
+  await supabaseAdmin.from('blueprint_assignments').delete()
+    .eq('athlete_id', athleteId).eq('team_id', teamId)
+  await supabaseAdmin.from('survey_responses').delete()
+    .eq('athlete_id', athleteId).eq('team_id', teamId)
+
+  // workout_logs, athlete_goals, daily_checkins have no team_id column —
+  // they're scoped to the athlete only
+  await supabaseAdmin.from('workout_logs').delete().eq('athlete_id', athleteId)
+  await supabaseAdmin.from('athlete_goals').delete().eq('athlete_id', athleteId)
+  await supabaseAdmin.from('daily_checkins').delete().eq('athlete_id', athleteId)
+
+  // coach_notes is keyed by (coach_id, athlete_id), not team_id
+  if (team?.coach_id) {
+    await supabaseAdmin.from('coach_notes').delete()
+      .eq('coach_id', team.coach_id).eq('athlete_id', athleteId)
+  }
+
+  // team_messages has team_id but no athlete_id column — the athlete can
+  // appear as either sender or recipient
+  await supabaseAdmin.from('team_messages').delete()
+    .eq('team_id', teamId).eq('sender_id', athleteId)
+  await supabaseAdmin.from('team_messages').delete()
+    .eq('team_id', teamId).eq('recipient_id', athleteId)
+
   const { error } = await supabaseAdmin
     .from('team_members')
     .delete()

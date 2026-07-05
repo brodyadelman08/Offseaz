@@ -18,10 +18,14 @@ router.post('/', async (req, res) => {
     return res.status(500).json({ error: 'Email service is not configured.' })
   }
 
+  const escapeHtml = str => String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
+
   const resend    = new Resend(key)
   const from      = 'Offseaz <brody@offseaz.com>'
   const roleLabel = ROLE_LABELS[role] || role
-  const safeMsg   = message.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/\n/g, '<br>')
+  const safeName  = escapeHtml(name)
+  const safeEmail = escapeHtml(email)
+  const safeMsg   = escapeHtml(message).replace(/\n/g, '<br>')
 
   const html = `
 <!DOCTYPE html>
@@ -39,12 +43,12 @@ router.post('/', async (req, res) => {
           <table cellpadding="0" cellspacing="0" style="width:100%;border-collapse:collapse;">
             <tr>
               <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px;color:#888;width:80px;vertical-align:top;">Name</td>
-              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:600;color:#111;">${name}</td>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px;font-weight:600;color:#111;">${safeName}</td>
             </tr>
             <tr>
               <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px;color:#888;vertical-align:top;">Email</td>
               <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px;color:#111;">
-                <a href="mailto:${email}" style="color:#308EBD;text-decoration:none;">${email}</a>
+                <a href="mailto:${safeEmail}" style="color:#308EBD;text-decoration:none;">${safeEmail}</a>
               </td>
             </tr>
             <tr>
