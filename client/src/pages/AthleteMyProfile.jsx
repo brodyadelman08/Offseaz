@@ -5,6 +5,7 @@ import api from '../services/api'
 import { FlameIcon, CalendarIcon, EditIcon, PlusIcon, ChevronDownIcon, ChevronUpIcon, ClipboardIcon, BoltIcon, StatusInjuryIcon } from '../components/Icons'
 import AvatarUpload from '../components/AvatarUpload'
 import PRCelebration from '../components/PRCelebration'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -361,7 +362,7 @@ function AddMetricsModal({ existingSelections, onSave, onClose }) {
 // ─── Main page ────────────────────────────────────────────────────────────────
 
 export default function AthleteMyProfile() {
-  const { profile, updateProfile } = useAuth()
+  const { profile, updateProfile, signOut } = useAuth()
   const navigate = useNavigate()
   const [survey, setSurvey] = useState(null)
   const [coachPlan, setCoachPlan] = useState(null)
@@ -402,6 +403,9 @@ export default function AthleteMyProfile() {
   const [perfHistOpen,   setPerfHistOpen]   = useState({}) // { [selectionId]: bool }
   const [perfHistData,   setPerfHistData]   = useState({}) // { [selectionId]: entries[] }
   const [confirmRemove, setConfirmRemove] = useState(null) // { type: 'lift'|'metric', key?, label?, selId?, name? }
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false)
+  const [deletingAccount,   setDeletingAccount]   = useState(false)
+  const [deleteAccountErr,  setDeleteAccountErr]  = useState('')
   const [isMobile, setIsMobile] = useState(() => window.innerWidth < 600)
   useEffect(() => {
     const check = () => setIsMobile(window.innerWidth < 600)
@@ -471,6 +475,19 @@ export default function AthleteMyProfile() {
       console.error('Failed to update privacy:', err)
     } finally {
       setSavingPrivacy(false)
+    }
+  }
+
+  async function handleDeleteAccount() {
+    setDeletingAccount(true)
+    setDeleteAccountErr('')
+    try {
+      await api.delete('/api/auth/account')
+      await signOut()
+      window.location.href = '/'
+    } catch (err) {
+      setDeleteAccountErr(err.response?.data?.error || 'Failed to delete account.')
+      setDeletingAccount(false)
     }
   }
 
@@ -1105,6 +1122,37 @@ export default function AthleteMyProfile() {
           </div>
         )}
       </div>
+
+      {/* Danger zone */}
+      <div style={{ ...styles.card, marginTop: 14, borderColor: 'rgba(220,38,38,0.30)' }}>
+        <p style={{ ...styles.cardLabel, color: RED }}>Danger Zone</p>
+        <div style={styles.privacyRow}>
+          <div>
+            <p style={styles.privacyTitle}>Delete My Account</p>
+            <p style={styles.privacySub}>
+              Permanently delete your account, workout logs, PRs, goals, and survey data.
+            </p>
+          </div>
+          <button
+            style={{ ...styles.privacyBtn, borderColor: RED, color: RED }}
+            onClick={() => setShowDeleteAccount(true)}
+          >
+            Delete Account
+          </button>
+        </div>
+      </div>
+
+      {showDeleteAccount && (
+        <ConfirmDeleteModal
+          title="Delete Your Account?"
+          warningText="This will permanently delete your account, all workout logs, PRs, goals, survey data, and remove you from all teams. This cannot be undone."
+          confirmLabel="Delete My Account"
+          loading={deletingAccount}
+          error={deleteAccountErr}
+          onConfirm={handleDeleteAccount}
+          onCancel={() => { setShowDeleteAccount(false); setDeleteAccountErr('') }}
+        />
+      )}
     </div>
   )
 }

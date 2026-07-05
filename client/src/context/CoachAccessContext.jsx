@@ -9,6 +9,7 @@ export function CoachAccessProvider({ children }) {
   const [teams, setTeams]               = useState([])
   const [accessByTeam, setAccessByTeam] = useState({})
   const [loading, setLoading]           = useState(true)
+  const [notifications, setNotifications] = useState([])
   const [activeTeamId, _setActiveTeamId] = useState(
     () => localStorage.getItem('offseaz_active_coach_team') || null
   )
@@ -34,7 +35,18 @@ export function CoachAccessProvider({ children }) {
     finally { setLoading(false) }
   }, [profile?.id, profile?.role])
 
+  // Fetched here once and shared via context so Sidebar's notification badge
+  // and CoachDashboard's notification list don't each fire their own request.
+  const refreshNotifications = useCallback(async () => {
+    if (!profile || profile.role !== 'coach') { setNotifications([]); return }
+    try {
+      const res = await api.get('/api/notifications')
+      setNotifications(res.data.notifications || [])
+    } catch { /* non-fatal */ }
+  }, [profile?.id, profile?.role])
+
   useEffect(() => { refresh() }, [refresh])
+  useEffect(() => { refreshNotifications() }, [refreshNotifications])
 
   function setActiveTeamId(id) {
     _setActiveTeamId(id)
@@ -58,6 +70,8 @@ export function CoachAccessProvider({ children }) {
       canEdit,
       loading,
       refresh,
+      notifications,
+      refreshNotifications,
     }}>
       {children}
     </CoachAccessContext.Provider>

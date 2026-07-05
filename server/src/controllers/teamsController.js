@@ -16,6 +16,8 @@ const {
 } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
 const { createCoachJoinNotification } = require('../services/notificationService')
+const { deleteTeamData } = require('../services/accountDeletionService')
+const { sendError } = require('../utils/errorResponse')
 
 // ─── Create team ──────────────────────────────────────────────────────────────
 
@@ -252,6 +254,26 @@ async function transferOwnership(req, res) {
   }
 }
 
+// ─── Delete team ───────────────────────────────────────────────────────────────
+//
+// Distinct from full account deletion — removes one team and everything
+// scoped to it (athletes are unlinked, not deleted). Only the head coach who
+// owns the team may do this.
+async function deleteTeam(req, res) {
+  const { teamId } = req.params
+  try {
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, teamId)
+    if (!team || accessLevel !== 'head_coach') {
+      return res.status(403).json({ error: 'Only the head coach can delete this team' })
+    }
+    await deleteTeamData(teamId)
+    res.json({ ok: true })
+  } catch (err) {
+    console.error('[deleteTeam] error:', err.message, '| teamId:', teamId)
+    sendError(res, err, 'Failed to delete team.')
+  }
+}
+
 module.exports = {
   create,
   mine,
@@ -264,4 +286,5 @@ module.exports = {
   athleteTeams,
   myCoachTeams,
   transferOwnership,
+  deleteTeam,
 }

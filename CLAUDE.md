@@ -82,7 +82,7 @@ Roles are stored in the `profiles` table, not in the JWT. `AuthContext` fetches 
 | `profiles` | One row per user — `id` matches `auth.users.id`, stores `role` and `full_name` |
 | `teams` | Owned by a coach (`coach_id`); has an `invite_code` (8-char lowercase hex) |
 | `team_members` | Join table: `team_id` + `athlete_id` |
-| `surveys` | One per athlete; `completed_at` timestamp signals completion |
+| `survey_responses` | One per athlete; `completed_at` timestamp signals completion |
 | `blueprints` | Training plans; owned by a coach, assigned to an athlete |
 | `blueprint_weeks` | Child of blueprint; `sessions` is a JSONB array of session objects |
 | `workout_logs` | Athlete logs; references `blueprint_week_id` + `session_index` |

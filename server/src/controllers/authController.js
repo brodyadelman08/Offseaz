@@ -1,5 +1,8 @@
 const supabaseAdmin = require('../config/supabase')
 const { createProfile, getProfile } = require('../services/authService')
+const { sendError } = require('../utils/errorResponse')
+const { rejectIfOversized } = require('../utils/uploadLimits')
+const { deleteAthleteAccount, deleteCoachAccount } = require('../services/accountDeletionService')
 
 async function register(req, res) {
   const { userId, role, full_name } = req.body
@@ -35,7 +38,7 @@ async function register(req, res) {
       return res.status(409).json({ error: 'Profile already exists' })
     }
     console.error('[register] createProfile error:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to create profile.')
   }
 }
 
@@ -70,16 +73,16 @@ async function profile(req, res) {
             return res.json({ profile: existing })
           } catch (fetchErr) {
             console.error('[authController] failed to fetch existing profile after duplicate-key race:', fetchErr.message, '| userId:', req.user.id)
-            return res.status(500).json({ error: fetchErr.message })
+            return sendError(res, fetchErr, 'Failed to load profile.')
           }
         }
         console.error('[authController] auto-create profile failed:', createErr.message, '| userId:', req.user.id)
-        return res.status(500).json({ error: createErr.message })
+        return sendError(res, createErr, 'Failed to load profile.')
       }
     }
 
     console.error('[authController] getProfile error:', err.message, '| code:', err.code, '| userId:', req.user.id)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load profile.')
   }
 }
 
@@ -100,9 +103,13 @@ async function updateAvatar(req, res) {
   }
 
   try {
-    // Decode base64 data URL → Buffer
     const base64 = dataUrl.split(',')[1]
     if (!base64) return res.status(400).json({ error: 'Invalid dataUrl format' })
+
+    // Reject oversized payloads by declared size BEFORE decoding to binary —
+    // avoids allocating a large Buffer for a request we're going to reject anyway.
+    if (rejectIfOversized(req, res, base64)) return
+
     const buffer = Buffer.from(base64, 'base64')
 
     if (buffer.length > 4 * 1024 * 1024) {
@@ -140,7 +147,7 @@ async function updateAvatar(req, res) {
     res.json({ profile: data })
   } catch (err) {
     console.error('[updateAvatar] error:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to update avatar.')
   }
 }
 
@@ -161,7 +168,7 @@ async function updateName(req, res) {
     res.json({ profile: data })
   } catch (err) {
     console.error('[updateName] error:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to update name.')
   }
 }
 
@@ -176,7 +183,7 @@ async function updatePrivacy(req, res) {
     res.json({ profile: data })
   } catch (err) {
     console.error('[updatePrivacy] error:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to update privacy setting.')
   }
 }
 
@@ -196,8 +203,23 @@ async function updateDigestPreference(req, res) {
     res.json({ profile: data })
   } catch (err) {
     console.error('[updateDigestPreference] error:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to update digest preference.')
   }
 }
 
-module.exports = { register, profile, updateAvatar, updateName, updatePrivacy, updateDigestPreference }
+async function deleteAccount(req, res) {
+  try {
+    const profileData = await getProfile(req.user.id)
+    if (profileData.role === 'coach') {
+      await deleteCoachAccount(req.user.id)
+    } else {
+      await deleteAthleteAccount(req.user.id)
+    }
+    res.json({ ok: true })
+  } catch (err) {
+    console.error('[deleteAccount] error:', err.message, '| userId:', req.user.id)
+    sendError(res, err, 'Failed to delete account.')
+  }
+}
+
+module.exports = { register, profile, updateAvatar, updateName, updatePrivacy, updateDigestPreference, deleteAccount }

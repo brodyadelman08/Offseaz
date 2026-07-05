@@ -51,7 +51,10 @@ const INJURY_BADGE = { label: 'Injury', color: '#c73820', bg: '#fce8e6' }
 
 export default function CoachDashboard() {
   const { profile } = useAuth()
-  const { team: ctxTeam, teams, isHeadCoach, refresh: refreshAccess, setActiveTeamId } = useCoachAccess()
+  const {
+    team: ctxTeam, teams, isHeadCoach, refresh: refreshAccess, setActiveTeamId,
+    notifications: ctxNotifications, refreshNotifications,
+  } = useCoachAccess()
   const navigate = useNavigate()
 
   // The dashboard owns create-team flow; other team data comes from context
@@ -60,7 +63,7 @@ export default function CoachDashboard() {
   const [athletes, setAthletes]   = useState([])
   const [blueprints, setBlueprints] = useState([])
   const [activityLogs, setActivityLogs] = useState([])
-  const [notifications, setNotifications] = useState([])
+  const notifications = ctxNotifications || []
   const [error, setError]         = useState('')
   const [loading, setLoading]     = useState(true)
   const [creating, setCreating]   = useState(false)
@@ -93,12 +96,10 @@ export default function CoachDashboard() {
       api.get(`/api/survey/team${ctxTeam?.id ? `?team_id=${ctxTeam.id}` : ''}`).then(r => r.data.athletes).catch(() => []),
       api.get(`/api/blueprints${ctxTeam?.id ? `?team_id=${ctxTeam.id}` : ''}`).then(r => r.data.blueprints).catch(() => []),
       api.get(`/api/workouts/team${ctxTeam?.id ? `?team_id=${ctxTeam.id}` : ''}`).then(r => r.data.logs).catch(() => []),
-      api.get('/api/notifications').then(r => r.data.notifications).catch(() => []),
-    ]).then(([athletesData, blueprintsData, logsData, notifData]) => {
+    ]).then(([athletesData, blueprintsData, logsData]) => {
       setAthletes(athletesData)
       setBlueprints(blueprintsData)
       setActivityLogs(logsData)
-      setNotifications(notifData)
     }).finally(() => setLoading(false))
   }, [ctxTeam?.id])
 
@@ -172,7 +173,7 @@ export default function CoachDashboard() {
     e.stopPropagation()
     try {
       await api.patch(`/api/notifications/dismiss-athlete/${athleteId}`)
-      setNotifications(prev => prev.filter(n => n.athlete_id !== athleteId))
+      refreshNotifications()
     } catch (err) {
       console.error('[CoachDashboard] dismiss notification failed:', err)
     }

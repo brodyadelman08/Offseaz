@@ -1,6 +1,7 @@
 const { getProfile } = require('../services/authService')
 const { logMax, getMaxesByAthlete } = require('../services/maxesService')
 const { getAthleteProfile } = require('../services/athleteService')
+const { sendError } = require('../utils/errorResponse')
 
 async function getMyMaxes(req, res) {
   try {
@@ -11,7 +12,7 @@ async function getMyMaxes(req, res) {
     const maxes = await getMaxesByAthlete(req.user.id)
     res.json({ maxes })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load maxes.')
   }
 }
 
@@ -49,7 +50,7 @@ async function getAthleteMaxes(req, res) {
     res.json({ maxes })
   } catch (err) {
     if (err.status === 403) return res.status(403).json({ error: err.message })
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load athlete maxes.')
   }
 }
 

@@ -4,6 +4,8 @@ const {
   toggleLike, addComment, deleteComment,
   uploadFeedPhoto, deleteFeedPhoto,
 } = require('../services/feedService')
+const { sendError } = require('../utils/errorResponse')
+const { rejectIfOversized } = require('../utils/uploadLimits')
 
 async function getFeedHandler(req, res) {
   try {
@@ -12,7 +14,7 @@ async function getFeedHandler(req, res) {
     const posts   = await getFeed(teamId, req.user.id)
     res.json({ posts })
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to load feed.', 400)
   }
 }
 
@@ -27,7 +29,7 @@ async function createPostHandler(req, res) {
     const post    = await createPost(teamId, req.user.id, (content || '').trim(), photo_url || null)
     res.status(201).json({ post })
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to create post.', 400)
   }
 }
 
@@ -41,7 +43,7 @@ async function deletePostHandler(req, res) {
     res.json({ success: true })
   } catch (err) {
     if (err.status === 403) return res.status(403).json({ error: err.message })
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to delete post.', 400)
   }
 }
 
@@ -50,11 +52,15 @@ async function uploadPhotoHandler(req, res) {
   if (!dataUrl || !mimeType) {
     return res.status(400).json({ error: 'dataUrl and mimeType are required' })
   }
+  // Reject oversized payloads by declared size BEFORE the service decodes to
+  // a Buffer — avoids allocating memory for a request we'll reject anyway.
+  const base64 = dataUrl.split(',')[1]
+  if (rejectIfOversized(req, res, base64)) return
   try {
     const url = await uploadFeedPhoto(req.user.id, dataUrl, mimeType)
     res.status(201).json({ url })
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to upload photo.', 400)
   }
 }
 
@@ -64,7 +70,7 @@ async function toggleLikeHandler(req, res) {
     const result = await toggleLike(postId, req.user.id)
     res.json(result)
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to update like.', 400)
   }
 }
 
@@ -76,7 +82,7 @@ async function addCommentHandler(req, res) {
     const comment = await addComment(postId, req.user.id, content.trim())
     res.status(201).json({ comment })
   } catch (err) {
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to add comment.', 400)
   }
 }
 
@@ -88,7 +94,7 @@ async function deleteCommentHandler(req, res) {
     res.json({ success: true })
   } catch (err) {
     if (err.status === 403) return res.status(403).json({ error: err.message })
-    res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to delete comment.', 400)
   }
 }
 

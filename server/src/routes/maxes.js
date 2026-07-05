@@ -4,6 +4,7 @@ const router = express.Router()
 const verifyToken = require('../middleware/verifyToken')
 const { getMyMaxes, addMax, getAthleteMaxes } = require('../controllers/maxesController')
 const { getSelectedLifts, addLiftSelection, removeLiftSelection, updateLiftSelections } = require('../services/maxesService')
+const { sendError } = require('../utils/errorResponse')
 
 // ── Lift selections (must be before /:athleteId to avoid route conflict) ───────
 
@@ -13,7 +14,7 @@ router.get('/selections', verifyToken, async (req, res) => {
     res.json({ selected_lifts })
   } catch (err) {
     console.error('[maxes] getSelectedLifts:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load lift selections.')
   }
 })
 
@@ -23,7 +24,8 @@ router.post('/selections/:liftKey', verifyToken, async (req, res) => {
     res.json({ ok: true })
   } catch (err) {
     console.error('[maxes] addLiftSelection:', err.message)
-    res.status(err.message.includes('Invalid') ? 400 : 500).json({ error: err.message })
+    if (err.message.includes('Invalid')) return res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to add lift selection.')
   }
 })
 
@@ -33,12 +35,11 @@ router.delete('/selections/:liftKey', verifyToken, async (req, res) => {
     res.json({ ok: true })
   } catch (err) {
     console.error('[maxes] removeLiftSelection:', err.message)
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to remove lift selection.')
   }
 })
 
 router.put('/selections', verifyToken, async (req, res) => {
-  console.log('[maxes PUT /selections] body:', JSON.stringify(req.body), '| user:', req.user?.id)
   const { lifts } = req.body
   if (!Array.isArray(lifts)) return res.status(400).json({ error: 'lifts must be an array' })
   try {
@@ -46,7 +47,8 @@ router.put('/selections', verifyToken, async (req, res) => {
     res.json({ ok: true, lifts })
   } catch (err) {
     console.error('[maxes] updateLiftSelections:', err.message)
-    res.status(err.message.includes('Invalid') ? 400 : 500).json({ error: err.message })
+    if (err.message.includes('Invalid')) return res.status(400).json({ error: err.message })
+    sendError(res, err, 'Failed to update lift selections.')
   }
 })
 

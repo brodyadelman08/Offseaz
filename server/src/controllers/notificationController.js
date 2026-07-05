@@ -1,5 +1,6 @@
 const { getProfile } = require('../services/authService')
 const { getCoachNotifications, dismissAthleteNotifications } = require('../services/notificationService')
+const { sendError } = require('../utils/errorResponse')
 
 async function list(req, res) {
   try {
@@ -8,7 +9,7 @@ async function list(req, res) {
     const notifications = await getCoachNotifications(req.user.id)
     res.json({ notifications })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load notifications.')
   }
 }
 
@@ -20,7 +21,7 @@ async function dismissByAthlete(req, res) {
     await dismissAthleteNotifications(req.user.id, athleteId)
     res.json({ ok: true })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to dismiss notifications.')
   }
 }
 

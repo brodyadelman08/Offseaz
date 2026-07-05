@@ -6,6 +6,7 @@ const {
   sendChatMessage,
   getTeamAthletes,
 } = require('../services/messageService')
+const { sendError } = require('../utils/errorResponse')
 
 // GET /api/messages/conversations
 async function conversations(req, res) {
@@ -17,7 +18,7 @@ async function conversations(req, res) {
     const list = await getConversationList(req.user.id, profile.role, teamId)
     res.json({ conversations: list })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load conversations.')
   }
 }
 
@@ -30,7 +31,7 @@ async function thread(req, res) {
     const messages = await getConversationThread(req.user.id, profile.role, convId, teamId)
     res.json({ messages })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load messages.')
   }
 }
 
@@ -53,7 +54,7 @@ async function send(req, res) {
     const message = await sendChatMessage(req.user.id, profile.role, convId, content.trim())
     res.status(201).json({ message })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to send message.')
   }
 }
 
@@ -67,7 +68,7 @@ async function athletes(req, res) {
     const list = await getTeamAthletes(req.user.id, req.query.team_id || null)
     res.json({ athletes: list })
   } catch (err) {
-    res.status(500).json({ error: err.message })
+    sendError(res, err, 'Failed to load athletes.')
   }
 }
 

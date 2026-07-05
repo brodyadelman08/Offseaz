@@ -8,7 +8,6 @@ import {
   HomeIcon, CalendarIcon, UserIcon, SignOutIcon, FeedIcon, TrophyIcon,
 } from './Icons'
 import AvatarUpload from './AvatarUpload'
-import api from '../services/api'
 
 const ORANGE  = '#F75709'
 const BLUE    = '#308EBD'
@@ -22,21 +21,16 @@ const ACCENT_BG  = [
 const SIDEBAR_W = 240
 
 // ─── Notification badge hook (coaches only) ───────────────────────────────────
+//
+// Notifications are fetched once in CoachAccessContext and shared here — this
+// avoids a second independent /api/notifications call every time the coach
+// dashboard (which fetches its own copy for the activity feed) is mounted
+// alongside this always-present sidebar.
 
-function useNotifBadge(isCoach) {
-  const [badge, setBadge] = useState({ count: 0, color: null })
-  useEffect(() => {
-    if (!isCoach) return
-    api.get('/api/notifications')
-      .then(r => {
-        const ns = r.data.notifications || []
-        if (!ns.length) { setBadge({ count: 0, color: null }); return }
-        const hasInjury = ns.some(n => n.type === 'injury_flag')
-        setBadge({ count: ns.length, color: hasInjury ? '#c73820' : ORANGE })
-      })
-      .catch(() => {})
-  }, [isCoach])
-  return badge
+function useNotifBadge(isCoach, notifications) {
+  if (!isCoach || !notifications?.length) return { count: 0, color: null }
+  const hasInjury = notifications.some(n => n.type === 'injury_flag')
+  return { count: notifications.length, color: hasInjury ? '#c73820' : ORANGE }
 }
 
 // ─── Hook ─────────────────────────────────────────────────────────────────────
@@ -137,7 +131,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
 
   const activeCoachTeam = coachTeams.find(t => t.id === activeCoachTeamId) || coachTeams[0] || null
 
-  const notifBadge = useNotifBadge(profile?.role === 'coach')
+  const notifBadge = useNotifBadge(profile?.role === 'coach', coachAccessCtx?.notifications)
 
   function isActive(path, exact) {
     if (exact) return pathname === path
@@ -277,7 +271,9 @@ function BottomBar({ profile, signOut }) {
   const isCoach = profile?.role === 'coach'
   const primaryNav = isCoach ? COACH_PRIMARY : ATHLETE_PRIMARY
   const moreNav    = isCoach ? COACH_MORE    : ATHLETE_MORE
-  const notifBadge = useNotifBadge(isCoach)
+  // CoachAccessContext is only provided inside /coach routes — guard for athletes.
+  const coachAccessCtx = useCoachAccess()
+  const notifBadge = useNotifBadge(isCoach, coachAccessCtx?.notifications)
 
   function isActive(path, exact) {
     if (exact) return pathname === path

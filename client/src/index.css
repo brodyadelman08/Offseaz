@@ -271,13 +271,6 @@ select {
   cursor: pointer;
 }
 
-/* ── Survey skip button hover ─────────────────────────────────────────────── */
-/* Can't inline hover on plain button, so CSS handles it */
-.survey-skip:hover {
-  color: var(--text) !important;
-  border-color: var(--text-3) !important;
-}
-
 /* ── Landing page button / link hover states ──────────────────────────────── */
 .land-cta-orange {
   transition: transform 0.18s ease, box-shadow 0.18s ease, opacity 0.15s ease;
@@ -306,11 +299,6 @@ select {
 .land-cta-ghost:hover {
   color: #fff !important;
   border-color: rgba(255,255,255,0.35) !important;
-  text-decoration: none !important;
-}
-
-.land-nav-link:hover {
-  color: #fff !important;
   text-decoration: none !important;
 }
 
@@ -542,23 +530,6 @@ select {
   .survey-pill-divider{ display: none; }
 }
 
-/* ── Action row: stack button below text on narrow phones ────────────────── */
-.action-row-mobile {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  gap: 12px;
-}
-@media (max-width: 420px) {
-  .action-row-mobile {
-    flex-direction: column;
-    align-items: flex-start;
-  }
-  .action-row-mobile > button {
-    width: 100%;
-  }
-}
-
 /* ── Feed post card hover — desktop only (hover media query avoids iOS stuck-hover) */
 @media (hover: hover) {
   .feed-post-card:hover {
@@ -629,13 +600,6 @@ html {
   pointer-events: none !important;
 }
 
-/* ── Sidebar nav item — hover glow ─────────────────────────────────────────── */
-@media (hover: hover) {
-  .sidebar-nav-item:hover {
-    background: rgba(255,255,255,0.05) !important;
-  }
-}
-
 /* ── Landing page — universal card hover for lp-card and lp-sport ──────────
    Already have border-color from the inline <style> block in Landing.jsx;
    add lift and shadow here for the full premium feel.                         */
@@ -703,57 +667,11 @@ html {
   }
 }
 
-/* ── Role card (Register) hover ──────────────────────────────────────────── */
-@media (hover: hover) {
-  .role-card:hover {
-    transform: translateY(-2px);
-    box-shadow: 0 6px 24px rgba(0,0,0,0.32), inset 0 1px 0 rgba(255,255,255,0.05) !important;
-  }
-}
-
 /* ── Sign-out button hover ─────────────────────────────────────────────────── */
 @media (hover: hover) {
   .sign-out-btn:hover {
     background: rgba(199,56,32,0.14) !important;
     border-color: rgba(199,56,32,0.40) !important;
-  }
-}
-
-/* ── Team pill hover ─────────────────────────────────────────────────────── */
-@media (hover: hover) {
-  .team-pill:hover {
-    border-color: var(--border) !important;
-    background: rgba(255,255,255,0.04) !important;
-    color: var(--text) !important;
-  }
-}
-
-/* ── About page stat card hover ─────────────────────────────────────────── */
-@media (hover: hover) {
-  .about-stat-card {
-    transition: transform var(--t-std), box-shadow var(--t-std);
-  }
-  .about-stat-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card-hover) !important;
-  }
-}
-
-/* ── Contact social card hover ─────────────────────────────────────────── */
-@media (hover: hover) {
-  .social-card {
-    transition: transform var(--t-std), box-shadow var(--t-std) !important;
-  }
-  .social-card:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card-hover) !important;
-  }
-}
-
-/* ── Legal nav link hover ───────────────────────────────────────────────── */
-@media (hover: hover) {
-  .pub-nav-link:hover {
-    color: var(--text) !important;
   }
 }
 

@@ -3,10 +3,12 @@ import api from '../services/api'
 import { useAuth } from '../context/AuthContext'
 import { useCoachAccess } from '../context/CoachAccessContext'
 import AvatarUpload from '../components/AvatarUpload'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 import { EditIcon, CheckIcon, TrashIcon, UsersIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
+const RED    = '#DC2626'
 
 export default function CoachProfile() {
   const { session, profile, updateProfile, signOut } = useAuth()
@@ -39,6 +41,14 @@ export default function CoachProfile() {
   const [transferring, setTransferring]   = useState(false)
   const [transferDone, setTransferDone]   = useState(false)
   const [transferErr, setTransferErr]     = useState('')
+
+  // ── Delete account / delete team ────────────────────────────────────────────
+  const [showDeleteAccount, setShowDeleteAccount] = useState(false)
+  const [deletingAccount,   setDeletingAccount]   = useState(false)
+  const [deleteAccountErr,  setDeleteAccountErr]  = useState('')
+  const [showDeleteTeam,    setShowDeleteTeam]    = useState(false)
+  const [deletingTeam,      setDeletingTeam]      = useState(false)
+  const [deleteTeamErr,     setDeleteTeamErr]     = useState('')
 
   // ── Load data ──────────────────────────────────────────────────────────────
   const loadData = useCallback(async () => {
@@ -127,6 +137,32 @@ export default function CoachProfile() {
       setTransferErr(err.response?.data?.error || 'Transfer failed.')
     } finally {
       setTransferring(false)
+    }
+  }
+
+  async function handleDeleteAccount() {
+    setDeletingAccount(true)
+    setDeleteAccountErr('')
+    try {
+      await api.delete('/api/auth/account')
+      await signOut()
+      window.location.href = '/'
+    } catch (err) {
+      setDeleteAccountErr(err.response?.data?.error || 'Failed to delete account.')
+      setDeletingAccount(false)
+    }
+  }
+
+  async function handleDeleteTeam() {
+    if (!team) return
+    setDeletingTeam(true)
+    setDeleteTeamErr('')
+    try {
+      await api.delete(`/api/teams/${team.id}`)
+      window.location.reload()
+    } catch (err) {
+      setDeleteTeamErr(err.response?.data?.error || 'Failed to delete team.')
+      setDeletingTeam(false)
     }
   }
 
@@ -384,6 +420,57 @@ export default function CoachProfile() {
             </div>
           )}
         </div>
+      )}
+
+      {/* ── Delete Team (head coach only) ──────────────────────────────── */}
+      {team && isHeadCoach && (
+        <div style={{ ...styles.card, borderColor: 'rgba(220,38,38,0.30)' }}>
+          <h2 style={{ ...styles.cardTitle, color: RED }}>Delete Team</h2>
+          <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.55, margin: '0 0 14px' }}>
+            Permanently deletes {team.name} — all athletes will be removed from the team and all
+            team data (blueprints, messages, digest history) will be deleted. This does not delete
+            your coach account.
+          </p>
+          <button style={styles.deleteTeamBtn} onClick={() => setShowDeleteTeam(true)}>
+            Delete {team.name}
+          </button>
+        </div>
+      )}
+
+      {/* ── Danger zone: delete account ─────────────────────────────────── */}
+      <div style={{ ...styles.card, borderColor: 'rgba(220,38,38,0.30)' }}>
+        <h2 style={{ ...styles.cardTitle, color: RED }}>Danger Zone</h2>
+        <p style={{ fontSize: 14, color: 'var(--text-2)', lineHeight: 1.55, margin: '0 0 14px' }}>
+          Permanently delete your account and all your teams, blueprints, and athlete data
+          associated with your teams.
+        </p>
+        <button style={styles.deleteTeamBtn} onClick={() => setShowDeleteAccount(true)}>
+          Delete My Account
+        </button>
+      </div>
+
+      {showDeleteTeam && (
+        <ConfirmDeleteModal
+          title={`Delete ${team?.name}?`}
+          warningText="All athletes will be removed from this team and all team data — blueprints, messages, and digest history — will be permanently deleted. This cannot be undone."
+          confirmLabel="Delete Team"
+          loading={deletingTeam}
+          error={deleteTeamErr}
+          onConfirm={handleDeleteTeam}
+          onCancel={() => { setShowDeleteTeam(false); setDeleteTeamErr('') }}
+        />
+      )}
+
+      {showDeleteAccount && (
+        <ConfirmDeleteModal
+          title="Delete Your Account?"
+          warningText="This will permanently delete your account and all your teams, blueprints, and athlete data associated with your teams. This cannot be undone."
+          confirmLabel="Delete My Account"
+          loading={deletingAccount}
+          error={deleteAccountErr}
+          onConfirm={handleDeleteAccount}
+          onCancel={() => { setShowDeleteAccount(false); setDeleteAccountErr('') }}
+        />
       )}
     </div>
   )
@@ -731,6 +818,18 @@ const styles = {
     border: '1px solid rgba(199,56,32,0.40)',
     background: 'rgba(199,56,32,0.06)',
     color: '#c73820',
+    cursor: 'pointer',
+    transition: 'background 0.15s',
+  },
+  deleteTeamBtn: {
+    alignSelf: 'flex-start',
+    padding: '8px 18px',
+    fontSize: 13,
+    fontWeight: 700,
+    borderRadius: 8,
+    border: '1px solid rgba(220,38,38,0.40)',
+    background: 'rgba(220,38,38,0.06)',
+    color: '#DC2626',
     cursor: 'pointer',
     transition: 'background 0.15s',
   },
