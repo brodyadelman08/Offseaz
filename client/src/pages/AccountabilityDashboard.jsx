@@ -1,6 +1,6 @@
 import { useState, useEffect, Component } from 'react'
 import api from '../services/api'
-import { ClipboardIcon, FlameIcon, AlertIcon } from '../components/Icons'
+import { ClipboardIcon, FlameIcon, AlertIcon, RestDayIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
 const YELLOW = '#F0BE24'
@@ -218,7 +218,9 @@ function AccountabilityInner() {
                           {s.label}
                         </span>
                         {a.today_is_rest_day && (
-                          <span style={styles.restDayChip}>😴 Rest Day</span>
+                          <span style={{ ...styles.restDayChip, display: 'inline-flex', alignItems: 'center', gap: 4 }}>
+                            <RestDayIcon size={11} color={BLUE} /> Rest Day
+                          </span>
                         )}
                       </div>
                     </div>

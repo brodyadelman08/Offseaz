@@ -758,3 +758,29 @@ export function CameraIcon({ size = 20, color = 'currentColor' }) {
     </svg>
   )
 }
+
+/** Simple side-view bed — rest day / recovery */
+export function RestDayIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      {/* Pillow */}
+      <rect x="3" y="9" width="7" height="5" rx="1.5" />
+      {/* Mattress + footboard */}
+      <path d="M3 14h18v4" />
+      <path d="M21 14v-2a2 2 0 0 0-2-2h-6" />
+      {/* Legs */}
+      <path d="M3 18v2" />
+      <path d="M21 18v2" />
+    </svg>
+  )
+}
+
+/** Crescent moon with a "Z" — sleep quality */
+export function SleepIcon({ size = 20, color = 'currentColor' }) {
+  return (
+    <svg style={base(size, color)} viewBox="0 0 24 24">
+      <path d="M20 13.5A8.5 8.5 0 1 1 10.5 5a6.5 6.5 0 0 0 9.5 8.5z" />
+      <path d="M15 3h4l-4 4h4" />
+    </svg>
+  )
+}

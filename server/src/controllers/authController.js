@@ -2,6 +2,7 @@ const supabaseAdmin = require('../config/supabase')
 const { createProfile, getProfile } = require('../services/authService')
 const { sendError } = require('../utils/errorResponse')
 const { rejectIfOversized } = require('../utils/uploadLimits')
+const { validateMagicBytes, getImageDimensions } = require('../utils/imageValidation')
 const { deleteAthleteAccount, deleteCoachAccount } = require('../services/accountDeletionService')
 
 async function register(req, res) {
@@ -114,6 +115,26 @@ async function updateAvatar(req, res) {
 
     if (buffer.length > 4 * 1024 * 1024) {
       return res.status(400).json({ error: 'Image must be under 4 MB' })
+    }
+
+    // Magic-byte check — the decoded buffer must actually start with the
+    // header bytes for the declared MIME type, not just match by extension.
+    if (!validateMagicBytes(buffer, mimeType)) {
+      return res.status(400).json({ error: 'Invalid image file' })
+    }
+
+    // Minimum dimension check (JPEG/PNG only — WEBP dimensions require full
+    // chunk parsing we don't implement). Skips the check if dimensions can't
+    // be read rather than rejecting a structurally unusual but valid image.
+    const dims = getImageDimensions(buffer, mimeType)
+    if (dims && (dims.width < 100 || dims.height < 100)) {
+      return res.status(400).json({ error: 'Image too small, minimum 100x100 pixels' })
+    }
+
+    // A valid cropped avatar should never compress down this small — catches
+    // corrupt or empty payloads that still passed the checks above.
+    if (buffer.length < 1000) {
+      return res.status(400).json({ error: 'Image appears to be corrupt or empty' })
     }
 
     // Upload via service-role client — bypasses storage RLS entirely

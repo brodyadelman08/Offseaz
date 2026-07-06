@@ -156,6 +156,25 @@ function LeaveConfirmModal({ onCancel, onConfirm }) {
   )
 }
 
+// ─── Week-reduction confirmation modal ───────────────────────────────────────
+
+function WeekReductionConfirmModal({ from, to, onCancel, onConfirm }) {
+  return (
+    <div style={lc.overlay} onClick={onCancel}>
+      <div style={lc.card} onClick={e => e.stopPropagation()}>
+        <p style={lc.title}>Reduce weeks?</p>
+        <p style={lc.body}>
+          Reducing weeks from {from} to {to} will permanently delete the content for weeks {to + 1} through {from}. This cannot be undone.
+        </p>
+        <div style={lc.btnRow}>
+          <button onClick={onCancel} style={lc.cancelBtn}>Cancel</button>
+          <button onClick={onConfirm} style={lc.confirmBtn}>Confirm</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Description preview with bolded exercise names ──────────────────────────
 
 function BoldDesc({ text, maxChars }) {
@@ -234,6 +253,7 @@ export default function BlueprintBuilder() {
   const [bulkFocus, setBulkFocus] = useState('')
   const [bulkDesc, setBulkDesc] = useState('')
   const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
+  const [pendingWeekReduction, setPendingWeekReduction] = useState(null) // { from, to } or null
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 768)
@@ -375,9 +395,19 @@ export default function BlueprintBuilder() {
     setSelected(new Set()); setBulkEditOpen(false); setBulkFocus(''); setBulkDesc('')
   }
 
+  function applyNumWeeks(num) {
+    setForm(prev => ({ ...prev, num_weeks: num, weeks: makeWeeks(num, prev.weeks) }))
+  }
+
+  // Reducing num_weeks drops the content for every week above the new count
+  // (makeWeeks only keeps the first `num` weeks) — confirm before doing that.
   function setNumWeeks(n) {
     const num = Math.min(16, Math.max(1, parseInt(n, 10) || 1))
-    setForm(prev => ({ ...prev, num_weeks: num, weeks: makeWeeks(num, prev.weeks) }))
+    if (num < form.num_weeks) {
+      setPendingWeekReduction({ from: form.num_weeks, to: num })
+    } else {
+      applyNumWeeks(num)
+    }
   }
 
   async function handleSubmit() {
@@ -708,6 +738,16 @@ export default function BlueprintBuilder() {
         <LeaveConfirmModal
           onCancel={() => setShowLeaveConfirm(false)}
           onConfirm={() => { setShowLeaveConfirm(false); setPhase('pick') }}
+        />
+      )}
+
+      {/* ── Week-reduction confirmation ── */}
+      {pendingWeekReduction && (
+        <WeekReductionConfirmModal
+          from={pendingWeekReduction.from}
+          to={pendingWeekReduction.to}
+          onCancel={() => setPendingWeekReduction(null)}
+          onConfirm={() => { applyNumWeeks(pendingWeekReduction.to); setPendingWeekReduction(null) }}
         />
       )}
     </div>

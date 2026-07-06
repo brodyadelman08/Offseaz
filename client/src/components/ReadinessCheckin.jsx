@@ -1,6 +1,6 @@
 import { useState } from 'react'
 import api from '../services/api'
-import { DumbbellIcon } from './Icons'
+import { DumbbellIcon, SleepIcon, RestDayIcon, FlameIcon } from './Icons'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -79,10 +79,12 @@ export default function ReadinessCheckin({ onComplete, onDismiss }) {
     return (
       <div style={s.overlay}>
         <div style={s.card}>
-          <div style={s.restIcon}>😴</div>
+          <div style={s.restIcon}><SleepIcon size={48} color={BLUE} /></div>
           <h2 style={s.restTitle}>Smart.</h2>
           <p style={s.restMsg}>Recovery is part of the program.</p>
-          <p style={{ ...s.restMsg, color: YELLOW, fontWeight: 700, fontSize: 15 }}>Your streak is safe. 🔥</p>
+          <p style={{ ...s.restMsg, color: YELLOW, fontWeight: 700, fontSize: 15, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: 6 }}>
+            Your streak is safe. <FlameIcon size={16} color={YELLOW} />
+          </p>
           <button style={s.continueBtn} onClick={() => onComplete({ is_rest_day: true })}>
             Got it
           </button>
@@ -136,7 +138,7 @@ export default function ReadinessCheckin({ onComplete, onDismiss }) {
             disabled={!allAnswered || submitting}
             onClick={() => handleDayType(true)}
           >
-            <span style={{ fontSize: 22 }}>😴</span>
+            <RestDayIcon size={22} color="#fff" />
             <span style={s.dayTypeBtnLabel}>Rest Day</span>
           </button>
         </div>
