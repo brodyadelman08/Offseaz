@@ -826,7 +826,7 @@ export default function Landing() {
               No plan. No visibility. No accountability. He built the platform he wished he had.
             </p>
             <p style={{ fontSize: 17, color: '#555', lineHeight: 1.85, marginBottom: 44 }}>
-              Today, Brody is a preferred walk-on for the University of St. Thomas baseball program,
+              Today, Brody is a preferred walk-on for the <span style={{ fontWeight: 700, color: '#4B2D83' }}>University of St. Thomas</span> baseball program,
               a Division I program competing in the Summit League.
             </p>
             <Link to="/about" style={s.storyLink}>

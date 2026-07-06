@@ -86,7 +86,7 @@ export default function About() {
             <p style={s.bodyText}>
               He started on varsity as a sophomore shortstop and went on to earn his team's captaincy
               for two straight years. He finished 2nd at State in DECA and qualified for ICDC in Atlanta.
-              He is heading to the University of St. Thomas on the Schulze Innovation Scholarship.
+              He is heading to the <span style={{ fontWeight: 700, color: '#4B2D83' }}>University of St. Thomas</span> on the Schulze Innovation Scholarship.
             </p>
             <p style={s.bodyText}>
               Offseaz was built because Brody watched firsthand how unstructured and unaccountable
@@ -96,7 +96,7 @@ export default function About() {
               actually putting in the work.
             </p>
             <p style={s.bodyText}>
-              Brody is a preferred walk-on for the University of St. Thomas baseball program, a
+              Brody is a preferred walk-on for the <span style={{ fontWeight: 700, color: '#4B2D83' }}>University of St. Thomas</span> baseball program, a
               Division I program competing in the Summit League.
             </p>
           </div>
