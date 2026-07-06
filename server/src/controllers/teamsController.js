@@ -62,6 +62,11 @@ async function join(req, res) {
   }
 
   try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role === 'coach') {
+      return res.status(403).json({ error: 'Coaches cannot join teams as athletes' })
+    }
+
     const team = await getTeamByInviteCode(invite_code)
     const membership = await joinTeam(team.id, req.user.id)
     res.status(201).json({ team, membership })
@@ -141,14 +146,15 @@ async function coaches(req, res) {
 
 async function updateCoachAccess(req, res) {
   const { coachId } = req.params
-  const { access_level } = req.body
+  const { access_level, team_id } = req.body
+  const teamId = team_id || req.query.team_id || null
 
   if (!['view_only', 'admin_coach'].includes(access_level)) {
     return res.status(400).json({ error: 'access_level must be "view_only" or "admin_coach"' })
   }
 
   try {
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, teamId)
     if (!team || accessLevel !== 'head_coach') {
       return res.status(403).json({ error: 'Only the head coach can manage assistant coach access' })
     }
@@ -165,9 +171,10 @@ async function updateCoachAccess(req, res) {
 
 async function removeCoach(req, res) {
   const { coachId } = req.params
+  const teamId = req.body?.team_id || req.query.team_id || null
 
   try {
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, teamId)
     if (!team || accessLevel !== 'head_coach') {
       return res.status(403).json({ error: 'Only the head coach can remove coaches' })
     }

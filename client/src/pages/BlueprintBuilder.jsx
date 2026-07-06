@@ -139,6 +139,23 @@ function BulkEditModal({ count, focus, desc, onFocusChange, onDescChange, onAppl
   )
 }
 
+// ─── Leave-without-saving confirmation modal ─────────────────────────────────
+
+function LeaveConfirmModal({ onCancel, onConfirm }) {
+  return (
+    <div style={lc.overlay} onClick={onCancel}>
+      <div style={lc.card} onClick={e => e.stopPropagation()}>
+        <p style={lc.title}>Leave without saving?</p>
+        <p style={lc.body}>Your blueprint progress will be lost. Go back to templates.</p>
+        <div style={lc.btnRow}>
+          <button onClick={onCancel} style={lc.cancelBtn}>Cancel</button>
+          <button onClick={onConfirm} style={lc.confirmBtn}>Confirm</button>
+        </div>
+      </div>
+    </div>
+  )
+}
+
 // ─── Description preview with bolded exercise names ──────────────────────────
 
 function BoldDesc({ text, maxChars }) {
@@ -216,12 +233,29 @@ export default function BlueprintBuilder() {
   const [bulkEditOpen, setBulkEditOpen] = useState(false)
   const [bulkFocus, setBulkFocus] = useState('')
   const [bulkDesc, setBulkDesc] = useState('')
+  const [showLeaveConfirm, setShowLeaveConfirm] = useState(false)
 
   useEffect(() => {
     const onResize = () => setIsMobile(window.innerWidth < 768)
     window.addEventListener('resize', onResize)
     return () => window.removeEventListener('resize', onResize)
   }, [])
+
+  // Once a coach is in the grid builder they have unsaved manual work (a
+  // template pick or a from-scratch build) that only persists on successful
+  // "Save Blueprint" — warn before a tab close/reload throws it away.
+  const hasUnsavedChanges = phase === 'build'
+
+  useEffect(() => {
+    if (!hasUnsavedChanges) return
+    function handleBeforeUnload(e) {
+      e.preventDefault()
+      e.returnValue = 'You have unsaved changes. Are you sure you want to leave?'
+      return e.returnValue
+    }
+    window.addEventListener('beforeunload', handleBeforeUnload)
+    return () => window.removeEventListener('beforeunload', handleBeforeUnload)
+  }, [hasUnsavedChanges])
 
   // ── Template selection ──────────────────────────────────────────────────────
 
@@ -485,7 +519,7 @@ export default function BlueprintBuilder() {
 
       {/* ── Top bar ── */}
       <div style={g.topBar}>
-        <button onClick={() => setPhase('pick')} style={g.backBtn}>← Templates</button>
+        <button onClick={() => setShowLeaveConfirm(true)} style={g.backBtn}>← Templates</button>
         <div style={g.titleGroup}>
           <input style={g.titleInput} value={form.title} onChange={e => setForm(p => ({ ...p, title: e.target.value }))} placeholder="Blueprint title…" />
           <select style={g.weeksSelect} value={form.num_weeks} onChange={e => setNumWeeks(e.target.value)}>
@@ -668,6 +702,14 @@ export default function BlueprintBuilder() {
           onClose={() => setBulkEditOpen(false)}
         />
       )}
+
+      {/* ── Leave-without-saving confirmation ── */}
+      {showLeaveConfirm && (
+        <LeaveConfirmModal
+          onCancel={() => setShowLeaveConfirm(false)}
+          onConfirm={() => { setShowLeaveConfirm(false); setPhase('pick') }}
+        />
+      )}
     </div>
   )
 }
@@ -814,4 +856,15 @@ const dr = {
   drawerActions: { display: 'flex', flexWrap: 'wrap', gap: 8, marginTop: 20 },
   actionBtn: { fontSize: 13, fontWeight: 600, padding: '8px 14px', borderRadius: 8, cursor: 'pointer' },
   applyBtn: { width: '100%', padding: '12px', fontSize: 14, fontWeight: 700, borderRadius: 10, border: 'none', background: ORANGE, color: '#fff', cursor: 'pointer' },
+}
+
+// ─── Leave-confirm modal styles ───────────────────────────────────────────────
+const lc = {
+  overlay: { position: 'fixed', inset: 0, background: 'rgba(0,0,0,0.55)', zIndex: 300, display: 'flex', alignItems: 'center', justifyContent: 'center', padding: 16 },
+  card: { background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16, padding: 24, maxWidth: 380, width: '100%', boxShadow: '0 8px 32px rgba(0,0,0,0.4)' },
+  title: { fontSize: 16, fontWeight: 700, color: 'var(--text)', margin: '0 0 8px' },
+  body: { fontSize: 14, color: 'var(--text-2)', lineHeight: 1.55, margin: '0 0 22px' },
+  btnRow: { display: 'flex', gap: 10 },
+  cancelBtn: { flex: 1, padding: '11px 0', borderRadius: 8, border: '1px solid var(--border)', background: 'transparent', color: 'var(--text-2)', fontWeight: 600, fontSize: 14, cursor: 'pointer' },
+  confirmBtn: { flex: 1, padding: '11px 0', borderRadius: 8, border: 'none', background: '#DC2626', color: '#fff', fontWeight: 700, fontSize: 14, cursor: 'pointer' },
 }

@@ -4,8 +4,16 @@ const {
   toggleLike, addComment, deleteComment,
   uploadFeedPhoto, deleteFeedPhoto,
 } = require('../services/feedService')
+const { resolveCoachTeamAndAccess } = require('../services/teamsService')
 const { sendError } = require('../utils/errorResponse')
 const { rejectIfOversized } = require('../utils/uploadLimits')
+
+// View-only assistant coaches can read the feed but not write to it.
+async function isViewOnlyCoach(userId, role, teamId) {
+  if (role !== 'coach') return false
+  const { accessLevel } = await resolveCoachTeamAndAccess(userId, teamId)
+  return accessLevel === 'view_only'
+}
 
 async function getFeedHandler(req, res) {
   try {
@@ -25,6 +33,9 @@ async function createPostHandler(req, res) {
   }
   try {
     const profile = await getProfile(req.user.id)
+    if (await isViewOnlyCoach(req.user.id, profile.role, req.query.teamId || null)) {
+      return res.status(403).json({ error: 'View-only coaches cannot post to the feed' })
+    }
     const teamId  = await getTeamId(req.user.id, profile.role, req.query.teamId || null)
     const post    = await createPost(teamId, req.user.id, (content || '').trim(), photo_url || null)
     res.status(201).json({ post })
@@ -57,6 +68,10 @@ async function uploadPhotoHandler(req, res) {
   const base64 = dataUrl.split(',')[1]
   if (rejectIfOversized(req, res, base64)) return
   try {
+    const profile = await getProfile(req.user.id)
+    if (await isViewOnlyCoach(req.user.id, profile.role, req.query.teamId || null)) {
+      return res.status(403).json({ error: 'View-only coaches cannot upload feed photos' })
+    }
     const url = await uploadFeedPhoto(req.user.id, dataUrl, mimeType)
     res.status(201).json({ url })
   } catch (err) {
@@ -67,6 +82,10 @@ async function uploadPhotoHandler(req, res) {
 async function toggleLikeHandler(req, res) {
   const { postId } = req.params
   try {
+    const profile = await getProfile(req.user.id)
+    if (await isViewOnlyCoach(req.user.id, profile.role, req.query.teamId || null)) {
+      return res.status(403).json({ error: 'View-only coaches cannot like posts' })
+    }
     const result = await toggleLike(postId, req.user.id)
     res.json(result)
   } catch (err) {
@@ -79,6 +98,10 @@ async function addCommentHandler(req, res) {
   const { content } = req.body
   if (!content?.trim()) return res.status(400).json({ error: 'Content is required' })
   try {
+    const profile = await getProfile(req.user.id)
+    if (await isViewOnlyCoach(req.user.id, profile.role, req.query.teamId || null)) {
+      return res.status(403).json({ error: 'View-only coaches cannot comment' })
+    }
     const comment = await addComment(postId, req.user.id, content.trim())
     res.status(201).json({ comment })
   } catch (err) {

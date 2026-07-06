@@ -315,6 +315,42 @@ async function transferTeamOwnership(teamId, currentHeadCoachId, newHeadCoachId)
     )
 }
 
+// ─── Team-membership verification (IDOR guards) ───────────────────────────────
+
+/**
+ * Verifies a single athlete is a member (access_level 'athlete') of the given team.
+ */
+async function isAthleteOnTeam(teamId, athleteId) {
+  if (!teamId || !athleteId) return false
+  const { data, error } = await supabaseAdmin
+    .from('team_members')
+    .select('athlete_id')
+    .eq('team_id', teamId)
+    .eq('athlete_id', athleteId)
+    .eq('access_level', 'athlete')
+    .limit(1)
+
+  if (error) throw error
+  return Boolean(data?.length)
+}
+
+/**
+ * Filters a list of athlete ids down to only those that are members
+ * (access_level 'athlete') of the given team.
+ */
+async function filterAthleteIdsOnTeam(teamId, athleteIds) {
+  if (!teamId || !athleteIds?.length) return []
+  const { data, error } = await supabaseAdmin
+    .from('team_members')
+    .select('athlete_id')
+    .eq('team_id', teamId)
+    .eq('access_level', 'athlete')
+    .in('athlete_id', athleteIds)
+
+  if (error) throw error
+  return (data || []).map(r => r.athlete_id)
+}
+
 module.exports = {
   createTeam,
   getTeamByCoach,
@@ -330,4 +366,6 @@ module.exports = {
   updateCoachAccessLevel,
   removeCoachFromTeam,
   transferTeamOwnership,
+  isAthleteOnTeam,
+  filterAthleteIdsOnTeam,
 }

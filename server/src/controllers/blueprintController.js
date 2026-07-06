@@ -1,5 +1,5 @@
 const { getProfile } = require('../services/authService')
-const { resolveCoachTeamAndAccess, getAthleteTeam } = require('../services/teamsService')
+const { resolveCoachTeamAndAccess, getAthleteTeam, isAthleteOnTeam, filterAthleteIdsOnTeam } = require('../services/teamsService')
 const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments } = require('../data/blueprintTemplates')
 const {
   createBlueprint,
@@ -92,6 +92,20 @@ async function create(req, res) {
 
     if (week.sessions !== undefined && (!Array.isArray(week.sessions) || week.sessions.length > 20)) {
       return res.status(400).json({ error: `Week ${wn} has too many sessions — max 20 sessions per week` })
+    }
+
+    if (Array.isArray(week.sessions)) {
+      for (const session of week.sessions) {
+        if (session?.day && String(session.day).length > 100) {
+          return res.status(400).json({ error: 'Session day is too long' })
+        }
+        if (session?.focus && String(session.focus).length > 200) {
+          return res.status(400).json({ error: 'Session focus is too long' })
+        }
+        if (session?.description && String(session.description).length > 2000) {
+          return res.status(400).json({ error: 'Session description too long' })
+        }
+      }
     }
   }
 
@@ -203,6 +217,13 @@ async function assign(req, res) {
       return res.status(403).json({ error: 'View-only coaches cannot assign blueprints' })
     }
 
+    if (assign_to === 'athlete') {
+      const onTeam = await isAthleteOnTeam(blueprint.team_id, athlete_id)
+      if (!onTeam) {
+        return res.status(403).json({ error: 'That athlete is not on your team' })
+      }
+    }
+
     const assignment = await assignBlueprint(id, {
       assign_to,
       athlete_id: assign_to === 'athlete' ? athlete_id : null,
@@ -267,6 +288,14 @@ async function getOverrides(req, res) {
     if (profile.role !== 'coach') {
       return res.status(403).json({ error: 'Only coaches can view plan overrides' })
     }
+    const { team } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    if (!team) {
+      return res.status(403).json({ error: 'No team found' })
+    }
+    const onTeam = await isAthleteOnTeam(team.id, athleteId)
+    if (!onTeam) {
+      return res.status(403).json({ error: 'That athlete is not on your team' })
+    }
     const result = await getAthleteOverrides(athleteId)
     res.json(result)
   } catch (err) {
@@ -287,9 +316,16 @@ async function saveOverrides(req, res) {
     if (profile.role !== 'coach') {
       return res.status(403).json({ error: 'Only coaches can save plan overrides' })
     }
-    const { accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    if (!team) {
+      return res.status(403).json({ error: 'No team found' })
+    }
     if (accessLevel === 'view_only') {
       return res.status(403).json({ error: 'View-only coaches cannot edit plans' })
+    }
+    const onTeam = await isAthleteOnTeam(team.id, athleteId)
+    if (!onTeam) {
+      return res.status(403).json({ error: 'That athlete is not on your team' })
     }
     const result = await saveAthleteOverrides(athleteId, assignment_id, overrides)
     res.json({ override: result })
@@ -323,11 +359,18 @@ async function bulkAssign(req, res) {
       return res.status(403).json({ error: 'View-only coaches cannot assign blueprints' })
     }
 
-    const assignments = await bulkAssignBlueprint(id, athlete_ids, starts_on)
+    // Silently drop any athlete id that isn't actually on this blueprint's team
+    // before inserting — prevents assigning to athletes from other teams.
+    const validAthleteIds = await filterAthleteIdsOnTeam(blueprint.team_id, athlete_ids)
+    if (validAthleteIds.length === 0) {
+      return res.status(400).json({ error: 'None of the provided athletes are on your team' })
+    }
+
+    const assignments = await bulkAssignBlueprint(id, validAthleteIds, starts_on)
 
     // Post to team feed so athletes are notified
     if (team) {
-      const count = athlete_ids.length
+      const count = validAthleteIds.length
       const msg = `📋 "${blueprint.title}" has been assigned to ${count} athlete${count === 1 ? '' : 's'}.`
       createPost(team.id, req.user.id, msg, null).catch(e =>
         console.error('[bulkAssign] feed notification failed:', e?.message)

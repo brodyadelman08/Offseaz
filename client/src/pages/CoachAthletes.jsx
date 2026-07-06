@@ -110,7 +110,7 @@ export default function CoachAthletes() {
     const newLevel = currentLevel === 'admin_coach' ? 'view_only' : 'admin_coach'
     setToggling(coachId)
     try {
-      await api.patch(`/api/teams/coaches/${coachId}/access`, { access_level: newLevel })
+      await api.patch(`/api/teams/coaches/${coachId}/access${team?.id ? `?team_id=${team.id}` : ''}`, { access_level: newLevel })
       setCoaches(prev => prev.map(c => c.id === coachId ? { ...c, access_level: newLevel } : c))
     } catch (err) {
       console.error('[CoachAthletes] toggle access error:', err)
@@ -123,7 +123,7 @@ export default function CoachAthletes() {
     setRemoving(coach.id)
     setConfirmRemove(null)
     try {
-      await api.delete(`/api/teams/coaches/${coach.id}`)
+      await api.delete(`/api/teams/coaches/${coach.id}${team?.id ? `?team_id=${team.id}` : ''}`)
       setCoaches(prev => prev.filter(c => c.id !== coach.id))
       refreshAccess()
     } catch (err) {
