@@ -116,9 +116,13 @@ function getSelectionDef(sel) {
   if (sel.metric_id === 'throwing_velocity' && sel.sub_type_id) {
     const st = THROWING_SUB_TYPES[sel.sub_type_id]
     if (!st) return null
-    return { name: `Throwing Velocity — ${st.name}`, unit: st.unit, lowerIsBetter: st.lowerIsBetter }
+    // `name` keeps the full "Throwing Velocity — X" label for the log modal/
+    // history view; `shortName` is the sub-type alone, used on the compact
+    // profile card where the combined name is too long to fit.
+    return { name: `Throwing Velocity — ${st.name}`, shortName: st.name, unit: st.unit, lowerIsBetter: st.lowerIsBetter }
   }
-  return PERF_METRICS[sel.metric_id] || null
+  const base = PERF_METRICS[sel.metric_id]
+  return base ? { ...base, shortName: base.name } : null
 }
 
 function computeStoredValue(unit, val1, val2) {
@@ -653,9 +657,10 @@ export default function AthleteMyProfile() {
   )
 
   const mGrid    = isMobile ? { ...styles.maxesGrid, gridTemplateColumns: 'repeat(2, 1fr)', gap: 8 } : styles.maxesGrid
-  const mCard    = isMobile ? { ...styles.liftCard, padding: '12px 16px' } : styles.liftCard
+  const mCard    = isMobile ? { ...styles.liftCard, padding: '12px 16px', minHeight: 160 } : styles.liftCard
   const mLabel   = isMobile ? { ...styles.liftLabel, fontSize: 13 } : styles.liftLabel
   const mLogBtn  = isMobile ? { ...styles.logPRBtn, fontSize: 12, padding: '6px 10px', minHeight: 32 } : styles.logPRBtn
+  const mPR      = isMobile ? { ...styles.liftPR, fontSize: 18 } : styles.liftPR
 
   return (
     <div style={styles.container}>
@@ -901,20 +906,19 @@ export default function AthleteMyProfile() {
               <div key={key} style={mCard}>
                 <div style={styles.liftTop}>
                   <span style={mLabel}>{label}</span>
-                  <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                    {current && (
-                      <span style={styles.liftPR}>
-                        {current.weight_lbs} <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
-                      </span>
-                    )}
-                    <button
-                      style={styles.removeLiftBtn}
-                      onClick={() => setConfirmRemove({ type: 'lift', key, label })}
-                      title="Remove lift"
-                      aria-label={`Remove ${label}`}
-                    >×</button>
-                  </div>
+                  <button
+                    style={styles.removeLiftBtn}
+                    onClick={() => setConfirmRemove({ type: 'lift', key, label })}
+                    title="Remove lift"
+                    aria-label={`Remove ${label}`}
+                  >×</button>
                 </div>
+                {current && (
+                  <div style={styles.liftPRRow}>
+                    <span style={mPR}>{current.weight_lbs}</span>
+                    <span style={styles.liftUnit}>lbs{current.reps > 1 ? ` x ${current.reps}` : ''}</span>
+                  </div>
+                )}
                 {current ? (
                   <p style={styles.liftDate}>Set {fmtShortDate(current.logged_at)}{current.notes ? ` · ${current.notes}` : ''}</p>
                 ) : (
@@ -1009,21 +1013,21 @@ export default function AthleteMyProfile() {
               return (
                 <div key={sel.id} style={mCard}>
                   <div style={styles.liftTop}>
-                    <span style={mLabel}>{def.name}</span>
-                    <div style={{ display: 'flex', alignItems: 'baseline', gap: 6 }}>
-                      {bestVal !== null && (
-                        <span style={{ ...styles.liftPR, fontSize: bestVal >= 100 ? 16 : 22 }}>
-                          {fmtPerfValue(bestVal, def.unit)}
-                        </span>
-                      )}
-                      <button
-                        style={styles.removeLiftBtn}
-                        onClick={() => setConfirmRemove({ type: 'metric', selId: sel.id, name: def.name })}
-                        title="Remove metric"
-                        aria-label={`Remove ${def.name}`}
-                      >×</button>
-                    </div>
+                    <span style={mLabel}>{def.shortName}</span>
+                    <button
+                      style={styles.removeLiftBtn}
+                      onClick={() => setConfirmRemove({ type: 'metric', selId: sel.id, name: def.name })}
+                      title="Remove metric"
+                      aria-label={`Remove ${def.name}`}
+                    >×</button>
                   </div>
+                  {bestVal !== null && (
+                    <div style={styles.liftPRRow}>
+                      <span style={{ ...mPR, fontSize: bestVal >= 100 ? (isMobile ? 15 : 16) : (isMobile ? 18 : 22) }}>
+                        {fmtPerfValue(bestVal, def.unit)}
+                      </span>
+                    </div>
+                  )}
 
                   {pr ? (
                     <p style={styles.liftDate}>Set {fmtShortDate(pr.updated_at)}</p>
@@ -1234,10 +1238,11 @@ const styles = {
 
   maxesGrid: { display: 'grid', gridTemplateColumns: 'repeat(auto-fill, minmax(180px, 1fr))', gap: 12 },
   liftCard:  { background: 'var(--card-inner)', border: '1px solid var(--border)', borderRadius: 12, padding: '14px 16px', display: 'flex', flexDirection: 'column', gap: 6, boxShadow: '0 1px 4px rgba(0,0,0,0.14)' },
-  liftTop:   { display: 'flex', justifyContent: 'space-between', alignItems: 'baseline' },
-  liftLabel: { fontSize: 12, fontWeight: 700, color: 'var(--text-2)', textTransform: 'uppercase', letterSpacing: 0.4 },
-  liftPR:    { fontSize: 22, fontWeight: 700, color: ORANGE, lineHeight: 1 },
-  liftUnit:  { fontSize: 12, fontWeight: 600, color: 'var(--text-3)' },
+  liftTop:   { display: 'flex', justifyContent: 'space-between', alignItems: 'center', gap: 8 },
+  liftLabel: { fontSize: 12, fontWeight: 700, color: 'var(--text-2)', textTransform: 'uppercase', letterSpacing: 0.4, display: 'block', flex: 1, minWidth: 0, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  liftPRRow: { display: 'flex', alignItems: 'baseline', gap: 4, marginTop: 2, overflow: 'hidden', textOverflow: 'ellipsis', whiteSpace: 'nowrap' },
+  liftPR:    { fontSize: 22, fontWeight: 700, color: ORANGE, lineHeight: 1, whiteSpace: 'nowrap' },
+  liftUnit:  { fontSize: 12, fontWeight: 600, color: 'var(--text-3)', whiteSpace: 'nowrap' },
   liftDate:  { fontSize: 11, color: 'var(--text-3)', margin: 0 },
   liftEmpty: { fontSize: 12, color: 'var(--text-3)', margin: 0, fontStyle: 'italic' },
   removeLiftBtn: {
