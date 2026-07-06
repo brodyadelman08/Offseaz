@@ -1296,7 +1296,7 @@ function normalizeSport(raw) {
     golf: 'golf',
     wrestling: 'wrestling',
     volleyball: 'volleyball', vball: 'volleyball',
-    track: 'track', trackandfiled: 'track', trackanfield: 'track', trackandfieldfield: 'track',
+    track: 'track', trackandfield: 'track', trackandfiled: 'track', trackanfield: 'track', trackandfieldfield: 'track',
     crosscountry: 'cross_country', xc: 'cross_country', crosscountryrunning: 'cross_country',
     lacrosse: 'lacrosse', lax: 'lacrosse',
     swimming: 'swimming', swim: 'swimming',
