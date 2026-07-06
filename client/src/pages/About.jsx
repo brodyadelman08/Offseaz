@@ -95,6 +95,10 @@ export default function About() {
               personalized to each athlete, with coaches getting real-time visibility into who is
               actually putting in the work.
             </p>
+            <p style={s.bodyText}>
+              Brody is a preferred walk-on for the University of St. Thomas baseball program, a
+              Division I program competing in the Summit League.
+            </p>
           </div>
 
         </div>

@@ -822,8 +822,12 @@ export default function Landing() {
               Offseaz was built by Brody Adelman — a multi-sport varsity athlete who watched firsthand
               how unstructured and unaccountable offseason training was for most high school athletes.
             </p>
-            <p style={{ fontSize: 17, color: '#555', lineHeight: 1.85, marginBottom: 44 }}>
+            <p style={{ fontSize: 17, color: '#555', lineHeight: 1.85, marginBottom: 16 }}>
               No plan. No visibility. No accountability. He built the platform he wished he had.
+            </p>
+            <p style={{ fontSize: 17, color: '#555', lineHeight: 1.85, marginBottom: 44 }}>
+              Today, Brody is a preferred walk-on for the University of St. Thomas baseball program,
+              a Division I program competing in the Summit League.
             </p>
             <Link to="/about" style={s.storyLink}>
               Read the full story <ArrowRightIcon size={14} />
