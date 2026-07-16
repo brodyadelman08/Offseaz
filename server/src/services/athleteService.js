@@ -3,50 +3,43 @@ const { getSurveyByAthlete } = require('./surveyService')
 const { getAthletePlan } = require('./blueprintService')
 
 async function getAthleteProfile(athleteId, coachId) {
-  console.log('[getAthleteProfile] start — athleteId=%s coachId=%s', athleteId, coachId)
-
-  // Resolve team — head coaches own a team; assistant coaches are in team_members
-  // Use .limit(1) + array (never throws on 0 rows, never throws on multiple rows)
-  let teamId = null
-
+  // Resolve EVERY team this coach is associated with — teams they own
+  // (coach_id match) plus teams they assist on (a team_members row with a
+  // coach-level access_level). A coach who owns or assists multiple teams
+  // must be checked against the full set, not a single arbitrarily-picked
+  // team — picking just one caused legitimate athletes on the coach's other
+  // team(s) to be falsely rejected.
   const { data: ownedTeams, error: ownedErr } = await supabaseAdmin
     .from('teams')
     .select('id')
     .eq('coach_id', coachId)
-    .limit(1)
 
-  console.log('[getAthleteProfile] ownedTeams=%j ownedErr=%j', ownedTeams, ownedErr)
+  if (ownedErr) throw ownedErr
 
-  if (ownedTeams?.length) {
-    teamId = ownedTeams[0].id
-    console.log('[getAthleteProfile] head coach path — teamId=%s', teamId)
-  } else {
-    const { data: assistantRows, error: assistantErr } = await supabaseAdmin
-      .from('team_members')
-      .select('team_id')
-      .eq('athlete_id', coachId)
-      .in('access_level', ['view_only', 'admin_coach'])
-      .limit(1)
+  const { data: assistantRows, error: assistantErr } = await supabaseAdmin
+    .from('team_members')
+    .select('team_id')
+    .eq('athlete_id', coachId)
+    .in('access_level', ['view_only', 'admin_coach'])
 
-    console.log('[getAthleteProfile] assistantRows=%j assistantErr=%j', assistantRows, assistantErr)
+  if (assistantErr) throw assistantErr
 
-    if (!assistantRows?.length) {
-      console.log('[getAthleteProfile] no team found for coachId=%s — throwing 403', coachId)
-      throw Object.assign(new Error('No team found'), { status: 403 })
-    }
-    teamId = assistantRows[0].team_id
-    console.log('[getAthleteProfile] assistant coach path — teamId=%s', teamId)
+  const teamIds = [...new Set([
+    ...(ownedTeams || []).map(t => t.id),
+    ...(assistantRows || []).map(r => r.team_id),
+  ])]
+
+  if (!teamIds.length) {
+    throw Object.assign(new Error('No team found'), { status: 403 })
   }
 
-  // Verify athlete is on coach's team
+  // Verify athlete is on at least one of the coach's teams
   const { data: memberRows, error: memberError } = await supabaseAdmin
     .from('team_members')
     .select('athlete_id')
-    .eq('team_id', teamId)
+    .in('team_id', teamIds)
     .eq('athlete_id', athleteId)
     .limit(1)
-
-  console.log('[getAthleteProfile] memberRows=%j memberError=%j', memberRows, memberError)
 
   if (memberError) throw memberError
   if (!memberRows?.length) throw Object.assign(new Error('Athlete not on your team'), { status: 403 })
