@@ -315,8 +315,8 @@ export function FootballIcon({ size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
       <g transform="rotate(-28 20 20)">
-        <ellipse cx="20" cy="20" rx="17" ry="11" fill="#F75709" />
-        <ellipse cx="20" cy="20" rx="17" ry="11" fill="none" stroke="#bf4207" strokeWidth="0.8" />
+        <ellipse cx="20" cy="20" rx="17" ry="10" fill="#F75709" />
+        <ellipse cx="20" cy="20" rx="17" ry="10" fill="none" stroke="#bf4207" strokeWidth="0.8" />
         {/* Lengthwise seam */}
         <line x1="3" y1="20" x2="37" y2="20" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
         {/* Lace vertical bar */}
@@ -532,14 +532,10 @@ export function RugbyIcon({ size = 40 }) {
   return (
     <svg width={size} height={size} viewBox="0 0 40 40" style={sb}>
       <g transform="rotate(-28 20 20)">
-        <ellipse cx="20" cy="20" rx="17" ry="10" fill="#7a3b1e" />
-        <ellipse cx="20" cy="20" rx="17" ry="10" fill="none" stroke="#5c2b13" strokeWidth="0.8" />
-        {/* Lengthwise seam */}
+        <ellipse cx="20" cy="20" rx="17" ry="11" fill="#7a3b1e" />
+        <ellipse cx="20" cy="20" rx="17" ry="11" fill="none" stroke="#5c2b13" strokeWidth="0.8" />
+        {/* Lengthwise seam only — a rugby ball has no laces */}
         <line x1="3" y1="20" x2="37" y2="20" stroke="white" strokeWidth="1.5" strokeLinecap="round" />
-        {/* Lace-style stitch marks */}
-        <line x1="12" y1="18" x2="12" y2="22" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
-        <line x1="20" y1="17.5" x2="20" y2="22.5" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
-        <line x1="28" y1="18" x2="28" y2="22" stroke="white" strokeWidth="1.2" strokeLinecap="round" />
       </g>
     </svg>
   )
