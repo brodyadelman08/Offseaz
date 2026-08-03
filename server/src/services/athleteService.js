@@ -113,6 +113,8 @@ async function getAthleteProfile(athleteId, coachId) {
       description: plan.description,
       num_weeks: plan.num_weeks,
       starts_on: plan.starts_on,
+      current_week: plan.current_week,
+      is_individual: plan.is_individual,
     } : null,
     logs,
   }

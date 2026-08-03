@@ -61,6 +61,14 @@ function calcCurrentWeek(startsOn, numWeeks) {
   return Math.min(Math.max(week, 1), numWeeks)
 }
 
+// Prefer the real, stored progress value (always present for an
+// auto-generated plan; present for a coach plan assigned to this one
+// athlete) — fall back to the elapsed-time estimate only for a team-wide
+// bulk assignment, which has no single meaningful current_week.
+function planCurrentWeek(plan) {
+  return plan.is_individual ? plan.current_week : calcCurrentWeek(plan.starts_on, plan.num_weeks)
+}
+
 // ─── Performance metric display helpers (coach read-only) ─────────────────────
 
 const PERF_METRICS_COACH = {
@@ -267,7 +275,7 @@ export default function AthleteProfile() {
   if (!athlete) return null
 
   const { survey, plan, logs } = athlete
-  const currentWeek = plan ? calcCurrentWeek(plan.starts_on, plan.num_weeks) : null
+  const currentWeek = plan ? planCurrentWeek(plan) : null
   const hasAnyMax = maxes && LIFTS.some(l => maxes[l.key]?.current)
 
   const surveyFields = [

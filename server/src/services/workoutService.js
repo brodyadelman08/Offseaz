@@ -49,7 +49,83 @@ async function logSession(athleteId, { blueprint_week_id, session_index, status,
     console.error('[logSession] streak update failed:', err.message)
   }
 
+  // Fire-and-forget — not needed in the log response, shouldn't block it.
+  recomputeCurrentWeek(athleteId, blueprint_week_id).catch(err =>
+    console.error('[logSession] recomputeCurrentWeek failed:', err.message)
+  )
+
   return { workout: data, streak_days }
+}
+
+// Recomputes how far the athlete has actually progressed through their
+// individually-assigned plan and persists it to blueprint_assignments.current_week
+// — a stored value, distinct from the plan content, that the UI and survey
+// retake both read instead of guessing from elapsed calendar time.
+//
+// A week counts as "complete" once every session in it has at least one
+// workout_logs row (any status — even a skip means the athlete addressed it,
+// consistent with how streaks already treat skips as neutral rather than
+// blocking). current_week is set to the first NOT-yet-complete week, i.e.
+// one past the last fully-logged week, clamped to the plan's length.
+async function recomputeCurrentWeek(athleteId, blueprintWeekId) {
+  const { data: sourceWeek, error: sourceWeekErr } = await supabaseAdmin
+    .from('blueprint_weeks')
+    .select('blueprint_id')
+    .eq('id', blueprintWeekId)
+    .maybeSingle()
+  if (sourceWeekErr || !sourceWeek) return
+
+  // current_week lives on the athlete's individual assignment row. Sessions
+  // logged against a team-wide (coach-assigned) blueprint have no such row —
+  // nothing to update in that case, which is intentional.
+  const { data: assignment, error: assignErr } = await supabaseAdmin
+    .from('blueprint_assignments')
+    .select('id, current_week')
+    .eq('blueprint_id', sourceWeek.blueprint_id)
+    .eq('athlete_id', athleteId)
+    .maybeSingle()
+  if (assignErr || !assignment) return
+
+  const { data: weeks, error: weeksErr } = await supabaseAdmin
+    .from('blueprint_weeks')
+    .select('id, week_number, sessions')
+    .eq('blueprint_id', sourceWeek.blueprint_id)
+    .order('week_number', { ascending: true })
+  if (weeksErr || !weeks?.length) return
+
+  const weekIds = weeks.map(w => w.id)
+  const { data: logs, error: logsErr } = await supabaseAdmin
+    .from('workout_logs')
+    .select('blueprint_week_id, session_index')
+    .eq('athlete_id', athleteId)
+    .in('blueprint_week_id', weekIds)
+  if (logsErr) return
+
+  const loggedSessionsByWeek = {}
+  for (const log of logs || []) {
+    if (!loggedSessionsByWeek[log.blueprint_week_id]) loggedSessionsByWeek[log.blueprint_week_id] = new Set()
+    loggedSessionsByWeek[log.blueprint_week_id].add(log.session_index)
+  }
+
+  let newCurrentWeek = 1
+  for (const week of weeks) {
+    const sessionCount = Array.isArray(week.sessions) ? week.sessions.length : 0
+    const loggedCount  = loggedSessionsByWeek[week.id]?.size || 0
+    // A week with zero scheduled sessions has nothing to log — treat it as
+    // trivially complete rather than a wall the athlete can never pass.
+    const isComplete = loggedCount >= sessionCount
+    if (isComplete) newCurrentWeek = week.week_number + 1
+    else break
+  }
+  newCurrentWeek = Math.min(newCurrentWeek, weeks.length)
+
+  if (newCurrentWeek !== assignment.current_week) {
+    const { error: updateErr } = await supabaseAdmin
+      .from('blueprint_assignments')
+      .update({ current_week: newCurrentWeek })
+      .eq('id', assignment.id)
+    if (updateErr) console.error('[recomputeCurrentWeek] update failed:', updateErr.message)
+  }
 }
 
 async function getAthleteLog(athleteId) {

@@ -219,6 +219,16 @@ async function getAthletePlan(athleteId) {
       num_weeks: blueprint.num_weeks,
       starts_on: assignment.starts_on,
       assigned_at: assignment.assigned_at,
+      // Athlete's actual progress — a stored value, not derived from elapsed
+      // time. Defaults to 1 for rows that predate this column.
+      current_week: assignment.current_week || 1,
+      // current_week is only ever recomputed for assignments scoped to one
+      // athlete (assignment.athlete_id set) — an auto-generated plan always
+      // qualifies; a coach plan does too if assigned to one athlete. A
+      // team-wide bulk assignment (athlete_id null, shared by the whole
+      // roster) has no single meaningful current_week, so the client should
+      // fall back to its elapsed-time estimate for that case only.
+      is_individual: assignment.athlete_id != null,
       weeks: weeks || [],
     }
   }
@@ -229,6 +239,47 @@ async function getAthletePlan(athleteId) {
   ])
 
   return { auto_plan, coach_plan }
+}
+
+// Finds the athlete's current individual auto-generated assignment (if any),
+// i.e. the plan that was built from their survey answers — never a
+// coach-built/coach-assigned plan. Used by survey retake to know what to
+// preserve vs. regenerate.
+async function getAthleteAutoAssignment(athleteId) {
+  const { data, error } = await supabaseAdmin
+    .from('blueprint_assignments')
+    .select('*, blueprints(*)')
+    .eq('athlete_id', athleteId)
+    .order('assigned_at', { ascending: false })
+
+  if (error) throw error
+
+  const match = (data || []).find(a => a.blueprints?.description?.startsWith('Auto-generated'))
+  if (!match) return null
+  return { assignment: match, blueprint: match.blueprints }
+}
+
+// Overwrites a blueprint's title/description and the content of only the
+// given weeks (each { week_number, objective, sessions }) — every other week
+// row is left completely untouched, so completed history and the
+// workout_logs pointing at those blueprint_week_id rows stay intact.
+async function updateBlueprintUpcomingWeeks(blueprintId, { title, description }, upcomingWeeks) {
+  const { error: bpError } = await supabaseAdmin
+    .from('blueprints')
+    .update({ title, description })
+    .eq('id', blueprintId)
+
+  if (bpError) throw bpError
+
+  for (const week of upcomingWeeks) {
+    const { error } = await supabaseAdmin
+      .from('blueprint_weeks')
+      .update({ objective: week.objective || null, sessions: week.sessions || [] })
+      .eq('blueprint_id', blueprintId)
+      .eq('week_number', week.week_number)
+
+    if (error) throw error
+  }
 }
 
 async function deleteBlueprint(blueprintId) {
@@ -365,6 +416,8 @@ module.exports = {
   assignBlueprint,
   bulkAssignBlueprint,
   getAthletePlan,
+  getAthleteAutoAssignment,
+  updateBlueprintUpcomingWeeks,
   toggleLock,
   deleteBlueprint,
   getAthleteOverrides,

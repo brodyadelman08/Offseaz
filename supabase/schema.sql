@@ -126,12 +126,17 @@ CREATE INDEX IF NOT EXISTS idx_blueprint_weeks_blueprint_id ON blueprint_weeks(b
 -- ── blueprint_assignments ────────────────────────────────────────────────────
 -- athlete_id XOR team_id is populated depending on whether the blueprint was
 -- assigned to one athlete or broadcast to a whole team.
+-- current_week is the athlete's actual progress through this plan, tracked
+-- as a distinct stored value (not derived from elapsed time). Recomputed by
+-- the server after every workout log — see server/src/services/workoutService.js
+-- recomputeCurrentWeek(). See migrations/blueprint_assignment_current_week.sql.
 CREATE TABLE IF NOT EXISTS blueprint_assignments (
   id           UUID PRIMARY KEY DEFAULT gen_random_uuid(),
   blueprint_id UUID NOT NULL REFERENCES blueprints(id) ON DELETE CASCADE,
   athlete_id   UUID REFERENCES profiles(id) ON DELETE CASCADE,
   team_id      UUID REFERENCES teams(id) ON DELETE CASCADE,
   starts_on    DATE NOT NULL,
+  current_week INTEGER NOT NULL DEFAULT 1 CHECK (current_week >= 1),
   assigned_at  TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 

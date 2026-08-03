@@ -513,7 +513,7 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, inj
       {/* Week dots — wrap so 16 dots don't overflow on narrow screens */}
       <div style={styles.weekDots}>
         {Array.from({ length: plan.num_weeks }, (_, i) => i + 1).map(n => {
-          const isPast = n < calcCurrentWeek(plan.starts_on, plan.num_weeks)
+          const isPast = n < currentWeek
           return (
             <button
               key={n}
@@ -597,8 +597,13 @@ export default function AthletePlan() {
       setLogs(logsData)
       setMaxes(maxesData)
       setInjuryAreas(injuryData)
-      if (plans.coach) setCurrentWeekCoach(calcCurrentWeek(plans.coach.starts_on, plans.coach.num_weeks))
-      if (plans.auto)  setCurrentWeekAuto(calcCurrentWeek(plans.auto.starts_on,   plans.auto.num_weeks))
+      // is_individual plans (always true for the auto plan; true for a
+      // coach plan only if assigned to this one athlete, not bulk-assigned
+      // to the whole team) carry a real, stored current_week. A team-wide
+      // assignment has no single meaningful value per athlete — fall back
+      // to the elapsed-time estimate for that case only.
+      if (plans.coach) setCurrentWeekCoach(plans.coach.is_individual ? plans.coach.current_week : calcCurrentWeek(plans.coach.starts_on, plans.coach.num_weeks))
+      if (plans.auto)  setCurrentWeekAuto(plans.auto.is_individual ? plans.auto.current_week : calcCurrentWeek(plans.auto.starts_on, plans.auto.num_weeks))
     }).finally(() => setLoading(false))
   }, [])
 

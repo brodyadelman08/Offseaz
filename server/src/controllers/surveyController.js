@@ -2,7 +2,7 @@ const { submitSurvey, updateSurvey, getSurveyByAthlete, getTeamSurveys, updatePh
 const { getAthleteTeam } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
 const { createInjuryNotification } = require('../services/notificationService')
-const { autoAssignBlueprint } = require('../services/autoAssignService')
+const { autoAssignBlueprint, regenerateUpcomingWeeks, programmingFieldsChanged } = require('../services/autoAssignService')
 
 async function submit(req, res) {
   const {
@@ -100,6 +100,10 @@ async function update(req, res) {
       return res.status(403).json({ error: 'Only athletes can update surveys' })
     }
 
+    // Snapshot the pre-retake answers so we can tell afterward whether
+    // anything that actually drives blueprint generation changed.
+    const oldSurvey = await getSurveyByAthlete(req.user.id).catch(() => null)
+
     const survey = await updateSurvey(req.user.id, {
       full_name,
       age, height_feet, height_inches, weight_lbs, grade,
@@ -116,20 +120,34 @@ async function update(req, res) {
       offseason_goals,
     })
 
+    const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
+    const team = await getAthleteTeam(req.user.id).catch(() => null)
+
     // Notify coach if athlete flagged any injury area
     const hasInjury = (injury_areas || []).some(a => a !== 'None')
-    if (hasInjury) {
-      try {
-        const team = await getAthleteTeam(req.user.id)
-        if (team?.coach_id) {
-          const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
-          createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
-            console.error('Injury notification failed (update):', e)
-          )
-        }
-      } catch (e) {
-        console.error('Could not look up team for injury notification:', e)
+    if (hasInjury && team?.coach_id) {
+      createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
+        console.error('Injury notification failed (update):', e)
+      )
+    }
+
+    // Retaking the survey only touches the plan if the athlete is on a team
+    // (same rule as first-time submit — no coach_id, nothing to assign) AND
+    // an answer that actually feeds blueprint generation changed. If nothing
+    // programming-relevant changed, the plan resumes exactly as-is.
+    if (team?.id && team?.coach_id) {
+      if (programmingFieldsChanged(oldSurvey, survey)) {
+        console.log('[survey/update] programming-relevant answers changed — regenerating upcoming weeks', {
+          athleteId: req.user.id, teamId: team.id, coachId: team.coach_id,
+        })
+        regenerateUpcomingWeeks(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
+          console.error('[survey/update] regenerateUpcomingWeeks failed:', e?.message || e)
+        )
+      } else {
+        console.log('[survey/update] no programming-relevant changes — plan resumes unchanged', { athleteId: req.user.id })
       }
+    } else {
+      console.log('[survey/update] no team — skipping plan regeneration for teamless athlete')
     }
 
     res.json({ survey })

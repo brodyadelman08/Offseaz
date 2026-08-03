@@ -28,7 +28,9 @@ function surveyGoalsToSuggestions(surveyGoals = []) {
   return surveyGoals.map(g => MAP[g] || { title: g, target: '' }).filter(Boolean)
 }
 
-// Compute 1-based current week number clamped to [1, numWeeks]
+// Compute 1-based current week number clamped to [1, numWeeks] — elapsed-time
+// fallback used only when the plan has no real per-athlete progress tracking
+// (a team-wide bulk assignment; see plan.is_individual).
 function currentWeekOf(startsOn, numWeeks) {
   const msPerWeek = 7 * 24 * 60 * 60 * 1000
   const elapsed   = Date.now() - new Date(startsOn).getTime()
@@ -36,12 +38,20 @@ function currentWeekOf(startsOn, numWeeks) {
   return Math.min(Math.max(week, 1), numWeeks)
 }
 
+// The plan's actual current week — the real, stored progress value when
+// available (auto-generated plans always have one; individually-assigned
+// coach plans do too), falling back to the elapsed-time estimate only for a
+// team-wide bulk assignment, which has no single meaningful value.
+function planCurrentWeek(plan) {
+  return plan.is_individual ? plan.current_week : currentWeekOf(plan.starts_on, plan.num_weeks)
+}
+
 const DAY_NAMES = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 // Find today's session within the active plan's current week
 function findTodaySession(plan) {
   if (!plan?.weeks?.length) return null
-  const weekNum = currentWeekOf(plan.starts_on, plan.num_weeks)
+  const weekNum = planCurrentWeek(plan)
   const week = plan.weeks.find(w => w.week_number === weekNum) || plan.weeks[0]
   if (!week?.sessions?.length) return null
 
@@ -288,7 +298,7 @@ export default function AthleteDashboard() {
     }
 
     // Default — plain plan summary card
-    const week = currentWeekOf(activePlan.starts_on, activePlan.num_weeks)
+    const week = planCurrentWeek(activePlan)
     return (
       <div style={styles.card}>
         <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', gap: 12, flexWrap: 'wrap' }}>
