@@ -4,15 +4,25 @@ import { Link } from 'react-router-dom'
 const LOGO   = '/Offseaz-Logo-White-Letter-Dark.png'
 const ORANGE = '#F75709'
 
-// ── Scroll to top on every page mount ────────────────────────────────────────
+// ── Scroll to top on every page mount, or to a #section-id if the link that
+//    brought us here included one (e.g. the signup age-block's "Learn more") ──
 function ScrollTop() {
-  useEffect(() => { window.scrollTo(0, 0) }, [])
+  useEffect(() => {
+    if (window.location.hash) {
+      const el = document.getElementById(window.location.hash.slice(1))
+      if (el) {
+        el.scrollIntoView()
+        return
+      }
+    }
+    window.scrollTo(0, 0)
+  }, [])
   return null
 }
 
 // ── Shared helpers ────────────────────────────────────────────────────────────
-function Sec({ n, title }) {
-  return <h2 style={ls.secHead}>{n}. {title}</h2>
+function Sec({ n, title, id }) {
+  return <h2 id={id} style={ls.secHead}>{n}. {title}</h2>
 }
 function P({ children }) {
   return <p style={ls.p}>{children}</p>
@@ -93,7 +103,7 @@ export function Privacy() {
   return (
     <LegalLayout
       title="Privacy Policy"
-      lastUpdated="September 16, 2025"
+      lastUpdated="August 5, 2026"
       intro="At Offseaz, your privacy is important to us. This Privacy Policy explains how we collect, use, store, and protect your information when you visit or interact with offseaz.com. By using our platform, you agree to the practices described in this policy."
     >
       <Sec n="1" title="Information We Collect" />
@@ -120,7 +130,7 @@ export function Privacy() {
       <Sec n="3" title="Sharing of Information" />
       <P>We do not sell or rent your personal information. We may share your data only in the following limited circumstances:</P>
       <Ul>
-        <Li>With trusted third-party service providers who support our operations, including database hosting (Supabase), email delivery (Resend), and payment processing (Stripe)</Li>
+        <Li>With trusted third-party service providers who support our operations, including database hosting (Supabase), email delivery (Resend), and payment processing (Stripe). Stripe processes and stores payment card details directly — Offseaz never receives or stores full card numbers</Li>
         <Li>To comply with applicable laws, regulations, or legal requests</Li>
         <Li>To protect the rights, property, or safety of Offseaz, our users, or others</Li>
         <Li>Between coaches and athletes within the same team, as required for the platform to function — coaches can view athlete training data, logs, and profiles for athletes on their team</Li>
@@ -131,7 +141,9 @@ export function Privacy() {
       <Ul>
         <Li>Athletes under 18 should have parental or guardian awareness before creating an account</Li>
         <Li>Athlete performance data is only visible to their assigned coach and teammates on the same team, based on the athlete's privacy settings</Li>
-        <Li>We do not knowingly collect data from children under the age of 13. If you believe we have inadvertently collected such data, contact us immediately at <Email /></Li>
+        <Li>If an athlete is under 18 and subscribes to a paid personalized blueprint, the paying party must be a parent or guardian who is at least 18 years old. We collect that parent or guardian's payment and contact information for billing purposes only — it is not merged with or exposed as part of the athlete's training profile</Li>
+        <Li>We ask for date of birth at signup solely to confirm you meet the 13-and-older minimum age required to create an account (see Terms of Service, Section 1). It is used only to compute that one eligibility check and is not stored — this is true whether the check passes or fails</Li>
+        <Li>We do not knowingly collect personal information from children under the age of 13. If you believe we have inadvertently collected such data, contact us immediately at <Email /></Li>
       </Ul>
 
       <Sec n="5" title="Cookies and Tracking" />
@@ -166,11 +178,11 @@ export function Terms() {
   return (
     <LegalLayout
       title="Terms and Conditions"
-      lastUpdated="September 16, 2025"
+      lastUpdated="August 5, 2026"
       intro="Welcome to Offseaz. By accessing or using offseaz.com, you agree to comply with and be bound by these Terms and Conditions. Please read them carefully. If you do not agree, you should not use the platform."
     >
-      <Sec n="1" title="Eligibility" />
-      <P>You must be at least 13 years old to use this platform. Athletes under the age of 18 should use the platform with parental or guardian awareness. By using Offseaz, you confirm that you meet these requirements.</P>
+      <Sec n="1" title="Eligibility" id="eligibility" />
+      <P>You must be at least 13 years old to create an Offseaz account or use this platform. We collect and verify date of birth at signup specifically to enforce this minimum, and accounts are not created for anyone who does not meet it — there is no exception and no parental-consent path around this age requirement. Athletes who are 13 or older but under 18 should use the platform with parental or guardian awareness. If an athlete under 18 subscribes to a paid personalized blueprint, a parent or guardian who is at least 18 years old must be the paying party and must agree to these Terms on the athlete's behalf — see Section 10, "Minors &amp; Parental Consent for Payment." By using Offseaz, you confirm that you meet these requirements.</P>
 
       <Sec n="2" title="Use of the Platform" />
       <P>You agree to use Offseaz only for lawful purposes and in ways that do not infringe on the rights of others. Prohibited activities include but are not limited to:</P>
@@ -194,34 +206,53 @@ export function Terms() {
         <Li>Obtaining appropriate consent from athletes and parents before adding minors to their team</Li>
       </Ul>
 
-      <Sec n="5" title="Payments and Subscriptions" />
-      <P>Offseaz offers subscription-based access for coaches. The following terms apply:</P>
+      <Sec n="5" title="Coach Team Tools — Free Forever" />
+      <P>The core coach experience — team dashboard, roster management, the weekly Monday accountability report, and the ability to build and assign a fully custom training plan to your team — is free forever. A coach is never required to pay Offseaz for anything. Payment is only ever required if a coach chooses to unlock and assign one of Offseaz's pre-made sport blueprints, as described in Section 7.</P>
+
+      <Sec n="6" title="Athlete Personalized Blueprint (Paid Subscription)" />
+      <P>Athletes can take the needs-analysis survey and preview their personalized training blueprint at no cost, whether or not they belong to a team. Paying for a subscription unlocks the full usable plan and workout logging, and includes unlimited survey retakes and regenerated plans for as long as the subscription is active. Current pricing is $7.99/month or $59.99/year; these amounts are placeholders and subject to change as described in Section 8.</P>
+
+      <Sec n="7" title="Coach Sport Blueprint Unlock (Paid, Optional)" />
+      <P>Coaches may optionally purchase a seasonal unlock to assign Offseaz's pre-made, 16-week sport-specific blueprints to their team. This unlock is priced per sport, per season, by roster size at the time of purchase — up to 25 athletes: $99; 26–50 athletes: $149; 51+ athletes: $199 — and renews yearly at the roster tier locked in at purchase. These amounts are placeholders and subject to change as described in Section 8. This unlock is never required to use Offseaz as a coach: building and assigning your own custom plan remains free and fully supported whether or not you ever purchase a sport blueprint unlock.</P>
+
+      <Sec n="8" title="Billing, Pricing & Renewal Terms" />
       <Ul>
         <Li>All payments must be made using the methods specified on the platform</Li>
-        <Li>Subscription pricing is subject to change with advance notice to active subscribers</Li>
-        <Li>Subscriptions renew automatically unless canceled prior to the renewal date</Li>
-        <Li>A 30-day free trial is available for new coach accounts with full platform access</Li>
+        <Li>Pricing for both the athlete subscription and the coach sport blueprint unlock is subject to change with advance notice to active subscribers; changes apply at the next renewal, not to a period already paid for</Li>
+        <Li>Athlete subscriptions renew automatically each month or year (matching the plan selected) unless canceled prior to the renewal date, and will be charged at the then-current price disclosed at checkout</Li>
+        <Li>Coach sport blueprint unlocks renew automatically each year at the roster tier locked in at purchase, unless canceled prior to the renewal date</Li>
+        <Li>There is no free trial period for either product. The athlete survey and blueprint preview are free to use with no time limit and no payment method required; a coach can preview Offseaz's pre-made sport blueprints before deciding whether to purchase an unlock. Checkout always discloses the exact amount that will be charged and when, before you pay</Li>
       </Ul>
 
-      <Sec n="6" title="Intellectual Property" />
+      <Sec n="9" title="Payment Failures & Grace Periods" />
+      <Ul>
+        <Li>If an athlete's subscription renewal payment fails, the athlete keeps full access for a grace period of approximately two weeks while we attempt to process payment. All logged history and progress is preserved throughout the grace period. If payment is not resolved by the end of the grace period, the plan locks until payment resumes — logged history and progress are preserved and restored in full once payment succeeds</Li>
+        <Li>Coaches receive email notifications when a payment issue occurs on their account</Li>
+        <Li>If a coach's sport blueprint unlock lapses at renewal, athletes keep access to any pre-made plans already assigned to them through the end of the current season, but the coach cannot assign new pre-made blueprints until the unlock is renewed. Free custom team plans are never affected by a lapsed unlock</Li>
+      </Ul>
+
+      <Sec n="10" title="Minors & Parental Consent for Payment" />
+      <P>If an athlete is under 18 and wants to subscribe to the paid personalized blueprint, a parent or guardian who is at least 18 years old must be the paying party on the account and must agree to these Terms, including the billing and cancellation terms in Sections 8 and 9, on the athlete's behalf. The athlete may continue to use the free survey and blueprint preview without a parent or guardian.</P>
+
+      <Sec n="11" title="Intellectual Property" />
       <P>All content on the Offseaz platform, including text, graphics, logos, software, training templates, and design, is the property of Offseaz or its licensors and is protected by applicable intellectual property laws. You may not copy, distribute, or use platform content without prior written consent.</P>
 
-      <Sec n="7" title="User Content" />
+      <Sec n="12" title="User Content" />
       <P>When you post or submit content to Offseaz, including workout logs, posts, photos, or comments, you grant Offseaz a non-exclusive, royalty-free license to use and display that content in connection with operating the platform. You are solely responsible for any content you provide and warrant that it does not violate any third-party rights.</P>
 
-      <Sec n="8" title="Disclaimers" />
+      <Sec n="13" title="Disclaimers" />
       <P>Offseaz provides training templates and tools for informational and organizational purposes only. We are not licensed medical professionals or certified athletic trainers. Athletes with injuries or medical conditions should consult a qualified professional before following any training program on the platform. Offseaz is not liable for injuries resulting from the use of training programs created, assigned, or followed through the platform.</P>
 
-      <Sec n="9" title="Limitation of Liability" />
+      <Sec n="14" title="Limitation of Liability" />
       <P>To the fullest extent permitted by law, Offseaz and its affiliates will not be liable for any indirect, incidental, or consequential damages resulting from your use or inability to use the platform.</P>
 
-      <Sec n="10" title="Governing Law" />
+      <Sec n="15" title="Governing Law" />
       <P>These Terms are governed by the laws of the State of Minnesota, United States. Any disputes shall be resolved exclusively in the courts of the State of Minnesota.</P>
 
-      <Sec n="11" title="Changes to These Terms" />
+      <Sec n="16" title="Changes to These Terms" />
       <P>We may update these Terms at any time. Updates will be posted with a revised Last Updated date. Continued use of the platform after updates constitutes acceptance of the revised Terms.</P>
 
-      <Sec n="12" title="Contact Us" />
+      <Sec n="17" title="Contact Us" />
       <P>If you have questions about these Terms, contact us at <Email />.</P>
     </LegalLayout>
   )
@@ -233,15 +264,15 @@ export function Refund() {
   return (
     <LegalLayout
       title="Refund Policy"
-      lastUpdated="September 16, 2025"
-      intro="At Offseaz, we want coaches and athletes to be fully satisfied with their experience on the platform. This Refund Policy explains the terms under which refunds are provided for subscription purchases made through offseaz.com."
+      lastUpdated="August 5, 2026"
+      intro="At Offseaz, we want coaches and athletes to be fully satisfied with their experience on the platform. This Refund Policy explains the terms under which refunds are provided for both of Offseaz's paid products: the athlete personalized blueprint subscription and the coach sport blueprint unlock."
     >
-      <Sec n="1" title="Free Trial" />
-      <P>New coach accounts receive a 30-day free trial with full access to all platform features. No payment is required during the trial period. You may cancel at any time during the trial without being charged.</P>
+      <Sec n="1" title="What This Policy Covers" />
+      <P>Coach team tools — the dashboard, roster, Monday accountability report, and building and assigning a free custom team plan — are free forever and never involve a charge, so there is nothing to refund there. This policy applies only to the two paid products on Offseaz: (1) an athlete's personalized blueprint subscription, and (2) a coach's optional seasonal unlock of Offseaz's pre-made sport blueprints. Neither product has a free trial — the athlete survey and blueprint preview, and the coach's preview of pre-made blueprints, are free with no time limit, and payment is only charged when you actively choose to subscribe or purchase an unlock.</P>
 
       <Sec n="2" title="Eligibility for Refunds" />
       <Ul>
-        <Li>Refund requests for paid subscriptions must be submitted within 15 days of the original charge date</Li>
+        <Li>Refund requests must be submitted within 15 days of the original charge date, for either the athlete subscription or the coach sport blueprint unlock</Li>
         <Li>Refunds are evaluated on a case-by-case basis and may be approved at our discretion</Li>
         <Li>Proof of purchase is required for all refund requests</Li>
       </Ul>
@@ -249,7 +280,7 @@ export function Refund() {
       <Sec n="3" title="Non-Refundable Items" />
       <P>The following are not eligible for refunds:</P>
       <Ul>
-        <Li>Subscription charges for periods of service already used beyond the 15-day window</Li>
+        <Li>Charges for periods of service already used beyond the 15-day window</Li>
         <Li>Charges that occurred more than 15 days before the refund request</Li>
         <Li>Accounts that have been suspended or terminated due to violations of these Terms</Li>
       </Ul>
@@ -258,12 +289,19 @@ export function Refund() {
       <P>To request a refund, contact us at <Email /> with your account email address and the reason for your request. If approved, refunds will be processed to your original payment method within 10 business days.</P>
 
       <Sec n="5" title="Cancellations" />
-      <P>You may cancel your Offseaz subscription at any time from your account settings. Cancellation stops future billing. You will retain access to the platform through the end of your current billing period.</P>
+      <P>You may cancel your athlete subscription or coach sport blueprint unlock at any time from your account settings. Cancellation stops future billing. You will retain access through the end of your current paid period, with no automatic partial refund for the unused portion of that period.</P>
 
-      <Sec n="6" title="Consumer Rights" />
+      <Sec n="6" title="Payment Failures &amp; Grace Periods" />
+      <Ul>
+        <Li>If an athlete's renewal payment fails, they keep full access for a grace period of approximately two weeks while we attempt to process payment. All logged history and progress is preserved during the grace period and, if the plan later locks, is preserved and fully restored once payment succeeds</Li>
+        <Li>Coaches are notified by email of any payment issue on their account</Li>
+        <Li>If a coach's sport blueprint unlock lapses at renewal, athletes keep access to any pre-made plans already assigned to them for the remainder of the current season, but the coach cannot assign new pre-made blueprints until the unlock is renewed. A coach's free custom team plan is never affected by a lapsed unlock</Li>
+      </Ul>
+
+      <Sec n="7" title="Consumer Rights" />
       <P>This Refund Policy does not limit any statutory rights you may have under applicable consumer protection laws in your jurisdiction.</P>
 
-      <Sec n="7" title="Contact Us" />
+      <Sec n="8" title="Contact Us" />
       <P>For questions about our Refund Policy or to request a refund, contact us at <Email />.</P>
     </LegalLayout>
   )
@@ -386,6 +424,7 @@ const ls = {
     margin: '36px 0 10px',
     paddingBottom: 8,
     borderBottom: '1px solid #1A1A1A',
+    scrollMarginTop: 84, // keeps the heading clear of the fixed 64px nav when linked to directly
   },
 
   p: {
