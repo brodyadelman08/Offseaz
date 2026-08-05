@@ -2,20 +2,28 @@
 import { useNavigate, useSearchParams, Link } from 'react-router-dom'
 import { supabase } from '../services/supabase'
 import api from '../services/api'
+import { useAuth } from '../context/AuthContext'
 import { BarChartIcon, UserIcon, TargetIcon, CheckCircleIcon } from '../components/Icons'
 
 export default function Register() {
   const navigate = useNavigate()
+  const { updateProfile } = useAuth()
   const [searchParams] = useSearchParams()
   const inviteCode = searchParams.get('invite')
 
   const [fullName, setFullName] = useState('')
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
+  const [dob, setDob] = useState('')
   const [role, setRole] = useState(inviteCode ? 'athlete' : '')
   const [error, setError] = useState('')
   const [fieldErrors, setFieldErrors] = useState({})
   const [loading, setLoading] = useState(false)
+  // Set only by an authoritative server response (never computed client-side)
+  // — see POST /api/auth/check-age. Rendered in place of the form itself.
+  const [ageBlock, setAgeBlock] = useState(null)
+
+  const todayISO = new Date().toISOString().slice(0, 10)
 
   const accentColor = role === 'athlete' ? '#308EBD' : '#F75709'
 
@@ -32,6 +40,7 @@ export default function Register() {
     } else if (password.length < 8) {
       errs.password = 'Password must be at least 8 characters.'
     }
+    if (!dob) errs.dob = 'Date of birth is required.'
     if (!inviteCode && !role) errs.role = 'Please select a role.'
     return errs
   }
@@ -43,6 +52,25 @@ export default function Register() {
     if (Object.keys(errs).length > 0) { setFieldErrors(errs); return }
     setFieldErrors({})
     setLoading(true)
+
+    // Authoritative, server-side age gate — computed from date_of_birth on
+    // the server, not trusted from anything the client calculates. This
+    // runs BEFORE signUp() so an underage attempt never creates an account
+    // at all. Whatever value of `dob` is in the field right now is exactly
+    // what gets checked, so there's no way to "pre-pass" the check and then
+    // swap in a different birthdate before submitting.
+    try {
+      await api.post('/api/auth/check-age', { date_of_birth: dob })
+    } catch (err) {
+      if (err.response?.status === 403 && err.response?.data?.error === 'age_restricted') {
+        setAgeBlock({ message: err.response.data.message })
+        setLoading(false)
+        return
+      }
+      setError(err.response?.data?.error || 'Could not verify eligibility. Please try again.')
+      setLoading(false)
+      return
+    }
 
     const { data, error: signUpError } = await supabase.auth.signUp({
       email,
@@ -57,8 +85,26 @@ export default function Register() {
     }
 
     try {
-      await api.post('/api/auth/register', { userId: data.user.id, role, full_name: fullName })
+      const registerRes = await api.post('/api/auth/register', { userId: data.user.id, role, full_name: fullName, date_of_birth: dob })
+      // Deterministically set the just-verified age onto shared auth state
+      // ourselves, rather than relying on AuthContext's own independent
+      // GET /api/auth/profile fetch (kicked off in parallel by the
+      // signUp() above) to have already picked it up — that fetch can race
+      // ahead of this /register call and briefly cache a profile without
+      // age_verified_at, which would incorrectly show this brand-new user
+      // the existing-user age-confirmation prompt one screen from now.
+      updateProfile({ ...registerRes.data.profile })
     } catch (err) {
+      // Defense-in-depth: /api/auth/register re-checks age server-side too.
+      // This should be unreachable given the pre-check above, but if it
+      // ever fires, the server has already deleted the just-created auth
+      // user — show the same block screen rather than a generic error.
+      if (err.response?.status === 403 && err.response?.data?.error === 'age_restricted') {
+        setAgeBlock({ message: err.response.data.message })
+        setLoading(false)
+        return
+      }
+
       const message = err.response?.data?.error || ''
       const isAlreadyExists = err.response?.status === 409 && /already exists/i.test(message)
 
@@ -72,6 +118,11 @@ export default function Register() {
       // (GET /api/auth/profile auto-creating a missing row from user_metadata)
       // won a race against this very insert. The account is real and these
       // credentials are valid, so log the user in instead of showing an error.
+      // (age_verified_at was still set server-side despite the 409 — see
+      // /api/auth/register — so patch it in here too for the same reason as above.)
+      if (err.response?.data?.profile) {
+        updateProfile({ ...err.response.data.profile })
+      }
       const { error: signInError } = await supabase.auth.signInWithPassword({ email, password })
       if (signInError) {
         setError('Registration failed. Please try again.')
@@ -105,6 +156,13 @@ export default function Register() {
           <h2 style={styles.heading}>Create account</h2>
           <p style={styles.subheading}>Join Offseaz today</p>
 
+          {ageBlock ? (
+            <div style={styles.ageBlockBox}>
+              <p style={styles.ageBlockMessage}>{ageBlock.message}</p>
+              <Link to="/terms#eligibility" style={styles.ageBlockLink}>Learn more</Link>
+            </div>
+          ) : (
+          <>
           {inviteCode && (
             <div style={styles.inviteBanner}>
               <TargetIcon size={14} color="#308EBD" /> You have a team invite — joining as an Athlete.
@@ -146,6 +204,18 @@ export default function Register() {
                 autoComplete="new-password"
               />
               {fieldErrors.password && <p style={styles.fieldErr}>{fieldErrors.password}</p>}
+            </div>
+            <div>
+              <p style={styles.roleLabel}>Date of birth</p>
+              <input
+                style={{ ...styles.input, ...(fieldErrors.dob ? styles.inputError : {}) }}
+                type="date"
+                value={dob}
+                max={todayISO}
+                onChange={e => { setDob(e.target.value); setFieldErrors(p => ({ ...p, dob: '' })) }}
+                autoComplete="bday"
+              />
+              {fieldErrors.dob && <p style={styles.fieldErr}>{fieldErrors.dob}</p>}
             </div>
 
             {!inviteCode && (
@@ -199,6 +269,8 @@ export default function Register() {
               <CheckCircleIcon size={13} color="var(--text-3)" /> You can log in immediately after creating your account — no email confirmation required during beta.
             </p>
           </form>
+          </>
+          )}
 
           <p style={styles.switchLink}>
             Already have an account?{' '}
@@ -284,6 +356,25 @@ const styles = {
     padding: '10px 14px',
     fontSize: 13,
     marginBottom: 16,
+  },
+  ageBlockBox: {
+    background: 'rgba(199,56,32,0.12)',
+    border: '1px solid rgba(199,56,32,0.3)',
+    borderRadius: 12,
+    padding: '18px 18px',
+    textAlign: 'center',
+  },
+  ageBlockMessage: {
+    fontSize: 14,
+    color: '#ff6b4a',
+    lineHeight: 1.6,
+    margin: '0 0 12px',
+  },
+  ageBlockLink: {
+    fontSize: 13,
+    fontWeight: 600,
+    color: 'var(--text-2)',
+    textDecoration: 'underline',
   },
   form: {
     display: 'flex',

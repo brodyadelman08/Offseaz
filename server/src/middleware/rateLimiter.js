@@ -46,4 +46,15 @@ const inviteCodeLimiter = rateLimit({
   handler: jsonHandler('Too many attempts, please try again in 15 minutes.'),
 })
 
-module.exports = { registrationLimiter, contactLimiter, inviteCodeLimiter }
+// POST /api/auth/check-age — max 20 attempts per IP per 15 minutes. This
+// endpoint has no side effects (it only computes an age), but it's still
+// rate-limited as routine hygiene for an unauthenticated public endpoint.
+const ageCheckLimiter = rateLimit({
+  windowMs: 15 * 60 * 1000,
+  max: 20,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: jsonHandler('Too many attempts, please try again in 15 minutes.'),
+})
+
+module.exports = { registrationLimiter, contactLimiter, inviteCodeLimiter, ageCheckLimiter }

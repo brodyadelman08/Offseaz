@@ -27,15 +27,20 @@ create extension if not exists pgcrypto;
 -- ── profiles ─────────────────────────────────────────────────────────────────
 -- One row per Supabase auth user. id mirrors auth.users.id (see CLAUDE.md
 -- Auth flow — created by the /api/auth/register self-heal path).
+-- age_verified_at is dormant until supabase/migrations/age_verified_at.sql
+-- has been run — see that file and server/src/controllers/authController.js.
+-- NULL means "not yet confirmed," never a stored date_of_birth — see
+-- age_verified_at.sql for why only a timestamp, not a birthdate, is kept.
 CREATE TABLE IF NOT EXISTS profiles (
-  id             UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
-  role           TEXT NOT NULL CHECK (role IN ('coach', 'athlete')),
-  full_name      TEXT,
-  avatar_url     TEXT,
-  privacy_team   TEXT NOT NULL DEFAULT 'public' CHECK (privacy_team IN ('public', 'private')),
-  streak_days    INTEGER NOT NULL DEFAULT 0,
-  digest_enabled BOOLEAN NOT NULL DEFAULT TRUE,
-  created_at     TIMESTAMPTZ NOT NULL DEFAULT now()
+  id              UUID PRIMARY KEY REFERENCES auth.users(id) ON DELETE CASCADE,
+  role            TEXT NOT NULL CHECK (role IN ('coach', 'athlete')),
+  full_name       TEXT,
+  avatar_url      TEXT,
+  privacy_team    TEXT NOT NULL DEFAULT 'public' CHECK (privacy_team IN ('public', 'private')),
+  streak_days     INTEGER NOT NULL DEFAULT 0,
+  digest_enabled  BOOLEAN NOT NULL DEFAULT TRUE,
+  age_verified_at TIMESTAMPTZ,
+  created_at      TIMESTAMPTZ NOT NULL DEFAULT now()
 );
 
 -- ── teams ────────────────────────────────────────────────────────────────────

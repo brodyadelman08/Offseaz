@@ -46,7 +46,22 @@ export function AuthProvider({ children }) {
     api.get('/api/auth/profile')
       .then(res => {
         const p = res.data.profile
-        setProfile(p || null)
+        // age_verified_at is monotonic FOR A GIVEN USER — once set, it should
+        // never revert to unset. This fetch races with Register.jsx's own
+        // explicit /register call right after signup (both fire off the
+        // moment a new session appears); whichever response lands last would
+        // otherwise win and could silently overwrite an already-correct
+        // age_verified_at with a stale null snapshot taken before /register
+        // recorded it. The `prev?.id === p?.id` check is required — without
+        // it, switching accounts in the same tab (sign out from user A,
+        // straight into user B) could incorrectly carry A's verified status
+        // onto B's freshly-fetched profile.
+        setProfile(prev => {
+          if (p && prev?.id === p.id && prev?.age_verified_at && !p.age_verified_at) {
+            return { ...p, age_verified_at: prev.age_verified_at }
+          }
+          return p || null
+        })
       })
       .catch(() => {
         setProfile(null)
@@ -61,8 +76,13 @@ export function AuthProvider({ children }) {
     setProfile(null)
   }
 
+  // Merges into the existing profile if one is already loaded, or seeds a
+  // fresh profile object from `partial` alone if not (e.g. immediately after
+  // registration, before the parallel GET /api/auth/profile fetch has
+  // resolved — see Register.jsx, which always passes a complete profile row
+  // in that case, not just a single field).
   function updateProfile(partial) {
-    setProfile(prev => prev ? { ...prev, ...partial } : prev)
+    setProfile(prev => ({ ...(prev || {}), ...partial }))
   }
 
   return (

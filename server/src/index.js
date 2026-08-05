@@ -20,7 +20,7 @@ const contactRoutes  = require('./routes/contact')
 const checkinsRoutes     = require('./routes/checkins')
 const leaderboardRoutes  = require('./routes/leaderboard')
 const performanceRoutes  = require('./routes/performance')
-const { registrationLimiter, contactLimiter, inviteCodeLimiter } = require('./middleware/rateLimiter')
+const { registrationLimiter, contactLimiter, inviteCodeLimiter, ageCheckLimiter } = require('./middleware/rateLimiter')
 
 const app = express()
 const PORT = process.env.PORT || 3000
@@ -62,6 +62,7 @@ app.use(cors({
   allowedHeaders: ['Content-Type', 'Authorization'],
   methods: ['GET', 'POST', 'PUT', 'PATCH', 'DELETE', 'OPTIONS'],
 }))
+
 app.use(express.json({ limit: '15mb' })) // avatar base64 uploads compressed client-side; raw files up to 10 MB
 
 app.get('/', (req, res) => {
@@ -71,6 +72,7 @@ app.get('/', (req, res) => {
 // ─── Rate limiters ──────────────────────────────────────────────────────────
 // Applied to specific sub-paths before the route modules that actually
 // handle them, so the limiter runs first and falls through via next().
+app.use('/api/auth/check-age', ageCheckLimiter)
 app.use('/api/auth/register', registrationLimiter)
 app.use('/api/contact', contactLimiter)
 app.use('/api/teams/join', inviteCodeLimiter)
