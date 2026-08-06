@@ -351,6 +351,34 @@ async function filterAthleteIdsOnTeam(teamId, athleteIds) {
   return (data || []).map(r => r.athlete_id)
 }
 
+/**
+ * Role-agnostic authorization check: is `userId` associated with `teamId` in
+ * ANY capacity — head coach (teams.coach_id), assistant coach, or athlete
+ * (both live in team_members, see CLAUDE.md)?
+ *
+ * This exists specifically to close an IDOR class where several endpoints
+ * (workoutService.getTeamLogs, accountabilityService.getAccountabilityData,
+ * surveyService.getTeamSurveys, messageService.getTeamAthletes,
+ * checkinController.getTeam, leaderboardController) accepted a client-
+ * supplied team_id and used it directly whenever it was present, only
+ * deriving (and therefore only verifying) the caller's own team when
+ * team_id was omitted. Call this before trusting any caller-supplied
+ * team_id, never after.
+ */
+async function isUserOnTeam(userId, teamId) {
+  if (!userId || !teamId) return false
+
+  const { data: owned, error: ownedErr } = await supabaseAdmin
+    .from('teams').select('id').eq('id', teamId).eq('coach_id', userId).maybeSingle()
+  if (ownedErr) throw ownedErr
+  if (owned) return true
+
+  const { data: member, error: memberErr } = await supabaseAdmin
+    .from('team_members').select('team_id').eq('team_id', teamId).eq('athlete_id', userId).maybeSingle()
+  if (memberErr) throw memberErr
+  return Boolean(member)
+}
+
 module.exports = {
   createTeam,
   getTeamByCoach,
@@ -368,4 +396,5 @@ module.exports = {
   transferTeamOwnership,
   isAthleteOnTeam,
   filterAthleteIdsOnTeam,
+  isUserOnTeam,
 }

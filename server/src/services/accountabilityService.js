@@ -2,6 +2,7 @@ const supabaseAdmin = require('../config/supabase')
 const { getTeamLogs } = require('./workoutService')
 const { computeStreakDays } = require('./streakService')
 const { getTeamCheckins } = require('./checkinService')
+const { isUserOnTeam } = require('./teamsService')
 
 function getMondayKey(date) {
   const d = new Date(date)
@@ -41,6 +42,10 @@ async function getAccountabilityData(coachId, teamId = null) {
       .from('teams').select('id').eq('coach_id', coachId).limit(1)
     if (!teams?.length) return { athletes: [], logs: [] }
     resolvedTeamId = teams[0].id
+  } else if (!(await isUserOnTeam(coachId, resolvedTeamId))) {
+    // Readiness check-ins live in here too — a caller-supplied team_id must
+    // never be trusted without this check.
+    throw Object.assign(new Error('That team is not yours'), { status: 403 })
   }
 
   // Get athlete members only — filter out assistant coaches who may have

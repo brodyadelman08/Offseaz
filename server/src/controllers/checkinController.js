@@ -1,6 +1,7 @@
 const supabaseAdmin = require('../config/supabase')
 const { getProfile } = require('../services/authService')
 const { getTodayCheckin, submitCheckin, getTeamCheckins } = require('../services/checkinService')
+const { isUserOnTeam } = require('../services/teamsService')
 const { sendError } = require('../utils/errorResponse')
 
 // GET /api/checkins/today — athlete gets their own today check-in (or null)
@@ -42,6 +43,10 @@ async function getTeam(req, res) {
     if (!resolvedTeamId) {
       const { data: teams } = await supabaseAdmin.from('teams').select('id').eq('coach_id', req.user.id).limit(1)
       resolvedTeamId = teams?.[0]?.id
+    } else if (!(await isUserOnTeam(req.user.id, resolvedTeamId))) {
+      // Readiness scores (sleep/soreness/energy) live behind this check —
+      // a caller-supplied team_id must never be trusted without it.
+      return res.status(403).json({ error: 'That team is not yours' })
     }
     if (!resolvedTeamId) return res.json({ checkins: [] })
     const { data: members } = await supabaseAdmin
