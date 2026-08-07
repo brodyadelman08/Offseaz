@@ -1,5 +1,6 @@
 const supabaseAdmin = require('../config/supabase')
 const { updateAthleteStreak } = require('./streakService')
+const { isUserOnTeam } = require('./teamsService')
 
 // Color priority for the activity feed (lower = more urgent)
 const ACCENT_RED    = '#c73820'
@@ -146,6 +147,10 @@ async function getTeamLogs(coachId, teamId = null) {
       .from('teams').select('id').eq('coach_id', coachId).limit(1)
     if (!teams?.length) return []
     resolvedTeamId = teams[0].id
+  } else if (!(await isUserOnTeam(coachId, resolvedTeamId))) {
+    // A caller-supplied team_id was never verified — without this, any
+    // coach could pass another team's id and read its full activity feed.
+    throw Object.assign(new Error('That team is not yours'), { status: 403 })
   }
 
   // Get athlete IDs with join dates — filter to athletes only so coaches

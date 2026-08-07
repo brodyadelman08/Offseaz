@@ -59,6 +59,7 @@ async function teamLogs(req, res) {
     const logs = await getTeamLogs(req.user.id, req.query.team_id || null)
     res.json({ logs })
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 }
@@ -72,6 +73,7 @@ async function accountability(req, res) {
     const data = await getAccountabilityData(req.user.id, req.query.team_id || null)
     res.json(data)
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 }

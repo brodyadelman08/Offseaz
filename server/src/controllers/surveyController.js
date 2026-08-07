@@ -175,6 +175,7 @@ async function teamSurveys(req, res) {
     const athletes = await getTeamSurveys(req.user.id, req.query.team_id || null)
     res.json({ athletes })
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     res.status(500).json({ error: err.message })
   }
 }

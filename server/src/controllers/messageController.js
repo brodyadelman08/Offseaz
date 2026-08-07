@@ -68,6 +68,8 @@ async function athletes(req, res) {
     const list = await getTeamAthletes(req.user.id, req.query.team_id || null)
     res.json({ athletes: list })
   } catch (err) {
+    // sendError already surfaces err.status (e.g. the 403 from
+    // getTeamAthletes's ownership check) as-is — see utils/errorResponse.js.
     sendError(res, err, 'Failed to load athletes.')
   }
 }

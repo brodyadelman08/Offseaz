@@ -1,4 +1,5 @@
 const supabaseAdmin = require('../config/supabase')
+const { isUserOnTeam } = require('./teamsService')
 
 // ── Internal helpers ─────────────────────────────────────────────────────────
 
@@ -305,6 +306,10 @@ async function getTeamAthletes(coachId, teamId = null) {
       .from('teams').select('id').eq('coach_id', coachId).limit(1)
     if (!teams?.length) return []
     resolvedTeamId = teams[0].id
+  } else if (!(await isUserOnTeam(coachId, resolvedTeamId))) {
+    // Same class of bug as getTeamLogs/getAccountabilityData/getTeamSurveys —
+    // a caller-supplied team_id must never be trusted without this check.
+    throw Object.assign(new Error('That team is not yours'), { status: 403 })
   }
   // Use two queries to avoid FK hint fragility
   const { data: members, error } = await supabaseAdmin

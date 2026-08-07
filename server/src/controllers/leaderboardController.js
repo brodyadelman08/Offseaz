@@ -1,6 +1,7 @@
 const supabaseAdmin = require('../config/supabase')
 const { getProfile } = require('../services/authService')
 const { getLeaderboard } = require('../services/leaderboardService')
+const { isUserOnTeam } = require('../services/teamsService')
 const { sendError } = require('../utils/errorResponse')
 
 // GET /api/leaderboard?team_id=xxx — athletes and coaches
@@ -19,6 +20,12 @@ async function getLeaderboardHandler(req, res) {
           .from('team_members').select('team_id').eq('athlete_id', req.user.id).limit(1)
         teamId = memberships?.[0]?.team_id
       }
+    } else if (!(await isUserOnTeam(req.user.id, teamId))) {
+      // A caller-supplied team_id was previously used with NO check at all —
+      // any authenticated user, athlete or coach, could read any team's
+      // leaderboard. isUserOnTeam covers coach, assistant coach, and athlete
+      // membership in one call.
+      return res.status(403).json({ error: 'That team is not yours' })
     }
 
     if (!teamId) return res.json({ streak: [], completion_rate: [], sessions_total: [] })
