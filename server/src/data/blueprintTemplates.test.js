@@ -19,7 +19,8 @@
 const fs = require('fs')
 const path = require('path')
 const {
-  generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments,
+  generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments, applyAccessoryProgression,
+  superset, SUPERSET_MARKER_RE,
 } = require('./blueprintTemplates')
 
 // ─── Shared helpers ─────────────────────────────────────────────────────────
@@ -626,9 +627,10 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
   //      "build from template" path the coach-facing UI calls via
   //      POST /api/blueprints/templates/generate
   // blueprintController.js's generateFromTemplate additionally always runs
-  // applyDeloadAdjustments() on path 2's output, so this test does the same
-  // to compare like-for-like (standard goal + intermediate experience + no
-  // injuries, so the experience/injury passes are no-ops on path 1).
+  // applyAccessoryProgression() then applyDeloadAdjustments() on path 2's
+  // output, so this test does the same to compare like-for-like (standard
+  // goal + intermediate experience + no injuries, so the experience/injury
+  // passes are no-ops on path 1).
   const POSITION_INPUT = {
     baseball: 'Catcher', softball: 'Softball', football: 'Linemen', basketball: 'Point Guard',
     soccer: 'Goalkeeper', hockey: 'Forward', rugby: 'Prop', tennis: 'Tennis', golf: 'Golf',
@@ -647,7 +649,7 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
       })
 
       const autoAssign = generateBlueprintForAthlete(survey)
-      const manualBuilder = applyDeloadAdjustments(tpl.generateWeeks(pos.id, 'standard', days))
+      const manualBuilder = applyDeloadAdjustments(applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', days)))
 
       expect(autoAssign.weeks).toEqual(manualBuilder)
     })
@@ -661,5 +663,289 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
       }))
       expect(bp.title.startsWith('General Athletic Performance')).toBe(false)
     }
+  })
+})
+
+// ─── Area 9 — Rebuilt week-to-week progression ─────────────────────────────
+// Covers the 2026-08 rebuild: wave loading (not a flat linear climb), real
+// deloads at every phase boundary (not just week 16), accessory volume waves
+// AND exercise rotation, a warm-up ramp proportional to each week's own top
+// set, baseball climbing within a phase instead of a flat per-phase number,
+// and the superset-marker structural capability.
+
+describe('Area 9 — Rebuilt week-to-week progression', () => {
+  // Same classifiers as Area 5/production, duplicated locally per this file's
+  // existing convention (see Area 5 above) so each Area's tests independently
+  // verify against real output rather than importing each other's internals.
+  const MOBILITY_EXACT_EXEMPT = new Set([
+    'dead bug', 'ab wheel', 'plank', 'pallof press', 'half kneeling cable press',
+    'cable woodchop', 'copenhagen adductor', 'suitcase carry', 'bird dog',
+    'glute bridge', 'glute bridge hold', 'single leg glute bridge',
+    'ytw series', 'ytw shoulder series', 'band external rotation', 'band pull-aparts',
+    'hip 90/90 hold', 'hip 90/90 stretch', 'hip 90/90 rotations', 'ankle circles',
+    'ankle mobility circles', 'cat-cow', 'downward dog',
+  ])
+  function isMobilityExempt(name) {
+    const n = name.toLowerCase().trim()
+    if (MOBILITY_EXACT_EXEMPT.has(n)) return true
+    return /stretch|mobility|foam roll/i.test(n)
+  }
+  const MAIN_LIFT_KEYWORDS_RE = /^(Power Clean(?: from floor)?|Hang Power Clean|Hang Clean|BB Split Jerk|Push Jerk|Split Jerk|Snatch|Hang Snatch|Power Snatch|Clean Pull|Clean and Jerk)\b/
+  const CONDITIONING_HEADER_RE = /^[\w &]*Conditioning:$/
+  const PLYO_KEYWORDS_RE = /\b(Box Jumps?|Broad Jumps?|Hurdle Hops?|Depth Jumps?|Depth Drop|Snap Down|Squat Jumps?|Lateral Bounds?|Bounding|Approach Jumps?|Drop Jumps?|Reactive Box Jump|Ankle Hops?|Hop & Stick)\b/i
+
+  function sumNonExemptAccessorySets(description) {
+    let total = 0
+    let inCoreBlock = false
+    for (const line of description.split('\n')) {
+      if (line.trim() === '') { inCoreBlock = false; continue }
+      if (/^Core\s*—/.test(line)) { inCoreBlock = true; continue }
+      const colonIdx = line.indexOf(':')
+      const name = colonIdx > 0 ? line.slice(0, colonIdx) : line
+      if (inCoreBlock || isMobilityExempt(name)) continue
+      const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
+      if (!m) continue
+      total += parseInt(m[2], 10)
+    }
+    return total
+  }
+
+  // Ordered list of {name, sets} for every plain accessory line in a session
+  // (excludes conditioning/plyo/core-block/mobility-exempt/ramped-%/main-lift
+  // lines) — mirrors isAccessoryLine()'s real classification in
+  // blueprintTemplates.js so "accessory" means the same thing here as in
+  // production.
+  function accessoryLineSeq(description) {
+    const seq = []
+    let inCoreBlock = false
+    for (const line of description.split('\n')) {
+      if (line.trim() === '') { inCoreBlock = false; continue }
+      if (/^Core\s*—/.test(line)) { inCoreBlock = true; continue }
+      if (inCoreBlock) continue
+      if (line.includes('%')) continue
+      if (MAIN_LIFT_KEYWORDS_RE.test(line)) continue
+      if (CONDITIONING_HEADER_RE.test(line) || PLYO_KEYWORDS_RE.test(line)) continue
+      const colonIdx = line.indexOf(':')
+      if (colonIdx <= 0) continue
+      const name = line.slice(0, colonIdx).trim()
+      if (isMobilityExempt(name)) continue
+      const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
+      if (!m) continue
+      seq.push({ name, sets: parseInt(m[2], 10) })
+    }
+    return seq
+  }
+
+  // First ramped-lift line's ordered {pct, reps} tokens (the 4 warm-up steps
+  // plus the final top working set — every real ramped main-lift line in
+  // this file has exactly this 5-token shape), or null if the session has no
+  // ramped line.
+  function rampTokens(description) {
+    for (const line of description.split('\n')) {
+      const matches = [...line.matchAll(/(\d+)%[×x](\d+)/g)]
+      if (matches.length >= 5) return matches.map(m => ({ pct: parseInt(m[1], 10), reps: parseInt(m[2], 10) }))
+    }
+    return null
+  }
+
+  function pctOf(week) {
+    const m = week.objective.match(/\((\d+)%/)
+    return m ? parseInt(m[1], 10) : null
+  }
+
+  // ── 1. Real deloads at every phase boundary (weeks 4, 8, 12, 16) ──────────
+  describe('deloads land at every phase boundary, not just week 16', () => {
+    const DELOAD_WEEKS = [4, 8, 12, 16]
+    for (const tpl of SPORT_TEMPLATES) {
+      test(`${tpl.label} (${tpl.id}): every phase's week 4 cuts accessory volume, strips conditioning/plyo, and is labeled`, () => {
+        const pos = tpl.positions[0]
+        const days = maxDaysFor(tpl)
+        const progressed = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', days))
+        const deloaded = applyDeloadAdjustments(progressed)
+
+        for (const wn of DELOAD_WEEKS) {
+          const prevWeek = progressed.find(w => w.week_number === wn - 1)
+          const deloadWeek = deloaded.find(w => w.week_number === wn)
+          expect(deloadWeek).toBeDefined()
+
+          let prevTotal = 0
+          let deloadTotal = 0
+          for (let i = 0; i < deloadWeek.sessions.length; i++) {
+            prevTotal += sumNonExemptAccessorySets(prevWeek.sessions[i].description)
+            deloadTotal += sumNonExemptAccessorySets(deloadWeek.sessions[i].description)
+          }
+          if (prevTotal > 0) {
+            expect(1 - deloadTotal / prevTotal).toBeGreaterThanOrEqual(0.40)
+          }
+
+          for (const s of deloadWeek.sessions) {
+            expect(s.description).toMatch(/Deload Week/)
+            for (const line of s.description.split('\n')) {
+              expect(PLYO_KEYWORDS_RE.test(line.split(':')[0])).toBe(false)
+              expect(CONDITIONING_HEADER_RE.test(line)).toBe(false)
+            }
+          }
+        }
+      })
+    }
+  })
+
+  // ── 2 & 5. Accessory volume wave AND exercise rotation ────────────────────
+  test('accessory SET COUNT (volume) changes across the working weeks of a phase, for at least one line in at least one sport — a real wave, not frozen', () => {
+    let volumeChanged = false
+    for (const tpl of SPORT_TEMPLATES) {
+      const pos = tpl.positions[0]
+      const progressed = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', tpl.daysOptions[0].days))
+      const [w1, w2, w3] = progressed
+      for (let si = 0; si < w1.sessions.length; si++) {
+        const seq1 = accessoryLineSeq(w1.sessions[si].description)
+        const seq2 = accessoryLineSeq(w2.sessions[si].description)
+        const seq3 = accessoryLineSeq(w3.sessions[si].description)
+        const len = Math.min(seq1.length, seq2.length, seq3.length)
+        for (let li = 0; li < len; li++) {
+          if (seq1[li].sets !== seq2[li].sets || seq1[li].sets !== seq3[li].sets) volumeChanged = true
+        }
+      }
+    }
+    expect(volumeChanged).toBe(true)
+  })
+
+  test('an accessory exercise NAME actually rotates across the working weeks of a phase, for at least one line in at least one sport — not just volume changing', () => {
+    let rotated = false
+    for (const tpl of SPORT_TEMPLATES) {
+      const pos = tpl.positions[0]
+      const progressed = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', tpl.daysOptions[0].days))
+      const [w1, w2, w3] = progressed
+      for (let si = 0; si < w1.sessions.length; si++) {
+        const seq1 = accessoryLineSeq(w1.sessions[si].description)
+        const seq2 = accessoryLineSeq(w2.sessions[si].description)
+        const seq3 = accessoryLineSeq(w3.sessions[si].description)
+        const len = Math.min(seq1.length, seq2.length, seq3.length)
+        for (let li = 0; li < len; li++) {
+          if (seq1[li].name !== seq2[li].name || seq1[li].name !== seq3[li].name) rotated = true
+        }
+      }
+    }
+    expect(rotated).toBe(true)
+  })
+
+  test('accessory rotation is deterministic, not random — regenerating the same inputs twice produces identical output', () => {
+    const tpl = SPORT_TEMPLATES.find(t => t.id === 'football')
+    const pos = tpl.positions[0]
+    const runA = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', tpl.daysOptions[0].days))
+    const runB = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', tpl.daysOptions[0].days))
+    expect(runA).toEqual(runB)
+  })
+
+  // ── 3. Warm-up ramp scales with each week's own top set ───────────────────
+  test('warm-up ramp scales proportionally with each week\'s own top set, instead of a frozen 40/50/60/70%', () => {
+    for (const id of ['football', 'basketball', 'baseball']) {
+      const tpl = SPORT_TEMPLATES.find(t => t.id === id)
+      const pos = tpl.positions[0]
+      const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))
+
+      let early = null
+      let late = null
+      for (const s of weeks[0].sessions) { early = early || rampTokens(s.description) }
+      for (const s of weeks[14].sessions) { late = late || rampTokens(s.description) } // week 15 — Phase 4, wip 3 (peak)
+
+      expect(early).not.toBeNull()
+      expect(late).not.toBeNull()
+
+      for (const tokens of [early, late]) {
+        for (let i = 1; i < tokens.length; i++) expect(tokens[i].pct).toBeGreaterThanOrEqual(tokens[i - 1].pct)
+        expect(tokens[0].pct).toBeLessThan(tokens[tokens.length - 1].pct)
+      }
+
+      // Not frozen: the actual ramp values differ between an early, lighter
+      // week and a much later, heavier one.
+      expect(early[0].pct).not.toBe(late[0].pct)
+
+      // Still proportional (not just independently climbing): the first
+      // ramp step stays roughly the same fraction of that week's own top set
+      // both times.
+      const earlyRatio = early[0].pct / early[early.length - 1].pct
+      const lateRatio = late[0].pct / late[late.length - 1].pct
+      expect(Math.abs(earlyRatio - lateRatio)).toBeLessThan(0.05)
+    }
+  })
+
+  // ── 4. Baseball climbs within a phase ──────────────────────────────────────
+  test("baseball's top-set percentage actually climbs within a phase — no longer flat at one number for all 4 weeks", () => {
+    const tpl = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const pos = tpl.positions[0]
+    const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))
+    const phase1Working = [weeks[0], weeks[1], weeks[2]].map(pctOf) // wip 1-3 (excludes week 4's deload)
+
+    expect(new Set(phase1Working).size).toBeGreaterThan(1)
+    expect(Math.max(...phase1Working)).toBe(phase1Working[2]) // wip 3 is the phase's peak
+  })
+
+  // ── 6. Wave loading (not a flat linear climb) ──────────────────────────────
+  test('wave loading is visible in the printed top-set percentages — week 2 dips below week 1 before week 3 peaks, for football and baseball', () => {
+    for (const id of ['football', 'baseball']) {
+      const tpl = SPORT_TEMPLATES.find(t => t.id === id)
+      const pos = tpl.positions[0]
+      const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))
+      const [wip1, wip2, wip3] = [weeks[0], weeks[1], weeks[2]].map(pctOf)
+
+      expect(wip2).toBeLessThan(wip1)
+      expect(wip3).toBeGreaterThan(wip1)
+      expect(wip3).toBeGreaterThan(wip2)
+    }
+  })
+
+  test('no phase-boundary dip: a phase\'s opening week never drops below the previous phase\'s peak, for every sport', () => {
+    // cross_country and swimming are deliberately excluded from the %-based
+    // wave/phase system by design (XC's dryland work is a fixed, intentionally
+    // light 65-70% range with no heavy loading; swimming's main lifts use a
+    // flat "@ moderate load" prescription with their own phase-based, not
+    // week-based, set-count progression) — neither prints a single top-set %
+    // in its objective, so there's no percentage to check for a dip here.
+    for (const tpl of SPORT_TEMPLATES) {
+      if (tpl.id === 'cross_country' || tpl.id === 'swimming') continue
+      const pos = tpl.positions[0]
+      const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))
+      // Peak of each phase is its 3rd working week (wip 3): weeks 3, 7, 11, 15
+      // (1-indexed week numbers). Opening week of the next phase is wip 1:
+      // weeks 5, 9, 13.
+      const peaks = [2, 6, 10].map(i => pctOf(weeks[i]))       // week_number 3, 7, 11
+      const nextOpeners = [4, 8, 12].map(i => pctOf(weeks[i])) // week_number 5, 9, 13
+      for (let i = 0; i < peaks.length; i++) {
+        expect(nextOpeners[i]).toBeGreaterThanOrEqual(peaks[i])
+      }
+    }
+  })
+
+  // ── 7. Superset notation — structural capability only ──────────────────────
+  describe('superset() structural helper (no template uses it yet — capability only)', () => {
+    test('marks each line in a group with the same ⟦SS<n>⟧ prefix, preserving content and order', () => {
+      const lines = superset(1, ['DB Row: 3x10', 'DB Bench Press: 3x10'])
+      expect(lines).toEqual(['⟦SS1⟧DB Row: 3x10', '⟦SS1⟧DB Bench Press: 3x10'])
+    })
+
+    test('SUPERSET_MARKER_RE matches and extracts the group number from a marked line', () => {
+      const m = '⟦SS2⟧Pull-ups: 3xAMAP'.match(SUPERSET_MARKER_RE)
+      expect(m).not.toBeNull()
+      expect(m[1]).toBe('2')
+    })
+
+    test('SUPERSET_MARKER_RE does not match an unmarked line', () => {
+      expect(SUPERSET_MARKER_RE.test('DB Row: 3x10')).toBe(false)
+    })
+
+    test('no existing sport template emits a superset marker yet — this rebuild only adds the capability, not any specific grouping', () => {
+      for (const tpl of SPORT_TEMPLATES) {
+        const pos = tpl.positions[0]
+        const weeks = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl)))
+        for (const w of weeks) {
+          for (const s of w.sessions) {
+            for (const line of s.description.split('\n')) {
+              expect(SUPERSET_MARKER_RE.test(line)).toBe(false)
+            }
+          }
+        }
+      }
+    })
   })
 })

@@ -5,6 +5,7 @@ import { useTeam } from '../context/TeamContext'
 import api from '../services/api'
 import { CheckCircleIcon, PlusIcon, CheckIcon } from '../components/Icons'
 import ReadinessCheckin from '../components/ReadinessCheckin'
+import { stripSupersetMarker } from '../utils/supersets'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -64,8 +65,11 @@ function findTodaySession(plan) {
 function TodaySessionCard({ activePlan, onStart }) {
   const session   = findTodaySession(activePlan)
   const exercises = session?.exercises?.slice(0, 3) || []
+  // This card renders raw description lines directly (not via
+  // SessionDescription.jsx, which has full superset-bracket rendering), so a
+  // superset marker just gets stripped here — never shown as a raw ⟦SS1⟧.
   const descLines = !exercises.length && session?.description
-    ? session.description.split('\n').filter(Boolean).slice(0, 3)
+    ? session.description.split('\n').filter(Boolean).slice(0, 3).map(stripSupersetMarker)
     : []
 
   return (

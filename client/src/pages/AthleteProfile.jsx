@@ -3,6 +3,7 @@ import { useParams, useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import AvatarUpload from '../components/AvatarUpload'
 import { ChevronDownIcon, ChevronUpIcon, FileTextIcon, AlertIcon, ClipboardIcon, CheckIcon, XIcon } from '../components/Icons'
+import { stripSupersetMarker } from '../utils/supersets'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -451,7 +452,11 @@ export default function AthleteProfile() {
                       Week {week.week_number} (applies to all weeks)
                     </p>
                     {(week.sessions || []).map((session, si) => {
-                      const lines = (session.description || '').split('\n').filter(l => l.trim())
+                      // Raw per-line editor (not SessionDescription.jsx's full
+                      // bracket rendering) — strip any superset marker so a
+                      // raw ⟦SS1⟧ never shows. Stripping only affects display
+                      // text; the `li` index used for removal keys is unchanged.
+                      const lines = (session.description || '').split('\n').filter(l => l.trim()).map(stripSupersetMarker)
                       return (
                         <div key={si} style={{ marginBottom: 12 }}>
                           <p style={{ fontSize: 13, fontWeight: 600, color: BLUE, marginBottom: 6 }}>
