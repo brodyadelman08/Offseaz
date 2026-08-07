@@ -1,6 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
+import { stripSupersetMarker } from '../utils/supersets'
 import {
   PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon, LockIcon, UnlockIcon,
   FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon, SoccerIcon, HockeyIcon,
@@ -180,7 +181,10 @@ function WeekReductionConfirmModal({ from, to, onCancel, onConfirm }) {
 function BoldDesc({ text, maxChars }) {
   if (!text) return null
   const display = maxChars && text.length > maxChars ? text.slice(0, maxChars) + '…' : text
-  const lines = display.split('\n')
+  // Preview rendering only (not SessionDescription.jsx's full bracket UI) —
+  // strip any superset marker per line first so it never gets absorbed into
+  // the bolded exercise-name slice or shown raw.
+  const lines = display.split('\n').map(stripSupersetMarker)
   return (
     <>
       {lines.map((line, i) => {

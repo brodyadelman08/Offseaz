@@ -1,6 +1,7 @@
 import ExerciseInfoButton from './ExerciseInfoButton'
 import { lookupExercise } from '../data/exerciseLibrary'
 import { AlertIcon } from './Icons'
+import { parseSupersetGroups } from '../utils/supersets'
 
 /**
  * Exercises to flag per injury area.
@@ -107,6 +108,18 @@ const CAUTION_BADGE_STYLE = {
   lineHeight: 1.4,
   whiteSpace: 'nowrap',
 }
+
+// Superset bracket UI — a single continuous vertical bar spanning every line
+// in the group, with an "SS" label at the top, matching the marker/parsing
+// convention in client/src/utils/supersets.js (⟦SS<n>⟧, added server-side by
+// superset() in server/src/data/blueprintTemplates.js). No session template
+// currently emits the marker, but rendering is built so it's correct the
+// moment one does.
+const SUPERSET_ROW_STYLE = { display: 'flex', gap: 8, margin: '2px 0' }
+const SUPERSET_GUTTER_STYLE = { display: 'flex', flexDirection: 'column', alignItems: 'center', width: 18, flex: '0 0 auto' }
+const SUPERSET_LABEL_STYLE = { fontSize: 9, fontWeight: 800, color: '#308EBD', lineHeight: 1, letterSpacing: 0.5 }
+const SUPERSET_BAR_STYLE = { flex: 1, width: 2, background: '#308EBD', marginTop: 3, borderRadius: 1, minHeight: 8 }
+const SUPERSET_LINES_STYLE = { flex: 1, minWidth: 0 }
 
 const INJURY_BANNER_STYLE = {
   display: 'flex',
@@ -330,6 +343,108 @@ function segmentNameLength(seg) {
 }
 
 /**
+ * Renders the content of a single exercise/prescription line (no wrapping
+ * key or line-break) — the same colon vs. comma-separated logic used for
+ * every line, factored out so both a standalone line and a line inside a
+ * superset group render identically.
+ */
+function renderLineContent(line, flaggedSet, maxes) {
+  const colonIdx = line.indexOf(':')
+
+  if (colonIdx > 0) {
+    const name = line.slice(0, colonIdx).trim()
+    let rest = line.slice(colonIdx)   // includes the colon
+    const hasInfo = !!lookupExercise(name)
+    const isFlagged = flaggedSet.has(name.toLowerCase())
+
+    // ── Percentage-based weight calculation ──────────────────────────
+    const nameLower = name.toLowerCase()
+    const liftKey   = LIFT_KEY_MAP[nameLower]
+    const maxEntry  = liftKey ? maxes?.[liftKey] : null
+    const maxLbs    = maxEntry?.current?.weight_lbs ?? null
+
+    // Ramping sets: "40%×10, 50%×8, 60%×6, 70%×5, 75%×3"
+    if (/\d+%[×x]\d+/.test(rest) && liftKey) {
+      rest = rest.replace(/(\d+)%([×x])(\d+)/g, (_, pctStr, sep, repsStr) => {
+        const pct = parseInt(pctStr, 10) / 100
+        if (maxLbs) {
+          return `${pctStr}%${sep}${repsStr} (${calcWeight(maxLbs, pct)} lbs)`
+        }
+        return `${pctStr}%${sep}${repsStr}`
+      })
+      if (!maxLbs) {
+        const label = LIFT_LABELS[liftKey] || liftKey
+        rest += ` — log your ${label} max to see weights`
+      }
+    } else if (liftKey) {
+      // Single-percentage format: "@ XX%"
+      const pctMatch = rest.match(/@\s*(\d+)%/)
+      if (pctMatch) {
+        const pct = parseInt(pctMatch[1], 10) / 100
+        const pctLabel = `${Math.round(pct * 100)}%`
+        if (maxLbs) {
+          const lbs = calcWeight(maxLbs, pct)
+          rest = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
+        } else {
+          const label = LIFT_LABELS[liftKey] || liftKey
+          rest = rest.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
+        }
+      }
+    }
+
+    return (
+      <span>
+        <span style={{ fontWeight: 600 }}>{name}</span>
+        {hasInfo && <ExerciseInfoButton exerciseName={name} />}
+        {isFlagged && (
+          <span style={CAUTION_BADGE_STYLE}>
+            <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
+          </span>
+        )}
+        {rest}
+      </span>
+    )
+  }
+
+  // No colon — comma-separated builder format (e.g. "Back squat 4x6 @ 65%, Leg press 3x10")
+  const segments = line.split(/, ?/)
+  const hasPercent = /@\s*\d+%/.test(line)
+
+  return (
+    <span>
+      {segments.map((seg, si) => {
+        const trimmed = seg.trim()
+        const processed = hasPercent ? substitutePercentage(trimmed, maxes) : trimmed
+        const flaggedName = findFlagAtStart(trimmed, flaggedSet)
+        if (flaggedName) {
+          return (
+            <span key={si}>
+              {si > 0 && ', '}
+              <span style={{ fontWeight: 600 }}>{trimmed.slice(0, flaggedName.length)}</span>
+              <span style={CAUTION_BADGE_STYLE}>
+                <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
+              </span>
+              {processed.slice(flaggedName.length)}
+            </span>
+          )
+        }
+        const nameLen = segmentNameLength(trimmed)
+        if (nameLen > 0) {
+          return (
+            <span key={si}>
+              {si > 0 && ', '}
+              <span style={{ fontWeight: 600 }}>{processed.slice(0, nameLen)}</span>
+              {processed.slice(nameLen)}
+            </span>
+          )
+        }
+        return <span key={si}>{si > 0 && ', '}{processed}</span>
+      })}
+    </span>
+  )
+}
+
+/**
  * Renders a multi-line session description with:
  *  - Inline ⓘ buttons for exercises in the library
  *  - Real exercise substitution / load reduction for the athlete's flagged
@@ -337,6 +452,10 @@ function segmentNameLength(seg) {
  *    when a session was actually modified
  *  - Yellow caution tags for exercises matching the athlete's injury areas
  *  - Automatic weight calculation for "@ XX%" percentage references
+ *  - Superset groups (consecutive lines marked with a shared ⟦SS<n>⟧ marker —
+ *    see client/src/utils/supersets.js) rendered as one continuous bracket
+ *    spanning the group. No template currently emits the marker; this is
+ *    rendering-capability only.
  *
  * Props:
  *   description     {string}   - newline-delimited session text
@@ -354,7 +473,7 @@ function segmentNameLength(seg) {
  *                                blueprint case, where injury_areas can't safely be
  *                                baked into shared stored content.
  *   maxes           {object}   - { liftKey: { current: { weight_lbs } } } from /api/maxes
- *   style           {object}   - optional style overrides for the wrapper <p>
+ *   style           {object}   - optional style overrides for the wrapper element
  */
 export default function SessionDescription({ description, focus = '', injuryAreas = [], injuryModified = false, maxes = {}, style }) {
   if (!description) return null
@@ -366,6 +485,7 @@ export default function SessionDescription({ description, focus = '', injuryArea
 
   const flaggedSet = buildFlaggedSet(injuryAreas)
   const lines = processedDescription.split('\n')
+  const chunks = parseSupersetGroups(lines)
 
   return (
     <>
@@ -375,111 +495,30 @@ export default function SessionDescription({ description, focus = '', injuryArea
           Session modified for your flagged injury areas. Contact your coach before increasing load.
         </div>
       )}
-      <p style={{ margin: 0, lineHeight: 1.6, ...style }}>
-      {lines.map((line, i) => {
-        const colonIdx = line.indexOf(':')
-
-        let rendered
-        if (colonIdx > 0) {
-          const name = line.slice(0, colonIdx).trim()
-          let rest = line.slice(colonIdx)   // includes the colon
-          const hasInfo = !!lookupExercise(name)
-          const isFlagged = flaggedSet.has(name.toLowerCase())
-
-          // ── Percentage-based weight calculation ──────────────────────────
-          const nameLower = name.toLowerCase()
-          const liftKey   = LIFT_KEY_MAP[nameLower]
-          const maxEntry  = liftKey ? maxes?.[liftKey] : null
-          const maxLbs    = maxEntry?.current?.weight_lbs ?? null
-
-          // Ramping sets: "40%×10, 50%×8, 60%×6, 70%×5, 75%×3"
-          if (/\d+%[×x]\d+/.test(rest) && liftKey) {
-            rest = rest.replace(/(\d+)%([×x])(\d+)/g, (_, pctStr, sep, repsStr) => {
-              const pct = parseInt(pctStr, 10) / 100
-              if (maxLbs) {
-                return `${pctStr}%${sep}${repsStr} (${calcWeight(maxLbs, pct)} lbs)`
-              }
-              return `${pctStr}%${sep}${repsStr}`
-            })
-            if (!maxLbs) {
-              const label = LIFT_LABELS[liftKey] || liftKey
-              rest += ` — log your ${label} max to see weights`
-            }
-          } else if (liftKey) {
-            // Single-percentage format: "@ XX%"
-            const pctMatch = rest.match(/@\s*(\d+)%/)
-            if (pctMatch) {
-              const pct = parseInt(pctMatch[1], 10) / 100
-              const pctLabel = `${Math.round(pct * 100)}%`
-              if (maxLbs) {
-                const lbs = calcWeight(maxLbs, pct)
-                rest = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
-              } else {
-                const label = LIFT_LABELS[liftKey] || liftKey
-                rest = rest.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
-              }
-            }
+      {/* A <div> wrapper (not <p>) so a superset group's block-level bracket
+          row can sit alongside plain lines without invalid <div>-inside-<p>
+          nesting; each plain line becomes its own block instead of relying
+          on inline <br /> the way a single <p> did before. */}
+      <div style={{ margin: 0, lineHeight: 1.6, ...style }}>
+        {chunks.map((chunk, i) => {
+          if (chunk.type === 'superset') {
+            return (
+              <div key={i} style={SUPERSET_ROW_STYLE}>
+                <div style={SUPERSET_GUTTER_STYLE}>
+                  <span style={SUPERSET_LABEL_STYLE}>SS</span>
+                  <div style={SUPERSET_BAR_STYLE} />
+                </div>
+                <div style={SUPERSET_LINES_STYLE}>
+                  {chunk.lines.map((line, li) => (
+                    <div key={li}>{renderLineContent(line, flaggedSet, maxes)}</div>
+                  ))}
+                </div>
+              </div>
+            )
           }
-
-          rendered = (
-            <span>
-              <span style={{ fontWeight: 600 }}>{name}</span>
-              {hasInfo && <ExerciseInfoButton exerciseName={name} />}
-              {isFlagged && (
-                <span style={CAUTION_BADGE_STYLE}>
-                  <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
-                </span>
-              )}
-              {rest}
-            </span>
-          )
-        } else {
-          // No colon — comma-separated builder format (e.g. "Back squat 4x6 @ 65%, Leg press 3x10")
-          const segments = line.split(/, ?/)
-          const hasPercent = /@\s*\d+%/.test(line)
-
-          rendered = (
-            <span>
-              {segments.map((seg, si) => {
-                const trimmed = seg.trim()
-                const processed = hasPercent ? substitutePercentage(trimmed, maxes) : trimmed
-                const flaggedName = findFlagAtStart(trimmed, flaggedSet)
-                if (flaggedName) {
-                  return (
-                    <span key={si}>
-                      {si > 0 && ', '}
-                      <span style={{ fontWeight: 600 }}>{trimmed.slice(0, flaggedName.length)}</span>
-                      <span style={CAUTION_BADGE_STYLE}>
-                        <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
-                      </span>
-                      {processed.slice(flaggedName.length)}
-                    </span>
-                  )
-                }
-                const nameLen = segmentNameLength(trimmed)
-                if (nameLen > 0) {
-                  return (
-                    <span key={si}>
-                      {si > 0 && ', '}
-                      <span style={{ fontWeight: 600 }}>{processed.slice(0, nameLen)}</span>
-                      {processed.slice(nameLen)}
-                    </span>
-                  )
-                }
-                return <span key={si}>{si > 0 && ', '}{processed}</span>
-              })}
-            </span>
-          )
-        }
-
-        return (
-          <span key={i}>
-            {rendered}
-            {i < lines.length - 1 && <br />}
-          </span>
-        )
-      })}
-      </p>
+          return <div key={i}>{renderLineContent(chunk.text, flaggedSet, maxes)}</div>
+        })}
+      </div>
     </>
   )
 }

@@ -16,6 +16,10 @@ const EXERCISE_LIBRARY = {
     description: 'Bar rests on front delts with elbows high. Keep torso upright as you squat to parallel, then drive up through your heels.',
     muscles: 'Quads, upper back, core',
   },
+  'box squat': {
+    description: 'Bar on traps, feet shoulder-width, box set to just below parallel. Sit back and down under control until you touch the box, pause briefly, then drive up through your heels.',
+    muscles: 'Quads, glutes, hamstrings, core',
+  },
   'front split squat': {
     description: 'From a split stance, lower your rear knee toward the floor while keeping your front shin vertical, then drive back up through your front heel.',
     muscles: 'Quads, glutes, hip flexors',
@@ -64,6 +68,10 @@ const EXERCISE_LIBRARY = {
     description: 'Stand tall, soft bend in knees. Hinge at the hips, pushing them back as you lower the bar down your legs until you feel a hamstring stretch, then drive hips forward to return.',
     muscles: 'Hamstrings, glutes, erectors',
   },
+  'good mornings': {
+    description: 'Bar on your traps, soft bend in the knees. Hinge at the hips, lowering your torso toward parallel while keeping your back flat, then drive your hips forward to return.',
+    muscles: 'Hamstrings, glutes, erectors',
+  },
   'overhead press': {
     description: 'Bar at collarbone, brace your core, and press straight overhead to full lockout, squeezing your glutes at the top.',
     muscles: 'Anterior/medial deltoids, triceps, upper traps',
@@ -106,6 +114,10 @@ const EXERCISE_LIBRARY = {
   },
   'db row': {
     description: 'Hinge at hips, hold dumbbells, and row to your hips by driving your elbows straight back.',
+    muscles: 'Lats, rhomboids, rear deltoids, biceps',
+  },
+  'chest supported row': {
+    description: 'Chest braced against an incline bench, row dumbbells or a bar straight up to your ribs by driving your elbows back, keeping your torso still.',
     muscles: 'Lats, rhomboids, rear deltoids, biceps',
   },
   'power clean': {
@@ -342,6 +354,18 @@ const EXERCISE_LIBRARY = {
     description: 'Hold dumbbells at your sides with a slight forward lean and bent elbows. Raise your arms out to the side to shoulder height, then lower with control.',
     muscles: 'Medial deltoids',
   },
+  'front raise': {
+    description: 'Hold dumbbells in front of your thighs. Keeping a slight bend in your elbows, raise the weights straight out in front to shoulder height, then lower with control.',
+    muscles: 'Anterior deltoids',
+  },
+  'cuban press': {
+    description: 'Hold dumbbells at your sides, elbows bent 90°. Raise elbows to shoulder height, externally rotate the weights up, then press overhead to lockout before reversing.',
+    muscles: 'Rotator cuff, medial deltoids, triceps',
+  },
+  'arnold press': {
+    description: 'Hold dumbbells at shoulder height with palms facing you. Press overhead while rotating your palms to face forward, reversing the rotation on the way down.',
+    muscles: 'Deltoids (all three heads), triceps',
+  },
   'lat raises — side, front, back': {
     description: 'Perform three variations back-to-back: lateral raises, front raises, and rear delt raises (bent over), for a complete shoulder circuit.',
     muscles: 'All three deltoid heads',
@@ -460,6 +484,10 @@ const EXERCISE_LIBRARY = {
     description: 'Step one foot backward and lower your rear knee toward the floor, keeping your front shin vertical, then drive back to standing through your front heel.',
     muscles: 'Quads, glutes, hip flexors',
   },
+  'walking lunge': {
+    description: 'Step forward into a lunge, lowering your rear knee toward the floor, then drive up through your front heel and step the rear leg forward into the next lunge.',
+    muscles: 'Quads, glutes, hip flexors',
+  },
   'reverse flys': {
     description: 'Bent over with dumbbells hanging down, raise your arms out to the sides with a slight bend at the elbows until they reach shoulder height.',
     muscles: 'Rear deltoids, rhomboids',
@@ -565,6 +593,10 @@ const EXERCISE_LIBRARY = {
   'double leg calf raise': {
     description: 'Stand on both feet. Rise up onto your toes as high as possible, then lower slowly below the step height. Use added weight as needed.',
     muscles: 'Gastrocnemius, soleus',
+  },
+  'seated calf raise': {
+    description: 'Seated with a weighted pad across your knees, rise up onto your toes as high as possible, then lower slowly for a full stretch.',
+    muscles: 'Soleus, gastrocnemius',
   },
   'calf raises': {
     description: 'Stand on your toes (or a step for full range). Rise up as high as possible, lower slowly below the step height.',
