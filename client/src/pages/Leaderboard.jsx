@@ -1,5 +1,7 @@
 import { useState, useEffect } from 'react'
 import { useAuth } from '../context/AuthContext'
+import { useCoachAccess } from '../context/CoachAccessContext'
+import { useTeam } from '../context/TeamContext'
 import api from '../services/api'
 import {
   FlameIcon, BarChartIcon, DumbbellIcon, TrophyIcon,
@@ -66,17 +68,41 @@ function medalColorFor(rank) {
 
 export default function Leaderboard() {
   const { profile } = useAuth()
+  // Same role-aware active-team pattern as Messages.jsx/Feed.jsx — on
+  // /coach routes useCoachAccess() has the switcher's selection, on
+  // /athlete routes it returns null (no provider) and useTeam() applies.
+  const coachCtx      = useCoachAccess()
+  const teamCtx        = useTeam()
+  const activeTeamId   = profile?.role === 'coach'
+    ? (coachCtx?.activeTeamId ?? null)
+    : (teamCtx?.activeTeam?.id ?? null)
+  // Whether the relevant context is still resolving which team is active.
+  // On mount, activeTeamId briefly reads null before teams finish loading —
+  // fetching during that window (and again once the real id resolves) fires
+  // two overlapping requests with no ordering guarantee between their
+  // responses, so a fast "default team" response can arrive after and
+  // overwrite the correct team's data. Waiting for context to settle before
+  // ever fetching avoids the race instead of just usually winning it.
+  const contextLoading = profile?.role === 'coach'
+    ? (coachCtx?.loading ?? false)
+    : (teamCtx?.teamsLoading ?? false)
+
   const [data,      setData]      = useState(null)
   const [loading,   setLoading]   = useState(true)
   const [activeTab, setActiveTab] = useState('streak')
   const [infoOpen,  setInfoOpen]  = useState(false)
 
   useEffect(() => {
-    api.get('/api/leaderboard')
+    if (contextLoading) return
+    setLoading(true)
+    const url = activeTeamId
+      ? `/api/leaderboard?team_id=${encodeURIComponent(activeTeamId)}`
+      : '/api/leaderboard'
+    api.get(url)
       .then(r => setData(r.data))
       .catch(() => setData(null))
       .finally(() => setLoading(false))
-  }, [])
+  }, [activeTeamId, contextLoading])
 
   function switchTab(key) {
     setActiveTab(key)

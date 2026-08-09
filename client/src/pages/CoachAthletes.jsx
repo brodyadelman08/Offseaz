@@ -58,7 +58,7 @@ function MaxesCell({ maxes }) {
 export default function CoachAthletes() {
   const navigate   = useNavigate()
   const isMobile   = useIsMobile()
-  const { team, isHeadCoach, refresh: refreshAccess } = useCoachAccess()
+  const { team, isHeadCoach, loading: contextLoading, refresh: refreshAccess } = useCoachAccess()
 
   const [activeTab, setActiveTab] = useState('athletes')
 
@@ -79,6 +79,16 @@ export default function CoachAthletes() {
 
   // ── Load athletes + today's check-ins ─────────────────────────────────────
   useEffect(() => {
+    // CoachAccessContext's `teams` (and therefore `team`) starts empty on
+    // every fresh mount until its first /api/teams/my-coach-teams fetch
+    // resolves — a direct load of /coach/athletes (full refresh, deep link)
+    // can fire this fetch with team?.id still undefined during that window,
+    // defaulting server-side to the coach's first team, and that request
+    // can resolve after the correct one and overwrite it with the wrong
+    // team's roster. Waiting for context to settle before ever fetching
+    // avoids the race instead of just usually winning it — same pattern as
+    // Leaderboard.jsx/AccountabilityDashboard.jsx/Feed.jsx/Messages.jsx.
+    if (contextLoading) return
     setAthLoading(true)
     Promise.all([
       api.get(`/api/roster${team?.id ? `?team_id=${team.id}` : ''}`).then(r => r.data.roster || []).catch(() => []),
@@ -89,7 +99,7 @@ export default function CoachAthletes() {
       for (const c of checkins) map[c.athlete_id] = c
       setCheckinMap(map)
     }).finally(() => setAthLoading(false))
-  }, [team?.id])
+  }, [team?.id, contextLoading])
 
   // ── Load coaches ───────────────────────────────────────────────────────────
   useEffect(() => {
