@@ -28,6 +28,10 @@ const EXERCISE_LIBRARY = {
     description: 'Rear foot elevated on a bench, front foot forward. Lower your rear knee toward the floor, keeping your torso upright, then drive up through your front heel.',
     muscles: 'Quads, glutes, hip flexors',
   },
+  'bulgarian split squat iso hold': {
+    description: 'Rear foot elevated on a bench, front foot forward. Lower into the bottom position and hold it, front thigh parallel to the floor, torso upright — a static hold, no reps.',
+    muscles: 'Quads, glutes, hip flexors',
+  },
   'bench press': {
     description: 'Lie on a flat bench, grip just outside shoulder-width. Lower the bar to your chest under control, then press back to lockout.',
     muscles: 'Chest, anterior deltoids, triceps',
@@ -216,6 +220,10 @@ const EXERCISE_LIBRARY = {
     description: 'Step off a box (not jump), land briefly on both feet, then immediately explode into a maximum vertical jump. Minimize ground contact time.',
     muscles: 'Quads, glutes, calves (plyometric)',
   },
+  'depth jump → box jump': {
+    description: 'A contrast combo: step off a box and immediately explode into a maximum vertical jump onto a second box the moment you land, minimizing ground contact time between the two.',
+    muscles: 'Quads, glutes, calves (plyometric, reactive strength)',
+  },
   'box jumps': {
     description: 'Stand facing a box. Swing your arms back, hinge slightly, then explosively jump onto the box, landing softly in a quarter-squat. Step down between reps.',
     muscles: 'Quads, glutes, calves',
@@ -298,6 +306,10 @@ const EXERCISE_LIBRARY = {
     description: 'Hold a med ball overhead, then slam it explosively into the floor as hard as possible, bending your knees as you follow through.',
     muscles: 'Lats, core, shoulders, hip flexors',
   },
+  'cable/band rotational chop': {
+    description: 'Set a cable or band high, hold it with both hands, and pull it down and across your body in a chopping motion, rotating your torso and hips together.',
+    muscles: 'Obliques, core, shoulders',
+  },
   'band pull-aparts': {
     description: 'Hold a band at shoulder height with both hands in front of you. Pull the band apart, drawing your hands apart until the band touches your chest, then slowly return.',
     muscles: 'Rear deltoids, rhomboids, rotator cuff',
@@ -317,6 +329,22 @@ const EXERCISE_LIBRARY = {
   'ytw shoulder series': {
     description: 'Lie face-down on a bench or stand bent over. Perform Y, T, and W raises with light dumbbells — each letter describes the arm position at the top.',
     muscles: 'Rear deltoids, rhomboids, lower traps',
+  },
+  'ytw raises': {
+    description: 'Lie face-down on an incline bench. Raise light dumbbells through the Y, T, and W arm positions in sequence, squeezing your shoulder blades at the top of each.',
+    muscles: 'Rear deltoids, rhomboids, lower traps',
+  },
+  'scap push-ups': {
+    description: 'From a push-up plank position with arms locked, let your shoulder blades pinch together as your chest drops slightly, then push the floor away, protracting your shoulder blades. Elbows stay straight throughout.',
+    muscles: 'Serratus anterior, scapular stabilizers',
+  },
+  'crossover symmetry band series': {
+    description: 'Using the Crossover Symmetry band station, run through the full prescribed series (typically external rotation, low row, and elevation patterns) at light resistance and controlled tempo.',
+    muscles: 'Rotator cuff, scapular stabilizers, rear deltoids',
+  },
+  'prone swimmers': {
+    description: 'Lie face-down with arms extended overhead. Sweep your arms out and down to your sides like a swimming stroke, squeezing your shoulder blades together, then reverse back overhead.',
+    muscles: 'Rear deltoids, rhomboids, lower traps, lats',
   },
   'landmine press': {
     description: 'Anchor a barbell in a corner or landmine attachment. Hold the end with one hand at shoulder height and press it forward-overhead in an arcing path.',
@@ -619,6 +647,18 @@ const EXERCISE_LIBRARY = {
   'plank': {
     description: 'In a forearm plank position, maintain a perfectly rigid body from head to heel. Squeeze your glutes, brace your abs, and breathe normally.',
     muscles: 'Core, transverse abdominis, glutes',
+  },
+  'alternating v-ups': {
+    description: 'Lie on your back, arms and legs extended. Crunch up, reaching your opposite hand toward your opposite foot to form a "V," alternating sides each rep.',
+    muscles: 'Rectus abdominis, obliques, hip flexors',
+  },
+  'penguins': {
+    description: 'Lie on your back with knees bent, arms at your sides. Crunch slightly and reach one hand down to tap your heel, alternating side to side in a quick, rhythmic tempo.',
+    muscles: 'Obliques, rectus abdominis',
+  },
+  'alternating supermans': {
+    description: 'Lie face-down, arms extended overhead. Lift one arm and the opposite leg off the floor simultaneously, hold briefly, lower, and alternate sides.',
+    muscles: 'Erectors, glutes, rear deltoids',
   },
 }
 
