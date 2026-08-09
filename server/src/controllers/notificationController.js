@@ -6,9 +6,10 @@ async function list(req, res) {
   try {
     const profile = await getProfile(req.user.id)
     if (profile.role !== 'coach') return res.status(403).json({ error: 'Coaches only' })
-    const notifications = await getCoachNotifications(req.user.id)
+    const notifications = await getCoachNotifications(req.user.id, req.query.team_id || null)
     res.json({ notifications })
   } catch (err) {
+    if (err.status === 403) return res.status(403).json({ error: err.message })
     sendError(res, err, 'Failed to load notifications.')
   }
 }

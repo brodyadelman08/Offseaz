@@ -1,4 +1,5 @@
 const supabaseAdmin = require('../config/supabase')
+const { isUserOnTeam } = require('./teamsService')
 
 async function createInjuryNotification(coachId, athleteId, athleteName) {
   // Upsert — re-alerts the coach even if they've already seen a previous injury flag
@@ -37,14 +38,39 @@ async function createBlueprintNotification(coachId, athleteId, athleteName, blue
   if (error) throw error
 }
 
-async function getCoachNotifications(coachId) {
-  const { data, error } = await supabaseAdmin
+// coach_notifications has no team_id column of its own (see schema.sql) — for
+// every notification type, `athlete_id` is always a team_members row for the
+// relevant team (a real athlete for injury_flag/blueprint_assigned/
+// program_complete; an assistant/head coach's own id, reused via the same
+// column, for coach_joined/ownership_transfer — transferOwnership() confirms
+// the new head coach is already a team_members row before notifying them).
+// So scoping to one team, without a schema change, means intersecting the
+// coach's notifications with that team's team_members.athlete_id set.
+async function getCoachNotifications(coachId, teamId = null) {
+  if (teamId && !(await isUserOnTeam(coachId, teamId))) {
+    // A caller-supplied team_id was never checked before — without this, any
+    // coach could pass another team's id and see who's on its roster via
+    // which notifications come back scoped to it.
+    throw Object.assign(new Error('That team is not yours'), { status: 403 })
+  }
+
+  let query = supabaseAdmin
     .from('coach_notifications')
     .select('id, athlete_id, type, message, created_at')
     .eq('coach_id', coachId)
     .is('dismissed_at', null)
     .order('created_at', { ascending: false })
 
+  if (teamId) {
+    const { data: members, error: memberErr } = await supabaseAdmin
+      .from('team_members').select('athlete_id').eq('team_id', teamId)
+    if (memberErr) throw memberErr
+    const memberIds = new Set((members || []).map(m => m.athlete_id))
+    if (memberIds.size === 0) return []
+    query = query.in('athlete_id', [...memberIds])
+  }
+
+  const { data, error } = await query
   if (error) throw error
   return data || []
 }
