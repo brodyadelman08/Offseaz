@@ -233,9 +233,20 @@ export default function Feed() {
   // /athlete/feed (no provider — hook returns null).  Guard every access.
   const coachCtx         = useCoachAccess()
   const coachTeam        = coachCtx?.team ?? null
-  const activeTeam       = useTeam()?.activeTeam ?? null
+  const teamCtx           = useTeam()
+  const activeTeam       = teamCtx?.activeTeam ?? null
   // Derive the active team ID for whichever role is viewing
   const teamId = profile?.role === 'coach' ? coachTeam?.id : activeTeam?.id
+  // Whether the relevant context is still resolving which team is active.
+  // On mount, teamId briefly reads undefined before teams finish loading —
+  // fetching during that window (and again once the real id resolves) fires
+  // two overlapping requests with no ordering guarantee between their
+  // responses, so a fast "default team" response can arrive after and
+  // overwrite the correct team's data. Waiting for context to settle before
+  // ever fetching avoids the race instead of just usually winning it.
+  const contextLoading = profile?.role === 'coach'
+    ? (coachCtx?.loading ?? false)
+    : (teamCtx?.teamsLoading ?? false)
 
   const [posts, setPosts]               = useState([])
   const [loading, setLoading]           = useState(true)
@@ -256,12 +267,14 @@ export default function Feed() {
   const photoInputRef = useRef(null)
 
   useEffect(() => {
+    if (contextLoading) return
+    setLoading(true)
     const url = teamId ? `/api/feed?teamId=${teamId}` : '/api/feed'
     api.get(url)
       .then(r => setPosts(r.data.posts || []))
       .catch(err => setError(err.response?.data?.error || 'Could not load feed.'))
       .finally(() => setLoading(false))
-  }, [teamId])
+  }, [teamId, contextLoading])
 
   async function handlePhotoSelect(e) {
     const file = e.target.files?.[0]

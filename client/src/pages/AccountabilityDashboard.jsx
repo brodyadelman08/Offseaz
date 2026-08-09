@@ -1,5 +1,6 @@
 import { useState, useEffect, Component } from 'react'
 import api from '../services/api'
+import { useCoachAccess } from '../context/CoachAccessContext'
 import { ClipboardIcon, FlameIcon, AlertIcon, RestDayIcon } from '../components/Icons'
 
 const ORANGE = '#F75709'
@@ -94,13 +95,31 @@ export default function AccountabilityDashboard() {
 }
 
 function AccountabilityInner() {
+  // Accountability is coach-only (server enforces this), so the switcher's
+  // selection always comes from CoachAccessContext — same pattern as
+  // CoachAthletes.jsx's roster fetch.
+  const { team, loading: contextLoading } = useCoachAccess()
+  const teamId = team?.id ?? null
+
   const [data, setData] = useState(null)
   const [loading, setLoading] = useState(true)
   const [filter, setFilter] = useState('all')
   const [apiError, setApiError] = useState(null)
 
   useEffect(() => {
-    api.get('/api/workouts/accountability')
+    // Wait for CoachAccessContext to finish resolving which team is active.
+    // On mount, teamId briefly reads null before teams finish loading —
+    // fetching during that window (and again once the real id resolves)
+    // fires two overlapping requests with no ordering guarantee between
+    // their responses, so a fast "default team" response can arrive after
+    // and overwrite the correct team's data. Waiting avoids the race
+    // instead of just usually winning it.
+    if (contextLoading) return
+    setLoading(true)
+    const url = teamId
+      ? `/api/workouts/accountability?team_id=${encodeURIComponent(teamId)}`
+      : '/api/workouts/accountability'
+    api.get(url)
       .then(res => {
         setData(res.data)
       })
@@ -110,7 +129,7 @@ function AccountabilityInner() {
         setData({ athletes: [], logs: [] })
       })
       .finally(() => setLoading(false))
-  }, [])
+  }, [teamId, contextLoading])
 
   const athletes = data?.athletes || []
   const logs = data?.logs || []

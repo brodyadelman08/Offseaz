@@ -212,6 +212,19 @@ export default function Messages() {
   const activeTeamId = profile?.role === 'coach'
     ? (coachCtx?.activeTeamId ?? null)
     : (teamCtx?.activeTeam?.id ?? null)
+  // Whether the relevant context is still resolving which team is active.
+  // CoachAccessContext's `teams` list (and therefore activeTeamId) starts
+  // empty on every fresh mount until its first /api/teams/my-coach-teams
+  // fetch resolves — a direct load of /coach/messages (full refresh, deep
+  // link) can fire loadConvs(null) during that window, defaulting
+  // server-side to the coach's first team, and that request can resolve
+  // after the correct one and overwrite it with the wrong team's
+  // conversations. Waiting for context to settle before ever fetching
+  // avoids the race instead of just usually winning it — same pattern as
+  // Leaderboard.jsx/AccountabilityDashboard.jsx/Feed.jsx.
+  const contextLoading = profile?.role === 'coach'
+    ? (coachCtx?.loading ?? false)
+    : (teamCtx?.teamsLoading ?? false)
 
   const [convs, setConvs]                 = useState([])
   const [activeId, setActiveId]           = useState(null)
@@ -343,6 +356,10 @@ export default function Messages() {
   // Also resets any open thread so the user isn't left viewing a conversation
   // that belongs to the previous team.
   useEffect(() => {
+    // Wait for context to finish resolving which team is active before ever
+    // fetching — see contextLoading above.
+    if (contextLoading) return
+
     // Athletes with no team see the preview banner — nothing to load
     if (profile?.role === 'athlete' && !activeTeamId) {
       setLoadingConvs(false)
@@ -361,7 +378,7 @@ export default function Messages() {
     setLoadingConvs(true)
     loadConvs(activeTeamId).finally(() => setLoadingConvs(false))
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [activeTeamId])
+  }, [activeTeamId, contextLoading])
 
   // Scroll to bottom when messages change
   useEffect(() => {
