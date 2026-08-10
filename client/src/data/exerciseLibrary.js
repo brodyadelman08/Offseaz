@@ -540,10 +540,6 @@ const EXERCISE_LIBRARY = {
     description: 'Press a bar or dumbbells from shoulder height straight overhead to full arm extension, keeping your core braced.',
     muscles: 'Anterior/medial deltoids, triceps',
   },
-  'hang clean': {
-    description: 'Start with the bar at mid-thigh. Dip slightly, then explosively extend your hips and shrug as you pull yourself under to catch on your front delts.',
-    muscles: 'Posterior chain, traps, core',
-  },
   'db step-ups': {
     description: 'Hold dumbbells at your sides and step one foot onto a box. Drive through that heel to raise your body up, fully extending your hip, then step back down.',
     muscles: 'Quads, glutes',
@@ -581,10 +577,6 @@ const EXERCISE_LIBRARY = {
   'hip 90/90 mobility circuit': {
     description: 'Sit with both legs bent at 90° (one forward, one to the side). Rock your knees from side to side in a controlled flow to improve hip internal and external rotation.',
     muscles: 'Hip capsule, adductors, glutes',
-  },
-  'sled sprint': {
-    description: 'Attach a harness to a sled. Accelerate forward dragging the sled, maintaining forward lean and high knees.',
-    muscles: 'Quads, glutes, hip flexors, calves',
   },
 
   // ─── Swimming ─────────────────────────────────────────────────────────────
@@ -629,10 +621,6 @@ const EXERCISE_LIBRARY = {
   'calf raises': {
     description: 'Stand on your toes (or a step for full range). Rise up as high as possible, lower slowly below the step height.',
     muscles: 'Gastrocnemius, soleus',
-  },
-  'hip thrust': {
-    description: 'Upper back on a bench, bar across your hips. Drive through your heels to extend your hips fully, squeezing your glutes at the top.',
-    muscles: 'Glutes, hamstrings',
   },
 
   // ─── Core exercises ───────────────────────────────────────────────────────
