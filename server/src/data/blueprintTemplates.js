@@ -881,6 +881,17 @@ const BASEBALL_ACCESSORY_ROTATION = {
   // so Tibialis Raises (wall-supported, leaning back) appears as a real
   // working accessory on lower days without touching any other sport.
   'calf raises':               { 2: 'Tibialis Raises', 3: 'Seated Calf Raise' },
+  // Trap Bar Jump (the Oly-lift replacement — see baseball3Day/baseball4Day/
+  // pitcher3Day/pitcher4Day) has no week-2/3 rotation targets — it should
+  // always read "Trap Bar Jump", never rotate into a different exercise, so
+  // this entry is deliberately empty of numbered keys (rotateAccessoryName
+  // falls through to the original name whenever entry[wip] is undefined).
+  // Being a key here still grants it protectedNames priority-0 status in
+  // organizeSessionDescription, so it reliably survives the accessory cap
+  // instead of losing a priority tie-break to the rotational-power anchors
+  // above on a crowded day — it's replacing what used to be an
+  // always-present main lift, and needs to stay reliably present too.
+  'trap bar jump':              {},
 }
 
 // Per-sport extra-rotation lookup passed into applyAccessoryProgression.
@@ -1110,7 +1121,7 @@ function baseball3Day(info) {
     // position players get 2 arm-care days/week total across this 3-day
     // split (here + Day 3), never every day.
     makeBaseballSession('Day 2', 'Upper Strength', [
-      { name: 'Hang Clean',                               sets: 3, reps: '3' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'DB Bench Press',                           sets: 4, reps: '8',    ss: 1 },
       { name: 'Bulgarian Split Squat Iso Hold',            sets: 3, reps: '30s', note: 'each leg — fills rest between press sets', ss: 1 },
       { name: 'Overhead Press',                           sets: 3, reps: '8' },
@@ -1122,14 +1133,16 @@ function baseball3Day(info) {
       { name: 'Band Pull-Aparts',                         sets: 3, reps: '20' },
       { name: 'Core — Sit-ups',                           sets: 4, reps: '12' },
     ], 'upper_push'),
-    // Squat/Hinge-type day — no plyo (Power Clean is the day's own explosive
-    // element already). Reverse Lunge is primary unilateral; Bulgarian
-    // removed to avoid bilateral + double unilateral fatigue. Second arm-care
-    // anchor (Face Pulls, cycles Prone Swimmers/Crossover Symmetry Band
-    // Series) — this week's second (of two) arm-care day, alactic
-    // conditioning finisher, and the rotating core-finisher protocol.
+    // Squat/Hinge-type day — no plyo (Trap Bar Jump is the day's own
+    // explosive element already, an unsupervised-safe swap for the Power
+    // Clean this slot used to carry — see the Oly-lift removal above).
+    // Reverse Lunge is primary unilateral; Bulgarian removed to avoid
+    // bilateral + double unilateral fatigue. Second arm-care anchor (Face
+    // Pulls, cycles Prone Swimmers/Crossover Symmetry Band Series) — this
+    // week's second (of two) arm-care day, alactic conditioning finisher,
+    // and the rotating core-finisher protocol.
     makeBaseballSession('Day 3', 'Lower Strength', [
-      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'Reverse Lunge',                            sets: 3, reps: '5',    note: 'each leg — primary unilateral' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
@@ -1164,7 +1177,7 @@ function baseball4Day(info) {
     // here (Band External Rotation) — with Day 3's Face Pulls anchor,
     // position players get 2 of 4 days/week.
     makeBaseballSession('Day 2', 'Upper Strength', [
-      { name: 'Hang Clean',                               sets: 3, reps: '3',    note: 'working up' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'DB Bench Press',                           sets: 4, reps: p3 ? '6' : '8', ss: 1 },
       { name: 'Bulgarian Split Squat Iso Hold',            sets: 3, reps: '30s', note: 'each leg — fills rest between press sets', ss: 1 },
       { name: 'Overhead Press',                           sets: 3, reps: '8' },
@@ -1194,7 +1207,7 @@ function baseball4Day(info) {
     // No arm care here — position players cap at 2 of 4 days (Day 2 + Day 3
     // above); pitcher4Day adds a third arm-care day on this same slot.
     makeBaseballSession('Day 4', 'Upper Power', [
-      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'Lat Pulldown',                              sets: 3, reps: '8' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
@@ -1279,7 +1292,7 @@ function pitcher3Day(info) {
     // cycling their own pool) — more volume than a position player's
     // single-anchor upper day.
     makeBaseballSession('Day 2', 'Upper Strength and Arm Care', [
-      { name: 'Hang Clean',                               sets: 3, reps: '3' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'Landmine Press',                           sets: 4, reps: '8',    note: 'lower load — no direct overhead pressing', ss: 1 },
       { name: 'Bulgarian Split Squat Iso Hold',            sets: 3, reps: '30s', note: 'each leg — fills rest between press sets', ss: 1 },
       { name: 'Single Arm DB Row',                        sets: 4, reps: '10',   note: 'each arm' },
@@ -1289,13 +1302,13 @@ function pitcher3Day(info) {
       { name: 'Core — Sit-ups',                           sets: 4, reps: '12' },
       { name: 'Core — Rotate and Press',                  sets: 3, reps: '10' },
     ], 'upper_push'),
-    // Squat/Hinge-type day — no plyo (Power Clean is the day's own explosive
-    // element already). Reverse Lunge is primary unilateral; Bulgarian
-    // removed to reduce fatigue; Single Leg RDL for hip stability. Third
-    // arm-care day (Band External Rotation); sprint protocol + the rotating
-    // core-finisher protocol.
+    // Squat/Hinge-type day — no plyo (Trap Bar Jump is the day's own
+    // explosive element already). Reverse Lunge is primary unilateral;
+    // Bulgarian removed to reduce fatigue; Single Leg RDL for hip stability.
+    // Third arm-care day (Band External Rotation); sprint protocol + the
+    // rotating core-finisher protocol.
     makeBaseballSession('Day 3', 'Lower Strength', [
-      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'Reverse Lunge',                            sets: 3, reps: '5',    note: 'each leg — primary unilateral' },
       { name: 'Single Leg RDL',                           sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
@@ -1328,7 +1341,7 @@ function pitcher4Day(info) {
     // Arm-care day 2 of 3, both anchors (more volume than position players'
     // single anchor on the equivalent day).
     makeBaseballSession('Day 2', 'Upper Strength and Arm Care', [
-      { name: 'Hang Clean',                               sets: 3, reps: '3',    note: 'working up' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'Landmine Press',                           sets: 4, reps: p3 ? '6' : '8', note: 'lower load — no direct overhead pressing', ss: 1 },
       { name: 'Bulgarian Split Squat Iso Hold',            sets: 3, reps: '30s', note: 'each leg — fills rest between press sets', ss: 1 },
       { name: 'Single Arm DB Row',                        sets: 4, reps: '10',   note: 'each arm' },
@@ -1356,7 +1369,7 @@ function pitcher4Day(info) {
     // (Band External Rotation) — this is the third day per week pitchers get
     // arm care that position players don't, on the equivalent upper-power day.
     makeBaseballSession('Day 4', 'Upper Power and Rotational', [
-      { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
+      { name: 'Trap Bar Jump',                            sets: 3, reps: '3',    note: 'Suggested: Keep under 155lbs' },
       { name: 'Pull-ups',                                 sets: 3, reps: 'AMAP' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
@@ -1939,6 +1952,13 @@ function applyKneeAdjustments(description) {
     if (/\bDepth Jumps?\b/.test(stripped)) {
       return stripped.replace(/Depth Jumps?/, 'Box Step-Ups')
     }
+    // Trap Bar Jump is a loaded jump — same landing-impact concern as Depth
+    // Jumps. Swap to Trap Bar Deadlift (same equipment/hip-hinge pattern,
+    // zero landing impact), keeping the rest of the line (its load note)
+    // as-is, same name-only-swap approach as the Depth Jumps line above.
+    if (/^Trap Bar Jump\b/.test(stripped)) {
+      return stripped.replace(/^Trap Bar Jump/, 'Trap Bar Deadlift')
+    }
     if (/^Bulgarian Split Squat\b/.test(stripped)) {
       return stripped.replace(/^Bulgarian Split Squat/, 'Reverse Lunge') + ' (reduced load)'
     }
@@ -2095,6 +2115,18 @@ function isPowerFocusDay(focus) {
   return /power/i.test(focus || '')
 }
 
+// Trap Bar Jump (baseball's Olympic-lift replacement — see
+// removeBeginnerOlyLifts and the baseball session functions below) is not a
+// technical lift and isn't %-ramped, so it deliberately does NOT get pushed
+// into olyLiftLines or rampedLiftLines below — it's an ordinary accessory
+// candidate, subject to the same cap/pairing/cut-priority rules as
+// everything else (per the Oly-lift-removal decision: no special
+// always-standalone carve-out). But its mere presence still means the day
+// has a real power anchor worth reorganizing around, so it needs to escape
+// the "no main lift, nothing to reorganize" bail-out below. Scoped to this
+// exact name — zero effect on any other sport/day.
+const POWER_ANCHOR_RE = /^Trap Bar Jump\b/
+
 // One session's description -> reorganized description.
 function organizeSessionDescription(description, focus, protectedNames) {
   const rawLines = description.split('\n')
@@ -2111,11 +2143,13 @@ function organizeSessionDescription(description, focus, protectedNames) {
   let seenWorkingLine = false
   let inCoreBlock = false
   let idxCounter = 0
+  let hasPowerAnchor = false
   let i = 0
 
   while (i < rawLines.length) {
     const raw = rawLines[i]
     const bare = raw.replace(SUPERSET_MARKER_RE, '')
+    if (POWER_ANCHOR_RE.test(bare)) hasPowerAnchor = true
     if (bare.trim() === '') { inCoreBlock = false; i++; continue }
     if (/^Core\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
     if (inCoreBlock) { coreLines.push(raw); i++; continue }
@@ -2164,8 +2198,10 @@ function organizeSessionDescription(description, focus, protectedNames) {
   }
 
   // No main lift recognized (a non-lifting day — pure conditioning/mobility)
-  // — nothing to reorganize.
-  if (olyLiftLines.length === 0 && rampedLiftLines.length === 0) return description
+  // — nothing to reorganize. A Trap Bar Jump day is the one exception: it
+  // has no oly/ramped lift of its own, but is still real strength/power
+  // content that needs the cap and pairing applied.
+  if (olyLiftLines.length === 0 && rampedLiftLines.length === 0 && !hasPowerAnchor) return description
 
   let groupNum = 1
   const out = [...preamble]

@@ -60,6 +60,10 @@ const EXERCISE_LIBRARY = {
     description: 'Stand inside the hex bar, hinge to grab the handles, brace your core, and push the floor away as you drive your hips to standing.',
     muscles: 'Quads, glutes, hamstrings, erectors',
   },
+  'trap bar jump': {
+    description: 'Stand inside the hex/trap bar and pick it up to a standing hinge position. Explosively triple-extend (hips, knees, ankles) into a vertical jump, then land softly and reset. A safe, unsupervised-friendly alternative to Olympic-lift catch variations — same explosive triple extension, no technical catch phase. Keep the load light (suggested: under 155lbs) so the movement stays fast and jump-like, not a max-effort pull.',
+    muscles: 'Glutes, hamstrings, quads, calves (triple extension/power)',
+  },
   'hex bar deadlift': {
     description: 'Stand inside the hex bar, hinge to grab the handles, brace your core, and push the floor away as you drive your hips to standing.',
     muscles: 'Quads, glutes, hamstrings, erectors',
