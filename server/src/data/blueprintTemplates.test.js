@@ -1234,3 +1234,112 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     }
   })
 })
+
+// ─── Area 12 — Trap Bar Jump (Olympic-lift removal, baseball) ──────────────
+// Baseball no longer prescribes Hang Clean/Power Clean anywhere — Olympic
+// lifts require expert in-person coaching to execute safely, and Offseaz
+// athletes often train without a coach present. Trap Bar Jump replaces both
+// (position players' Day 2/3 or 4, pitchers' Day 2/3/4 depending on split)
+// as a safer power movement: same explosive triple extension, no technical
+// catch phase.
+
+describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
+  const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+
+  function allBaseballBlueprints() {
+    const out = []
+    for (const position of ['Position Player', 'Pitcher']) {
+      for (const days of ['3', '4', '5', '6']) {
+        out.push(generateBlueprintForAthlete(mkSurvey({
+          sport: 'Baseball', position, time_per_week: days,
+        })))
+      }
+    }
+    return out
+  }
+
+  test('no Hang Clean or Power Clean (any variant) appears anywhere in baseball output, for any position or day count', () => {
+    const violations = []
+    for (const bp of allBaseballBlueprints()) {
+      for (const s of allSessions(bp.weeks)) {
+        if (/\bHang Clean\b|\bPower Clean\b|\bHang Power Clean\b/.test(s.description)) {
+          violations.push(`${bp.title} week ${s.week} ${s.day}`)
+        }
+      }
+    }
+    expect(violations).toEqual([])
+  })
+
+  test('Trap Bar Jump appears with its load note on every session that used to carry an Olympic lift, for position player and pitcher, 3-day and 4-day', () => {
+    for (const position of ['Position Player', 'Pitcher']) {
+      for (const days of ['3', '4']) {
+        const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position, time_per_week: days }))
+        const text = allSessions(bp.weeks).map(s => s.description).join('\n')
+        // Every occurrence of the exercise name carries the exact load note,
+        // not just some of them.
+        const lines = text.split('\n').filter(l => /Trap Bar Jump/.test(l))
+        expect(lines.length).toBeGreaterThan(0)
+        for (const line of lines) {
+          expect(line).toMatch(/Trap Bar Jump: \d+x\d+ \(Suggested: Keep under 155lbs\)/)
+        }
+      }
+    }
+  })
+
+  test('Trap Bar Jump is not always standalone — it stands alone on some days and pairs (bracketed) on others, following the normal pairing logic like any other accessory', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4' }))
+    let sawStandalone = false
+    let sawPaired = false
+    for (const s of allSessions(bp.weeks)) {
+      for (const line of s.description.split('\n')) {
+        if (!/Trap Bar Jump/.test(line)) continue
+        if (SUPERSET_MARKER_RE.test(line)) sawPaired = true
+        else sawStandalone = true
+      }
+    }
+    expect(sawStandalone).toBe(true)
+    expect(sawPaired).toBe(true)
+  })
+
+  test('Trap Bar Jump reliably survives the accessory cap every single week — it never silently disappears from a day it belongs on', () => {
+    for (const position of ['Position Player', 'Pitcher']) {
+      const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position, time_per_week: '4' }))
+      // Day indices that carry Trap Bar Jump for the 4-day split (position
+      // player: Day 2 + Day 4; pitcher: Day 2 + Day 4 too).
+      const trapBarJumpDayIdx = [1, 3]
+      for (const w of bp.weeks) {
+        for (const idx of trapBarJumpDayIdx) {
+          expect(w.sessions[idx].description).toContain('Trap Bar Jump')
+        }
+      }
+    }
+  })
+
+  test('a knee injury swaps Trap Bar Jump for Trap Bar Deadlift (removes the landing-impact component), never leaving the raw Trap Bar Jump line behind', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4', injury_areas: ['Knee'] }))
+    let hasTrapBarDeadliftSwap = false
+    for (const s of allSessions(bp.weeks)) {
+      if (/Trap Bar Deadlift: \d+x\d+ \(Suggested: Keep under 155lbs\)/.test(s.description)) hasTrapBarDeadliftSwap = true
+    }
+    const stillHasRawJump = allSessions(bp.weeks).some(s => /Trap Bar Jump/.test(s.description))
+    expect(stillHasRawJump).toBe(false)
+    expect(hasTrapBarDeadliftSwap).toBe(true)
+  })
+
+  test('Trap Bar Jump is present in the exercise library and resolves via the same case-insensitive lookup the info button uses', () => {
+    const libSource = fs.readFileSync(
+      path.join(__dirname, '..', '..', '..', 'client', 'src', 'data', 'exerciseLibrary.js'),
+      'utf8'
+    )
+    expect(libSource).toMatch(/'trap bar jump':\s*\{/)
+  })
+
+  test('the day-type warm-up block is unaffected by the Trap Bar Jump swap — Day 2/4 (Upper/Push) and the squat/hinge day still show their correct warm-up', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4' }))
+    const [day1, day2, day3, day4] = bp.weeks[0].sessions
+    expect(day1.warmup.label).toMatch(/Lower Power/i)
+    expect(day2.warmup.label).toMatch(/Upper.*Push/i)
+    expect(day3.warmup.label).toMatch(/Squat.*Hinge/i)
+    expect(day4.warmup.label).toMatch(/Upper.*Push/i)
+  })
+})
