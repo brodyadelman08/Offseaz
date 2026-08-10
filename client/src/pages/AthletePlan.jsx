@@ -83,7 +83,7 @@ const cb = {
 // ── Exercise row (wraps on small screens) ─────────────────────────────────────
 
 const LIFT_LABELS = {
-  bench_press:'Bench Press', squat:'Squat', deadlift:'Deadlift',
+  bench_press:'Bench Press', squat:'Squat',
   trap_bar_deadlift:'Trap Bar Deadlift', overhead_press:'Overhead Press',
   power_clean:'Power Clean', hang_clean:'Hang Clean', clean:'Clean',
   front_squat:'Front Squat', romanian_deadlift:'Romanian Deadlift', reverse_lunge:'Reverse Lunge',

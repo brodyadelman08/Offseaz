@@ -6,7 +6,6 @@ const { getSurveyByAthlete } = require('./surveyService')
 const LIFT_LABELS = {
   bench_press:       'Bench Press',
   squat:             'Squat',
-  deadlift:          'Deadlift',
   trap_bar_deadlift: 'Trap Bar Deadlift',
   overhead_press:    'Overhead Press',
   power_clean:       'Power Clean',

@@ -28,7 +28,7 @@ const INJURY_FLAGS = {
     'Single Leg RDL', 'Walking Lunge', 'Reverse Lunge', 'Sled Push',
   ],
   Back: [
-    'Conventional Deadlift', 'Trap Bar Deadlift', 'Hex Bar Deadlift',
+    'Trap Bar Deadlift', 'Hex Bar Deadlift',
     'Romanian Deadlift', 'RDL', 'Stiff Leg Deadlift',
     'Back Squat', 'Good Mornings', 'Barbell Row', 'Back Extensions',
   ],
@@ -46,7 +46,7 @@ const INJURY_FLAGS = {
  * Maps every exercise name (lowercase) that appears with a "@ XX%" percentage
  * reference in the blueprint templates to its lifting_maxes table key.
  *
- * VALID keys in lifting_maxes: bench_press | squat | deadlift |
+ * VALID keys in lifting_maxes: bench_press | squat |
  *   trap_bar_deadlift | power_clean | overhead_press
  */
 const LIFT_KEY_MAP = {
@@ -60,7 +60,6 @@ const LIFT_KEY_MAP = {
   'hex bar deadlift':       'trap_bar_deadlift',
   'romanian deadlift':      'romanian_deadlift',
   'rdl':                    'romanian_deadlift',
-  'deadlift':               'deadlift',
 
   // Bench variations
   'bench press':            'bench_press',
@@ -82,7 +81,6 @@ const LIFT_KEY_MAP = {
 const LIFT_LABELS = {
   bench_press:       'Bench Press',
   squat:             'Squat',
-  deadlift:          'Deadlift',
   trap_bar_deadlift: 'Trap Bar Deadlift',
   overhead_press:    'Overhead Press',
   power_clean:       'Power Clean',

@@ -27,7 +27,6 @@ const LOG_STATUS = {
 const LIFTS = [
   { key: 'bench_press',       label: 'Bench Press' },
   { key: 'squat',             label: 'Squat' },
-  { key: 'deadlift',          label: 'Deadlift' },
   { key: 'trap_bar_deadlift', label: 'Trap Bar Deadlift' },
   { key: 'overhead_press',    label: 'Overhead Press' },
   { key: 'power_clean',       label: 'Power Clean' },

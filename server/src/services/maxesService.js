@@ -1,7 +1,7 @@
 const supabaseAdmin = require('../config/supabase')
 
 const VALID_LIFTS = [
-  'bench_press', 'squat', 'deadlift', 'trap_bar_deadlift',
+  'bench_press', 'squat', 'trap_bar_deadlift',
   'power_clean', 'overhead_press',
   'hang_clean', 'clean', 'front_squat', 'romanian_deadlift', 'reverse_lunge',
 ]
