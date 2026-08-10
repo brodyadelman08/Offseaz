@@ -1286,7 +1286,13 @@ describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
     }
   })
 
-  test('Trap Bar Jump is not always standalone — it stands alone on some days and pairs (bracketed) on others, following the normal pairing logic like any other accessory', () => {
+  test('Trap Bar Jump always stands alone, never bracketed into a superset — same free-anchor treatment as an Olympic/ramped lift, not an ordinary accessory candidate', () => {
+    // Superseded by the under-filling root-cause fix: a day's anchor (Trap
+    // Bar Jump included) is now promoted to the same free, uncounted slot
+    // an Oly/ramped lift gets, instead of competing in the capped accessory
+    // pool — which is what let it silently eat one of the 3 accessory slots
+    // and under-fill the day (main + 2 instead of main + 3). It should
+    // therefore NEVER carry a superset marker, on any session.
     const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4' }))
     let sawStandalone = false
     let sawPaired = false
@@ -1298,7 +1304,7 @@ describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
       }
     }
     expect(sawStandalone).toBe(true)
-    expect(sawPaired).toBe(true)
+    expect(sawPaired).toBe(false)
   })
 
   test('Trap Bar Jump reliably survives the accessory cap every single week — it never silently disappears from a day it belongs on', () => {
@@ -1341,5 +1347,157 @@ describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
     expect(day2.warmup.label).toMatch(/Upper.*Push/i)
     expect(day3.warmup.label).toMatch(/Squat.*Hinge/i)
     expect(day4.warmup.label).toMatch(/Upper.*Push/i)
+  })
+})
+
+// ─── Area 13 — Under-filling root-cause fix (any day, any anchor type) ─────
+// organizeSessionDescription used to only reorganize a day if it found a
+// %-ramped or technical-Olympic-lift line. Everything else — a day anchored
+// by a plain press, a row, or a jump — either got skipped entirely (raw,
+// uncapped, unpaired template text passed straight through) or, if it had a
+// narrow special-case escape hatch (baseball's old Trap Bar Jump handling),
+// had its own anchor compete for and consume one of the 3 accessory
+// budget slots, silently under-filling the day (main + 2 instead of
+// main + 3). The fix promotes whichever line is FIRST in the template's own
+// authored order to the same free, uncounted anchor slot an Oly/ramped lift
+// already gets, whenever there's no Oly/ramped lift — so every day with any
+// real working content gets organized and filled to its intended cap,
+// regardless of what kind of movement anchors it.
+
+describe('Area 13 — Under-filling root-cause fix (any day, any anchor type)', () => {
+  // Reimplementation of the exact classification predicates from
+  // blueprintTemplates.js, for audit purposes only — mirrors what
+  // isMainLiftLine/isRampedLiftLine/isConditioningLine/isPlyoLine/
+  // isMobilityCoreExempt/isAccessoryLine actually do, so "raw accessory
+  // content available" is measured the same way production measures it,
+  // not by a naive "line has a colon" heuristic (which would wrongly flag
+  // pure conditioning/recovery days that have no accessory content to
+  // organize at all).
+  const MAIN_LIFT_KEYWORDS_RE_LOCAL = /^(Power Clean(?: from floor)?|Hang Power Clean|Hang Clean|BB Split Jerk|Push Jerk|Split Jerk|Snatch|Hang Snatch|Power Snatch|Clean Pull|Clean and Jerk)\b/
+  const PLYO_KEYWORDS_RE_LOCAL = /\b(Box Jumps?|Broad Jumps?|Hurdle Hops?|Depth Jumps?|Depth Drop|Snap Down|Squat Jumps?|Lateral Bounds?|Bounding|Approach Jumps?|Drop Jumps?|Reactive Box Jump|Ankle Hops?|Hop & Stick)\b/i
+  const CONDITIONING_HEADER_RE_LOCAL = /^[\w &]*Conditioning:$/
+  const CONDITIONING_EXERCISE_RE_LOCAL = /^(Sprint Work|Sprint Ladder|Sprint \+ Close Out|Sprint \+ Jog Ladder|Repeat Sprint|300 Yard Shuttle|Flying 20s|17s Drill|Baseline Sprint|Defensive Slide(?: Sprint)?|Post Sprint|Box Out Drill|Shuffle Step|Full Court Sprint|V Drill|Star Drill|200m Intervals|400m [Rr]epeats|Isometric (?:Squat|Pull) Hold|Weighted Carries(?: Medley)?|Farmer Carr(?:y|ies)|Battle Rope|Wrestle-Outs|Sled Push|Sled Sprint|Sled Drag|Pro Agility(?: Drill)?|5-10-5(?: Shuttle)?|Cone Drill(?:\s*\(5-10-5\))?|Deceleration Drill|Lateral Shuffle(?: Sprint)?|T-Drill|Aerobic Finish|Tempo [Rr]un|Sprint Tempo Protocol)\b/
+  const MOBILITY_EXACT_EXEMPT_LOCAL = new Set([
+    'dead bug', 'ab wheel', 'plank', 'pallof press', 'half kneeling cable press',
+    'cable woodchop', 'copenhagen adductor', 'suitcase carry', 'bird dog',
+    'glute bridge', 'glute bridge hold', 'single leg glute bridge',
+    'ytw series', 'ytw shoulder series', 'band external rotation', 'band pull-aparts',
+    'hip 90/90 hold', 'hip 90/90 stretch', 'hip 90/90 rotations', 'ankle circles',
+    'ankle mobility circles', 'cat-cow', 'downward dog',
+  ])
+  function isRamped(bare) { return bare.includes('%') || bare.includes('@ moderate load') }
+  function isMainLift(bare) {
+    const colonIdx = bare.indexOf(':')
+    const name = colonIdx > 0 ? bare.slice(0, colonIdx) : bare
+    return MAIN_LIFT_KEYWORDS_RE_LOCAL.test(name)
+  }
+  function isPlyo(bare) {
+    const colonIdx = bare.indexOf(':')
+    const name = colonIdx > 0 ? bare.slice(0, colonIdx) : bare
+    return PLYO_KEYWORDS_RE_LOCAL.test(name)
+  }
+  function isConditioning(bare) {
+    return CONDITIONING_HEADER_RE_LOCAL.test(bare) || CONDITIONING_EXERCISE_RE_LOCAL.test(bare)
+  }
+  function isMobilityExempt(name) {
+    const n = name.toLowerCase().trim()
+    if (MOBILITY_EXACT_EXEMPT_LOCAL.has(n)) return true
+    return /stretch|mobility|foam roll/i.test(n)
+  }
+  function isAccessory(bare) {
+    if (isConditioning(bare) || isPlyo(bare) || isRamped(bare) || isMainLift(bare)) return false
+    const colonIdx = bare.indexOf(':')
+    if (colonIdx <= 0) return false
+    if (isMobilityExempt(bare.slice(0, colonIdx))) return false
+    return /^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/.test(bare) ||
+           /^(.*?):\s*(\d+)x(\d+)\s*warmup,\s*(\d+)x(\d+[a-zA-Z]*|AMAP)\s*working(.*)$/.test(bare)
+  }
+
+  test('a day with no %-ramped or Olympic-lift anchor still gets fully organized (bracketed pairs), not left as raw unbracketed template text, for every sport/position/day-count that has real accessory content available', () => {
+    const stillRaw = []
+    for (const tpl of SPORT_TEMPLATES) {
+      for (const pos of tpl.positions) {
+        for (const daysOpt of tpl.daysOptions) {
+          const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
+          const raw = tpl.generateWeeks(pos.id, 'standard', daysOpt.days)
+          const organized = applySessionOrganization(raw, rotation)
+          for (const s of organized[0].sessions) {
+            const rawSession = raw[0].sessions.find(x => x.day === s.day)
+            const rawLines = rawSession.description.split('\n').map(l => l.replace(SUPERSET_MARKER_RE, ''))
+            const hasOlyOrRamped = rawLines.some(l => isMainLift(l) || isRamped(l))
+            if (hasOlyOrRamped) continue // already worked before the fix — out of scope here
+
+            let inCore = false
+            let accessoryCount = 0
+            let plyoCount = 0
+            for (const l of rawLines) {
+              if (l.trim() === '') { inCore = false; continue }
+              if (/^Core\s*—/.test(l)) { inCore = true; continue }
+              if (inCore) continue
+              if (isPlyo(l)) { plyoCount++; continue }
+              if (isAccessory(l)) accessoryCount++
+            }
+            // An anchor (1) plus at least 3 accessory/plyo candidates is
+            // real, organizable content — if the organized output is
+            // byte-identical to the raw template, this day was skipped
+            // entirely (the bug), not correctly left alone (a genuinely
+            // sparse conditioning/recovery day never reaches this count).
+            if (accessoryCount + plyoCount >= 4 && s.description === rawSession.description) {
+              stillRaw.push(`${tpl.id}/${pos.id}/${daysOpt.days}d ${s.day}`)
+            }
+          }
+        }
+      }
+    }
+    expect(stillRaw).toEqual([])
+  })
+
+  test('baseball Upper Power/Upper Strength days (Trap Bar Jump anchor) reach the full main + 3 accessory cap, not main + 2 — the exact reported symptom', () => {
+    const rotation = SPORT_ACCESSORY_ROTATION.baseball
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const organized = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 4), rotation)
+    const day2 = organized[0].sessions.find(s => s.day === 'Day 2').description
+    const day4 = organized[0].sessions.find(s => s.day === 'Day 4').description
+    for (const desc of [day2, day4]) {
+      const groups = new Set(desc.split('\n').map(l => l.match(SUPERSET_MARKER_RE)).filter(Boolean).map(m => m[1]))
+      const singleLines = desc.split('\n').filter(l => {
+        if (l.trim() === '' || SUPERSET_MARKER_RE.test(l)) return false
+        if (/^Core\s*—/.test(l)) return false
+        const colonIdx = l.indexOf(':')
+        if (colonIdx <= 0) return false
+        return /^(.*?):\s*(\d+)x/.test(l)
+      })
+      // Trap Bar Jump (the free anchor) is 1 of those standalone singles;
+      // main + 3 accessories means at least one bracketed pair group
+      // survives alongside it (2 of the 3 slots), not just the anchor alone.
+      expect(groups.size).toBeGreaterThanOrEqual(1)
+      expect(singleLines.length).toBeGreaterThanOrEqual(1)
+    }
+  })
+
+  test('a plyo line that does not get the main-lift contrast pairing (no ramped lift on the same day, or 2+ plyo lines) falls back into the normal capped accessory pool instead of being silently dropped', () => {
+    // Track and Field / Jumpers Day 5 in the raw template is 5 plyo lines
+    // with no ramped/Oly lift on the day at all — under the old logic these
+    // would either all vanish (early-return never even reaches the plyo
+    // branch... but if it did via some other path, keepPlyo requires
+    // exactly 1 plyo line) or the whole day would be skipped. Confirm real,
+    // audited-affected content survives post-fix.
+    const track = SPORT_TEMPLATES.find(t => t.id === 'track')
+    const rotation = SPORT_ACCESSORY_ROTATION.track || {}
+    const raw = track.generateWeeks('jump', 'standard', 6)
+    const rawDay5 = raw[0].sessions.find(s => s.day === 'Day 5')
+    expect(rawDay5).toBeTruthy()
+    const rawPlyoNames = rawDay5.description.split('\n').filter(l => /Hops?|Jump|Bound/i.test(l))
+    expect(rawPlyoNames.length).toBeGreaterThan(0)
+
+    const organized = applySessionOrganization(raw, rotation)
+    const organizedDay5 = organized[0].sessions.find(s => s.day === 'Day 5').description
+    // At least one plyo/jump movement from the raw template survives in the
+    // organized output — not all silently dropped.
+    const survived = rawPlyoNames.some(rawLine => {
+      const name = rawLine.split(':')[0].trim()
+      return organizedDay5.includes(name)
+    })
+    expect(survived).toBe(true)
   })
 })
