@@ -50,7 +50,7 @@ function getPhaseInfo(weekNum, phases) {
     const t = WAVE_T[wip]
     f2 = Math.round((ph.low + (ph.high - ph.low) * t) * 100) / 100
   }
-  return { phaseNum: idx + 1, phaseLabel: ph.label, f: f2, pct: pct(f2), wip, deload, ramp: buildRamp(f2) }
+  return { week: weekNum, phaseNum: idx + 1, phaseLabel: ph.label, f: f2, pct: pct(f2), wip, deload, ramp: buildRamp(f2) }
 }
 
 function buildWeeks(n, phases, sessionsFn) {
@@ -876,6 +876,11 @@ const BASEBALL_ACCESSORY_ROTATION = {
   'band external rotation':    { 2: 'Scap Push-Ups',  3: 'YTW Raises' },
   // Arm care pool #2 (anchor: Face Pulls)
   'face pulls':                { 2: 'Prone Swimmers', 3: 'Crossover Symmetry Band Series' },
+  // Lower-body accessory pool (anchor: Calf Raises) — overrides the shared
+  // global ACCESSORY_ROTATION's own 'calf raises' entry for baseball only,
+  // so Tibialis Raises (wall-supported, leaning back) appears as a real
+  // working accessory on lower days without touching any other sport.
+  'calf raises':               { 2: 'Tibialis Raises', 3: 'Seated Calf Raise' },
 }
 
 // Per-sport extra-rotation lookup passed into applyAccessoryProgression.
@@ -920,21 +925,45 @@ const BASEBALL_SPRINT_PROTOCOL = {
   note: '30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep',
 }
 
-// Exact prescription. The "Core — ..." header makes this automatically
-// exempt from both the accessory volume wave and deload volume reduction
-// (see isMobilityCoreExempt's core-block tracking) — it's meant to always
-// be these same 3 movements at this same interval scheme, not something
-// that varies week to week. 4m30s total = 3 movements x (20s on + 10s off)
-// x 3 rounds through the cycle. "4m30s" (not "4:30") deliberately — every
-// line in this file is parsed as "name before the first colon, prescription
-// after," both here and in SessionDescription.jsx's renderer, so a colon
-// inside the header itself would get mistaken for that split point.
-const BASEBALL_CORE_FINISHER = [
-  { header: 'Core — Finisher (4m30s, 20s on/10s off):' },
-  { name: 'Alternating V-Ups',      sets: 3, reps: '20s' },
-  { name: 'Penguins',               sets: 3, reps: '20s' },
-  { name: 'Alternating Supermans',  sets: 3, reps: '20s' },
+// Rotating pool — 3 movements at a time, keeping the 20s-on/10s-off
+// interval structure. Decline Bench Iso is a genuine 30-second static hold,
+// not an interval movement, so it gets its own "3x30s hold" line instead
+// when it's in rotation.
+const CORE_FINISHER_POOL = [
+  'Alternating V-Ups', 'Penguins', 'Alternating Supermans', 'Flutter Kicks',
+  'Mountain Climbers', 'Russian Twists', 'Hollow Hold', 'Cherry Pickers',
+  'Decline Bench Iso', 'Dead Bug',
 ]
+
+// Deterministic (not random) rotation: a rolling 3-movement window keyed by
+// week number, so the finisher varies week to week but is reproducible and
+// consistent for any given week — no persisted/random state needed, and two
+// calls with the same week number always produce the same 3 movements.
+function coreFinisherMovements(weekNumber) {
+  const start = ((weekNumber - 1) * 3) % CORE_FINISHER_POOL.length
+  return [0, 1, 2].map(i => CORE_FINISHER_POOL[(start + i) % CORE_FINISHER_POOL.length])
+}
+
+// Exact prescription, rotating pool. The "Core — ..." header makes this
+// automatically exempt from both the accessory volume wave and deload
+// volume reduction (see isMobilityCoreExempt's core-block tracking), same
+// as every other sport's core block — it's meant to vary WHICH movements
+// appear, not lose volume. The header stays generic (no fixed "4m30s"
+// promise) because a week that rotates in Decline Bench Iso runs a little
+// longer than an all-interval week — that deviation shows on the movement's
+// own line ("3x30s hold") rather than being hidden behind an inaccurate
+// total-time claim in the header.
+function baseballCoreFinisher(weekNumber) {
+  const exercises = [{ header: 'Core — Finisher (20s on/10s off unless noted):' }]
+  for (const name of coreFinisherMovements(weekNumber)) {
+    exercises.push(
+      name === 'Decline Bench Iso'
+        ? { name, sets: 3, reps: '30s', note: 'hold' }
+        : { name, sets: 3, reps: '20s' }
+    )
+  }
+  return exercises
+}
 
 // Formats one exercise object into its "Name: SxR (note)" line. Sport-
 // agnostic — any sport's session builder can use this, not just baseball's.
@@ -984,31 +1013,102 @@ function buildSessionDescription(exercises) {
   return lines.join('\n')
 }
 
-function makeBaseballSession(day, focus, exercises) {
+// ─── Day-type warm-up blocks (baseball only) ───────────────────────────────
+// Attached as session.warmup — a SEPARATE field from `description`, not text
+// woven into it, deliberately: warm-ups are fixed/consistent (never rotated,
+// never volume-waved, never touched by deload) so keeping them structurally
+// outside `description` means none of the line-classification passes
+// (accessory rotation, deload reduction, session organization, injury
+// substitution) need to know warm-ups exist at all. `blueprint_weeks.sessions`
+// is a JSONB column — this needs no schema migration, and blueprintService.js
+// already stores whatever's on a session object as-is. Rendered client-side
+// as a collapsed, tap-to-expand block (see SessionDescription.jsx) so a long
+// warm-up doesn't overwhelm the session view.
+const UPPER_PUSH_WARMUP = {
+  label: 'Upper/Push Warm-Up',
+  lines: [
+    'Prone Y-T-W Raises: 2-3x5-8',
+    'Band External Rotation: 2-3x5-8',
+    'Scap Push-Ups: 2-3x5-8',
+    'Band Pull-Aparts: 2-3x5-8',
+    'Prone Swimmers: 2-3x5-8',
+    'Cuban Press: 2-3x5-8',
+    'Push-ups: 2-3x5-8',
+    'Wall Slides: 2-3x5-8',
+    'Face Pulls: 2-3x5-8 (light)',
+    'Arm Circles / Pass-Throughs: 2-3x5-8',
+  ],
+}
+const LOWER_POWER_WARMUP = {
+  label: 'Lower Power Warm-Up',
+  lines: [
+    'Jog: brief',
+    'Open and Close the Gate: 2x10 each',
+    'Leg Swings: 10 each (front/back + side)',
+    'Walking Lunge: 10 yds',
+    'Karaoka: 10 yds each way (both ways)',
+    'High Knees / Butt Kicks: 10 yds each',
+    'Side Shuffle: 10 yds each way (both ways)',
+    'A-Skips: 10 yds',
+    'Broad Jumps: 3 (submax)',
+    'A-Skip to 10-Yard Build-Up: 2',
+    'Short Sprints: 2x15 yds',
+  ],
+}
+const SQUAT_HINGE_WARMUP = {
+  label: 'Squat/Hinge Warm-Up',
+  lines: [
+    'Cat-Cow: 8-10',
+    '90/90 Hip Rotations: 5 each side',
+    'Clock T-Spine: 5 each direction',
+    'Inchworms with Seal Stretch: 5',
+    'Thread the Needle: 5 each side (T-Spine)',
+    'Glute Bridge: 10',
+    'Bodyweight Squat to Depth: 8 (use squat rack to pull deeper)',
+    'Ankle Cradle to Side Lunge: 5 each side',
+    'Squat to Hamstring: 8',
+  ],
+}
+const WARMUP_BLOCKS = {
+  upper_push: UPPER_PUSH_WARMUP,
+  lower_power: LOWER_POWER_WARMUP,
+  squat_hinge: SQUAT_HINGE_WARMUP,
+}
+
+function makeBaseballSession(day, focus, exercises, warmupType) {
   const description = buildSessionDescription(exercises)
-  return { day, focus, description }
+  const session = { day, focus, description }
+  if (warmupType && WARMUP_BLOCKS[warmupType]) session.warmup = WARMUP_BLOCKS[warmupType]
+  return session
 }
 
 function baseball3Day(info) {
   return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift, added Bulgarian Split Squat.
-    // SS1: heavy squat first, then a jump — the lift potentiates the jump.
-    makeBaseballSession('Day 1', 'Lower and Power', [
-      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3`, ss: 1 },
-      { ...baseballPlyo(info.phaseNum), ss: 1 },
+    // Lower Power day: Back Squat + jump — the one approved exception to
+    // "main lift stands alone," bracketed as a contrast superset by
+    // applySessionOrganization (heavy lift first, potentiates the jump); no
+    // `ss` field needed here anymore, that pass derives it from content
+    // (a power-focus day with exactly one plyo line). Remaining accessories
+    // get capped to 3 and paired automatically by the same pass.
+    makeBaseballSession('Day 1', 'Lower Power', [
+      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3` },
+      baseballPlyo(info.phaseNum),
       { name: 'Hip Thrust',                               sets: 3, reps: '8' },
       { name: 'Box Drop',                                 sets: 3, reps: '3' },
       { name: 'Bulgarian Split Squat',                    sets: 3, reps: '6',    note: 'each leg' },
       { name: 'Calf Raises',                              sets: 3, reps: 'AMAP' },
       { name: 'Core — Cherry Pickers',                    sets: 4, reps: '15' },
       { name: 'Core — Tuck-Up',                           sets: 3, reps: 'AMAP' },
-    ]),
-    // Rotational power lives on Med Ball Scoop Toss + Landmine Rotation (both
-    // cycle through Cable/Band Rotational Chop and Med Ball Overhead Slam via
-    // BASEBALL_ACCESSORY_ROTATION). SS1: press first, iso hold fills the rest
-    // between press sets. One arm-care anchor (Band External Rotation, cycles
-    // Scap Push-Ups/YTW Raises) — position players get 2 arm-care days/week
-    // total across this 3-day split (here + Day 3), never every day.
+    ], 'lower_power'),
+    // Upper/Push day. DB Bench Press + Bulgarian Split Squat Iso Hold is a
+    // deliberate, hand-authored pair (press priority, iso fills the rest
+    // between sets) — applySessionOrganization detects and protects it as an
+    // atomic unit via its `ss` marker, exempt from the generic accessory cut.
+    // Rotational power lives on Med Ball Scoop Toss + Landmine Rotation
+    // (cycle through Cable/Band Rotational Chop and Med Ball Overhead Slam).
+    // Arm care (Band External Rotation, cycles Scap Push-Ups/YTW Raises) —
+    // position players get 2 arm-care days/week total across this 3-day
+    // split (here + Day 3), never every day.
     makeBaseballSession('Day 2', 'Upper Strength', [
       { name: 'Hang Clean',                               sets: 3, reps: '3' },
       { name: 'DB Bench Press',                           sets: 4, reps: '8',    ss: 1 },
@@ -1021,13 +1121,14 @@ function baseball3Day(info) {
       { name: 'Forearm Curls (Both Ways)',                sets: 3, reps: 'AMAP' },
       { name: 'Band Pull-Aparts',                         sets: 3, reps: '20' },
       { name: 'Core — Sit-ups',                           sets: 4, reps: '12' },
-    ]),
-    // Reverse Lunge is primary unilateral; Bulgarian removed to avoid bilateral
-    // + double unilateral fatigue. Second arm-care anchor (Face Pulls, cycles
-    // Prone Swimmers/Crossover Symmetry Band Series) — this is the week's
-    // second (of two) arm-care day, alactic conditioning finisher, and the
-    // exact core-finisher protocol in place of the old EXT/INT Rotation block.
-    makeBaseballSession('Day 3', 'Lower and Upper Power', [
+    ], 'upper_push'),
+    // Squat/Hinge-type day — no plyo (Power Clean is the day's own explosive
+    // element already). Reverse Lunge is primary unilateral; Bulgarian
+    // removed to avoid bilateral + double unilateral fatigue. Second arm-care
+    // anchor (Face Pulls, cycles Prone Swimmers/Crossover Symmetry Band
+    // Series) — this week's second (of two) arm-care day, alactic
+    // conditioning finisher, and the rotating core-finisher protocol.
+    makeBaseballSession('Day 3', 'Lower Strength', [
       { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
       { name: 'Reverse Lunge',                            sets: 3, reps: '5',    note: 'each leg — primary unilateral' },
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
@@ -1037,29 +1138,31 @@ function baseball3Day(info) {
       { name: 'Copenhagen Adductor',                      sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Face Pulls',                               sets: 3, reps: '15' },
       BASEBALL_SPRINT_PROTOCOL,
-      ...BASEBALL_CORE_FINISHER,
-    ]),
+      ...baseballCoreFinisher(info.week),
+    ], 'squat_hinge'),
   ]
 }
 
 function baseball4Day(info) {
   const p3 = info.phaseNum >= 3
   return [
-    // Day 1: Back Squat only — hinge work lives on Day 3's Trap Bar Deadlift
-    // instead. SS1: heavy squat, then a jump.
-    makeBaseballSession('Day 1', 'Lower Strength', [
-      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3`, ss: 1 },
-      { ...baseballPlyo(info.phaseNum), ss: 1 },
+    // Lower Power day: Back Squat + jump — the approved main-lift/plyo
+    // contrast exception, auto-derived by applySessionOrganization.
+    makeBaseballSession('Day 1', 'Lower Power', [
+      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3` },
+      baseballPlyo(info.phaseNum),
       { name: 'Box Drop',                                 sets: 3, reps: '3' },
       { name: 'Bulgarian Split Squat',                    sets: 3, reps: '6',    note: 'each leg' },
       { name: 'Weighted Hip Thrust',                      sets: 3, reps: '8' },
       { name: 'Calf Raises',                              sets: 3, reps: 'AMAP' },
-      ...BASEBALL_CORE_FINISHER,
+      ...baseballCoreFinisher(info.week),
       { name: 'Core — Tuck-Up',                           sets: 3, reps: 'AMAP' },
-    ]),
-    // Rotational power on Med Ball Scoop Toss + Landmine Rotation. SS1: press
-    // + iso hold. One arm-care anchor here (Band External Rotation) — with
-    // Day 3's Face Pulls anchor, position players get 2 of 4 days/week.
+    ], 'lower_power'),
+    // Upper/Push day. DB Bench Press + Bulgarian Split Squat Iso Hold is the
+    // same protected, hand-authored pair as the 3-day version. Rotational
+    // power on Med Ball Scoop Toss + Landmine Rotation. One arm-care anchor
+    // here (Band External Rotation) — with Day 3's Face Pulls anchor,
+    // position players get 2 of 4 days/week.
     makeBaseballSession('Day 2', 'Upper Strength', [
       { name: 'Hang Clean',                               sets: 3, reps: '3',    note: 'working up' },
       { name: 'DB Bench Press',                           sets: 4, reps: p3 ? '6' : '8', ss: 1 },
@@ -1072,14 +1175,14 @@ function baseball4Day(info) {
       { name: 'Lat Raises — Side, Front, Back',           sets: 3, reps: 'AMAP' },
       { name: 'Band Pull-Aparts',                         sets: 3, reps: '20' },
       { name: 'Core — Sit-ups',                           sets: 4, reps: '12' },
-    ]),
-    // Reverse Lunge is primary unilateral after Trap Bar DL; Bulgarian removed
-    // (flagged: TBD + heavy BSS). SS1: heavy deadlift, then Broad Jumps — a
-    // second, distinct explosive stimulus alongside Day 1's phase-gated jump.
-    // Face Pulls is this week's second arm-care day; sprint protocol here.
-    makeBaseballSession('Day 3', 'Lower Power', [
-      { name: 'Trap Bar Deadlift', ramp: `${info.ramp}, ${info.pct}×3`, ss: 1 },
-      { name: 'Broad Jumps',                              sets: 4, reps: '5',   ss: 1 },
+    ], 'upper_push'),
+    // Squat/Hinge day: Trap Bar Deadlift stands alone now — the phase-gated
+    // jump moved to Day 1 only, so this is a pure hinge/strength day with no
+    // plyo, matching the mobility-focused Squat/Hinge warm-up (no jump/sprint
+    // prep needed here). Face Pulls is this week's second arm-care day;
+    // sprint protocol here.
+    makeBaseballSession('Day 3', 'Lower Strength', [
+      { name: 'Trap Bar Deadlift', ramp: `${info.ramp}, ${info.pct}×3` },
       { name: 'Reverse Lunge',                            sets: 3, reps: '5',    note: 'each leg — primary unilateral' },
       { name: 'Single Leg RDL',                           sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Shotput Med Ball Throw',                   sets: 4, reps: '5',    note: 'each side' },
@@ -1087,7 +1190,7 @@ function baseball4Day(info) {
       { name: 'Face Pulls',                               sets: 3, reps: '15' },
       BASEBALL_SPRINT_PROTOCOL,
       { name: 'Core — EXT/INT Rotation',                  sets: 3, reps: 'AMAP' },
-    ]),
+    ], 'squat_hinge'),
     // No arm care here — position players cap at 2 of 4 days (Day 2 + Day 3
     // above); pitcher4Day adds a third arm-care day on this same slot.
     makeBaseballSession('Day 4', 'Upper Power', [
@@ -1096,8 +1199,8 @@ function baseball4Day(info) {
       { name: 'Bird Dog Row',                             sets: 4, reps: '10' },
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
       { name: 'Bench Curls',                              sets: 3, reps: '8' },
-      ...BASEBALL_CORE_FINISHER,
-    ]),
+      ...baseballCoreFinisher(info.week),
+    ], 'upper_push'),
   ]
 }
 
@@ -1112,7 +1215,7 @@ const BASEBALL_ARM_CARE = makeBaseballSession('Day 5', 'Arm Care & Conditioning'
   { name: 'Band Pull-Aparts',         sets: 3, reps: '20' },
   BASEBALL_SPRINT_PROTOCOL,
   { name: 'Lateral Bounds',           sets: 4, reps: '5',  note: 'each side' },
-])
+], 'upper_push')
 
 const BASEBALL_LIGHT_FB = makeBaseballSession('Day 6', 'Lighter Full Body', [
   { name: 'Goblet Squat',             sets: 3, reps: '10' },
@@ -1154,25 +1257,27 @@ function generateBaseballWeeks(_, goal, daysPerWeek) {
 
 function pitcher3Day(info) {
   return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift; Hip Thrust, Copenhagen,
-    // Single Leg RDL remain. SS1: heavy squat, then a jump. One light
-    // arm-care touch (Face Pulls) — pitchers get arm care on all 3 days here
-    // (vs 2 of 3 for position players), with more volume on Days 2-3.
-    makeBaseballSession('Day 1', 'Lower and Power', [
-      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3`, ss: 1 },
-      { ...baseballPlyo(info.phaseNum), ss: 1 },
+    // Lower Power day: Back Squat + jump — the approved main-lift/plyo
+    // contrast exception, auto-derived by applySessionOrganization. One
+    // light arm-care touch (Face Pulls) — pitchers get arm care on all 3
+    // days here (vs 2 of 3 for position players), with more volume on
+    // Days 2-3.
+    makeBaseballSession('Day 1', 'Lower Power', [
+      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3` },
+      baseballPlyo(info.phaseNum),
       { name: 'Hip Thrust',                               sets: 4, reps: '8' },
       { name: 'Copenhagen Adductor',                      sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Single Leg RDL',                           sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Face Pulls',                               sets: 3, reps: '15' },
       { name: 'Core — Cherry Pickers',                    sets: 4, reps: '15' },
       { name: 'Core — EXT/INT Rotation',                  sets: 3, reps: 'AMAP' },
-    ]),
+    ], 'lower_power'),
     // Position difference, made visible: Landmine Press instead of a flat
-    // press — lower load, no direct overhead pressing. SS1: press + iso
-    // hold. BOTH arm-care anchors here (Band External Rotation AND Face
-    // Pulls, each cycling their own pool) — more volume than a position
-    // player's single-anchor upper day.
+    // press — lower load, no direct overhead pressing. Bulgarian Split
+    // Squat Iso Hold is the same protected, hand-authored pair. BOTH
+    // arm-care anchors here (Band External Rotation AND Face Pulls, each
+    // cycling their own pool) — more volume than a position player's
+    // single-anchor upper day.
     makeBaseballSession('Day 2', 'Upper Strength and Arm Care', [
       { name: 'Hang Clean',                               sets: 3, reps: '3' },
       { name: 'Landmine Press',                           sets: 4, reps: '8',    note: 'lower load — no direct overhead pressing', ss: 1 },
@@ -1183,13 +1288,13 @@ function pitcher3Day(info) {
       { name: 'Band Pull-Aparts',                         sets: 4, reps: '20' },
       { name: 'Core — Sit-ups',                           sets: 4, reps: '12' },
       { name: 'Core — Rotate and Press',                  sets: 3, reps: '10' },
-    ]),
-    // Reverse Lunge is primary unilateral; Bulgarian removed to reduce
-    // fatigue; Single Leg RDL for hip stability. Rotational power on Med
-    // Ball Rotational Throw; third arm-care day (Band External Rotation);
-    // sprint protocol + the exact core-finisher in place of the old
-    // EXT/INT Rotation block.
-    makeBaseballSession('Day 3', 'Lower and Upper Power', [
+    ], 'upper_push'),
+    // Squat/Hinge-type day — no plyo (Power Clean is the day's own explosive
+    // element already). Reverse Lunge is primary unilateral; Bulgarian
+    // removed to reduce fatigue; Single Leg RDL for hip stability. Third
+    // arm-care day (Band External Rotation); sprint protocol + the rotating
+    // core-finisher protocol.
+    makeBaseballSession('Day 3', 'Lower Strength', [
       { name: 'Power Clean',               warmup: '2x2', sets: 3, reps: '2' },
       { name: 'Reverse Lunge',                            sets: 3, reps: '5',    note: 'each leg — primary unilateral' },
       { name: 'Single Leg RDL',                           sets: 3, reps: '8',    note: 'each leg' },
@@ -1198,30 +1303,30 @@ function pitcher3Day(info) {
       { name: 'Copenhagen Adductor',                      sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Band External Rotation',                   sets: 3, reps: '15',   note: 'each arm' },
       BASEBALL_SPRINT_PROTOCOL,
-      ...BASEBALL_CORE_FINISHER,
-    ]),
+      ...baseballCoreFinisher(info.week),
+    ], 'squat_hinge'),
   ]
 }
 
 function pitcher4Day(info) {
   const p3 = info.phaseNum >= 3
   return [
-    // Day 1: Back Squat only — hinge work lives on Day 3's Trap Bar Deadlift
-    // instead. SS1: heavy squat, then a jump. Arm-care day 1 of 3 (Face Pulls).
-    makeBaseballSession('Day 1', 'Lower Strength', [
-      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3`, ss: 1 },
-      { ...baseballPlyo(info.phaseNum), ss: 1 },
+    // Lower Power day: Back Squat + jump — approved contrast exception.
+    // Arm-care day 1 of 3 (Face Pulls).
+    makeBaseballSession('Day 1', 'Lower Power', [
+      { name: 'Back Squat',      ramp: `${info.ramp}, ${info.pct}×3` },
+      baseballPlyo(info.phaseNum),
       { name: 'Weighted Hip Thrust',                      sets: 4, reps: '8' },
       { name: 'Copenhagen Adductor',                      sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Single Leg RDL',                           sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Face Pulls',                               sets: 3, reps: '15' },
       { name: 'Core — Cherry Pickers',                    sets: 4, reps: '15' },
       { name: 'Core — EXT/INT Rotation',                  sets: 3, reps: 'AMAP' },
-    ]),
+    ], 'lower_power'),
     // Landmine Press instead of a flat press — position difference, lower
-    // load, no direct overhead pressing. SS1: press + iso hold. Arm-care
-    // day 2 of 3, both anchors (more volume than position players' single
-    // anchor on the equivalent day).
+    // load, no direct overhead pressing. Protected press + iso-hold pair.
+    // Arm-care day 2 of 3, both anchors (more volume than position players'
+    // single anchor on the equivalent day).
     makeBaseballSession('Day 2', 'Upper Strength and Arm Care', [
       { name: 'Hang Clean',                               sets: 3, reps: '3',    note: 'working up' },
       { name: 'Landmine Press',                           sets: 4, reps: p3 ? '6' : '8', note: 'lower load — no direct overhead pressing', ss: 1 },
@@ -1232,13 +1337,13 @@ function pitcher4Day(info) {
       { name: 'Band Pull-Aparts',                         sets: 4, reps: '20' },
       { name: 'Core — Sit-ups',                           sets: 4, reps: '12' },
       { name: 'Core — Rotate and Press',                  sets: 3, reps: '10' },
-    ]),
-    // Reverse Lunge primary unilateral; Bulgarian removed (flagged: Trap Bar
-    // DL + heavy BSS); Single Leg RDL for hip stability. SS1: heavy deadlift,
-    // then Broad Jumps. Sprint protocol here; no arm care on this day.
-    makeBaseballSession('Day 3', 'Lower Power', [
-      { name: 'Trap Bar Deadlift', ramp: `${info.ramp}, ${info.pct}×3`, ss: 1 },
-      { name: 'Broad Jumps',                              sets: 4, reps: '5',   ss: 1 },
+    ], 'upper_push'),
+    // Squat/Hinge day: Trap Bar Deadlift stands alone now — the phase-gated
+    // jump moved to Day 1 only. Reverse Lunge primary unilateral; Bulgarian
+    // removed (flagged: Trap Bar DL + heavy BSS); Single Leg RDL for hip
+    // stability. Sprint protocol here; no arm care on this day.
+    makeBaseballSession('Day 3', 'Lower Strength', [
+      { name: 'Trap Bar Deadlift', ramp: `${info.ramp}, ${info.pct}×3` },
       { name: 'Reverse Lunge',                            sets: 3, reps: '5',    note: 'each leg — primary unilateral' },
       { name: 'Single Leg RDL',                           sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Lateral Band Walk',                        sets: 3, reps: '15',   note: 'each direction' },
@@ -1246,7 +1351,7 @@ function pitcher4Day(info) {
       { name: 'Calf Raises',                              sets: 3, reps: 'AMAP' },
       BASEBALL_SPRINT_PROTOCOL,
       { name: 'Core — Tuck-Up',                           sets: 3, reps: 'AMAP' },
-    ]),
+    ], 'squat_hinge'),
     // Rotational power on Med Ball Rotational Throw. Arm-care day 3 of 3
     // (Band External Rotation) — this is the third day per week pitchers get
     // arm care that position players don't, on the equivalent upper-power day.
@@ -1257,8 +1362,8 @@ function pitcher4Day(info) {
       { name: 'Med Ball Rotational Throw',                sets: 4, reps: '6',    note: 'each side' },
       { name: 'Lat Pulldown',                              sets: 3, reps: '8' },
       { name: 'Band External Rotation',                   sets: 3, reps: '15',   note: 'each arm' },
-      ...BASEBALL_CORE_FINISHER,
-    ]),
+      ...baseballCoreFinisher(info.week),
+    ], 'upper_push'),
   ]
 }
 
@@ -1273,7 +1378,7 @@ const PITCHER_ARM_CARE = makeBaseballSession('Day 5', 'Arm Care & Conditioning',
   { name: 'Wrist Curls',              sets: 3, reps: '15' },
   BASEBALL_SPRINT_PROTOCOL,
   { name: 'Lateral Bounds',           sets: 4, reps: '5',  note: 'each side' },
-])
+], 'upper_push')
 
 const PITCHER_LIGHT_FB = makeBaseballSession('Day 6', 'Lighter Full Body and Arm Care', [
   { name: 'Goblet Squat',             sets: 3, reps: '10' },
@@ -1954,6 +2059,187 @@ const ACCESSORY_ROTATION = {
   'db shoulder press':     { 2: 'Arnold Press',          3: 'Push Press' },
 }
 
+// ─── Session organization: volume cap + pairing (all sports) ──────────────
+// Every sport's session templates were authored densely — main lift plus
+// 5-8+ accessories on a single day. This pass runs FIRST in the pipeline
+// (before accessory rotation/wave/deload), on the fixed, freshly-generated
+// template content, so a cutting decision is based on which physical
+// "slot" exists in the template, not on what a line happens to be rotated
+// into for a particular week — keeps the same slot surviving or getting
+// cut consistently across all 16 weeks.
+//
+// Reorganizes each day into: any inline warm-up preamble a sport already
+// writes (untouched, wherever it is), the main lift alone — UNLESS the day
+// has exactly one plyo/jump line, the one approved exception: bracketed
+// with the main lift as a contrast superset (heavy lift first, so it
+// potentiates the jump) — up to 3 remaining accessories (a pre-existing
+// hand-authored pair, e.g. baseball's press + iso-hold superset, is kept
+// as an atomic, always-first-priority 2-slot unit; everything else is cut
+// down by priority, least sport-specific first, then paired into brackets
+// of 2), conditioning work, and the core block(s) — always last.
+
+const MAX_ACCESSORIES = 3
+
+// Generic isolation/filler work — cut first when a day needs trimming,
+// regardless of sport. Nothing sport-specific here (arm-care, rotational
+// power, etc.) — those are protected via the calling sport's own
+// SPORT_ACCESSORY_ROTATION anchor keys (protectedNames param below).
+const GENERIC_FILLER = new Set([
+  'tricep pushdowns', 'tricep extensions', 'bicep curls', 'hammer curls',
+  'db curl', 'bench curls', 'forearm curls', 'forearm curls (both ways)',
+  'wrist curls', 'reverse wrist curls', 'neck flexion', 'neck extension',
+  'lateral neck flexion',
+])
+
+function isPowerFocusDay(focus) {
+  return /power/i.test(focus || '')
+}
+
+// One session's description -> reorganized description.
+function organizeSessionDescription(description, focus, protectedNames) {
+  const rawLines = description.split('\n')
+
+  const preamble = []       // leading unclassified lines (e.g. an inline "X Warm-up: ..." line) — untouched, always first
+  const olyLiftLines = []   // technical Olympic-lift lines (Power Clean, Hang Clean, ...) — always solo, never paired with plyo
+  const rampedLiftLines = [] // the true %-ramped main lift(s) — the ONLY thing plyo can pair with
+  const plyoLines = []
+  const otherLines = []     // anything unclassified once we're past the preamble — untouched, kept after accessories
+  const conditioningLines = []
+  const coreLines = []      // "Core — ..." blocks through to the next blank line — untouched, always last
+  const candidates = []     // { kind: 'pair'|'single', lines: [...bare text], priority, weight, idx }
+
+  let seenWorkingLine = false
+  let inCoreBlock = false
+  let idxCounter = 0
+  let i = 0
+
+  while (i < rawLines.length) {
+    const raw = rawLines[i]
+    const bare = raw.replace(SUPERSET_MARKER_RE, '')
+    if (bare.trim() === '') { inCoreBlock = false; i++; continue }
+    if (/^Core\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
+    if (inCoreBlock) { coreLines.push(raw); i++; continue }
+    if (isConditioningLine(raw)) { conditioningLines.push(raw); i++; continue }
+
+    // A pre-existing hand-authored superset group (from the template's own
+    // generation-time `ss` field — e.g. baseball's press + iso-hold pair).
+    // The main-lift + plyo contrast is detected by content below, not by
+    // marker, so this only ever catches a deliberate NON-main-lift pair.
+    const m = raw.match(SUPERSET_MARKER_RE)
+    if (m && !isRampedLiftLine(raw) && !isMainLiftLine(raw) && !isPlyoLine(raw)) {
+      const group = m[1]
+      const pair = [bare]
+      i++
+      while (i < rawLines.length) {
+        const nextRaw = rawLines[i]
+        const nm = nextRaw.match(SUPERSET_MARKER_RE)
+        if (nm && nm[1] === group) { pair.push(nextRaw.replace(SUPERSET_MARKER_RE, '')); i++ } else break
+      }
+      // A pre-existing pair is always priority 0 (highest) and, being a
+      // deliberate 2-exercise unit, counts as 2 of the 3 accessory slots.
+      candidates.push({ kind: 'pair', lines: pair, priority: 0, weight: pair.length, idx: idxCounter++ })
+      seenWorkingLine = true
+      continue
+    }
+
+    if (isPlyoLine(raw)) { plyoLines.push(bare); seenWorkingLine = true; i++; continue }
+    // Some sports' sessions carry BOTH a technical Olympic lift (Power
+    // Clean, Hang Clean, ...) AND a separate %-ramped compound lift on the
+    // same day (e.g. Power Clean + Back Squat) — only the ramped lift is
+    // ever a candidate for the plyo contrast pairing; the oly lift always
+    // stands alone, wherever the template places it.
+    if (isRampedLiftLine(raw)) { rampedLiftLines.push(bare); seenWorkingLine = true; i++; continue }
+    if (isMainLiftLine(raw)) { olyLiftLines.push(bare); seenWorkingLine = true; i++; continue }
+    if (isAccessoryLine(raw, false)) {
+      const colonIdx = bare.indexOf(':')
+      const name = (colonIdx > 0 ? bare.slice(0, colonIdx) : bare).toLowerCase().trim()
+      const priority = protectedNames.has(name) ? 0 : GENERIC_FILLER.has(name) ? 2 : 1
+      candidates.push({ kind: 'single', lines: [bare], priority, weight: 1, idx: idxCounter++ })
+      seenWorkingLine = true
+      i++
+      continue
+    }
+    if (!seenWorkingLine) preamble.push(raw); else otherLines.push(raw)
+    i++
+  }
+
+  // No main lift recognized (a non-lifting day — pure conditioning/mobility)
+  // — nothing to reorganize.
+  if (olyLiftLines.length === 0 && rampedLiftLines.length === 0) return description
+
+  let groupNum = 1
+  const out = [...preamble]
+  if (preamble.length) out.push('')
+
+  // Any technical Olympic lift(s) always stand alone first, wherever the
+  // template places them — never a plyo-pairing candidate.
+  out.push(...olyLiftLines)
+
+  // The %-ramped main lift stands alone, UNLESS this is a power-focus day
+  // with exactly one plyo/jump line — the one approved exception, bracketed
+  // together, heavy lift first. 2+ plyo lines, or any plyo on a non-power
+  // day, are dropped entirely (the "cuttable on strength days if space is
+  // tight" rule — a day this dense doesn't get to keep ambiguous extra jumps).
+  const keepPlyo = plyoLines.length === 1 && isPowerFocusDay(focus) && rampedLiftLines.length > 0
+  if (keepPlyo) {
+    out.push(...superset(groupNum, [...rampedLiftLines, plyoLines[0]]))
+    groupNum++
+  } else {
+    out.push(...rampedLiftLines)
+  }
+
+  // Cap the combined pool of authored pairs + loose accessories to
+  // MAX_ACCESSORIES total slots, by priority (0 = pre-existing pair or
+  // sport-specific/protected, 1 = normal, 2 = generic filler), stable on
+  // original position within a tier. Then restore original relative order
+  // before re-pairing, so a kept pair's lines and any surviving loose
+  // accessories still read in a sensible sequence.
+  const kept = [...candidates]
+    .sort((a, b) => a.priority - b.priority || a.idx - b.idx)
+    .reduce((acc, c) => {
+      const used = acc.reduce((sum, k) => sum + k.weight, 0)
+      if (used + c.weight <= MAX_ACCESSORIES) acc.push(c)
+      return acc
+    }, [])
+    .sort((a, b) => a.idx - b.idx)
+
+  let pendingSingle = null
+  for (const c of kept) {
+    if (c.kind === 'pair') {
+      if (pendingSingle) { out.push(pendingSingle); pendingSingle = null }
+      out.push(...superset(groupNum, c.lines))
+      groupNum++
+    } else if (pendingSingle) {
+      out.push(...superset(groupNum, [pendingSingle, c.lines[0]]))
+      groupNum++
+      pendingSingle = null
+    } else {
+      pendingSingle = c.lines[0]
+    }
+  }
+  if (pendingSingle) out.push(pendingSingle)
+
+  out.push(...otherLines)
+  out.push(...conditioningLines)
+  if (coreLines.length) {
+    out.push('')
+    out.push(...coreLines)
+  }
+
+  return out.join('\n')
+}
+
+function applySessionOrganization(weeks, extraRotation = {}) {
+  const protectedNames = new Set(Object.keys(extraRotation))
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(session => ({
+      ...session,
+      description: organizeSessionDescription(session.description, session.focus, protectedNames),
+    })),
+  }))
+}
+
 function isRampedLiftLine(line) {
   // "%" covers every sport whose main lift ramps with a top-set percentage.
   // Swimming has no percentage-based lifts (its Trap Bar Deadlift/Back Squat
@@ -2284,6 +2570,7 @@ function generateBlueprintForAthlete(survey) {
   else if (sport === 'golf')     weeks = generateGolfWeeks(posId, goal, days)
   else                           weeks = generateGeneralWeeks(posId, goal, days)
 
+  weeks = applySessionOrganization(weeks, SPORT_ACCESSORY_ROTATION[sport] || {})
   weeks = applyAccessoryProgression(weeks, SPORT_ACCESSORY_ROTATION[sport] || {})
   weeks = applyExperienceAdjustments(weeks, experience)
   weeks = applyInjuryAdjustments(weeks, survey.injury_areas)
@@ -2671,4 +2958,4 @@ const SPORT_TEMPLATES = [
   },
 ]
 
-module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION }
+module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION }

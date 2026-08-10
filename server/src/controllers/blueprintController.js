@@ -1,6 +1,6 @@
 const { getProfile } = require('../services/authService')
 const { resolveCoachTeamAndAccess, getAthleteTeam, isAthleteOnTeam, filterAthleteIdsOnTeam } = require('../services/teamsService')
-const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, SPORT_ACCESSORY_ROTATION } = require('../data/blueprintTemplates')
+const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, SPORT_ACCESSORY_ROTATION } = require('../data/blueprintTemplates')
 const {
   createBlueprint,
   getBlueprintsByCoach,
@@ -56,7 +56,9 @@ async function generateFromTemplate(req, res) {
     const goal = goal_id === 'muscle_gain' ? 'muscle_gain' : 'standard'
     const days = days_per_week ? parseInt(days_per_week, 10) : undefined
 
-    const weeks = applyDeloadAdjustments(applyAccessoryProgression(sport.generateWeeks(position_id, goal, days), SPORT_ACCESSORY_ROTATION[sport.id] || {}))
+    const rotation = SPORT_ACCESSORY_ROTATION[sport.id] || {}
+    const organized = applySessionOrganization(sport.generateWeeks(position_id, goal, days), rotation)
+    const weeks = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation))
     res.json({ weeks })
   } catch (err) {
     res.status(500).json({ error: err.message })

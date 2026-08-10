@@ -476,7 +476,7 @@ function PlanView({ plan, currentWeek, setCurrentWeek, logs, setLogs, maxes, inj
                             <LockIcon size={13} color="var(--text-3)" /> Detailed coaching notes unlock when you join your team
                           </div>
                         ) : (
-                          <SessionDescription description={s.description} focus={s.focus} injuryAreas={injuryAreas} injuryModified={s.injury_modified} maxes={maxes} style={styles.sessionDesc} />
+                          <SessionDescription description={s.description} focus={s.focus} injuryAreas={injuryAreas} injuryModified={s.injury_modified} maxes={maxes} warmup={s.warmup} style={styles.sessionDesc} />
                         )
                       ) : null}
 

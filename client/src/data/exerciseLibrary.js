@@ -660,6 +660,128 @@ const EXERCISE_LIBRARY = {
     description: 'Lie face-down, arms extended overhead. Lift one arm and the opposite leg off the floor simultaneously, hold briefly, lower, and alternate sides.',
     muscles: 'Erectors, glutes, rear deltoids',
   },
+
+  // ─── Rotating core-finisher pool additions ───────────────────────────────
+  'flutter kicks': {
+    description: 'Lie on your back, hands under your glutes, legs extended a few inches off the floor. Alternate small, rapid up-and-down kicks while keeping your lower back pressed down.',
+    muscles: 'Rectus abdominis, hip flexors',
+  },
+  'mountain climbers': {
+    description: 'From a high plank, rapidly drive your knees toward your chest one at a time, keeping your hips low and core braced throughout.',
+    muscles: 'Core, hip flexors, shoulders',
+  },
+  'russian twists': {
+    description: 'Sit with knees bent and torso leaned back slightly, feet off the floor. Rotate your torso side to side, tapping the floor (or a weight) beside each hip.',
+    muscles: 'Obliques, rectus abdominis',
+  },
+  'hollow hold': {
+    description: 'Lie on your back, press your lower back into the floor, and lift your shoulders and legs a few inches up, arms extended overhead. Hold the "hollow" shape without arching.',
+    muscles: 'Rectus abdominis, hip flexors, core',
+  },
+  'cherry pickers': {
+    description: 'Lie on your back with legs extended toward the ceiling. Crunch up, reaching both hands toward your toes, then lower with control.',
+    muscles: 'Rectus abdominis, hip flexors',
+  },
+  'decline bench iso': {
+    description: 'On a decline bench, hold your torso in a static crunched position partway up (not lying flat, not fully sitting up) for the full duration of the hold, core braced throughout.',
+    muscles: 'Rectus abdominis, hip flexors',
+  },
+
+  // ─── Lower-body accessory pool addition ──────────────────────────────────
+  'tibialis raises': {
+    description: 'Stand leaning back against a wall for support, heels planted a step in front of you. Lift your toes up toward your shins as high as possible, then lower with control.',
+    muscles: 'Tibialis anterior (shin)',
+  },
+
+  // ─── Upper/Push day warm-up additions ────────────────────────────────────
+  'prone y-t-w raises': {
+    description: 'Lie face-down on an incline bench or the floor. Raise light dumbbells (or empty hands) through the Y, T, and W arm positions in sequence, squeezing your shoulder blades at the top of each.',
+    muscles: 'Rear deltoids, rhomboids, lower traps',
+  },
+  'wall slides': {
+    description: 'Stand with your back, head, and arms against a wall, elbows and wrists touching the wall in a "W" position. Slide your arms up into a "Y" while keeping contact with the wall, then return.',
+    muscles: 'Lower traps, rotator cuff, scapular stabilizers',
+  },
+  'arm circles / pass-throughs': {
+    description: 'Either drill: make large controlled circles with straight arms, or hold a band/PVC pipe wide and pass it overhead from front to back with straight arms.',
+    muscles: 'Shoulders, rotator cuff, upper back',
+  },
+
+  // ─── Lower Power day warm-up additions ───────────────────────────────────
+  'jog': {
+    description: 'An easy, conversational-pace jog to raise heart rate and body temperature before the rest of the warm-up.',
+    muscles: 'Full body, cardiovascular',
+  },
+  'open and close the gate': {
+    description: 'Standing tall, lift one knee up and rotate it out to the side ("open the gate"), then reverse the motion, rotating the knee across your body ("close the gate"). Alternate legs.',
+    muscles: 'Hip flexors, glutes, hip rotators',
+  },
+  'leg swings': {
+    description: 'Holding a wall or rail for balance, swing one leg forward and back, then side to side, through a controlled, progressively larger range of motion. Switch legs.',
+    muscles: 'Hip flexors, hamstrings, adductors',
+  },
+  'karaoka': {
+    description: 'Moving laterally, cross one foot over the other, then behind, alternating in a fast grapevine pattern while rotating the hips and swinging the arms.',
+    muscles: 'Hip rotators, adductors, abductors',
+  },
+  'high knees / butt kicks': {
+    description: 'Either drill, moving forward: drive your knees up to hip height rapidly (high knees), or kick your heels up toward your glutes rapidly (butt kicks).',
+    muscles: 'Hip flexors, hamstrings, calves',
+  },
+  'side shuffle': {
+    description: 'In an athletic stance, shuffle laterally for a set distance without crossing your feet, staying low and quick, then repeat in the other direction.',
+    muscles: 'Glutes, hip abductors, quads',
+  },
+  'a-skips': {
+    description: 'A skipping drill driving one knee up to hip height with an active, clawing foot strike under the hips, arms driving in opposition, alternating sides as you travel forward.',
+    muscles: 'Hip flexors, glutes, calves',
+  },
+  'a-skip to 10-yard build-up': {
+    description: 'Perform A-Skips for a few steps, then transition smoothly into a 10-yard acceleration build-up to near-top speed.',
+    muscles: 'Hip flexors, glutes, hamstrings, calves',
+  },
+  'short sprints': {
+    description: 'Brief, controlled sprints (10-20 yards) at increasing effort, used to prime the nervous system for the day\'s explosive work — not a conditioning effort.',
+    muscles: 'Full body, hamstrings, glutes, calves',
+  },
+
+  // ─── Squat/Hinge day warm-up additions ───────────────────────────────────
+  'cat-cow': {
+    description: 'On hands and knees, alternate between arching your back and dropping your belly (cow) and rounding your spine toward the ceiling (cat), moving with your breath.',
+    muscles: 'Spinal erectors, core, thoracic mobility',
+  },
+  '90/90 hip rotations': {
+    description: 'Sit with both knees bent 90°, one leg in front and one to the side. Rotate through your hips to switch the front/back leg, keeping both knees on the floor.',
+    muscles: 'Hip rotators, glutes',
+  },
+  'clock t-spine': {
+    description: 'From a hands-and-knees or side-lying position, rotate your top arm through the hours of a clock face, following it with your eyes to drive thoracic rotation.',
+    muscles: 'Thoracic spine, obliques, shoulders',
+  },
+  'inchworms with seal stretch': {
+    description: 'From standing, walk your hands out to a plank, then lower to the floor and press up into a seal-stretch back extension, before walking your hands back to your feet.',
+    muscles: 'Hamstrings, core, spinal erectors, shoulders',
+  },
+  'thread the needle': {
+    description: 'From hands and knees, thread one arm underneath your body and through the gap, rotating your torso toward the floor, then reverse and reach that arm toward the ceiling.',
+    muscles: 'Thoracic spine, obliques, shoulders',
+  },
+  'glute bridge': {
+    description: 'Lie on your back, knees bent, feet flat. Drive through your heels to lift your hips until your body forms a straight line from shoulders to knees, squeeze, then lower.',
+    muscles: 'Glutes, hamstrings',
+  },
+  'bodyweight squat to depth': {
+    description: 'Holding a squat rack or stable support to help pull yourself deeper, squat down as low as your mobility allows with control, then stand back up.',
+    muscles: 'Quads, glutes, hip mobility, ankle mobility',
+  },
+  'ankle cradle to side lunge': {
+    description: 'Stand on one leg, cradle the opposite ankle/shin up toward your chest for a hip/ankle stretch, then step that foot out into a side lunge before returning to standing.',
+    muscles: 'Ankle mobility, hip flexors, adductors',
+  },
+  'squat to hamstring': {
+    description: 'Drop into a deep bodyweight squat, then straighten your legs while keeping your hands on the floor to stretch the hamstrings, before returning to the squat. Alternate.',
+    muscles: 'Hamstrings, adductors, hip mobility',
+  },
 }
 
 // Case-insensitive lookup helper
