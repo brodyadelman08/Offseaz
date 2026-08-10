@@ -200,7 +200,7 @@ export default function BlueprintDetail() {
                         <span style={s.sessionFocus}>{sess.focus}</span>
                       </div>
                       {sess.description && (
-                        <SessionDescription description={sess.description} focus={sess.focus} injuryModified={sess.injury_modified} style={s.sessionDesc} />
+                        <SessionDescription description={sess.description} focus={sess.focus} injuryModified={sess.injury_modified} warmup={sess.warmup} style={s.sessionDesc} />
                       )}
                     </div>
                   ))

@@ -1,6 +1,7 @@
+import { useState } from 'react'
 import ExerciseInfoButton from './ExerciseInfoButton'
 import { lookupExercise } from '../data/exerciseLibrary'
-import { AlertIcon } from './Icons'
+import { AlertIcon, ChevronDownIcon, ChevronUpIcon } from './Icons'
 import { parseSupersetGroups } from '../utils/supersets'
 
 /**
@@ -120,6 +121,56 @@ const SUPERSET_GUTTER_STYLE = { display: 'flex', flexDirection: 'column', alignI
 const SUPERSET_LABEL_STYLE = { fontSize: 9, fontWeight: 800, color: '#308EBD', lineHeight: 1, letterSpacing: 0.5 }
 const SUPERSET_BAR_STYLE = { flex: 1, width: 2, background: '#308EBD', marginTop: 3, borderRadius: 1, minHeight: 8 }
 const SUPERSET_LINES_STYLE = { flex: 1, minWidth: 0 }
+
+// Day-type warm-up block — collapsed by default, tap-to-expand, matching the
+// same ▲/▼ chevron convention BlueprintDetail.jsx already uses for its week
+// list. Warm-ups are fixed/consistent (server never rotates or waves them —
+// see session.warmup in blueprintTemplates.js), so this is purely a display
+// affordance for keeping a long warm-up from overwhelming the session view.
+const WARMUP_WRAP_STYLE = {
+  border: '1px solid var(--border)',
+  borderRadius: 10,
+  marginBottom: 10,
+  overflow: 'hidden',
+}
+const WARMUP_HEADER_STYLE = {
+  display: 'flex',
+  alignItems: 'center',
+  justifyContent: 'space-between',
+  width: '100%',
+  padding: '8px 12px',
+  background: 'var(--card-inner, rgba(127,127,127,0.06))',
+  border: 'none',
+  cursor: 'pointer',
+  fontSize: 13,
+  fontWeight: 700,
+  color: 'var(--text-2)',
+  textAlign: 'left',
+}
+const WARMUP_BODY_STYLE = { padding: '10px 12px', lineHeight: 1.6 }
+
+function WarmupBlock({ warmup, flaggedSet, maxes }) {
+  const [open, setOpen] = useState(false)
+  if (!warmup || !warmup.lines || warmup.lines.length === 0) return null
+
+  return (
+    <div style={WARMUP_WRAP_STYLE}>
+      <button style={WARMUP_HEADER_STYLE} onClick={() => setOpen(o => !o)} type="button">
+        <span>{warmup.label || 'Warm-Up'}</span>
+        {open
+          ? <ChevronUpIcon size={14} color="var(--text-3)" />
+          : <ChevronDownIcon size={14} color="var(--text-3)" />}
+      </button>
+      {open && (
+        <div style={WARMUP_BODY_STYLE}>
+          {warmup.lines.map((line, i) => (
+            <div key={i}>{renderLineContent(line, flaggedSet, maxes)}</div>
+          ))}
+        </div>
+      )}
+    </div>
+  )
+}
 
 const INJURY_BANNER_STYLE = {
   display: 'flex',
@@ -473,14 +524,19 @@ function renderLineContent(line, flaggedSet, maxes) {
  *                                blueprint case, where injury_areas can't safely be
  *                                baked into shared stored content.
  *   maxes           {object}   - { liftKey: { current: { weight_lbs } } } from /api/maxes
+ *   warmup          {object}   - optional { label, lines } day-type warm-up block
+ *                                 (see session.warmup in blueprintTemplates.js).
+ *                                 Rendered as a collapsed, tap-to-expand block above
+ *                                 the main content — never rotated/waved, so it's
+ *                                 passed straight through with no substitution pass.
  *   style           {object}   - optional style overrides for the wrapper element
  */
-export default function SessionDescription({ description, focus = '', injuryAreas = [], injuryModified = false, maxes = {}, style }) {
-  if (!description) return null
+export default function SessionDescription({ description, focus = '', injuryAreas = [], injuryModified = false, maxes = {}, warmup = null, style }) {
+  if (!description && !warmup) return null
 
   const { text: processedDescription, modified: liveModified } = injuryModified
     ? { text: description, modified: false }
-    : applyInjurySubstitutions(description, injuryAreas, focus)
+    : applyInjurySubstitutions(description || '', injuryAreas, focus)
   const sessionModified = injuryModified || liveModified
 
   const flaggedSet = buildFlaggedSet(injuryAreas)
@@ -489,36 +545,39 @@ export default function SessionDescription({ description, focus = '', injuryArea
 
   return (
     <>
+      <WarmupBlock warmup={warmup} flaggedSet={flaggedSet} maxes={maxes} />
       {sessionModified && (
         <div style={INJURY_BANNER_STYLE}>
           <AlertIcon size={15} color="#ff6b4a" strokeWidth={2} />
           Session modified for your flagged injury areas. Contact your coach before increasing load.
         </div>
       )}
-      {/* A <div> wrapper (not <p>) so a superset group's block-level bracket
-          row can sit alongside plain lines without invalid <div>-inside-<p>
-          nesting; each plain line becomes its own block instead of relying
-          on inline <br /> the way a single <p> did before. */}
-      <div style={{ margin: 0, lineHeight: 1.6, ...style }}>
-        {chunks.map((chunk, i) => {
-          if (chunk.type === 'superset') {
-            return (
-              <div key={i} style={SUPERSET_ROW_STYLE}>
-                <div style={SUPERSET_GUTTER_STYLE}>
-                  <span style={SUPERSET_LABEL_STYLE}>SS</span>
-                  <div style={SUPERSET_BAR_STYLE} />
+      {!description ? null : (
+        // A <div> wrapper (not <p>) so a superset group's block-level bracket
+        // row can sit alongside plain lines without invalid <div>-inside-<p>
+        // nesting; each plain line becomes its own block instead of relying
+        // on inline <br /> the way a single <p> did before.
+        <div style={{ margin: 0, lineHeight: 1.6, ...style }}>
+          {chunks.map((chunk, i) => {
+            if (chunk.type === 'superset') {
+              return (
+                <div key={i} style={SUPERSET_ROW_STYLE}>
+                  <div style={SUPERSET_GUTTER_STYLE}>
+                    <span style={SUPERSET_LABEL_STYLE}>SS</span>
+                    <div style={SUPERSET_BAR_STYLE} />
+                  </div>
+                  <div style={SUPERSET_LINES_STYLE}>
+                    {chunk.lines.map((line, li) => (
+                      <div key={li}>{renderLineContent(line, flaggedSet, maxes)}</div>
+                    ))}
+                  </div>
                 </div>
-                <div style={SUPERSET_LINES_STYLE}>
-                  {chunk.lines.map((line, li) => (
-                    <div key={li}>{renderLineContent(line, flaggedSet, maxes)}</div>
-                  ))}
-                </div>
-              </div>
-            )
-          }
-          return <div key={i}>{renderLineContent(chunk.text, flaggedSet, maxes)}</div>
-        })}
-      </div>
+              )
+            }
+            return <div key={i}>{renderLineContent(chunk.text, flaggedSet, maxes)}</div>
+          })}
+        </div>
+      )}
     </>
   )
 }

@@ -20,7 +20,7 @@ const fs = require('fs')
 const path = require('path')
 const {
   generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments, applyAccessoryProgression,
-  superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION,
+  applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION,
 } = require('./blueprintTemplates')
 
 // ─── Shared helpers ─────────────────────────────────────────────────────────
@@ -55,6 +55,15 @@ function firstMatchingLine(description, re) {
 function lastPercent(line) {
   const matches = [...line.matchAll(/(\d+)%/g)]
   return parseInt(matches[matches.length - 1][1], 10)
+}
+
+// Strips a leading ⟦SS<n>⟧ marker from every line — for tests that check
+// "does this text contain/start with exercise X" against the FULL,
+// organized output, where X may now be inside a superset bracket. Matches
+// what the real client renderer does before matching an exercise name (see
+// parseSupersetGroups/renderLineContent in SessionDescription.jsx).
+function stripMarkers(description) {
+  return description.split('\n').map(l => l.replace(SUPERSET_MARKER_RE, '')).join('\n')
 }
 
 function exerciseNamesIn(description) {
@@ -278,8 +287,9 @@ describe('Area 4 — Injury substitution logic', () => {
       let hasBareOverheadPress = false
       let hasLandminePress = false
       for (const s of allSessions(bp.weeks)) {
-        if (/^Overhead Press\b/m.test(s.description)) hasBareOverheadPress = true
-        if (/Landmine Press/.test(s.description)) hasLandminePress = true
+        const text = stripMarkers(s.description)
+        if (/^Overhead Press\b/m.test(text)) hasBareOverheadPress = true
+        if (/Landmine Press/.test(text)) hasLandminePress = true
       }
       expect(hasBareOverheadPress).toBe(false)
       expect(hasLandminePress).toBe(true)
@@ -296,9 +306,10 @@ describe('Area 4 — Injury substitution logic', () => {
       let hasBareBackSquat = false
       let hasGobletSquat = false
       for (const s of allSessions(bp.weeks)) {
-        if (/\bDepth Jumps?\b/.test(s.description)) hasDepthJump = true
-        if (/^Back Squat\b/m.test(s.description)) hasBareBackSquat = true
-        if (/^Goblet Squat\b/m.test(s.description)) hasGobletSquat = true
+        const text = stripMarkers(s.description)
+        if (/\bDepth Jumps?\b/.test(text)) hasDepthJump = true
+        if (/^Back Squat\b/m.test(text)) hasBareBackSquat = true
+        if (/^Goblet Squat\b/m.test(text)) hasGobletSquat = true
       }
       expect(hasDepthJump).toBe(false)
       expect(hasBareBackSquat).toBe(false)
@@ -530,7 +541,7 @@ describe('Area 7 — Exercise library coverage', () => {
     'cat-cow', 'close grip bench', 'coach note', 'copenhagen plank', 'core bird dog',
     'core cable woodchop', 'core finisher', 'core maintenance', 'core pallof press',
     'core — anti-extension', 'core — anti-rotation',
-    'core — finisher (4m30s, 20s on/10s off)',
+    'core — finisher (20s on/10s off unless noted)',
     'core — lateral stability', 'core — rotate and press',
     'core — rotational power', 'core — sit-ups', 'cossack squat', 'cossack squat (light)',
     'court conditioning', 'court sprints', 'db bench', 'db shoulder press', 'db squat jump',
@@ -655,11 +666,11 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
   //      "build from template" path the coach-facing UI calls via
   //      POST /api/blueprints/templates/generate
   // blueprintController.js's generateFromTemplate additionally always runs
-  // applyAccessoryProgression() (with that sport's own SPORT_ACCESSORY_ROTATION
-  // entry, if any) then applyDeloadAdjustments() on path 2's output, so this
-  // test does the same to compare like-for-like (standard goal + intermediate
-  // experience + no injuries, so the experience/injury passes are no-ops on
-  // path 1).
+  // applySessionOrganization() then applyAccessoryProgression() (both with
+  // that sport's own SPORT_ACCESSORY_ROTATION entry, if any) then
+  // applyDeloadAdjustments() on path 2's output, so this test does the same
+  // to compare like-for-like (standard goal + intermediate experience + no
+  // injuries, so the experience/injury passes are no-ops on path 1).
   const POSITION_INPUT = {
     baseball: 'Catcher', softball: 'Softball', football: 'Linemen', basketball: 'Point Guard',
     soccer: 'Goalkeeper', hockey: 'Forward', rugby: 'Prop', tennis: 'Tennis', golf: 'Golf',
@@ -678,7 +689,9 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
       })
 
       const autoAssign = generateBlueprintForAthlete(survey)
-      const manualBuilder = applyDeloadAdjustments(applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', days), SPORT_ACCESSORY_ROTATION[tpl.id] || {}))
+      const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
+      const organized = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation)
+      const manualBuilder = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation))
 
       expect(autoAssign.weeks).toEqual(manualBuilder)
     })
@@ -963,29 +976,38 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
       expect(SUPERSET_MARKER_RE.test('DB Row: 3x10')).toBe(false)
     })
 
-    test('no sport OTHER than baseball/softball emits a superset marker — the capability stays opt-in per sport, not globally on', () => {
+    // Session organization (volume cap + pairing, including the main-lift +
+    // plyo contrast exception) applies to EVERY sport, not just baseball —
+    // see Area 11 below for the full cap/pairing behavior. This just
+    // confirms the superset capability itself isn't somehow still gated to
+    // baseball at the marker level.
+    test('applySessionOrganization derives real superset markers for other sports too, not just baseball', () => {
+      let foundElsewhere = false
       for (const tpl of SPORT_TEMPLATES) {
         if (tpl.id === 'baseball' || tpl.id === 'softball') continue
         const pos = tpl.positions[0]
-        const weeks = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl)), SPORT_ACCESSORY_ROTATION[tpl.id] || {})
+        const weeks = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl)), SPORT_ACCESSORY_ROTATION[tpl.id] || {})
         for (const w of weeks) {
           for (const s of w.sessions) {
-            for (const line of s.description.split('\n')) {
-              expect(SUPERSET_MARKER_RE.test(line)).toBe(false)
-            }
+            if (s.description.split('\n').some(l => SUPERSET_MARKER_RE.test(l))) foundElsewhere = true
           }
         }
       }
+      expect(foundElsewhere).toBe(true)
     })
 
     test('baseball DOES emit real superset markers — the first actual use of the capability, not just plumbing', () => {
       const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
       const pos = baseball.positions[0]
-      const weeks = applyAccessoryProgression(baseball.generateWeeks(pos.id, 'standard', maxDaysFor(baseball)), SPORT_ACCESSORY_ROTATION.baseball)
+      const days = maxDaysFor(baseball)
+      const rotation = SPORT_ACCESSORY_ROTATION.baseball
+      const weeks = applyAccessoryProgression(applySessionOrganization(baseball.generateWeeks(pos.id, 'standard', days), rotation), rotation)
       let found = false
       for (const w of weeks) {
         for (const s of w.sessions) {
-          if (SUPERSET_MARKER_RE.test(s.description)) found = true
+          // SUPERSET_MARKER_RE is intentionally NOT multiline (it only ever
+          // needs to check one line at a time in real usage) — check per line.
+          if (s.description.split('\n').some(l => SUPERSET_MARKER_RE.test(l))) found = true
         }
       }
       expect(found).toBe(true)
@@ -1032,16 +1054,24 @@ describe('Area 10 — Baseball sport-specific content', () => {
     expect(text).toContain('Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)')
   })
 
-  test('the core finisher appears with the exact prescribed movements and interval scheme, and is exempt from the accessory volume wave', () => {
+  test('the core finisher appears with the exact prescribed interval scheme, rotates movements week to week, and is exempt from the accessory volume wave', () => {
     const raw = baseball.generateWeeks('baseball', 'standard', 3)
     const progressed = applyAccessoryProgression(raw, SPORT_ACCESSORY_ROTATION.baseball)
     for (const weeks of [raw, progressed]) {
       const text = allDescriptions(weeks).join('\n')
-      expect(text).toContain('Core — Finisher (4m30s, 20s on/10s off):')
+      expect(text).toContain('Core — Finisher (20s on/10s off unless noted):')
+      // Week 1's deterministic rotation is the pool's first 3 movements —
+      // present regardless of the volume wave (exempt, unchanged either way).
       expect(text).toContain('Alternating V-Ups: 3x20s')
       expect(text).toContain('Penguins: 3x20s')
       expect(text).toContain('Alternating Supermans: 3x20s')
     }
+    // Rotates: week 2 shows a DIFFERENT 3 movements than week 1, not the same
+    // fixed set every week.
+    const week1Text = raw[0].sessions.map(s => s.description).join('\n')
+    const week2Text = raw[1].sessions.map(s => s.description).join('\n')
+    expect(week2Text).toContain('Flutter Kicks: 3x20s')
+    expect(week1Text).not.toContain('Flutter Kicks')
   })
 
   test('pitcher avoids heavy overhead pressing — Landmine Press instead, at lower load, never "Overhead Press"; position player gets Overhead Press', () => {
@@ -1056,7 +1086,7 @@ describe('Area 10 — Baseball sport-specific content', () => {
   })
 
   test('at least one superset renders with the bracket marker, heavy lift first — Back Squat before its paired jump', () => {
-    const weeks = baseball.generateWeeks('baseball', 'standard', 3)
+    const weeks = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 3), SPORT_ACCESSORY_ROTATION.baseball)
     const day1 = weeks[0].sessions[0].description.split('\n')
     const marked = day1.filter(l => SUPERSET_MARKER_RE.test(l))
     expect(marked.length).toBeGreaterThanOrEqual(2)
@@ -1081,5 +1111,126 @@ describe('Area 10 — Baseball sport-specific content', () => {
     // and the line must still carry its superset marker (not silently drop out of the group).
     expect(day2).toContain('⟦SS1⟧Reverse Lunge Iso Hold')
     expect(day2).not.toContain('Bulgarian Split Squat Iso Hold')
+  })
+})
+
+// ─── Area 11 — Session organization, volume cap, and warm-up blocks ────────
+// Covers the Part 1-4 restructuring: the shared applySessionOrganization pass
+// (accessory cap + auto-pairing, all sports), the Oly-lift-vs-ramped-lift
+// main-lift split, cut priority, Tibialis Raises via rotation, and baseball's
+// day-type warm-up blocks.
+
+describe('Area 11 — Session organization, volume cap, and warm-up blocks', () => {
+  const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+
+  test('a non-baseball sport also gets the accessory cap and auto-pairing — main lift stands alone, its plyo contrast pairs with it, everything else pairs in 2s up to 3 accessory slots', () => {
+    const bp = generateBlueprintForAthlete({
+      sport: 'Track and Field', position: 'Jumpers', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const day1 = bp.weeks[0].sessions[0].description.split('\n')
+    const marked = day1.filter(l => SUPERSET_MARKER_RE.test(l))
+    // SS1 = Back Squat + Box Jumps (main lift's plyo contrast), SS2 = an
+    // auto-paired accessory duo — 4 marked lines across 2 groups.
+    expect(marked.length).toBe(4)
+    expect(marked[0]).toMatch(/^⟦SS1⟧Back Squat:/)
+    expect(marked[1]).toMatch(/^⟦SS1⟧Box Jumps:/)
+    expect(marked[2]).toMatch(/^⟦SS2⟧/)
+    expect(marked[3]).toMatch(/^⟦SS2⟧/)
+  })
+
+  test('Oly-lift/ramped-lift split regression: a session with BOTH a technical Olympic lift and a separate %-ramped lift keeps the Oly lift standalone and only pairs the ramped lift with the plyo contrast — they never get bundled into one group', () => {
+    const bp = generateBlueprintForAthlete({
+      sport: 'Track and Field', position: 'Jumpers', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const day1 = bp.weeks[0].sessions[0].description
+    // Power Clean (technical Oly lift, no %) must render with NO superset
+    // marker — it stands alone, never bundled with the ramped squat + jump.
+    expect(firstMatchingLine(day1, /Power Clean/)).toMatch(/^Power Clean:/)
+    expect(firstMatchingLine(day1, /Power Clean/)).not.toMatch(SUPERSET_MARKER_RE)
+    // Back Squat (the %-ramped lift) is the one that pairs with the jump.
+    expect(firstMatchingLine(day1, /Back Squat/)).toMatch(/^⟦SS1⟧Back Squat:/)
+  })
+
+  test('cut priority: generic filler (Bicep Curls, Tricep Extensions) is dropped before regular sport accessories when trimming to the cap', () => {
+    const bp = generateBlueprintForAthlete({
+      sport: 'Football', position: 'Linemen', primary_goal: 'muscle_gain',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const day1 = bp.weeks[0].sessions[0].description
+    expect(day1).not.toContain('Bicep Curls')
+    expect(day1).not.toContain('Tricep Extensions')
+    // The non-generic accessories from the same day survive the cap instead.
+    expect(day1).toContain('Bulgarian Split Squat')
+    expect(day1).toContain('Leg Curl')
+    expect(day1).toContain('Double Leg Calf Raise')
+  })
+
+  test('Tibialis Raises rotates in as a real working lower-body accessory (not a warm-up) via the calf-raise rotation slot', () => {
+    const bp = generateBlueprintForAthlete({
+      sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const week2Day1 = bp.weeks[1].sessions[0]
+    expect(week2Day1.description).toContain('Tibialis Raises:')
+    // It's a working accessory line, not part of the warm-up block.
+    expect((week2Day1.warmup?.lines || []).some(l => l.startsWith('Tibialis Raises'))).toBe(false)
+  })
+
+  test('each baseball day type carries the correct collapsed warm-up block, and non-baseball sports get none (baseball-only for now)', () => {
+    const bp = generateBlueprintForAthlete({
+      sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const [day1, day2, day3, day4] = bp.weeks[0].sessions
+    expect(day1.warmup.label).toMatch(/Lower Power/i)
+    expect(day1.warmup.lines.some(l => l.startsWith('Jog:'))).toBe(true)
+    expect(day2.warmup.label).toMatch(/Upper.*Push/i)
+    expect(day2.warmup.lines.some(l => l.startsWith('Prone Y-T-W Raises:'))).toBe(true)
+    expect(day3.warmup.label).toMatch(/Squat.*Hinge/i)
+    expect(day3.warmup.lines.some(l => l.startsWith('Cat-Cow:'))).toBe(true)
+    expect(day4.warmup.label).toMatch(/Upper.*Push/i)
+
+    const football = generateBlueprintForAthlete({
+      sport: 'Football', position: 'Linemen', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    expect(football.weeks[0].sessions[0].warmup).toBeUndefined()
+  })
+
+  test('the warm-up block is consistent week to week (not rotated) for the same day type', () => {
+    const bp = generateBlueprintForAthlete({
+      sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const week1Day1 = bp.weeks[0].sessions[0].warmup
+    const week5Day1 = bp.weeks[4].sessions[0].warmup
+    expect(week5Day1.lines).toEqual(week1Day1.lines)
+  })
+
+  test('the accessory cap holds across every sport/position/day-count combination — no session ever exceeds ~5 total working blocks worth of accessory content beyond the main lift', () => {
+    for (const tpl of SPORT_TEMPLATES) {
+      for (const pos of tpl.positions) {
+        for (const days of tpl.daysOptions.map(d => d.days)) {
+          const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
+          const weeks = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation)
+          for (const w of weeks) {
+            for (const s of w.sessions) {
+              const markerGroups = new Set(
+                s.description.split('\n')
+                  .map(l => l.match(SUPERSET_MARKER_RE))
+                  .filter(Boolean)
+                  .map(m => m[1])
+              )
+              // At most 2 superset groups: one is the optional main-lift+plyo
+              // contrast, the rest of the cap (weight 3) collapses into at
+              // most 2 pair-groups plus a possible leftover single.
+              expect(markerGroups.size).toBeLessThanOrEqual(2)
+            }
+          }
+        }
+      }
+    }
   })
 })
