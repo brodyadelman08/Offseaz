@@ -52,13 +52,13 @@ const EXERCISE_LIBRARY = {
     description: 'Grip the bar about shoulder-width. Lower to your lower chest, keeping elbows tucked close to your sides, then press to lockout.',
     muscles: 'Triceps, chest, anterior deltoids',
   },
-  'deadlift': {
-    description: 'Bar over mid-foot, hinge at hips, brace your core, and pull the bar up by driving your hips forward to standing.',
-    muscles: 'Hamstrings, glutes, erectors, traps, lats',
-  },
   'trap bar deadlift': {
     description: 'Stand inside the hex bar, hinge to grab the handles, brace your core, and push the floor away as you drive your hips to standing.',
     muscles: 'Quads, glutes, hamstrings, erectors',
+  },
+  'trap bar jump': {
+    description: 'Stand inside the hex/trap bar and pick it up to a standing hinge position. Explosively triple-extend (hips, knees, ankles) into a vertical jump, then land softly and reset. A safe, unsupervised-friendly alternative to Olympic-lift catch variations — same explosive triple extension, no technical catch phase. Keep the load light (suggested: under 155lbs) so the movement stays fast and jump-like, not a max-effort pull.',
+    muscles: 'Glutes, hamstrings, quads, calves (triple extension/power)',
   },
   'hex bar deadlift': {
     description: 'Stand inside the hex bar, hinge to grab the handles, brace your core, and push the floor away as you drive your hips to standing.',

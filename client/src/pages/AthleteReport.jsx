@@ -9,7 +9,7 @@ const YELLOW = '#F0BE24'
 const LOGO   = '/Offseaz-Logo-White-Letter-Dark.png'
 
 const LIFTS_ORDER = [
-  'bench_press','squat','deadlift','trap_bar_deadlift','overhead_press',
+  'bench_press','squat','trap_bar_deadlift','overhead_press',
   'power_clean','hang_clean','clean','front_squat','romanian_deadlift','reverse_lunge',
 ]
 

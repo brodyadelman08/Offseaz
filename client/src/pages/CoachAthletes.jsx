@@ -22,7 +22,6 @@ const ACCESS_CONFIG = {
 const LIFT_ABBREVS = [
   { key: 'bench_press',    abbrev: 'BP' },
   { key: 'squat',          abbrev: 'SQ' },
-  { key: 'deadlift',       abbrev: 'DL' },
   { key: 'power_clean',    abbrev: 'PC' },
   { key: 'overhead_press', abbrev: 'OHP' },
 ]

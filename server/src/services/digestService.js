@@ -37,7 +37,6 @@ function sportEmoji(sport) {
 const LIFT_LABELS = {
   bench_press:        'Bench Press',
   squat:              'Squat',
-  deadlift:           'Deadlift',
   trap_bar_deadlift:  'Trap Bar Deadlift',
   power_clean:        'Power Clean',
   overhead_press:     'Overhead Press',
