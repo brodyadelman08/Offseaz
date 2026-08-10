@@ -881,17 +881,6 @@ const BASEBALL_ACCESSORY_ROTATION = {
   // so Tibialis Raises (wall-supported, leaning back) appears as a real
   // working accessory on lower days without touching any other sport.
   'calf raises':               { 2: 'Tibialis Raises', 3: 'Seated Calf Raise' },
-  // Trap Bar Jump (the Oly-lift replacement — see baseball3Day/baseball4Day/
-  // pitcher3Day/pitcher4Day) has no week-2/3 rotation targets — it should
-  // always read "Trap Bar Jump", never rotate into a different exercise, so
-  // this entry is deliberately empty of numbered keys (rotateAccessoryName
-  // falls through to the original name whenever entry[wip] is undefined).
-  // Being a key here still grants it protectedNames priority-0 status in
-  // organizeSessionDescription, so it reliably survives the accessory cap
-  // instead of losing a priority tie-break to the rotational-power anchors
-  // above on a crowded day — it's replacing what used to be an
-  // always-present main lift, and needs to stay reliably present too.
-  'trap bar jump':              {},
 }
 
 // Per-sport extra-rotation lookup passed into applyAccessoryProgression.
@@ -2115,18 +2104,6 @@ function isPowerFocusDay(focus) {
   return /power/i.test(focus || '')
 }
 
-// Trap Bar Jump (baseball's Olympic-lift replacement — see
-// removeBeginnerOlyLifts and the baseball session functions below) is not a
-// technical lift and isn't %-ramped, so it deliberately does NOT get pushed
-// into olyLiftLines or rampedLiftLines below — it's an ordinary accessory
-// candidate, subject to the same cap/pairing/cut-priority rules as
-// everything else (per the Oly-lift-removal decision: no special
-// always-standalone carve-out). But its mere presence still means the day
-// has a real power anchor worth reorganizing around, so it needs to escape
-// the "no main lift, nothing to reorganize" bail-out below. Scoped to this
-// exact name — zero effect on any other sport/day.
-const POWER_ANCHOR_RE = /^Trap Bar Jump\b/
-
 // One session's description -> reorganized description.
 function organizeSessionDescription(description, focus, protectedNames) {
   const rawLines = description.split('\n')
@@ -2134,7 +2111,7 @@ function organizeSessionDescription(description, focus, protectedNames) {
   const preamble = []       // leading unclassified lines (e.g. an inline "X Warm-up: ..." line) — untouched, always first
   const olyLiftLines = []   // technical Olympic-lift lines (Power Clean, Hang Clean, ...) — always solo, never paired with plyo
   const rampedLiftLines = [] // the true %-ramped main lift(s) — the ONLY thing plyo can pair with
-  const plyoLines = []
+  const plyoLines = []      // { line, idx } — idx shared with candidates so original order is comparable across both
   const otherLines = []     // anything unclassified once we're past the preamble — untouched, kept after accessories
   const conditioningLines = []
   const coreLines = []      // "Core — ..." blocks through to the next blank line — untouched, always last
@@ -2143,13 +2120,11 @@ function organizeSessionDescription(description, focus, protectedNames) {
   let seenWorkingLine = false
   let inCoreBlock = false
   let idxCounter = 0
-  let hasPowerAnchor = false
   let i = 0
 
   while (i < rawLines.length) {
     const raw = rawLines[i]
     const bare = raw.replace(SUPERSET_MARKER_RE, '')
-    if (POWER_ANCHOR_RE.test(bare)) hasPowerAnchor = true
     if (bare.trim() === '') { inCoreBlock = false; i++; continue }
     if (/^Core\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
     if (inCoreBlock) { coreLines.push(raw); i++; continue }
@@ -2176,7 +2151,7 @@ function organizeSessionDescription(description, focus, protectedNames) {
       continue
     }
 
-    if (isPlyoLine(raw)) { plyoLines.push(bare); seenWorkingLine = true; i++; continue }
+    if (isPlyoLine(raw)) { plyoLines.push({ line: bare, idx: idxCounter++ }); seenWorkingLine = true; i++; continue }
     // Some sports' sessions carry BOTH a technical Olympic lift (Power
     // Clean, Hang Clean, ...) AND a separate %-ramped compound lift on the
     // same day (e.g. Power Clean + Back Squat) — only the ramped lift is
@@ -2197,11 +2172,41 @@ function organizeSessionDescription(description, focus, protectedNames) {
     i++
   }
 
-  // No main lift recognized (a non-lifting day — pure conditioning/mobility)
-  // — nothing to reorganize. A Trap Bar Jump day is the one exception: it
-  // has no oly/ramped lift of its own, but is still real strength/power
-  // content that needs the cap and pairing applied.
-  if (olyLiftLines.length === 0 && rampedLiftLines.length === 0 && !hasPowerAnchor) return description
+  // Root-cause fix: a day's anchor only used to get a FREE slot (outside the
+  // 3-accessory budget) if it was %-ramped or a technical Olympic lift.
+  // Anything else — a plain press, a row, a jump (e.g. baseball's Trap Bar
+  // Jump) — fell into the ordinary candidates pool and competed for one of
+  // the 3 accessory slots like everything else, silently under-filling the
+  // day (main + 2 instead of main + 3) and mis-treating the day's own
+  // primary movement as interchangeable filler. Whenever there's no oly/
+  // ramped lift, promote whichever item appears FIRST in the template's own
+  // authored order — a single accessory line, or (only if the day has no
+  // accessory content at all) a plyo line — to that same free slot. This
+  // file's universal convention is that a session's main/anchor movement is
+  // always written first, so "first in authored order" reliably identifies
+  // it. An authored pair is never promoted — it already gets guaranteed
+  // priority-0 treatment as an atomic 2-exercise unit, and promoting half of
+  // it would break the pair.
+  let promotedAnchor = null
+  if (olyLiftLines.length === 0 && rampedLiftLines.length === 0) {
+    const firstSingle = candidates.find(c => c.kind === 'single')
+    const firstPlyo = plyoLines[0] || null
+    if (firstSingle && (!firstPlyo || firstSingle.idx < firstPlyo.idx)) {
+      promotedAnchor = firstSingle.lines[0]
+      candidates.splice(candidates.indexOf(firstSingle), 1)
+    } else if (firstPlyo) {
+      promotedAnchor = firstPlyo.line
+      plyoLines.shift()
+    }
+  }
+
+  // Nothing at all to reorganize — a genuinely non-lifting day (pure
+  // conditioning/mobility/recovery, no oly/ramped lift, no promotable
+  // anchor, no remaining candidates or plyo work either).
+  if (!promotedAnchor && olyLiftLines.length === 0 && rampedLiftLines.length === 0 &&
+      candidates.length === 0 && plyoLines.length === 0) {
+    return description
+  }
 
   let groupNum = 1
   const out = [...preamble]
@@ -2211,17 +2216,25 @@ function organizeSessionDescription(description, focus, protectedNames) {
   // template places them — never a plyo-pairing candidate.
   out.push(...olyLiftLines)
 
+  // A promoted non-ramped/non-oly anchor (e.g. Trap Bar Jump, a flat Bench
+  // Press) also stands alone, same free treatment as an Olympic lift.
+  if (promotedAnchor) out.push(promotedAnchor)
+
   // The %-ramped main lift stands alone, UNLESS this is a power-focus day
   // with exactly one plyo/jump line — the one approved exception, bracketed
-  // together, heavy lift first. 2+ plyo lines, or any plyo on a non-power
-  // day, are dropped entirely (the "cuttable on strength days if space is
-  // tight" rule — a day this dense doesn't get to keep ambiguous extra jumps).
+  // together, heavy lift first. Any plyo line that DOESN'T get that
+  // treatment (2+ of them, a non-power day, or no ramped lift to pair with)
+  // falls back into the same capped/paired accessory pool as everything
+  // else, instead of being silently dropped.
   const keepPlyo = plyoLines.length === 1 && isPowerFocusDay(focus) && rampedLiftLines.length > 0
   if (keepPlyo) {
-    out.push(...superset(groupNum, [...rampedLiftLines, plyoLines[0]]))
+    out.push(...superset(groupNum, [...rampedLiftLines, plyoLines[0].line]))
     groupNum++
   } else {
     out.push(...rampedLiftLines)
+    for (const p of plyoLines) {
+      candidates.push({ kind: 'single', lines: [p.line], priority: 1, weight: 1, idx: p.idx })
+    }
   }
 
   // Cap the combined pool of authored pairs + loose accessories to
