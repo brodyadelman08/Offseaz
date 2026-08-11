@@ -20,7 +20,7 @@ const fs = require('fs')
 const path = require('path')
 const {
   generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments, applyAccessoryProgression,
-  applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION,
+  applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION, SPORT_MAX_ACCESSORIES,
 } = require('./blueprintTemplates')
 
 // ─── Shared helpers ─────────────────────────────────────────────────────────
@@ -473,7 +473,12 @@ describe('Area 6 — Sport and position coverage', () => {
   // Position players get "standard" arm care (2x/week) and pitchers get MORE
   // (3x/week + higher volume on shared days) — not "position players get
   // none." See BASEBALL_ACCESSORY_ROTATION's arm-care anchors.
-  test('Baseball Pitcher gets more arm-care frequency AND volume than Baseball Position Player, and Position Player still gets some (not zero)', () => {
+  test('Baseball Pitcher gets more arm-care volume than Baseball Position Player (same 1-day frequency — day-type locking confines arm care to Upper Strength only, for both), and Position Player still gets some (not zero)', () => {
+    // Frequency is now equal by design: day-type locking (Area 14) confines
+    // arm care to Upper Strength only for both positions — pitchers used to
+    // get an extra arm-care touch on a lower day, which the new rule no
+    // longer allows. The volume difference (higher sets on the same 3-move
+    // circuit) is how the position difference still shows up.
     const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
     const positionPlayerSessions = baseball.generateWeeks('baseball', 'standard', 4)[0].sessions
     const pitcherSessions = baseball.generateWeeks('pitcher', 'standard', 4)[0].sessions
@@ -495,7 +500,7 @@ describe('Area 6 — Sport and position coverage', () => {
     }
 
     expect(armCareDayCount(positionPlayerSessions)).toBeGreaterThan(0)
-    expect(armCareDayCount(pitcherSessions)).toBeGreaterThan(armCareDayCount(positionPlayerSessions))
+    expect(armCareDayCount(pitcherSessions)).toBe(armCareDayCount(positionPlayerSessions))
     expect(armCareSetVolume(pitcherSessions)).toBeGreaterThan(armCareSetVolume(positionPlayerSessions))
   })
 })
@@ -514,9 +519,14 @@ describe('Area 7 — Exercise library coverage', () => {
     const libPath = path.join(__dirname, '..', '..', '..', 'client', 'src', 'data', 'exerciseLibrary.js')
     const text = fs.readFileSync(libPath, 'utf8')
     const keys = new Set()
-    const re = /^\s*'([^']+)':\s*\{/gm
+    // Double-quoted keys (e.g. "world's greatest stretch") are needed
+    // whenever the name itself contains an apostrophe — match single- and
+    // double-quoted keys as two distinct alternatives (not a shared
+    // "exclude both quote characters" class, which would truncate a
+    // double-quoted key at its own apostrophe).
+    const re = /^\s*(?:'([^']+)'|"([^"]+)")\s*:\s*\{/gm
     let m
-    while ((m = re.exec(text))) keys.add(m[1].toLowerCase())
+    while ((m = re.exec(text))) keys.add((m[1] || m[2]).toLowerCase())
     return keys
   }
 
@@ -540,6 +550,7 @@ describe('Area 7 — Exercise library coverage', () => {
     'cable woodchop', 'calf flexibility', 'calf raise', 'calf raise static stretch',
     'cat-cow', 'close grip bench', 'coach note', 'copenhagen plank', 'core bird dog',
     'core cable woodchop', 'core finisher', 'core maintenance', 'core pallof press',
+    'arm care — circuit',
     'core — anti-extension', 'core — anti-rotation',
     'core — finisher (20s on/10s off unless noted)',
     'core — lateral stability', 'core — rotate and press',
@@ -690,7 +701,7 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
 
       const autoAssign = generateBlueprintForAthlete(survey)
       const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
-      const organized = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation)
+      const organized = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation, tpl.id)
       const manualBuilder = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation))
 
       expect(autoAssign.weeks).toEqual(manualBuilder)
@@ -1026,36 +1037,42 @@ describe('Area 10 — Baseball sport-specific content', () => {
     return out
   }
 
-  test('rotational power (Cable/Band Rotational Chop or Med Ball Overhead Slam) appears across the 16-week progression', () => {
-    const weeks = applyAccessoryProgression(baseball.generateWeeks('baseball', 'standard', 3), SPORT_ACCESSORY_ROTATION.baseball)
+  test('the med-ball rotational/power pool (Rotational Throw, Scoop Toss, Shotput Throw, Overhead Slam, Broad Jump + Throw) appears across the 16-week progression', () => {
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
     const text = allDescriptions(weeks).join('\n')
-    expect(/Cable\/Band Rotational Chop|Med Ball Overhead Slam/.test(text)).toBe(true)
+    expect(/Med Ball Rotational Throw|Med Ball Scoop Toss|Shotput Med Ball Throw|Med Ball Overhead Slam|Med Ball Broad Jump \+ Throw/.test(text)).toBe(true)
   })
 
-  test('rotational power rotation is scoped to baseball/softball only — no other sport picks up Cable/Band Rotational Chop or Med Ball Overhead Slam', () => {
+  test('the med-ball pool is scoped to baseball/softball only — no other sport picks up Med Ball Broad Jump + Throw or Shotput Med Ball Throw', () => {
     for (const tpl of SPORT_TEMPLATES) {
       if (tpl.id === 'baseball' || tpl.id === 'softball') continue
       const pos = tpl.positions[0]
-      const weeks = applyAccessoryProgression(tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl)), SPORT_ACCESSORY_ROTATION[tpl.id] || {})
+      const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))
       const text = allDescriptions(weeks).join('\n')
-      expect(/Cable\/Band Rotational Chop|Med Ball Overhead Slam/.test(text)).toBe(false)
+      expect(/Med Ball Broad Jump \+ Throw|Shotput Med Ball Throw/.test(text)).toBe(false)
     }
   })
 
-  test('explosive/plyo work (Box Jumps, Broad Jumps, or the Depth Jump → Box Jump contrast combo) appears', () => {
-    const weeks = baseball.generateWeeks('baseball', 'standard', 3)
+  test('explosive/plyo work (Box Jumps, Broad Jumps, or the Depth Jump → Box Jump contrast combo) appears on Lower Power', () => {
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
     const text = allDescriptions(weeks).join('\n')
     expect(/Box Jumps|Broad Jumps|Depth Jump → Box Jump/.test(text)).toBe(true)
   })
 
-  test('the sprint/tempo protocol appears with the exact prescribed text', () => {
-    const weeks = baseball.generateWeeks('baseball', 'standard', 3)
+  test('the sprint/tempo protocol appears with the exact prescribed text, as Lower Strength\'s sole finisher', () => {
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
     const text = allDescriptions(weeks).join('\n')
     expect(text).toContain('Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)')
   })
 
-  test('the core finisher appears with the exact prescribed interval scheme, rotates movements week to week, and is exempt from the accessory volume wave', () => {
-    const raw = baseball.generateWeeks('baseball', 'standard', 3)
+  test('the Bike Ladder conditioning finisher appears with the exact prescribed protocol, as Lower Power\'s finisher', () => {
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+    const text = allDescriptions(weeks).join('\n')
+    expect(text).toContain('Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)')
+  })
+
+  test('the core finisher appears on Upper Power with the exact prescribed interval scheme, rotates movements week to week, and is exempt from the accessory volume wave', () => {
+    const raw = baseball.generateWeeks('baseball', 'standard', 4)
     const progressed = applyAccessoryProgression(raw, SPORT_ACCESSORY_ROTATION.baseball)
     for (const weeks of [raw, progressed]) {
       const text = allDescriptions(weeks).join('\n')
@@ -1074,43 +1091,45 @@ describe('Area 10 — Baseball sport-specific content', () => {
     expect(week1Text).not.toContain('Flutter Kicks')
   })
 
-  test('pitcher avoids heavy overhead pressing — Landmine Press instead, at lower load, never "Overhead Press"; position player gets Overhead Press', () => {
+  test('pitcher avoids heavy overhead pressing — Landmine Press instead, at lower load; "Overhead Press" never appears anywhere in baseball for either position (removed from the rebuilt content entirely)', () => {
     const positionWeeks = baseball.generateWeeks('baseball', 'standard', 4)
     const pitcherWeeks  = baseball.generateWeeks('pitcher', 'standard', 4)
     const positionText  = allDescriptions(positionWeeks).join('\n')
     const pitcherText   = allDescriptions(pitcherWeeks).join('\n')
 
-    expect(positionText).toContain('Overhead Press: 3x8')
-    expect(/^Overhead Press\b/m.test(pitcherText)).toBe(false)
+    expect(/\bOverhead Press\b/.test(positionText)).toBe(false)
+    expect(/\bOverhead Press\b/.test(pitcherText)).toBe(false)
     expect(pitcherText).toContain('Landmine Press: 4x8 (lower load — no direct overhead pressing)')
   })
 
-  test('at least one superset renders with the bracket marker, heavy lift first — Back Squat before its paired jump', () => {
-    const weeks = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 3), SPORT_ACCESSORY_ROTATION.baseball)
-    const day1 = weeks[0].sessions[0].description.split('\n')
-    const marked = day1.filter(l => SUPERSET_MARKER_RE.test(l))
-    expect(marked.length).toBeGreaterThanOrEqual(2)
-    expect(marked[0]).toMatch(/^⟦SS1⟧Back Squat:/)
-    expect(marked[1]).toMatch(/^⟦SS1⟧(Box Jumps|Broad Jumps|Depth Jump → Box Jump):/)
+  test('Lower Power: the squat variant + jump contrast renders bracketed, heavy lift first, alternating Front Squat/Back Squat weekly', () => {
+    const raw = baseball.generateWeeks('baseball', 'standard', 4)
+    const organized = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
+    const week1Day1 = organized[0].sessions[0].description.split('\n')
+    const week2Day1 = organized[1].sessions[0].description.split('\n')
+    const marked1 = week1Day1.filter(l => SUPERSET_MARKER_RE.test(l))
+    const marked2 = week2Day1.filter(l => SUPERSET_MARKER_RE.test(l))
+    expect(marked1[0]).toMatch(/^⟦SS1⟧Front Squat:/)
+    expect(marked1[1]).toMatch(/^⟦SS1⟧(Box Jumps|Broad Jumps|Depth Jump → Box Jump):/)
+    expect(marked2[0]).toMatch(/^⟦SS1⟧Back Squat:/)
   })
 
-  test('the upper push + lower iso hold superset (DB Bench Press + Bulgarian Split Squat Iso Hold) renders correctly, press first', () => {
-    const weeks = baseball.generateWeeks('baseball', 'standard', 3)
-    const day2 = weeks[0].sessions[1].description.split('\n')
-    const marked = day2.filter(l => SUPERSET_MARKER_RE.test(l))
-    expect(marked.length).toBe(2)
-    expect(marked[0]).toMatch(/^⟦SS1⟧DB Bench Press:/)
-    expect(marked[1]).toMatch(/^⟦SS1⟧Bulgarian Split Squat Iso Hold:/)
+  test('Upper Strength: DB Bench Press + Tibialis Raises renders correctly, press first, and is NOT category-varied (stays fixed every week)', () => {
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+    for (const wk of [0, 1, 2, 3]) {
+      const day2 = weeks[wk].sessions[1].description.split('\n')
+      const marked = day2.filter(l => SUPERSET_MARKER_RE.test(l) && /DB Bench Press|Tibialis Raises/.test(l))
+      expect(marked[0]).toMatch(/^⟦SS1⟧DB Bench Press:/)
+      expect(marked[1]).toMatch(/^⟦SS1⟧Tibialis Raises:/)
+    }
   })
 
-  test('a knee-injury substitution still correctly retargets an exercise inside a superset group (marker-vs-injury-regex hardening)', () => {
-    const survey = mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '3', injury_areas: ['Knee'] })
+  test('a knee-injury substitution still correctly retargets an exercise inside a superset group (marker-vs-injury-regex hardening) — Front Squat -> Goblet Squat on an odd (Front Squat) week', () => {
+    const survey = mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4', injury_areas: ['Knee'] })
     const bp = generateBlueprintForAthlete(survey)
-    const day2 = bp.weeks[0].sessions[1].description
-    // Bulgarian Split Squat Iso Hold -> Reverse Lunge Iso Hold (reduced load) for a knee injury,
-    // and the line must still carry its superset marker (not silently drop out of the group).
-    expect(day2).toContain('⟦SS1⟧Reverse Lunge Iso Hold')
-    expect(day2).not.toContain('Bulgarian Split Squat Iso Hold')
+    const day1 = bp.weeks[0].sessions[0].description
+    expect(day1).toMatch(/⟦SS1⟧Goblet Squat:/)
+    expect(day1).not.toContain('Front Squat')
   })
 })
 
@@ -1209,12 +1228,19 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(week5Day1.lines).toEqual(week1Day1.lines)
   })
 
-  test('the accessory cap holds across every sport/position/day-count combination — no session ever exceeds ~5 total working blocks worth of accessory content beyond the main lift', () => {
+  test('the accessory cap holds across every sport/position/day-count combination — no session ever exceeds its sport\'s configured cap worth of accessory content beyond the main lift', () => {
     for (const tpl of SPORT_TEMPLATES) {
+      // Default-cap (3) sports: at most 2 superset groups — one is the
+      // optional main-lift+plyo/authored-partner contrast, the rest of the
+      // 3-weight budget collapses into at most 1 more pair-group plus a
+      // possible leftover single. Baseball/softball's raised cap (6) allows
+      // up to 3 groups (baseball's Upper Strength is deliberately 3 full
+      // authored pairs, not auto-trimmed — see Area 14).
+      const maxGroups = (SPORT_MAX_ACCESSORIES[tpl.id] || 3) > 3 ? 3 : 2
       for (const pos of tpl.positions) {
         for (const days of tpl.daysOptions.map(d => d.days)) {
           const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
-          const weeks = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation)
+          const weeks = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation, tpl.id)
           for (const w of weeks) {
             for (const s of w.sessions) {
               const markerGroups = new Set(
@@ -1223,10 +1249,7 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
                   .filter(Boolean)
                   .map(m => m[1])
               )
-              // At most 2 superset groups: one is the optional main-lift+plyo
-              // contrast, the rest of the cap (weight 3) collapses into at
-              // most 2 pair-groups plus a possible leftover single.
-              expect(markerGroups.size).toBeLessThanOrEqual(2)
+              expect(markerGroups.size).toBeLessThanOrEqual(maxGroups)
             }
           }
         }
@@ -1239,9 +1262,11 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
 // Baseball no longer prescribes Hang Clean/Power Clean anywhere — Olympic
 // lifts require expert in-person coaching to execute safely, and Offseaz
 // athletes often train without a coach present. Trap Bar Jump replaces both
-// (position players' Day 2/3 or 4, pitchers' Day 2/3/4 depending on split)
 // as a safer power movement: same explosive triple extension, no technical
-// catch phase.
+// catch phase. Since the comprehensive rebuild, it lives exclusively on
+// Lower Power (day-type locking: total-body power moves are lower-day only)
+// as that day's standalone power-move exception — no longer scattered
+// across the old Day 2/3/4 upper-day slots.
 
 describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
   const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
@@ -1307,16 +1332,11 @@ describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
     expect(sawPaired).toBe(false)
   })
 
-  test('Trap Bar Jump reliably survives the accessory cap every single week — it never silently disappears from a day it belongs on', () => {
+  test('Trap Bar Jump reliably survives the accessory cap every single week — it never silently disappears from Lower Power (Day 1), the only day it belongs on now', () => {
     for (const position of ['Position Player', 'Pitcher']) {
       const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position, time_per_week: '4' }))
-      // Day indices that carry Trap Bar Jump for the 4-day split (position
-      // player: Day 2 + Day 4; pitcher: Day 2 + Day 4 too).
-      const trapBarJumpDayIdx = [1, 3]
       for (const w of bp.weeks) {
-        for (const idx of trapBarJumpDayIdx) {
-          expect(w.sessions[idx].description).toContain('Trap Bar Jump')
-        }
+        expect(w.sessions[0].description).toContain('Trap Bar Jump')
       }
     }
   })
@@ -1499,5 +1519,377 @@ describe('Area 13 — Under-filling root-cause fix (any day, any anchor type)', 
       return organizedDay5.includes(name)
     })
     expect(survived).toBe(true)
+  })
+})
+
+// ─── Area 14 — Baseball comprehensive rebuild ──────────────────────────────
+// Category-based lift variation, day-type locking, the pairing/balance
+// rule, auto-rotating choose-1 slots, the finisher arrangement (no
+// conditioning+core or arm-care+core on any day, any day-count), the
+// intentionally-uncapped Upper Strength day, Day 6's rotating light-mobility
+// pool, the Hamstring Curls hip-injury substitution, and the 3-day
+// baseball3Day/pitcher3Day = 4-day.slice(0,3) simplification.
+
+describe('Area 14 — Baseball comprehensive rebuild', () => {
+  const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+  const ALL_DAY_COUNTS = ['3', '4', '5', '6']
+  const ALL_POSITIONS = ['Position Player', 'Pitcher']
+
+  function allBaseballBlueprints() {
+    const out = []
+    for (const position of ALL_POSITIONS) {
+      for (const days of ALL_DAY_COUNTS) {
+        out.push({ position, days, bp: generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position, time_per_week: days })) })
+      }
+    }
+    return out
+  }
+
+  describe('category-based lift variation', () => {
+    test('Lower Power squat alternates Front Squat (odd weeks) / Back Squat (even weeks), progression (%) unaffected', () => {
+      // The squat + jump contrast pair is content-detected by
+      // applySessionOrganization, not authored with an `ss` field — no
+      // marker exists until that pass runs (unlike the rest of this day's
+      // authored pairs, which already carry their marker on raw output).
+      const rawWeeks = baseball.generateWeeks('baseball', 'standard', 4)
+      const weeks = applySessionOrganization(rawWeeks, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
+      expect(weeks[0].sessions[0].description).toMatch(/^⟦SS1⟧Front Squat: \d+%/m)
+      expect(weeks[1].sessions[0].description).toMatch(/^⟦SS1⟧Back Squat: \d+%/m)
+      expect(weeks[2].sessions[0].description).toMatch(/^⟦SS1⟧Front Squat: \d+%/m)
+      // The % progression itself keeps climbing across the phase regardless
+      // of which name is showing (proves the swap doesn't reset/disturb load).
+      const w1pct = weeks[0].sessions[0].description.match(/(\d+)%×3$/m)[1]
+      const w3pct = weeks[2].sessions[0].description.match(/(\d+)%×3$/m)[1]
+      expect(parseInt(w3pct, 10)).toBeGreaterThan(parseInt(w1pct, 10))
+    })
+
+    test('Upper Power bench variant alternates DB Bench Press (odd) / Incline DB Press (even), its iso partner varies with it', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      expect(weeks[0].sessions[3].description).toMatch(/^⟦SS1⟧DB Bench Press: \d+%/m)
+      expect(weeks[0].sessions[3].description).toContain('Bulgarian Split Squat Iso Hold')
+      expect(weeks[1].sessions[3].description).toMatch(/^⟦SS1⟧Incline DB Press: \d+%/m)
+      expect(weeks[1].sessions[3].description).toContain('Long-Lever Plank Iso')
+    })
+
+    test('Lower Strength anchor alternates Trap Bar Deadlift (odd) / Reverse Lunge (even) — never both the same day', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      for (const [idx, expectDeadlift] of [[0, true], [1, false], [2, true], [3, false]]) {
+        const desc = weeks[idx].sessions[2].description
+        expect(desc.includes('Trap Bar Deadlift')).toBe(expectDeadlift)
+        expect(desc.includes('Reverse Lunge')).toBe(!expectDeadlift)
+      }
+    })
+
+    test('the glute accessory tied to the anchor: Glute Bridge on Trap Bar Deadlift weeks, Hip Thrust on Reverse Lunge weeks', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      expect(weeks[0].sessions[2].description).toContain('Glute Bridge')
+      expect(weeks[1].sessions[2].description).toContain('Hip Thrust')
+    })
+
+    test('the med-ball pool rotates on Lower Strength and Upper Power independently, never showing the same movement on both days in the same week', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      for (const w of weeks.slice(0, 8)) {
+        const lowerStrengthMedBall = w.sessions[2].description.split('\n').find(l => /Med Ball|Shotput/.test(l)).replace(/⟦SS\d+⟧/, '').split(':')[0]
+        const upperPowerMedBall = w.sessions[3].description.split('\n').find(l => /Med Ball|Shotput/.test(l)).replace(/⟦SS\d+⟧/, '').split(':')[0]
+        expect(lowerStrengthMedBall).not.toBe(upperPowerMedBall)
+      }
+    })
+
+    test('a %-ramped anchor (Trap Bar Deadlift, or a bench variant) correctly brackets with its authored partner instead of the marker breaking', () => {
+      // Regression test for the specific bug this rebuild fixed: marking a
+      // ramped/Oly line with `ss` used to silently strip the marker before
+      // its partner was ever reached.
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      const lowerStrength = weeks[0].sessions[2].description.split('\n')
+      const marked1 = lowerStrength.filter(l => SUPERSET_MARKER_RE.test(l))
+      expect(marked1[0]).toMatch(/^⟦SS1⟧Trap Bar Deadlift:/)
+      expect(marked1[1]).toMatch(/^⟦SS1⟧(Med Ball|Shotput)/)
+
+      const upperPower = weeks[0].sessions[3].description.split('\n')
+      const marked2 = upperPower.filter(l => SUPERSET_MARKER_RE.test(l))
+      expect(marked2[0]).toMatch(/^⟦SS1⟧DB Bench Press:/)
+      expect(marked2[1]).toMatch(/^⟦SS1⟧Bulgarian Split Squat Iso Hold:/)
+    })
+  })
+
+  describe('day-type locking', () => {
+    test('arm-care work (Band Pull-Aparts, Band External Rotation, Face Pulls, Prone Swimmers, Scap Push-Ups, YTW Raises, Crossover Symmetry) never appears on a lower-body day, for any position/day-count/week', () => {
+      const ARM_CARE_RE = /\b(Band Pull-Aparts|Band External Rotation|Face Pulls|Prone Swimmers|Scap Push-Ups|YTW Raises|Crossover Symmetry Band Series)\b/
+      const LOWER_FOCUS_RE = /Lower/i
+      const violations = []
+      for (const { position, days, bp } of allBaseballBlueprints()) {
+        for (const w of bp.weeks) {
+          for (const s of w.sessions) {
+            if (!LOWER_FOCUS_RE.test(s.focus)) continue
+            if (ARM_CARE_RE.test(s.description)) violations.push(`${position}/${days}d week ${w.week_number} ${s.day} (${s.focus})`)
+          }
+        }
+      }
+      expect(violations).toEqual([])
+    })
+
+    test('Trap Bar Jump (total-body power move) never appears on an upper-body day, for any position/day-count/week', () => {
+      const UPPER_FOCUS_RE = /Upper/i
+      const violations = []
+      for (const { position, days, bp } of allBaseballBlueprints()) {
+        for (const w of bp.weeks) {
+          for (const s of w.sessions) {
+            if (!UPPER_FOCUS_RE.test(s.focus)) continue
+            if (/Trap Bar Jump/.test(s.description)) violations.push(`${position}/${days}d week ${w.week_number} ${s.day} (${s.focus})`)
+          }
+        }
+      }
+      expect(violations).toEqual([])
+    })
+  })
+
+  describe('finisher arrangement — no conditioning+core or arm-care+core on any day, any day-count', () => {
+    const CORE_HEADER_RE = /^Core\s*—/
+    const ARM_CARE_HEADER_RE = /^Arm Care\s*—/
+    const CONDITIONING_NAMES_RE = /^(Sprint Tempo Protocol|Bike Ladder)\b/
+
+    test('no session anywhere in baseball combines a Core block with a conditioning finisher (Sprint Tempo Protocol or Bike Ladder)', () => {
+      const violations = []
+      for (const { position, days, bp } of allBaseballBlueprints()) {
+        for (const w of bp.weeks) {
+          for (const s of w.sessions) {
+            const lines = s.description.split('\n')
+            const hasCore = lines.some(l => CORE_HEADER_RE.test(l))
+            const hasConditioning = lines.some(l => CONDITIONING_NAMES_RE.test(l.replace(SUPERSET_MARKER_RE, '')))
+            if (hasCore && hasConditioning) violations.push(`${position}/${days}d week ${w.week_number} ${s.day}`)
+          }
+        }
+      }
+      expect(violations).toEqual([])
+    })
+
+    test('no session anywhere in baseball combines a Core block with the Arm Care circuit', () => {
+      const violations = []
+      for (const { position, days, bp } of allBaseballBlueprints()) {
+        for (const w of bp.weeks) {
+          for (const s of w.sessions) {
+            const lines = s.description.split('\n')
+            const hasCore = lines.some(l => CORE_HEADER_RE.test(l))
+            const hasArmCare = lines.some(l => ARM_CARE_HEADER_RE.test(l))
+            if (hasCore && hasArmCare) violations.push(`${position}/${days}d week ${w.week_number} ${s.day}`)
+          }
+        }
+      }
+      expect(violations).toEqual([])
+    })
+
+    test('the 3-day split\'s old hand-authored hybrid Day 3 (which combined arm-care + conditioning + core) is gone — confirmed by the two rules above holding for 3-day plans specifically', () => {
+      const bp3 = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '3' }))
+      expect(bp3.weeks[0].sessions.length).toBe(3)
+      const day3 = bp3.weeks[0].sessions[2].description
+      const hasArmCare = /^Arm Care\s*—/m.test(day3)
+      const hasConditioning = /^(Sprint Tempo Protocol|Bike Ladder)\b/m.test(day3.split('\n').map(l => l.replace(SUPERSET_MARKER_RE, '')).join('\n'))
+      const hasCore = /^Core\s*—/m.test(day3)
+      // Lower Strength (3-day's Day 3): Sprint Tempo Protocol only, no core, no arm-care.
+      expect(hasConditioning).toBe(true)
+      expect(hasArmCare).toBe(false)
+      expect(hasCore).toBe(false)
+    })
+
+    test('the finisher arrangement is exactly as specified: Lower Power = Bike Ladder, Upper Strength = Arm Care circuit, Lower Strength = Sprint Tempo, Upper Power = rotating core', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      const [day1, day2, day3, day4] = weeks[0].sessions
+      expect(day1.description).toContain('Bike Ladder')
+      expect(day2.description).toMatch(/^Arm Care\s*—/m)
+      expect(day3.description).toContain('Sprint Tempo Protocol')
+      expect(day4.description).toMatch(/^Core\s*—/m)
+    })
+
+    test('the Arm Care circuit has 3+ exercises and is never bracketed into a pairing', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      const day2Lines = weeks[0].sessions[1].description.split('\n')
+      const headerIdx = day2Lines.findIndex(l => /^Arm Care\s*—/.test(l))
+      expect(headerIdx).toBeGreaterThanOrEqual(0)
+      const circuitLines = day2Lines.slice(headerIdx + 1).filter(l => l.trim() !== '')
+      expect(circuitLines.length).toBeGreaterThanOrEqual(3)
+      for (const l of circuitLines) expect(SUPERSET_MARKER_RE.test(l)).toBe(false)
+    })
+  })
+
+  describe('pairing/balance rule — ~90% paired, only main lift or power move standalone', () => {
+    test('across all 4 core baseball days, at least 90% of working exercise lines are bracketed into a pairing, and every standalone line is either a main lift, Trap Bar Jump, or a finisher', () => {
+      const weeks = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 4), SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
+      let total = 0
+      let paired = 0
+      const unpairedNonExempt = []
+      const FINISHER_OR_MAIN_RE = /^(Trap Bar Jump|Bike Ladder|Sprint Tempo Protocol)\b/
+      for (const s of weeks[0].sessions) {
+        let inExemptBlock = false
+        for (const rawLine of s.description.split('\n')) {
+          const bare = rawLine.replace(SUPERSET_MARKER_RE, '')
+          if (bare.trim() === '') { inExemptBlock = false; continue }
+          if (/^(Core|Arm Care)\s*—/.test(bare)) { inExemptBlock = true; continue }
+          if (inExemptBlock) continue
+          const colonIdx = bare.indexOf(':')
+          if (colonIdx <= 0) continue
+          if (SUPERSET_MARKER_RE.test(rawLine)) { total++; paired++; continue }
+          // A recognized finisher or the day's own main-lift-standalone line
+          // is explicitly outside what the ~90% pairing rule measures — it's
+          // never meant to be paired at all, same as Core/Arm Care block
+          // content above (which is also excluded from the denominator).
+          if (FINISHER_OR_MAIN_RE.test(bare)) continue
+          total++
+          unpairedNonExempt.push(`${s.day}: ${bare}`)
+        }
+      }
+      expect(unpairedNonExempt).toEqual([])
+      expect(paired / total).toBeGreaterThanOrEqual(0.9)
+    })
+  })
+
+  describe('Upper Strength — intentionally over the normal cap, not auto-trimmed', () => {
+    test('all 3 authored pairs survive every week, never trimmed down to 2', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      for (const w of weeks) {
+        const day2 = w.sessions[1].description
+        const groups = new Set(day2.split('\n').map(l => l.match(SUPERSET_MARKER_RE)).filter(Boolean).map(m => m[1]))
+        expect(groups.size).toBe(3)
+      }
+    })
+  })
+
+  describe('choose-1 auto-rotating slots (triceps/biceps, Upper Power)', () => {
+    test('the prescribed exercise rotates deterministically across a 3-week cycle, and the note always lists the other 2 pool options', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      const tricepPicks = weeks.slice(0, 3).map(w => {
+        const line = w.sessions[3].description.split('\n').find(l => /DB Skull Crushers|Diamond Push-Ups|Cable Pushdown/.test(l))
+        return line.replace(SUPERSET_MARKER_RE, '')
+      })
+      // 3 distinct picks across 3 consecutive weeks (full pool cycle).
+      const names = tricepPicks.map(l => l.split(':')[0])
+      expect(new Set(names).size).toBe(3)
+      for (const line of tricepPicks) {
+        expect(line).toMatch(/^(DB Skull Crushers|Diamond Push-Ups|Cable Pushdown): 3x10 \(or /)
+      }
+      // Week 4 repeats week 1's pick (3-week cycle).
+      const week4 = weeks[3].sessions[3].description.split('\n').find(l => /DB Skull Crushers|Diamond Push-Ups|Cable Pushdown/.test(l))
+      expect(week4.replace(SUPERSET_MARKER_RE, '')).toBe(tricepPicks[0])
+    })
+
+    test('triceps and biceps choose-1 slots are bracketed together as a pair', () => {
+      const day4 = baseball.generateWeeks('baseball', 'standard', 4)[0].sessions[3].description.split('\n')
+      const marked = day4.filter(l => SUPERSET_MARKER_RE.test(l) && /Crushers|Push-Ups|Pushdown|Curls/.test(l))
+      expect(marked.length).toBe(2)
+      const group = marked[0].match(SUPERSET_MARKER_RE)[1]
+      expect(marked[1]).toMatch(new RegExp(`^⟦SS${group}⟧`))
+    })
+  })
+
+  describe('Day 6 — light mobility/prehab day (6-day plans only)', () => {
+    test('Day 6 only appears on 6-day plans, never on 3/4/5-day', () => {
+      for (const { position, days, bp } of allBaseballBlueprints()) {
+        const hasDay6 = bp.weeks[0].sessions.some(s => s.day === 'Day 6')
+        expect(hasDay6).toBe(days === '6' ? true : false)
+      }
+    })
+
+    test('Day 6 rotates 4 movements deterministically by week, and stays genuinely light (every line notes "light", low set counts)', () => {
+      const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '6' }))
+      const week1 = bp.weeks[0].sessions.find(s => s.day === 'Day 6').description
+      const week2 = bp.weeks[1].sessions.find(s => s.day === 'Day 6').description
+      expect(week1).not.toBe(week2)
+      for (const desc of [week1, week2]) {
+        const lines = desc.split('\n').filter(l => l.trim() !== '' && l.includes(':'))
+        expect(lines.length).toBeGreaterThanOrEqual(4)
+        for (const l of lines) {
+          expect(l).toMatch(/\(light/)
+          const setsMatch = l.match(/:\s*(\d+)x/)
+          if (setsMatch) expect(parseInt(setsMatch[1], 10)).toBeLessThanOrEqual(2)
+        }
+      }
+    })
+
+    test('Day 6 is baseball-scoped — no other sport gets a rotating light-mobility Day 6', () => {
+      for (const tpl of SPORT_TEMPLATES) {
+        if (tpl.id === 'baseball' || tpl.id === 'softball') continue
+        const pos = tpl.positions[0]
+        const days = tpl.daysOptions.find(d => d.days >= 6)
+        if (!days) continue
+        const weeks = tpl.generateWeeks(pos.id, 'standard', days.days)
+        const day6 = weeks[0].sessions.find(s => s.day === 'Day 6')
+        // Cossack Squat pre-exists elsewhere (e.g. hockey's own recovery
+        // day) independent of this rebuild — check names that are
+        // genuinely unique, brand-new library entries from this rebuild.
+        if (day6) expect(day6.description).not.toMatch(/World's Greatest Stretch|Copenhagen Plank/)
+      }
+    })
+  })
+
+  describe('Hamstring Curls — hip-injury substitution only, never default content', () => {
+    test('Hamstring Curls never appears in default (no-injury) baseball content, for any position/day-count', () => {
+      const violations = []
+      for (const { position, days, bp } of allBaseballBlueprints()) {
+        for (const s of allSessions(bp.weeks)) {
+          if (/Hamstring Curls/.test(s.description)) violations.push(`${position}/${days}d ${s.day}`)
+        }
+      }
+      expect(violations).toEqual([])
+    })
+
+    test('a hip injury swaps Single Leg RDL for Hamstring Curls, marker preserved', () => {
+      const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4', injury_areas: ['Hip'] }))
+      const lowerStrength = bp.weeks[0].sessions[2].description
+      expect(lowerStrength).toMatch(/⟦SS\d+⟧Hamstring Curls:/)
+      expect(lowerStrength).not.toContain('Single Leg RDL')
+    })
+  })
+
+  describe('3-day split reuses the 4-day day-functions directly (no separately-authored hybrid)', () => {
+    test('baseball3Day and pitcher3Day are exactly the first 3 sessions of the 4-day equivalent, byte-for-byte, for every week', () => {
+      const b4 = baseball.generateWeeks('baseball', 'standard', 4)
+      const b3 = baseball.generateWeeks('baseball', 'standard', 3)
+      for (let i = 0; i < b3.length; i++) {
+        expect(b3[i].sessions).toEqual(b4[i].sessions.slice(0, 3))
+      }
+      const p4 = baseball.generateWeeks('pitcher', 'standard', 4)
+      const p3 = baseball.generateWeeks('pitcher', 'standard', 3)
+      for (let i = 0; i < p3.length; i++) {
+        expect(p3[i].sessions).toEqual(p4[i].sessions.slice(0, 3))
+      }
+    })
+
+    test('the 3-day split has no Upper Power day (dropped, not compressed into Day 3)', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 3)
+      expect(weeks[0].sessions.some(s => s.focus === 'Upper Power')).toBe(false)
+      expect(weeks[0].sessions.map(s => s.focus)).toEqual(['Lower Power', 'Upper Strength', 'Lower Strength'])
+    })
+  })
+
+  describe('this rebuild stays baseball-scoped — no contamination of other sports', () => {
+    test('none of the new baseball-specific exercise names appear in any other sport\'s output', () => {
+      // Suitcase Carry deliberately excluded — it's a pre-existing, shared
+      // exercise already used by several other sports' templates (and
+      // already in MOBILITY_EXACT_EXEMPT before this rebuild); it just
+      // never had a library entry until now. Not new/exclusive to baseball.
+      const BASEBALL_ONLY_NAMES = [
+        'Gorilla Row', 'Side X Plank', 'Long-Lever Plank Iso', 'Barbell Single Leg RDL',
+        'Bike Ladder', 'DB Skull Crushers', 'Diamond Push-Ups', 'Cable Pushdown',
+        'DB Curls', 'Cable Curls', 'Incline Curls', 'Med Ball Broad Jump + Throw',
+      ]
+      const violations = []
+      for (const tpl of SPORT_TEMPLATES) {
+        if (tpl.id === 'baseball' || tpl.id === 'softball') continue
+        for (const pos of tpl.positions) {
+          const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))
+          const text = weeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
+          for (const name of BASEBALL_ONLY_NAMES) {
+            if (text.includes(name)) violations.push(`${tpl.id}/${pos.id}: "${name}"`)
+          }
+        }
+      }
+      expect(violations).toEqual([])
+    })
+
+    test('softball shares baseball\'s full rebuilt content (same generator), and no other sport does', () => {
+      const softball = SPORT_TEMPLATES.find(t => t.id === 'softball')
+      const softballWeeks = softball.generateWeeks('softball', 'standard', 4)
+      expect(softballWeeks[0].sessions[0].description).toContain('Trap Bar Jump')
+      expect(softballWeeks[0].sessions[1].description).toMatch(/^Arm Care\s*—/m)
+    })
   })
 })

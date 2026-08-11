@@ -252,8 +252,19 @@ function applyKneeSubstitutions(description) {
     if (/^Back Squat\b/.test(line)) {
       return scaleAllPercentages(line.replace(/^Back Squat/, 'Goblet Squat'), 0.60)
     }
+    // Front Squat carries the same knee-loading concern as Back Squat — kept
+    // in sync with applyKneeAdjustments in blueprintTemplates.js.
+    if (/^Front Squat\b/.test(line)) {
+      return scaleAllPercentages(line.replace(/^Front Squat/, 'Goblet Squat'), 0.60)
+    }
     if (/\bDepth Jumps?\b/.test(line)) {
       return line.replace(/Depth Jumps?/, 'Box Step-Ups')
+    }
+    // Trap Bar Jump is a loaded jump — same landing-impact concern as Depth
+    // Jumps. Kept in sync with applyKneeAdjustments in blueprintTemplates.js
+    // (this substitution existed server-side already but was missing here).
+    if (/^Trap Bar Jump\b/.test(line)) {
+      return line.replace(/^Trap Bar Jump/, 'Trap Bar Deadlift')
     }
     if (/^Bulgarian Split Squat\b/.test(line)) {
       return line.replace(/^Bulgarian Split Squat/, 'Reverse Lunge') + ' (reduced load)'
@@ -282,6 +293,12 @@ function applyHipSubstitutions(description) {
   return description.split('\n').map(line => {
     if (/^Bulgarian Split Squat\b/.test(line)) {
       return line.replace(/^Bulgarian Split Squat/, 'Single Leg Press')
+    }
+    // Kept in sync with applyHipAdjustments in blueprintTemplates.js —
+    // Hamstring Curls is a hip-injury-only swap for Single Leg RDL, not
+    // part of baseball's default weekly content.
+    if (/^Single Leg RDL\b/.test(line)) {
+      return line.replace(/^Single Leg RDL/, 'Hamstring Curls')
     }
     const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
     if (m && /\bLunge\b/i.test(m[1])) {

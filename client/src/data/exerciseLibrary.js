@@ -770,6 +770,80 @@ const EXERCISE_LIBRARY = {
     description: 'Drop into a deep bodyweight squat, then straighten your legs while keeping your hands on the floor to stretch the hamstrings, before returning to the squat. Alternate.',
     muscles: 'Hamstrings, adductors, hip mobility',
   },
+
+  // ─── Baseball comprehensive rebuild additions ──────────────────────────────
+  'bike ladder': {
+    description: 'On a stationary bike, ride a symmetric interval ladder for 3 rounds: 10s hard/20s easy, 15s/15s, 20s hard/10s easy, 15s/15s, 10s hard/20s easy. Push the effort on each "on" segment, spin easy on the "off" segment.',
+    muscles: 'Cardiovascular conditioning, quads, glutes',
+  },
+  'gorilla row': {
+    description: 'Stand over two kettlebells (or dumbbells) in a hip hinge. Row one bell up to your ribs while the other hand stays braced on its handle for support, then switch sides.',
+    muscles: 'Lats, rhomboids, rear deltoids, core, grip',
+  },
+  'side x plank': {
+    description: 'From a side plank, reach your top arm and top leg out to form an X shape, holding your hips lifted and body in a straight line, then switch sides.',
+    muscles: 'Obliques, glutes, shoulders (anti-rotation/lateral core)',
+  },
+  'long-lever plank iso': {
+    description: 'Hold a forearm plank with your elbows walked out in front of your shoulders (longer lever than a standard plank), keeping hips level and core braced throughout the hold.',
+    muscles: 'Core, anterior chain, shoulders',
+  },
+  'barbell single leg rdl': {
+    description: 'Holding a barbell at your hips, balance on one leg. Hinge forward, extending the free leg behind you as you lower the bar down your shin, then drive your hips forward to return to standing.',
+    muscles: 'Hamstrings, glutes, erectors, ankle stabilizers',
+  },
+  'db skull crushers': {
+    description: 'Lying on a bench holding dumbbells overhead, lower them toward your forehead by bending only at the elbows, then extend back to lockout.',
+    muscles: 'Triceps',
+  },
+  'diamond push-ups': {
+    description: 'From a push-up position, bring your hands together under your chest so your thumbs and index fingers form a diamond. Lower your chest to your hands, then press back up.',
+    muscles: 'Triceps, chest, anterior deltoids',
+  },
+  'cable pushdown': {
+    description: 'Standing at a cable stack with a bar or rope attachment, keep your elbows pinned at your sides and extend your forearms down to lockout, then control the weight back up.',
+    muscles: 'Triceps',
+  },
+  'db curls': {
+    description: 'Standing or seated, hold dumbbells at your sides with palms forward. Curl the weights up toward your shoulders without swinging, then lower under control.',
+    muscles: 'Biceps, forearms',
+  },
+  'cable curls': {
+    description: 'Standing at a low cable pulley with a bar or rope attachment, curl the handle up toward your shoulders keeping your elbows pinned at your sides, then lower under control.',
+    muscles: 'Biceps, forearms',
+  },
+  'incline curls': {
+    description: 'Lying back on an incline bench with arms hanging straight down, curl dumbbells up toward your shoulders, keeping your upper arms stationary against the bench.',
+    muscles: 'Biceps (long head emphasis)',
+  },
+  'cossack squat': {
+    description: 'Take a wide stance, shift your weight over one bent leg and sit into a deep squat on that side while the other leg stays straight, foot flat. Push back to center and repeat on the other side.',
+    muscles: 'Adductors, quads, glutes, hip mobility',
+  },
+  "world's greatest stretch": {
+    description: 'From a lunge position, place both hands inside your front foot. Rotate your torso and reach the same-side arm toward the ceiling, then return and repeat, alternating sides.',
+    muscles: 'Hip flexors, adductors, thoracic spine, hamstrings',
+  },
+  'copenhagen plank': {
+    description: 'Support your top leg on a bench with your bottom leg free, propped up on your forearm in a side-plank position. Hold, keeping hips level, then switch sides.',
+    muscles: 'Adductors, obliques, hip stability',
+  },
+  'inchworms': {
+    description: 'From standing, hinge and walk your hands out to a plank position, then walk your feet up to your hands, keeping legs as straight as comfortable throughout.',
+    muscles: 'Hamstrings, shoulders, core',
+  },
+  'step-ups': {
+    description: 'Facing a box or bench, drive through the lead foot to step up onto it, bringing the trail leg to full hip extension at the top, then step back down under control.',
+    muscles: 'Quads, glutes, hamstrings',
+  },
+  'suitcase carry': {
+    description: 'Hold a single dumbbell or kettlebell at your side like a suitcase. Walk for the prescribed distance while resisting the urge to lean, keeping your torso upright and core braced.',
+    muscles: 'Core, obliques, grip, traps',
+  },
+  'med ball broad jump + throw': {
+    description: 'Holding a med ball between your legs, load into a squat and explosively broad-jump forward while throwing the ball forward from between your legs as you jump. Reset and repeat.',
+    muscles: 'Glutes, hamstrings, quads, core (full-body power)',
+  },
 }
 
 // Case-insensitive lookup helper
