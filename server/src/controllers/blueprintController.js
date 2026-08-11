@@ -57,7 +57,7 @@ async function generateFromTemplate(req, res) {
     const days = days_per_week ? parseInt(days_per_week, 10) : undefined
 
     const rotation = SPORT_ACCESSORY_ROTATION[sport.id] || {}
-    const organized = applySessionOrganization(sport.generateWeeks(position_id, goal, days), rotation)
+    const organized = applySessionOrganization(sport.generateWeeks(position_id, goal, days), rotation, sport.id)
     const weeks = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation))
     res.json({ weeks })
   } catch (err) {
