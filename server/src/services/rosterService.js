@@ -1,20 +1,33 @@
 const supabaseAdmin = require('../config/supabase')
+const { pickCurrentEntry } = require('./maxesService')
 
 const VALID_LIFTS = ['bench_press', 'squat', 'trap_bar_deadlift', 'power_clean', 'overhead_press']
 
 // ─── Helpers ──────────────────────────────────────────────────────────────────
 
 /**
- * Given an array of {athlete_id, lift, weight_lbs, reps} rows,
- * build a map: athleteId → { liftKey → { weight_lbs, reps } (best/heaviest) }
+ * Given an array of {athlete_id, lift, weight_lbs, reps, estimated_1rm} rows,
+ * build a map: athleteId → { liftKey → { weight_lbs, reps } (current, per
+ * pickCurrentEntry — same highest-ESTIMATED-1RM resolution maxesService.js's
+ * getMaxesByAthlete uses, so the coach roster and an athlete's own profile
+ * never disagree about which entry is "current"). Output shape unchanged
+ * (weight_lbs/reps only) — the raw PR display this feeds never changes,
+ * only which logged entry wins that slot.
  */
 function buildMaxesMap(rows) {
-  const map = {}
+  const grouped = {}
   for (const row of rows || []) {
-    if (!map[row.athlete_id]) map[row.athlete_id] = {}
-    const current = map[row.athlete_id][row.lift]
-    if (!current || row.weight_lbs > current.weight_lbs) {
-      map[row.athlete_id][row.lift] = { weight_lbs: row.weight_lbs, reps: row.reps }
+    if (!grouped[row.athlete_id]) grouped[row.athlete_id] = {}
+    if (!grouped[row.athlete_id][row.lift]) grouped[row.athlete_id][row.lift] = []
+    grouped[row.athlete_id][row.lift].push(row)
+  }
+
+  const map = {}
+  for (const athleteId of Object.keys(grouped)) {
+    map[athleteId] = {}
+    for (const lift of Object.keys(grouped[athleteId])) {
+      const winner = pickCurrentEntry(grouped[athleteId][lift])
+      map[athleteId][lift] = { weight_lbs: winner.weight_lbs, reps: winner.reps }
     }
   }
   return map
@@ -60,7 +73,7 @@ async function getCoachRoster(teamId, sort = 'name') {
       .in('athlete_id', athleteIds),
     supabaseAdmin
       .from('lifting_maxes')
-      .select('athlete_id, lift, weight_lbs, reps')
+      .select('athlete_id, lift, weight_lbs, reps, estimated_1rm')
       .in('athlete_id', athleteIds),
     supabaseAdmin
       .from('workout_logs')
@@ -171,7 +184,7 @@ async function getAthleteRoster(athleteId) {
       .in('athlete_id', athleteIds),
     supabaseAdmin
       .from('lifting_maxes')
-      .select('athlete_id, lift, weight_lbs, reps')
+      .select('athlete_id, lift, weight_lbs, reps, estimated_1rm')
       .in('athlete_id', athleteIds),
   ])
 
@@ -261,7 +274,7 @@ async function getTeammateProfile(viewerId, targetId) {
     supabaseAdmin.from('survey_responses').select('*').eq('athlete_id', targetId).single(),
     supabaseAdmin
       .from('lifting_maxes')
-      .select('id, lift, weight_lbs, reps, notes, logged_at')
+      .select('id, lift, weight_lbs, reps, notes, logged_at, estimated_1rm, is_estimated')
       .eq('athlete_id', targetId)
       .order('logged_at', { ascending: true }),
     supabaseAdmin
@@ -282,9 +295,10 @@ async function getTeammateProfile(viewerId, targetId) {
   for (const lift of VALID_LIFTS) {
     const entries = maxes[lift].history
     if (entries.length > 0) {
-      maxes[lift].current = entries.reduce((best, e) =>
-        e.weight_lbs > best.weight_lbs ? e : best
-      )
+      // Same highest-ESTIMATED-1RM resolution as maxesService.js's
+      // getMaxesByAthlete — a teammate's profile never disagrees with their
+      // own profile or the coach roster about which entry is "current".
+      maxes[lift].current = pickCurrentEntry(entries)
     }
   }
 
@@ -387,4 +401,4 @@ async function updatePrivacy(athleteId, privacyTeam) {
   return data
 }
 
-module.exports = { getCoachRoster, getAthleteRoster, getTeammateProfile, removeAthlete, updatePrivacy }
+module.exports = { getCoachRoster, getAthleteRoster, getTeammateProfile, removeAthlete, updatePrivacy, buildMaxesMap }

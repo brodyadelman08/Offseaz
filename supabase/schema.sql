@@ -178,14 +178,21 @@ CREATE TABLE IF NOT EXISTS workout_logs (
 -- `lift` is validated against an app-level VALID_LIFTS list
 -- (server/src/services/maxesService.js), not a DB constraint, so new lift
 -- types can be added without a migration.
+-- estimated_1rm/is_estimated: see supabase/migrations/estimated_1rm.sql —
+-- reps is which of {1,3,5,10} the athlete logged the weight_lbs at;
+-- estimated_1rm is the derived true-1RM value (weight_lbs as-is when
+-- reps=1, converted via a standard multiplier table otherwise) that all
+-- percentage-based programming and max-resolution actually key off.
 CREATE TABLE IF NOT EXISTS lifting_maxes (
-  id         UUID PRIMARY KEY DEFAULT gen_random_uuid(),
-  athlete_id UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
-  lift       TEXT NOT NULL,
-  weight_lbs NUMERIC NOT NULL,
-  reps       INTEGER NOT NULL DEFAULT 1,
-  notes      TEXT,
-  logged_at  TIMESTAMPTZ NOT NULL DEFAULT now()
+  id             UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  athlete_id     UUID NOT NULL REFERENCES profiles(id) ON DELETE CASCADE,
+  lift           TEXT NOT NULL,
+  weight_lbs     NUMERIC NOT NULL,
+  reps           INTEGER NOT NULL DEFAULT 1,
+  notes          TEXT,
+  logged_at      TIMESTAMPTZ NOT NULL DEFAULT now(),
+  estimated_1rm  NUMERIC NOT NULL,
+  is_estimated   BOOLEAN NOT NULL DEFAULT FALSE
 );
 
 CREATE INDEX IF NOT EXISTS idx_lifting_maxes_athlete_id ON lifting_maxes(athlete_id);

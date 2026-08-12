@@ -2137,3 +2137,116 @@ describe('Area 15 — Shared block periodization', () => {
     expect(resolvePhaseRotationKey('soccer', 'goalkeeper')).toBe('soccer')
   })
 })
+
+// ─── Area 16 — Weighted Push-Ups in the horizontal-push rotation ───────────
+// Added as a lower-frequency 3rd option alongside the existing Close Grip
+// Bench Press / DB Bench Press variants in football's (skill/hybrid) and
+// soccer's phase-rotation pools. Fires on exactly one week per 16-week plan
+// (Phase 1's wip-2 week = week 2) — never on a deload week (4/8/12/16) or
+// during Phase 4's taper (13-16).
+
+describe('Area 16 — Weighted Push-Ups horizontal-push rotation', () => {
+  function fullPipeline(sportId, posId, goal, days) {
+    const tpl = SPORT_TEMPLATES.find(t => t.id === sportId)
+    const rotation = SPORT_ACCESSORY_ROTATION[sportId] || {}
+    const capKey = resolveAccessoryCapKey(sportId, posId, goal)
+    const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey(sportId, posId)] || {}
+    const organized = applySessionOrganization(tpl.generateWeeks(posId, goal, days), rotation, capKey)
+    return applyDeloadAdjustments(applyAccessoryProgression(organized, rotation, phaseRotation))
+  }
+
+  // Returns the horizontal-push line's exercise name for a given week (1-16)
+  // and day-matcher, or null if that line isn't present that week.
+  function pushLineName(weeks, weekNum, dayMatch) {
+    const day = weeks[weekNum - 1].sessions.find(dayMatch)
+    if (!day) return null
+    const line = day.description.split('\n').find(l =>
+      /DB Incline Press:|Incline DB Press:|Close Grip Bench Press:|DB Bench Press:|Weighted Push-Ups:/.test(l)
+    )
+    return line ? line.replace(SUPERSET_MARKER_RE, '').split(':')[0] : null
+  }
+
+  const GROUPS = [
+    ['football', 'skill',  s => s.day === 'Day 2'],
+    ['football', 'hybrid', s => s.day === 'Day 2'],
+    ['soccer',   'goalkeeper',  s => s.day === 'Tuesday'],
+    ['soccer',   'center_back', s => s.day === 'Tuesday'],
+    ['soccer',   'midfielder',  s => s.day === 'Tuesday'],
+  ]
+
+  for (const [sportId, posId, dayMatch] of GROUPS) {
+    test(`${sportId}/${posId}: Weighted Push-Ups appears exactly once (week 2) across the 16-week plan`, () => {
+      const weeks = fullPipeline(sportId, posId, 'standard', 4)
+      const names = []
+      for (let w = 1; w <= 16; w++) names.push(pushLineName(weeks, w, dayMatch))
+      const pushUpWeeks = names.map((n, i) => (n === 'Weighted Push-Ups' ? i + 1 : null)).filter(Boolean)
+      expect(pushUpWeeks).toEqual([2])
+    })
+
+    test(`${sportId}/${posId}: Weighted Push-Ups never appears on a deload week (4/8/12/16)`, () => {
+      const weeks = fullPipeline(sportId, posId, 'standard', 4)
+      for (const wn of [4, 8, 12, 16]) {
+        expect(weeks[wn - 1].objective).toMatch(/Deload/)
+        expect(pushLineName(weeks, wn, dayMatch)).not.toBe('Weighted Push-Ups')
+      }
+    })
+
+    test(`${sportId}/${posId}: Weighted Push-Ups never appears during Phase 4's taper (weeks 13-16)`, () => {
+      const weeks = fullPipeline(sportId, posId, 'standard', 4)
+      for (let wn = 13; wn <= 16; wn++) {
+        expect(pushLineName(weeks, wn, dayMatch)).not.toBe('Weighted Push-Ups')
+      }
+    })
+
+    test(`${sportId}/${posId}: Weighted Push-Ups appears strictly less often than either primary variant (Close Grip Bench Press / DB Bench Press)`, () => {
+      const weeks = fullPipeline(sportId, posId, 'standard', 4)
+      const counts = {}
+      for (let w = 1; w <= 16; w++) {
+        const n = pushLineName(weeks, w, dayMatch)
+        if (n) counts[n] = (counts[n] || 0) + 1
+      }
+      expect(counts['Weighted Push-Ups']).toBe(1)
+      expect(counts['Close Grip Bench Press']).toBeGreaterThan(counts['Weighted Push-Ups'])
+      expect(counts['DB Bench Press']).toBeGreaterThan(counts['Weighted Push-Ups'])
+    })
+  }
+
+  test('football QB and linemen never see Weighted Push-Ups (QB has no incline-press accessory; linemen is the untouched bespoke engine)', () => {
+    const qbWeeks = fullPipeline('football', 'qb', 'standard', 4)
+    const linemenWeeks = SPORT_TEMPLATES.find(t => t.id === 'football').generateWeeks('linemen', 'standard', 4)
+    const qbText = qbWeeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
+    const linemenText = linemenWeeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
+    expect(qbText).not.toContain('Weighted Push-Ups')
+    expect(linemenText).not.toContain('Weighted Push-Ups')
+  })
+
+  test('baseball and basketball are untouched — Weighted Push-Ups never appears (only football/soccer got this option)', () => {
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const basketball = SPORT_TEMPLATES.find(t => t.id === 'basketball')
+    for (const [tpl, posId] of [[baseball, 'baseball'], [basketball, 'guards'], [basketball, 'wings'], [basketball, 'bigs']]) {
+      const weeks = fullPipeline(tpl.id, posId, 'standard', 4)
+      const text = weeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
+      expect(text).not.toContain('Weighted Push-Ups')
+    }
+  })
+
+  test('Weighted Push-Ups is in the exercise library with a real description', () => {
+    const libSource = fs.readFileSync(
+      path.join(__dirname, '..', '..', '..', 'client', 'src', 'data', 'exerciseLibrary.js'),
+      'utf8'
+    )
+    expect(libSource).toMatch(/'weighted push-ups':\s*\{/)
+  })
+
+  test('the exact substituted line reads "Weighted Push-Ups: <sets>x<reps>" (5-10 rep range) on its one active week', () => {
+    const weeks = fullPipeline('football', 'skill', 'standard', 4)
+    const day = weeks[1].sessions.find(s => s.day === 'Day 2') // week 2
+    const line = day.description.split('\n').find(l => /Weighted Push-Ups:/.test(l))
+    expect(line).toBeTruthy()
+    const m = line.replace(SUPERSET_MARKER_RE, '').match(/Weighted Push-Ups:\s*\d+x(\d+)/)
+    expect(m).toBeTruthy()
+    const reps = parseInt(m[1], 10)
+    expect(reps).toBeGreaterThanOrEqual(5)
+    expect(reps).toBeLessThanOrEqual(10)
+  })
+})

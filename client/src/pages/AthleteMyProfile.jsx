@@ -932,8 +932,17 @@ export default function AthleteMyProfile() {
                     <div style={{ display: 'flex', gap: 6 }}>
                       <input style={{ ...styles.weightInput, flex: 2 }} type="number" placeholder="Weight (lbs)" min="1" max="2000" step="0.5" value={form.weight}
                         onChange={e => { setLogForms(prev => ({ ...prev, [key]: { ...prev[key], weight: e.target.value } })); setSaveErrors(prev => ({ ...prev, [key]: null })) }} />
-                      <input style={{ ...styles.weightInput, flex: 1 }} type="number" placeholder="Reps" min="1" max="100" value={form.reps}
-                        onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], reps: e.target.value } }))} />
+                      {/* Which rep max this weight was logged at — the app converts
+                          any non-1RM entry into an estimated true 1RM under the hood
+                          (see estimateOneRepMax in server/src/services/maxesService.js)
+                          and uses that for every percentage-based set in the program. */}
+                      <select style={{ ...styles.weightInput, flex: 1 }} value={form.reps}
+                        onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], reps: e.target.value } }))}>
+                        <option value="1">1RM</option>
+                        <option value="3">3RM</option>
+                        <option value="5">5RM</option>
+                        <option value="10">10RM</option>
+                      </select>
                     </div>
                     <input style={styles.notesInput} type="text" placeholder="Notes (optional)" value={form.notes}
                       onChange={e => setLogForms(prev => ({ ...prev, [key]: { ...prev[key], notes: e.target.value } }))} />

@@ -532,6 +532,10 @@ const EXERCISE_LIBRARY = {
     description: 'From a plank position with hands just outside shoulder-width, lower your chest to the floor keeping your core tight, then push back up.',
     muscles: 'Chest, triceps, anterior deltoids, core',
   },
+  'weighted push-ups': {
+    description: 'Same setup as a standard push-up (hands just outside shoulder-width, core tight), with a plate or weighted vest loaded across your upper back. Lower your chest to the floor under control, then push back up without letting your hips sag.',
+    muscles: 'Chest, triceps, anterior deltoids, core',
+  },
   'lat pulldown': {
     description: 'Sit at a cable pulldown machine, grip the bar just outside shoulder-width with an overhand grip. Pull the bar to your upper chest by driving your elbows down.',
     muscles: 'Lats, biceps, rear deltoids',
