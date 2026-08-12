@@ -354,10 +354,18 @@ function linemenDay1Lower(info) {
 
 function linemenDay2Upper(info) {
   const { phaseNum: ph, deload: dl } = info
+  // Standing BB OHP is this day's ONLY pressing lift (no separate bench
+  // elsewhere in the session), so it gets the same wave-loaded, open-rep-
+  // window main-lift treatment as Front/Back Squat and Close Grip Bench —
+  // it must render in the main-lift slot right after the power opener, not
+  // read like just another accessory. Contrast with the 3-day merged upper
+  // day below, where Close Grip Bench is already that day's wave-loaded
+  // main and OHP stays a secondary "10/8/6/6 building" press instead.
   return {
     day: 'Day 2', focus: 'Upper Strength',
     description: `${LINEMEN_WU_UPPER}Single Arm DB Split Jerk: ${linemenOlyScheme(ph, dl)}, each arm\n` +
-      `${LINEMEN_AMRAP_PULLUP}\nStanding BB OHP: 10/8/6/6 (building)\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${LINEMEN_NECK}`,
+      `Standing BB OHP: ${buildLinemenMainLiftRamp(ph, dl)}\n` +
+      `${LINEMEN_AMRAP_PULLUP}\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${LINEMEN_NECK}`,
   }
 }
 
@@ -2439,6 +2447,23 @@ function isPowerFocusDay(focus) {
   return /power/i.test(focus || '')
 }
 
+// A live-testing PROTOCOL line — currently just linemen's AMRAP pull-up
+// chart (see LINEMEN_AMRAP_PULLUP) — prescribes a real primary movement
+// whose actual work-set volume depends on the athlete's own Set-1 result,
+// so it's deliberately written as prose rather than a fixed "Name: NxR"
+// figure the generator could fabricate. That prose shape means it would
+// otherwise fall all the way to the bottom of a session (the generic
+// "otherLines" bucket, after every accessory) — this classifier instead
+// gives it the same "stands early, right after the main lift(s), exempt
+// from the accessory cap/rotation/deload-volume-reduction" treatment as an
+// Olympic lift, without needing a name-specific special case. No existing
+// non-linemen template contains this phrase, so it's inert everywhere else.
+const PROTOCOL_LINE_RE = /:\s*Set 1 = AMRAP\b/
+
+function isProtocolLine(line) {
+  return PROTOCOL_LINE_RE.test(line.replace(SUPERSET_MARKER_RE, ''))
+}
+
 // One session's description -> reorganized description.
 function organizeSessionDescription(description, focus, protectedNames, maxAccessories = MAX_ACCESSORIES) {
   const rawLines = description.split('\n')
@@ -2447,6 +2472,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   const olyLiftLines = []   // technical Olympic-lift lines (Power Clean, Hang Clean, ...) — always solo, never paired with plyo
   const rampedLiftLines = [] // the true %-ramped main lift(s) — the ONLY thing plyo can pair with
   const plyoLines = []      // { line, idx } — idx shared with candidates so original order is comparable across both
+  const protocolLines = []  // live-testing protocol lines (e.g. AMRAP pull-up chart) — stand early, exempt from the cap
   const otherLines = []     // anything unclassified once we're past the preamble — untouched, kept after accessories
   const conditioningLines = []
   const coreLines = []      // "Core — ..." blocks through to the next blank line — untouched, always last
@@ -2512,6 +2538,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
     // stands alone, wherever the template places it.
     if (isRampedLiftLine(raw)) { rampedLiftLines.push(bare); seenWorkingLine = true; i++; continue }
     if (isMainLiftLine(raw)) { olyLiftLines.push(bare); seenWorkingLine = true; i++; continue }
+    if (isProtocolLine(raw)) { protocolLines.push(bare); seenWorkingLine = true; i++; continue }
     if (isAccessoryLine(raw, false)) {
       const colonIdx = bare.indexOf(':')
       const name = (colonIdx > 0 ? bare.slice(0, colonIdx) : bare).toLowerCase().trim()
@@ -2557,7 +2584,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   // conditioning/mobility/recovery, no oly/ramped lift, no promotable
   // anchor, no remaining candidates or plyo work either).
   if (!promotedAnchor && olyLiftLines.length === 0 && rampedLiftLines.length === 0 &&
-      candidates.length === 0 && plyoLines.length === 0) {
+      candidates.length === 0 && plyoLines.length === 0 && protocolLines.length === 0) {
     return description
   }
 
@@ -2589,6 +2616,11 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
       candidates.push({ kind: 'single', lines: [p.line], priority: 1, weight: 1, idx: p.idx })
     }
   }
+
+  // A protocol line (e.g. the AMRAP pull-up chart) stands right after the
+  // main lift(s), same free/exempt treatment as an Olympic lift or promoted
+  // anchor — never counted against the accessory cap, never paired.
+  out.push(...protocolLines)
 
   // Cap the combined pool of authored pairs + loose accessories to
   // MAX_ACCESSORIES total slots, by priority (0 = pre-existing pair or
