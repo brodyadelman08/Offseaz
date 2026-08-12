@@ -844,6 +844,64 @@ const EXERCISE_LIBRARY = {
     description: 'Holding a med ball between your legs, load into a squat and explosively broad-jump forward while throwing the ball forward from between your legs as you jump. Reset and repeat.',
     muscles: 'Glutes, hamstrings, quads, core (full-body power)',
   },
+
+  // ─── Football — Linemen ───────────────────────────────────────────────────
+  'barbell rdl': {
+    description: 'Stand tall holding a barbell at hip height, soft bend in the knees. Hinge at the hips, lowering the bar down your legs until you feel a hamstring stretch, then drive your hips forward to return.',
+    muscles: 'Hamstrings, glutes, erectors',
+  },
+  'hang clean above the knee': {
+    description: 'Start with the bar at the hip crease, then hinge back only until the bar reaches just above your kneecaps. Explosively extend hips/knees/ankles and pull yourself under the bar to catch it on your shoulders in a quarter-squat.',
+    muscles: 'Hamstrings, glutes, traps, full-body power (Olympic-lift variant)',
+  },
+  'clean pull': {
+    description: 'Set up like a clean from the floor, but pull through triple extension (hips, knees, ankles) without turning it over or catching the bar — a heavy, technical-catch-free way to train clean-pull power.',
+    muscles: 'Hamstrings, glutes, traps, erectors (full-body power)',
+  },
+  'single arm db split jerk': {
+    description: 'Take a dumbbell to shoulder height in one hand, dip and drive it overhead while your feet split front-to-back to catch the weight locked out, then step back to standing.',
+    muscles: 'Shoulders, triceps, legs (single-arm power)',
+  },
+  'neutral-grip pull-ups': {
+    description: 'Using parallel/neutral-grip handles, pull your chin over the bar keeping elbows close to your sides, then lower under control. Set 1 is a max-effort AMRAP that sets your work-set volume for the rest of the exercise.',
+    muscles: 'Lats, biceps, mid-back',
+  },
+  'inverted bb row': {
+    description: 'Set a barbell in a rack at waist height. Lie underneath and pull your chest to the bar keeping your body in a straight line, then lower under control.',
+    muscles: 'Lats, mid-back, biceps, core',
+  },
+  'single arm db bench': {
+    description: 'Lying on a flat bench with one dumbbell, press it straight up over your chest while bracing your core against the offset load, then lower under control. Complete all reps on one side before switching.',
+    muscles: 'Chest, anterior deltoids, triceps, core (anti-rotation)',
+  },
+  'seated single arm db overhead press': {
+    description: 'Seated with a dumbbell at shoulder height in one hand, press it straight overhead to lockout while bracing your core against the offset load, then lower under control.',
+    muscles: 'Shoulders, triceps, core (anti-lateral-flexion)',
+  },
+  'seated cable lat pulldown': {
+    description: 'Seated at a lat pulldown station with an underhand grip, pull the bar down to your upper chest leading with your elbows, then control it back to full extension.',
+    muscles: 'Lats, biceps, mid-back',
+  },
+  'standing bb ohp': {
+    description: 'Bar at collarbone height, feet shoulder-width. Brace your core and press the bar straight overhead to lockout, then lower under control.',
+    muscles: 'Anterior/medial deltoids, triceps, core',
+  },
+  'weighted dips': {
+    description: 'On parallel bars with a weight belt or plate, lower your body until your shoulders dip below your elbows, then press back up to lockout.',
+    muscles: 'Chest, triceps, anterior deltoids',
+  },
+  'farmer carries': {
+    description: 'Hold a heavy dumbbell or farmer-carry handle in each hand at your sides and walk for the prescribed distance, keeping your torso tall and core braced.',
+    muscles: 'Grip, traps, core, full-body stability',
+  },
+  'loaded carry mix': {
+    description: 'Alternate between a farmer carry (a heavy load in each hand) and a suitcase carry (a heavy load in one hand) across the prescribed rounds, keeping your torso tall throughout.',
+    muscles: 'Grip, traps, core, full-body stability',
+  },
+  'romanian deadlift above the knee': {
+    description: 'Stand tall, soft bend in the knees. Hinge at the hips, lowering the bar only until it passes just below your kneecaps, then drive your hips forward to return — the beginner-safe substitute for the technical Hang Clean Above the Knee.',
+    muscles: 'Hamstrings, glutes, erectors',
+  },
 }
 
 // Case-insensitive lookup helper

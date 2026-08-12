@@ -1,6 +1,6 @@
 const { getProfile } = require('../services/authService')
 const { resolveCoachTeamAndAccess, getAthleteTeam, isAthleteOnTeam, filterAthleteIdsOnTeam } = require('../services/teamsService')
-const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, SPORT_ACCESSORY_ROTATION } = require('../data/blueprintTemplates')
+const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, SPORT_ACCESSORY_ROTATION, resolveAccessoryCapKey } = require('../data/blueprintTemplates')
 const {
   createBlueprint,
   getBlueprintsByCoach,
@@ -57,7 +57,8 @@ async function generateFromTemplate(req, res) {
     const days = days_per_week ? parseInt(days_per_week, 10) : undefined
 
     const rotation = SPORT_ACCESSORY_ROTATION[sport.id] || {}
-    const organized = applySessionOrganization(sport.generateWeeks(position_id, goal, days), rotation, sport.id)
+    const capKey = resolveAccessoryCapKey(sport.id, position_id, goal)
+    const organized = applySessionOrganization(sport.generateWeeks(position_id, goal, days), rotation, capKey)
     const weeks = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation))
     res.json({ weeks })
   } catch (err) {

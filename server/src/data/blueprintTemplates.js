@@ -233,21 +233,265 @@ function bballPlyo(phaseNum) {
   return 'Depth Jumps: 3x4'
 }
 
-function fbLinemenSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
+// ─── Football — Linemen (standard goal only; see fbLinemenMGSess below for
+// the muscle-gain variant, which is untouched by this rebuild) ─────────────
+// Adapted from a real D1 4-day upper/lower linemen program — the 4-day
+// layout (linemenAnchor4Day) is the source-faithful anchor; 3/5/6-day layouts
+// keep that same core with additional movements to fill the extra frequency,
+// per the program design. Two targeted, linemen-only rule changes from the
+// sport-wide defaults:
+//   1. A raised accessory cap (5, see resolveAccessoryCapKey/SPORT_MAX_ACCESSORIES
+//      above) so a day can run main power lift + main strength lift + 3-4
+//      accessories (5-6 movements) instead of the sport-wide cap of 3.
+//   2. Main strength lifts (Front/Back Squat, Close Grip Bench, and the
+//      6-day Lower C's Trap Bar Deadlift) prescribe an OPEN rep WINDOW on
+//      the top set (e.g. "80%×5-8") instead of a fixed rep count — see
+//      buildLinemenMainLiftRamp. The window is just text appended after the
+//      top-set %, so every existing %-based classifier (isRampedLiftLine,
+//      the beginner/advanced experience-adjustment passes) already handles
+//      it unchanged; addExtraTopSet above got one small, backward-compatible
+//      fix (optional "-N" support) so an advanced athlete's extra top set
+//      doesn't truncate the window.
+// Olympic lifts (Power Clean, Hang Clean Above the Knee, BB/Single Arm DB
+// Split Jerk, Clean Pull) are autoregulated — "start light and build" to a
+// top set/double/single, never a %-of-max — so every one of their lines is
+// deliberately written as prose (no "NxR" shape) rather than a parsed
+// number, which keeps them naturally exempt from the accessory-rotation,
+// volume-wave, and deload-reduction passes that only ever touch lines
+// matching that shape (see isAccessoryLine).
+
+const LINEMEN_WU_LOWER = 'Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5\n\n'
+const LINEMEN_WU_UPPER = 'Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20\n\n'
+
+// Short 4-way neck block (flexion, extension, both lateral directions) on
+// every linemen session — football-specific armor. The "Neck — ...:" header
+// (see organizeSessionDescription/applyDeloadVolumeReduction above) keeps it
+// exempt from the accessory cap, rotation, volume wave, and deload
+// reduction — a fixed, always-kept dose every week, same treatment as a
+// "Core — ...:" block.
+const LINEMEN_NECK = 'Neck — 4-Way (band or manual resistance):\nNeck Flexion: 2x15\nNeck Extension: 2x15\nLateral Neck Flexion: 2x15 each side'
+// Heavier dedicated neck dose for the 5-day plan's own Day 5 (see spec).
+const LINEMEN_NECK_DEDICATED = 'Neck — Dedicated 4-Way (band or manual resistance):\nNeck Flexion: 3x12\nNeck Extension: 3x12\nLateral Neck Flexion: 3x12 each side'
+
+// Main strength lift (Front Squat / Back Squat / Close Grip Bench / Trap Bar
+// Deadlift) wave loading, off personal max, tied to the same phase/deload
+// cadence every other sport uses (phase boundary every 4 weeks, deload on
+// the 4th). Only 3 named tiers are prescribed (Accumulation/Intensification/
+// Peak); Phase 4 holds at Peak's numbers rather than inventing a 4th tier,
+// matching how several real programs keep the final block at peak intensity
+// through to the end of an offseason.
+const LINEMEN_MAIN_LIFT_SCHEMES = {
+  accumulation:    { pcts: [40, 50, 60, 70, 80],     reps: [10, 8, 6, 5],    top: '5-8' },
+  intensification: { pcts: [40, 53, 65, 75, 85],     reps: [10, 8, 6, 5],    top: '3-6' },
+  peak:            { pcts: [40, 50, 60, 70, 80, 90], reps: [10, 8, 6, 5, 3], top: '1-4' },
+  deload:          { pcts: [40, 70],                 reps: [10],            top: '5' },
+}
+
+function linemenMainLiftScheme(phaseNum, deload) {
+  if (deload) return LINEMEN_MAIN_LIFT_SCHEMES.deload
+  if (phaseNum <= 1) return LINEMEN_MAIN_LIFT_SCHEMES.accumulation
+  if (phaseNum === 2) return LINEMEN_MAIN_LIFT_SCHEMES.intensification
+  return LINEMEN_MAIN_LIFT_SCHEMES.peak // Phase 3 AND 4 hold at Peak
+}
+
+// Returns just the ramp text (no exercise name) — e.g.
+// "40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8" for an Accumulation-phase week, or
+// "40%×10, 70%×5" (fixed, no open window) for a deload week.
+function buildLinemenMainLiftRamp(phaseNum, deload) {
+  const s = linemenMainLiftScheme(phaseNum, deload)
+  const steps = s.pcts.slice(0, -1).map((p, i) => `${p}%×${s.reps[i]}`)
+  const topPct = s.pcts[s.pcts.length - 1]
+  return `${steps.join(', ')}, ${topPct}%×${s.top}`
+}
+
+// Olympic-lift autoregulated prescription — "start light and build," never a
+// forced percentage. Rep scheme descends by phase: Accumulation 5x3,
+// Intensification down to heavy doubles (3,3,2,2), Peak heavy singles off a
+// triple (3,2,2,1,1), deload 3x3 lighter (no build).
+function linemenOlyScheme(phaseNum, deload) {
+  // Deliberately NOT written as a leading "3x3" — every branch here is
+  // prose specifically so it never matches the shared "Name: NxR" accessory
+  // shape (isAccessoryLine's regex requires digits immediately after the
+  // colon). That keeps every Oly-lift line naturally exempt from the
+  // accessory-rotation/volume-wave/deload-reduction passes, which is the
+  // correct outcome for an autoregulated lift — but it means the number
+  // can't lead the string, or reduceAccessoryVolume would still halve it
+  // out from under this already-deloaded prescription.
+  if (deload) return 'lighter, no build — 3x3'
+  if (phaseNum <= 1) return 'build to a top set of 5x3 — start light and build'
+  if (phaseNum === 2) return 'build to heavy doubles — 3,3,2,2, start light and build'
+  return 'build to a heavy single off a triple — 3,2,2,1,1, start light and build'
+}
+
+// AMRAP Pull-Up special protocol (kept exactly, every week — this is a fixed
+// live-testing protocol, not something that progresses by phase). Set 1 is
+// AMRAP; the athlete looks up their own result on this chart for the
+// remaining work sets. Neutral grip.
+const LINEMEN_AMRAP_PULLUP =
+  'Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — ' +
+  '1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5'
+
+function linemenPhaseInfo(weekNumber) {
+  const phaseNum = Math.min(4, Math.floor((weekNumber - 1) / 4) + 1)
+  const wip = ((weekNumber - 1) % 4) + 1
+  const deload = wip === 4
+  const labels = ['Accumulation', 'Intensification', 'Peak', 'Peak']
+  return { week: weekNumber, phaseNum, phaseLabel: labels[phaseNum - 1], wip, deload }
+}
+
+// ── 4-day anchor (source-faithful) — reused verbatim by 5-day (+Day 5) and
+// 6-day (relabeled Lower A/Upper A/Lower B/Upper B, +Lower C/Upper C) ──────
+
+function linemenDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower Power',
+    description: `${LINEMEN_WU_LOWER}Power Clean: ${linemenOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+      `Front Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${LINEMEN_NECK}`,
+  }
+}
+
+function linemenDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  // Standing BB OHP is this day's ONLY pressing lift (no separate bench
+  // elsewhere in the session), so it gets the same wave-loaded, open-rep-
+  // window main-lift treatment as Front/Back Squat and Close Grip Bench —
+  // it must render in the main-lift slot right after the power opener, not
+  // read like just another accessory. Contrast with the 3-day merged upper
+  // day below, where Close Grip Bench is already that day's wave-loaded
+  // main and OHP stays a secondary "10/8/6/6 building" press instead.
+  return {
+    day: 'Day 2', focus: 'Upper Strength',
+    description: `${LINEMEN_WU_UPPER}Single Arm DB Split Jerk: ${linemenOlyScheme(ph, dl)}, each arm\n` +
+      `Standing BB OHP: ${buildLinemenMainLiftRamp(ph, dl)}\n` +
+      `${LINEMEN_AMRAP_PULLUP}\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${LINEMEN_NECK}`,
+  }
+}
+
+function linemenDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower Strength',
+    description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${linemenOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+      `Back Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${LINEMEN_NECK}`,
+  }
+}
+
+function linemenDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power',
+    description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${linemenOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildLinemenMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Bent Over BB Row: 3x10\nSeated Single Arm DB Overhead Press: 3x10 each arm\nSeated Cable Lat Pulldown: 3x12 (underhand grip)\n${LINEMEN_NECK}`,
+  }
+}
+
+function linemenAnchor4Day(info) {
+  return [linemenDay1Lower(info), linemenDay2Upper(info), linemenDay3Lower(info), linemenDay4Upper(info)]
+}
+
+// ── 3-day (card core consolidated — every anchor movement still appears
+// somewhere across the week, just regrouped into 3 sessions) ──────────────
+
+function linemen3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
   return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift, added Hip Thrust for posterior chain
     { day: 'Day 1', focus: 'Lower Power',
-      description: `${WU_LOWER}Power Clean from floor: 5x3 working up, last set AMAP\nBack Squat: ${info.ramp}, ${q}×3\nHip Thrust: 4x8\nGoblet Lateral Lunge: 3x4 each leg\nDouble Leg Calf Raise: 3x15\n${coreBlock(ph)}${SPRINT_STD}` },
-    { day: 'Day 2', focus: 'Upper Strength',
-      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: ${info.ramp}, ${q}×3\nIncline DB Press: 4x8\nWeighted Pull-ups: 4x5\nBB Row: 4x8\nTricep Pushdowns: 3x12\nFace Pulls: 3x15${NECK}` },
-    // Hinge day — separated from the Day 1 squat day; no accessory deadlift here
+      description: `${LINEMEN_WU_LOWER}Power Clean: ${linemenOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+        `Back Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${LINEMEN_NECK}` },
+    { day: 'Day 2', focus: 'Upper (Full)',
+      description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${linemenOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildLinemenMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `${LINEMEN_AMRAP_PULLUP}\nStanding BB OHP: 10/8/6/6 (building)\nBent Over BB Row: 3x10\n${LINEMEN_NECK}` },
     { day: 'Day 3', focus: 'Lower Strength',
-      description: `${WU_LOWER}Trap Bar Deadlift: ${info.ramp}, ${q}×3\nDB Step-Ups: 3x6 each leg\nDB Suitcase Carries: 3x20 yds each side\nSingle Leg Calf Raise: 3x12\nNordic Hamstring Curl: 3x5${SPRINT_STD}` },
-    { day: 'Day 4', focus: 'Upper Power',
-      description: `${WU_UPPER}BB Split Jerk: 4x3 working up\nClose Grip Bench Press: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nSled Push: 6x20 yds${NECK}` },
+      description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${linemenOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+        `Front Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${LINEMEN_NECK}` },
   ]
+}
+
+// ── 5-day (4-day anchor + Day 5: power/athleticism/armor) ─────────────────
+
+function linemenDay5(w) {
+  return {
+    day: 'Day 5', focus: 'Power, Athleticism & Armor',
+    description: 'Trap Bar Jump: 4x3 (cap 155 lbs)\nBox Jumps: 3x3\nBroad Jumps: 3x3\n' +
+      'Sled Push: 4x20 yds (or Prowler Push; sub Heavy Farmer Carries if unavailable)\n' +
+      'Loaded Carry Mix: 3 rounds (farmer + suitcase, alternating)\n' +
+      `${LINEMEN_NECK_DEDICATED}\nGrip Work: 2 sets`,
+  }
+}
+
+// ── 6-day (4-day anchor relabeled Lower A/Upper A/Lower B/Upper B, +
+// Lower C: posterior chain/athletic, + Upper C: hypertrophy/armor) ────────
+
+function linemenLowerC(info, w) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(w, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${linemenOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Posterior Chain & Athletic',
+    description: `${power}\nTrap Bar Deadlift: ${buildLinemenMainLiftRamp(ph, dl)}\n` +
+      `Bulgarian Split Squat: 3x8 each leg\nHip Thrust: 3x10\nFarmer Carries: 3x30 yds\n${LINEMEN_NECK}`,
+  }
+}
+
+function linemenUpperC(w) {
+  const press = weeklyVariant(w, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Armor',
+    description: `${press}\nChest Supported Row: 3x12\nLateral Raise: 3x15\nFace Pulls: 3x15\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${LINEMEN_NECK}`,
+  }
+}
+
+function relabelDays(sessions, labels) {
+  return sessions.map((s, i) => ({ ...s, day: labels[i] || s.day }))
+}
+
+// Single entry point for every linemen day count. daysPerWeek < 3 falls back
+// to the first 2 days of the 4-day anchor (no dedicated layout for 2 days is
+// specified — same "slice the anchor" fallback every other sport already
+// uses for its own low day-count options).
+function generateLinemenWeeks(daysPerWeek = 4) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const info = linemenPhaseInfo(w)
+    let sessions
+    if (daysPerWeek <= 2) {
+      sessions = linemenAnchor4Day(info).slice(0, 2)
+    } else if (daysPerWeek === 3) {
+      sessions = linemen3Day(info)
+    } else if (daysPerWeek === 4) {
+      sessions = linemenAnchor4Day(info)
+    } else if (daysPerWeek === 5) {
+      sessions = [...linemenAnchor4Day(info), linemenDay5(w)]
+    } else {
+      sessions = [
+        ...relabelDays(linemenAnchor4Day(info), ['Lower A', 'Upper A', 'Lower B', 'Upper B']),
+        linemenLowerC(info, w),
+        linemenUpperC(w),
+      ]
+    }
+    // The main-lift scheme's own top percentage (80/85/90, or 70 on a
+    // deload) as the one representative number for the week — every main
+    // strength lift in a given phase shares the same top %, unlike the
+    // open rep WINDOW on that top set, which is genuinely different per
+    // lift-scheme and isn't a single scalar worth summarizing here.
+    const topScheme = linemenMainLiftScheme(info.phaseNum, info.deload)
+    const topPct = topScheme.pcts[topScheme.pcts.length - 1]
+    weeks.push({
+      week_number: w,
+      objective: info.deload
+        ? `Phase ${info.phaseNum} — Deload (${topPct}%) · Week ${info.wip} of 4`
+        : `Phase ${info.phaseNum} — ${info.phaseLabel} (${topPct}%) · Week ${info.wip} of 4`,
+      sessions,
+    })
+  }
+  return weeks
 }
 
 function fbLinemenMGSess(info) {
@@ -326,9 +570,17 @@ const FB_DAY6 = {
 
 function generateFootballWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
+  // Standard-goal linemen (and the position default for any unrecognized
+  // posId, matching the old fns.linemen fallback below) route to the
+  // rebuilt, source-faithful linemen generator. Muscle-gain linemen keeps
+  // the older, denser fbLinemenMGSess template untouched — that goal wasn't
+  // part of this rebuild. Skill/hybrid/qb are completely unaffected either way.
+  if (!mg && posId !== 'skill' && posId !== 'hybrid' && posId !== 'qb') {
+    return generateLinemenWeeks(daysPerWeek)
+  }
   const phases = mg ? MG_PHASES : FB_PHASES
   const fns = {
-    linemen: mg ? fbLinemenMGSess : fbLinemenSess,
+    linemen: fbLinemenMGSess,
     skill:   (info) => mg ? fbSkillSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbSkillSess(info),
     hybrid:  (info) => mg ? fbHybridSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbHybridSess(info),
     qb:      (info) => mg ? fbQBSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbQBSess(info),
@@ -1820,7 +2072,12 @@ function scaleTopSetPercent(text, factor) {
 // single-percentage accessory line.
 function addExtraTopSet(text) {
   return text.split('\n').map(line => {
-    const matches = [...line.matchAll(/\d+%×\d+/g)]
+    // Optional trailing "-N" supports an open rep WINDOW on the top set
+    // (e.g. linemen's "85%×3-6") — without it, the range's second number
+    // would be silently dropped when this duplicated set is appended.
+    // Every other sport's top set is a single fixed rep count with no
+    // hyphen, so this is purely additive: identical matches/behavior there.
+    const matches = [...line.matchAll(/\d+%×\d+(?:-\d+)?/g)]
     if (matches.length < 2) return line
     return `${line}, ${matches[matches.length - 1][0]}`
   }).join('\n')
@@ -1837,6 +2094,15 @@ function removeBeginnerOlyLifts(text) {
     if (stripped.startsWith('Power Clean from floor')) return 'Trap Bar Deadlift' + stripped.slice('Power Clean from floor'.length)
     if (stripped.startsWith('Power Clean')) return 'Trap Bar Deadlift' + stripped.slice('Power Clean'.length)
     if (stripped.startsWith('Hang Clean')) return 'Romanian Deadlift' + stripped.slice('Hang Clean'.length)
+    // A fixed WARM-UP COMPLEX line (not a standalone prescription) can name
+    // "Hang Clean xN" as one empty-bar technique-priming rep among several
+    // (e.g. linemen's Empty BB Warm-Up Complex) — swap just that one step to
+    // a non-technical hinge rep for beginners, leaving the rest of the fixed
+    // block untouched. Scoped narrowly (requires both "warm-up" wording and
+    // the exact "Hang Clean xN" shape) so it can't fire on any other line.
+    if (/warm-?up/i.test(stripped) && /Hang Clean x\d+/.test(stripped)) {
+      return stripped.replace(/Hang Clean x(\d+)/, 'Good Morning x$1')
+    }
     return stripped
   })).join('\n')
 }
@@ -2146,6 +2412,24 @@ const MAX_ACCESSORIES = 3
 const SPORT_MAX_ACCESSORIES = {
   baseball: 6,
   softball: 6,
+  // Football linemen only (see resolveAccessoryCapKey below) — a day runs
+  // main power lift + main strength lift + 3-4 accessories (5-6 movements
+  // total), one tick above the sport-wide default of 3. Every other football
+  // position (skill/hybrid/qb) still resolves to the default cap untouched.
+  football_linemen: 5,
+}
+
+// Football's shared MAX_ACCESSORIES cap is raised for linemen only — never
+// for skill/hybrid/qb, and never for a muscle-gain linemen blueprint (that
+// goal still runs the older, denser fbLinemenMGSess template, which was
+// already calibrated against the default cap; leaving it there avoids
+// re-tuning content this task didn't touch). Both call sites that organize
+// a football blueprint (auto-assign below, and blueprintController.js's
+// manual "build from template" tool) must resolve the same key for the
+// same inputs, so this is the one place that decision is made.
+function resolveAccessoryCapKey(sport, posId, goal) {
+  if (sport === 'football' && posId === 'linemen' && goal !== 'muscle_gain') return 'football_linemen'
+  return sport
 }
 
 // Generic isolation/filler work — cut first when a day needs trimming,
@@ -2163,6 +2447,23 @@ function isPowerFocusDay(focus) {
   return /power/i.test(focus || '')
 }
 
+// A live-testing PROTOCOL line — currently just linemen's AMRAP pull-up
+// chart (see LINEMEN_AMRAP_PULLUP) — prescribes a real primary movement
+// whose actual work-set volume depends on the athlete's own Set-1 result,
+// so it's deliberately written as prose rather than a fixed "Name: NxR"
+// figure the generator could fabricate. That prose shape means it would
+// otherwise fall all the way to the bottom of a session (the generic
+// "otherLines" bucket, after every accessory) — this classifier instead
+// gives it the same "stands early, right after the main lift(s), exempt
+// from the accessory cap/rotation/deload-volume-reduction" treatment as an
+// Olympic lift, without needing a name-specific special case. No existing
+// non-linemen template contains this phrase, so it's inert everywhere else.
+const PROTOCOL_LINE_RE = /:\s*Set 1 = AMRAP\b/
+
+function isProtocolLine(line) {
+  return PROTOCOL_LINE_RE.test(line.replace(SUPERSET_MARKER_RE, ''))
+}
+
 // One session's description -> reorganized description.
 function organizeSessionDescription(description, focus, protectedNames, maxAccessories = MAX_ACCESSORIES) {
   const rawLines = description.split('\n')
@@ -2171,6 +2472,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   const olyLiftLines = []   // technical Olympic-lift lines (Power Clean, Hang Clean, ...) — always solo, never paired with plyo
   const rampedLiftLines = [] // the true %-ramped main lift(s) — the ONLY thing plyo can pair with
   const plyoLines = []      // { line, idx } — idx shared with candidates so original order is comparable across both
+  const protocolLines = []  // live-testing protocol lines (e.g. AMRAP pull-up chart) — stand early, exempt from the cap
   const otherLines = []     // anything unclassified once we're past the preamble — untouched, kept after accessories
   const conditioningLines = []
   const coreLines = []      // "Core — ..." blocks through to the next blank line — untouched, always last
@@ -2190,8 +2492,12 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
     // never paired, never counted against the accessory cap. Reuses the
     // same coreLines bucket/output-position (always last) since a day is
     // never supposed to have both (the "never arm-care + core same day"
-    // rule), so there's no real ambiguity in sharing it.
-    if (/^(Core|Arm Care)\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
+    // rule), so there's no real ambiguity in sharing it. "Neck — ...:"
+    // (linemen's short 4-way armor block, every session) gets the identical
+    // treatment — a fixed, always-kept finisher, never trimmed by the
+    // accessory cap. No existing template emits a line starting "Neck —",
+    // so this is purely additive for every other sport.
+    if (/^(Core|Arm Care|Neck)\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
     if (inCoreBlock) { coreLines.push(raw); i++; continue }
     if (isConditioningLine(raw)) { conditioningLines.push(raw); i++; continue }
 
@@ -2232,6 +2538,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
     // stands alone, wherever the template places it.
     if (isRampedLiftLine(raw)) { rampedLiftLines.push(bare); seenWorkingLine = true; i++; continue }
     if (isMainLiftLine(raw)) { olyLiftLines.push(bare); seenWorkingLine = true; i++; continue }
+    if (isProtocolLine(raw)) { protocolLines.push(bare); seenWorkingLine = true; i++; continue }
     if (isAccessoryLine(raw, false)) {
       const colonIdx = bare.indexOf(':')
       const name = (colonIdx > 0 ? bare.slice(0, colonIdx) : bare).toLowerCase().trim()
@@ -2277,7 +2584,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   // conditioning/mobility/recovery, no oly/ramped lift, no promotable
   // anchor, no remaining candidates or plyo work either).
   if (!promotedAnchor && olyLiftLines.length === 0 && rampedLiftLines.length === 0 &&
-      candidates.length === 0 && plyoLines.length === 0) {
+      candidates.length === 0 && plyoLines.length === 0 && protocolLines.length === 0) {
     return description
   }
 
@@ -2309,6 +2616,11 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
       candidates.push({ kind: 'single', lines: [p.line], priority: 1, weight: 1, idx: p.idx })
     }
   }
+
+  // A protocol line (e.g. the AMRAP pull-up chart) stands right after the
+  // main lift(s), same free/exempt treatment as an Olympic lift or promoted
+  // anchor — never counted against the accessory cap, never paired.
+  out.push(...protocolLines)
 
   // Cap the combined pool of authored pairs + loose accessories to
   // MAX_ACCESSORIES total slots, by priority (0 = pre-existing pair or
@@ -2377,7 +2689,7 @@ function isRampedLiftLine(line) {
 // ramp attached — isRampedLiftLine() alone doesn't catch them, but they're
 // still a main/technical lift, not an accessory, and should never be
 // volume-waved or rotated.
-const MAIN_LIFT_KEYWORDS = /^(Power Clean(?: from floor)?|Hang Power Clean|Hang Clean|BB Split Jerk|Push Jerk|Split Jerk|Snatch|Hang Snatch|Power Snatch|Clean Pull|Clean and Jerk)\b/
+const MAIN_LIFT_KEYWORDS = /^(Power Clean(?: from floor)?|Hang Power Clean|Hang Clean|Single Arm DB Split Jerk|BB Split Jerk|Push Jerk|Split Jerk|Snatch|Hang Snatch|Power Snatch|Clean Pull|Clean and Jerk)\b/
 
 function isMainLiftLine(line) {
   const stripped = line.replace(SUPERSET_MARKER_RE, '')
@@ -2573,10 +2885,11 @@ function applyDeloadVolumeReduction(description) {
     if (isConditioningLine(line) || isPlyoLine(line)) continue
 
     const bareLine = line.replace(SUPERSET_MARKER_RE, '')
-    // "Arm Care — ...:" gets the same exempt-block treatment as "Core —
-    // ...:" (see organizeSessionDescription) — a standalone circuit finisher
-    // isn't volume-waved or deload-reduced any more than the core block is.
-    if (/^(Core|Arm Care)\s*—/.test(bareLine)) {
+    // "Arm Care — ...:" / "Neck — ...:" get the same exempt-block treatment
+    // as "Core — ...:" (see organizeSessionDescription) — a standalone
+    // circuit finisher isn't volume-waved or deload-reduced any more than
+    // the core block is.
+    if (/^(Core|Arm Care|Neck)\s*—/.test(bareLine)) {
       inCoreBlock = true
       kept.push(line)
       continue
@@ -2696,7 +3009,7 @@ function generateBlueprintForAthlete(survey) {
   else if (sport === 'golf')     weeks = generateGolfWeeks(posId, goal, days)
   else                           weeks = generateGeneralWeeks(posId, goal, days)
 
-  weeks = applySessionOrganization(weeks, SPORT_ACCESSORY_ROTATION[sport] || {}, sport)
+  weeks = applySessionOrganization(weeks, SPORT_ACCESSORY_ROTATION[sport] || {}, resolveAccessoryCapKey(sport, posId, goal))
   weeks = applyAccessoryProgression(weeks, SPORT_ACCESSORY_ROTATION[sport] || {})
   weeks = applyExperienceAdjustments(weeks, experience)
   weeks = applyInjuryAdjustments(weeks, survey.injury_areas)
@@ -3084,4 +3397,4 @@ const SPORT_TEMPLATES = [
   },
 ]
 
-module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION, SPORT_MAX_ACCESSORIES }
+module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION, SPORT_MAX_ACCESSORIES, resolveAccessoryCapKey }
