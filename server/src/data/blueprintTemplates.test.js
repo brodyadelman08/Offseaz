@@ -21,7 +21,7 @@ const path = require('path')
 const {
   generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments, applyAccessoryProgression,
   applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION, SPORT_MAX_ACCESSORIES,
-  resolveAccessoryCapKey,
+  resolveAccessoryCapKey, SPORT_PHASE_ACCESSORY_ROTATION, resolvePhaseRotationKey,
 } = require('./blueprintTemplates')
 
 // ─── Shared helpers ─────────────────────────────────────────────────────────
@@ -726,10 +726,12 @@ describe('Area 8 — Manual-builder / auto-assign generator parity', () => {
       // the same sport+position+goal-aware accessory-cap key auto-assign
       // uses (see resolveAccessoryCapKey) — needed for football/linemen's
       // raised cap; a no-op passthrough (returns tpl.id unchanged) for every
-      // other sport/position.
+      // other sport/position. Same for Change 4's phase-rotation key — a
+      // no-op ({}) for every sport/position outside the 5 target groups.
       const capKey = resolveAccessoryCapKey(tpl.id, pos.id, 'standard')
+      const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey(tpl.id, pos.id)] || {}
       const organized = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation, capKey)
-      const manualBuilder = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation))
+      const manualBuilder = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation, phaseRotation))
 
       expect(autoAssign.weeks).toEqual(manualBuilder)
     })
@@ -990,13 +992,22 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
     }
   })
 
-  test('no phase-boundary dip: a phase\'s opening week never drops below the previous phase\'s peak, for every sport', () => {
+  test('no phase-boundary dip: a phase\'s opening week never drops below the previous phase\'s peak, for every sport — except the shared-block-periodization Phase 3->4 taper seam', () => {
     // cross_country and swimming are deliberately excluded from the %-based
     // wave/phase system by design (XC's dryland work is a fixed, intentionally
     // light 65-70% range with no heavy loading; swimming's main lifts use a
     // flat "@ moderate load" prescription with their own phase-based, not
     // week-based, set-count progression) — neither prints a single top-set %
     // in its objective, so there's no percentage to check for a dip here.
+    //
+    // baseball/softball/basketball/soccer, and football's skill/hybrid/qb
+    // positions (not tested here — this test uses positions[0], which for
+    // football is 'linemen', a fully separate untouched engine) deliberately
+    // DO dip at the Phase 3 -> Phase 4 seam only (Change 2's Peak Taper —
+    // Phase 4 reuses Phase 1's own range instead of continuing to climb).
+    // The first two boundaries (Phase 1->2, Phase 2->3) still never dip for
+    // any sport, target group or not.
+    const TAPER_SPORTS = new Set(['baseball', 'softball', 'basketball', 'soccer'])
     for (const tpl of SPORT_TEMPLATES) {
       if (tpl.id === 'cross_country' || tpl.id === 'swimming') continue
       const pos = tpl.positions[0]
@@ -1007,7 +1018,13 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
       const peaks = [2, 6, 10].map(i => pctOf(weeks[i]))       // week_number 3, 7, 11
       const nextOpeners = [4, 8, 12].map(i => pctOf(weeks[i])) // week_number 5, 9, 13
       for (let i = 0; i < peaks.length; i++) {
-        expect(nextOpeners[i]).toBeGreaterThanOrEqual(peaks[i])
+        if (i === 2 && TAPER_SPORTS.has(tpl.id)) {
+          // Phase 3 -> Phase 4: this sport's own taper — opener must be
+          // strictly lower than Phase 3's peak, not just "not higher."
+          expect(nextOpeners[i]).toBeLessThan(peaks[i])
+        } else {
+          expect(nextOpeners[i]).toBeGreaterThanOrEqual(peaks[i])
+        }
       }
     }
   })
@@ -1233,10 +1250,15 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
       sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
-    const week2Day1 = bp.weeks[1].sessions[0]
-    expect(week2Day1.description).toContain('Tibialis Raises:')
+    // Change 4 (shared block periodization): baseball's Calf Raises rotation
+    // is now phase-keyed, not wip-keyed — Tibialis Raises is the Phase 2
+    // (Development, weeks 5-8) variant specifically, not every wip-2 week.
+    // Week 6 (index 5) is Phase 2. Phase 1 (e.g. week 2) now shows the
+    // anchor "Calf Raises" name instead, at Foundation's higher volume.
+    const week6Day1 = bp.weeks[5].sessions[0]
+    expect(week6Day1.description).toContain('Tibialis Raises:')
     // It's a working accessory line, not part of the warm-up block.
-    expect((week2Day1.warmup?.lines || []).some(l => l.startsWith('Tibialis Raises'))).toBe(false)
+    expect((week6Day1.warmup?.lines || []).some(l => l.startsWith('Tibialis Raises'))).toBe(false)
   })
 
   test('each baseball day type carries the correct collapsed warm-up block, and non-baseball sports get none (baseball-only for now)', () => {
@@ -1347,7 +1369,10 @@ describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
         const lines = text.split('\n').filter(l => /Trap Bar Jump/.test(l))
         expect(lines.length).toBeGreaterThan(0)
         for (const line of lines) {
-          expect(line).toMatch(/Trap Bar Jump: \d+x\d+ \(Suggested: Keep under 155lbs\)/)
+          // Change 3 (shared block periodization) appends a phase intent
+          // note after the load suggestion — still starts with the exact
+          // same load note every time, just no longer the end of the line.
+          expect(line).toMatch(/Trap Bar Jump: \d+x\d+ \(Suggested: Keep under 155lbs — .+\)/)
         }
       }
     }
@@ -1387,7 +1412,8 @@ describe('Area 12 — Trap Bar Jump (Olympic-lift removal, baseball)', () => {
     const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Baseball', position: 'Position Player', time_per_week: '4', injury_areas: ['Knee'] }))
     let hasTrapBarDeadliftSwap = false
     for (const s of allSessions(bp.weeks)) {
-      if (/Trap Bar Deadlift: \d+x\d+ \(Suggested: Keep under 155lbs\)/.test(s.description)) hasTrapBarDeadliftSwap = true
+      // Change 3 appends a phase intent note after the load suggestion now.
+      if (/Trap Bar Deadlift: \d+x\d+ \(Suggested: Keep under 155lbs — .+\)/.test(s.description)) hasTrapBarDeadliftSwap = true
     }
     const stillHasRawJump = allSessions(bp.weeks).some(s => /Trap Bar Jump/.test(s.description))
     expect(stillHasRawJump).toBe(false)
@@ -1600,8 +1626,12 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
       expect(weeks[2].sessions[0].description).toMatch(/^⟦SS1⟧Front Squat: \d+%/m)
       // The % progression itself keeps climbing across the phase regardless
       // of which name is showing (proves the swap doesn't reset/disturb load).
-      const w1pct = weeks[0].sessions[0].description.match(/(\d+)%×3$/m)[1]
-      const w3pct = weeks[2].sessions[0].description.match(/(\d+)%×3$/m)[1]
+      // Reps are fixed at 8 for both weeks (Change 1: both are Phase 1 —
+      // rotational tier's Foundation rep target only changes at a phase
+      // boundary, not week to week), so a literal reps count is still safe
+      // to match on here.
+      const w1pct = weeks[0].sessions[0].description.match(/(\d+)%×8$/m)[1]
+      const w3pct = weeks[2].sessions[0].description.match(/(\d+)%×8$/m)[1]
       expect(parseInt(w3pct, 10)).toBeGreaterThan(parseInt(w1pct, 10))
     })
 
@@ -1933,5 +1963,177 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
       expect(softballWeeks[0].sessions[0].description).toContain('Trap Bar Jump')
       expect(softballWeeks[0].sessions[1].description).toMatch(/^Arm Care\s*—/m)
     })
+  })
+})
+
+// ─── Area 15 — Shared block periodization (feat/shared-block-periodization) ─
+// Change 1 (tiered main-lift rep arc), Change 2 (Phase 4 taper), Change 3
+// (explosive/power phase arc), Change 4 (phase-keyed accessory rotation).
+// Scoped to exactly 5 target groups: baseball/softball, football skill/
+// hybrid/qb, basketball, soccer. Football linemen (a fully separate,
+// bespoke engine) must be byte-for-byte unaffected — verified explicitly.
+
+describe('Area 15 — Shared block periodization', () => {
+  // Week -> phase helper matching getPhaseInfo's own math.
+  const weekOfPhase = (phaseNum, wip) => (phaseNum - 1) * 4 + wip
+
+  test('Change 1: baseball main-lift top-set reps descend 8/6/5/4 by phase (rotational tier), never a fixed 3', () => {
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+    const expected = { 1: 8, 2: 6, 3: 5, 4: 4 }
+    for (const [phaseNum, reps] of Object.entries(expected)) {
+      const w = weekOfPhase(Number(phaseNum), 2) // wip 2, avoids week-1-of-plan edge cases
+      const line = firstMatchingLine(weeks[w - 1].sessions[0].description, /Squat:/)
+      expect(line).toMatch(new RegExp(`×${reps}$`))
+    }
+  })
+
+  test('Change 1: football skill (power tier) descends 6/5/4/3 by phase; football QB (rotational tier) descends 8/6/5/4; hybrid matches skill exactly', () => {
+    const football = SPORT_TEMPLATES.find(t => t.id === 'football')
+    const skillWeeks = football.generateWeeks('skill', 'standard', 4)
+    const hybridWeeks = football.generateWeeks('hybrid', 'standard', 4)
+    const qbWeeks = football.generateWeeks('qb', 'standard', 4)
+    const power = { 1: 6, 2: 5, 3: 4, 4: 3 }
+    const rotational = { 1: 8, 2: 6, 3: 5, 4: 4 }
+    for (const [phaseNum, reps] of Object.entries(power)) {
+      const w = weekOfPhase(Number(phaseNum), 2)
+      expect(firstMatchingLine(skillWeeks[w - 1].sessions[0].description, /Back Squat:/)).toMatch(new RegExp(`×${reps}$`))
+      expect(firstMatchingLine(hybridWeeks[w - 1].sessions[0].description, /Back Squat:/)).toMatch(new RegExp(`×${reps}$`))
+    }
+    for (const [phaseNum, reps] of Object.entries(rotational)) {
+      const w = weekOfPhase(Number(phaseNum), 2)
+      expect(firstMatchingLine(qbWeeks[w - 1].sessions[0].description, /Back Squat:/)).toMatch(new RegExp(`×${reps}$`))
+    }
+  })
+
+  test('Change 1/no true singles: no main-lift top set anywhere in baseball/football-skill/hybrid/qb/basketball/soccer output ever drops to 1 or 2 reps', () => {
+    const groups = [
+      ['baseball', 'baseball'], ['football', 'skill'], ['football', 'hybrid'], ['football', 'qb'],
+      ['basketball', 'guards'], ['soccer', 'goalkeeper'],
+    ]
+    for (const [sportId, posId] of groups) {
+      const tpl = SPORT_TEMPLATES.find(t => t.id === sportId)
+      const weeks = tpl.generateWeeks(posId, 'standard', 4)
+      for (const week of weeks) {
+        for (const s of week.sessions) {
+          const matches = [...s.description.matchAll(/×(\d+)$/gm)]
+          for (const m of matches) expect(parseInt(m[1], 10)).toBeGreaterThanOrEqual(3)
+        }
+      }
+    }
+  })
+
+  test('Change 2: Phase 4 (weeks 13-16) is a genuine taper for baseball/basketball/soccer/football-skill — its top % is lower than Phase 3\'s peak, not higher', () => {
+    const groups = [['baseball', 'baseball'], ['basketball', 'guards'], ['soccer', 'goalkeeper'], ['football', 'skill']]
+    for (const [sportId, posId] of groups) {
+      const tpl = SPORT_TEMPLATES.find(t => t.id === sportId)
+      const weeks = tpl.generateWeeks(posId, 'standard', 4)
+      const phase3Peak = lastPercent(firstMatchingLine(weeks[weekOfPhase(3, 3) - 1].sessions[0].description, /Squat:/))
+      const phase4Opener = lastPercent(firstMatchingLine(weeks[weekOfPhase(4, 1) - 1].sessions[0].description, /Squat:/))
+      expect(phase4Opener).toBeLessThan(phase3Peak)
+    }
+  })
+
+  test('Change 2: deloads still fire at exactly weeks 4/8/12/16 for baseball, and Phase 4\'s deload (week 16) is the lightest week in the whole 16-week plan', () => {
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+    for (const wn of [4, 8, 12, 16]) {
+      expect(weeks[wn - 1].objective).toMatch(/Deload/)
+    }
+    for (const wn of [1, 2, 3, 5, 6, 7, 9, 10, 11, 13, 14, 15]) {
+      expect(weeks[wn - 1].objective).not.toMatch(/Deload/)
+    }
+    const allPeaks = weeks.map(w => lastPercent(firstMatchingLine(w.sessions[0].description, /Squat:/)))
+    expect(allPeaks[15]).toBe(Math.min(...allPeaks))
+  })
+
+  test('Change 3: baseball Trap Bar Jump volume follows the explosive phase arc (Foundation baseline, Development/Strength higher, Peak lowest of all four) and carries a phase intent note', () => {
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+    const setsAt = (phaseNum) => {
+      const line = firstMatchingLine(weeks[weekOfPhase(phaseNum, 2) - 1].sessions[0].description, /Trap Bar Jump/)
+      return parseInt(line.match(/Trap Bar Jump:\s*(\d+)x/)[1], 10)
+    }
+    const [p1, p2, p3, p4] = [1, 2, 3, 4].map(setsAt)
+    expect(p2).toBeGreaterThan(p1)
+    expect(p3).toBeGreaterThan(p1)
+    expect(p4).toBeLessThan(p1) // Peak is the lowest of all four phases
+    expect(p4).toBeLessThan(p2)
+    expect(p4).toBeLessThan(p3)
+  })
+
+  test('Change 4: baseball\'s Calf Raises accessory now rotates by PHASE, not wip — every week inside a phase shows the same name, and it differs from the adjacent phase', () => {
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const rotation = SPORT_ACCESSORY_ROTATION.baseball
+    const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey('baseball', 'baseball')]
+    const organized = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 4), rotation, 'baseball')
+    const withAccessories = applyAccessoryProgression(organized, rotation, phaseRotation)
+    const nameOnDay1 = (weekIdx) => {
+      const line = firstMatchingLine(withAccessories[weekIdx].sessions[0].description, /Calf Raises:|Tibialis Raises:|Seated Calf Raise:/)
+      return line.split(':')[0].replace(SUPERSET_MARKER_RE, '').trim()
+    }
+    // Phase 1 (Foundation): weeks 1-3 (wip 1-3) all show the anchor name.
+    expect(nameOnDay1(0)).toBe('Calf Raises')
+    expect(nameOnDay1(1)).toBe('Calf Raises')
+    expect(nameOnDay1(2)).toBe('Calf Raises')
+    // Phase 2 (Development): weeks 5-7 all show the Development variant.
+    expect(nameOnDay1(4)).toBe('Tibialis Raises')
+    expect(nameOnDay1(5)).toBe('Tibialis Raises')
+    expect(nameOnDay1(6)).toBe('Tibialis Raises')
+    // Phase 3 (Strength): weeks 9-11 all show the Strength variant.
+    expect(nameOnDay1(8)).toBe('Seated Calf Raise')
+    // Phase 4 (Peak Taper): weeks 13-15 fall back to the anchor name again.
+    expect(nameOnDay1(12)).toBe('Calf Raises')
+  })
+
+  test('Change 4: an accessory name NOT in the phase-rotation table (e.g. Gorilla Row) is completely untouched by phase, exactly as before', () => {
+    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
+    const rotation = SPORT_ACCESSORY_ROTATION.baseball
+    const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey('baseball', 'baseball')]
+    const organized = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 4), rotation, 'baseball')
+    const withAccessories = applyAccessoryProgression(organized, rotation, phaseRotation)
+    for (const wn of [1, 6, 9, 14]) {
+      expect(withAccessories[wn - 1].sessions[1].description).toContain('Gorilla Row:')
+    }
+  })
+
+  test('Football linemen is completely unaffected: same phase labels/rep windows as the untouched bespoke engine, and its own pre-existing Single Leg RDL wip-rotation still fires (never phase-based)', () => {
+    const football = SPORT_TEMPLATES.find(t => t.id === 'football')
+    const weeks = football.generateWeeks('linemen', 'standard', 4)
+    // Linemen's own phase labels (Accumulation/Intensification/Peak/Peak) —
+    // completely different from FB_PHASES's labels — are untouched.
+    expect(weeks[0].objective).toMatch(/Accumulation/)
+    expect(weeks[4].objective).toMatch(/Intensification/)
+    expect(weeks[8].objective).toMatch(/Peak/)
+    expect(weeks[12].objective).toMatch(/Peak/)
+    // Peak (phase 3) does NOT taper down for linemen — phase 4 holds at the
+    // same Peak numbers as phase 3, exactly as it did before this rebuild.
+    const topPctOf = (weekIdx) => lastPercent(firstMatchingLine(weeks[weekIdx].sessions[0].description, /Front Squat:/))
+    expect(topPctOf(10)).toBe(topPctOf(14)) // week 11 (phase 3, wip 3) === week 15 (phase 4, wip 3)
+    // The pre-existing GLOBAL wip-based ACCESSORY_ROTATION still governs
+    // linemen's Single Leg RDL (Good Mornings on wip 2) — proves Change 4's
+    // new phase table never reaches linemen through the shared sport-level
+    // lookup (resolvePhaseRotationKey returns null for linemen).
+    const rotation = SPORT_ACCESSORY_ROTATION.football || {}
+    const capKey = resolveAccessoryCapKey('football', 'linemen', 'standard')
+    const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey('football', 'linemen')] || {}
+    expect(phaseRotation).toEqual({})
+    const organized = applySessionOrganization(weeks, rotation, capKey)
+    const withAccessories = applyAccessoryProgression(organized, rotation, phaseRotation)
+    // Week 6 = phase 2, wip 2 (linemen's own phase math) — Day 3's Single Leg
+    // RDL should still be wip-rotated to "Good Mornings" by the untouched
+    // global table, not left as "Single Leg RDL" or moved by phase.
+    const day3Week6 = withAccessories[5].sessions.find(s => s.day === 'Day 3').description
+    expect(day3Week6).toContain('Good Mornings:')
+  })
+
+  test('resolvePhaseRotationKey resolves every football position explicitly — skill/hybrid/qb to \'football\', linemen to null — never a silent default', () => {
+    expect(resolvePhaseRotationKey('football', 'skill')).toBe('football')
+    expect(resolvePhaseRotationKey('football', 'hybrid')).toBe('football')
+    expect(resolvePhaseRotationKey('football', 'qb')).toBe('football')
+    expect(resolvePhaseRotationKey('football', 'linemen')).toBeNull()
+    expect(resolvePhaseRotationKey('baseball', 'baseball')).toBe('baseball')
+    expect(resolvePhaseRotationKey('basketball', 'guards')).toBe('basketball')
+    expect(resolvePhaseRotationKey('soccer', 'goalkeeper')).toBe('soccer')
   })
 })
