@@ -8,6 +8,38 @@ const VALID_LIFTS = [
 
 const VALID_LIFTS_SET = new Set(VALID_LIFTS)
 
+// Rep-max -> estimated true 1RM multipliers. weight / multiplier == the
+// estimated 1RM (e.g. a 5RM of 185 -> 185 / 0.87 = 212.6 -> rounds to 215).
+// Only the 4 values the athlete-facing dropdown offers are recognized here;
+// 1 is the "no conversion needed" case, handled separately below.
+const REP_MAX_MULTIPLIERS = { 3: 0.93, 5: 0.87, 10: 0.75 }
+
+// Converts a logged (weight, reps) entry into an estimated 1RM.
+// reps === 1: the weight IS the 1RM already — used as-is, flagged "tested".
+// reps in {3, 5, 10}: divided out by its multiplier and rounded to the
+//   nearest 5 lbs, flagged "estimated".
+// Any other reps value (not reachable through the dropdown-driven client,
+//   but defensive against any other caller): falls back to the raw weight,
+//   unconverted, still flagged "estimated" since it wasn't a true 1RM test.
+function estimateOneRepMax(weightLbs, reps) {
+  const w = Number(weightLbs)
+  const r = Number(reps) || 1
+  if (r === 1) return { estimated_1rm: w, is_estimated: false }
+  const multiplier = REP_MAX_MULTIPLIERS[r]
+  const estimated_1rm = multiplier ? Math.round((w / multiplier) / 5) * 5 : w
+  return { estimated_1rm, is_estimated: true }
+}
+
+// Picks the "current" max from a list of logged entries by highest
+// ESTIMATED 1RM (not raw weight_lbs) — so a new entry at a different rep
+// range never accidentally lowers the stored max just because its raw
+// weight happens to be smaller than an old heavier-but-lower-rep entry.
+function pickCurrentEntry(entries) {
+  return entries.reduce((best, e) =>
+    Number(e.estimated_1rm) > Number(best.estimated_1rm) ? e : best
+  )
+}
+
 // Returns { max, is_pr, previous_best } — is_pr true when new weight > all prior entries
 async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   if (!VALID_LIFTS.includes(lift)) throw new Error(`Invalid lift: ${lift}`)
@@ -24,9 +56,14 @@ async function logMax(athleteId, lift, weight_lbs, reps, notes) {
   const previousBest = prior?.[0] ? Number(prior[0].weight_lbs) : null
   const is_pr = previousBest === null || Number(weight_lbs) > previousBest
 
+  const { estimated_1rm, is_estimated } = estimateOneRepMax(weight_lbs, reps)
+
   const { data, error } = await supabaseAdmin
     .from('lifting_maxes')
-    .insert({ athlete_id: athleteId, lift, weight_lbs, reps: reps || 1, notes: notes || null })
+    .insert({
+      athlete_id: athleteId, lift, weight_lbs, reps: reps || 1, notes: notes || null,
+      estimated_1rm, is_estimated,
+    })
     .select()
     .single()
 
@@ -49,7 +86,7 @@ async function logMax(athleteId, lift, weight_lbs, reps, notes) {
 async function getMaxesByAthlete(athleteId) {
   const { data, error } = await supabaseAdmin
     .from('lifting_maxes')
-    .select('id, lift, weight_lbs, reps, notes, logged_at')
+    .select('id, lift, weight_lbs, reps, notes, logged_at, estimated_1rm, is_estimated')
     .eq('athlete_id', athleteId)
     .order('logged_at', { ascending: true })
 
@@ -68,9 +105,7 @@ async function getMaxesByAthlete(athleteId) {
   for (const lift of VALID_LIFTS) {
     const entries = result[lift].history
     if (entries.length > 0) {
-      result[lift].current = entries.reduce((best, e) =>
-        Number(e.weight_lbs) > Number(best.weight_lbs) ? e : best
-      )
+      result[lift].current = pickCurrentEntry(entries)
     }
   }
 
@@ -135,4 +170,7 @@ async function updateLiftSelections(athleteId, liftKeys) {
   }
 }
 
-module.exports = { logMax, getMaxesByAthlete, VALID_LIFTS, getSelectedLifts, addLiftSelection, removeLiftSelection, updateLiftSelections }
+module.exports = {
+  logMax, getMaxesByAthlete, VALID_LIFTS, getSelectedLifts, addLiftSelection, removeLiftSelection, updateLiftSelections,
+  estimateOneRepMax, pickCurrentEntry, REP_MAX_MULTIPLIERS,
+}

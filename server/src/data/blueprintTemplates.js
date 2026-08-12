@@ -141,10 +141,18 @@ function explosiveIntent(phaseNum) {
 // "explosive/specific/more unilateral" slots.
 const PHASE_ACCESSORY_MULT = { 1: 1.3, 2: 1.0, 3: 0.85, 4: 0.5 }
 
-function resolvePhaseAccessory(name, phaseNum, phaseRotation) {
+// A phase entry is normally a plain name string (unchanged every week of
+// that phase). It may instead be a function `(weekNumber) => name` for a
+// phase that needs week-to-week texture within itself — e.g. a low-
+// frequency 3rd rotation option that shouldn't show every week of that
+// phase. weekNumber is always a "normal" (non-deload) week here —
+// applyAccessoryProgression never calls this for a wip-4 week at all.
+function resolvePhaseAccessory(name, phaseNum, phaseRotation, weekNumber) {
   const entry = phaseRotation[name.toLowerCase().trim()]
   if (!entry) return null
-  return { name: entry[phaseNum] || name, mult: PHASE_ACCESSORY_MULT[phaseNum] }
+  const raw = entry[phaseNum]
+  const resolved = typeof raw === 'function' ? raw(weekNumber) : raw
+  return { name: resolved || name, mult: PHASE_ACCESSORY_MULT[phaseNum] }
 }
 
 // ─── Superset notation (structural capability only) ────────────────────────
@@ -1308,6 +1316,23 @@ const BASEBALL_PHASE_ACCESSORY_ROTATION = {
   'calf raises':             { 1: 'Calf Raises',            2: 'Tibialis Raises', 3: 'Seated Calf Raise',             4: 'Calf Raises' },
 }
 
+// Weighted Push-Ups — a lower-frequency 3rd option in the horizontal-push
+// rotation (football's "incline db press" key below, soccer's "db bench
+// press" key below), alongside the existing Close Grip Bench Press/DB
+// Bench Press variants, which stay the primary options. Substitutes in on
+// exactly one week — Phase 1's middle normal week (wip 2 = week 2) — out
+// of the 9 normal training weeks this pool spans across a 16-week plan,
+// clearly less often than either primary variant (each gets a full phase,
+// 3 weeks apiece). Phase 4 (Peak Taper) keeps a plain anchor-name string
+// for its own entry below, so this function is never even called during
+// the taper; deload weeks never reach any phase-rotation resolution at
+// all (applyAccessoryProgression returns early on every wip-4 week before
+// resolvePhaseAccessory ever runs) — Weighted Push-Ups can't appear on
+// weeks 4/8/12/16 or during weeks 13-16 by construction, not by a special case.
+function phase1WithWeightedPushUpOption(anchorName) {
+  return (weekNumber) => (weekNumber === 2 ? 'Weighted Push-Ups' : anchorName)
+}
+
 // Football skill/hybrid/qb share one table (all three already share the
 // same FB_PHASES phase table and pipeline). Stable core: Hip Thrust, Single
 // Arm DB Row, Band Pull-Aparts/External Rotation, Bent Over BB Row, Weighted
@@ -1318,7 +1343,13 @@ const FOOTBALL_PHASE_ACCESSORY_ROTATION = {
   'single leg rdl':        { 1: 'Single Leg RDL',    2: 'Good Mornings',           3: 'Romanian Deadlift',    4: 'Single Leg RDL' },
   'bulgarian split squat': { 1: 'Bulgarian Split Squat', 2: 'Reverse Lunge',       3: 'Walking Lunge',        4: 'Bulgarian Split Squat' },
   'pull-ups':               { 1: 'Pull-ups',          2: 'DB Row',                 3: 'Chin-ups',             4: 'Pull-ups' },
-  'incline db press':      { 1: 'DB Incline Press',   2: 'Close Grip Bench Press', 3: 'DB Bench Press',       4: 'DB Incline Press' },
+  // Two keys for the same slot: hybrid's raw content reads "Incline DB
+  // Press", skill's reads "DB Incline Press" (word order swapped — a
+  // pre-existing naming inconsistency between the two session functions,
+  // not something this change renames). Both need an entry or one of the
+  // two positions silently never rotates at all.
+  'incline db press':      { 1: phase1WithWeightedPushUpOption('DB Incline Press'), 2: 'Close Grip Bench Press', 3: 'DB Bench Press', 4: 'DB Incline Press' },
+  'db incline press':      { 1: phase1WithWeightedPushUpOption('DB Incline Press'), 2: 'Close Grip Bench Press', 3: 'DB Bench Press', 4: 'DB Incline Press' },
 }
 
 // Basketball — shared across guards/wings/bigs. Stable core: Lateral
@@ -1339,7 +1370,7 @@ const BASKETBALL_PHASE_ACCESSORY_ROTATION = {
 const SOCCER_PHASE_ACCESSORY_ROTATION = {
   'single leg rdl':        { 1: 'Single Leg RDL',        2: 'Good Mornings', 3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
   'bulgarian split squat': { 1: 'Bulgarian Split Squat', 2: 'Reverse Lunge', 3: 'Walking Lunge',      4: 'Bulgarian Split Squat' },
-  'db bench press':        { 1: 'DB Bench Press',        2: 'Incline DB Press', 3: 'Close Grip Bench Press', 4: 'DB Bench Press' },
+  'db bench press':        { 1: phase1WithWeightedPushUpOption('DB Bench Press'), 2: 'Incline DB Press', 3: 'Close Grip Bench Press', 4: 'DB Bench Press' },
   'lateral raise':          { 1: 'Lateral Raise',         2: 'Front Raise',   3: 'Cuban Press',        4: 'Lateral Raise' },
 }
 
@@ -2984,7 +3015,7 @@ function applyAccessoryProgression(weeks, extraRotation = {}, phaseRotation = {}
             // rotation/wave below for any key the sport's phaseRotation
             // table lists — every other accessory (the "stable core") keeps
             // today's exact wip-based behavior, completely untouched.
-            const phaseHit = resolvePhaseAccessory(name, phaseNum, phaseRotation)
+            const phaseHit = resolvePhaseAccessory(name, phaseNum, phaseRotation, week.week_number)
             if (phaseHit) {
               const renamed = phaseHit.name === name ? stripped : phaseHit.name + rest
               return scaleAccessoryLineVolume(renamed, phaseHit.mult)

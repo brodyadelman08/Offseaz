@@ -108,6 +108,31 @@ const CAUTION_BADGE_STYLE = {
   whiteSpace: 'nowrap',
 }
 
+// Display-only styling for a ramp line's final/working set (FIX 1) — bold
+// the converted "%×reps (lbs)" text, then a small, quieter italic tag for
+// the "(work set)" label right after it. No structural change to the line.
+const WORK_SET_VALUE_STYLE = { fontWeight: 700 }
+const WORK_SET_TAG_STYLE = { fontWeight: 400, fontStyle: 'italic', color: 'var(--text-3)' }
+
+// Display-only "log your max" call-to-action badge (FIX 2) — replaces a
+// ramp's bare percentages when no 1RM is on file, instead of the old quiet
+// trailing dash-note. Athlete-facing blue (#308EBD), matching this file's
+// existing SUPERSET_LABEL_STYLE/brand convention, in the same badge shape
+// as CAUTION_BADGE_STYLE above so it reads as "notice me" without being loud.
+const MAX_PROMPT_STYLE = {
+  display: 'inline-flex',
+  alignItems: 'center',
+  marginLeft: 2,
+  padding: '3px 10px',
+  fontSize: 12,
+  fontWeight: 700,
+  color: '#308EBD',
+  background: 'rgba(48,142,189,0.12)',
+  border: '1px solid rgba(48,142,189,0.35)',
+  borderRadius: 8,
+  verticalAlign: 'middle',
+}
+
 // Superset bracket UI — a single continuous vertical bar spanning every line
 // in the group, with an "SS" label at the top, matching the marker/parsing
 // convention in client/src/utils/supersets.js (⟦SS<n>⟧, added server-side by
@@ -388,7 +413,11 @@ function substitutePercentage(text, maxes) {
   }
   if (!liftKey) return text
   const maxEntry = maxes?.[liftKey]
-  const maxLbs = maxEntry?.current?.weight_lbs ?? null
+  // Keys off the estimated true 1RM (weight as-is for a logged 1RM,
+  // converted via a standard rep-max multiplier otherwise — see
+  // estimateOneRepMax in server/src/services/maxesService.js), not the raw
+  // weight_lbs the athlete typed in.
+  const maxLbs = maxEntry?.current?.estimated_1rm ?? null
   if (maxLbs) {
     const lbs = calcWeight(maxLbs, pct)
     return text.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
@@ -427,33 +456,70 @@ function renderLineContent(line, flaggedSet, maxes) {
     const nameLower = name.toLowerCase()
     const liftKey   = LIFT_KEY_MAP[nameLower]
     const maxEntry  = liftKey ? maxes?.[liftKey] : null
-    const maxLbs    = maxEntry?.current?.weight_lbs ?? null
+    // Keys off the estimated true 1RM, not the raw weight_lbs the athlete
+    // typed in — see the matching comment on substitutePercentage above.
+    const maxLbs    = maxEntry?.current?.estimated_1rm ?? null
+
+    // What actually renders after the name — `rest` (a plain string) in
+    // every pre-existing case; only the ramp-with-a-logged-max case (FIX 1)
+    // needs to become an array of strings/elements, to bold+label just the
+    // final set without touching how every earlier warm-up set renders.
+    let restNode = rest
 
     // Ramping sets: "40%×10, 50%×8, 60%×6, 70%×5, 75%×3"
-    if (/\d+%[×x]\d+/.test(rest) && liftKey) {
-      rest = rest.replace(/(\d+)%([×x])(\d+)/g, (_, pctStr, sep, repsStr) => {
-        const pct = parseInt(pctStr, 10) / 100
-        if (maxLbs) {
-          return `${pctStr}%${sep}${repsStr} (${calcWeight(maxLbs, pct)} lbs)`
-        }
-        return `${pctStr}%${sep}${repsStr}`
-      })
-      if (!maxLbs) {
+    const rampMatches = [...rest.matchAll(/(\d+)%([×x])(\d+)/g)]
+    if (rampMatches.length > 0 && liftKey) {
+      if (maxLbs) {
+        // FIX 1 — the LAST set in the ramp is the working set. Every earlier
+        // set converts to "%×reps (lbs)" exactly as before; only this last
+        // one also gets bolded + an appended "(work set)" tag.
+        const lastMatch = rampMatches[rampMatches.length - 1]
+        const pieces = []
+        let cursor = 0
+        rampMatches.forEach((m, i) => {
+          const [full, pctStr, sep, repsStr] = m
+          const pct = parseInt(pctStr, 10) / 100
+          const converted = `${pctStr}%${sep}${repsStr} (${calcWeight(maxLbs, pct)} lbs)`
+          pieces.push(rest.slice(cursor, m.index))
+          pieces.push(
+            m === lastMatch
+              ? (
+                <span key={`set-${i}`}>
+                  <span style={WORK_SET_VALUE_STYLE}>{converted}</span>
+                  <span style={WORK_SET_TAG_STYLE}> (work set)</span>
+                </span>
+              )
+              : converted
+          )
+          cursor = m.index + full.length
+        })
+        pieces.push(rest.slice(cursor))
+        restNode = pieces
+      } else {
+        // FIX 2 — no logged max: replace the whole ramp with one clear,
+        // visually distinct call-to-action instead of a wall of bare,
+        // unconverted percentages (the old behavior — a quiet trailing
+        // dash-note appended after the raw ramp — is gone).
         const label = LIFT_LABELS[liftKey] || liftKey
-        rest += ` — log your ${label} max to see weights`
+        restNode = (
+          <>
+            {': '}
+            <span style={MAX_PROMPT_STYLE}>Log your {label} max to unlock your weights</span>
+          </>
+        )
       }
     } else if (liftKey) {
-      // Single-percentage format: "@ XX%"
+      // Single-percentage format: "@ XX%" — unchanged.
       const pctMatch = rest.match(/@\s*(\d+)%/)
       if (pctMatch) {
         const pct = parseInt(pctMatch[1], 10) / 100
         const pctLabel = `${Math.round(pct * 100)}%`
         if (maxLbs) {
           const lbs = calcWeight(maxLbs, pct)
-          rest = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
+          restNode = rest.replace(pctMatch[0], `${pctLabel} of your max → ${lbs} lbs`)
         } else {
           const label = LIFT_LABELS[liftKey] || liftKey
-          rest = rest.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
+          restNode = rest.replace(pctMatch[0], `${pctLabel} of your max → Log your ${label} max to see your weight`)
         }
       }
     }
@@ -467,7 +533,7 @@ function renderLineContent(line, flaggedSet, maxes) {
             <AlertIcon size={11} color="#92400e" strokeWidth={2} /> Use caution — flagged injury
           </span>
         )}
-        {rest}
+        {restNode}
       </span>
     )
   }
@@ -538,7 +604,9 @@ function renderLineContent(line, flaggedSet, maxes) {
  *                                runs live here instead — the coach-built/shared-
  *                                blueprint case, where injury_areas can't safely be
  *                                baked into shared stored content.
- *   maxes           {object}   - { liftKey: { current: { weight_lbs } } } from /api/maxes
+ *   maxes           {object}   - { liftKey: { current: { weight_lbs, estimated_1rm, is_estimated } } }
+ *                                 from /api/maxes — percentage math keys off estimated_1rm,
+ *                                 not the raw weight_lbs the athlete logged (see maxesService.js)
  *   warmup          {object}   - optional { label, lines } day-type warm-up block
  *                                 (see session.warmup in blueprintTemplates.js).
  *                                 Rendered as a collapsed, tap-to-expand block above
