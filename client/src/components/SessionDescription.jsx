@@ -2,7 +2,21 @@ import { useState } from 'react'
 import ExerciseInfoButton from './ExerciseInfoButton'
 import { lookupExercise } from '../data/exerciseLibrary'
 import { AlertIcon, ChevronDownIcon, ChevronUpIcon } from './Icons'
-import { parseSupersetGroups } from '../utils/supersets'
+import { parseSupersetGroups, SUPERSET_MARKER_RE } from '../utils/supersets'
+
+// Runs `transform` on a line with any leading ⟦SS<n>⟧ superset marker held
+// aside first, then re-prepended — so an injury substitution/reduction still
+// fires correctly on a superset-paired line instead of silently no-op'ing
+// because the marker broke the regex's `^` anchor. Mirrors
+// withMarkerPreserved() in server/src/data/blueprintTemplates.js exactly
+// (this file had no equivalent before — a real gap, since a coach's
+// manually-built-then-saved blueprint can legitimately carry markers from
+// the "build from template" tool's own auto-organize pass).
+function withMarkerPreserved(line, transform) {
+  const m = line.match(SUPERSET_MARKER_RE)
+  if (!m) return transform(line)
+  return m[0] + transform(line.slice(m[0].length))
+}
 
 /**
  * Exercises to flag per injury area.
@@ -22,10 +36,22 @@ const INJURY_FLAGS = {
     'Broad Jump', 'Tuck Jump', 'Sled Push', 'Sled Pull',
     'Leg Extension', 'Leg Press', 'Hack Squat',
   ],
+  Quadriceps: [
+    'Back Squat', 'Front Squat', 'Goblet Squat', 'Box Squat', 'Deep Squat',
+    'Bulgarian Split Squat', 'Split Squat', 'Walking Lunge', 'Reverse Lunge',
+    'Step-up', 'Box Jump', 'Depth Jump', 'Jump Squat', 'Squat Jump', 'Broad Jump',
+    'Leg Extension', 'Leg Press', 'Hack Squat',
+  ],
+  Hamstring: [
+    'Romanian Deadlift', 'RDL', 'Single Leg RDL', 'Stiff Leg Deadlift',
+    'Trap Bar Deadlift', 'Hex Bar Deadlift', 'Good Mornings',
+    'Nordic Hamstring Curl', 'Hamstring Curls', 'Glute Bridge', 'Hip Thrust',
+    'Broad Jump', 'Bounding',
+  ],
   Ankle: [
     'Box Jump', 'Depth Jump', 'Broad Jump', 'Jump Squat', 'Tuck Jump', 'Squat Jump',
-    'Calf Raises', 'Calf Raise', 'Single Leg Calf Raise',
-    'Single Leg RDL', 'Walking Lunge', 'Reverse Lunge', 'Sled Push',
+    'Calf Raises', 'Calf Raise', 'Single Leg Calf Raise', 'Tibialis Raises',
+    'Single Leg RDL', 'Bulgarian Split Squat', 'Walking Lunge', 'Reverse Lunge', 'Sled Push',
   ],
   Back: [
     'Trap Bar Deadlift', 'Hex Bar Deadlift',
@@ -38,8 +64,20 @@ const INJURY_FLAGS = {
     'Bulgarian Split Squat', 'Copenhagen Adductor',
     'Reverse Lunge', 'Walking Lunge', 'Lateral Lunge',
   ],
-  Elbow: ['Power Clean', 'Front Squat', 'Overhead Press'],
-  Wrist: ['Power Clean', 'Front Squat', 'Overhead Press'],
+  Elbow: [
+    'Power Clean', 'Front Squat', 'Overhead Press', 'Bench Press', 'Close Grip Bench Press',
+    'Chin-ups', 'Weighted Chin-ups', 'BB Row', 'Bent Over BB Row',
+    'Bicep Curls', 'Hammer Curls', 'DB Curls', 'Cable Curls', 'Incline Curls',
+    'Tricep Extensions', 'Tricep Pushdowns', 'DB Skull Crushers', 'Diamond Push-Ups', 'Cable Pushdown',
+    'Suitcase Carry', 'Farmer Carries',
+  ],
+  Wrist: [
+    'Power Clean', 'Front Squat', 'Overhead Press', 'Close Grip Bench Press',
+    'Hang Clean', 'BB Split Jerk', 'Push Press', 'Push-ups', 'Push-up', 'Weighted Push-Ups',
+    'Suitcase Carry', 'Farmer Carries', 'Grip Work',
+    'Bicep Curls', 'Hammer Curls', 'DB Curls', 'Cable Curls', 'Incline Curls',
+    'Tricep Extensions', 'Tricep Pushdowns', 'DB Skull Crushers', 'Diamond Push-Ups', 'Cable Pushdown',
+  ],
 }
 
 /**
@@ -257,98 +295,240 @@ function ensureShoulderWarmup(description, focus) {
   return text
 }
 
-function applyShoulderSubstitutions(description, focus) {
-  const lines = description.split('\n').map(line => {
-    if (/^Overhead Press\b/.test(line)) {
-      const renamed = line.replace(/^Overhead Press/, 'Landmine Press')
-      const scaled = scaleAllPercentages(renamed, 0.70)
-      return scaled === renamed ? `${renamed} (70% of your usual Overhead Press load)` : scaled
-    }
-    if (/^Bench Press\b/.test(line)) {
-      return line.replace(/^Bench Press/, 'DB Bench Press') + ' (use a controlled range of motion)'
-    }
-    return line
+// ─── Flat 50% load-reduction rule ──────────────────────────────────────────
+// Mirrors blueprintTemplates.js exactly — one consistent factor for every
+// substituted lift and every load reduction across the whole system.
+// Shoulder/Back previously used 0.70 and Knee used 0.60; all three are now
+// 0.50 too.
+const INJURY_LOAD_FACTOR = 0.50
+
+// Reduces the SET count (not reps) on any accessory-shaped "Name: NxR..."
+// line whose name matches nameRe, by INJURY_LOAD_FACTOR. Mirrors
+// reduceInjuryVolume() in blueprintTemplates.js exactly, including handling
+// a line with multiple "NxR" segments by scaling every segment.
+function reduceInjuryVolume(line, nameRe) {
+  const colonIdx = line.indexOf(':')
+  if (colonIdx <= 0) return line
+  const name = line.slice(0, colonIdx)
+  if (!nameRe.test(name)) return line
+  const rest = line.slice(colonIdx)
+  return name + rest.replace(/(\d+)x(\d+[a-zA-Z]*|AMAP)/g, (_, sets, reps) => {
+    const newSets = Math.max(1, Math.round(parseInt(sets, 10) * INJURY_LOAD_FACTOR))
+    return `${newSets}x${reps}`
   })
+}
+
+// Shared "biceps AND triceps accessory work" reduction target for both
+// Elbow and Wrist. Mirrors blueprintTemplates.js exactly.
+const ARM_ACCESSORY_RE = /^(Bicep Curls?|Hammer Curls?|DB Curls?|Cable Curls?|Incline Curls?|Tricep (Pushdowns?|Extensions?)|Cable Pushdown|DB Skull Crushers?|Diamond Push-?Ups?|Forearm Curls?(?: \(Both Ways\))?|Wrist Curls?|Reverse Wrist Curls?)\b/i
+
+function applyShoulderSubstitutions(description, focus) {
+  const lines = description.split('\n').map(line => withMarkerPreserved(line, stripped => {
+    if (/^Overhead Press\b/.test(stripped)) {
+      const renamed = stripped.replace(/^Overhead Press/, 'Landmine Press')
+      const scaled = scaleAllPercentages(renamed, INJURY_LOAD_FACTOR)
+      return scaled === renamed ? `${renamed} (50% of your usual Overhead Press load)` : scaled
+    }
+    if (/^Bench Press\b/.test(stripped)) {
+      return stripped.replace(/^Bench Press/, 'DB Bench Press') + ' (use a controlled range of motion)'
+    }
+    return stripped
+  }))
   return ensureShoulderWarmup(lines.join('\n'), focus)
 }
 
 function applyKneeSubstitutions(description) {
-  return description.split('\n').map(line => {
-    if (/^Back Squat\b/.test(line)) {
-      return scaleAllPercentages(line.replace(/^Back Squat/, 'Goblet Squat'), 0.60)
+  return description.split('\n').map(line => withMarkerPreserved(line, stripped => {
+    if (/^Back Squat\b/.test(stripped)) {
+      return scaleAllPercentages(stripped.replace(/^Back Squat/, 'Goblet Squat'), INJURY_LOAD_FACTOR)
     }
     // Front Squat carries the same knee-loading concern as Back Squat — kept
     // in sync with applyKneeAdjustments in blueprintTemplates.js.
-    if (/^Front Squat\b/.test(line)) {
-      return scaleAllPercentages(line.replace(/^Front Squat/, 'Goblet Squat'), 0.60)
+    if (/^Front Squat\b/.test(stripped)) {
+      return scaleAllPercentages(stripped.replace(/^Front Squat/, 'Goblet Squat'), INJURY_LOAD_FACTOR)
     }
-    if (/\bDepth Jumps?\b/.test(line)) {
-      return line.replace(/Depth Jumps?/, 'Box Step-Ups')
+    if (/\bDepth Jumps?\b/.test(stripped)) {
+      return stripped.replace(/Depth Jumps?/, 'Box Step-Ups')
     }
     // Trap Bar Jump is a loaded jump — same landing-impact concern as Depth
-    // Jumps. Kept in sync with applyKneeAdjustments in blueprintTemplates.js
-    // (this substitution existed server-side already but was missing here).
-    if (/^Trap Bar Jump\b/.test(line)) {
-      return line.replace(/^Trap Bar Jump/, 'Trap Bar Deadlift')
+    // Jumps. Kept in sync with applyKneeAdjustments in blueprintTemplates.js.
+    if (/^Trap Bar Jump\b/.test(stripped)) {
+      return stripped.replace(/^Trap Bar Jump/, 'Trap Bar Deadlift')
     }
-    if (/^Bulgarian Split Squat\b/.test(line)) {
-      return line.replace(/^Bulgarian Split Squat/, 'Reverse Lunge') + ' (reduced load)'
+    if (/^Bulgarian Split Squat\b/.test(stripped)) {
+      return stripped.replace(/^Bulgarian Split Squat/, 'Reverse Lunge') + ' (50% load)'
     }
-    return line
-  }).join('\n')
+    return stripped
+  })).join('\n')
 }
 
 const SPINAL_FLEXION_RE = /^(Core — Sit-ups|Sit-ups|Ab Wheel|Good Mornings?|Weighted Sit-?ups?)\b/
 
 function applyBackSubstitutions(description) {
   return description.split('\n')
-    .filter(line => !SPINAL_FLEXION_RE.test(line))
-    .map(line => {
-      if (/^Trap Bar Deadlift\b/.test(line)) {
-        return scaleAllPercentages(line.replace(/^Trap Bar Deadlift/, 'Romanian Deadlift'), 0.70)
+    .filter(line => !SPINAL_FLEXION_RE.test(line.replace(SUPERSET_MARKER_RE, '')))
+    .map(line => withMarkerPreserved(line, stripped => {
+      if (/^Trap Bar Deadlift\b/.test(stripped)) {
+        return scaleAllPercentages(stripped.replace(/^Trap Bar Deadlift/, 'Romanian Deadlift'), INJURY_LOAD_FACTOR)
       }
-      if (/^Hex Bar Deadlift\b/.test(line)) {
-        return scaleAllPercentages(line.replace(/^Hex Bar Deadlift/, 'Romanian Deadlift'), 0.70)
+      if (/^Hex Bar Deadlift\b/.test(stripped)) {
+        return scaleAllPercentages(stripped.replace(/^Hex Bar Deadlift/, 'Romanian Deadlift'), INJURY_LOAD_FACTOR)
       }
-      return line
-    }).join('\n')
+      return stripped
+    })).join('\n')
 }
 
 function applyHipSubstitutions(description) {
-  return description.split('\n').map(line => {
-    if (/^Bulgarian Split Squat\b/.test(line)) {
-      return line.replace(/^Bulgarian Split Squat/, 'Single Leg Press')
+  return description.split('\n').map(line => withMarkerPreserved(line, stripped => {
+    if (/^Bulgarian Split Squat\b/.test(stripped)) {
+      return stripped.replace(/^Bulgarian Split Squat/, 'Single Leg Press')
     }
     // Kept in sync with applyHipAdjustments in blueprintTemplates.js —
-    // Hamstring Curls is a hip-injury-only swap for Single Leg RDL, not
-    // part of baseball's default weekly content.
-    if (/^Single Leg RDL\b/.test(line)) {
-      return line.replace(/^Single Leg RDL/, 'Hamstring Curls')
+    // Hamstring Curls is a hip-injury-only swap for Single Leg RDL, unrelated
+    // to and independent of the new dedicated Hamstring area below.
+    if (/^Single Leg RDL\b/.test(stripped)) {
+      return stripped.replace(/^Single Leg RDL/, 'Hamstring Curls')
     }
-    const m = line.match(/^(.*?):\s*(\d+)x(\d+[a-zA-Z]*|AMAP)(.*)$/)
-    if (m && /\bLunge\b/i.test(m[1])) {
-      const [, name, sets, reps, rest] = m
-      const newSets = Math.max(1, Math.round(parseInt(sets, 10) * 0.50))
-      return `${name}: ${newSets}x${reps}${rest}`
+    return reduceInjuryVolume(stripped, /\bLunge\b/i)
+  })).join('\n')
+}
+
+// ─── Quadriceps (strain) ────────────────────────────────────────────────────
+const QUAD_REMOVE_RE = /^Depth Jumps?\b/
+const QUAD_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|Sled (?:Push|Sprint|Drag)|Broad Jumps?|(?:DB |Split |Single Leg )?Squat Jumps?|Approach Jumps?|Bounding|Hex Bar Jumps?|Lateral (?:Bounds?|Squat Jump)|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Resistance Band Sprint)\b/i
+
+function applyQuadricepsSubstitutions(description) {
+  return description.split('\n')
+    .filter(line => !QUAD_REMOVE_RE.test(line.replace(SUPERSET_MARKER_RE, '')))
+    .map(line => withMarkerPreserved(line, stripped => {
+      if (/^Back Squat\b/.test(stripped)) {
+        return scaleAllPercentages(stripped.replace(/^Back Squat/, 'Box Squat'), INJURY_LOAD_FACTOR)
+      }
+      if (/^Front Squat\b/.test(stripped)) {
+        return scaleAllPercentages(stripped.replace(/^Front Squat/, 'Goblet Squat'), INJURY_LOAD_FACTOR)
+      }
+      if (/\bBox Jumps?\b/.test(stripped)) {
+        return stripped.replace(/Box Jumps?/, 'Step-Ups')
+      }
+      if (/^Bulgarian Split Squat\b/.test(stripped)) {
+        return stripped.replace(/^Bulgarian Split Squat/, 'Reverse Lunge') + ' (50% load)'
+      }
+      return reduceInjuryVolume(stripped, QUAD_VOLUME_RE)
+    })).join('\n')
+}
+
+// ─── Hamstring (strain) — its own dedicated area, independent of Hip's
+// Hamstring Curls swap above. ────────────────────────────────────────────
+const HAMSTRING_REMOVE_RE = /^Good Mornings?\b/
+const HAMSTRING_RDL_RE = /^(?:Barbell )?(?:Single Leg )?RDL\b/
+const HAMSTRING_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|Sled Sprint|Broad Jumps?|Bounding|Lateral Bounds?|Flying 20s|300 Yard Shuttle|Resistance Band Sprint)\b/i
+
+function applyHamstringSubstitutions(description) {
+  return description.split('\n')
+    .filter(line => !HAMSTRING_REMOVE_RE.test(line.replace(SUPERSET_MARKER_RE, '')))
+    .map(line => withMarkerPreserved(line, stripped => {
+      if (HAMSTRING_RDL_RE.test(stripped)) {
+        return stripped.replace(HAMSTRING_RDL_RE, 'Hip Thrust') + ' (50% load)'
+      }
+      if (/^Romanian Deadlift\b/.test(stripped)) {
+        const renamed = stripped.replace(/^Romanian Deadlift/, 'Glute Bridge')
+        const scaled = scaleAllPercentages(renamed, INJURY_LOAD_FACTOR)
+        return scaled === renamed ? `${renamed} (light)` : scaled
+      }
+      return reduceInjuryVolume(stripped, HAMSTRING_VOLUME_RE)
+    })).join('\n')
+}
+
+// ─── Ankle ──────────────────────────────────────────────────────────────────
+const ANKLE_REMOVE_RE = /^Depth Jumps?\b/
+const ANKLE_SLRDL_RE = /^(?:Barbell )?Single Leg RDL\b/
+const ANKLE_CALF_RE = /^(?:Calf Raises?|Seated Calf Raise|Single Leg Calf Raise|Tibialis Raises)\b/i
+const ANKLE_COD_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|Sled Sprint|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Lateral Shuffle|Defensive Slide(?: Sprint)?|Pro Agility Drill|T-Drill|Deceleration Drill|17s Drill|Resistance Band Sprint)\b/i
+
+function applyAnkleSubstitutions(description) {
+  return description.split('\n')
+    .filter(line => !ANKLE_REMOVE_RE.test(line.replace(SUPERSET_MARKER_RE, '')))
+    .map(line => withMarkerPreserved(line, stripped => {
+      if (/\bBox Jumps?\b/.test(stripped)) {
+        return stripped.replace(/Box Jumps?/, 'Step-Ups')
+      }
+      if (ANKLE_SLRDL_RE.test(stripped)) {
+        return stripped.replace(ANKLE_SLRDL_RE, 'Romanian Deadlift')
+      }
+      if (/^Bulgarian Split Squat\b/.test(stripped)) {
+        return stripped.replace(/^Bulgarian Split Squat/, 'Leg Press') + ' (50% load)'
+      }
+      let out = reduceInjuryVolume(stripped, ANKLE_CALF_RE)
+      out = reduceInjuryVolume(out, ANKLE_COD_RE)
+      return out
+    })).join('\n')
+}
+
+// ─── Elbow ──────────────────────────────────────────────────────────────────
+const ELBOW_HEAVY_PRESS_RE = /^(Bench Press|Close Grip Bench(?: Press)?|Overhead Press)\b/
+const ELBOW_ROW_RE = /^(?:Bent Over )?BB Row\b/
+const ELBOW_GRIP_RE = /^(?:(?:DB )?Suitcase Carr(?:y|ies)|Farmer Carr(?:y|ies)|Sandbag Carry)\b/
+
+function applyElbowSubstitutions(description) {
+  return description.split('\n').map(line => withMarkerPreserved(line, stripped => {
+    if (ELBOW_HEAVY_PRESS_RE.test(stripped)) {
+      return scaleAllPercentages(stripped, INJURY_LOAD_FACTOR)
     }
-    return line
-  }).join('\n')
+    if (/^(?:Weighted )?Chin-ups\b/.test(stripped)) {
+      return stripped.replace(/^(?:Weighted )?Chin-ups/, 'Neutral-Grip Pull-Ups')
+    }
+    if (ELBOW_GRIP_RE.test(stripped)) {
+      return stripped + ' (use straps)'
+    }
+    let out = reduceInjuryVolume(stripped, ELBOW_ROW_RE)
+    out = reduceInjuryVolume(out, ARM_ACCESSORY_RE)
+    return out
+  })).join('\n')
+}
+
+// ─── Wrist ──────────────────────────────────────────────────────────────────
+const WRIST_CATCH_OLY_RE = /^(Power Clean(?: from floor)?|Hang (?:Power )?Clean(?: Above the Knee)?|(?:BB |Single Arm DB )?Split Jerk|Push Press)\b/
+const WRIST_GRIP_RE = /^(?:(?:DB )?Suitcase Carr(?:y|ies)|Farmer Carr(?:y|ies)|Sandbag Carry|Grip Work)\b/
+
+function applyWristSubstitutions(description) {
+  return description.split('\n').map(line => withMarkerPreserved(line, stripped => {
+    if (/^Front Squat\b/.test(stripped)) {
+      return scaleAllPercentages(stripped.replace(/^Front Squat/, 'Cross-Arm Front Squat'), INJURY_LOAD_FACTOR)
+    }
+    if (/^(?:Weighted )?Push-?Ups?\b/i.test(stripped)) {
+      return reduceInjuryVolume(stripped, /^(?:Weighted )?Push-?Ups?/i)
+    }
+    if (WRIST_CATCH_OLY_RE.test(stripped)) {
+      return stripped.replace(WRIST_CATCH_OLY_RE, 'Clean Pull')
+    }
+    if (WRIST_GRIP_RE.test(stripped)) {
+      return reduceInjuryVolume(stripped, WRIST_GRIP_RE)
+    }
+    return reduceInjuryVolume(stripped, ARM_ACCESSORY_RE)
+  })).join('\n')
 }
 
 /**
  * Applies real exercise substitution/load-reduction for this athlete's flagged
  * injury areas. Returns the (possibly unchanged) text plus whether anything
  * actually changed, so the caller knows whether to show the injury banner.
+ * Mirrors applyInjuryAdjustments() in blueprintTemplates.js exactly — see
+ * that function's comment for why 'Other'/'None' never reach here.
  */
 function applyInjurySubstitutions(description, injuryAreas = [], focus = '') {
   const areas = new Set((injuryAreas || []).filter(a => a && a !== 'None'))
   if (areas.size === 0) return { text: description, modified: false }
 
   let text = description
-  if (areas.has('Shoulder')) text = applyShoulderSubstitutions(text, focus)
-  if (areas.has('Knee'))     text = applyKneeSubstitutions(text)
-  if (areas.has('Back'))     text = applyBackSubstitutions(text)
-  if (areas.has('Hip'))      text = applyHipSubstitutions(text)
+  if (areas.has('Shoulder'))   text = applyShoulderSubstitutions(text, focus)
+  if (areas.has('Knee'))       text = applyKneeSubstitutions(text)
+  if (areas.has('Back'))       text = applyBackSubstitutions(text)
+  if (areas.has('Hip'))        text = applyHipSubstitutions(text)
+  if (areas.has('Quadriceps')) text = applyQuadricepsSubstitutions(text)
+  if (areas.has('Hamstring'))  text = applyHamstringSubstitutions(text)
+  if (areas.has('Ankle'))      text = applyAnkleSubstitutions(text)
+  if (areas.has('Elbow'))      text = applyElbowSubstitutions(text)
+  if (areas.has('Wrist'))      text = applyWristSubstitutions(text)
 
   return { text, modified: text !== description }
 }

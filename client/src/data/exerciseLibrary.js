@@ -16,9 +16,21 @@ const EXERCISE_LIBRARY = {
     description: 'Bar rests on front delts with elbows high. Keep torso upright as you squat to parallel, then drive up through your heels.',
     muscles: 'Quads, upper back, core',
   },
+  'cross-arm front squat': {
+    description: 'Same front squat setup, but cross your arms over the bar (right hand on left shoulder, left hand on right shoulder) instead of a full front-rack grip — takes the load off your wrists entirely. Keep torso upright as you squat to parallel, then drive up through your heels.',
+    muscles: 'Quads, upper back, core',
+  },
   'box squat': {
     description: 'Bar on traps, feet shoulder-width, box set to just below parallel. Sit back and down under control until you touch the box, pause briefly, then drive up through your heels.',
     muscles: 'Quads, glutes, hamstrings, core',
+  },
+  'leg press': {
+    description: 'Seated in the leg press machine, feet shoulder-width on the platform. Lower the platform under control until your knees reach about 90°, then press back up without locking out hard.',
+    muscles: 'Quads, glutes, hamstrings',
+  },
+  'single leg press': {
+    description: 'Same setup as the leg press machine, one foot on the platform at a time. Lower under control to about 90° of knee bend, then press back up without locking out hard.',
+    muscles: 'Quads, glutes, hamstrings',
   },
   'front split squat': {
     description: 'From a split stance, lower your rear knee toward the floor while keeping your front shin vertical, then drive back up through your front heel.',
