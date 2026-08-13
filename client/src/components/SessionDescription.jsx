@@ -114,6 +114,17 @@ const LIFT_KEY_MAP = {
 
   // Lunge
   'reverse lunge':          'reverse_lunge',
+
+  // Injury substitutes (see applyKneeSubstitutions/applyQuadricepsSubstitutions/
+  // applyWristSubstitutions/applyShoulderSubstitutions) — there's no separately
+  // tracked max for these movement-pattern variants anywhere in lifting_maxes,
+  // so a substituted line's % resolves off the ORIGINAL lift's own tracked max
+  // (the sane basis: it's the same underlying strength pattern at a lighter
+  // variation, just loaded at INJURY_LOAD_FACTOR of that same number).
+  'box squat':              'squat',        // Back Squat -> Box Squat (Quadriceps)
+  'goblet squat':           'squat',        // Back/Front Squat -> Goblet Squat (Knee, Quadriceps)
+  'cross-arm front squat':  'front_squat',  // Front Squat -> Cross-Arm Front Squat (Wrist)
+  'landmine press':         'overhead_press', // Overhead Press -> Landmine Press (Shoulder)
 }
 
 const LIFT_LABELS = {
@@ -472,7 +483,10 @@ const ELBOW_GRIP_RE = /^(?:(?:DB )?Suitcase Carr(?:y|ies)|Farmer Carr(?:y|ies)|S
 function applyElbowSubstitutions(description) {
   return description.split('\n').map(line => withMarkerPreserved(line, stripped => {
     if (ELBOW_HEAVY_PRESS_RE.test(stripped)) {
-      return scaleAllPercentages(stripped, INJURY_LOAD_FACTOR)
+      const scaled = scaleAllPercentages(stripped, INJURY_LOAD_FACTOR)
+      // Same fallback as Shoulder's Overhead Press swap: a plain "Name: NxR"
+      // line (no % ramp) has nothing for scaleAllPercentages to touch.
+      return scaled === stripped ? `${stripped} (50% load)` : scaled
     }
     if (/^(?:Weighted )?Chin-ups\b/.test(stripped)) {
       return stripped.replace(/^(?:Weighted )?Chin-ups/, 'Neutral-Grip Pull-Ups')

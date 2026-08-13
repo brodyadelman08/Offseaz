@@ -467,6 +467,21 @@ describe('Area 17 — Injury system upgrade', () => {
     if (baseFS && injFS) expect(injFS).toBe(baseFS)
   })
 
+  test('Elbow: a PLAIN (non-percentage) heavy-press line still gets an explicit 50% load note, not silently left at full load', () => {
+    // Muscle-gain Linemen's Day4 has "Overhead Press: 4x10" — a flat NxR
+    // line with no % ramp at all, unlike Bench/Close Grip Bench which are
+    // always "@ XX%". scaleAllPercentages alone is a no-op on a line with no
+    // "%" in it, so this specifically exercises the fallback path.
+    const bp = generateBlueprintForAthlete(mkSurvey({ primary_goal: 'muscle_gain', injury_areas: ['Elbow'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ primary_goal: 'muscle_gain', injury_areas: [] }))
+    const text = fullText(bp)
+    const baseText = fullText(baseline)
+
+    const baseOHP = baseText.split('\n').find(l => /^Overhead Press:/.test(l))
+    expect(baseOHP).toBe('Overhead Press: 4x10') // confirms this really is a plain, unscaled line
+    expect(text).toMatch(/^Overhead Press: 4x10 \(50% load\)$/m)
+  })
+
   test('Wrist: Front Squat -> Cross-Arm Front Squat at 50%, catch-position Oly lifts -> Clean Pull, push-ups reduced, grip work reduced, biceps AND triceps accessories reduced, legs otherwise fine', () => {
     const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Wrist'] })) // Football/Linemen
     const baseline = generateBlueprintForAthlete(mkSurvey({ injury_areas: [] }))

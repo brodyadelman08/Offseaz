@@ -2647,7 +2647,12 @@ function applyElbowAdjustments(description) {
     // Heavy pressing stays the same movement, just lighter — unlike
     // Shoulder, elbow strain doesn't need a different movement pattern.
     if (ELBOW_HEAVY_PRESS_RE.test(stripped)) {
-      return scaleAllPercentages(stripped, INJURY_LOAD_FACTOR)
+      const scaled = scaleAllPercentages(stripped, INJURY_LOAD_FACTOR)
+      // A plain "Name: NxR" heavy-press line (no % ramp — e.g. "Overhead
+      // Press: 4x10") has nothing for scaleAllPercentages to touch, so it'd
+      // silently pass through at full load. Same fallback Shoulder's own
+      // Overhead Press swap already uses: make the cut explicit as text.
+      return scaled === stripped ? `${stripped} (50% load)` : scaled
     }
     if (/^(?:Weighted )?Chin-ups\b/.test(stripped)) {
       return stripped.replace(/^(?:Weighted )?Chin-ups/, 'Neutral-Grip Pull-Ups')
