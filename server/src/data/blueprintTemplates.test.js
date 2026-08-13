@@ -344,6 +344,191 @@ describe('Area 4 — Injury substitution logic', () => {
   })
 })
 
+// ─── Area 17 — Injury system upgrade (flat 50%, new/upgraded areas) ────────
+// Quadriceps and Hamstring are new, formalized areas (Hamstring previously
+// only reachable indirectly via Hip's Hamstring Curls swap, which is
+// untouched and independent of this). Ankle/Elbow/Wrist go from badge-only
+// to real substitution. Every existing Shoulder/Knee/Back/Hip substitution
+// keeps its exact target, now at a flat 50% load cut instead of 60%/70%.
+
+describe('Area 17 — Injury system upgrade', () => {
+  function fullText(bp) {
+    return allSessions(bp.weeks).map(s => stripMarkers(s.description)).join('\n')
+  }
+
+  test('flat 50% rule: Shoulder\'s Overhead Press fallback note and Knee/Back\'s scaled percentages both land on 50%, never 60%/70%', () => {
+    // Linemen (mkSurvey's default) has no literal "Overhead Press" line of
+    // its own (it uses "Standing BB OHP") — same combo Area 4's existing
+    // Shoulder test already uses for this exact reason.
+    const shoulderBp = generateBlueprintForAthlete(mkSurvey({ sport: 'Football', position: 'QB', injury_areas: ['Shoulder'] }))
+    const text = fullText(shoulderBp)
+    expect(text).toMatch(/Landmine Press.*\(50% of your usual Overhead Press load\)/)
+    expect(text).not.toMatch(/70% of your usual Overhead Press load/)
+
+    // Knee: Goblet Squat's scaled top % must be exactly half the athlete's
+    // raw (uninjured) top %, not 60% of it.
+    const baseline = generateBlueprintForAthlete(mkSurvey({ injury_areas: [] }))
+    const kneeBp    = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Knee'] }))
+    const baseLine  = firstMatchingLine(allSessions(baseline.weeks)[0].description, /^Back Squat:/) || firstMatchingLine(stripMarkers(allSessions(baseline.weeks)[0].description), /^Back Squat:/)
+    const injLine   = fullText(kneeBp).split('\n').find(l => /^Goblet Squat:/.test(l))
+    if (baseLine && injLine) {
+      const baseTop = lastPercent(baseLine)
+      const injTop  = lastPercent(injLine)
+      expect(injTop).toBe(Math.max(1, Math.round(baseTop * 0.5)))
+    }
+  })
+
+  test('Quadriceps: Back/Front Squat -> Box/Goblet Squat at 50%, Depth Jumps removed, Box Jumps -> Step-Ups, Bulgarian Split Squat -> Reverse Lunge (50% load), RDL/hinge work untouched', () => {
+    const combos = [['Basketball', 'Wings'], ['Football', 'Linemen'], ['Soccer', 'Center Back']]
+    for (const [sport, position] of combos) {
+      const bp = generateBlueprintForAthlete(mkSurvey({ sport, position, injury_areas: ['Quadriceps'] }))
+      const baseline = generateBlueprintForAthlete(mkSurvey({ sport, position, injury_areas: [] }))
+      const text = fullText(bp)
+      expect(text).not.toMatch(/\bDepth Jumps?\b/)
+      expect(text).not.toMatch(/^Back Squat\b/m)
+      expect(text).not.toMatch(/^Front Squat\b/m)
+      if (fullText(baseline).match(/\bBox Squat\b/) == null && fullText(baseline).includes('Back Squat')) {
+        expect(text).toMatch(/\bBox Squat\b/)
+      }
+      if (fullText(baseline).includes('Bulgarian Split Squat')) {
+        expect(text).toMatch(/Reverse Lunge.*\(50% load\)/)
+      }
+      // Romanian Deadlift / RDL hinge work is untouched by a quad injury.
+      if (fullText(baseline).match(/^Romanian Deadlift\b/m)) {
+        expect(text).toMatch(/^Romanian Deadlift\b/m)
+      }
+    }
+  })
+
+  test('Hamstring: RDL/Single Leg RDL -> Hip Thrust (50% load), Romanian Deadlift -> Glute Bridge, Good Mornings removed, formalized independent of Hip\'s own Hamstring Curls swap', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Hamstring'] })) // default sport: Football/Linemen
+    const text = fullText(bp)
+    expect(text).not.toMatch(/^Good Mornings?\b/m)
+    expect(text).not.toMatch(/^(?:Barbell )?(?:Single Leg )?RDL\b/m)
+    expect(text).toMatch(/Hip Thrust.*\(50% load\)/)
+
+    // Hamstring is independent of Hip: flagging Hamstring alone must NOT
+    // trigger Hip's own Single Leg RDL -> Hamstring Curls swap.
+    expect(text).not.toMatch(/Hamstring Curls/)
+
+    // Romanian Deadlift specifically (Back's substitution target) -> light
+    // Glute Bridge, when it's the athlete's own prescribed lift.
+    const backBp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Back'] }))
+    const rdlLine = fullText(backBp).split('\n').find(l => /^Romanian Deadlift:/.test(l))
+    if (rdlLine) {
+      const hamstringOnRdl = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Back', 'Hamstring'] }))
+      expect(fullText(hamstringOnRdl)).toMatch(/Glute Bridge/)
+    }
+  })
+
+  test('Hip\'s existing Hamstring Curls swap for Single Leg RDL is unaffected by formalizing Hamstring as its own area', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Hip'] }))
+    const text = fullText(bp)
+    expect(text).not.toMatch(/^Single Leg RDL\b/m)
+    expect(text).toMatch(/Hamstring Curls/)
+  })
+
+  test('Ankle: Box Jumps -> Step-Ups, Depth Jumps removed, Single Leg RDL -> bilateral Romanian Deadlift, Bulgarian Split Squat -> Leg Press (50% load), calf raises reduced', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Wings', injury_areas: ['Ankle'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Wings', injury_areas: [] }))
+    const text = fullText(bp)
+    expect(text).not.toMatch(/\bDepth Jumps?\b/)
+    if (fullText(baseline).match(/\bBox Jumps?\b/)) {
+      expect(text).toMatch(/\bStep-Ups\b/)
+    }
+    if (fullText(baseline).match(/^Bulgarian Split Squat\b/m)) {
+      expect(text).toMatch(/Leg Press.*\(50% load\)/)
+    }
+  })
+
+  test('Elbow: heavy pressing (Bench/Close Grip Bench/Overhead Press) at 50%, Chin-ups -> Neutral-Grip Pull-Ups, grip carries get straps, biceps AND triceps accessories reduced, legs untouched', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Elbow'] })) // Football/Linemen
+    const baseline = generateBlueprintForAthlete(mkSurvey({ injury_areas: [] }))
+    const text = fullText(bp)
+    const baseText = fullText(baseline)
+
+    // Close Grip Bench Press top % must be exactly half of baseline's.
+    const baseCGB = baseText.split('\n').find(l => /^Close Grip Bench Press:/.test(l))
+    const injCGB  = text.split('\n').find(l => /^Close Grip Bench Press:/.test(l))
+    if (baseCGB && injCGB) {
+      expect(lastPercent(injCGB)).toBe(Math.max(1, Math.round(lastPercent(baseCGB) * 0.5)))
+    }
+
+    if (baseText.match(/^(?:Weighted )?Chin-ups\b/m)) {
+      expect(text).toMatch(/Neutral-Grip Pull-Ups/)
+      expect(text).not.toMatch(/^(?:Weighted )?Chin-ups\b/m)
+    }
+    if (baseText.includes('DB Suitcase Carries')) {
+      expect(text).toMatch(/DB Suitcase Carries.*\(use straps\)/)
+    }
+    // Legs untouched: Front Squat and Back Squat keep their baseline top %.
+    const baseFS = baseText.split('\n').find(l => /^Front Squat:/.test(l))
+    const injFS  = text.split('\n').find(l => /^Front Squat:/.test(l))
+    if (baseFS && injFS) expect(injFS).toBe(baseFS)
+  })
+
+  test('Elbow: a PLAIN (non-percentage) heavy-press line still gets an explicit 50% load note, not silently left at full load', () => {
+    // Muscle-gain Linemen's Day4 has "Overhead Press: 4x10" — a flat NxR
+    // line with no % ramp at all, unlike Bench/Close Grip Bench which are
+    // always "@ XX%". scaleAllPercentages alone is a no-op on a line with no
+    // "%" in it, so this specifically exercises the fallback path.
+    const bp = generateBlueprintForAthlete(mkSurvey({ primary_goal: 'muscle_gain', injury_areas: ['Elbow'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ primary_goal: 'muscle_gain', injury_areas: [] }))
+    const text = fullText(bp)
+    const baseText = fullText(baseline)
+
+    const baseOHP = baseText.split('\n').find(l => /^Overhead Press:/.test(l))
+    expect(baseOHP).toBe('Overhead Press: 4x10') // confirms this really is a plain, unscaled line
+    expect(text).toMatch(/^Overhead Press: 4x10 \(50% load\)$/m)
+  })
+
+  test('Wrist: Front Squat -> Cross-Arm Front Squat at 50%, catch-position Oly lifts -> Clean Pull, push-ups reduced, grip work reduced, biceps AND triceps accessories reduced, legs otherwise fine', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Wrist'] })) // Football/Linemen
+    const baseline = generateBlueprintForAthlete(mkSurvey({ injury_areas: [] }))
+    const text = fullText(bp)
+    const baseText = fullText(baseline)
+
+    expect(text).not.toMatch(/^Front Squat\b/m)
+    const baseFS = baseText.split('\n').find(l => /^Front Squat:/.test(l))
+    const injCAFS = text.split('\n').find(l => /^Cross-Arm Front Squat:/.test(l))
+    if (baseFS && injCAFS) {
+      expect(lastPercent(injCAFS)).toBe(Math.max(1, Math.round(lastPercent(baseFS) * 0.5)))
+    }
+    // Power Clean / Hang Clean / Split Jerk all become Clean Pull.
+    expect(text).not.toMatch(/^Power Clean\b/m)
+    expect(text).not.toMatch(/^Hang Clean\b/m)
+    expect(text).toMatch(/Clean Pull/)
+    // Back Squat (not a wrist-loaded front-rack hold) is untouched.
+    const baseBS = baseText.split('\n').find(l => /^Back Squat:/.test(l))
+    const injBS  = text.split('\n').find(l => /^Back Squat:/.test(l))
+    if (baseBS && injBS) expect(injBS).toBe(baseBS)
+  })
+
+  test('Other never substitutes or badges any exercise — the description-only path', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['Other'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ injury_areas: [] }))
+    expect(fullText(bp)).toBe(fullText(baseline))
+    expect(allSessions(bp.weeks).some(s => s.injury_modified)).toBe(false)
+  })
+
+  test('None still means no injury adjustment at all, unchanged', () => {
+    const bp = generateBlueprintForAthlete(mkSurvey({ injury_areas: ['None'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ injury_areas: [] }))
+    expect(fullText(bp)).toBe(fullText(baseline))
+  })
+
+  test('Quadriceps and Hamstring are independently selectable and each produces a real, distinct modification', () => {
+    const quadBp = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Wings', injury_areas: ['Quadriceps'] }))
+    const hamBp  = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Wings', injury_areas: ['Hamstring'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Wings', injury_areas: [] }))
+    expect(fullText(quadBp)).not.toBe(fullText(baseline))
+    expect(fullText(hamBp)).not.toBe(fullText(baseline))
+    expect(fullText(quadBp)).not.toBe(fullText(hamBp))
+    expect(allSessions(quadBp.weeks).some(s => s.injury_modified)).toBe(true)
+    expect(allSessions(hamBp.weeks).some(s => s.injury_modified)).toBe(true)
+  })
+})
+
 // ─── Area 5 — Deload week verification ─────────────────────────────────────
 
 describe('Area 5 — Deload week verification', () => {

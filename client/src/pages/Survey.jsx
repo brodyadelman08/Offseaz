@@ -630,6 +630,9 @@ export default function Survey() {
     if (step === 5) return form.experience_level !== ''
     if (step === 6) return form.days_per_week !== ''
     if (step === 7) return form.equipment_tier !== ''
+    // "Other" isn't auto-substituted/badged — the coach only finds out what
+    // it means from this text, so it can't be left blank.
+    if (step === 8) return !form.injury_areas.includes('Other') || form.injury_other.trim().length > 0
     return true
   }
 
@@ -884,13 +887,19 @@ export default function Survey() {
             {step === 8 && (
               <>
                 <MultiCards
-                  options={['Shoulder', 'Knee', 'Back', 'Hip', 'Ankle', 'Elbow', 'Wrist', 'None', 'Other']}
+                  options={['Shoulder', 'Knee', 'Quadriceps', 'Hamstring', 'Back', 'Hip', 'Ankle', 'Elbow', 'Wrist', 'None', 'Other']}
                   value={form.injury_areas}
                   onChange={v => set('injury_areas', v)}
                 />
                 {form.injury_areas.includes('Other') && (
                   <div style={{ marginTop: 18 }}>
-                    <label style={st.label}>Describe the injury</label>
+                    <label style={st.label}>
+                      Describe the injury <span style={{ color: ORANGE }}>*</span>
+                      <span style={{ fontWeight: 400, color: 'var(--text-3)', fontSize: 12, marginLeft: 6 }}>required</span>
+                    </label>
+                    <p style={{ fontSize: 12, color: 'var(--text-3)', margin: '2px 0 8px' }}>
+                      "Other" isn't auto-adjusted like the areas above — your coach is notified with exactly what you type here.
+                    </p>
                     <input
                       style={st.input}
                       type="text"

@@ -1,7 +1,17 @@
 const supabaseAdmin = require('../config/supabase')
 const { isUserOnTeam } = require('./teamsService')
 
-async function createInjuryNotification(coachId, athleteId, athleteName) {
+// otherDescription: when the athlete selected "Other" (which — unlike
+// Shoulder/Knee/Back/Hip/Quadriceps/Hamstring/Ankle/Elbow/Wrist — never
+// drives any automatic exercise substitution or caution badge, see
+// applyInjuryAdjustments in blueprintTemplates.js), this is the coach's only
+// way to learn what the athlete actually described. Included verbatim in
+// the notification message when present.
+async function createInjuryNotification(coachId, athleteId, athleteName, otherDescription = null) {
+  const message = otherDescription
+    ? `${athleteName} described an injury: "${otherDescription}" — tap to review their profile.`
+    : `${athleteName} flagged an injury — tap to review their profile.`
+
   // Upsert — re-alerts the coach even if they've already seen a previous injury flag
   const { error } = await supabaseAdmin
     .from('coach_notifications')
@@ -10,7 +20,7 @@ async function createInjuryNotification(coachId, athleteId, athleteName) {
         coach_id: coachId,
         athlete_id: athleteId,
         type: 'injury_flag',
-        message: `${athleteName} flagged an injury — tap to review their profile.`,
+        message,
         dismissed_at: null,
         created_at: new Date().toISOString(),
       },

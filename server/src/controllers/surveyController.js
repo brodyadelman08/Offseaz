@@ -4,6 +4,16 @@ const { getProfile } = require('../services/authService')
 const { createInjuryNotification } = require('../services/notificationService')
 const { autoAssignBlueprint, regenerateUpcomingWeeks, programmingFieldsChanged } = require('../services/autoAssignService')
 
+// "Other" never drives any automatic exercise substitution or caution badge
+// (see applyInjuryAdjustments in blueprintTemplates.js) — the coach
+// notification message is the ONLY place that information reaches anyone,
+// so a blank description would mean the flag goes nowhere. Mirrors the
+// client-side canAdvance() check in Survey.jsx — this is the server-side
+// half of the same rule, not a replacement for it.
+function otherInjuryDescriptionMissing(injuryAreas, injuryOther) {
+  return (injuryAreas || []).includes('Other') && !(injuryOther && injuryOther.trim())
+}
+
 async function submit(req, res) {
   const {
     full_name,
@@ -18,6 +28,9 @@ async function submit(req, res) {
 
   if (!sport || !sport.trim()) {
     return res.status(400).json({ error: 'Sport is required' })
+  }
+  if (otherInjuryDescriptionMissing(injury_areas, injury_other)) {
+    return res.status(400).json({ error: 'Please describe the injury when "Other" is selected' })
   }
 
   try {
@@ -48,10 +61,13 @@ async function submit(req, res) {
 
     const athleteName = (full_name && full_name.trim()) || profile.full_name || 'An athlete'
 
-    // Notify coach only if athlete is on a team and flagged an injury
+    // Notify coach only if athlete is on a team and flagged an injury.
+    // "Other" is what actually needs the coach's eyes — everything else
+    // already shows up as a real substitution/badge in the plan itself.
     const hasInjury = (injury_areas || []).some(a => a !== 'None')
     if (hasInjury && team?.coach_id) {
-      createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
+      const otherDescription = (injury_areas || []).includes('Other') ? injury_other?.trim() || null : null
+      createInjuryNotification(team.coach_id, req.user.id, athleteName, otherDescription).catch(e =>
         console.error('Injury notification failed (submit):', e)
       )
     }
@@ -93,6 +109,9 @@ async function update(req, res) {
   if (!sport || !sport.trim()) {
     return res.status(400).json({ error: 'Sport is required' })
   }
+  if (otherInjuryDescriptionMissing(injury_areas, injury_other)) {
+    return res.status(400).json({ error: 'Please describe the injury when "Other" is selected' })
+  }
 
   try {
     const profile = await getProfile(req.user.id)
@@ -126,7 +145,8 @@ async function update(req, res) {
     // Notify coach if athlete flagged any injury area
     const hasInjury = (injury_areas || []).some(a => a !== 'None')
     if (hasInjury && team?.coach_id) {
-      createInjuryNotification(team.coach_id, req.user.id, athleteName).catch(e =>
+      const otherDescription = (injury_areas || []).includes('Other') ? injury_other?.trim() || null : null
+      createInjuryNotification(team.coach_id, req.user.id, athleteName, otherDescription).catch(e =>
         console.error('Injury notification failed (update):', e)
       )
     }
@@ -193,4 +213,4 @@ async function updatePhysical(req, res) {
   }
 }
 
-module.exports = { submit, update, mysurvey, teamSurveys, updatePhysical }
+module.exports = { submit, update, mysurvey, teamSurveys, updatePhysical, otherInjuryDescriptionMissing }
