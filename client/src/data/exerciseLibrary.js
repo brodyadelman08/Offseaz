@@ -436,6 +436,14 @@ const EXERCISE_LIBRARY = {
     description: 'Hang from a pull-up bar or squeeze a thick implement (towel, fat grip) for timed holds to develop crushing and supporting grip strength.',
     muscles: 'Forearms, finger flexors',
   },
+  'rope climb': {
+    description: 'Climb a suspended rope hand-over-hand using an L-sit or straight-leg technique, controlling the descent rather than sliding down.',
+    muscles: 'Forearms, lats, biceps, core',
+  },
+  'scrum drive': {
+    description: 'In a low, squared scrum stance, drive a sled or scrum machine forward over a set distance, keeping the back flat and hips low throughout.',
+    muscles: 'Quads, glutes, hip flexors, upper back',
+  },
   'sprawl drills': {
     description: 'From a standing position, shoot your legs back explosively into a wide base position (sprawl), dropping your hips to the mat. Drive back to standing quickly.',
     muscles: 'Hip flexors, quads, core, shoulder girdle',

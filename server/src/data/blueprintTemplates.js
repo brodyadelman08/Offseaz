@@ -975,13 +975,135 @@ const WR_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nNeck Strengthening: 3x12 each direction\nGrip Work: 3x30s each\nHip Flexor Stretch: 3x45s each leg\nStatic Stretch: Hip Flexors · Hamstrings · Thoracic`,
 }
 
+// ─── Wrestling — Collision/Max-Strength archetype (standard goal only; see
+// wrestlingSess above for the muscle-gain variant, untouched by this build,
+// same precedent as Linemen's own fbLinemenMGSess) ─────────────────────────
+// Built on the same archetype core Football Linemen established — same
+// rep-scheme math (collisionMainLiftScheme/buildCollisionMainLiftRamp),
+// same autoregulated Oly-lift prescription (collisionOlyScheme), same
+// day-count-aware layouts, same raised accessory cap (see
+// resolveAccessoryCapKey below). Differentiated from Linemen by exercise
+// selection and emphasis, not by structure: grip strength and grappling-
+// specific work (Weighted Pull-ups, Farmer/DB Suitcase Carries, Grip Work,
+// Rope Climb, Sprawl Drills) stand in for Linemen's football-specific
+// movements. The two sports share only the neck-armor block (COLLISION_NECK)
+// as common contact-sport ground — everything else is wrestling's own.
+
+const WRESTLING_WU_LOWER = 'Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side\n\n'
+const WRESTLING_WU_UPPER = 'Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction\n\n'
+
+function wrestlingDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower Power',
+    description: `${WRESTLING_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+      `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nNordic Hamstring Curl: 3x5\nSprawl Drills: 3x10\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 2', focus: 'Upper Strength',
+    description: `${WRESTLING_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Overhead Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Rope Climb: 3 ascents\nBB Row: 4x8\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower Strength',
+    description: `${WRESTLING_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+      `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power',
+    description: `${WRESTLING_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Weighted Chin-ups: 4x6\nInverted BB Row: 3x10\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingArchetypeAnchor4Day(info) {
+  return [wrestlingDay1Lower(info), wrestlingDay2Upper(info), wrestlingDay3Lower(info), wrestlingDay4Upper(info)]
+}
+
+// ── 3-day (consolidated — every anchor movement still appears somewhere) ──
+
+function wrestlingArchetype3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return [
+    { day: 'Day 1', focus: 'Lower Power',
+      description: `${WRESTLING_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+        `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nSprawl Drills: 3x10\n${COLLISION_NECK}` },
+    { day: 'Day 2', focus: 'Upper (Full)',
+      description: `${WRESTLING_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `Rope Climb: 3 ascents\nBB Row: 4x8\n${COLLISION_NECK}` },
+    { day: 'Day 3', focus: 'Lower Strength',
+      description: `${WRESTLING_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+        `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+        `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}` },
+  ]
+}
+
+// ── 5-day (4-day anchor + Day 5: grip/conditioning/armor) ──────────────────
+
+function wrestlingArchetypeDay5(info) {
+  return {
+    day: 'Day 5', focus: 'Grip, Conditioning & Armor',
+    description: 'Trap Bar Jump: 4x3 (cap 155 lbs)\nSled Push: 4x20 yds\n' +
+      'Weighted Carries: Farmer / Suitcase / Rack — 3 sets each\nRope Climb: 3 ascents\n' +
+      `${COLLISION_NECK_DEDICATED}\nGrip Work: 3 sets`,
+  }
+}
+
+// ── 6-day (4-day anchor relabeled Lower A/Upper A/Lower B/Upper B, +
+// Lower C: posterior chain/grappling, + Upper C: hypertrophy/grip armor) ──
+
+function wrestlingArchetypeLowerC(info) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Posterior Chain & Grappling',
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Single Leg RDL: 3x8 each leg\nSprawl Drills: 3x10\nDB Suitcase Carries: 3x30 yds each side\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingArchetypeUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Grip Armor',
+    description: `${press}\nChest Supported Row: 3x12\nRope Climb: 3 ascents\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${COLLISION_NECK}`,
+  }
+}
+
+function generateWrestlingArchetypeWeeks(daysPerWeek) {
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: wrestlingArchetypeAnchor4Day,
+    threeDay: wrestlingArchetype3Day,
+    day5: wrestlingArchetypeDay5,
+    lowerC: wrestlingArchetypeLowerC,
+    upperC: wrestlingArchetypeUpperC,
+  }, daysPerWeek)
+}
+
 function generateWrestlingWeeks(_, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  const phases = mg ? MG_PHASES : WR_PHASES
-  const fn = mg
-    ? (info) => wrestlingSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : wrestlingSess
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [WR_DAY5, WR_DAY6])
+  if (!mg) return generateWrestlingArchetypeWeeks(daysPerWeek)
+  const fn = (info) => wrestlingSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
+  return buildWeeksDynamic(16, MG_PHASES, fn, daysPerWeek, [WR_DAY5, WR_DAY6])
 }
 
 // ─── Volleyball ───────────────────────────────────────────────────────────────
@@ -2168,8 +2290,125 @@ const HOCKEY_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip 90/90 Hold: 3x45s each side\nCossack Squat (light): 2x10 each side\nThoracic Rotation: 3x10 each side\nAdductor Static Stretch: 3x45s each side\nAnkle Mobility Circles: 3x10 each`,
 }
 
+// ─── Hockey Forwards — Collision/Max-Strength archetype (standard goal
+// only; see hockeyForwardsSess above for the muscle-gain variant, untouched
+// by this build) — Hockey Defense/Goalie are a different archetype (Repeat-
+// Sprint/Field, lateral/reactive) and are completely unaffected. ──────────
+// Built on the same archetype core as Linemen/Wrestling/Rugby Forwards, but
+// deliberately WITHOUT the shared neck-armor block — forwards' real
+// contact/first-step demand is collision strength blended with skating
+// acceleration and hip mobility (Copenhagen Adductor, Cossack Squat, Hip
+// 90/90 Hold, Lateral Bound, Split Squat Jump) rather than the
+// head/neck-impact profile Linemen/Wrestling/Rugby Forwards share — a real
+// point of differentiation between contact-sport programs, not an
+// oversight. Otherwise identical machinery: same rep-scheme math, same
+// autoregulated Oly-lift prescription, same raised accessory cap.
+
+const HOCKEY_ARCHETYPE_WU_LOWER = 'Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
+const HOCKEY_ARCHETYPE_WU_UPPER = 'Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
+
+function hockeyArchetypeDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower — First-Step Explosion',
+    description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Power Clean: ${collisionOlyScheme(ph, dl)}\n` +
+      `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Bulgarian Split Squat: 3x6 each leg\nCopenhagen Adductor: 3x8 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side`,
+  }
+}
+
+function hockeyArchetypeDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 2', focus: 'Upper — Puck Battle Strength',
+    description: `${HOCKEY_ARCHETYPE_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Bench Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Weighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBand External Rotation: 3x15 each arm`,
+  }
+}
+
+function hockeyArchetypeDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower — Acceleration & COD',
+    description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)}\n` +
+      `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Lateral Bound: 5x5 each side\nSplit Squat Jump: 4x5 each leg\nCossack Squat: 3x8 each side`,
+  }
+}
+
+function hockeyArchetypeDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power & Conditioning',
+    description: `${HOCKEY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Weighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBattle Rope: 4x20s`,
+  }
+}
+
+function hockeyArchetypeAnchor4Day(info) {
+  return [hockeyArchetypeDay1Lower(info), hockeyArchetypeDay2Upper(info), hockeyArchetypeDay3Lower(info), hockeyArchetypeDay4Upper(info)]
+}
+
+function hockeyArchetype3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return [
+    { day: 'Day 1', focus: 'Lower — First-Step Explosion',
+      description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Power Clean: ${collisionOlyScheme(ph, dl)}\n` +
+        `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+        `Bulgarian Split Squat: 3x6 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side` },
+    { day: 'Day 2', focus: 'Upper (Full) — Puck Battle Strength',
+      description: `${HOCKEY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `Weighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm` },
+    { day: 'Day 3', focus: 'Lower — Acceleration & COD',
+      description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)}\n` +
+        `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Lateral Bound: 5x5 each side\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg` },
+  ]
+}
+
+function hockeyArchetypeDay5(info) {
+  return {
+    day: 'Day 5', focus: 'On-Ice Transfer & Skating Power',
+    description: 'Lateral Sled Drag: 4x20 yds each direction\nSplit Squat Jump: 4x5 each leg\n' +
+      'Lateral Bound: 5x5 each side\nCopenhagen Adductor: 3x8 each leg\nHip 90/90 Hold: 3x30s each side',
+  }
+}
+
+function hockeyArchetypeLowerC(info) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Skating Power & Hip Mobility',
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Cossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nSled Sprint: 6x20 yds`,
+  }
+}
+
+function hockeyArchetypeUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Shoulder Health',
+    description: `${press}\nChest Supported Row: 3x12\nBand External Rotation: 3x15 each arm\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}`,
+  }
+}
+
+function generateHockeyForwardsArchetypeWeeks(daysPerWeek) {
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: hockeyArchetypeAnchor4Day,
+    threeDay: hockeyArchetype3Day,
+    day5: hockeyArchetypeDay5,
+    lowerC: hockeyArchetypeLowerC,
+    upperC: hockeyArchetypeUpperC,
+  }, daysPerWeek)
+}
+
 function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
+  if (!mg && posId === 'forwards') return generateHockeyForwardsArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : HOCKEY_PHASES
   const baseFns = { forwards: hockeyForwardsSess, defense: hockeyDefenseSess, goalie: hockeyGoalieSess }
   const baseFn = baseFns[posId] || hockeyForwardsSess
@@ -2231,8 +2470,122 @@ const RUGBY_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip Flexor Stretch: 3x45s each leg\nThoracic Rotation: 3x10 each side\nHamstring Eccentric: 3x8\nStatic Stretch: Adductors · Quads · Calves`,
 }
 
+// ─── Rugby Forwards — Collision/Max-Strength archetype (standard goal only;
+// see rugbyForwardsSess above for the muscle-gain variant, untouched by
+// this build) — Rugby Backs is a different archetype (Repeat-Sprint/Field
+// Athlete) and is completely unaffected by this section. ───────────────────
+// Built on the same archetype core as Linemen/Wrestling. Differentiated by
+// scrum/contact-specific work (Scrum Drive, Sandbag Carry, Landmine
+// Rotational Press) in place of Linemen's football-specific movements,
+// sharing the neck-armor block (COLLISION_NECK) as common contact-sport
+// ground with Linemen and Wrestling.
+
+const RUGBY_ARCHETYPE_WU_LOWER = 'Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
+const RUGBY_ARCHETYPE_WU_UPPER = 'Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
+
+function rugbyArchetypeDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower Power — Scrummage Drive',
+    description: `${RUGBY_ARCHETYPE_WU_LOWER}Power Clean from floor: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+      `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 2', focus: 'Upper Strength & Contact Prep',
+    description: `${RUGBY_ARCHETYPE_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Bench Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\nDB Shrugs: 3x12\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower Explosion & Carrying',
+    description: `${RUGBY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+      `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power, Contact & Rotational',
+    description: `${RUGBY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Weighted Chin-ups: 4x6\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeAnchor4Day(info) {
+  return [rugbyArchetypeDay1Lower(info), rugbyArchetypeDay2Upper(info), rugbyArchetypeDay3Lower(info), rugbyArchetypeDay4Upper(info)]
+}
+
+function rugbyArchetype3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return [
+    { day: 'Day 1', focus: 'Lower Power — Scrummage Drive',
+      description: `${RUGBY_ARCHETYPE_WU_LOWER}Power Clean from floor: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+        `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\n${COLLISION_NECK}` },
+    { day: 'Day 2', focus: 'Upper (Full) & Contact Prep',
+      description: `${RUGBY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\n${COLLISION_NECK}` },
+    { day: 'Day 3', focus: 'Lower Explosion & Carrying',
+      description: `${RUGBY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+        `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+        `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\n${COLLISION_NECK}` },
+  ]
+}
+
+function rugbyArchetypeDay5(info) {
+  return {
+    day: 'Day 5', focus: 'Contact Conditioning & Armor',
+    description: 'Scrum Drive: 5x10 yds\nSled Push: 4x20 yds\n' +
+      'Weighted Carries: Farmer / Sandbag / Rack — 3 sets each\n' +
+      `${COLLISION_NECK_DEDICATED}\nGrip Work: 2 sets`,
+  }
+}
+
+function rugbyArchetypeLowerC(info) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Posterior Chain & Carrying',
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Single Leg RDL: 3x8 each leg\nScrum Drive: 4x10 yds\nSandbag Carry: 3x20 yds\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Contact Armor',
+    description: `${press}\nChest Supported Row: 3x12\nLandmine Rotational Press: 3x6 each side\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${COLLISION_NECK}`,
+  }
+}
+
+function generateRugbyForwardsArchetypeWeeks(daysPerWeek) {
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: rugbyArchetypeAnchor4Day,
+    threeDay: rugbyArchetype3Day,
+    day5: rugbyArchetypeDay5,
+    lowerC: rugbyArchetypeLowerC,
+    upperC: rugbyArchetypeUpperC,
+  }, daysPerWeek)
+}
+
 function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
+  if (!mg && posId === 'forwards') return generateRugbyForwardsArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : RUGBY_PHASES
   const baseFns = { forwards: rugbyForwardsSess, backs: rugbyBacksSess }
   const baseFn = baseFns[posId] || rugbyForwardsSess
@@ -3049,6 +3402,21 @@ const SPORT_MAX_ACCESSORIES = {
   // total), one tick above the sport-wide default of 3. Every other football
   // position (skill/hybrid/qb) still resolves to the default cap untouched.
   football_linemen: 5,
+  // The other 3 sports built on the Collision/Max-Strength archetype core
+  // (feat/archetype-collision) — same raised cap as Linemen, same reasoning:
+  // the archetype's day layouts are authored dense on purpose. Scoped to
+  // wrestling (single position) and specifically the Forwards position of
+  // rugby/hockey — Rugby Backs and Hockey Defense/Goalie are untouched by
+  // this archetype and keep the sport-wide default cap of 3.
+  // Deliberately NOT keyed as plain "wrestling" — wrestling is a single-
+  // position sport, so a bare 'wrestling' key would collide with
+  // resolveAccessoryCapKey's own goal-agnostic fallthrough (`return sport`)
+  // and leak the raised cap into the muscle-gain path too (caught by the
+  // golden snapshot suite). "wrestling_archetype" only ever gets returned
+  // by the explicit, goal-gated branch below.
+  wrestling_archetype: 5,
+  rugby_forwards: 5,
+  hockey_forwards: 5,
 }
 
 // Football's shared MAX_ACCESSORIES cap is raised for linemen only — never
@@ -3058,9 +3426,16 @@ const SPORT_MAX_ACCESSORIES = {
 // re-tuning content this task didn't touch). Both call sites that organize
 // a football blueprint (auto-assign below, and blueprintController.js's
 // manual "build from template" tool) must resolve the same key for the
-// same inputs, so this is the one place that decision is made.
+// same inputs, so this is the one place that decision is made. Wrestling/
+// Rugby Forwards/Hockey Forwards follow the identical goal-gated pattern —
+// their own muscle-gain paths still run their older, pre-archetype content
+// (wrestlingSess, rugbyForwardsSess, hockeyForwardsSess), untouched, so they
+// resolve to the sport-wide default cap exactly as before this archetype work.
 function resolveAccessoryCapKey(sport, posId, goal) {
   if (sport === 'football' && posId === 'linemen' && goal !== 'muscle_gain') return 'football_linemen'
+  if (sport === 'wrestling' && goal !== 'muscle_gain') return 'wrestling_archetype'
+  if (sport === 'rugby' && posId === 'forwards' && goal !== 'muscle_gain') return 'rugby_forwards'
+  if (sport === 'hockey' && posId === 'forwards' && goal !== 'muscle_gain') return 'hockey_forwards'
   return sport
 }
 
