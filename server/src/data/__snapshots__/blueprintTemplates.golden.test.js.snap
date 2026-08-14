@@ -7962,183 +7962,151 @@ Suitcase Carry: 3x20 yds each side",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals hockey/forwards — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (69%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 35%×10, 45%×8, 55%×6, 62%×5, 69%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
-Sled Sprint: 6x20 yds
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Hang Power Clean: build to a top set of 5x3 — start light and build
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
+Sled Sprint: 6x20 yds",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 55%×6, 62%×5, 69%×6
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
 ⟦SS1⟧Weighted Pull-ups: 5x5
 ⟦SS1⟧Single Arm DB Row: 5x10 each arm
-Med Ball Chest Pass: 4x8 (moderate intent — controlled speed)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (60%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Hang Power Clean: lighter, no build — 3x3
+Trap Bar Deadlift: 40%×10, 70%×5
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×6
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Chest Pass: 2x6 (moderate intent — controlled speed)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength (76%) · Week 1 of 4",
+    "objective": "Phase 2 — Intensification (85%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 38%×10, 49%×8, 61%×6, 68%×5, 76%×5
-⟦SS1⟧Broad Jumps: 5x3
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
-Sled Sprint: 6x20 yds
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Hang Power Clean: build to heavy doubles — 3,3,2,2, start light and build
+Trap Bar Deadlift: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
+Sled Sprint: 6x20 yds",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×5
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and build, each arm
+Bench Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
 ⟦SS1⟧DB Row: 4x5
 ⟦SS1⟧Chest Supported Row: 4x10 each arm
-Med Ball Chest Pass: 5x8 (add volume — building intent)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (66%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 33%×10, 43%×8, 53%×6, 59%×5, 66%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Hang Power Clean: lighter, no build — 3x3
+Trap Bar Deadlift: 40%×10, 70%×5
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×5
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Chest Pass: 3x6 (add volume — building intent)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Power Build (82%) · Week 1 of 4",
+    "objective": "Phase 3 — Peak (90%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 41%×10, 53%×8, 66%×6, 74%×5, 82%×4
-⟦SS1⟧Hurdle Hops: 4x6
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
-Sled Sprint: 6x20 yds
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Hang Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
+Sled Sprint: 6x20 yds",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×4
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 ⟦SS1⟧Weighted Chin-ups: 3x5
 ⟦SS1⟧Pull-ups: 3x10 each arm
-Med Ball Chest Pass: 5x8 (high intent — near-max effort)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8151,103 +8119,87 @@ Cable Woodchop: 3x10 each side",
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×4
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Hang Power Clean: lighter, no build — 3x3
+Trap Bar Deadlift: 40%×10, 70%×5
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×4
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Chest Pass: 3x6 (high intent — near-max effort)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak (86%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak (90%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 43%×10, 56%×8, 69%×6, 77%×5, 86%×3
-⟦SS1⟧Depth Jumps: 4x5
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
-Sled Sprint: 6x20 yds
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Lateral Stability:
+Hang Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
+Bulgarian Split Squat: 3x6 each leg
 Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Hip 90/90 Hold: 3x30s each side
+Sled Sprint: 6x20 yds",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 43%×10, 56%×8, 69%×6, 77%×5, 86%×3
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 ⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧Single Arm DB Row: 2x10 each arm
-Med Ball Chest Pass: 3x8 (tapered — lowest volume, stay sharp)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (73%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 37%×10, 47%×8, 58%×6, 66%×5, 73%×3
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Lateral Stability:
+Hang Power Clean: lighter, no build — 3x3
+Trap Bar Deadlift: 40%×10, 70%×5
+Bulgarian Split Squat: 2x5 each leg
 Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Hip 90/90 Hold: 3x30s each side",
         "focus": "Lower — First-Step Explosion",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 37%×10, 47%×8, 58%×6, 66%×5, 73%×3
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Chest Pass: 2x6 (tapered — lowest volume, stay sharp)
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -10218,272 +10170,320 @@ Suitcase Carry: 3x20 yds each side",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals rugby/forwards — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (62%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×6
-⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-Neck Strengthening: 2x9 each direction
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
+⟦SS1⟧Hip Thrust: 2x8
+Nordic Hamstring Curl: 2x4
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 31%×10, 40%×8, 50%×6, 56%×5, 62%×6
-⟦SS1⟧Weighted Pull-ups: 3x4
-⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
+⟦SS1⟧DB Row: 2x8 each arm
+DB Shrugs: 2x9
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength Build (78%) · Week 1 of 4",
+    "objective": "Phase 2 — Intensification (85%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×5
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to heavy doubles — 3,3,2,2, start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 39%×10, 51%×8, 62%×6, 70%×5, 78%×5
-⟦SS1⟧DB Row: 5x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and build, each arm
+Bench Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
+⟦SS1⟧DB Row: 5xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (68%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-Neck Strengthening: 2x9 each direction
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
+⟦SS1⟧Hip Thrust: 2x8
+Nordic Hamstring Curl: 2x4
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Weighted Pull-ups: 3x4
-⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
+⟦SS1⟧DB Row: 2x8 each arm
+DB Shrugs: 2x9
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Peak Strength (85%) · Week 1 of 4",
+    "objective": "Phase 3 — Peak (90%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×4
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 43%×10, 55%×8, 68%×6, 77%×5, 85%×4
-⟦SS1⟧Weighted Chin-ups: 4x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
+⟦SS1⟧Weighted Chin-ups: 4xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (73%) · Week 4 of 4",
+    "objective": "Phase 3 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-Neck Strengthening: 2x9 each direction
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
+⟦SS1⟧Hip Thrust: 2x8
+Nordic Hamstring Curl: 2x4
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-⟦SS1⟧Weighted Pull-ups: 3x4
-⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
+⟦SS1⟧DB Row: 2x8 each arm
+DB Shrugs: 2x9
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Maximum Output (90%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak (90%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 45%×10, 59%×8, 72%×6, 81%×5, 90%×3
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 45%×10, 59%×8, 72%×6, 81%×5, 90%×3
-⟦SS1⟧Weighted Pull-ups: 3x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (77%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-Neck Strengthening: 2x9 each direction
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
+⟦SS1⟧Hip Thrust: 2x8
+Nordic Hamstring Curl: 2x4
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Weighted Pull-ups: 3x4
-⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Bench Press: 40%×10, 70%×5
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
+⟦SS1⟧DB Row: 2x8 each arm
+DB Shrugs: 2x9
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -17472,243 +17472,325 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals wrestling/wrestling — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (75%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 7xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-Single Leg RDL: 3x8 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
+Farmer Carries: 3x40 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Weighted Pull-ups: 7xAMAP
-⟦SS1⟧BB Row: 4x6
-Overhead Press: 4x8
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (66%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-Single Leg RDL: 2x6 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-Overhead Press: 2x6
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Overhead Press: 40%×10, 70%×5
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength Build (83%) · Week 1 of 4",
+    "objective": "Phase 2 — Intensification (85%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 42%×10, 54%×8, 66%×6, 75%×5, 83%×5 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to heavy doubles — 3,3,2,2, start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6 (full ROM)
 ⟦SS1⟧DB Row: 5xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-Single Leg RDL: 3x8 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
+Farmer Carries: 3x40 yds
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 42%×10, 54%×8, 66%×6, 75%×5, 83%×5
-⟦SS1⟧DB Row: 5xAMAP
-⟦SS1⟧BB Row: 4x6
-Overhead Press: 4x8
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and build, each arm
+Overhead Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (72%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 36%×10, 47%×8, 58%×6, 65%×5, 72%×5 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-Single Leg RDL: 2x6 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 36%×10, 47%×8, 58%×6, 65%×5, 72%×5
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-Overhead Press: 2x6
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Overhead Press: 40%×10, 70%×5
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Peak Strength (89%) · Week 1 of 4",
+    "objective": "Phase 3 — Peak (90%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 45%×10, 58%×8, 71%×6, 80%×5, 89%×4 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Weighted Chin-ups: 4xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-Single Leg RDL: 3x8 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
+Farmer Carries: 3x40 yds
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 45%×10, 58%×8, 71%×6, 80%×5, 89%×4
-⟦SS1⟧Weighted Chin-ups: 4xAMAP
-⟦SS1⟧BB Row: 4x6
-Overhead Press: 4x8
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
+Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (76%) · Week 4 of 4",
+    "objective": "Phase 3 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×4 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-Single Leg RDL: 2x6 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×4
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-Overhead Press: 2x6
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Overhead Press: 40%×10, 70%×5
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Max Strength (93%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak (90%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 47%×10, 60%×8, 74%×6, 84%×5, 93%×3 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-Single Leg RDL: 3x8 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
+Farmer Carries: 3x40 yds
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 47%×10, 60%×8, 74%×6, 84%×5, 93%×3
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 4x6
-Overhead Press: 4x8
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
+Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (78%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×3 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
+Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-Single Leg RDL: 2x6 each leg
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 39%×10, 51%×8, 62%×6, 70%×5, 78%×3
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-Overhead Press: 2x6
-Band External Rotation: 3x15 each arm",
-        "focus": "Upper Max Strength",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
+Overhead Press: 40%×10, 70%×5
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Upper Strength",
       },
     ],
     "week": 16,
@@ -17719,64 +17801,72 @@ Band External Rotation: 3x15 each arm",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Ankle] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Step-Ups: 5x5
-⟦SS1⟧Leg Press: 4x6 each leg (50% load)
-Romanian Deadlift: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Leg Press: 4x8 each leg (50% load)
+⟦SS1⟧Romanian Deadlift: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -17788,64 +17878,73 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Back] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
-        "injury_modified": true,
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
-        "injury_modified": true,
       },
       {
         "day": "Day 3",
-        "description": "Romanian Deadlift: 18%×10, 23%×8, 28%×6, 32%×5, 35%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Romanian Deadlift: 20%×10, 25%×8, 30%×6, 35%×5, 40%×5-8
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
-        "injury_modified": true,
       },
     ],
     "week": 1,
@@ -17856,65 +17955,73 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Elbow] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 18%×10, 23%×8, 28%×6, 32%×5, 35%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8 (50% load)
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 20%×10, 25%×8, 30%×6, 35%×5, 40%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
         "injury_modified": true,
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 4x20 yds (use straps)
 Farmer Carries: 4x20 yds (use straps)
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 18%×10, 23%×8, 28%×6, 32%×5, 35%×6
-⟦SS1⟧Neutral-Grip Pull-Ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 20%×10, 25%×8, 30%×6, 35%×5, 40%×5-8 (hands at shoulder width)
+⟦SS1⟧Neutral-Grip Pull-Ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
         "injury_modified": true,
       },
@@ -17927,64 +18034,72 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Hamstring] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x8 each leg (50% load)
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Hip Thrust: 4x8 each leg (50% load)
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -17996,64 +18111,72 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Hip] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Single Leg Press: 4x6 each leg
-Hamstring Curls: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Single Leg Press: 4x8 each leg
+⟦SS1⟧Hamstring Curls: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18065,65 +18188,73 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Knee] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Goblet Squat: 18%×10, 23%×8, 28%×6, 32%×5, 35%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Goblet Squat: 20%×10, 25%×8, 30%×6, 35%×5, 40%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
         "injury_modified": true,
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Reverse Lunge: 4x6 each leg (50% load)
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Reverse Lunge: 4x8 each leg (50% load)
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18135,63 +18266,71 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[None] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18203,67 +18342,74 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Quadriceps] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Box Squat: 18%×10, 23%×8, 28%×6, 32%×5, 35%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 3x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Box Squat: 20%×10, 25%×8, 30%×6, 35%×5, 40%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
         "injury_modified": true,
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Step-Ups: 5x5
-⟦SS1⟧Reverse Lunge: 4x6 each leg (50% load)
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Reverse Lunge: 4x8 each leg (50% load)
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 3x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
-        "injury_modified": true,
       },
     ],
     "week": 1,
@@ -18274,68 +18420,76 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Shoulder] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Power Clean from floor: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
       },
       {
         "day": "Day 2",
-        "description": "Band External Rotation: 3x15 each arm (required warm-up)
-YTW Series: 3x10 each (required warm-up)
-DB Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6 (use a controlled range of motion)
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Landmine Press: 4x8 (50% of your usual Overhead Press load)
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+YTW Series: 3x10 each (required warm-up)
+Band External Rotation: 3x15 each arm (required warm-up)
+Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, each arm
+DB Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (use a controlled range of motion)
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
         "injury_modified": true,
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Clean Above the Knee: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 4x20 yds
 Farmer Carries: 4x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
       },
       {
         "day": "Day 4",
-        "description": "Band External Rotation: 3x15 each arm (required warm-up)
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
 YTW Series: 3x10 each (required warm-up)
-Hang Clean: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+Band External Rotation: 3x15 each arm (required warm-up)
+BB Split Jerk: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
         "injury_modified": true,
       },
@@ -18348,65 +18502,74 @@ Plank: 3x30 seconds",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Wrist] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
+    "objective": "Phase 1 — Accumulation (80%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Clean Pull: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-Neck Strengthening: 3x12 each direction
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive",
+Clean Pull: build to a top set of 5x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
+        "focus": "Lower Power — Scrummage Drive",
         "injury_modified": true,
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
-⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Clean Pull: build to a top set of 5x3 — start light and build, each arm
+Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
+⟦SS1⟧DB Row: 4x10 each arm
+DB Shrugs: 3x12
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Strength & Contact Prep",
+        "injury_modified": true,
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
-Single Leg RDL: 4x8 each leg
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Clean Pull: build to a top set of 5x3 — start light and build (start at hip crease, hinge to above kneecaps, explode)
+Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+Sandbag Carry: 2x20 yds
 Farmer Carries: 2x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
       {
         "day": "Day 4",
-        "description": "Clean Pull: 4x3
-Close Grip Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Clean Pull: build to a top set of 5x3 — start light and build
+Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
+⟦SS1⟧Weighted Chin-ups: 4x6
 ⟦SS1⟧Single Arm DB Row: 4x10 each arm
 Landmine Rotational Press: 3x6 each side
-Sled Push: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side",
         "focus": "Upper Power, Contact & Rotational",
         "injury_modified": true,
       },

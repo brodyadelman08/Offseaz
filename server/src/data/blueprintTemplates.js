@@ -83,8 +83,10 @@ function buildWeeksDynamic(n, phases, sessFn, daysPerWeek, extraDays = []) {
 // four real blocks with distinct intent, WITHOUT touching getPhaseInfo's own
 // signature or math. Scoped to exactly the sports/positions that opt in by
 // calling these helpers: baseball, football skill/hybrid/qb, basketball,
-// soccer. Football linemen (generateLinemenWeeks/linemenPhaseInfo) is a
-// fully separate, bespoke engine and is never touched by anything below.
+// soccer. Football linemen (generateLinemenWeeks, built on the shared
+// Collision/Max-Strength archetype core's collisionPhaseInfo — see that
+// section above) is a fully separate engine from Change 1-4's own phase
+// system and is never touched by anything below.
 
 // Change 1 — main-lift top-set rep target descends by phase instead of a
 // fixed 3 reps for all 16 weeks. Two tiers: power (peaks harder, down to a
@@ -321,72 +323,70 @@ function bballPlyo(phaseNum) {
   return 'Depth Jumps: 3x4'
 }
 
-// ─── Football — Linemen (standard goal only; see fbLinemenMGSess below for
-// the muscle-gain variant, which is untouched by this rebuild) ─────────────
-// Adapted from a real D1 4-day upper/lower linemen program — the 4-day
-// layout (linemenAnchor4Day) is the source-faithful anchor; 3/5/6-day layouts
-// keep that same core with additional movements to fill the extra frequency,
-// per the program design. Two targeted, linemen-only rule changes from the
-// sport-wide defaults:
-//   1. A raised accessory cap (5, see resolveAccessoryCapKey/SPORT_MAX_ACCESSORIES
-//      above) so a day can run main power lift + main strength lift + 3-4
-//      accessories (5-6 movements) instead of the sport-wide cap of 3.
-//   2. Main strength lifts (Front/Back Squat, Close Grip Bench, and the
-//      6-day Lower C's Trap Bar Deadlift) prescribe an OPEN rep WINDOW on
-//      the top set (e.g. "80%×5-8") instead of a fixed rep count — see
-//      buildLinemenMainLiftRamp. The window is just text appended after the
-//      top-set %, so every existing %-based classifier (isRampedLiftLine,
+// ─── Collision/Max-Strength archetype core (feat/archetype-collision) ─────
+// Extracted from Football Linemen, the archetype's original, benchmark
+// implementation (see the Blueprint Architecture Audit). This section is
+// the reusable CORE — the rep-scheme math, the autoregulated Oly-lift
+// prescription, the phase/deload cadence, and the day-count-aware assembly
+// logic (generateCollisionArchetypeWeeks below) — shared by every sport
+// that joins this archetype. Linemen's own day content (linemenDay1Lower
+// etc., further below) is completely UNCHANGED by this extraction; it now
+// just calls these shared functions by their new name instead of owning a
+// private copy, and is assembled by the shared orchestrator instead of its
+// own bespoke one. Wrestling/Rugby Forwards/Hockey Forwards each author
+// their OWN day-content functions against this same core — see their own
+// sections further below.
+//
+// What makes this archetype "Collision/Max-Strength" (not just "any sport
+// with a squat in it"):
+//   1. A raised accessory cap (5, see resolveAccessoryCapKey/
+//      SPORT_MAX_ACCESSORIES) so a day can run main power lift + main
+//      strength lift + 3-4 accessories (5-6 movements) instead of the
+//      sport-wide default cap of 3.
+//   2. Main strength lifts prescribe an OPEN rep WINDOW on the top set
+//      (e.g. "80%×5-8") instead of a fixed rep count — see
+//      buildCollisionMainLiftRamp. The window is just text appended after
+//      the top-set %, so every existing %-based classifier (isRampedLiftLine,
 //      the beginner/advanced experience-adjustment passes) already handles
 //      it unchanged; addExtraTopSet above got one small, backward-compatible
 //      fix (optional "-N" support) so an advanced athlete's extra top set
 //      doesn't truncate the window.
-// Olympic lifts (Power Clean, Hang Clean Above the Knee, BB/Single Arm DB
-// Split Jerk, Clean Pull) are autoregulated — "start light and build" to a
-// top set/double/single, never a %-of-max — so every one of their lines is
-// deliberately written as prose (no "NxR" shape) rather than a parsed
-// number, which keeps them naturally exempt from the accessory-rotation,
-// volume-wave, and deload-reduction passes that only ever touch lines
-// matching that shape (see isAccessoryLine).
+//   3. Olympic lifts (Power Clean, Hang Clean Above the Knee, BB/Single Arm
+//      DB Split Jerk, Clean Pull, ...) are autoregulated — "start light and
+//      build" to a top set/double/single, never a %-of-max — so every one
+//      of their lines is deliberately written as prose (no "NxR" shape)
+//      rather than a parsed number, which keeps them naturally exempt from
+//      the accessory-rotation, volume-wave, and deload-reduction passes
+//      that only ever touch lines matching that shape (see isAccessoryLine).
+//   4. Day-count-aware, hand-designed layouts (3/4/5/6 days) rather than a
+//      generic slice-to-N fallback — see generateCollisionArchetypeWeeks.
 
-const LINEMEN_WU_LOWER = 'Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5\n\n'
-const LINEMEN_WU_UPPER = 'Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20\n\n'
-
-// Short 4-way neck block (flexion, extension, both lateral directions) on
-// every linemen session — football-specific armor. The "Neck — ...:" header
-// (see organizeSessionDescription/applyDeloadVolumeReduction above) keeps it
-// exempt from the accessory cap, rotation, volume wave, and deload
-// reduction — a fixed, always-kept dose every week, same treatment as a
-// "Core — ...:" block.
-const LINEMEN_NECK = 'Neck — 4-Way (band or manual resistance):\nNeck Flexion: 2x15\nNeck Extension: 2x15\nLateral Neck Flexion: 2x15 each side'
-// Heavier dedicated neck dose for the 5-day plan's own Day 5 (see spec).
-const LINEMEN_NECK_DEDICATED = 'Neck — Dedicated 4-Way (band or manual resistance):\nNeck Flexion: 3x12\nNeck Extension: 3x12\nLateral Neck Flexion: 3x12 each side'
-
-// Main strength lift (Front Squat / Back Squat / Close Grip Bench / Trap Bar
-// Deadlift) wave loading, off personal max, tied to the same phase/deload
-// cadence every other sport uses (phase boundary every 4 weeks, deload on
-// the 4th). Only 3 named tiers are prescribed (Accumulation/Intensification/
-// Peak); Phase 4 holds at Peak's numbers rather than inventing a 4th tier,
-// matching how several real programs keep the final block at peak intensity
-// through to the end of an offseason.
-const LINEMEN_MAIN_LIFT_SCHEMES = {
+// Main strength lift wave loading, off personal max, tied to the same
+// phase/deload cadence every other sport uses (phase boundary every 4
+// weeks, deload on the 4th). Only 3 named tiers are prescribed
+// (Accumulation/Intensification/Peak); Phase 4 holds at Peak's numbers
+// rather than inventing a 4th tier, matching how several real programs
+// keep the final block at peak intensity through to the end of an
+// offseason.
+const COLLISION_MAIN_LIFT_SCHEMES = {
   accumulation:    { pcts: [40, 50, 60, 70, 80],     reps: [10, 8, 6, 5],    top: '5-8' },
   intensification: { pcts: [40, 53, 65, 75, 85],     reps: [10, 8, 6, 5],    top: '3-6' },
   peak:            { pcts: [40, 50, 60, 70, 80, 90], reps: [10, 8, 6, 5, 3], top: '1-4' },
   deload:          { pcts: [40, 70],                 reps: [10],            top: '5' },
 }
 
-function linemenMainLiftScheme(phaseNum, deload) {
-  if (deload) return LINEMEN_MAIN_LIFT_SCHEMES.deload
-  if (phaseNum <= 1) return LINEMEN_MAIN_LIFT_SCHEMES.accumulation
-  if (phaseNum === 2) return LINEMEN_MAIN_LIFT_SCHEMES.intensification
-  return LINEMEN_MAIN_LIFT_SCHEMES.peak // Phase 3 AND 4 hold at Peak
+function collisionMainLiftScheme(phaseNum, deload) {
+  if (deload) return COLLISION_MAIN_LIFT_SCHEMES.deload
+  if (phaseNum <= 1) return COLLISION_MAIN_LIFT_SCHEMES.accumulation
+  if (phaseNum === 2) return COLLISION_MAIN_LIFT_SCHEMES.intensification
+  return COLLISION_MAIN_LIFT_SCHEMES.peak // Phase 3 AND 4 hold at Peak
 }
 
 // Returns just the ramp text (no exercise name) — e.g.
 // "40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8" for an Accumulation-phase week, or
 // "40%×10, 70%×5" (fixed, no open window) for a deload week.
-function buildLinemenMainLiftRamp(phaseNum, deload) {
-  const s = linemenMainLiftScheme(phaseNum, deload)
+function buildCollisionMainLiftRamp(phaseNum, deload) {
+  const s = collisionMainLiftScheme(phaseNum, deload)
   const steps = s.pcts.slice(0, -1).map((p, i) => `${p}%×${s.reps[i]}`)
   const topPct = s.pcts[s.pcts.length - 1]
   return `${steps.join(', ')}, ${topPct}%×${s.top}`
@@ -396,7 +396,7 @@ function buildLinemenMainLiftRamp(phaseNum, deload) {
 // forced percentage. Rep scheme descends by phase: Accumulation 5x3,
 // Intensification down to heavy doubles (3,3,2,2), Peak heavy singles off a
 // triple (3,2,2,1,1), deload 3x3 lighter (no build).
-function linemenOlyScheme(phaseNum, deload) {
+function collisionOlyScheme(phaseNum, deload) {
   // Deliberately NOT written as a leading "3x3" — every branch here is
   // prose specifically so it never matches the shared "Name: NxR" accessory
   // shape (isAccessoryLine's regex requires digits immediately after the
@@ -411,6 +411,90 @@ function linemenOlyScheme(phaseNum, deload) {
   return 'build to a heavy single off a triple — 3,2,2,1,1, start light and build'
 }
 
+function collisionPhaseInfo(weekNumber) {
+  const phaseNum = Math.min(4, Math.floor((weekNumber - 1) / 4) + 1)
+  const wip = ((weekNumber - 1) % 4) + 1
+  const deload = wip === 4
+  const labels = ['Accumulation', 'Intensification', 'Peak', 'Peak']
+  return { week: weekNumber, phaseNum, phaseLabel: labels[phaseNum - 1], wip, deload }
+}
+
+// Fixed 4-way neck-armor block — flexion, extension, both lateral
+// directions. Shared across every Collision-archetype sport that wants
+// dedicated neck work (Linemen, Wrestling, Rugby Forwards — see their own
+// sections; Hockey Forwards opts out in favor of hip/skating-mobility
+// accessories instead, per its own real demands). The "Neck — ...:" header
+// (see organizeSessionDescription/applyDeloadVolumeReduction) keeps it
+// exempt from the accessory cap, rotation, volume wave, and deload
+// reduction — a fixed, always-kept dose every week, same treatment as a
+// "Core — ...:" block.
+const COLLISION_NECK = 'Neck — 4-Way (band or manual resistance):\nNeck Flexion: 2x15\nNeck Extension: 2x15\nLateral Neck Flexion: 2x15 each side'
+// Heavier dedicated neck dose for a 5-day plan's own Day 5.
+const COLLISION_NECK_DEDICATED = 'Neck — Dedicated 4-Way (band or manual resistance):\nNeck Flexion: 3x12\nNeck Extension: 3x12\nLateral Neck Flexion: 3x12 each side'
+
+// Single entry point for every Collision-archetype sport's day-count
+// handling. `dayFns` supplies the sport's own content:
+//   anchor4Day(info) -> [4 sessions]   (required — the source-faithful anchor)
+//   threeDay(info)   -> [3 sessions]   (required — hand-consolidated, NOT a
+//                                       slice of the anchor; every anchor
+//                                       movement still appears somewhere)
+//   day5(info)       -> session        (5-day: anchor + this)
+//   lowerC(info)     -> session        (6-day: relabeled anchor + this)
+//   upperC(info)     -> session        (6-day: relabeled anchor + this)
+//   sixDayLabels     -> string[4]      (defaults to Lower A/Upper A/Lower B/Upper B)
+// daysPerWeek < 3 falls back to the first 2 days of the 4-day anchor (no
+// dedicated layout for 2 days — same "slice the anchor" fallback every
+// other sport already uses for its own low day-count options).
+function generateCollisionArchetypeWeeks(dayFns, daysPerWeek = 4) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const info = collisionPhaseInfo(w)
+    let sessions
+    if (daysPerWeek <= 2) {
+      sessions = dayFns.anchor4Day(info).slice(0, 2)
+    } else if (daysPerWeek === 3) {
+      sessions = dayFns.threeDay(info)
+    } else if (daysPerWeek === 4) {
+      sessions = dayFns.anchor4Day(info)
+    } else if (daysPerWeek === 5) {
+      sessions = [...dayFns.anchor4Day(info), dayFns.day5(info)]
+    } else {
+      sessions = [
+        ...relabelDays(dayFns.anchor4Day(info), dayFns.sixDayLabels || ['Lower A', 'Upper A', 'Lower B', 'Upper B']),
+        dayFns.lowerC(info),
+        dayFns.upperC(info),
+      ]
+    }
+    // The main-lift scheme's own top percentage (80/85/90, or 70 on a
+    // deload) as the one representative number for the week — every main
+    // strength lift in a given phase shares the same top %, unlike the
+    // open rep WINDOW on that top set, which is genuinely different per
+    // lift-scheme and isn't a single scalar worth summarizing here.
+    const topScheme = collisionMainLiftScheme(info.phaseNum, info.deload)
+    const topPct = topScheme.pcts[topScheme.pcts.length - 1]
+    weeks.push({
+      week_number: w,
+      objective: info.deload
+        ? `Phase ${info.phaseNum} — Deload (${topPct}%) · Week ${info.wip} of 4`
+        : `Phase ${info.phaseNum} — ${info.phaseLabel} (${topPct}%) · Week ${info.wip} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
+// ─── Football — Linemen (standard goal only; see fbLinemenMGSess below for
+// the muscle-gain variant, which is untouched by this rebuild) ─────────────
+// Adapted from a real D1 4-day upper/lower linemen program — the 4-day
+// layout (linemenAnchor4Day) is the source-faithful anchor; 3/5/6-day layouts
+// keep that same core with additional movements to fill the extra frequency,
+// per the program design. This is the archetype's reference implementation —
+// see generateLinemenWeeks below, which now just plugs these day functions
+// into the shared generateCollisionArchetypeWeeks orchestrator.
+
+const LINEMEN_WU_LOWER = 'Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5\n\n'
+const LINEMEN_WU_UPPER = 'Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20\n\n'
+
 // AMRAP Pull-Up special protocol (kept exactly, every week — this is a fixed
 // live-testing protocol, not something that progresses by phase). Set 1 is
 // AMRAP; the athlete looks up their own result on this chart for the
@@ -419,14 +503,6 @@ const LINEMEN_AMRAP_PULLUP =
   'Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — ' +
   '1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5'
 
-function linemenPhaseInfo(weekNumber) {
-  const phaseNum = Math.min(4, Math.floor((weekNumber - 1) / 4) + 1)
-  const wip = ((weekNumber - 1) % 4) + 1
-  const deload = wip === 4
-  const labels = ['Accumulation', 'Intensification', 'Peak', 'Peak']
-  return { week: weekNumber, phaseNum, phaseLabel: labels[phaseNum - 1], wip, deload }
-}
-
 // ── 4-day anchor (source-faithful) — reused verbatim by 5-day (+Day 5) and
 // 6-day (relabeled Lower A/Upper A/Lower B/Upper B, +Lower C/Upper C) ──────
 
@@ -434,9 +510,9 @@ function linemenDay1Lower(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Day 1', focus: 'Lower Power',
-    description: `${LINEMEN_WU_LOWER}Power Clean: ${linemenOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
-      `Front Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${LINEMEN_NECK}`,
+    description: `${LINEMEN_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+      `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${COLLISION_NECK}`,
   }
 }
 
@@ -451,9 +527,9 @@ function linemenDay2Upper(info) {
   // main and OHP stays a secondary "10/8/6/6 building" press instead.
   return {
     day: 'Day 2', focus: 'Upper Strength',
-    description: `${LINEMEN_WU_UPPER}Single Arm DB Split Jerk: ${linemenOlyScheme(ph, dl)}, each arm\n` +
-      `Standing BB OHP: ${buildLinemenMainLiftRamp(ph, dl)}\n` +
-      `${LINEMEN_AMRAP_PULLUP}\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${LINEMEN_NECK}`,
+    description: `${LINEMEN_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Standing BB OHP: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `${LINEMEN_AMRAP_PULLUP}\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${COLLISION_NECK}`,
   }
 }
 
@@ -461,9 +537,9 @@ function linemenDay3Lower(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Day 3', focus: 'Lower Strength',
-    description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${linemenOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
-      `Back Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${LINEMEN_NECK}`,
+    description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+      `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${COLLISION_NECK}`,
   }
 }
 
@@ -471,9 +547,9 @@ function linemenDay4Upper(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Day 4', focus: 'Upper Power',
-    description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${linemenOlyScheme(ph, dl)}\n` +
-      `Close Grip Bench Press: ${buildLinemenMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-      `Bent Over BB Row: 3x10\nSeated Single Arm DB Overhead Press: 3x10 each arm\nSeated Cable Lat Pulldown: 3x12 (underhand grip)\n${LINEMEN_NECK}`,
+    description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Bent Over BB Row: 3x10\nSeated Single Arm DB Overhead Press: 3x10 each arm\nSeated Cable Lat Pulldown: 3x12 (underhand grip)\n${COLLISION_NECK}`,
   }
 }
 
@@ -488,51 +564,51 @@ function linemen3Day(info) {
   const { phaseNum: ph, deload: dl } = info
   return [
     { day: 'Day 1', focus: 'Lower Power',
-      description: `${LINEMEN_WU_LOWER}Power Clean: ${linemenOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
-        `Back Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${LINEMEN_NECK}` },
+      description: `${LINEMEN_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+        `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${COLLISION_NECK}` },
     { day: 'Day 2', focus: 'Upper (Full)',
-      description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${linemenOlyScheme(ph, dl)}\n` +
-        `Close Grip Bench Press: ${buildLinemenMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-        `${LINEMEN_AMRAP_PULLUP}\nStanding BB OHP: 10/8/6/6 (building)\nBent Over BB Row: 3x10\n${LINEMEN_NECK}` },
+      description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `${LINEMEN_AMRAP_PULLUP}\nStanding BB OHP: 10/8/6/6 (building)\nBent Over BB Row: 3x10\n${COLLISION_NECK}` },
     { day: 'Day 3', focus: 'Lower Strength',
-      description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${linemenOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
-        `Front Squat: ${buildLinemenMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${LINEMEN_NECK}` },
+      description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+        `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${COLLISION_NECK}` },
   ]
 }
 
 // ── 5-day (4-day anchor + Day 5: power/athleticism/armor) ─────────────────
 
-function linemenDay5(w) {
+function linemenDay5(info) {
   return {
     day: 'Day 5', focus: 'Power, Athleticism & Armor',
     description: 'Trap Bar Jump: 4x3 (cap 155 lbs)\nBox Jumps: 3x3\nBroad Jumps: 3x3\n' +
       'Sled Push: 4x20 yds (or Prowler Push; sub Heavy Farmer Carries if unavailable)\n' +
       'Loaded Carry Mix: 3 rounds (farmer + suitcase, alternating)\n' +
-      `${LINEMEN_NECK_DEDICATED}\nGrip Work: 2 sets`,
+      `${COLLISION_NECK_DEDICATED}\nGrip Work: 2 sets`,
   }
 }
 
 // ── 6-day (4-day anchor relabeled Lower A/Upper A/Lower B/Upper B, +
 // Lower C: posterior chain/athletic, + Upper C: hypertrophy/armor) ────────
 
-function linemenLowerC(info, w) {
+function linemenLowerC(info) {
   const { phaseNum: ph, deload: dl } = info
-  const power = weeklyVariant(w, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${linemenOlyScheme(ph, dl)}`)
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
   return {
     day: 'Lower C', focus: 'Lower — Posterior Chain & Athletic',
-    description: `${power}\nTrap Bar Deadlift: ${buildLinemenMainLiftRamp(ph, dl)}\n` +
-      `Bulgarian Split Squat: 3x8 each leg\nHip Thrust: 3x10\nFarmer Carries: 3x30 yds\n${LINEMEN_NECK}`,
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Bulgarian Split Squat: 3x8 each leg\nHip Thrust: 3x10\nFarmer Carries: 3x30 yds\n${COLLISION_NECK}`,
   }
 }
 
-function linemenUpperC(w) {
-  const press = weeklyVariant(w, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+function linemenUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
   return {
     day: 'Upper C', focus: 'Upper — Hypertrophy & Armor',
     description: `${press}\nChest Supported Row: 3x12\nLateral Raise: 3x15\nFace Pulls: 3x15\n` +
-      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${LINEMEN_NECK}`,
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${COLLISION_NECK}`,
   }
 }
 
@@ -540,46 +616,18 @@ function relabelDays(sessions, labels) {
   return sessions.map((s, i) => ({ ...s, day: labels[i] || s.day }))
 }
 
-// Single entry point for every linemen day count. daysPerWeek < 3 falls back
-// to the first 2 days of the 4-day anchor (no dedicated layout for 2 days is
-// specified — same "slice the anchor" fallback every other sport already
-// uses for its own low day-count options).
+// Single entry point for linemen — now just plugs its own day-content
+// functions into the shared archetype orchestrator (generateCollisionArchetypeWeeks
+// above). The day functions themselves, and everything they produce, are
+// unchanged from before this extraction.
 function generateLinemenWeeks(daysPerWeek = 4) {
-  const weeks = []
-  for (let w = 1; w <= 16; w++) {
-    const info = linemenPhaseInfo(w)
-    let sessions
-    if (daysPerWeek <= 2) {
-      sessions = linemenAnchor4Day(info).slice(0, 2)
-    } else if (daysPerWeek === 3) {
-      sessions = linemen3Day(info)
-    } else if (daysPerWeek === 4) {
-      sessions = linemenAnchor4Day(info)
-    } else if (daysPerWeek === 5) {
-      sessions = [...linemenAnchor4Day(info), linemenDay5(w)]
-    } else {
-      sessions = [
-        ...relabelDays(linemenAnchor4Day(info), ['Lower A', 'Upper A', 'Lower B', 'Upper B']),
-        linemenLowerC(info, w),
-        linemenUpperC(w),
-      ]
-    }
-    // The main-lift scheme's own top percentage (80/85/90, or 70 on a
-    // deload) as the one representative number for the week — every main
-    // strength lift in a given phase shares the same top %, unlike the
-    // open rep WINDOW on that top set, which is genuinely different per
-    // lift-scheme and isn't a single scalar worth summarizing here.
-    const topScheme = linemenMainLiftScheme(info.phaseNum, info.deload)
-    const topPct = topScheme.pcts[topScheme.pcts.length - 1]
-    weeks.push({
-      week_number: w,
-      objective: info.deload
-        ? `Phase ${info.phaseNum} — Deload (${topPct}%) · Week ${info.wip} of 4`
-        : `Phase ${info.phaseNum} — ${info.phaseLabel} (${topPct}%) · Week ${info.wip} of 4`,
-      sessions,
-    })
-  }
-  return weeks
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: linemenAnchor4Day,
+    threeDay: linemen3Day,
+    day5: linemenDay5,
+    lowerC: linemenLowerC,
+    upperC: linemenUpperC,
+  }, daysPerWeek)
 }
 
 function fbLinemenMGSess(info) {
@@ -927,13 +975,135 @@ const WR_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nNeck Strengthening: 3x12 each direction\nGrip Work: 3x30s each\nHip Flexor Stretch: 3x45s each leg\nStatic Stretch: Hip Flexors · Hamstrings · Thoracic`,
 }
 
+// ─── Wrestling — Collision/Max-Strength archetype (standard goal only; see
+// wrestlingSess above for the muscle-gain variant, untouched by this build,
+// same precedent as Linemen's own fbLinemenMGSess) ─────────────────────────
+// Built on the same archetype core Football Linemen established — same
+// rep-scheme math (collisionMainLiftScheme/buildCollisionMainLiftRamp),
+// same autoregulated Oly-lift prescription (collisionOlyScheme), same
+// day-count-aware layouts, same raised accessory cap (see
+// resolveAccessoryCapKey below). Differentiated from Linemen by exercise
+// selection and emphasis, not by structure: grip strength and grappling-
+// specific work (Weighted Pull-ups, Farmer/DB Suitcase Carries, Grip Work,
+// Rope Climb, Sprawl Drills) stand in for Linemen's football-specific
+// movements. The two sports share only the neck-armor block (COLLISION_NECK)
+// as common contact-sport ground — everything else is wrestling's own.
+
+const WRESTLING_WU_LOWER = 'Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side\n\n'
+const WRESTLING_WU_UPPER = 'Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction\n\n'
+
+function wrestlingDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower Power',
+    description: `${WRESTLING_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+      `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nNordic Hamstring Curl: 3x5\nSprawl Drills: 3x10\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 2', focus: 'Upper Strength',
+    description: `${WRESTLING_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Overhead Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Rope Climb: 3 ascents\nBB Row: 4x8\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower Strength',
+    description: `${WRESTLING_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+      `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power',
+    description: `${WRESTLING_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Weighted Chin-ups: 4x6\nInverted BB Row: 3x10\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingArchetypeAnchor4Day(info) {
+  return [wrestlingDay1Lower(info), wrestlingDay2Upper(info), wrestlingDay3Lower(info), wrestlingDay4Upper(info)]
+}
+
+// ── 3-day (consolidated — every anchor movement still appears somewhere) ──
+
+function wrestlingArchetype3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return [
+    { day: 'Day 1', focus: 'Lower Power',
+      description: `${WRESTLING_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+        `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nSprawl Drills: 3x10\n${COLLISION_NECK}` },
+    { day: 'Day 2', focus: 'Upper (Full)',
+      description: `${WRESTLING_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `Rope Climb: 3 ascents\nBB Row: 4x8\n${COLLISION_NECK}` },
+    { day: 'Day 3', focus: 'Lower Strength',
+      description: `${WRESTLING_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+        `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+        `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}` },
+  ]
+}
+
+// ── 5-day (4-day anchor + Day 5: grip/conditioning/armor) ──────────────────
+
+function wrestlingArchetypeDay5(info) {
+  return {
+    day: 'Day 5', focus: 'Grip, Conditioning & Armor',
+    description: 'Trap Bar Jump: 4x3 (cap 155 lbs)\nSled Push: 4x20 yds\n' +
+      'Weighted Carries: Farmer / Suitcase / Rack — 3 sets each\nRope Climb: 3 ascents\n' +
+      `${COLLISION_NECK_DEDICATED}\nGrip Work: 3 sets`,
+  }
+}
+
+// ── 6-day (4-day anchor relabeled Lower A/Upper A/Lower B/Upper B, +
+// Lower C: posterior chain/grappling, + Upper C: hypertrophy/grip armor) ──
+
+function wrestlingArchetypeLowerC(info) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Posterior Chain & Grappling',
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Single Leg RDL: 3x8 each leg\nSprawl Drills: 3x10\nDB Suitcase Carries: 3x30 yds each side\n${COLLISION_NECK}`,
+  }
+}
+
+function wrestlingArchetypeUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Grip Armor',
+    description: `${press}\nChest Supported Row: 3x12\nRope Climb: 3 ascents\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${COLLISION_NECK}`,
+  }
+}
+
+function generateWrestlingArchetypeWeeks(daysPerWeek) {
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: wrestlingArchetypeAnchor4Day,
+    threeDay: wrestlingArchetype3Day,
+    day5: wrestlingArchetypeDay5,
+    lowerC: wrestlingArchetypeLowerC,
+    upperC: wrestlingArchetypeUpperC,
+  }, daysPerWeek)
+}
+
 function generateWrestlingWeeks(_, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  const phases = mg ? MG_PHASES : WR_PHASES
-  const fn = mg
-    ? (info) => wrestlingSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : wrestlingSess
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [WR_DAY5, WR_DAY6])
+  if (!mg) return generateWrestlingArchetypeWeeks(daysPerWeek)
+  const fn = (info) => wrestlingSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
+  return buildWeeksDynamic(16, MG_PHASES, fn, daysPerWeek, [WR_DAY5, WR_DAY6])
 }
 
 // ─── Volleyball ───────────────────────────────────────────────────────────────
@@ -2120,8 +2290,125 @@ const HOCKEY_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip 90/90 Hold: 3x45s each side\nCossack Squat (light): 2x10 each side\nThoracic Rotation: 3x10 each side\nAdductor Static Stretch: 3x45s each side\nAnkle Mobility Circles: 3x10 each`,
 }
 
+// ─── Hockey Forwards — Collision/Max-Strength archetype (standard goal
+// only; see hockeyForwardsSess above for the muscle-gain variant, untouched
+// by this build) — Hockey Defense/Goalie are a different archetype (Repeat-
+// Sprint/Field, lateral/reactive) and are completely unaffected. ──────────
+// Built on the same archetype core as Linemen/Wrestling/Rugby Forwards, but
+// deliberately WITHOUT the shared neck-armor block — forwards' real
+// contact/first-step demand is collision strength blended with skating
+// acceleration and hip mobility (Copenhagen Adductor, Cossack Squat, Hip
+// 90/90 Hold, Lateral Bound, Split Squat Jump) rather than the
+// head/neck-impact profile Linemen/Wrestling/Rugby Forwards share — a real
+// point of differentiation between contact-sport programs, not an
+// oversight. Otherwise identical machinery: same rep-scheme math, same
+// autoregulated Oly-lift prescription, same raised accessory cap.
+
+const HOCKEY_ARCHETYPE_WU_LOWER = 'Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
+const HOCKEY_ARCHETYPE_WU_UPPER = 'Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
+
+function hockeyArchetypeDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower — First-Step Explosion',
+    description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Power Clean: ${collisionOlyScheme(ph, dl)}\n` +
+      `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Bulgarian Split Squat: 3x6 each leg\nCopenhagen Adductor: 3x8 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side`,
+  }
+}
+
+function hockeyArchetypeDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 2', focus: 'Upper — Puck Battle Strength',
+    description: `${HOCKEY_ARCHETYPE_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Bench Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Weighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBand External Rotation: 3x15 each arm`,
+  }
+}
+
+function hockeyArchetypeDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower — Acceleration & COD',
+    description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)}\n` +
+      `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Lateral Bound: 5x5 each side\nSplit Squat Jump: 4x5 each leg\nCossack Squat: 3x8 each side`,
+  }
+}
+
+function hockeyArchetypeDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power & Conditioning',
+    description: `${HOCKEY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Weighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBattle Rope: 4x20s`,
+  }
+}
+
+function hockeyArchetypeAnchor4Day(info) {
+  return [hockeyArchetypeDay1Lower(info), hockeyArchetypeDay2Upper(info), hockeyArchetypeDay3Lower(info), hockeyArchetypeDay4Upper(info)]
+}
+
+function hockeyArchetype3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return [
+    { day: 'Day 1', focus: 'Lower — First-Step Explosion',
+      description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Power Clean: ${collisionOlyScheme(ph, dl)}\n` +
+        `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+        `Bulgarian Split Squat: 3x6 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side` },
+    { day: 'Day 2', focus: 'Upper (Full) — Puck Battle Strength',
+      description: `${HOCKEY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `Weighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm` },
+    { day: 'Day 3', focus: 'Lower — Acceleration & COD',
+      description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)}\n` +
+        `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Lateral Bound: 5x5 each side\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg` },
+  ]
+}
+
+function hockeyArchetypeDay5(info) {
+  return {
+    day: 'Day 5', focus: 'On-Ice Transfer & Skating Power',
+    description: 'Lateral Sled Drag: 4x20 yds each direction\nSplit Squat Jump: 4x5 each leg\n' +
+      'Lateral Bound: 5x5 each side\nCopenhagen Adductor: 3x8 each leg\nHip 90/90 Hold: 3x30s each side',
+  }
+}
+
+function hockeyArchetypeLowerC(info) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Skating Power & Hip Mobility',
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Cossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nSled Sprint: 6x20 yds`,
+  }
+}
+
+function hockeyArchetypeUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Shoulder Health',
+    description: `${press}\nChest Supported Row: 3x12\nBand External Rotation: 3x15 each arm\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}`,
+  }
+}
+
+function generateHockeyForwardsArchetypeWeeks(daysPerWeek) {
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: hockeyArchetypeAnchor4Day,
+    threeDay: hockeyArchetype3Day,
+    day5: hockeyArchetypeDay5,
+    lowerC: hockeyArchetypeLowerC,
+    upperC: hockeyArchetypeUpperC,
+  }, daysPerWeek)
+}
+
 function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
+  if (!mg && posId === 'forwards') return generateHockeyForwardsArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : HOCKEY_PHASES
   const baseFns = { forwards: hockeyForwardsSess, defense: hockeyDefenseSess, goalie: hockeyGoalieSess }
   const baseFn = baseFns[posId] || hockeyForwardsSess
@@ -2183,8 +2470,122 @@ const RUGBY_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip Flexor Stretch: 3x45s each leg\nThoracic Rotation: 3x10 each side\nHamstring Eccentric: 3x8\nStatic Stretch: Adductors · Quads · Calves`,
 }
 
+// ─── Rugby Forwards — Collision/Max-Strength archetype (standard goal only;
+// see rugbyForwardsSess above for the muscle-gain variant, untouched by
+// this build) — Rugby Backs is a different archetype (Repeat-Sprint/Field
+// Athlete) and is completely unaffected by this section. ───────────────────
+// Built on the same archetype core as Linemen/Wrestling. Differentiated by
+// scrum/contact-specific work (Scrum Drive, Sandbag Carry, Landmine
+// Rotational Press) in place of Linemen's football-specific movements,
+// sharing the neck-armor block (COLLISION_NECK) as common contact-sport
+// ground with Linemen and Wrestling.
+
+const RUGBY_ARCHETYPE_WU_LOWER = 'Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
+const RUGBY_ARCHETYPE_WU_UPPER = 'Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
+
+function rugbyArchetypeDay1Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 1', focus: 'Lower Power — Scrummage Drive',
+    description: `${RUGBY_ARCHETYPE_WU_LOWER}Power Clean from floor: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+      `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+      `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeDay2Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 2', focus: 'Upper Strength & Contact Prep',
+    description: `${RUGBY_ARCHETYPE_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
+      `Bench Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\nDB Shrugs: 3x12\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeDay3Lower(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 3', focus: 'Lower Explosion & Carrying',
+    description: `${RUGBY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+      `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeDay4Upper(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Day 4', focus: 'Upper Power, Contact & Rotational',
+    description: `${RUGBY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+      `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+      `Weighted Chin-ups: 4x6\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeAnchor4Day(info) {
+  return [rugbyArchetypeDay1Lower(info), rugbyArchetypeDay2Upper(info), rugbyArchetypeDay3Lower(info), rugbyArchetypeDay4Upper(info)]
+}
+
+function rugbyArchetype3Day(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return [
+    { day: 'Day 1', focus: 'Lower Power — Scrummage Drive',
+      description: `${RUGBY_ARCHETYPE_WU_LOWER}Power Clean from floor: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
+        `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
+        `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\n${COLLISION_NECK}` },
+    { day: 'Day 2', focus: 'Upper (Full) & Contact Prep',
+      description: `${RUGBY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
+        `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
+        `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\n${COLLISION_NECK}` },
+    { day: 'Day 3', focus: 'Lower Explosion & Carrying',
+      description: `${RUGBY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
+        `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+        `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\n${COLLISION_NECK}` },
+  ]
+}
+
+function rugbyArchetypeDay5(info) {
+  return {
+    day: 'Day 5', focus: 'Contact Conditioning & Armor',
+    description: 'Scrum Drive: 5x10 yds\nSled Push: 4x20 yds\n' +
+      'Weighted Carries: Farmer / Sandbag / Rack — 3 sets each\n' +
+      `${COLLISION_NECK_DEDICATED}\nGrip Work: 2 sets`,
+  }
+}
+
+function rugbyArchetypeLowerC(info) {
+  const { phaseNum: ph, deload: dl } = info
+  const power = weeklyVariant(info.week, 'Trap Bar Jump: 4x3 (cap 155 lbs)', `Clean Pull: ${collisionOlyScheme(ph, dl)}`)
+  return {
+    day: 'Lower C', focus: 'Lower — Posterior Chain & Carrying',
+    description: `${power}\nTrap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
+      `Single Leg RDL: 3x8 each leg\nScrum Drive: 4x10 yds\nSandbag Carry: 3x20 yds\n${COLLISION_NECK}`,
+  }
+}
+
+function rugbyArchetypeUpperC(info) {
+  const press = weeklyVariant(info.week, 'Incline DB Press: 3x10', 'Weighted Dips: 3x10')
+  return {
+    day: 'Upper C', focus: 'Upper — Hypertrophy & Contact Armor',
+    description: `${press}\nChest Supported Row: 3x12\nLandmine Rotational Press: 3x6 each side\n` +
+      `${superset(1, ['Bicep Curls: 3x12', 'Tricep Pushdowns: 3x12']).join('\n')}\n${COLLISION_NECK}`,
+  }
+}
+
+function generateRugbyForwardsArchetypeWeeks(daysPerWeek) {
+  return generateCollisionArchetypeWeeks({
+    anchor4Day: rugbyArchetypeAnchor4Day,
+    threeDay: rugbyArchetype3Day,
+    day5: rugbyArchetypeDay5,
+    lowerC: rugbyArchetypeLowerC,
+    upperC: rugbyArchetypeUpperC,
+  }, daysPerWeek)
+}
+
 function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
+  if (!mg && posId === 'forwards') return generateRugbyForwardsArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : RUGBY_PHASES
   const baseFns = { forwards: rugbyForwardsSess, backs: rugbyBacksSess }
   const baseFn = baseFns[posId] || rugbyForwardsSess
@@ -3001,6 +3402,21 @@ const SPORT_MAX_ACCESSORIES = {
   // total), one tick above the sport-wide default of 3. Every other football
   // position (skill/hybrid/qb) still resolves to the default cap untouched.
   football_linemen: 5,
+  // The other 3 sports built on the Collision/Max-Strength archetype core
+  // (feat/archetype-collision) — same raised cap as Linemen, same reasoning:
+  // the archetype's day layouts are authored dense on purpose. Scoped to
+  // wrestling (single position) and specifically the Forwards position of
+  // rugby/hockey — Rugby Backs and Hockey Defense/Goalie are untouched by
+  // this archetype and keep the sport-wide default cap of 3.
+  // Deliberately NOT keyed as plain "wrestling" — wrestling is a single-
+  // position sport, so a bare 'wrestling' key would collide with
+  // resolveAccessoryCapKey's own goal-agnostic fallthrough (`return sport`)
+  // and leak the raised cap into the muscle-gain path too (caught by the
+  // golden snapshot suite). "wrestling_archetype" only ever gets returned
+  // by the explicit, goal-gated branch below.
+  wrestling_archetype: 5,
+  rugby_forwards: 5,
+  hockey_forwards: 5,
 }
 
 // Football's shared MAX_ACCESSORIES cap is raised for linemen only — never
@@ -3010,9 +3426,16 @@ const SPORT_MAX_ACCESSORIES = {
 // re-tuning content this task didn't touch). Both call sites that organize
 // a football blueprint (auto-assign below, and blueprintController.js's
 // manual "build from template" tool) must resolve the same key for the
-// same inputs, so this is the one place that decision is made.
+// same inputs, so this is the one place that decision is made. Wrestling/
+// Rugby Forwards/Hockey Forwards follow the identical goal-gated pattern —
+// their own muscle-gain paths still run their older, pre-archetype content
+// (wrestlingSess, rugbyForwardsSess, hockeyForwardsSess), untouched, so they
+// resolve to the sport-wide default cap exactly as before this archetype work.
 function resolveAccessoryCapKey(sport, posId, goal) {
   if (sport === 'football' && posId === 'linemen' && goal !== 'muscle_gain') return 'football_linemen'
+  if (sport === 'wrestling' && goal !== 'muscle_gain') return 'wrestling_archetype'
+  if (sport === 'rugby' && posId === 'forwards' && goal !== 'muscle_gain') return 'rugby_forwards'
+  if (sport === 'hockey' && posId === 'forwards' && goal !== 'muscle_gain') return 'hockey_forwards'
   return sport
 }
 
@@ -3022,8 +3445,9 @@ function resolveAccessoryCapKey(sport, posId, goal) {
 // fine for baseball/basketball/soccer, where every position shares
 // content-compatible accessory names, but football is NOT uniform: skill/
 // hybrid/qb are the 3 positions this rebuild targets, while linemen (any
-// goal) runs the fully separate, bespoke generateLinemenWeeks/
-// linemenPhaseInfo engine and must never see Change 4's phase table — it
+// goal) runs the fully separate Collision/Max-Strength archetype engine
+// (generateLinemenWeeks, collisionPhaseInfo) and must never see Change 4's
+// phase table — it
 // already has its own pre-existing wip-based ACCESSORY_ROTATION rotation
 // (e.g. "Single Leg RDL" -> Good Mornings/Romanian Deadlift) that must stay
 // exactly as merged. Returning null here (rather than 'football') for any

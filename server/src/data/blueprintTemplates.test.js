@@ -763,6 +763,11 @@ describe('Area 7 — Exercise library coverage', () => {
     // LINEMEN_WU_UPPER) — same "preamble label, not a single exercise"
     // gap already accepted above for 'lower body warm-up'/'upper body warm-up'.
     'empty bb warm-up complex', 'upper body warm-up series',
+    // feat/archetype-collision — Wrestling/Rugby Forwards/Hockey Forwards'
+    // own fixed warm-up-complex LABEL lines, same "preamble label, not a
+    // single exercise" gap as Linemen's own above.
+    'wrestling movement warm-up', 'rugby lower-body warm-up', 'rugby upper-body warm-up',
+    'hockey lower-body warm-up', 'hockey upper-body warm-up',
     // Linemen's "Neck — ...:" header lines — same kind of block-label gap
     // already accepted above for 'core — anti-extension' etc. and
     // 'arm care — circuit'.
