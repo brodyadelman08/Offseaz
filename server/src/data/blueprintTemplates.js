@@ -902,15 +902,17 @@ function generateSoccerWeeks(posId, goal, daysPerWeek = 4) {
 function wrestlingSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'power') // Change 1 — collision/max-strength archetype, same tier as football skill/hybrid
+  const ms = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     // Fix 1: Squat day — removed Trap Bar Deadlift; Single Leg RDL kept as light accessory
     { day: 'Day 1', focus: 'Lower Max Strength',
-      description: `Back Squat: ${info.ramp}, ${q}×3 (top set — max effort)\nWeighted Pull-ups: 5xAMAP\nNordic Hamstring Curl: 3x5\nSingle Leg RDL: 3x8 each leg\nHip 90/90 Stretch: 3x30s each side\nCossack Squat: 3x5 each side\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r} (top set — max effort)\nWeighted Pull-ups: 5xAMAP\nNordic Hamstring Curl: 3x5\nSingle Leg RDL: 3x8 each leg\nHip 90/90 Stretch: 3x30s each side\nCossack Squat: 3x5 each side\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Max Strength',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nWeighted Pull-ups: 5xAMAP\nBB Row: 4x6\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nGrip Work: 3x30 seconds each\nBand External Rotation: 3x15 each arm\nFace Pulls: 3x15` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 5xAMAP\nBB Row: 4x6\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nGrip Work: 3x30 seconds each\nBand External Rotation: 3x15 each arm\nFace Pulls: 3x15` },
     // Fix 3: phasePlyo
     { day: 'Day 3', focus: 'Explosive Power',
-      description: `Power Clean: 5x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nMed Ball Slam: 4x8\nSprawl Drills: 3x10\nLevel Change Explosive Sprawl: 4x8` },
+      description: `Power Clean: 5x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nMed Ball Slam: ${ms}x8 (${explosiveIntent(ph)})\nSprawl Drills: 3x10\nLevel Change Explosive Sprawl: 4x8` },
     { day: 'Day 4', focus: 'Conditioning & Accessory',
       description: `Weighted Carries: Farmer / Suitcase / Rack — 3 sets each\nPull-up max set x3\nPush-up max set x3\nIsometric Squat Hold: 3x30 seconds\nIsometric Pull Hold: 3x30 seconds\n400m repeats x6\nBand External Rotation: 3x15 each arm\nFace Pulls: 3x15\nYTW Shoulder Series: 3x10 each` },
   ]
@@ -939,14 +941,16 @@ function generateWrestlingWeeks(_, goal, daysPerWeek = 4) {
 function volleyballSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — vertical/jump/court archetype, same tier as basketball
+  const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
   return [
     // Fix 3: phasePlyo replaces Box Jump + Depth Jump multi-list
     { day: 'Day 1', focus: 'Lower Power, Landing Mechanics & Patellar Tendon Prehab',
-      description: `Back Squat: ${info.ramp}, ${q}×3\nBulgarian Split Squat: 3x5 each leg\n${phasePlyo(ph)}\nSnap Down: 3x5\nDepth Drop: 3x5\nSingle Leg Box Jump: 3x5 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 4xAMAP` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x5 each leg\n${phasePlyo(ph)}\nSnap Down: 3x5\nDepth Drop: 3x5\nSingle Leg Box Jump: 3x5 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 4xAMAP` },
     { day: 'Day 2', focus: 'Upper & Shoulder Health',
       description: `DB Bench: 4x10\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nOverhead Press: 3x10\nFace Pulls: 3x15` },
     { day: 'Day 3', focus: 'Full Body Explosion',
-      description: `Power Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×3\nApproach Jump: 5x5\nLateral Bounds: 4x5 each side\nHip Thrust: 4x8\nBand Pull-Aparts: 3x20\n${coreBlock(ph)}` },
+      description: `Power Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nLateral Bounds: 4x5 each side\nHip Thrust: 4x8\nBand Pull-Aparts: 3x20\n${coreBlock(ph)}` },
   ]
 }
 
@@ -977,53 +981,60 @@ function generateVolleyballWeeks(_, goal, daysPerWeek = 3) {
 function trackSprintSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — non-contact speed archetype, same tier as football QB/basketball/soccer
+  const bnd = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
     // Fix 3: phasePlyo replaces Box Jump + Broad Jump list
     { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 5x3\nBack Squat: ${info.ramp}, ${q}×3\nHip Thrust: 4x8\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nCopenhagen Adductor: 3x8 each leg\nBanded Hip Flexion: 3x12 each leg\n${coreBlock(ph)}` },
+      description: `Power Clean: 5x3\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nCopenhagen Adductor: 3x8 each leg\nBanded Hip Flexion: 3x12 each leg\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${coreBlock(ph)}` },
     // Fix 3: phasePlyo as primary; Bounding + Wicket Drills are sprint-specific, kept
     { day: 'Day 3', focus: 'Explosion',
-      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nBounding: 3x20m\nWicket Drills: 3x30m\n${coreBlock(ph)}` },
+      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBounding: ${bnd}x20m (${explosiveIntent(ph)})\nWicket Drills: 3x30m\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Posterior Chain',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
   ]
 }
 
 function trackThrowSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/throwing archetype, same tier as baseball/golf/tennis
+  const mbrt2 = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const mbrt4 = explosiveSets(4, ph)
   return [
     // Fix 1: Day 1 is now a squat day — Trap Bar Deadlift moved to Day 3
     { day: 'Day 1', focus: 'Lower Power — Squat',
-      description: `Power Clean from floor: 5x3 working up, last set AMAP\nBack Squat: ${info.ramp}, ${q}×3\nHip Thrust: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nDouble Leg Calf Raise: 3x15\nGrip Work: 3x30s each (plate pinch · towel hang)\n${coreBlock(ph)}` },
+      description: `Power Clean from floor: 5x3 working up, last set AMAP\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nDouble Leg Calf Raise: 3x15\nGrip Work: 3x30s each (plate pinch · towel hang)\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Strength, Rotational & Shoulder Health',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nPull-ups: 4xAMAP\nBB Row: 4x8\nOverhead Press: 4x8\nMed Ball Rotational Throw: 4x6 each side\nRotational Cable Throw: 4x8 each side\nBand External Rotation: 3x15 each arm\nYTW Shoulder Series: 3x10 each\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nBB Row: 4x8\nOverhead Press: 4x8\nMed Ball Rotational Throw: ${mbrt2}x6 each side (${explosiveIntent(ph)})\nRotational Cable Throw: 4x8 each side\nBand External Rotation: 3x15 each arm\nYTW Shoulder Series: 3x10 each\nFace Pulls: 3x15\n${coreBlock(ph)}` },
     // Trap Bar DL is primary; RDL removed (flagged: TBD + RDL); Hip Thrust replaces it
     { day: 'Day 3', focus: 'Lower Strength — Deadlift',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\nDB Step-Ups: 3x6 each leg\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\nSingle Leg Calf Raise: 3x12\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nDB Step-Ups: 3x6 each leg\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\nSingle Leg Calf Raise: 3x12\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power, Rotational & Shoulder Health',
-      description: `Push Press: 4x5\nClose Grip Bench Press: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nRotational Cable Throw: 4x8 each side\nBand External Rotation: 3x15 each arm\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Push Press: 4x5\nClose Grip Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: ${mbrt4}x6 each side (${explosiveIntent(ph)})\nRotational Cable Throw: 4x8 each side\nBand External Rotation: 3x15 each arm\nFace Pulls: 3x15\n${coreBlock(ph)}` },
   ]
 }
 
 function trackJumpSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — non-contact jump archetype, same tier as basketball
+  const slbj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   // Single Leg Depth Jump only in phases 3-4 (Fix 3 — no depth jumps ph 1-2)
   const singleLegDepth = ph >= 3 ? '\nSingle Leg Depth Jump: 4x4 each leg' : ''
   return [
     // Fix 3: phasePlyo; Single Leg Depth Jump gated to phases 3-4
     { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 5x3\nBack Squat: ${info.ramp}, ${q}×3\nHip Thrust: 4x8\n${phasePlyo(ph)}${singleLegDepth}\nSingle Leg RDL: 3x8 each leg\nTerminal Knee Extension: 3x15 each leg\nApproach Jump Work: 3 sets\n${coreBlock(ph)}` },
+      description: `Power Clean: 5x3\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\n${phasePlyo(ph)}${singleLegDepth}\nSingle Leg RDL: 3x8 each leg\nTerminal Knee Extension: 3x15 each leg\nApproach Jump Work: 3 sets\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15` },
     // Fix 3: phasePlyo as primary; jump-specific drills kept; Single Leg Broad Jump phases 2+
     { day: 'Day 3', focus: 'Explosion — Jumps Focus',
-      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nBounding: 3x20m${ph >= 2 ? '\nSingle Leg Broad Jump: 3x3 each leg' : ''}\nSingle Leg Box Jump: 3x5 each leg\nApproach Jump Work: 3 sets\n${coreBlock(ph)}` },
+      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBounding: 3x20m${ph >= 2 ? '\nSingle Leg Broad Jump: 3x3 each leg' : ''}\nSingle Leg Box Jump: ${slbj}x5 each leg (${explosiveIntent(ph)})\nApproach Jump Work: 3 sets\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Posterior Chain',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
   ]
 }
 
@@ -1072,10 +1083,17 @@ function xcSess(deload = false) {
 
 const XC_PHASE_LABELS = ['Injury Prevention Base', 'Base Strength', 'Maintenance', 'Pre-Season Taper']
 
-const XC_DAY3 = {
+// Change 3 — Day 3's plyo/explosive lines now vary by phase (volume + intent
+// note) via the same explosiveSets/explosiveIntent mechanism every other
+// sport uses, instead of being a flat const identical every week of the
+// 16-week plan. Everything else on this day (Box Step-Up, Glute Bridge, Hip
+// 90/90 Hold, Calf Raise, Band Hip Abduction) is untouched — Cross Country's
+// deliberately light, non-%-ramped main-lift design (see xcSess/generateXCWeeks)
+// means Change 1's tiered rep arc has no ramped line to attach to here.
+const XC_DAY3 = (phaseNum) => ({
   day: 'Day 3', focus: 'Plyometrics & Injury Prevention',
-  description: `Ankle Hops: 3x20\nSingle Leg Hop & Stick: 3x5 each leg\nBox Step-Up: 3x12 each leg\nGlute Bridge: 3x15\nHip 90/90 Hold: 2x45s each side\nCalf Raise: 3xAMAP\nBand Hip Abduction: 3x15 each side`,
-}
+  description: `Ankle Hops: ${explosiveSets(3, phaseNum)}x20 (${explosiveIntent(phaseNum)})\nSingle Leg Hop & Stick: ${explosiveSets(3, phaseNum)}x5 each leg (${explosiveIntent(phaseNum)})\nBox Step-Up: 3x12 each leg\nGlute Bridge: 3x15\nHip 90/90 Hold: 2x45s each side\nCalf Raise: 3xAMAP\nBand Hip Abduction: 3x15 each side`,
+})
 const XC_DAY4 = {
   day: 'Day 4', focus: 'Core & Hip Strength',
   description: `Glute Bridge Hold: 3x60s\nSingle Leg Glute Bridge: 3x12 each leg\nCopenhagen Adductor: 3x8 each leg\nBird Dog: 3x10 each side\nDead Bug: 3x10 each side\nSide-Lying Hip Abduction: 3x15 each\nPlank with Hip Dip: 3x10 each side`,
@@ -1102,7 +1120,7 @@ function generateXCWeeks(_, goal, daysPerWeek = 2) {
     const isDeload = wip === 4
     const base  = xcSess(isDeload)
     const extra = []
-    if (daysPerWeek >= 3) extra.push(XC_DAY3)
+    if (daysPerWeek >= 3) extra.push(XC_DAY3(phi + 1))
     if (daysPerWeek >= 4) extra.push(XC_DAY4)
     if (daysPerWeek >= 5) extra.push(XC_DAY5)
     if (daysPerWeek >= 6) extra.push(XC_DAY6)
@@ -1121,15 +1139,18 @@ function generateXCWeeks(_, goal, daysPerWeek = 2) {
 function lacrosseSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — repeat-sprint/field archetype, same tier as soccer
+  const lb   = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const mbrt = explosiveSets(4, ph)
   return [
     // Fix 1: Squat day — removed Trap Bar Deadlift; Single Leg RDL + Nordic kept as accessories
     { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 4x3\nBack Squat: ${info.ramp}, ${q}×3\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: 4x5 each side\n${coreBlock(ph)}` },
+      description: `Power Clean: 4x3\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nPull-ups: 4xAMAP\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nBand External Rotation: 3x15\nGrip Work: 3x30s each` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: ${mbrt}x6 each side (${explosiveIntent(ph)})\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nBand External Rotation: 3x15\nGrip Work: 3x30s each` },
     // Fix 3: phasePlyo replaces multi-plyo list
     { day: 'Day 3', focus: 'Explosion',
-      description: `Hang Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
+      description: `Hang Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Conditioning & COD',
       description: `V Drill: 4x3\nStar Drill: 3x3\nSled Sprint: 6x20 yds\n200m Intervals: 8x1 @ 80-85% effort (90 sec rest)\nBroad Jump: 3x3\nCopenhagen Adductor: 3x8 each leg` },
   ]
@@ -1173,9 +1194,19 @@ function swimSess(phaseNum) {
 function swimDay4(phaseNum) {
   const sets = phaseNum <= 2 ? 3 : 4
   const s = (n) => `${sets}x${n}`
+  // Change 3 — the day's three genuinely explosive/power lines (med ball
+  // throw, box jump, lateral bound) now use the same phase-scaled
+  // explosiveSets/explosiveIntent arc every other sport's power work uses,
+  // instead of the old blunt "3 sets before phase 3, 4 after" bump. The two
+  // conditioning-tempo lines (Resistance Band Sprint, Ankle Hops) keep the
+  // existing s() helper — swimming has no % lifting anywhere (see swimSess),
+  // so Change 1's tiered rep arc has no ramped line to attach to on any day.
+  const mbot = explosiveSets(4, phaseNum)
+  const bj   = explosiveSets(4, phaseNum)
+  const lb   = explosiveSets(4, phaseNum)
   return {
     day: 'Day 4', focus: 'Power & Explosiveness',
-    description: `Medicine Ball Overhead Throw: ${s(8)}\nBox Jump: ${s(5)}\nResistance Band Sprint: ${s(20)} yds\nAnkle Hops: ${s(20)}\nLateral Bound: ${s(5)} each side\n${coreBlock(phaseNum)}`,
+    description: `Medicine Ball Overhead Throw: ${mbot}x8 (${explosiveIntent(phaseNum)})\nBox Jump: ${bj}x5 (${explosiveIntent(phaseNum)})\nResistance Band Sprint: ${s(20)} yds\nAnkle Hops: ${s(20)}\nLateral Bound: ${lb}x5 each side (${explosiveIntent(phaseNum)})\n${coreBlock(phaseNum)}`,
   }
 }
 function swimDay5(phaseNum) {
@@ -1374,20 +1405,118 @@ const SOCCER_PHASE_ACCESSORY_ROTATION = {
   'lateral raise':          { 1: 'Lateral Raise',         2: 'Front Raise',   3: 'Cuban Press',        4: 'Lateral Raise' },
 }
 
+// ─── Coverage extension (feat/blueprint-quick-wins) ────────────────────────
+// The 10 sport groups below never got Change 4 (or Change 1/3 — see each
+// session function). Every table here reuses ONLY names already vetted as
+// safe substitutes elsewhere in this file (the global wip-based
+// ACCESSORY_ROTATION table above, or FOOTBALL_/BASKETBALL_/SOCCER_/
+// BASEBALL_PHASE_ACCESSORY_ROTATION) — no new exercise names are introduced,
+// same rule Change 4 has followed from the start. Keys are picked from names
+// that actually recur in that sport's own real content (verified against
+// the live session functions, not guessed).
+
+// Hockey — shared across forwards/defense/goalie. All three share Weighted
+// Pull-ups, Single Arm DB Row, Face Pulls, and Band External Rotation.
+const HOCKEY_PHASE_ACCESSORY_ROTATION = {
+  'weighted pull-ups':      { 1: 'Weighted Pull-ups',      2: 'DB Row',              3: 'Weighted Chin-ups', 4: 'Weighted Pull-ups' },
+  'single arm db row':      { 1: 'Single Arm DB Row',      2: 'Chest Supported Row', 3: 'Pull-ups',          4: 'Single Arm DB Row' },
+  'face pulls':             { 1: 'Face Pulls',             2: 'Reverse Flys',        3: 'DB Row',            4: 'Face Pulls' },
+  'band external rotation': { 1: 'Band External Rotation', 2: 'Scap Push-Ups',       3: 'YTW Raises',        4: 'Band External Rotation' },
+}
+
+// Rugby — shared across forwards/backs. Both share Single Leg RDL,
+// Bulgarian Split Squat, Weighted Pull-ups, and Face Pulls.
+const RUGBY_PHASE_ACCESSORY_ROTATION = {
+  'single leg rdl':        { 1: 'Single Leg RDL',        2: 'Good Mornings', 3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
+  'bulgarian split squat': { 1: 'Bulgarian Split Squat', 2: 'Reverse Lunge', 3: 'Walking Lunge',      4: 'Bulgarian Split Squat' },
+  'weighted pull-ups':     { 1: 'Weighted Pull-ups',     2: 'DB Row',        3: 'Weighted Chin-ups',  4: 'Weighted Pull-ups' },
+  'face pulls':            { 1: 'Face Pulls',            2: 'Reverse Flys', 3: 'DB Row',             4: 'Face Pulls' },
+}
+
+// Track — shared across sprint/throw/jump (all 3 sub-events, mirroring how
+// basketball/soccer share one table across positions). Pull-ups, Hip
+// Thrust, Nordic Hamstring Curl, and Overhead Press all recur in every
+// sub-event's own content.
+const TRACK_PHASE_ACCESSORY_ROTATION = {
+  'pull-ups':              { 1: 'Pull-ups',              2: 'DB Row',          3: 'Chin-ups',           4: 'Pull-ups' },
+  'hip thrust':            { 1: 'Hip Thrust',            2: 'Glute Bridge',    3: 'Romanian Deadlift',  4: 'Hip Thrust' },
+  'nordic hamstring curl': { 1: 'Nordic Hamstring Curl', 2: 'Single Leg RDL',  3: 'Glute Bridge',       4: 'Nordic Hamstring Curl' },
+  'overhead press':        { 1: 'Overhead Press',        2: 'Arnold Press',    3: 'Push Press',         4: 'Overhead Press' },
+}
+
+const WRESTLING_PHASE_ACCESSORY_ROTATION = {
+  'weighted pull-ups':      { 1: 'Weighted Pull-ups',      2: 'DB Row',        3: 'Weighted Chin-ups', 4: 'Weighted Pull-ups' },
+  'band external rotation': { 1: 'Band External Rotation', 2: 'Scap Push-Ups', 3: 'YTW Raises',        4: 'Band External Rotation' },
+  'face pulls':             { 1: 'Face Pulls',             2: 'Reverse Flys',  3: 'DB Row',             4: 'Face Pulls' },
+}
+
+const VOLLEYBALL_PHASE_ACCESSORY_ROTATION = {
+  'bulgarian split squat': { 1: 'Bulgarian Split Squat', 2: 'Reverse Lunge',       3: 'Walking Lunge',        4: 'Bulgarian Split Squat' },
+  'calf raises':           { 1: 'Calf Raises',           2: 'Seated Calf Raise',  3: 'Single Leg Calf Raise', 4: 'Calf Raises' },
+  'single arm db row':     { 1: 'Single Arm DB Row',     2: 'Chest Supported Row', 3: 'Pull-ups',             4: 'Single Arm DB Row' },
+  'face pulls':            { 1: 'Face Pulls',            2: 'Reverse Flys',        3: 'DB Row',               4: 'Face Pulls' },
+}
+
+// Cross Country — only 2 always-present days (extra days 3-6 are static, see
+// XC_DAY3's own Change 3 update above); Single Leg RDL and Pull-ups are the
+// two names guaranteed present regardless of daysPerWeek.
+const XC_PHASE_ACCESSORY_ROTATION = {
+  'single leg rdl': { 1: 'Single Leg RDL', 2: 'Good Mornings', 3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
+  'pull-ups':       { 1: 'Pull-ups',        2: 'DB Row',        3: 'Chin-ups',           4: 'Pull-ups' },
+}
+
+const LACROSSE_PHASE_ACCESSORY_ROTATION = {
+  'single leg rdl':         { 1: 'Single Leg RDL',         2: 'Good Mornings',       3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
+  'single arm db row':      { 1: 'Single Arm DB Row',      2: 'Chest Supported Row', 3: 'Pull-ups',          4: 'Single Arm DB Row' },
+  'band external rotation': { 1: 'Band External Rotation', 2: 'Scap Push-Ups',       3: 'YTW Raises',        4: 'Band External Rotation' },
+}
+
+const TENNIS_PHASE_ACCESSORY_ROTATION = {
+  'bulgarian split squat':  { 1: 'Bulgarian Split Squat',  2: 'Reverse Lunge',       3: 'Walking Lunge',     4: 'Bulgarian Split Squat' },
+  'single leg rdl':         { 1: 'Single Leg RDL',         2: 'Good Mornings',       3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
+  'single arm db row':      { 1: 'Single Arm DB Row',      2: 'Chest Supported Row', 3: 'Pull-ups',          4: 'Single Arm DB Row' },
+  'band external rotation': { 1: 'Band External Rotation', 2: 'Scap Push-Ups',       3: 'YTW Raises',        4: 'Band External Rotation' },
+}
+
+const GOLF_PHASE_ACCESSORY_ROTATION = {
+  'single arm db row': { 1: 'Single Arm DB Row', 2: 'Chest Supported Row', 3: 'Pull-ups',                4: 'Single Arm DB Row' },
+  'db bench press':    { 1: 'DB Bench Press',     2: 'Incline DB Press',   3: 'Close Grip Bench Press', 4: 'DB Bench Press' },
+  'single leg rdl':    { 1: 'Single Leg RDL',     2: 'Good Mornings',      3: 'Romanian Deadlift',      4: 'Single Leg RDL' },
+}
+
+const SWIMMING_PHASE_ACCESSORY_ROTATION = {
+  'pull-ups':               { 1: 'Pull-ups',               2: 'DB Row',         3: 'Chin-ups',    4: 'Pull-ups' },
+  'band external rotation': { 1: 'Band External Rotation', 2: 'Scap Push-Ups', 3: 'YTW Raises',   4: 'Band External Rotation' },
+  'face pulls':             { 1: 'Face Pulls',              2: 'Reverse Flys',  3: 'DB Row',       4: 'Face Pulls' },
+}
+
 // Registry mirroring SPORT_ACCESSORY_ROTATION's shape/keys exactly, so both
 // call sites (blueprintController.js and generateBlueprintForAthlete below)
 // can pass `SPORT_PHASE_ACCESSORY_ROTATION[sportId] || {}` right alongside
 // the existing `SPORT_ACCESSORY_ROTATION[sportId] || {}` with no other
-// wiring changes. Every sport NOT listed here (hockey, rugby, tennis, golf,
-// wrestling, volleyball, track, cross country, lacrosse, swimming, general,
-// and football linemen/muscle-gain) resolves to `{}` and is completely
-// unaffected by Change 4.
+// wiring changes. `resolvePhaseRotationKey` already returns the bare sport
+// id for every non-football sport, so registering a new key here is the
+// ONLY wiring needed to reach it — no change to resolvePhaseRotationKey,
+// resolveAccessoryCapKey, applyAccessoryProgression, or the call site.
+// General (the "Other" fallback) and football linemen/muscle-gain
+// deliberately stay unregistered — see each's own comment elsewhere in this
+// file for why.
 const SPORT_PHASE_ACCESSORY_ROTATION = {
-  baseball:   BASEBALL_PHASE_ACCESSORY_ROTATION,
-  softball:   BASEBALL_PHASE_ACCESSORY_ROTATION,
-  football:   FOOTBALL_PHASE_ACCESSORY_ROTATION,
-  basketball: BASKETBALL_PHASE_ACCESSORY_ROTATION,
-  soccer:     SOCCER_PHASE_ACCESSORY_ROTATION,
+  baseball:      BASEBALL_PHASE_ACCESSORY_ROTATION,
+  softball:      BASEBALL_PHASE_ACCESSORY_ROTATION,
+  football:      FOOTBALL_PHASE_ACCESSORY_ROTATION,
+  basketball:    BASKETBALL_PHASE_ACCESSORY_ROTATION,
+  soccer:        SOCCER_PHASE_ACCESSORY_ROTATION,
+  hockey:        HOCKEY_PHASE_ACCESSORY_ROTATION,
+  rugby:         RUGBY_PHASE_ACCESSORY_ROTATION,
+  track:         TRACK_PHASE_ACCESSORY_ROTATION,
+  wrestling:     WRESTLING_PHASE_ACCESSORY_ROTATION,
+  volleyball:    VOLLEYBALL_PHASE_ACCESSORY_ROTATION,
+  cross_country: XC_PHASE_ACCESSORY_ROTATION,
+  lacrosse:      LACROSSE_PHASE_ACCESSORY_ROTATION,
+  tennis:        TENNIS_PHASE_ACCESSORY_ROTATION,
+  golf:          GOLF_PHASE_ACCESSORY_ROTATION,
+  swimming:      SWIMMING_PHASE_ACCESSORY_ROTATION,
 }
 
 // Phase-gated plyo progression for baseball, mirroring the shape of the
@@ -1931,45 +2060,54 @@ function generatePitcherBaseballWeeks(goal, daysPerWeek) {
 function hockeyForwardsSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'power') // Change 1 — contact position, same tier as football skill/hybrid
+  const mbcp = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const ssj  = explosiveSets(4, ph)
   return [
     { day: 'Day 1', focus: 'Lower — First-Step Explosion',
-      description: `Hang Power Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSled Sprint: 6x20 yds\nHip Thrust: 3x8\n${coreBlock(ph)}` },
+      description: `Hang Power Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSled Sprint: 6x20 yds\nHip Thrust: 3x8\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper — Puck Battle Strength',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass: 4x8\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x15\nBand Pull-Aparts: 3x20\n${coreBlock(ph)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass: ${mbcp}x8 (${explosiveIntent(ph)})\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x15\nBand Pull-Aparts: 3x20\n${coreBlock(ph)}` },
     { day: 'Day 3', focus: 'Lower — Acceleration & COD',
-      description: `Front Squat: ${info.ramp}, ${q}×3\nSplit Squat Jump: 4x5 each leg\nLateral Bound: 5x5 each side\nHip Thrust: 4x8\nResistance Band Sprint: 6x20 yds\n${phasePlyo(ph)}\n${coreBlock(ph)}` },
+      description: `Front Squat: ${info.ramp}, ${q}×${r}\nSplit Squat Jump: ${ssj}x5 each leg (${explosiveIntent(ph)})\nLateral Bound: 5x5 each side\nHip Thrust: 4x8\nResistance Band Sprint: 6x20 yds\n${phasePlyo(ph)}\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power & Conditioning',
-      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Slam: 4x8\nBattle Rope: 4x20s\nFarmer Carries: 3x40 yds\n${coreBlock(ph)}` },
+      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Slam: 4x8\nBattle Rope: 4x20s\nFarmer Carries: 3x40 yds\n${coreBlock(ph)}` },
   ]
 }
 
 function hockeyDefenseSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — lateral/reactive position, same tier as soccer/basketball
+  const lb   = explosiveSets(5, ph) // Change 3 — explosive volume by phase
+  const mbrt = explosiveSets(4, ph)
   return [
     { day: 'Day 1', focus: 'Lower — Lateral Mobility & Single Leg Stability',
-      description: `Back Squat: ${info.ramp}, ${q}×3\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: 5x5 each side\nCopenhagen Plank: 3x20s each side\nSingle Leg RDL: 3x8 each leg\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: ${lb}x5 each side (${explosiveIntent(ph)})\nCopenhagen Plank: 3x20s each side\nSingle Leg RDL: 3x8 each leg\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper — Core Stiffness & Rotational Strength',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x12 each side\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: ${mbrt}x6 each side (${explosiveIntent(ph)})\nPallof Press: 3x12 each side\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x15\n${coreBlock(ph)}` },
     { day: 'Day 3', focus: 'Lower — Crossover & Backward Skating Mechanics',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${phasePlyo(ph)}\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\nHip 90/90 Hold: 3x30s each side\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${phasePlyo(ph)}\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\nHip 90/90 Hold: 3x30s each side\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power & Anti-Rotation',
-      description: `BB Split Jerk: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nSuitcase Carry: 4x20 yds each arm\nSingle Leg RDL: 3x8 each leg\nAnti-Rotation Press: 3x10 each side\n${coreBlock(ph)}` },
+      description: `BB Split Jerk: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nSuitcase Carry: 4x20 yds each arm\nSingle Leg RDL: 3x8 each leg\nAnti-Rotation Press: 3x10 each side\n${coreBlock(ph)}` },
   ]
 }
 
 function hockeyGoalieSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — reactive/lateral position, same tier as soccer/basketball
+  const slbj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
+  const lsj  = explosiveSets(4, ph)
   return [
     { day: 'Day 1', focus: 'Lower — Butterfly Mechanics & Hip Mobility',
-      description: `Back Squat: ${info.ramp}, ${q}×3\nCossack Squat: 3x10 each side\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x8 each leg\nSingle Leg Box Jump: 3x5 each leg\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x10 each side\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x8 each leg\nSingle Leg Box Jump: ${slbj}x5 each leg (${explosiveIntent(ph)})\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper — Shoulder Health (Goalie Protection)',
       description: `DB Bench Press: 4x10 (DB only — protects shoulder joint)\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 4x15\n${coreBlock(ph)}` },
     { day: 'Day 3', focus: 'Lower — Reactive Lateral & Butterfly Recovery',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\nLateral Squat Jump: 4x5 each side\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${phasePlyo(ph)}\nResistance Band Lateral Walk: 3x20 each direction\nLateral Shuffle: 6x20 yds\nCossack Squat: 3x8 each side\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${phasePlyo(ph)}\nResistance Band Lateral Walk: 3x20 each direction\nLateral Shuffle: 6x20 yds\nCossack Squat: 3x8 each side\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power & Conditioning',
-      description: `BB Split Jerk: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nFarmer Carries: 4x20 yds\nBattle Rope: 4x20s\nCopenhagen Plank: 3x20s each side\n${coreBlock(ph)}` },
+      description: `BB Split Jerk: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nFarmer Carries: 4x20 yds\nBattle Rope: 4x20s\nCopenhagen Plank: 3x20s each side\n${coreBlock(ph)}` },
   ]
 }
 
@@ -1998,34 +2136,41 @@ function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
 function rugbyForwardsSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'power') // Change 1 — contact/scrummage position, same tier as football skill/hybrid
+  const mbrs = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const mbcp = explosiveSets(4, ph)
   return [
     // Fix 1: Squat day — removed Trap Bar Deadlift; Hip Thrust + Nordic remain
     { day: 'Day 1', focus: 'Lower Max Strength & Scrummage Drive',
-      description: `Power Clean from floor: 5x3 working up\nBack Squat: ${info.ramp}, ${q}×3\nHip Thrust: 4x10\nNordic Hamstring Curl: 4x5\nSled Push: 6x20 yds\nNeck Strengthening: 3x12 each direction\nMed Ball Rotational Slam: 4x8\n${coreBlock(ph)}` },
+      description: `Power Clean from floor: 5x3 working up\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x10\nNordic Hamstring Curl: 4x5\nSled Push: 6x20 yds\nNeck Strengthening: 3x12 each direction\nMed Ball Rotational Slam: ${mbrs}x8 (${explosiveIntent(ph)})\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Strength & Contact Prep',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nWeighted Pull-ups: 5x5\nDB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 5x5\nDB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph)}` },
     // Fix 3: phasePlyo replaces Box Jump + Broad Jump list
     { day: 'Day 3', focus: 'Lower Explosion & Carrying',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power, Contact & Rotational',
-      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\nMed Ball Chest Pass: 4x8\nSled Push: 6x20 yds\n${coreBlock(ph)}` },
+      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\nMed Ball Chest Pass: ${mbcp}x8 (${explosiveIntent(ph)})\nSled Push: 6x20 yds\n${coreBlock(ph)}` },
   ]
 }
 
 function rugbyBacksSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'power') // Change 1 — contact-sport speed position, same tier as football skill/hybrid
+  const lb1  = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const lb3  = explosiveSets(4, ph)
+  const mbcp = explosiveSets(4, ph)
   return [
     // Fix 1: Squat day — removed Trap Bar Deadlift; power and speed emphasis for backs
     { day: 'Day 1', focus: 'Lower Power & First-Step Speed',
-      description: `Power Clean: 4x3\nBack Squat: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: 4x5 each side\nSprint Work: 8x40 yds\n${coreBlock(ph)}` },
+      description: `Power Clean: 4x3\nBack Squat: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb1}x5 each side (${explosiveIntent(ph)})\nSprint Work: 8x40 yds\n${coreBlock(ph)}` },
     { day: 'Day 2', focus: 'Upper Strength',
-      description: `Bench Press: ${info.ramp}, ${q}×3\nWeighted Pull-ups: 5x5\nDB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 5x5\nDB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph)}` },
     // Fix 3: phasePlyo replaces Box Jump + Broad Jump list
     { day: 'Day 3', focus: 'Lower Explosion, Agility & COD',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: 4x5 each side\nT-Drill: 6x1\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb3}x5 each side (${explosiveIntent(ph)})\nT-Drill: 6x1\n${coreBlock(ph)}` },
     { day: 'Day 4', focus: 'Upper Power',
-      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×3\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass: 4x8\n${coreBlock(ph)}` },
+      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass: ${mbcp}x8 (${explosiveIntent(ph)})\n${coreBlock(ph)}` },
   ]
 }
 
@@ -2054,15 +2199,18 @@ function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
 function tennisSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/throwing archetype, same tier as baseball
+  const lsj  = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const mbrt = explosiveSets(4, ph)
   return [
     // Fix 1: Squat day — removed Trap Bar Deadlift; Bulgarian + Single Leg RDL remain
     { day: 'Day 1', focus: 'Lower Strength',
-      description: `Back Squat: ${info.ramp}, ${q}×3\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nLateral Bound: 4x5 each side\nCalf Raises: 3xAMAP` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nLateral Bound: 4x5 each side\nCalf Raises: 3xAMAP` },
     { day: 'Day 2', focus: 'Upper Strength & Balance',
-      description: `Power Clean: 3x3\nBench Press: ${info.ramp}, ${q}×3\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nForearm Curls (both directions): 3xAMAP` },
+      description: `Power Clean: 3x3\nBench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nForearm Curls (both directions): 3xAMAP` },
     // Fix 3: phasePlyo as primary; Lateral Squat Jump kept (sport-specific); Depth Jump removed from ph 1-2
     { day: 'Day 3', focus: 'Explosion & Lateral Power',
-      description: `Hang Clean: 3x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×3\n${phasePlyo(ph)}\nLateral Squat Jump: 4x5 each side\nSingle Leg Box Jump: 3x4 each leg\nMed Ball Rotational Throw: 4x6 each side` },
+      description: `Hang Clean: 3x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\nMed Ball Rotational Throw: ${mbrt}x6 each side (${explosiveIntent(ph)})` },
     { day: 'Day 4', focus: 'Rotational Power & Shoulder Health',
       description: `Rotational Cable Pull: 4x8 each side\nSplit Stance Cable Row: 3x10 each side\nLandmine Press: 3x8 each arm\nBand Pull-Aparts: 4x20\nWrist Curls: 3x15\nReverse Wrist Curls: 3x15\nCore Pallof Press: 3x10 each side\nCable Woodchop: 3x10 each side` },
   ]
@@ -2091,14 +2239,17 @@ function generateTennisWeeks(posId, goal, daysPerWeek = 4) {
 function golfSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
+  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/throwing archetype, same tier as baseball
+  const dsj  = explosiveSets(4, ph) // Change 3 — explosive volume by phase
+  const rms  = explosiveSets(4, ph)
   return [
     { day: 'Day 1', focus: 'Lower Vertical Strength & Ground Force',
-      description: `Back Squat: ${info.ramp}, ${q}×3 (explosive intent)\nHip Thrust: 3x10\nStep-Up: 3x6 each leg\nNordic Hamstring Curl: 3x5\nLandmine Thruster: 3x6 each side\nDB Squat Jump: 4x5\nCore Pallof Press: 3x10 each side\nDead Bug: 3x10` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r} (explosive intent)\nHip Thrust: 3x10\nStep-Up: 3x6 each leg\nNordic Hamstring Curl: 3x5\nLandmine Thruster: 3x6 each side\nDB Squat Jump: ${dsj}x5 (${explosiveIntent(ph)})\nCore Pallof Press: 3x10 each side\nDead Bug: 3x10` },
     { day: 'Day 2', focus: 'Upper & Rotational Power',
       description: `Single Arm DB Row: 4x8 each arm\nDB Bench Press: 4x8\nLandmine Press: 3x8 each arm\nSplit Stance Cable Row: 3x10 each side\nRotational Cable Pull: 4x8 each side\nMed Ball Rotational Throw: 4x6 each side\nBand Pull-Aparts: 3x20\nCore Cable Woodchop: 3x10 each side` },
     // Trap Bar Deadlift moved here from Day 1 — separated from Back Squat to avoid bilateral overload
     { day: 'Day 3', focus: 'Full Body Power & Posterior Chain',
-      description: `Power Clean: 3x3 (explosive intent)\nTrap Bar Deadlift: 40%×10, 50%×8, ${q}×3\n${phasePlyo(ph)}\nLateral Bound: 4x5 each side\nSingle Leg RDL: 3x8 each leg\nRotational Med Ball Slam: 4x6 each side\nCore Bird Dog: 3x10\nAnti-Rotation Press: 3x10` },
+      description: `Power Clean: 3x3 (explosive intent)\nTrap Bar Deadlift: 40%×10, 50%×8, ${q}×${r}\n${phasePlyo(ph)}\nLateral Bound: 4x5 each side\nSingle Leg RDL: 3x8 each leg\nRotational Med Ball Slam: ${rms}x6 each side (${explosiveIntent(ph)})\nCore Bird Dog: 3x10\nAnti-Rotation Press: 3x10` },
   ]
 }
 
@@ -2185,6 +2336,18 @@ function normalizeSport(raw) {
   return MAP[s] || null
 }
 
+// Fires whenever normalizePosition can't match a sport's regexes and has to
+// fall back to a default template. Several of those defaults are the sport's
+// most extreme/heaviest archetype (see the per-sport comments below), so a
+// silent fallback can quietly hand an athlete a program that doesn't fit
+// them at all — e.g. a typo'd position, or a position the survey offers that
+// no regex accounts for. This only logs (never throws) so generation always
+// still succeeds; it exists purely to make the fallback visible in server
+// logs/monitoring instead of invisible.
+function logPositionFallback(sport, rawPos, resolvedTo) {
+  console.warn(`[normalizePosition] Unrecognized ${sport} position "${rawPos}" — defaulting to "${resolvedTo}"`)
+}
+
 function normalizePosition(sport, rawPos) {
   const p = (rawPos || '').toLowerCase().trim()
 
@@ -2193,6 +2356,15 @@ function normalizePosition(sport, rawPos) {
     if (/\b(ol|dl|guard|tackle|center|centre|nose|offensive\s*line|defensive\s*line|lineman|linemen)\b/.test(p)) return 'linemen'
     if (/\b(wr|db|rb|safety|corner|cornerback|running\s*back|wide\s*rec|slot|receiver)\b/.test(p)) return 'skill'
     if (/\b(lb|te|fb|linebacker|tight\s*end|fullback)\b/.test(p)) return 'hybrid'
+    // Kickers/punters: a real, selectable survey option ("K/P") that never
+    // matched any branch above and was silently defaulting straight into
+    // Linemen — the heaviest, lowest-speed archetype in the system, a poor
+    // fit for a specialist position. Route to Skill (Speed/Power) instead —
+    // closer to a kicker/punter's actual explosiveness/hip-mobility/leg-speed
+    // demands than a max-strength/contact program. No new template — reuses
+    // the existing Skill content, same as any other skill-position athlete.
+    if (/\b(k\/p|kicker|punter|placekicker|place\s*kicker|long\s*snapper)\b/.test(p)) return 'skill'
+    logPositionFallback('football', rawPos, 'linemen')
     return 'linemen'
   }
 
@@ -2200,18 +2372,24 @@ function normalizePosition(sport, rawPos) {
     if (/\b(c|center|centre)\b/.test(p)) return 'bigs'
     if (/\b(sf|pf|small\s*forward|power\s*forward|forward|wing)\b/.test(p)) return 'wings'
     if (/\b(pg|sg|point|shooting|point\s*guard|shooting\s*guard|guard)\b/.test(p)) return 'guards'
+    logPositionFallback('basketball', rawPos, 'guards')
     return 'guards'
   }
 
   if (sport === 'hockey') {
     if (/\b(goalie|goaltender|g)\b/.test(p)) return 'goalie'
     if (/\b(defense|defence|d|defenseman|defenceman|def)\b/.test(p)) return 'defense'
+    logPositionFallback('hockey', rawPos, 'forwards')
     return 'forwards'
   }
 
   if (sport === 'track') {
-    if (/\b(shot|discus|javelin|hammer|throw|thrower)\b/.test(p)) return 'throw'
-    if (/\b(jump|jumper|hj|lj|tj|high\s*jump|long\s*jump|triple\s*jump|pole\s*vault|pv)\b/.test(p)) return 'jump'
+    // Plural forms added — the survey's own dropdown sends "Throws"/"Jumps"
+    // (plural), which the previous singular-only \bthrow\b/\bjump\b never
+    // matched (a trailing "s" breaks the trailing word boundary), silently
+    // defaulting every athlete who picked those exact options to Sprint.
+    if (/\b(shot|discus|javelin|hammer|throws?|throwers?)\b/.test(p)) return 'throw'
+    if (/\b(jumps?|jumpers?|hj|lj|tj|high\s*jumps?|long\s*jumps?|triple\s*jumps?|pole\s*vaults?|pv)\b/.test(p)) return 'jump'
     return 'sprint'
   }
 
@@ -2223,6 +2401,7 @@ function normalizePosition(sport, rawPos) {
   if (sport === 'rugby') {
     if (/\b(prop|hooker|lock|flanker|number\s*8|no\.?\s*8|numbe?r?\s*eight)\b/.test(p)) return 'forwards'
     if (/\b(scrum\s*half|fly\s*half|center|centre|wing|fullback|winger|back)\b/.test(p)) return 'backs'
+    logPositionFallback('rugby', rawPos, 'forwards')
     return 'forwards'
   }
   if (sport === 'soccer') {

@@ -553,6 +553,16 @@ describe('Area 7 — Exercise library coverage', () => {
   // changed, etc.) fails this test with the exact sport/position/day where it
   // was found, instead of silently making the ⓘ info button disappear.
   const KNOWN_MISSING = new Set([
+    // feat/blueprint-quick-wins — Track & Field's "Throws"/"Jumps" position
+    // labels (the real SPORT_TEMPLATES/survey values) never matched
+    // normalizePosition's old singular-only \bthrow\b/\bjump\b regexes, so
+    // every "Throwers"/"Jumpers" combination this test iterates silently
+    // generated Sprinters content instead — these 5 names live in
+    // TRACK_THROW_DAY5/TRACK_JUMP_DAY5 (and the Knee-injury substitution of
+    // Track Jump's own "Single Leg Depth Jump" line) and are only reachable
+    // now that the routing bug is fixed. Pre-existing content, not new.
+    'drop jump', 'overhead squat', 'rotational med ball throw',
+    'single leg bounding', 'single leg box step-ups',
     '17s drill', '200m intervals', '400m repeats', '5-10-5 shuttle', 'ab wheel',
     'adductor static stretch', 'aerobic finish', 'agility cone drill (5-10-5)',
     'ankle circuit', 'ankle mobility circles', 'anti-rotation press', 'balance work',
@@ -1202,8 +1212,20 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
   const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
 
   test('a non-baseball sport also gets the accessory cap and auto-pairing — main lift stands alone, its plyo contrast pairs with it, everything else pairs in 2s up to 3 accessory slots', () => {
+    // Fixture note (feat/blueprint-quick-wins): this used to say position:
+    // 'Jumpers', but normalizePosition's track branch only matched the
+    // singular \bjumper\b — "Jumpers" (the real SPORT_TEMPLATES/survey label)
+    // never matched and silently fell through to Sprint, so this test spent
+    // its whole life unknowingly exercising trackSprintSess, not
+    // trackJumpSess. Now that the plural-form gap is fixed (see
+    // normalizePosition), 'Jumpers' correctly reaches trackJumpSess — whose
+    // real Day 1 has TWO plyo-keyword lines (Box Jumps + Approach Jump
+    // Work), so it no longer fits the single-plyo-contrast case this test is
+    // specifically about (that's covered separately — see Area 17/track
+    // tests below). 'Sprinters' is the correct fixture for this test's
+    // actual intent and reproduces the exact assertions already here.
     const bp = generateBlueprintForAthlete({
-      sport: 'Track and Field', position: 'Jumpers', primary_goal: 'standard',
+      sport: 'Track and Field', position: 'Sprinters', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description.split('\n')
@@ -1218,8 +1240,9 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
   })
 
   test('Oly-lift/ramped-lift split regression: a session with BOTH a technical Olympic lift and a separate %-ramped lift keeps the Oly lift standalone and only pairs the ramped lift with the plyo contrast — they never get bundled into one group', () => {
+    // Same fixture correction as the test above — see its comment.
     const bp = generateBlueprintForAthlete({
-      sport: 'Track and Field', position: 'Jumpers', primary_goal: 'standard',
+      sport: 'Track and Field', position: 'Sprinters', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description
