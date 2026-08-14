@@ -806,6 +806,63 @@ function generateBasketballWeeks(posId, goal, daysPerWeek = 4) {
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [BB_DAY5, BB_DAY6])
 }
 
+// ─── Repeat-Sprint/Field Athlete archetype core (feat/archetype-repeat-sprint) ─
+// Extracted from Soccer, this archetype's benchmark (see the Blueprint
+// Architecture Audit — Soccer already rated 4/5 across all 6 positions
+// before this work, the most evenly-built archetype in the system). Unlike
+// Collision/Max-Strength (extracted from Linemen), this archetype's core
+// math was ALREADY fully shared engine machinery before this extraction —
+// mainLiftTopReps' 'rotational' tier, explosiveSets/explosiveIntent, and
+// coreBlock are the exact same functions baseball/basketball/football QB
+// already use, and the day-count/deload/phase cadence already runs through
+// the fully generic getPhaseInfo/buildWeeksDynamic every non-Collision sport
+// uses. So there is no bespoke rep-scheme or autoregulation math to pull out
+// the way Linemen had — the genuine, extractable "archetype core" here is
+// smaller and structural: the WEEKLY TEMPLATE every Repeat-Sprint/Field
+// sport below follows, plus one small real helper (sprintYardsForPhase).
+//
+// The weekly template (every sport below, every position, every day count
+// this archetype covers):
+//   Day 1 (Monday)    — Lower Strength/Power: one ramped main lift + a
+//                        posterior-chain/unilateral accessory pool + one
+//                        explosiveSets-scaled explosive/lateral line +
+//                        coreBlock(phaseNum).
+//   Day 2 (Tuesday)   — Upper, no ramped lift at all (this archetype is
+//                        deliberately less gym-lift-dense than Collision —
+//                        see the default, un-raised accessory cap below) —
+//                        plain accessory presses/rows + shoulder-health/
+//                        rotational work. No coreBlock — this day is the
+//                        one exception to "every lifting day ends in core."
+//   Day 3 (Thursday)  — Lower Explosion: a SECOND ramped main lift (usually
+//                        a hinge variant — Hex Bar or Trap Bar Deadlift) +
+//                        lateral/COD-specific accessory work +
+//                        coreBlock(phaseNum).
+//   Day 4 (Friday)    — Pure Speed & Conditioning: no lifting at all —
+//                        sprint ladders, shuttles, flying sprints, scaled
+//                        by phase via that sport's own sprintYardsForPhase
+//                        progression. No coreBlock.
+// Real weekday labels (not "Day 1-4") on purpose — a field sport's training
+// week is organized around competition day, not just gym frequency; this
+// carries through as an archetype-level convention for every sport below,
+// same as Soccer's own. 5th/6th extra days (where a sport has them) revert
+// to generic "Day 5"/"Day 6" labels, matching Soccer's own precedent exactly.
+//
+// The accessory cap is deliberately NOT raised (see resolveAccessoryCapKey —
+// no Repeat-Sprint/Field sport gets an entry there) — every sport below
+// resolves to the sport-wide default cap of 3, a genuine, intentional
+// archetype trait distinguishing it from Collision/Max-Strength's raised
+// cap of 5: this archetype is conditioning-forward, not lift-volume-forward.
+
+// Indexes a sport's own sprint-yardage-by-phase array — e.g. Foundation
+// (phase 1) uses the shortest yardage, Peak (phase 3) the longest, matching
+// every Repeat-Sprint/Field sport's own real progression. The single small
+// piece of genuinely shared math this archetype needed (every sport below
+// was reimplementing the identical `Math.min(3, phaseNum - 1)` indexing
+// inline before this extraction).
+function sprintYardsForPhase(yards, phaseNum) {
+  return yards[Math.min(yards.length - 1, phaseNum - 1)]
+}
+
 // ─── Soccer ───────────────────────────────────────────────────────────────────
 
 const SOC_SPRINT_YARDS = [50, 60, 70, 80]
@@ -813,7 +870,7 @@ const SOC_SPRINT_YARDS = [50, 60, 70, 80]
 function soccerGoalkeeperSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const slbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
@@ -831,7 +888,7 @@ function soccerGoalkeeperSess(info) {
 function soccerCenterBackSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const bj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
@@ -849,7 +906,7 @@ function soccerCenterBackSess(info) {
 function soccerFullbackSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const lb = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
@@ -867,7 +924,7 @@ function soccerFullbackSess(info) {
 function soccerMidfielderSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const hbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
@@ -885,7 +942,7 @@ function soccerMidfielderSess(info) {
 function soccerWingerSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const ah = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
@@ -903,7 +960,7 @@ function soccerWingerSess(info) {
 function soccerStrikerSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
   return [
