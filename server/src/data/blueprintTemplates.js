@@ -1392,12 +1392,62 @@ const LAX_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip Flexor Stretch: 3x45s each leg\nHamstring Eccentric: 3x8\nThoracic Rotation: 3x10 each side\nStatic Stretch: Groin · Quads · Calves`,
 }
 
+// ─── Lacrosse — Repeat-Sprint/Field Athlete archetype (standard goal only;
+// see lacrosseSess above for the muscle-gain variant, untouched by this
+// build). Same weekly template Soccer established, same 'rotational' tier,
+// same un-raised default cap. Differentiated from Soccer by lacrosse's own
+// real demand: Tuesday carries genuine overhead/rotational shooting power
+// (Med Ball Rotational Throw, Landmine Rotation, Cable Woodchop, stick-sport
+// Grip Work) rather than Soccer's shoulder-health-focused light upper day —
+// a real point of differentiation, not a reused template.
+
+function lacrosseArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lb = explosiveSets(4, ph)
+  return {
+    day: 'Monday', focus: 'Lower Power & Sprint',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\n${coreBlock(ph)}`,
+  }
+}
+
+function lacrosseArchetypeDay2(info) {
+  return {
+    day: 'Tuesday', focus: 'Upper & Rotational Shooting Power',
+    description: 'DB Bench Press: 4x8\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nGrip Work: 3x30s each',
+  }
+}
+
+function lacrosseArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r   = mainLiftTopReps(ph, 'rotational')
+  const lsj = explosiveSets(4, ph)
+  return {
+    day: 'Thursday', focus: 'Lower Explosion & Change of Direction',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${coreBlock(ph)}`,
+  }
+}
+
+function lacrosseArchetypeDay4(info) {
+  return {
+    day: 'Friday', focus: 'Conditioning & COD',
+    description: 'V Drill: 4x3\nStar Drill: 3x3\n200m Intervals: 8x1 @ 80-85% effort (90 sec rest)\n300 Yard Shuttle: 2x2\nBroad Jump: 3x3',
+  }
+}
+
+function lacrosseArchetypeSess(info) {
+  return [lacrosseArchetypeDay1(info), lacrosseArchetypeDay2(info), lacrosseArchetypeDay3(info), lacrosseArchetypeDay4(info)]
+}
+
+function generateLacrosseArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, STD_PHASES, lacrosseArchetypeSess, daysPerWeek, [LAX_DAY5, LAX_DAY6])
+}
+
 function generateLacrosseWeeks(_, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  const phases = mg ? MG_PHASES : STD_PHASES
-  const fn = mg
-    ? (info) => lacrosseSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : lacrosseSess
+  if (!mg) return generateLacrosseArchetypeWeeks(daysPerWeek)
+  const phases = MG_PHASES
+  const fn = (info) => lacrosseSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [LAX_DAY5, LAX_DAY6])
 }
 
@@ -2463,9 +2513,107 @@ function generateHockeyForwardsArchetypeWeeks(daysPerWeek) {
   }, daysPerWeek)
 }
 
+// ─── Hockey Defense & Hockey Goalie — Repeat-Sprint/Field Athlete archetype
+// (standard goal only; see hockeyDefenseSess/hockeyGoalieSess above for the
+// muscle-gain variants, untouched by this build) — Hockey Forwards is a
+// different archetype (Collision/Max-Strength) and is completely
+// unaffected. Same weekly template Soccer established, same 'rotational'
+// tier, same un-raised default cap. Differentiated from Soccer, and from
+// each other, by real position demand: Defense gets crossover/backward-
+// skating mechanics and anti-rotation work (a defenseman defends and
+// transitions in every direction); Goalie keeps its own distinct reactive/
+// butterfly-recovery emphasis and the DB-only-bench shoulder-protection
+// detail its pre-archetype content already established — genuinely
+// different from Defense, not a shared template with the label swapped.
+
+function hockeyDefenseArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lb = explosiveSets(5, ph)
+  return {
+    day: 'Monday', focus: 'Lower — Lateral Mobility & Single Leg Stability',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: ${lb}x5 each side (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\n${coreBlock(ph)}`,
+  }
+}
+
+function hockeyDefenseArchetypeDay2(info) {
+  return {
+    day: 'Tuesday', focus: 'Upper — Core Stiffness & Rotational Strength',
+    description: 'DB Bench Press: 4x10\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x12 each side\nBand External Rotation: 3x15 each arm',
+  }
+}
+
+function hockeyDefenseArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r = mainLiftTopReps(ph, 'rotational')
+  return {
+    day: 'Thursday', focus: 'Lower — Crossover & Backward Skating Mechanics',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\n${coreBlock(ph)}`,
+  }
+}
+
+function hockeyDefenseArchetypeDay4(info) {
+  return {
+    day: 'Friday', focus: 'Lateral Speed & Conditioning',
+    description: 'Lateral Shuffle: 8x20 yds\nReactive Lateral Bound: 4x5 each side\nSingle Leg Squat Jump: 4x5 each leg\n300 Yard Shuttle: 2x2\nFlying 20s: 4x1',
+  }
+}
+
+function hockeyDefenseArchetypeSess(info) {
+  return [hockeyDefenseArchetypeDay1(info), hockeyDefenseArchetypeDay2(info), hockeyDefenseArchetypeDay3(info), hockeyDefenseArchetypeDay4(info)]
+}
+
+function generateHockeyDefenseArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, HOCKEY_PHASES, hockeyDefenseArchetypeSess, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
+}
+
+function hockeyGoalieArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r    = mainLiftTopReps(ph, 'rotational')
+  const slbj = explosiveSets(4, ph)
+  return {
+    day: 'Monday', focus: 'Lower Power & Butterfly Mechanics',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x10 each side\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nCopenhagen Adductor: 4x8 each leg\nLateral Bound: 5x5 each side\n${coreBlock(ph)}`,
+  }
+}
+
+function hockeyGoalieArchetypeDay2(info) {
+  return {
+    day: 'Tuesday', focus: 'Upper & Shoulder Health (Goalie Protection)',
+    description: 'DB Bench Press: 4x10 (DB only — protects shoulder joint)\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 4x15',
+  }
+}
+
+function hockeyGoalieArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r   = mainLiftTopReps(ph, 'rotational')
+  const lsj = explosiveSets(4, ph)
+  return {
+    day: 'Thursday', focus: 'Reactive Lateral & Butterfly Recovery',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nCossack Squat: 3x8 each side\n${coreBlock(ph)}`,
+  }
+}
+
+function hockeyGoalieArchetypeDay4(info) {
+  return {
+    day: 'Friday', focus: 'Reactive Power & Conditioning',
+    description: 'Lateral Shuffle: 8x20 yds\nReactive Lateral Bound: 4x5 each side\nSingle Leg Squat Jump: 4x5 each leg\n300 Yard Shuttle: 2x2\nFlying 20s: 4x1',
+  }
+}
+
+function hockeyGoalieArchetypeSess(info) {
+  return [hockeyGoalieArchetypeDay1(info), hockeyGoalieArchetypeDay2(info), hockeyGoalieArchetypeDay3(info), hockeyGoalieArchetypeDay4(info)]
+}
+
+function generateHockeyGoalieArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, HOCKEY_PHASES, hockeyGoalieArchetypeSess, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
+}
+
 function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   if (!mg && posId === 'forwards') return generateHockeyForwardsArchetypeWeeks(daysPerWeek)
+  if (!mg && posId === 'defense') return generateHockeyDefenseArchetypeWeeks(daysPerWeek)
+  if (!mg && posId === 'goalie') return generateHockeyGoalieArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : HOCKEY_PHASES
   const baseFns = { forwards: hockeyForwardsSess, defense: hockeyDefenseSess, goalie: hockeyGoalieSess }
   const baseFn = baseFns[posId] || hockeyForwardsSess
@@ -2640,9 +2788,69 @@ function generateRugbyForwardsArchetypeWeeks(daysPerWeek) {
   }, daysPerWeek)
 }
 
+// ─── Rugby Backs — Repeat-Sprint/Field Athlete archetype (standard goal
+// only; see rugbyBacksSess above for the muscle-gain variant, untouched by
+// this build) — same weekly template Soccer established (Monday lower
+// strength/power, Tuesday upper, Thursday lower explosion, Friday pure
+// speed/conditioning), same 'rotational' rep tier, same un-raised default
+// accessory cap. Differentiated from Soccer by genuinely more contact
+// tolerance: Tuesday is a real strength day (Bench Press, Weighted
+// Pull-ups, neck work) rather than Soccer's deliberately light upper day —
+// backs still take contact, just less of it than forwards — and Thursday
+// keeps a Trap Bar Deadlift second main lift shared with the Forwards'
+// own Collision-archetype content, rather than Soccer's Hex Bar Deadlift.
+// RUGBY_PHASES (kept — a genuinely more aggressive intensity table than
+// Soccer's own SOC_PHASES, reflecting rugby's real demand) and RUGBY_DAY5/
+// RUGBY_DAY6 (kept — "Contact Conditioning" fits Backs' own contact-tolerance
+// need as well as it always fit Forwards') are both preserved unchanged.
+
+function rugbyBacksArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lb = explosiveSets(4, ph)
+  return {
+    day: 'Monday', focus: 'Lower Strength & Sprint',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 4x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${coreBlock(ph)}`,
+  }
+}
+
+function rugbyBacksArchetypeDay2(info) {
+  return {
+    day: 'Tuesday', focus: 'Upper Contact Strength',
+    description: 'Bench Press: 4x8\nWeighted Pull-ups: 4x6\nDB Row: 4x10 each arm\nOverhead Press: 3x10\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15',
+  }
+}
+
+function rugbyBacksArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lsj = explosiveSets(4, ph)
+  return {
+    day: 'Thursday', focus: 'Explosion, Agility & COD',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${coreBlock(ph)}`,
+  }
+}
+
+function rugbyBacksArchetypeDay4(info) {
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, info.phaseNum)
+  return {
+    day: 'Friday', focus: 'Repeat Sprint Conditioning',
+    description: `Flying 20s: 8x1\n300 Yard Shuttle: 3x2\nSprint Ladder: 10/20/30/20/10 yds — 4 rounds\nSprint + Jog Ladder: 4 rounds up to ${sy} yards`,
+  }
+}
+
+function rugbyBacksArchetypeSess(info) {
+  return [rugbyBacksArchetypeDay1(info), rugbyBacksArchetypeDay2(info), rugbyBacksArchetypeDay3(info), rugbyBacksArchetypeDay4(info)]
+}
+
+function generateRugbyBacksArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, RUGBY_PHASES, rugbyBacksArchetypeSess, daysPerWeek, [RUGBY_DAY5, RUGBY_DAY6])
+}
+
 function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   if (!mg && posId === 'forwards') return generateRugbyForwardsArchetypeWeeks(daysPerWeek)
+  if (!mg && posId === 'backs') return generateRugbyBacksArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : RUGBY_PHASES
   const baseFns = { forwards: rugbyForwardsSess, backs: rugbyBacksSess }
   const baseFn = baseFns[posId] || rugbyForwardsSess

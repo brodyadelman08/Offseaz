@@ -7359,11 +7359,11 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals h
     "objective": "Phase 1 — Foundation (69%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 35%×10, 45%×8, 55%×6, 62%×5, 69%×8
 ⟦SS1⟧Cossack Squat: 3x8 each side
 ⟦SS1⟧Lateral Bound: 5x5 each side (moderate intent — controlled speed)
-Copenhagen Plank: 3x20s each side
+Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Anti-Extension:
@@ -7373,19 +7373,12 @@ Plank: 3x30 seconds",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 55%×6, 62%×5, 69%×8
-⟦SS1⟧Weighted Pull-ups: 5x5
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x10
 ⟦SS1⟧Single Arm DB Row: 5x10 each arm
-Med Ball Rotational Throw: 4x6 each side (moderate intent — controlled speed)
+⟦SS1⟧Med Ball Rotational Throw: 4x6 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7395,12 +7388,12 @@ Plank: 3x30 seconds",
     "objective": "Phase 1 — Deload (60%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×8
 ⟦SS1⟧Cossack Squat: 2x6 each side
-Copenhagen Plank: 2x15s each side
+Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Anti-Extension:
@@ -7410,21 +7403,14 @@ Plank: 3x30 seconds",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×8
-⟦SS1⟧Weighted Pull-ups: 2x4
+DB Bench Press: 2x8
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Rotational Throw: 2x5 each side (moderate intent — controlled speed)
+⟦SS1⟧Med Ball Rotational Throw: 2x5 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7434,11 +7420,11 @@ Plank: 3x30 seconds",
     "objective": "Phase 2 — Strength (76%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧Cossack Squat: 3x8 each side
 ⟦SS1⟧Lateral Bound: 6x5 each side (add volume — building intent)
-Copenhagen Plank: 3x20s each side
+Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Anti-Rotation:
@@ -7447,18 +7433,12 @@ Half Kneeling Cable Press: 3x10 each side",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧DB Row: 4x5
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x10
 ⟦SS1⟧Chest Supported Row: 4x10 each arm
-Med Ball Rotational Throw: 5x6 each side (add volume — building intent)
+⟦SS1⟧Med Ball Rotational Throw: 4x6 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7468,12 +7448,12 @@ Half Kneeling Cable Press: 3x10 each side",
     "objective": "Phase 2 — Deload (66%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
 ⟦SS1⟧Cossack Squat: 2x6 each side
-Copenhagen Plank: 2x15s each side
+Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Anti-Rotation:
@@ -7482,20 +7462,14 @@ Half Kneeling Cable Press: 3x10 each side",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Weighted Pull-ups: 2x4
+DB Bench Press: 2x8
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Rotational Throw: 3x5 each side (add volume — building intent)
+⟦SS1⟧Med Ball Rotational Throw: 2x5 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7505,11 +7479,11 @@ Half Kneeling Cable Press: 3x10 each side",
     "objective": "Phase 3 — Power Build (82%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧Cossack Squat: 3x8 each side
 ⟦SS1⟧Lateral Bound: 6x5 each side (high intent — near-max effort)
-Copenhagen Plank: 3x20s each side
+Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Rotational Power:
@@ -7518,18 +7492,12 @@ Cable Woodchop: 3x10 each side",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Weighted Chin-ups: 3x5
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x10
 ⟦SS1⟧Pull-ups: 3x10 each arm
-Med Ball Rotational Throw: 5x6 each side (high intent — near-max effort)
+⟦SS1⟧Med Ball Rotational Throw: 4x6 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7539,12 +7507,12 @@ Cable Woodchop: 3x10 each side",
     "objective": "Phase 3 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
 ⟦SS1⟧Cossack Squat: 2x6 each side
-Copenhagen Plank: 2x15s each side
+Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Rotational Power:
@@ -7553,20 +7521,14 @@ Cable Woodchop: 3x10 each side",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧Weighted Pull-ups: 2x4
+DB Bench Press: 2x8
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Rotational Throw: 3x5 each side (high intent — near-max effort)
+⟦SS1⟧Med Ball Rotational Throw: 2x5 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7576,11 +7538,11 @@ Cable Woodchop: 3x10 each side",
     "objective": "Phase 4 — Peak (86%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧Cossack Squat: 3x8 each side
 ⟦SS1⟧Lateral Bound: 4x5 each side (tapered — lowest volume, stay sharp)
-Copenhagen Plank: 3x20s each side
+Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Lateral Stability:
@@ -7589,18 +7551,12 @@ Suitcase Carry: 3x20 yds each side",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
-⟦SS1⟧Weighted Pull-ups: 2x5
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x10
 ⟦SS1⟧Single Arm DB Row: 2x10 each arm
-Med Ball Rotational Throw: 3x6 each side (tapered — lowest volume, stay sharp)
+⟦SS1⟧Med Ball Rotational Throw: 4x6 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7610,12 +7566,12 @@ Suitcase Carry: 3x20 yds each side",
     "objective": "Phase 4 — Deload (73%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
 ⟦SS1⟧Cossack Squat: 2x6 each side
-Copenhagen Plank: 2x15s each side
+Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 
 Core — Lateral Stability:
@@ -7624,20 +7580,14 @@ Suitcase Carry: 3x20 yds each side",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-⟦SS1⟧Weighted Pull-ups: 2x4
+DB Bench Press: 2x8
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Med Ball Rotational Throw: 2x5 each side (tapered — lowest volume, stay sharp)
+⟦SS1⟧Med Ball Rotational Throw: 2x5 each side
 Pallof Press: 3x12 each side
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Band External Rotation: 3x15 each arm",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -8511,10 +8461,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals h
     "objective": "Phase 1 — Foundation (69%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 35%×10, 45%×8, 55%×6, 62%×5, 69%×8
 ⟦SS1⟧Cossack Squat: 3x10 each side
-⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
+⟦SS1⟧Single Leg Box Jump: 4x4 each leg (moderate intent — controlled speed)
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
@@ -8522,22 +8472,17 @@ Core — Anti-Extension:
 Dead Bug: 3x10 each side
 Ab Wheel: 3x8
 Plank: 3x30 seconds",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "DB Bench Press: 4x10 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Pull-ups: 5x5
 ⟦SS1⟧Single Arm DB Row: 5x10 each arm
-Overhead Press: 3x10
+⟦SS1⟧Overhead Press: 3x10
+Face Pulls: 5x15
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 1,
@@ -8546,7 +8491,7 @@ Plank: 3x30 seconds",
     "objective": "Phase 1 — Deload (60%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×8
@@ -8557,24 +8502,19 @@ Core — Anti-Extension:
 Dead Bug: 3x10 each side
 Ab Wheel: 3x8
 Plank: 3x30 seconds",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 DB Bench Press: 2x8 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
+⟦SS1⟧Overhead Press: 2x8
+Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 4,
@@ -8583,31 +8523,27 @@ Plank: 3x30 seconds",
     "objective": "Phase 2 — Strength (76%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧Cossack Squat: 3x10 each side
-⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
+⟦SS1⟧Single Leg Box Jump: 5x4 each leg (add volume — building intent)
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
 Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "DB Bench Press: 4x10 (DB only — protects shoulder joint)
-⟦SS1⟧DB Row: 4x5
 ⟦SS1⟧Chest Supported Row: 4x10 each arm
-Overhead Press: 3x10
+⟦SS1⟧Overhead Press: 3x10
+Reverse Flys: 4x15
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 5,
@@ -8616,7 +8552,7 @@ Half Kneeling Cable Press: 3x10 each side",
     "objective": "Phase 2 — Deload (66%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
@@ -8626,23 +8562,19 @@ Copenhagen Adductor: 4x8 each leg
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
 Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 DB Bench Press: 2x8 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
+⟦SS1⟧Overhead Press: 2x8
+Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 8,
@@ -8651,31 +8583,27 @@ Half Kneeling Cable Press: 3x10 each side",
     "objective": "Phase 3 — Power Build (82%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧Cossack Squat: 3x10 each side
-⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
+⟦SS1⟧Single Leg Box Jump: 5x4 each leg (high intent — near-max effort)
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "DB Bench Press: 4x10 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Chin-ups: 3x5
 ⟦SS1⟧Pull-ups: 3x10 each arm
-Overhead Press: 3x10
+⟦SS1⟧Overhead Press: 3x10
+DB Row: 3x15
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 9,
@@ -8684,7 +8612,7 @@ Cable Woodchop: 3x10 each side",
     "objective": "Phase 3 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
@@ -8694,23 +8622,19 @@ Copenhagen Adductor: 4x8 each leg
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 DB Bench Press: 2x8 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
+⟦SS1⟧Overhead Press: 2x8
+Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 12,
@@ -8719,31 +8643,27 @@ Cable Woodchop: 3x10 each side",
     "objective": "Phase 4 — Peak (86%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧Cossack Squat: 3x10 each side
-⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
+⟦SS1⟧Single Leg Box Jump: 3x4 each leg (tapered — lowest volume, stay sharp)
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
 Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "DB Bench Press: 4x10 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧Single Arm DB Row: 2x10 each arm
-Overhead Press: 3x10
+⟦SS1⟧Overhead Press: 3x10
+Face Pulls: 2x15
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 13,
@@ -8752,7 +8672,7 @@ Suitcase Carry: 3x20 yds each side",
     "objective": "Phase 4 — Deload (73%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
@@ -8762,23 +8682,19 @@ Copenhagen Adductor: 4x8 each leg
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
 Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower — Butterfly Mechanics & Hip Mobility",
+        "focus": "Lower Power & Butterfly Mechanics",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 DB Bench Press: 2x8 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
+⟦SS1⟧Overhead Press: 2x8
+Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Upper — Shoulder Health (Goalie Protection)",
+YTW Series: 3x10 each",
+        "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
     "week": 16,
@@ -9067,9 +8983,8 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals l
     "objective": "Phase 1 — Foundation (68%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-⟦SS1⟧Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
+        "day": "Monday",
+        "description": "⟦SS1⟧Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Lateral Bounds: 4x5 each side (moderate intent — controlled speed)
 ⟦SS2⟧Hip Thrust: 3x8
 ⟦SS2⟧Single Leg RDL: 4x8 each leg
@@ -9079,17 +8994,16 @@ Core — Anti-Extension:
 Dead Bug: 3x10 each side
 Ab Wheel: 3x8
 Plank: 3x30 seconds",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Pull-ups: 4xAMAP
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x8
 ⟦SS1⟧Single Arm DB Row: 5x10 each arm
-Overhead Press: 3x10
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 3x10
+Med Ball Rotational Throw: 4x6 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 1,
@@ -9098,10 +9012,9 @@ Band External Rotation: 3x15",
     "objective": "Phase 1 — Deload (59%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
@@ -9111,19 +9024,18 @@ Core — Anti-Extension:
 Dead Bug: 3x10 each side
 Ab Wheel: 3x8
 Plank: 3x30 seconds",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Pull-ups: 2xAMAP
+DB Bench Press: 2x6
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 2x8
+Med Ball Rotational Throw: 2x5 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 4,
@@ -9132,9 +9044,8 @@ Band External Rotation: 3x15",
     "objective": "Phase 2 — Strength (76%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
+        "day": "Monday",
+        "description": "⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧Lateral Bounds: 5x5 each side (add volume — building intent)
 ⟦SS2⟧Hip Thrust: 3x8
 ⟦SS2⟧Good Mornings: 3x8 each leg
@@ -9143,17 +9054,16 @@ Nordic Hamstring Curl: 3x5
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
 Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧Pull-ups: 4xAMAP
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x8
 ⟦SS1⟧Chest Supported Row: 4x10 each arm
-Overhead Press: 3x10
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 3x10
+Med Ball Rotational Throw: 4x6 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 5,
@@ -9162,10 +9072,9 @@ Band External Rotation: 3x15",
     "objective": "Phase 2 — Deload (66%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
 ⟦SS1⟧Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
@@ -9174,19 +9083,18 @@ Nordic Hamstring Curl: 2x4
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
 Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Pull-ups: 2xAMAP
+DB Bench Press: 2x6
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 2x8
+Med Ball Rotational Throw: 2x5 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 8,
@@ -9195,9 +9103,8 @@ Band External Rotation: 3x15",
     "objective": "Phase 3 — Power Blend (82%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-⟦SS1⟧Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
+        "day": "Monday",
+        "description": "⟦SS1⟧Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧Lateral Bounds: 5x5 each side (high intent — near-max effort)
 ⟦SS2⟧Hip Thrust: 3x8
 ⟦SS2⟧Romanian Deadlift: 3x8 each leg
@@ -9206,17 +9113,16 @@ Nordic Hamstring Curl: 3x5
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Pull-ups: 4xAMAP
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x8
 ⟦SS1⟧Pull-ups: 3x10 each arm
-Overhead Press: 3x10
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 3x10
+Med Ball Rotational Throw: 4x6 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 9,
@@ -9225,10 +9131,9 @@ Band External Rotation: 3x15",
     "objective": "Phase 3 — Deload (70%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
@@ -9237,19 +9142,18 @@ Nordic Hamstring Curl: 2x4
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧Pull-ups: 2xAMAP
+DB Bench Press: 2x6
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 2x8
+Med Ball Rotational Throw: 2x5 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 12,
@@ -9258,9 +9162,8 @@ Band External Rotation: 3x15",
     "objective": "Phase 4 — Peak (86%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-⟦SS1⟧Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
+        "day": "Monday",
+        "description": "⟦SS1⟧Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧Lateral Bounds: 3x5 each side (tapered — lowest volume, stay sharp)
 ⟦SS2⟧Hip Thrust: 3x8
 ⟦SS2⟧Single Leg RDL: 2x8 each leg
@@ -9269,17 +9172,16 @@ Nordic Hamstring Curl: 3x5
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
 Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
-⟦SS1⟧Pull-ups: 4xAMAP
+        "day": "Tuesday",
+        "description": "DB Bench Press: 4x8
 ⟦SS1⟧Single Arm DB Row: 2x10 each arm
-Overhead Press: 3x10
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 3x10
+Med Ball Rotational Throw: 4x6 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 13,
@@ -9288,10 +9190,9 @@ Band External Rotation: 3x15",
     "objective": "Phase 4 — Deload (73%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
 ⟦SS1⟧Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
@@ -9300,19 +9201,18 @@ Nordic Hamstring Curl: 2x4
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
 Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Power",
+        "focus": "Lower Power & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-⟦SS1⟧Pull-ups: 2xAMAP
+DB Bench Press: 2x6
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Overhead Press: 2x8
-Cable Woodchop: 3x10 each side
-Band External Rotation: 3x15",
-        "focus": "Upper",
+⟦SS1⟧Overhead Press: 2x8
+Med Ball Rotational Throw: 2x5 each side
+Cable Woodchop: 3x10 each side",
+        "focus": "Upper & Rotational Shooting Power",
       },
     ],
     "week": 16,
@@ -9611,32 +9511,25 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals r
     "objective": "Phase 1 — Accumulation (70%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Box Jumps: 5x5
+        "day": "Monday",
+        "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
+⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 4x5 each side (moderate intent — controlled speed)
-Sprint Work: 8x40 yds
 
 Core — Anti-Extension:
 Dead Bug: 3x10 each side
 Ab Wheel: 3x8
 Plank: 3x30 seconds",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
+        "day": "Tuesday",
+        "description": "Bench Press: 4x8
+⟦SS1⟧Weighted Pull-ups: 5x6
 ⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Upper Strength",
+Overhead Press: 3x10",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 1,
@@ -9645,33 +9538,28 @@ Plank: 3x30 seconds",
     "objective": "Phase 1 — Deload (62%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
-Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×6
+Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
+⟦SS1⟧Nordic Hamstring Curl: 2x4
 
 Core — Anti-Extension:
 Dead Bug: 3x10 each side
 Ab Wheel: 3x8
 Plank: 3x30 seconds",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 31%×10, 40%×8, 50%×6, 56%×5, 62%×6
-⟦SS1⟧Weighted Pull-ups: 3x4
+Bench Press: 2x6
+⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
-
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Upper Strength",
+Overhead Press: 2x8",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 4,
@@ -9680,30 +9568,24 @@ Plank: 3x30 seconds",
     "objective": "Phase 2 — Strength Build (78%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×5
-⟦SS1⟧Broad Jumps: 5x3
+        "day": "Monday",
+        "description": "Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×6
 ⟦SS1⟧Good Mornings: 3x8 each leg
+⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 5x5 each side (add volume — building intent)
-Sprint Work: 8x40 yds
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
 Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 39%×10, 51%×8, 62%×6, 70%×5, 78%×5
-⟦SS1⟧DB Row: 5x5
+        "day": "Tuesday",
+        "description": "Bench Press: 4x8
+⟦SS1⟧DB Row: 4x6
 ⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Upper Strength",
+Overhead Press: 3x10",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 5,
@@ -9712,31 +9594,27 @@ Half Kneeling Cable Press: 3x10 each side",
     "objective": "Phase 2 — Deload (68%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
+Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
+⟦SS1⟧Nordic Hamstring Curl: 2x4
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
 Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Weighted Pull-ups: 3x4
+Bench Press: 2x6
+⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
-
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Upper Strength",
+Overhead Press: 2x8",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 8,
@@ -9745,30 +9623,24 @@ Half Kneeling Cable Press: 3x10 each side",
     "objective": "Phase 3 — Peak Strength (85%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×4
-⟦SS1⟧Hurdle Hops: 4x6
+        "day": "Monday",
+        "description": "Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×5
 ⟦SS1⟧Romanian Deadlift: 3x8 each leg
+⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 5x5 each side (high intent — near-max effort)
-Sprint Work: 8x40 yds
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 43%×10, 55%×8, 68%×6, 77%×5, 85%×4
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "day": "Tuesday",
+        "description": "Bench Press: 4x8
+⟦SS1⟧Weighted Chin-ups: 3x6
 ⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Upper Strength",
+Overhead Press: 3x10",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 9,
@@ -9777,31 +9649,27 @@ Cable Woodchop: 3x10 each side",
     "objective": "Phase 3 — Deload (73%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
-Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
+Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
+⟦SS1⟧Nordic Hamstring Curl: 2x4
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-⟦SS1⟧Weighted Pull-ups: 3x4
+Bench Press: 2x6
+⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
-
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Upper Strength",
+Overhead Press: 2x8",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 12,
@@ -9810,30 +9678,24 @@ Cable Woodchop: 3x10 each side",
     "objective": "Phase 4 — Maximum Output (90%) · Week 1 of 4",
     "sessions": [
       {
-        "day": "Day 1",
-        "description": "Power Clean: 4x3
-Back Squat: 45%×10, 59%×8, 72%×6, 81%×5, 90%×3
-⟦SS1⟧Depth Jumps: 4x5
+        "day": "Monday",
+        "description": "Back Squat: 45%×10, 59%×8, 72%×6, 81%×5, 90%×4
 ⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 3x5 each side (tapered — lowest volume, stay sharp)
-Sprint Work: 8x40 yds
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
 Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
-        "description": "Bench Press: 45%×10, 59%×8, 72%×6, 81%×5, 90%×3
-⟦SS1⟧Weighted Pull-ups: 3x5
+        "day": "Tuesday",
+        "description": "Bench Press: 4x8
+⟦SS1⟧Weighted Pull-ups: 2x6
 ⟦SS1⟧DB Row: 4x10 each arm
-Overhead Press: 4x8
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Upper Strength",
+Overhead Press: 3x10",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 13,
@@ -9842,31 +9704,27 @@ Suitcase Carry: 3x20 yds each side",
     "objective": "Phase 4 — Deload (77%) · Week 4 of 4",
     "sessions": [
       {
-        "day": "Day 1",
+        "day": "Monday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean: 2x2
-Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
+Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
+⟦SS1⟧Nordic Hamstring Curl: 2x4
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
 Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Power & First-Step Speed",
+        "focus": "Lower Strength & Sprint",
       },
       {
-        "day": "Day 2",
+        "day": "Tuesday",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Weighted Pull-ups: 3x4
+Bench Press: 2x6
+⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧DB Row: 2x8 each arm
-Overhead Press: 2x6
-
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Upper Strength",
+Overhead Press: 2x8",
+        "focus": "Upper Contact Strength",
       },
     ],
     "week": 16,
