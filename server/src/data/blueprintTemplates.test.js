@@ -1514,18 +1514,32 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(firstMatchingLine(day1, /Back Squat/)).toMatch(/^⟦SS1⟧Back Squat:/)
   })
 
-  test('cut priority: generic filler (Bicep Curls, Tricep Extensions) is dropped before regular sport accessories when trimming to the cap', () => {
+  // feat/fix-silent-accessory-drops — this used to test that generic filler
+  // (Bicep Curls, Tricep Extensions) got CUT before regular sport
+  // accessories when a day's authored content exceeded the cap. That
+  // premise is gone: the cap no longer drops anything, ever (see
+  // organizeSessionDescription's own doc comment) — this was in fact the
+  // exact real-world case the full-codebase silent-drop audit flagged as
+  // worst-case (football/linemen muscle_gain's Upper Strength day was
+  // losing 7 movements). Now verifies the opposite: generic filler AND
+  // every other authored accessory all survive, correctly paired.
+  test('generic filler (Bicep Curls, Tricep Extensions) is never dropped — every authored accessory on the day survives, paired into supersets', () => {
     const bp = generateBlueprintForAthlete({
       sport: 'Football', position: 'Linemen', primary_goal: 'muscle_gain',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description
-    expect(day1).not.toContain('Bicep Curls')
-    expect(day1).not.toContain('Tricep Extensions')
-    // The non-generic accessories from the same day survive the cap instead.
+    expect(day1).toContain('Bicep Curls')
+    expect(day1).toContain('Tricep Extensions')
     expect(day1).toContain('Bulgarian Split Squat')
     expect(day1).toContain('Leg Curl')
     expect(day1).toContain('Double Leg Calf Raise')
+    // Bicep Curls paired into a bracket (not left dangling as a standalone
+    // line) — the day's total accessory count (Bulgarian Split Squat, Leg
+    // Curl, Double Leg Calf Raise, Bicep Curls, Tricep Extensions = 5, odd)
+    // means exactly one trails unpaired; Bicep Curls itself still forms a
+    // real ⟦SS⟧ pair with Double Leg Calf Raise.
+    expect(day1).toMatch(/⟦SS\d+⟧Bicep Curls:/)
   })
 
   test('Tibialis Raises rotates in as a real working lower-body accessory (not a warm-up) via the calf-raise rotation slot', () => {
@@ -1575,33 +1589,62 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(week5Day1.lines).toEqual(week1Day1.lines)
   })
 
-  test('the accessory cap holds across every sport/position/day-count combination — no session ever exceeds its sport\'s configured cap worth of accessory content beyond the main lift', () => {
+  // feat/fix-silent-accessory-drops — replaces a test that asserted the
+  // OPPOSITE of what's now correct (that every session stayed under a hard
+  // cap of 2-3 superset groups). That cap used to be enforced by silently
+  // DELETING any authored accessory beyond it — a full-codebase audit found
+  // 125 of ~163 distinct day-templates doing exactly that, across 13 of 14
+  // sports, dropping 1-7 movements apiece. This is the permanent regression
+  // test for that fix: for every sport/position/day-count/goal combination,
+  // every accessory-shaped movement name authored in the RAW (pre-
+  // organization) session description must still be present — same count,
+  // not just "present somewhere" — in the final, organized one. Mirrors the
+  // exact comparison the original audit used (raw vs. organizeSessionDescription's
+  // output, name-multiset diff) so this can never silently regress again.
+  test('no authored movement is ever silently dropped by session organization — every sport/position/day-count/goal combination, weeks 1/5/9/13', () => {
+    function nameMultiset(description) {
+      const counts = new Map()
+      for (const raw of description.split('\n')) {
+        const bare = raw.replace(SUPERSET_MARKER_RE, '')
+        const colonIdx = bare.indexOf(':')
+        if (colonIdx <= 0) continue
+        const name = bare.slice(0, colonIdx).trim()
+        counts.set(name, (counts.get(name) || 0) + 1)
+      }
+      return counts
+    }
+    const violations = []
     for (const tpl of SPORT_TEMPLATES) {
-      // Default-cap (3) sports: at most 2 superset groups — one is the
-      // optional main-lift+plyo/authored-partner contrast, the rest of the
-      // 3-weight budget collapses into at most 1 more pair-group plus a
-      // possible leftover single. Baseball/softball's raised cap (6) allows
-      // up to 3 groups (baseball's Upper Strength is deliberately 3 full
-      // authored pairs, not auto-trimmed — see Area 14).
-      const maxGroups = (SPORT_MAX_ACCESSORIES[tpl.id] || 3) > 3 ? 3 : 2
       for (const pos of tpl.positions) {
-        for (const days of tpl.daysOptions.map(d => d.days)) {
-          const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
-          const weeks = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation, tpl.id)
-          for (const w of weeks) {
-            for (const s of w.sessions) {
-              const markerGroups = new Set(
-                s.description.split('\n')
-                  .map(l => l.match(SUPERSET_MARKER_RE))
-                  .filter(Boolean)
-                  .map(m => m[1])
-              )
-              expect(markerGroups.size).toBeLessThanOrEqual(maxGroups)
+        for (const { days } of tpl.daysOptions) {
+          for (const goal of ['standard', 'muscle_gain']) {
+            const rawWeeks = tpl.generateWeeks(pos.id, goal, days)
+            const capKey = resolveAccessoryCapKey(tpl.id, pos.id, goal)
+            const orgWeeks = applySessionOrganization(
+              JSON.parse(JSON.stringify(rawWeeks)),
+              SPORT_ACCESSORY_ROTATION[tpl.id] || {},
+              capKey,
+            )
+            for (const wn of [1, 5, 9, 13]) {
+              const rawWeek = rawWeeks.find(w => w.week_number === wn)
+              const orgWeek = orgWeeks.find(w => w.week_number === wn)
+              if (!rawWeek || !orgWeek) continue
+              for (let i = 0; i < rawWeek.sessions.length; i++) {
+                const rawCounts = nameMultiset(rawWeek.sessions[i].description)
+                const orgCounts = nameMultiset(orgWeek.sessions[i].description)
+                for (const [name, rawCount] of rawCounts) {
+                  const orgCount = orgCounts.get(name) || 0
+                  if (orgCount < rawCount) {
+                    violations.push(`${tpl.id}/${pos.id}/${days}d/${goal} week ${wn} ${rawWeek.sessions[i].day}: "${name}" (${rawCount} authored -> ${orgCount} rendered)`)
+                  }
+                }
+              }
             }
           }
         }
       }
     }
+    expect(violations).toEqual([])
   })
 })
 

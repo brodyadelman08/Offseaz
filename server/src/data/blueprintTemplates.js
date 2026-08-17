@@ -4285,31 +4285,46 @@ const ACCESSORY_ROTATION = {
   'db shoulder press':     { 2: 'Arnold Press',          3: 'Push Press' },
 }
 
-// ─── Session organization: volume cap + pairing (all sports) ──────────────
+// ─── Session organization: pairing + formatting (all sports) ──────────────
 // Every sport's session templates were authored densely — main lift plus
-// 5-8+ accessories on a single day. This pass runs FIRST in the pipeline
+// 4-8+ accessories on a single day. This pass runs FIRST in the pipeline
 // (before accessory rotation/wave/deload), on the fixed, freshly-generated
-// template content, so a cutting decision is based on which physical
-// "slot" exists in the template, not on what a line happens to be rotated
-// into for a particular week — keeps the same slot surviving or getting
-// cut consistently across all 16 weeks.
+// template content.
 //
-// Reorganizes each day into: any inline warm-up preamble a sport already
-// writes (untouched, wherever it is), the main lift alone — UNLESS the day
-// has exactly one plyo/jump line, the one approved exception: bracketed
-// with the main lift as a contrast superset (heavy lift first, so it
-// potentiates the jump) — up to 3 remaining accessories (a pre-existing
-// hand-authored pair, e.g. baseball's press + iso-hold superset, is kept
-// as an atomic, always-first-priority 2-slot unit; everything else is cut
-// down by priority, least sport-specific first, then paired into brackets
-// of 2), conditioning work, and the core block(s) — always last.
+// CORE PRINCIPLE (feat/fix-silent-accessory-drops): no authored movement is
+// ever silently dropped. Every accessory-shaped line the template author
+// wrote for a day survives into the rendered output — full stop. What this
+// pass DOES do is formatting: reorganize each day into any inline warm-up
+// preamble a sport already writes (untouched, wherever it is), the main
+// lift alone — UNLESS the day has exactly one plyo/jump line, the one
+// approved exception: bracketed with the main lift as a contrast superset
+// (heavy lift first, so it potentiates the jump) — then EVERY remaining
+// accessory (a pre-existing hand-authored pair, e.g. baseball's press +
+// iso-hold superset, kept as an atomic 2-exercise unit; everything else
+// paired sequentially into brackets of 2 in the order the template
+// authored them, any genuinely odd leftover rendering as a single line
+// instead of a bracket), conditioning work, and the core block(s) — always
+// last.
+//
+// MAX_ACCESSORIES/SPORT_MAX_ACCESSORIES/resolveAccessoryCapKey previously
+// governed a hard budget that DELETED any candidate once the day's
+// authored count exceeded it — that was the actual root cause of a
+// full-codebase silent-content-loss bug (an audited 125 of ~163 distinct
+// day-templates were dropping 1-7 authored movements apiece, worst case
+// football/linemen's muscle-gain Upper Strength day losing its entire
+// neck/arm-care block). The cap no longer deletes anything (see `kept`
+// below) — these are kept only as a soft, non-destructive sizing signal
+// (still resolved per-sport so `applySessionOrganization`'s call site and
+// any future formatting decision has an accurate "how many accessories
+// does this sport normally author" number to work from), not a filter.
 
-const MAX_ACCESSORIES = 3
+const MAX_ACCESSORIES = 4
 
-// Per-sport override of MAX_ACCESSORIES. Baseball's rebuilt content is
-// deliberately denser (up to 3 full authored pairs on Upper Strength,
-// intentionally not auto-trimmed) — scoped to baseball/softball only, every
-// other sport keeps the default cap of 3 untouched.
+// Per-sport override of MAX_ACCESSORIES — no longer load-bearing for
+// content survival (see the section doc comment above), kept as an
+// accurate sizing signal: baseball's rebuilt content is deliberately dense
+// (up to 3 full authored pairs on Upper Strength), and the 4 Collision-
+// archetype sports/positions below author 5+ movements on purpose.
 const SPORT_MAX_ACCESSORIES = {
   baseball: 6,
   softball: 6,
@@ -4335,23 +4350,29 @@ const SPORT_MAX_ACCESSORIES = {
   hockey_forwards: 5,
 }
 
-// Football's shared MAX_ACCESSORIES cap is raised for linemen only — never
-// for skill/hybrid/qb, and never for a muscle-gain linemen blueprint (that
-// goal still runs the older, denser fbLinemenMGSess template, which was
-// already calibrated against the default cap; leaving it there avoids
-// re-tuning content this task didn't touch). Both call sites that organize
-// a football blueprint (auto-assign below, and blueprintController.js's
-// manual "build from template" tool) must resolve the same key for the
-// same inputs, so this is the one place that decision is made. Wrestling/
-// Rugby Forwards/Hockey Forwards follow the identical goal-gated pattern —
-// their own muscle-gain paths still run their older, pre-archetype content
-// (wrestlingSess, rugbyForwardsSess, hockeyForwardsSess), untouched, so they
-// resolve to the sport-wide default cap exactly as before this archetype work.
+// Football's shared MAX_ACCESSORIES sizing signal is raised for linemen
+// (and, identically, for Wrestling/Rugby Forwards/Hockey Forwards) —
+// PREVIOUSLY gated to `goal !== 'muscle_gain'` on the assumption that each
+// sport's older, pre-archetype muscle-gain template (fbLinemenMGSess,
+// wrestlingSess, rugbyForwardsSess, hockeyForwardsSess) was "already
+// calibrated against the default cap." feat/fix-silent-accessory-drops's
+// full-codebase audit proved that assumption wrong: football/linemen's
+// muscle-gain Upper Strength day alone authors 7 accessory-shaped
+// movements — the single worst silent-drop case found (BB Row, Face
+// Pulls, both neck directions, Lateral Raises, and Tricep Pushdowns were
+// all being deleted under the old default-cap gate). Since the cap no
+// longer deletes anything either way (see the section doc comment above),
+// closing this gate is pure correctness with no remaining downside — both
+// goals now resolve to the same, more-accurate sizing key. Both call sites
+// that organize a football blueprint (auto-assign below, and
+// blueprintController.js's manual "build from template" tool) must resolve
+// the same key for the same inputs, so this is the one place that decision
+// is made.
 function resolveAccessoryCapKey(sport, posId, goal) {
-  if (sport === 'football' && posId === 'linemen' && goal !== 'muscle_gain') return 'football_linemen'
-  if (sport === 'wrestling' && goal !== 'muscle_gain') return 'wrestling_archetype'
-  if (sport === 'rugby' && posId === 'forwards' && goal !== 'muscle_gain') return 'rugby_forwards'
-  if (sport === 'hockey' && posId === 'forwards' && goal !== 'muscle_gain') return 'hockey_forwards'
+  if (sport === 'football' && posId === 'linemen') return 'football_linemen'
+  if (sport === 'wrestling') return 'wrestling_archetype'
+  if (sport === 'rugby' && posId === 'forwards') return 'rugby_forwards'
+  if (sport === 'hockey' && posId === 'forwards') return 'hockey_forwards'
   return sport
 }
 
@@ -4585,20 +4606,17 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   // anchor — never counted against the accessory cap, never paired.
   out.push(...protocolLines)
 
-  // Cap the combined pool of authored pairs + loose accessories to
-  // MAX_ACCESSORIES total slots, by priority (0 = pre-existing pair or
-  // sport-specific/protected, 1 = normal, 2 = generic filler), stable on
-  // original position within a tier. Then restore original relative order
-  // before re-pairing, so a kept pair's lines and any surviving loose
-  // accessories still read in a sensible sequence.
-  const kept = [...candidates]
-    .sort((a, b) => a.priority - b.priority || a.idx - b.idx)
-    .reduce((acc, c) => {
-      const used = acc.reduce((sum, k) => sum + k.weight, 0)
-      if (used + c.weight <= maxAccessories) acc.push(c)
-      return acc
-    }, [])
-    .sort((a, b) => a.idx - b.idx)
+  // Every candidate renders — no authored movement is ever silently dropped
+  // (see the section doc comment above; this replaced a hard MAX_ACCESSORIES
+  // budget that used to delete anything past it, the actual root cause of a
+  // full-codebase silent-content-loss bug). `kept` is simply every
+  // candidate, restored to original authored order; `priority` (still
+  // computed above — protected/sport-specific = 0, generic filler = 2) no
+  // longer influences what survives, since nothing is cut. The loop below
+  // pairs them into brackets of 2 wherever the count allows, in that same
+  // original order, with any genuinely odd leftover rendering as a single
+  // line instead of a bracket.
+  const kept = [...candidates].sort((a, b) => a.idx - b.idx)
 
   let pendingSingle = null
   for (const c of kept) {

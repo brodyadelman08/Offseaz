@@ -198,6 +198,10 @@ const EXERCISE_LIBRARY = {
     description: 'Stand on one leg. Hop laterally over a hurdle or cone, absorb the landing on the same leg, stabilize, then hop back. Emphasize a quick, stiff landing.',
     muscles: 'Glutes, quads, peroneals, ankle stabilizers',
   },
+  'lateral hurdle hops': {
+    description: 'Stand beside a low hurdle with both feet together. Hop laterally over it, landing softly on both feet, then immediately hop back the other way. Keep ground contact time minimal.',
+    muscles: 'Glutes, quads, hip abductors, ankle stabilizers',
+  },
   'db lateral lunge': {
     description: 'Hold dumbbells at your sides. Step one foot wide to the side, sit your hips back and down over that foot, keeping the opposite leg straight, then push back to standing.',
     muscles: 'Quads, glutes, hip adductors',
