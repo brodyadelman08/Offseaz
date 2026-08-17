@@ -852,7 +852,9 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 3x3 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Aerobic Base:
+Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -864,10 +866,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 4x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating V-Ups: 3x20s
+Penguins: 3x20s
+Alternating Supermans: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -878,7 +880,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)
+Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -896,7 +901,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -910,10 +918,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — control
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -925,7 +932,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -943,7 +954,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — add volume — building intent)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Interval Work:
+Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -955,10 +968,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Prone Swimmers: 3x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating Supermans: 3x20s
+Flutter Kicks: 3x20s
+Mountain Climbers: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -969,7 +982,10 @@ Prone Swimmers: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Standing:
+Med Ball Rotational Throw: 3x6 each side
+Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -987,7 +1003,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1001,10 +1020,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building int
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -1016,7 +1034,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1034,7 +1056,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — high intent — near-max effort)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Quality Speed:
+Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1046,10 +1070,8 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Crossover Symmetry Band Series: 3x15",
+Conditioning — Maximal Velocity:
+Med Ball Rotational Throw: 4x6 each side (max intent)",
         "focus": "Upper Strength",
       },
       {
@@ -1060,7 +1082,9 @@ Crossover Symmetry Band Series: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Repeat Effort:
+Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
         "focus": "Lower Strength",
       },
     ],
@@ -1078,7 +1102,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1092,10 +1119,8 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max ef
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength",
       },
       {
@@ -1107,7 +1132,10 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1125,7 +1153,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 2x3 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Full-Recovery Reps:
+Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1137,10 +1167,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 2x15",
+Core — Finisher (20s on/10s off unless noted):
+Hollow Hold: 3x20s
+Cherry Pickers: 3x20s
+Decline Bench Iso: 3x30s hold",
         "focus": "Upper Strength",
       },
       {
@@ -1151,7 +1181,10 @@ Face Pulls: 2x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Low Volume, Max Intent:
+Med Ball Rotational Throw: 2x6 each side (max intent)
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
         "focus": "Lower Strength",
       },
     ],
@@ -1169,7 +1202,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)",
+Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1183,10 +1219,9 @@ Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, 
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -1198,7 +1233,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1221,7 +1260,9 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 3x3 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Aerobic Base:
+Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1233,10 +1274,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 4x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating V-Ups: 3x20s
+Penguins: 3x20s
+Alternating Supermans: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -1247,7 +1288,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)
+Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1265,7 +1309,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1279,10 +1326,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — control
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -1294,7 +1340,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1312,7 +1362,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — add volume — building intent)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Interval Work:
+Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1324,10 +1376,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Prone Swimmers: 3x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating Supermans: 3x20s
+Flutter Kicks: 3x20s
+Mountain Climbers: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -1338,7 +1390,10 @@ Prone Swimmers: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Standing:
+Med Ball Rotational Throw: 3x6 each side
+Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1356,7 +1411,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1370,10 +1428,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building int
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -1385,7 +1442,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1403,7 +1464,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — high intent — near-max effort)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Quality Speed:
+Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1415,10 +1478,8 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Crossover Symmetry Band Series: 3x15",
+Conditioning — Maximal Velocity:
+Med Ball Rotational Throw: 4x6 each side (max intent)",
         "focus": "Upper Strength",
       },
       {
@@ -1429,7 +1490,9 @@ Crossover Symmetry Band Series: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Repeat Effort:
+Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
         "focus": "Lower Strength",
       },
     ],
@@ -1447,7 +1510,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1461,10 +1527,8 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max ef
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength",
       },
       {
@@ -1476,7 +1540,10 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1494,7 +1561,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 2x3 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Full-Recovery Reps:
+Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1506,10 +1575,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 2x15",
+Core — Finisher (20s on/10s off unless noted):
+Hollow Hold: 3x20s
+Cherry Pickers: 3x20s
+Decline Bench Iso: 3x30s hold",
         "focus": "Upper Strength",
       },
       {
@@ -1520,7 +1589,10 @@ Face Pulls: 2x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Low Volume, Max Intent:
+Med Ball Rotational Throw: 2x6 each side (max intent)
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
         "focus": "Lower Strength",
       },
     ],
@@ -1538,7 +1610,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)",
+Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1552,10 +1627,9 @@ Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, 
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -1567,7 +1641,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1591,7 +1669,9 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 3x3 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Acceleration Mechanics:
+Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1603,10 +1683,11 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 5x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating V-Ups: 3x20s
+Penguins: 3x20s
+Alternating Supermans: 3x20s
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1617,7 +1698,9 @@ Face Pulls: 5x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Aerobic Base:
+Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1636,7 +1719,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1650,10 +1736,10 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1665,7 +1751,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1684,7 +1773,9 @@ Face Pulls: 4x15",
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — add volume — building intent)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Interval Work:
+Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1696,10 +1787,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Prone Swimmers: 4x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating Supermans: 3x20s
+Flutter Kicks: 3x20s
+Mountain Climbers: 3x20s",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1710,7 +1801,10 @@ Prone Swimmers: 4x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Standing:
+Med Ball Rotational Throw: 3x6 each side
+Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1729,7 +1823,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -1743,10 +1840,9 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1758,7 +1854,11 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -1777,7 +1877,9 @@ Face Pulls: 4x15",
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — high intent — near-max effort)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Quality Speed:
+Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1789,10 +1891,8 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Crossover Symmetry Band Series: 3x15",
+Conditioning — Maximal Velocity:
+Med Ball Rotational Throw: 4x6 each side (max intent)",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1803,7 +1903,9 @@ Crossover Symmetry Band Series: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Repeat Effort:
+Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
         "focus": "Lower Strength",
       },
     ],
@@ -1822,7 +1924,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1836,10 +1941,8 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1851,7 +1954,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1870,7 +1976,9 @@ Face Pulls: 4x15",
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 2x3 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Full-Recovery Reps:
+Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1882,10 +1990,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 2x15",
+Core — Finisher (20s on/10s off unless noted):
+Hollow Hold: 3x20s
+Cherry Pickers: 3x20s
+Decline Bench Iso: 3x30s hold",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1896,7 +2004,10 @@ Face Pulls: 2x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Low Volume, Max Intent:
+Med Ball Rotational Throw: 2x6 each side (max intent)
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
         "focus": "Lower Strength",
       },
     ],
@@ -1915,7 +2026,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1929,10 +2043,9 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1944,7 +2057,11 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -1968,7 +2085,9 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 3x3 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Acceleration Mechanics:
+Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -1980,10 +2099,11 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 5x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating V-Ups: 3x20s
+Penguins: 3x20s
+Alternating Supermans: 3x20s
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -1994,7 +2114,9 @@ Face Pulls: 5x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Aerobic Base:
+Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -2013,7 +2135,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -2027,10 +2152,10 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2042,7 +2167,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -2061,7 +2189,9 @@ Face Pulls: 4x15",
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — add volume — building intent)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Interval Work:
+Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -2073,10 +2203,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Prone Swimmers: 4x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating Supermans: 3x20s
+Flutter Kicks: 3x20s
+Mountain Climbers: 3x20s",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2087,7 +2217,10 @@ Prone Swimmers: 4x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Standing:
+Med Ball Rotational Throw: 3x6 each side
+Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -2106,7 +2239,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -2120,10 +2256,9 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2135,7 +2270,11 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -2154,7 +2293,9 @@ Face Pulls: 4x15",
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — high intent — near-max effort)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Quality Speed:
+Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -2166,10 +2307,8 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Crossover Symmetry Band Series: 3x15",
+Conditioning — Maximal Velocity:
+Med Ball Rotational Throw: 4x6 each side (max intent)",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2180,7 +2319,9 @@ Crossover Symmetry Band Series: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Repeat Effort:
+Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
         "focus": "Lower Strength",
       },
     ],
@@ -2199,7 +2340,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -2213,10 +2357,8 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2228,7 +2370,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -2247,7 +2392,9 @@ Face Pulls: 4x15",
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 2x3 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
 Copenhagen Adductor: 3x8 (each leg)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Full-Recovery Reps:
+Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -2259,10 +2406,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 2x15",
+Core — Finisher (20s on/10s off unless noted):
+Hollow Hold: 3x20s
+Cherry Pickers: 3x20s
+Decline Bench Iso: 3x30s hold",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2273,7 +2420,10 @@ Face Pulls: 2x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Low Volume, Max Intent:
+Med Ball Rotational Throw: 2x6 each side (max intent)
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
         "focus": "Lower Strength",
       },
     ],
@@ -2292,7 +2442,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
 Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
-Copenhagen Adductor: 3x8 (each leg)",
+Copenhagen Adductor: 3x8 (each leg)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -2306,10 +2459,9 @@ Copenhagen Adductor: 3x8 (each leg)",
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 4x20
-Band External Rotation: 4x15 (each arm)
-Face Pulls: 4x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength and Arm Care",
       },
       {
@@ -2321,7 +2473,11 @@ Face Pulls: 4x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -5012,7 +5168,10 @@ Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Loaded Carry Mix: 3 rounds (farmer + suitcase, alternating)",
         "focus": "Lower Power",
       },
       {
@@ -5028,7 +5187,13 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Sled Push: 4x15 yds (short, choppy steps)",
         "focus": "Upper Strength",
       },
     ],
@@ -5053,7 +5218,10 @@ Front Squat: 40%×10, 70%×5 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Lower Power",
       },
       {
@@ -5071,7 +5239,12 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sled Push: 2x15 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -5094,7 +5267,10 @@ Front Squat: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Interval Work:
+Farmer Carries: 4x30 yds",
         "focus": "Lower Power",
       },
       {
@@ -5110,7 +5286,12 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Rotation:
+Pallof Press: 3x10 each side
+Half Kneeling Cable Press: 3x10 each side
+Sled Push: 4x20 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -5135,7 +5316,10 @@ Front Squat: 40%×10, 70%×5 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Lower Power",
       },
       {
@@ -5153,7 +5337,12 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sled Push: 2x15 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -5176,7 +5365,10 @@ Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Quality Speed:
+Sprint Work: 5x10 yds @ max effort",
         "focus": "Lower Power",
       },
       {
@@ -5192,7 +5384,10 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Repeat Effort:
+Battle Rope: 4x20s",
         "focus": "Upper Strength",
       },
     ],
@@ -5217,7 +5412,10 @@ Front Squat: 40%×10, 70%×5 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power",
       },
       {
@@ -5235,7 +5433,10 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -5258,7 +5459,10 @@ Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 4x10 yds @ max effort (full recovery)",
         "focus": "Lower Power",
       },
       {
@@ -5274,7 +5478,12 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Lateral Stability:
+Copenhagen Adductor: 3x8 each leg
+Suitcase Carry: 3x20 yds each side
+Farmer Carries: 2x30 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -5299,7 +5508,10 @@ Front Squat: 40%×10, 70%×5 (full ROM)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power",
       },
       {
@@ -5317,7 +5529,12 @@ Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Se
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Farmer Carries: 2x20 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -7366,7 +7583,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals h
 Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 7x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
@@ -7379,10 +7596,9 @@ Lateral Shuffle: 7x20 yds
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Single Leg Squat Jump: 5x5 each leg
+300 Yard Shuttle: 2x2",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7415,9 +7631,9 @@ DB Bench Press: 2x8
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7434,7 +7650,7 @@ Plank: 2x20 seconds",
 Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 5x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
@@ -7447,9 +7663,9 @@ Lateral Shuffle: 5x20 yds
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Single Leg Squat Jump: 4x5 each leg
+300 Yard Shuttle: 2x2",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7482,9 +7698,9 @@ DB Bench Press: 2x8
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7501,7 +7717,7 @@ Plank: 2x20 seconds",
 Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Reactive Lateral Bound: 4x5 each side
 Flying 20s: 4x1",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
@@ -7514,9 +7730,9 @@ Flying 20s: 4x1",
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Reactive Lateral Bound: 4x5 each side
+Single Leg Squat Jump: 4x5 each leg",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7549,9 +7765,9 @@ DB Bench Press: 2x8
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7568,7 +7784,7 @@ Plank: 2x20 seconds",
 Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Lateral Shuffle: 3x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower — Lateral Mobility & Single Leg Stability",
@@ -7581,9 +7797,9 @@ Lateral Shuffle: 3x20 yds
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Single Leg Squat Jump: 2x5 each leg
+300 Yard Shuttle: 2x2",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7616,9 +7832,9 @@ DB Bench Press: 2x8
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper — Core Stiffness & Rotational Strength",
       },
     ],
@@ -7954,7 +8170,10 @@ Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
 Bulgarian Split Squat: 3x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Hip 90/90 Hold: 3x30s each side
-Sled Sprint: 6x20 yds",
+Sled Sprint: 6x20 yds
+
+Conditioning — Aerobic Base:
+Battle Rope: 3x20s",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -7965,7 +8184,13 @@ Single Arm DB Split Jerk: build to a top set of 5x3 — start light and build, e
 Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8
 ⟦SS1⟧Weighted Pull-ups: 5x5
 ⟦SS1⟧Single Arm DB Row: 5x10 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Sled Sprint: 4x20 yds",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -7984,7 +8209,10 @@ Hang Power Clean: lighter, no build — 3x3
 Trap Bar Deadlift: 40%×10, 70%×5
 Bulgarian Split Squat: 2x5 each leg
 Copenhagen Adductor: 3x8 each leg
-Hip 90/90 Hold: 3x30s each side",
+Hip 90/90 Hold: 3x30s each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -7997,7 +8225,12 @@ Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sled Sprint: 2x20 yds",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8015,7 +8248,10 @@ Trap Bar Deadlift: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
 Bulgarian Split Squat: 3x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Hip 90/90 Hold: 3x30s each side
-Sled Sprint: 6x20 yds",
+Sled Sprint: 6x20 yds
+
+Conditioning — Interval Work:
+Battle Rope: 4x20s",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -8026,7 +8262,12 @@ Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and bu
 Bench Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
 ⟦SS1⟧DB Row: 4x5
 ⟦SS1⟧Chest Supported Row: 4x10 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Core — Anti-Rotation:
+Pallof Press: 3x10 each side
+Half Kneeling Cable Press: 3x10 each side
+Sled Sprint: 5x20 yds",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8045,7 +8286,10 @@ Hang Power Clean: lighter, no build — 3x3
 Trap Bar Deadlift: 40%×10, 70%×5
 Bulgarian Split Squat: 2x5 each leg
 Copenhagen Adductor: 3x8 each leg
-Hip 90/90 Hold: 3x30s each side",
+Hip 90/90 Hold: 3x30s each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -8058,7 +8302,12 @@ Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sled Sprint: 2x20 yds",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8076,7 +8325,10 @@ Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 Bulgarian Split Squat: 3x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Hip 90/90 Hold: 3x30s each side
-Sled Sprint: 6x20 yds",
+Sled Sprint: 6x20 yds
+
+Conditioning — Quality Speed:
+Sprint Work: 5x15 yds @ max effort",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -8087,7 +8339,10 @@ Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, st
 Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 ⟦SS1⟧Weighted Chin-ups: 3x5
 ⟦SS1⟧Pull-ups: 3x10 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Conditioning — Repeat Effort:
+Lateral Sled Drag: 4x20 yds each direction",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8106,7 +8361,10 @@ Hang Power Clean: lighter, no build — 3x3
 Trap Bar Deadlift: 40%×10, 70%×5
 Bulgarian Split Squat: 2x5 each leg
 Copenhagen Adductor: 3x8 each leg
-Hip 90/90 Hold: 3x30s each side",
+Hip 90/90 Hold: 3x30s each side
+
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -8119,7 +8377,10 @@ Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8137,7 +8398,10 @@ Trap Bar Deadlift: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 Bulgarian Split Squat: 3x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Hip 90/90 Hold: 3x30s each side
-Sled Sprint: 6x20 yds",
+Sled Sprint: 6x20 yds
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 3x15 yds @ max effort (full recovery)",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -8148,7 +8412,12 @@ Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, st
 Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 ⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧Single Arm DB Row: 2x10 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Core — Lateral Stability:
+Copenhagen Adductor: 3x8 each leg
+Suitcase Carry: 3x20 yds each side
+Battle Rope: 2x20s",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8167,7 +8436,10 @@ Hang Power Clean: lighter, no build — 3x3
 Trap Bar Deadlift: 40%×10, 70%×5
 Bulgarian Split Squat: 2x5 each leg
 Copenhagen Adductor: 3x8 each leg
-Hip 90/90 Hold: 3x30s each side",
+Hip 90/90 Hold: 3x30s each side
+
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds",
         "focus": "Lower — First-Step Explosion",
       },
       {
@@ -8180,7 +8452,12 @@ Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Bench Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-Band External Rotation: 3x15 each arm",
+Band External Rotation: 3x15 each arm
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Battle Rope: 2x15s",
         "focus": "Upper — Puck Battle Strength",
       },
     ],
@@ -8499,7 +8776,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals h
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 7x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Butterfly Mechanics",
@@ -8513,10 +8790,9 @@ Face Pulls: 5x15
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Single Leg Squat Jump: 5x5 each leg
+Flying 20s: 4x1",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8549,9 +8825,9 @@ Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8568,9 +8844,10 @@ Plank: 2x20 seconds",
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 5x20 yds
-300 Yard Shuttle: 2x2",
+300 Yard Shuttle: 2x2
+Band External Rotation: 3x15 each arm",
         "focus": "Lower Power & Butterfly Mechanics",
       },
       {
@@ -8582,9 +8859,9 @@ Reverse Flys: 4x15
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Single Leg Squat Jump: 4x5 each leg
+Flying 20s: 4x1",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8603,7 +8880,8 @@ Copenhagen Adductor: 4x8 each leg
 
 Conditioning — Deload (Light):
 Lateral Shuffle: 2x20 yds
-Easy Mobility Circuit: 1 round",
+Easy Mobility Circuit: 1 round
+Band External Rotation: 2x15 each arm",
         "focus": "Lower Power & Butterfly Mechanics",
       },
       {
@@ -8617,9 +8895,9 @@ Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8636,9 +8914,10 @@ Plank: 2x20 seconds",
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Reactive Lateral Bound: 4x5 each side
-Flying 20s: 4x1",
+Flying 20s: 4x1
+DB Row: 3x15",
         "focus": "Lower Power & Butterfly Mechanics",
       },
       {
@@ -8650,9 +8929,9 @@ DB Row: 3x15
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Reactive Lateral Bound: 4x5 each side
+Single Leg Squat Jump: 4x5 each leg",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8671,7 +8950,8 @@ Copenhagen Adductor: 4x8 each leg
 
 Conditioning — Deload (Light):
 Lateral Shuffle: 2x20 yds
-Easy Mobility Circuit: 1 round",
+Easy Mobility Circuit: 1 round
+Band External Rotation: 2x15 each arm",
         "focus": "Lower Power & Butterfly Mechanics",
       },
       {
@@ -8685,9 +8965,9 @@ Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8704,9 +8984,10 @@ Plank: 2x20 seconds",
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Lateral Shuffle: 3x20 yds
-300 Yard Shuttle: 2x2",
+300 Yard Shuttle: 2x2
+Band External Rotation: 2x15 each arm",
         "focus": "Lower Power & Butterfly Mechanics",
       },
       {
@@ -8718,9 +8999,9 @@ Face Pulls: 2x15
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Single Leg Squat Jump: 2x5 each leg
+Flying 20s: 4x1",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -8739,7 +9020,8 @@ Copenhagen Adductor: 4x8 each leg
 
 Conditioning — Deload (Light):
 Lateral Shuffle: 2x20 yds
-Easy Mobility Circuit: 1 round",
+Easy Mobility Circuit: 1 round
+Band External Rotation: 2x15 each arm",
         "focus": "Lower Power & Butterfly Mechanics",
       },
       {
@@ -8753,9 +9035,9 @@ Face Pulls: 2x11
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health (Goalie Protection)",
       },
     ],
@@ -9052,7 +9334,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals l
 ⟦SS2⟧Single Leg RDL: 4x8 each leg
 Nordic Hamstring Curl: 3x5
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Broad Jump: 3x3",
         "focus": "Lower Power & Sprint",
@@ -9065,10 +9347,9 @@ Broad Jump: 3x3",
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+V Drill: 5x3
+Star Drill: 3x3",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9101,9 +9382,9 @@ DB Bench Press: 2x6
 Med Ball Rotational Throw: 2x5 each side
 Cable Woodchop: 3x10 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9120,7 +9401,7 @@ Plank: 2x20 seconds",
 ⟦SS2⟧Good Mornings: 3x8 each leg
 Nordic Hamstring Curl: 3x5
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Broad Jump: 3x3",
         "focus": "Lower Power & Sprint",
@@ -9133,9 +9414,9 @@ Broad Jump: 3x3",
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+V Drill: 4x3
+Star Drill: 3x3",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9168,9 +9449,9 @@ DB Bench Press: 2x6
 Med Ball Rotational Throw: 2x5 each side
 Cable Woodchop: 3x10 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9187,7 +9468,7 @@ Plank: 2x20 seconds",
 ⟦SS2⟧Romanian Deadlift: 3x8 each leg
 Nordic Hamstring Curl: 3x5
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 200m Intervals: 8x1 @ 80-85% effort (90 sec rest)
 Broad Jump: 4x3",
         "focus": "Lower Power & Sprint",
@@ -9200,9 +9481,9 @@ Broad Jump: 4x3",
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+V Drill: 5x3
+200m Intervals: 8x1 @ 80-85% effort (90 sec rest)",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9235,9 +9516,9 @@ DB Bench Press: 2x6
 Med Ball Rotational Throw: 2x5 each side
 Cable Woodchop: 3x10 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9254,7 +9535,7 @@ Plank: 2x20 seconds",
 ⟦SS2⟧Single Leg RDL: 2x8 each leg
 Nordic Hamstring Curl: 3x5
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Broad Jump: 3x3",
         "focus": "Lower Power & Sprint",
@@ -9267,9 +9548,9 @@ Broad Jump: 3x3",
 Med Ball Rotational Throw: 4x6 each side
 Cable Woodchop: 3x10 each side
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+V Drill: 2x3
+Star Drill: 3x3",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9302,9 +9583,9 @@ DB Bench Press: 2x6
 Med Ball Rotational Throw: 2x5 each side
 Cable Woodchop: 3x10 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Shooting Power",
       },
     ],
@@ -9610,7 +9891,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals r
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 4x5 each side (moderate intent — controlled speed)
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Lower Strength & Sprint",
@@ -9622,10 +9903,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
 ⟦SS1⟧DB Row: 4x10 each arm
 Overhead Press: 3x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Flying 20s: 5x1
+Sprint + Jog Ladder: 4 rounds up to 50 yards",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9656,9 +9936,9 @@ Bench Press: 2x6
 ⟦SS1⟧DB Row: 2x8 each arm
 Overhead Press: 2x8
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Flying 20s: 2x1
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9674,7 +9954,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 5x5 each side (add volume — building intent)
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Lower Strength & Sprint",
@@ -9686,9 +9966,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
 ⟦SS1⟧DB Row: 4x10 each arm
 Overhead Press: 3x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Flying 20s: 4x1
+Sprint + Jog Ladder: 4 rounds up to 60 yards",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9719,9 +9999,9 @@ Bench Press: 2x6
 ⟦SS1⟧DB Row: 2x8 each arm
 Overhead Press: 2x8
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Flying 20s: 2x1
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9737,7 +10017,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 5x5 each side (high intent — near-max effort)
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 8x1
 Sprint Ladder: 10/20/30/20/10 yds — 4 rounds",
         "focus": "Lower Strength & Sprint",
@@ -9749,9 +10029,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 4 rounds",
 ⟦SS1⟧DB Row: 4x10 each arm
 Overhead Press: 3x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 8x1
+Sprint Ladder: 10/20/30/20/10 yds — 4 rounds",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9782,9 +10062,9 @@ Bench Press: 2x6
 ⟦SS1⟧DB Row: 2x8 each arm
 Overhead Press: 2x8
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Flying 20s: 2x1
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9800,7 +10080,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Lateral Bounds: 3x5 each side (tapered — lowest volume, stay sharp)
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Lower Strength & Sprint",
@@ -9812,9 +10092,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
 ⟦SS1⟧DB Row: 4x10 each arm
 Overhead Press: 3x10
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Flying 20s: 2x1
+Sprint + Jog Ladder: 4 rounds up to 80 yards",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -9845,9 +10125,9 @@ Bench Press: 2x6
 ⟦SS1⟧DB Row: 2x8 each arm
 Overhead Press: 2x8
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Flying 20s: 2x1
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10167,7 +10447,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10183,7 +10466,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10207,7 +10496,10 @@ Nordic Hamstring Curl: 2x4
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10225,7 +10517,12 @@ DB Shrugs: 2x9
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Scrum Drive: 2x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10247,7 +10544,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Interval Work:
+Farmer Carries: 4x30 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10263,7 +10563,12 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Rotation:
+Pallof Press: 3x10 each side
+Half Kneeling Cable Press: 3x10 each side
+Scrum Drive: 4x15 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10287,7 +10592,10 @@ Nordic Hamstring Curl: 2x4
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10305,7 +10613,12 @@ DB Shrugs: 2x9
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Scrum Drive: 2x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10327,7 +10640,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Quality Speed:
+Sprint Work: 5x15 yds @ max effort",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10343,7 +10659,10 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Repeat Effort:
+Battle Rope: 4x20s",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10367,7 +10686,10 @@ Nordic Hamstring Curl: 2x4
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Scrum Drive: 2x10 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10385,7 +10707,10 @@ DB Shrugs: 2x9
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10407,7 +10732,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 3x15 yds @ max effort (full recovery)",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10423,7 +10751,12 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Lateral Stability:
+Copenhagen Adductor: 3x8 each leg
+Suitcase Carry: 3x20 yds each side
+Sled Push: 2x20 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10447,7 +10780,10 @@ Nordic Hamstring Curl: 2x4
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Scrum Drive: 2x10 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -10465,7 +10801,12 @@ DB Shrugs: 2x9
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sled Push: 2x15 yds",
         "focus": "Upper Strength & Contact Prep",
       },
     ],
@@ -10487,7 +10828,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 Single Leg RDL: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Sled Push: 7x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength — Hypertrophy",
@@ -10500,10 +10841,9 @@ Sled Push: 7x20 yds
 Neck Strengthening: 3x12 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Deceleration Drill: 7x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10537,9 +10877,9 @@ DB Bench Press: 3x6
 Neck Strengthening: 2x9 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10556,7 +10896,7 @@ Plank: 2x20 seconds",
 Good Mornings: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Sled Push: 5x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength — Hypertrophy",
@@ -10569,9 +10909,9 @@ Sled Push: 5x20 yds
 Neck Strengthening: 3x12 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Deceleration Drill: 5x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10605,9 +10945,9 @@ DB Bench Press: 3x6
 Neck Strengthening: 2x9 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10624,7 +10964,7 @@ Plank: 2x20 seconds",
 Romanian Deadlift: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Sprint Work: 6x30 yds @ max effort
 Flying 20s: 4x1",
         "focus": "Max Lower Strength — Hypertrophy",
@@ -10637,9 +10977,9 @@ Flying 20s: 4x1",
 Neck Strengthening: 3x12 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Sprint Work: 6x30 yds @ max effort
+Deceleration Drill: 4x20 yds (sprint 20 · brake · hold 2s)",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10673,9 +11013,9 @@ DB Bench Press: 3x6
 Neck Strengthening: 2x9 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10692,7 +11032,7 @@ Plank: 2x20 seconds",
 Single Leg RDL: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Sled Push: 3x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength — Hypertrophy",
@@ -10705,9 +11045,9 @@ Sled Push: 3x20 yds
 Neck Strengthening: 3x12 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Deceleration Drill: 3x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10741,9 +11081,9 @@ DB Bench Press: 3x6
 Neck Strengthening: 2x9 each direction
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength — Hypertrophy",
       },
     ],
@@ -10764,7 +11104,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Single Leg RDL: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Sled Push: 7x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength",
@@ -10776,10 +11116,9 @@ Sled Push: 7x20 yds
 ⟦SS1⟧Overhead Press: 4x8
 Neck Strengthening: 3x12 each direction
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Deceleration Drill: 7x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10811,9 +11150,9 @@ DB Bench Press: 3x6
 ⟦SS1⟧Overhead Press: 2x6
 Neck Strengthening: 2x9 each direction
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10829,7 +11168,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Good Mornings: 3x8 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Sled Push: 5x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength",
@@ -10841,9 +11180,9 @@ Sled Push: 5x20 yds
 ⟦SS1⟧Overhead Press: 4x8
 Neck Strengthening: 3x12 each direction
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Deceleration Drill: 5x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10875,9 +11214,9 @@ DB Bench Press: 3x6
 ⟦SS1⟧Overhead Press: 2x6
 Neck Strengthening: 2x9 each direction
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10893,7 +11232,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Romanian Deadlift: 3x8 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Sprint Work: 6x30 yds @ max effort
 Flying 20s: 4x1",
         "focus": "Max Lower Strength",
@@ -10905,9 +11244,9 @@ Flying 20s: 4x1",
 ⟦SS1⟧Overhead Press: 4x8
 Neck Strengthening: 3x12 each direction
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Sprint Work: 6x30 yds @ max effort
+Deceleration Drill: 4x20 yds (sprint 20 · brake · hold 2s)",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10939,9 +11278,9 @@ DB Bench Press: 3x6
 ⟦SS1⟧Overhead Press: 2x6
 Neck Strengthening: 2x9 each direction
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -10957,7 +11296,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Single Leg RDL: 2x8 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Sled Push: 3x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength",
@@ -10969,9 +11308,9 @@ Sled Push: 3x20 yds
 ⟦SS1⟧Overhead Press: 4x8
 Neck Strengthening: 3x12 each direction
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Deceleration Drill: 3x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -11003,9 +11342,9 @@ DB Bench Press: 3x6
 ⟦SS1⟧Overhead Press: 2x6
 Neck Strengthening: 2x9 each direction
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Contact Strength",
       },
     ],
@@ -11027,7 +11366,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 Single Leg RDL: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint — Hypertrophy",
@@ -11042,10 +11381,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11081,9 +11419,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11100,7 +11438,7 @@ Plank: 2x20 seconds",
 Good Mornings: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint — Hypertrophy",
@@ -11115,9 +11453,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Sled Sprint: 5x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11153,9 +11491,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11172,7 +11510,7 @@ Plank: 2x20 seconds",
 Romanian Deadlift: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 8x1
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Lower Strength & Sprint — Hypertrophy",
@@ -11187,9 +11525,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 8x1
+Sled Sprint: 6x20 yds",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11225,9 +11563,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11244,7 +11582,7 @@ Plank: 2x20 seconds",
 Single Leg RDL: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint — Hypertrophy",
@@ -11259,9 +11597,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Sled Sprint: 3x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11297,9 +11635,9 @@ Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility — Hypertrophy",
       },
     ],
@@ -11320,7 +11658,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 ⟦SS1⟧Hip Thrust: 4x8
 Single Leg RDL: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint",
@@ -11334,10 +11672,9 @@ Banded Monster Walk: 3x10 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11371,9 +11708,9 @@ Banded Monster Walk: 2x8 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11389,7 +11726,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Hip Thrust: 4x8
 Good Mornings: 3x8 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint",
@@ -11403,9 +11740,9 @@ Banded Monster Walk: 3x10 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Sled Sprint: 5x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11439,9 +11776,9 @@ Banded Monster Walk: 2x8 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11457,7 +11794,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Hip Thrust: 4x8
 Romanian Deadlift: 3x8 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 8x1
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Lower Strength & Sprint",
@@ -11471,9 +11808,9 @@ Banded Monster Walk: 3x10 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 8x1
+Sled Sprint: 6x20 yds",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11507,9 +11844,9 @@ Banded Monster Walk: 2x8 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11525,7 +11862,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Hip Thrust: 4x8
 Single Leg RDL: 2x8 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint",
@@ -11539,9 +11876,9 @@ Banded Monster Walk: 3x10 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Sled Sprint: 3x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11575,9 +11912,9 @@ Banded Monster Walk: 2x8 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Mobility",
       },
     ],
@@ -11600,7 +11937,7 @@ Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 7x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive — Hypertrophy",
@@ -11615,10 +11952,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Single Leg Squat Jump: 5x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11653,9 +11989,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11673,7 +12009,7 @@ Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 5x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive — Hypertrophy",
@@ -11688,9 +12024,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Single Leg Squat Jump: 4x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11725,9 +12061,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11745,7 +12081,7 @@ Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Reactive Lateral Bound: 4x5 each side
 Flying 20s: 4x1",
         "focus": "Lower Power & Explosive — Hypertrophy",
@@ -11760,9 +12096,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Reactive Lateral Bound: 4x5 each side
+Single Leg Squat Jump: 4x5 each leg",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11797,9 +12133,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11817,7 +12153,7 @@ Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Lateral Shuffle: 3x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive — Hypertrophy",
@@ -11832,9 +12168,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Single Leg Squat Jump: 2x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11869,9 +12205,9 @@ Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health — Hypertrophy",
       },
     ],
@@ -11893,7 +12229,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 7x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive",
@@ -11907,10 +12243,9 @@ Face Pulls: 3x20
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Single Leg Squat Jump: 5x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -11943,9 +12278,9 @@ Face Pulls: 2x15
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -11962,7 +12297,7 @@ Plank: 2x20 seconds",
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 5x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive",
@@ -11976,9 +12311,9 @@ Face Pulls: 3x20
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Single Leg Squat Jump: 4x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -12011,9 +12346,9 @@ Face Pulls: 2x15
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -12030,7 +12365,7 @@ Plank: 2x20 seconds",
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Reactive Lateral Bound: 4x5 each side
 Flying 20s: 4x1",
         "focus": "Lower Power & Explosive",
@@ -12044,9 +12379,9 @@ Face Pulls: 3x20
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Reactive Lateral Bound: 4x5 each side
+Single Leg Squat Jump: 4x5 each leg",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -12079,9 +12414,9 @@ Face Pulls: 2x15
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -12098,7 +12433,7 @@ Plank: 2x20 seconds",
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Lateral Shuffle: 3x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive",
@@ -12112,9 +12447,9 @@ Face Pulls: 3x20
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Single Leg Squat Jump: 2x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -12147,9 +12482,9 @@ Face Pulls: 2x15
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Single Leg Squat Jump: 2x5 each leg
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Shoulder Health",
       },
     ],
@@ -12171,7 +12506,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 Single Leg RDL: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base — Hypertrophy",
@@ -12184,10 +12519,9 @@ Aerobic Finish: 8 min tempo run",
 MB Twist Throw: 4x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+V Drill: 5x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12221,9 +12555,9 @@ DB Bench Press: 2x6
 MB Twist Throw: 2x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12240,7 +12574,7 @@ Plank: 2x20 seconds",
 Good Mornings: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base — Hypertrophy",
@@ -12253,9 +12587,9 @@ Aerobic Finish: 8 min tempo run",
 MB Twist Throw: 4x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+V Drill: 4x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12289,9 +12623,9 @@ DB Bench Press: 2x6
 MB Twist Throw: 2x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12308,7 +12642,7 @@ Plank: 2x20 seconds",
 Romanian Deadlift: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 6x1
 300 Yard Shuttle: 2x2",
         "focus": "Lower Strength & Aerobic Base — Hypertrophy",
@@ -12321,9 +12655,9 @@ Flying 20s: 6x1
 MB Twist Throw: 4x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+V Drill: 5x3
+Flying 20s: 6x1",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12357,9 +12691,9 @@ DB Bench Press: 2x6
 MB Twist Throw: 2x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12376,7 +12710,7 @@ Plank: 2x20 seconds",
 Single Leg RDL: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base — Hypertrophy",
@@ -12389,9 +12723,9 @@ Aerobic Finish: 8 min tempo run",
 MB Twist Throw: 4x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+V Drill: 2x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12425,9 +12759,9 @@ DB Bench Press: 2x6
 MB Twist Throw: 2x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity — Hypertrophy",
       },
     ],
@@ -12448,7 +12782,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 ⟦SS1⟧Hex Bar Jumps: 4x6 (moderate intent — controlled speed)
 Single Leg RDL: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base",
@@ -12460,10 +12794,9 @@ Aerobic Finish: 8 min tempo run",
 ⟦SS1⟧Lateral Raise: 4x12
 MB Twist Throw: 4x6 each side
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+V Drill: 5x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12495,9 +12828,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧Lateral Raise: 2x9
 MB Twist Throw: 2x5 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12513,7 +12846,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Hex Bar Jumps: 5x6 (add volume — building intent)
 Good Mornings: 3x8 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base",
@@ -12525,9 +12858,9 @@ Aerobic Finish: 8 min tempo run",
 ⟦SS1⟧Front Raise: 3x12
 MB Twist Throw: 4x6 each side
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+V Drill: 4x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12559,9 +12892,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧Lateral Raise: 2x9
 MB Twist Throw: 2x5 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12577,7 +12910,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Hex Bar Jumps: 5x6 (high intent — near-max effort)
 Romanian Deadlift: 3x8 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 6x1
 300 Yard Shuttle: 2x2",
         "focus": "Lower Strength & Aerobic Base",
@@ -12589,9 +12922,9 @@ Flying 20s: 6x1
 ⟦SS1⟧Cuban Press: 3x12
 MB Twist Throw: 4x6 each side
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+V Drill: 5x3
+Flying 20s: 6x1",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12623,9 +12956,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧Lateral Raise: 2x9
 MB Twist Throw: 2x5 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12641,7 +12974,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Hex Bar Jumps: 3x6 (tapered — lowest volume, stay sharp)
 Single Leg RDL: 2x8 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base",
@@ -12653,9 +12986,9 @@ Aerobic Finish: 8 min tempo run",
 ⟦SS1⟧Lateral Raise: 2x12
 MB Twist Throw: 4x6 each side
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+V Drill: 2x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12687,9 +13020,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧Lateral Raise: 2x9
 MB Twist Throw: 2x5 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+V Drill: 2x3
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Work Capacity",
       },
     ],
@@ -12712,7 +13045,7 @@ Approach Jump: 5x5 (moderate intent — controlled speed)
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height — Hypertrophy",
@@ -12725,10 +13058,9 @@ Broad Jump: 3x3",
 Med Ball Overhead Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12762,9 +13094,9 @@ DB Bench Press: 2x6
 Med Ball Overhead Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12782,7 +13114,7 @@ Approach Jump: 6x5 (add volume — building intent)
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height — Hypertrophy",
@@ -12795,9 +13127,9 @@ Broad Jump: 3x3",
 Med Ball Overhead Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Sled Sprint: 5x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12831,9 +13163,9 @@ DB Bench Press: 2x6
 Med Ball Overhead Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12851,7 +13183,7 @@ Approach Jump: 6x5 (high intent — near-max effort)
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 6x1
 Broad Jump: 4x3",
         "focus": "Lower Vertical Power & Jump Height — Hypertrophy",
@@ -12864,9 +13196,9 @@ Broad Jump: 4x3",
 Med Ball Overhead Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 6x1
+Sled Sprint: 6x20 yds",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12900,9 +13232,9 @@ DB Bench Press: 2x6
 Med Ball Overhead Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12920,7 +13252,7 @@ Approach Jump: 4x5 (tapered — lowest volume, stay sharp)
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height — Hypertrophy",
@@ -12933,9 +13265,9 @@ Broad Jump: 3x3",
 Med Ball Overhead Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Sled Sprint: 3x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12969,9 +13301,9 @@ DB Bench Press: 2x6
 Med Ball Overhead Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power — Hypertrophy",
       },
     ],
@@ -12993,7 +13325,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 Approach Jump: 5x5 (moderate intent — controlled speed)
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height",
@@ -13005,10 +13337,9 @@ Broad Jump: 3x3",
 ⟦SS1⟧MB Twist Throw: 4x6 each side
 Med Ball Overhead Slam: 4x8
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13040,9 +13371,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧MB Twist Throw: 2x5 each side
 Med Ball Overhead Slam: 2x6
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13059,7 +13390,7 @@ Plank: 2x20 seconds",
 Approach Jump: 6x5 (add volume — building intent)
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 3x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height",
@@ -13071,9 +13402,9 @@ Broad Jump: 3x3",
 ⟦SS1⟧MB Twist Throw: 4x6 each side
 Med Ball Overhead Slam: 4x8
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Sled Sprint: 5x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13105,9 +13436,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧MB Twist Throw: 2x5 each side
 Med Ball Overhead Slam: 2x6
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13124,7 +13455,7 @@ Plank: 2x20 seconds",
 Approach Jump: 6x5 (high intent — near-max effort)
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 6x1
 Broad Jump: 4x3",
         "focus": "Lower Vertical Power & Jump Height",
@@ -13136,9 +13467,9 @@ Broad Jump: 4x3",
 ⟦SS1⟧MB Twist Throw: 4x6 each side
 Med Ball Overhead Slam: 4x8
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 6x1
+Sled Sprint: 6x20 yds",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13170,9 +13501,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧MB Twist Throw: 2x5 each side
 Med Ball Overhead Slam: 2x6
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13189,7 +13520,7 @@ Plank: 2x20 seconds",
 Approach Jump: 4x5 (tapered — lowest volume, stay sharp)
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 300 Yard Shuttle: 2x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height",
@@ -13201,9 +13532,9 @@ Broad Jump: 3x3",
 ⟦SS1⟧MB Twist Throw: 4x6 each side
 Med Ball Overhead Slam: 4x8
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Sled Sprint: 3x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13235,9 +13566,9 @@ DB Bench Press: 2x6
 ⟦SS1⟧MB Twist Throw: 2x5 each side
 Med Ball Overhead Slam: 2x6
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper & Rotational Power",
       },
     ],
@@ -13259,7 +13590,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 Ankle Hops: 3x20 (moderate intent — controlled speed)
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Sprint Ladder: 10/20/30/20/10 yds — 4 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force — Hypertrophy",
@@ -13273,10 +13604,9 @@ MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13310,9 +13640,9 @@ MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13329,7 +13659,7 @@ Plank: 2x20 seconds",
 Ankle Hops: 4x20 (add volume — building intent)
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force — Hypertrophy",
@@ -13343,9 +13673,9 @@ MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Sled Sprint: 5x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13379,9 +13709,9 @@ MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13398,7 +13728,7 @@ Plank: 2x20 seconds",
 Ankle Hops: 4x20 (high intent — near-max effort)
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 8x1
 Sprint Ladder: 10/20/30/20/10 yds — 4 rounds",
         "focus": "Lower Speed-Strength & Horizontal Force — Hypertrophy",
@@ -13412,9 +13742,9 @@ MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 8x1
+Sled Sprint: 6x20 yds",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13448,9 +13778,9 @@ MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13467,7 +13797,7 @@ Plank: 2x20 seconds",
 Ankle Hops: 2x20 (tapered — lowest volume, stay sharp)
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Sprint Ladder: 10/20/30/20/10 yds — 2 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force — Hypertrophy",
@@ -13481,9 +13811,9 @@ MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Sled Sprint: 3x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13517,9 +13847,9 @@ MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory — Hypertrophy",
       },
     ],
@@ -13540,7 +13870,7 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Ankle Hops: 3x20 (moderate intent — controlled speed)
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Sprint Ladder: 10/20/30/20/10 yds — 4 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force",
@@ -13553,10 +13883,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 4 rounds
 MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13588,9 +13917,9 @@ DB Bench Press: 2x8
 MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13606,7 +13935,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Ankle Hops: 4x20 (add volume — building intent)
 
-Conditioning — Intensity Build:
+Conditioning — Acceleration Mechanics:
 Sprint Ladder: 10/20/30/20/10 yds — 3 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force",
@@ -13619,9 +13948,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 3 rounds
 MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Sled Sprint: 5x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13653,9 +13982,9 @@ DB Bench Press: 2x8
 MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13671,7 +14000,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Ankle Hops: 4x20 (high intent — near-max effort)
 
-Conditioning — Repeat Sprint:
+Conditioning — Quality Speed:
 Flying 20s: 8x1
 Sprint Ladder: 10/20/30/20/10 yds — 4 rounds",
         "focus": "Lower Speed-Strength & Horizontal Force",
@@ -13684,9 +14013,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 4 rounds",
 MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Flying 20s: 8x1
+Sled Sprint: 6x20 yds",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13718,9 +14047,9 @@ DB Bench Press: 2x8
 MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13736,7 +14065,7 @@ Plank: 2x20 seconds",
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Ankle Hops: 2x20 (tapered — lowest volume, stay sharp)
 
-Conditioning — Taper:
+Conditioning — Full-Recovery Reps:
 Sprint Ladder: 10/20/30/20/10 yds — 2 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force",
@@ -13749,9 +14078,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 2 rounds
 MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Sled Sprint: 3x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13783,9 +14112,9 @@ DB Bench Press: 2x8
 MB Twist Throw: 2x5 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds
+Easy Mobility Circuit: 1 round",
         "focus": "Upper Light & Accessory",
       },
     ],
@@ -13808,7 +14137,9 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 3x3 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Aerobic Base:
+Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -13820,10 +14151,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 4x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating V-Ups: 3x20s
+Penguins: 3x20s
+Alternating Supermans: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -13834,7 +14165,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)
+Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -13852,7 +14186,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -13866,10 +14203,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — control
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -13881,7 +14217,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -13899,7 +14239,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — add volume — building intent)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Interval Work:
+Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -13911,10 +14253,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Prone Swimmers: 3x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating Supermans: 3x20s
+Flutter Kicks: 3x20s
+Mountain Climbers: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -13925,7 +14267,10 @@ Prone Swimmers: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Standing:
+Med Ball Rotational Throw: 3x6 each side
+Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -13943,7 +14288,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -13957,10 +14305,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building int
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -13972,7 +14319,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -13990,7 +14341,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — high intent — near-max effort)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Quality Speed:
+Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14002,10 +14355,8 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Crossover Symmetry Band Series: 3x15",
+Conditioning — Maximal Velocity:
+Med Ball Rotational Throw: 4x6 each side (max intent)",
         "focus": "Upper Strength",
       },
       {
@@ -14016,7 +14367,9 @@ Crossover Symmetry Band Series: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Repeat Effort:
+Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
         "focus": "Lower Strength",
       },
     ],
@@ -14034,7 +14387,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14048,10 +14404,8 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max ef
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength",
       },
       {
@@ -14063,7 +14417,10 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -14081,7 +14438,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 2x3 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Full-Recovery Reps:
+Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14093,10 +14452,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 2x15",
+Core — Finisher (20s on/10s off unless noted):
+Hollow Hold: 3x20s
+Cherry Pickers: 3x20s
+Decline Bench Iso: 3x30s hold",
         "focus": "Upper Strength",
       },
       {
@@ -14107,7 +14466,10 @@ Face Pulls: 2x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Low Volume, Max Intent:
+Med Ball Rotational Throw: 2x6 each side (max intent)
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
         "focus": "Lower Strength",
       },
     ],
@@ -14125,7 +14487,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)",
+Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14139,10 +14504,9 @@ Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, 
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -14154,7 +14518,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -14177,7 +14545,9 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 3x3 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Aerobic Base:
+Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -14189,10 +14559,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 4x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating V-Ups: 3x20s
+Penguins: 3x20s
+Alternating Supermans: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -14203,7 +14573,10 @@ Face Pulls: 4x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)
+Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -14221,7 +14594,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — controlled speed)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -14235,10 +14611,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — moderate intent — control
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -14250,7 +14625,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -14268,7 +14647,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — add volume — building intent)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Interval Work:
+Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -14280,10 +14661,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Prone Swimmers: 3x15",
+Core — Finisher (20s on/10s off unless noted):
+Alternating Supermans: 3x20s
+Flutter Kicks: 3x20s
+Mountain Climbers: 3x20s",
         "focus": "Upper Strength",
       },
       {
@@ -14294,7 +14675,10 @@ Prone Swimmers: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Standing:
+Med Ball Rotational Throw: 3x6 each side
+Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -14312,7 +14696,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building intent)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Power",
       },
       {
@@ -14326,10 +14713,9 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — add volume — building int
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -14341,7 +14727,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Strength",
       },
     ],
@@ -14359,7 +14749,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 4x3 (Suggested: Keep under 155lbs — high intent — near-max effort)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Quality Speed:
+Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14371,10 +14763,8 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Crossover Symmetry Band Series: 3x15",
+Conditioning — Maximal Velocity:
+Med Ball Rotational Throw: 4x6 each side (max intent)",
         "focus": "Upper Strength",
       },
       {
@@ -14385,7 +14775,9 @@ Crossover Symmetry Band Series: 3x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Repeat Effort:
+Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
         "focus": "Lower Strength",
       },
     ],
@@ -14403,7 +14795,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)",
+Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max effort)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14417,10 +14812,8 @@ Trap Bar Jump: 2x2 (Suggested: Keep under 155lbs — high intent — near-max ef
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side",
         "focus": "Upper Strength",
       },
       {
@@ -14432,7 +14825,10 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -14450,7 +14846,9 @@ Face Pulls: 3x15",
 ⟦SS3⟧Barbell Single Leg RDL: 3x8 (each leg)
 ⟦SS3⟧Side X Plank: 3x30s (each side)
 Trap Bar Jump: 2x3 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
-Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
+
+Conditioning — Full-Recovery Reps:
+Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14462,10 +14860,10 @@ Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)",
 ⟦SS3⟧Forearm Curls (Both Ways): 3x10-15
 ⟦SS3⟧Cable/Band Rotational Chop: 3x6 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 2x15",
+Core — Finisher (20s on/10s off unless noted):
+Hollow Hold: 3x20s
+Cherry Pickers: 3x20s
+Decline Bench Iso: 3x30s hold",
         "focus": "Upper Strength",
       },
       {
@@ -14476,7 +14874,10 @@ Face Pulls: 2x15",
 ⟦SS2⟧Glute Bridge: 3x15
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
 ⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
-Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)",
+
+Conditioning — Low Volume, Max Intent:
+Med Ball Rotational Throw: 2x6 each side (max intent)
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
         "focus": "Lower Strength",
       },
     ],
@@ -14494,7 +14895,10 @@ Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @
 ⟦SS2⟧Calf Raises: 2xAMAP
 ⟦SS3⟧Barbell Single Leg RDL: 2x6 (each leg)
 ⟦SS3⟧Side X Plank: 2x23s (each side)
-Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)",
+Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, stay sharp)
+
+Conditioning — Deload (Light):
+Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
         "focus": "Lower Power",
       },
       {
@@ -14508,10 +14912,9 @@ Trap Bar Jump: 1x2 (Suggested: Keep under 155lbs — tapered — lowest volume, 
 ⟦SS3⟧Forearm Curls (Both Ways): 2x8-15
 ⟦SS3⟧Cable/Band Rotational Chop: 2x5 (each side)
 
-Arm Care — Circuit:
-Band Pull-Aparts: 3x20
-Band External Rotation: 3x15 (each arm)
-Face Pulls: 3x15",
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds",
         "focus": "Upper Strength",
       },
       {
@@ -14523,7 +14926,11 @@ Face Pulls: 3x15",
 ⟦SS2⟧Single Leg RDL: 2x6 (each leg)
 ⟦SS2⟧Hip Thrust: 2x6
 ⟦SS3⟧Copenhagen Adductor: 3x8 (each leg)
-⟦SS3⟧Suitcase Carry: 3x20 yds (each side)",
+⟦SS3⟧Suitcase Carry: 3x20 yds (each side)
+
+Conditioning — Deload (Light):
+Med Ball Overhead Slam: 2x5 each side
+Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "focus": "Lower Strength",
       },
     ],
@@ -17842,7 +18249,10 @@ Farmer Carries: 3x40 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Battle Rope: 3x20s",
         "focus": "Lower Power",
       },
       {
@@ -17858,7 +18268,13 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Sprint Work: 4x10 yds @ max effort (mat transitions)",
         "focus": "Upper Strength",
       },
     ],
@@ -17882,7 +18298,10 @@ Sprawl Drills: 2x8
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Lower Power",
       },
       {
@@ -17900,7 +18319,12 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sprint Work: 3x10 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -17923,7 +18347,10 @@ Farmer Carries: 3x40 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Interval Work:
+Battle Rope: 4x20s",
         "focus": "Lower Power",
       },
       {
@@ -17939,7 +18366,12 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Rotation:
+Pallof Press: 3x10 each side
+Half Kneeling Cable Press: 3x10 each side
+Sprint Work: 4x15 yds @ max effort",
         "focus": "Upper Strength",
       },
     ],
@@ -17963,7 +18395,10 @@ Sprawl Drills: 2x8
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Lower Power",
       },
       {
@@ -17981,7 +18416,12 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Sprint Work: 3x10 yds",
         "focus": "Upper Strength",
       },
     ],
@@ -18004,7 +18444,10 @@ Farmer Carries: 3x40 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Quality Speed:
+Sprint Work: 5x15 yds @ max effort",
         "focus": "Lower Power",
       },
       {
@@ -18020,7 +18463,10 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Repeat Effort:
+Wrestle-Outs: 4x30s",
         "focus": "Upper Strength",
       },
     ],
@@ -18044,7 +18490,10 @@ Sprawl Drills: 2x8
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sprint Work: 3x10 yds",
         "focus": "Lower Power",
       },
       {
@@ -18062,7 +18511,10 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Upper Strength",
       },
     ],
@@ -18085,7 +18537,10 @@ Farmer Carries: 3x40 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 3x15 yds @ max effort (full recovery)",
         "focus": "Lower Power",
       },
       {
@@ -18101,7 +18556,12 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Lateral Stability:
+Copenhagen Adductor: 3x8 each leg
+Suitcase Carry: 3x20 yds each side
+Battle Rope: 2x20s",
         "focus": "Upper Strength",
       },
     ],
@@ -18125,7 +18585,10 @@ Sprawl Drills: 2x8
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sprint Work: 3x10 yds",
         "focus": "Lower Power",
       },
       {
@@ -18143,7 +18606,12 @@ Rope Climb: 3 ascents
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Deload (Light):
+Dead Bug: 2x8 each side
+Plank: 2x20 seconds
+Battle Rope: 2x15s",
         "focus": "Upper Strength",
       },
     ],
@@ -18170,7 +18638,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18186,7 +18657,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
       {
@@ -18203,7 +18680,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18220,7 +18700,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18247,7 +18730,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18263,8 +18749,14 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
+        "injury_modified": true,
       },
       {
         "day": "Day 3",
@@ -18280,7 +18772,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18297,7 +18792,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18324,7 +18822,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18340,7 +18841,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
         "injury_modified": true,
       },
@@ -18358,7 +18865,10 @@ Farmer Carries: 4x20 yds (use straps)
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18375,7 +18885,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
         "injury_modified": true,
       },
@@ -18403,7 +18916,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18419,7 +18935,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
       {
@@ -18436,7 +18958,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18453,7 +18978,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18480,7 +19008,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18496,7 +19027,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
       {
@@ -18513,7 +19050,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18530,7 +19070,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18557,7 +19100,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
         "injury_modified": true,
       },
@@ -18574,7 +19120,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
       {
@@ -18591,7 +19143,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18608,7 +19163,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18635,7 +19193,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18651,7 +19212,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
       {
@@ -18668,7 +19235,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
       },
       {
@@ -18684,7 +19254,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18711,7 +19284,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 2x20 yds",
         "focus": "Lower Power — Scrummage Drive",
         "injury_modified": true,
       },
@@ -18728,7 +19304,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
       },
       {
@@ -18745,7 +19327,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18762,7 +19347,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
       },
     ],
@@ -18789,7 +19377,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
       },
       {
@@ -18807,7 +19398,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
         "injury_modified": true,
       },
@@ -18825,7 +19422,10 @@ Farmer Carries: 4x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
       },
       {
@@ -18833,7 +19433,6 @@ Lateral Neck Flexion: 2x15 each side",
         "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
 
 YTW Series: 3x10 each (required warm-up)
-Band External Rotation: 3x15 each arm (required warm-up)
 BB Split Jerk: build to a top set of 5x3 — start light and build
 Close Grip Bench Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×5-8 (hands at shoulder width)
 ⟦SS1⟧Weighted Chin-ups: 4x6
@@ -18843,7 +19442,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm (required warm-up)",
         "focus": "Upper Power, Contact & Rotational",
         "injury_modified": true,
       },
@@ -18871,7 +19473,10 @@ Nordic Hamstring Curl: 3x5
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Scrummage Drive",
         "injury_modified": true,
       },
@@ -18888,7 +19493,13 @@ DB Shrugs: 3x12
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Scrum Drive: 4x10 yds",
         "focus": "Upper Strength & Contact Prep",
         "injury_modified": true,
       },
@@ -18906,7 +19517,10 @@ Farmer Carries: 2x20 yds
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Half-Kneeling:
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lower Explosion & Carrying",
         "injury_modified": true,
       },
@@ -18923,7 +19537,10 @@ Landmine Rotational Press: 3x6 each side
 Neck — 4-Way (band or manual resistance):
 Neck Flexion: 2x15
 Neck Extension: 2x15
-Lateral Neck Flexion: 2x15 each side",
+Lateral Neck Flexion: 2x15 each side
+
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm",
         "focus": "Upper Power, Contact & Rotational",
         "injury_modified": true,
       },
@@ -19220,7 +19837,7 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Single Leg RDL: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Sled Push: 7x20 yds
 300 Yard Shuttle: 3x2",
         "focus": "Max Lower Strength",
@@ -19232,10 +19849,9 @@ Sled Push: 7x20 yds
 ⟦SS1⟧Overhead Press: 4x8
 Neck Strengthening: 3x12 each direction
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Deceleration Drill: 7x20 yds (sprint 20 · brake · hold 2s)
+300 Yard Shuttle: 2x2",
         "focus": "Upper Contact Strength",
       },
       {
@@ -19245,9 +19861,11 @@ Plank: 3x30 seconds",
 ⟦SS1⟧Approach Jump: 5x5
 Single Leg Lateral Hurdle Hop: 3x5 each leg
 
-Conditioning — Aerobic Base:
-Deceleration Drill: 7x20 yds (sprint 20 · brake · hold 2s)
-300 Yard Shuttle: 2x2",
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+MB Twist Throw: 3x6 each side (half-kneeling)",
         "focus": "Power, Jumping & Deceleration",
       },
       {
@@ -19256,9 +19874,9 @@ Deceleration Drill: 7x20 yds (sprint 20 · brake · hold 2s)
 ⟦SS1⟧Weighted Pull-ups: 4x6
 ⟦SS1⟧Neck Strengthening: 3x12 each direction
 
-Core — Rotational Endurance:
-Cable Woodchop: 3x12 each side
-Bird Dog: 3x10 each side",
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm
+Face Pulls: 3x15",
         "focus": "Upper Power",
       },
     ],
@@ -19279,7 +19897,7 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
 ⟦SS1⟧Hip Thrust: 4x8
 Single Leg RDL: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Banded Hip Abduction: 3x15 each side",
         "focus": "Lower Strength & Sprint",
@@ -19293,10 +19911,9 @@ Banded Monster Walk: 3x10 each direction
 Hip 90/90 Hold: 3x30s each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper Light & Mobility",
       },
       {
@@ -19306,9 +19923,11 @@ Plank: 3x30 seconds",
 ⟦SS1⟧Lateral Squat Jump: 4x5
 Single Leg Lateral Hurdle Hop: 3x5 each leg
 
-Conditioning — Aerobic Base:
-Sled Sprint: 7x20 yds
-Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+MB Twist Throw: 3x6 each side (half-kneeling)",
         "focus": "Explosion & Sprint Development",
       },
       {
@@ -19317,9 +19936,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
 ⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS1⟧Banded Hip Abduction: 3x15 each side
 
-Core — Rotational Endurance:
-Cable Woodchop: 3x12 each side
-Bird Dog: 3x10 each side",
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm
+Face Pulls: 3x15",
         "focus": "Upper Power",
       },
     ],
@@ -19341,7 +19960,7 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
 Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x10 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Lateral Shuffle: 7x20 yds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Power & Explosive",
@@ -19355,10 +19974,9 @@ Face Pulls: 3x20
 Band External Rotation: 4x15 each arm
 YTW Series: 3x10 each
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Single Leg Squat Jump: 5x5 each leg
+Resistance Band Lateral Walk: 3x20 each direction",
         "focus": "Upper & Shoulder Health",
       },
       {
@@ -19368,9 +19986,11 @@ Plank: 3x30 seconds",
 ⟦SS1⟧Single Leg Lateral Hurdle Hop: 4x5 each leg
 Cossack Squat: 4x6 each side
 
-Conditioning — Aerobic Base:
-Single Leg Squat Jump: 5x5 each leg
-Resistance Band Lateral Walk: 3x20 each direction",
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "focus": "Lateral Explosion & Hip Mobility",
       },
       {
@@ -19379,9 +19999,9 @@ Resistance Band Lateral Walk: 3x20 each direction",
 Weighted Pull-ups: 4x5
 Band External Rotation: 3x15 each arm
 
-Core — Rotational Endurance:
-Cable Woodchop: 3x12 each side
-Bird Dog: 3x10 each side",
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm
+Face Pulls: 3x15",
         "focus": "Upper Power",
       },
     ],
@@ -19402,7 +20022,7 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
 ⟦SS1⟧Hex Bar Jumps: 4x6 (moderate intent — controlled speed)
 Single Leg RDL: 4x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Aerobic Finish: 8 min tempo run",
         "focus": "Lower Strength & Aerobic Base",
@@ -19414,10 +20034,9 @@ Aerobic Finish: 8 min tempo run",
 ⟦SS1⟧Lateral Raise: 4x12
 MB Twist Throw: 4x6 each side
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+V Drill: 5x3
+Star Drill: 3x3",
         "focus": "Upper & Work Capacity",
       },
       {
@@ -19427,9 +20046,11 @@ Plank: 3x30 seconds",
 ⟦SS1⟧Lateral Squat Jump: 4x5
 Single Leg Lateral Hurdle Hop: 3x5 each leg
 
-Conditioning — Aerobic Base:
-V Drill: 5x3
-Star Drill: 3x3",
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+MB Twist Throw: 3x6 each side (half-kneeling)",
         "focus": "Explosion & Change of Direction",
       },
       {
@@ -19438,9 +20059,9 @@ Star Drill: 3x3",
 ⟦SS1⟧Kneeling Single Arm Lat Pulldown: 3x8 each arm
 ⟦SS1⟧Push-up: 3xAMAP
 
-Core — Rotational Endurance:
-Cable Woodchop: 3x12 each side
-Bird Dog: 3x10 each side",
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm
+Face Pulls: 3x15",
         "focus": "Upper Power",
       },
     ],
@@ -19462,7 +20083,7 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
 Approach Jump: 5x5 (moderate intent — controlled speed)
 Copenhagen Adductor: 3x8 each leg
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 300 Yard Shuttle: 4x2
 Broad Jump: 3x3",
         "focus": "Lower Vertical Power & Jump Height",
@@ -19474,10 +20095,9 @@ Broad Jump: 3x3",
 ⟦SS1⟧MB Twist Throw: 4x6 each side
 Med Ball Overhead Slam: 4x8
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
         "focus": "Upper & Rotational Power",
       },
       {
@@ -19487,9 +20107,11 @@ Plank: 3x30 seconds",
 ⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
 Lateral Squat Jump: 4x5
 
-Conditioning — Aerobic Base:
-Sled Sprint: 7x20 yds
-Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+MB Twist Throw: 3x6 each side (half-kneeling)",
         "focus": "Explosive Speed, Horizontal Power & Shot Drive",
       },
       {
@@ -19498,9 +20120,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 3 rounds",
 ⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS1⟧Med Ball Overhead Slam: 4x8
 
-Core — Rotational Endurance:
-Cable Woodchop: 3x12 each side
-Bird Dog: 3x10 each side",
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm
+Face Pulls: 3x15",
         "focus": "Upper Power",
       },
     ],
@@ -19521,7 +20143,7 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
 ⟦SS1⟧Nordic Hamstring Curl: 4x5
 Ankle Hops: 3x20 (moderate intent — controlled speed)
 
-Conditioning — Aerobic Base:
+Conditioning — Acceleration Mechanics:
 Sprint Ladder: 10/20/30/20/10 yds — 4 rounds
 300 Yard Shuttle: 2x2",
         "focus": "Lower Speed-Strength & Horizontal Force",
@@ -19534,10 +20156,9 @@ Sprint Ladder: 10/20/30/20/10 yds — 4 rounds
 MB Twist Throw: 3x6 each side
 Copenhagen Adductor: 3x8 each leg
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Sled Sprint: 7x20 yds
+300 Yard Shuttle: 2x2",
         "focus": "Upper Light & Accessory",
       },
       {
@@ -19547,9 +20168,11 @@ Plank: 3x30 seconds",
 ⟦SS1⟧Single Leg Lateral Hurdle Hop: 4x5 each leg
 Lateral Squat Jump: 4x5
 
-Conditioning — Aerobic Base:
-Sled Sprint: 7x20 yds
-300 Yard Shuttle: 2x2",
+Core — Anti-Extension:
+Dead Bug: 3x10 each side
+Ab Wheel: 3x8
+Plank: 3x30 seconds
+MB Twist Throw: 3x6 each side (half-kneeling)",
         "focus": "Vertical Strength & Reactive Speed",
       },
       {
@@ -19558,9 +20181,9 @@ Sled Sprint: 7x20 yds
 ⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS1⟧Banded Monster Walk: 3x10 each direction
 
-Core — Rotational Endurance:
-Cable Woodchop: 3x12 each side
-Bird Dog: 3x10 each side",
+Arm Care — Capacity & Scap Control:
+Band External Rotation: 3x15 each arm
+Face Pulls: 3x15",
         "focus": "Upper Power",
       },
     ],
