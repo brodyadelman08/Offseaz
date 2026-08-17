@@ -801,6 +801,18 @@ describe('Area 7 — Exercise library coverage', () => {
     'core — explosive rotation', 'core — stability & control',
     'conditioning — aerobic base', 'conditioning — intensity build',
     'conditioning — repeat sprint', 'conditioning — taper', 'conditioning — deload (light)',
+    // feat/finisher-engine — the Shared Finisher Engine's own per-family
+    // subtitle header lines (Sprint/Energy/Rotation render under a
+    // "Conditioning — <subtitle>:" header, Arm Care under its own — see
+    // finisherEngine.js's FINISHER_HEADER_WORD), same "block-label, not a
+    // single exercise" gap as every entry above.
+    'arm care — capacity & scap control', 'arm care — deload (light)',
+    'arm care — modest increase', 'arm care — readiness', 'arm care — maintenance',
+    'conditioning — full-recovery reps', 'conditioning — half-kneeling',
+    'conditioning — interval work', 'conditioning — low volume, max intent',
+    'conditioning — maximal velocity', 'conditioning — quality speed',
+    'conditioning — repeat effort', 'conditioning — standing',
+    'conditioning — acceleration mechanics', 'conditioning — reduced',
     'court conditioning', 'court sprints', 'db bench', 'db shoulder press', 'db squat jump',
     'deceleration drill', 'deep glute stretch', 'deep squat hold', 'defensive slide',
     'defensive slide sprint', 'depth drop', "downward dog → cobra flow",
@@ -1358,16 +1370,34 @@ describe('Area 10 — Baseball sport-specific content', () => {
     expect(/Box Jumps|Broad Jumps|Depth Jump → Box Jump/.test(text)).toBe(true)
   })
 
-  test('the sprint/tempo protocol appears with the exact prescribed text, as Lower Strength\'s sole finisher', () => {
+  // feat/finisher-engine — Sprint Tempo Protocol/Bike Ladder are now
+  // engine-driven (Sprint/Energy families — see baseballFinisherBank): real
+  // phase progression instead of one fixed prescription all 16 weeks, and
+  // no longer locked to a specific day (Lower Strength/Lower Power) — the
+  // engine schedules which day gets which family week to week, subject only
+  // to BASEBALL_DAY_COMPAT (never on an upper-body day). These now check
+  // that the Phase 1 text appears somewhere across the 16-week progression,
+  // not a single fixed string tied to one day.
+  test('the sprint/tempo protocol appears with its Phase 1 prescribed text, only ever on a lower-body day', () => {
     const weeks = baseball.generateWeeks('baseball', 'standard', 4)
     const text = allDescriptions(weeks).join('\n')
-    expect(text).toContain('Sprint Tempo Protocol: 5x1 (30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep)')
+    expect(text).toContain('Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep')
+    for (const w of weeks) {
+      for (const s of w.sessions) {
+        if (/Sprint Tempo Protocol/.test(s.description)) expect(s.focus).toMatch(/Lower/)
+      }
+    }
   })
 
-  test('the Bike Ladder conditioning finisher appears with the exact prescribed protocol, as Lower Power\'s finisher', () => {
+  test('the Bike Ladder conditioning finisher appears with its Phase 1 prescribed protocol, only ever on a lower-body day', () => {
     const weeks = baseball.generateWeeks('baseball', 'standard', 4)
     const text = allDescriptions(weeks).join('\n')
-    expect(text).toContain('Bike Ladder: 3x1 (10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s)')
+    expect(text).toContain('Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s')
+    for (const w of weeks) {
+      for (const s of w.sessions) {
+        if (/Bike Ladder/.test(s.description)) expect(s.focus).toMatch(/Lower/)
+      }
+    }
   })
 
   test('the core finisher appears on Upper Power with the exact prescribed interval scheme, rotates movements week to week, and is exempt from the accessory volume wave', () => {
@@ -1484,18 +1514,32 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(firstMatchingLine(day1, /Back Squat/)).toMatch(/^⟦SS1⟧Back Squat:/)
   })
 
-  test('cut priority: generic filler (Bicep Curls, Tricep Extensions) is dropped before regular sport accessories when trimming to the cap', () => {
+  // feat/fix-silent-accessory-drops — this used to test that generic filler
+  // (Bicep Curls, Tricep Extensions) got CUT before regular sport
+  // accessories when a day's authored content exceeded the cap. That
+  // premise is gone: the cap no longer drops anything, ever (see
+  // organizeSessionDescription's own doc comment) — this was in fact the
+  // exact real-world case the full-codebase silent-drop audit flagged as
+  // worst-case (football/linemen muscle_gain's Upper Strength day was
+  // losing 7 movements). Now verifies the opposite: generic filler AND
+  // every other authored accessory all survive, correctly paired.
+  test('generic filler (Bicep Curls, Tricep Extensions) is never dropped — every authored accessory on the day survives, paired into supersets', () => {
     const bp = generateBlueprintForAthlete({
       sport: 'Football', position: 'Linemen', primary_goal: 'muscle_gain',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description
-    expect(day1).not.toContain('Bicep Curls')
-    expect(day1).not.toContain('Tricep Extensions')
-    // The non-generic accessories from the same day survive the cap instead.
+    expect(day1).toContain('Bicep Curls')
+    expect(day1).toContain('Tricep Extensions')
     expect(day1).toContain('Bulgarian Split Squat')
     expect(day1).toContain('Leg Curl')
     expect(day1).toContain('Double Leg Calf Raise')
+    // Bicep Curls paired into a bracket (not left dangling as a standalone
+    // line) — the day's total accessory count (Bulgarian Split Squat, Leg
+    // Curl, Double Leg Calf Raise, Bicep Curls, Tricep Extensions = 5, odd)
+    // means exactly one trails unpaired; Bicep Curls itself still forms a
+    // real ⟦SS⟧ pair with Double Leg Calf Raise.
+    expect(day1).toMatch(/⟦SS\d+⟧Bicep Curls:/)
   })
 
   test('Tibialis Raises rotates in as a real working lower-body accessory (not a warm-up) via the calf-raise rotation slot', () => {
@@ -1545,33 +1589,62 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(week5Day1.lines).toEqual(week1Day1.lines)
   })
 
-  test('the accessory cap holds across every sport/position/day-count combination — no session ever exceeds its sport\'s configured cap worth of accessory content beyond the main lift', () => {
+  // feat/fix-silent-accessory-drops — replaces a test that asserted the
+  // OPPOSITE of what's now correct (that every session stayed under a hard
+  // cap of 2-3 superset groups). That cap used to be enforced by silently
+  // DELETING any authored accessory beyond it — a full-codebase audit found
+  // 125 of ~163 distinct day-templates doing exactly that, across 13 of 14
+  // sports, dropping 1-7 movements apiece. This is the permanent regression
+  // test for that fix: for every sport/position/day-count/goal combination,
+  // every accessory-shaped movement name authored in the RAW (pre-
+  // organization) session description must still be present — same count,
+  // not just "present somewhere" — in the final, organized one. Mirrors the
+  // exact comparison the original audit used (raw vs. organizeSessionDescription's
+  // output, name-multiset diff) so this can never silently regress again.
+  test('no authored movement is ever silently dropped by session organization — every sport/position/day-count/goal combination, weeks 1/5/9/13', () => {
+    function nameMultiset(description) {
+      const counts = new Map()
+      for (const raw of description.split('\n')) {
+        const bare = raw.replace(SUPERSET_MARKER_RE, '')
+        const colonIdx = bare.indexOf(':')
+        if (colonIdx <= 0) continue
+        const name = bare.slice(0, colonIdx).trim()
+        counts.set(name, (counts.get(name) || 0) + 1)
+      }
+      return counts
+    }
+    const violations = []
     for (const tpl of SPORT_TEMPLATES) {
-      // Default-cap (3) sports: at most 2 superset groups — one is the
-      // optional main-lift+plyo/authored-partner contrast, the rest of the
-      // 3-weight budget collapses into at most 1 more pair-group plus a
-      // possible leftover single. Baseball/softball's raised cap (6) allows
-      // up to 3 groups (baseball's Upper Strength is deliberately 3 full
-      // authored pairs, not auto-trimmed — see Area 14).
-      const maxGroups = (SPORT_MAX_ACCESSORIES[tpl.id] || 3) > 3 ? 3 : 2
       for (const pos of tpl.positions) {
-        for (const days of tpl.daysOptions.map(d => d.days)) {
-          const rotation = SPORT_ACCESSORY_ROTATION[tpl.id] || {}
-          const weeks = applySessionOrganization(tpl.generateWeeks(pos.id, 'standard', days), rotation, tpl.id)
-          for (const w of weeks) {
-            for (const s of w.sessions) {
-              const markerGroups = new Set(
-                s.description.split('\n')
-                  .map(l => l.match(SUPERSET_MARKER_RE))
-                  .filter(Boolean)
-                  .map(m => m[1])
-              )
-              expect(markerGroups.size).toBeLessThanOrEqual(maxGroups)
+        for (const { days } of tpl.daysOptions) {
+          for (const goal of ['standard', 'muscle_gain']) {
+            const rawWeeks = tpl.generateWeeks(pos.id, goal, days)
+            const capKey = resolveAccessoryCapKey(tpl.id, pos.id, goal)
+            const orgWeeks = applySessionOrganization(
+              JSON.parse(JSON.stringify(rawWeeks)),
+              SPORT_ACCESSORY_ROTATION[tpl.id] || {},
+              capKey,
+            )
+            for (const wn of [1, 5, 9, 13]) {
+              const rawWeek = rawWeeks.find(w => w.week_number === wn)
+              const orgWeek = orgWeeks.find(w => w.week_number === wn)
+              if (!rawWeek || !orgWeek) continue
+              for (let i = 0; i < rawWeek.sessions.length; i++) {
+                const rawCounts = nameMultiset(rawWeek.sessions[i].description)
+                const orgCounts = nameMultiset(orgWeek.sessions[i].description)
+                for (const [name, rawCount] of rawCounts) {
+                  const orgCount = orgCounts.get(name) || 0
+                  if (orgCount < rawCount) {
+                    violations.push(`${tpl.id}/${pos.id}/${days}d/${goal} week ${wn} ${rawWeek.sessions[i].day}: "${name}" (${rawCount} authored -> ${orgCount} rendered)`)
+                  }
+                }
+              }
             }
           }
         }
       }
     }
+    expect(violations).toEqual([])
   })
 })
 
@@ -2016,23 +2089,61 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
       expect(hasCore).toBe(false)
     })
 
-    test('the finisher arrangement is exactly as specified: Lower Power = Bike Ladder, Upper Strength = Arm Care circuit, Lower Strength = Sprint Tempo, Upper Power = rotating core', () => {
+    // feat/finisher-engine — the finisher arrangement is no longer a fixed
+    // "Day N always gets family X" mapping; the shared engine schedules
+    // which of the 5 families (Sprint/Energy/Core/Rotation/Arm) lands on
+    // which day, by weighted allocation, phase to phase. What DOES still
+    // hold (baseball's own pre-existing day-type-locking rule, restored via
+    // BASEBALL_DAY_COMPAT in blueprintTemplates.js) is that lower-body days
+    // only ever get a Sprint/Energy/Rotation finisher and upper-body days
+    // only ever get a Core/Arm/Rotation finisher — never arm-care/core on a
+    // lower day, never Sprint Tempo/Bike Ladder on an upper day.
+    test('every day\'s finisher stays within its day-type family (lower: Sprint/Energy/Rotation only; upper: Core/Arm/Rotation only), across all 16 weeks', () => {
       const weeks = baseball.generateWeeks('baseball', 'standard', 4)
-      const [day1, day2, day3, day4] = weeks[0].sessions
-      expect(day1.description).toContain('Bike Ladder')
-      expect(day2.description).toMatch(/^Arm Care\s*—/m)
-      expect(day3.description).toContain('Sprint Tempo Protocol')
-      expect(day4.description).toMatch(/^Core\s*—/m)
+      const LOWER_ONLY_RE = /^(Sprint Tempo Protocol|Bike Ladder)\b/
+      const UPPER_ONLY_HEADER_RE = /^(Core|Arm Care)\s*—/
+      const violations = []
+      for (const w of weeks) {
+        for (const s of w.sessions) {
+          const lines = s.description.split('\n').map(l => l.replace(SUPERSET_MARKER_RE, ''))
+          const isLowerDay = /Lower/.test(s.focus)
+          if (isLowerDay && lines.some(l => UPPER_ONLY_HEADER_RE.test(l))) violations.push(`week ${w.week_number} ${s.day}: Core/Arm Care on a lower day`)
+          if (!isLowerDay && lines.some(l => LOWER_ONLY_RE.test(l))) violations.push(`week ${w.week_number} ${s.day}: Sprint/Energy conditioning on an upper day`)
+        }
+      }
+      expect(violations).toEqual([])
     })
 
-    test('the Arm Care circuit has 3+ exercises and is never bracketed into a pairing', () => {
+    test('a real finisher (Sprint/Energy/Core/Rotation/Arm) is present on every session, every week — never a flat day with no finisher at all', () => {
       const weeks = baseball.generateWeeks('baseball', 'standard', 4)
-      const day2Lines = weeks[0].sessions[1].description.split('\n')
-      const headerIdx = day2Lines.findIndex(l => /^Arm Care\s*—/.test(l))
-      expect(headerIdx).toBeGreaterThanOrEqual(0)
-      const circuitLines = day2Lines.slice(headerIdx + 1).filter(l => l.trim() !== '')
-      expect(circuitLines.length).toBeGreaterThanOrEqual(3)
-      for (const l of circuitLines) expect(SUPERSET_MARKER_RE.test(l)).toBe(false)
+      const FINISHER_RE = /^(Sprint Tempo Protocol|Bike Ladder|Core\s*—|Arm Care\s*—|Conditioning\s*—)/m
+      const missing = []
+      for (const w of weeks) {
+        for (const s of w.sessions) {
+          if (!FINISHER_RE.test(s.description)) missing.push(`week ${w.week_number} ${s.day}`)
+        }
+      }
+      expect(missing).toEqual([])
+    })
+
+    test('whenever the Arm Care circuit lands on a day, it is never bracketed into a pairing — and Phase 1\'s own occurrence (its fullest, 3-exercise prescription) has 3+ exercises', () => {
+      const weeks = baseball.generateWeeks('baseball', 'standard', 4)
+      let checkedAtLeastOnce = false
+      let sawPhase1ThreePlus = false
+      for (const w of weeks) {
+        for (const s of w.sessions) {
+          const lines = s.description.split('\n')
+          const headerIdx = lines.findIndex(l => /^Arm Care\s*—/.test(l))
+          if (headerIdx < 0) continue
+          checkedAtLeastOnce = true
+          const circuitLines = lines.slice(headerIdx + 1).filter(l => l.trim() !== '')
+          expect(circuitLines.length).toBeGreaterThanOrEqual(1)
+          for (const l of circuitLines) expect(SUPERSET_MARKER_RE.test(l)).toBe(false)
+          if (w.week_number <= 3 && circuitLines.length >= 3) sawPhase1ThreePlus = true
+        }
+      }
+      expect(checkedAtLeastOnce).toBe(true)
+      expect(sawPhase1ThreePlus).toBe(true)
     })
   })
 
@@ -2042,13 +2153,17 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
       let total = 0
       let paired = 0
       const unpairedNonExempt = []
+      // feat/finisher-engine — Sprint/Energy/Rotation now render under a
+      // "Conditioning — <subtitle>:" header (finisherEngine.js's
+      // FINISHER_HEADER_WORD), same exempt-block treatment as Core/Arm
+      // Care, so it needs the same recognition here.
       const FINISHER_OR_MAIN_RE = /^(Trap Bar Jump|Bike Ladder|Sprint Tempo Protocol)\b/
       for (const s of weeks[0].sessions) {
         let inExemptBlock = false
         for (const rawLine of s.description.split('\n')) {
           const bare = rawLine.replace(SUPERSET_MARKER_RE, '')
           if (bare.trim() === '') { inExemptBlock = false; continue }
-          if (/^(Core|Arm Care)\s*—/.test(bare)) { inExemptBlock = true; continue }
+          if (/^(Core|Arm Care|Conditioning)\s*—/.test(bare)) { inExemptBlock = true; continue }
           if (inExemptBlock) continue
           const colonIdx = bare.indexOf(':')
           if (colonIdx <= 0) continue
@@ -2211,10 +2326,18 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
     })
 
     test('softball shares baseball\'s full rebuilt content (same generator), and no other sport does', () => {
+      // feat/finisher-engine — Day 2 is no longer guaranteed to be Arm Care
+      // specifically (the engine schedules which family lands where, week
+      // to week); what proves softball shares baseball's exact generator is
+      // that it has a real finisher at all AND respects the same
+      // BASEBALL_DAY_COMPAT day-type locking (never Core/Arm Care on a
+      // lower-body day) — see the "every day's finisher stays within its
+      // day-type family" test above, which already covers baseball itself.
       const softball = SPORT_TEMPLATES.find(t => t.id === 'softball')
       const softballWeeks = softball.generateWeeks('softball', 'standard', 4)
       expect(softballWeeks[0].sessions[0].description).toContain('Trap Bar Jump')
-      expect(softballWeeks[0].sessions[1].description).toMatch(/^Arm Care\s*—/m)
+      const day2 = softballWeeks[0].sessions[1].description
+      expect(/^(Core|Arm Care|Conditioning)\s*—/m.test(day2)).toBe(true)
     })
   })
 })

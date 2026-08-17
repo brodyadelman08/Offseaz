@@ -2,6 +2,8 @@
 // Single source of truth for both auto-assign (generateBlueprintForAthlete) and
 // the coach's manual "build from template" tool (SPORT_TEMPLATES, below).
 
+const finisherEngine = require('./finisherEngine')
+
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
 function pct(f) { return `${Math.round(f * 100)}%` }
@@ -254,6 +256,18 @@ function coreBlockB(phaseNum, deload = false) {
   if (phaseNum === 3)
     return 'Core — Explosive Rotation:\nMed Ball Side Throw: 4x6 each side\nRotational Cable Pull: 3x10 each side'
   return 'Core — Stability & Control:\nPallof Press: 3x10 each side\nDead Bug: 3x10 each side'
+}
+
+// Adapter — turns a "Core — <Subtitle>:\n<line>\n<line>" string from
+// coreBlock/coreBlockB into the {subtitle, lines[]} shape the Shared
+// Finisher Engine's content banks use (finisherEngine.js), so every sport's
+// 'core' family reuses this already phase-progressive, already-vetted
+// content instead of re-authoring it per sport. Not a fragile parse — the
+// "Core — X:" header shape is a fixed, established convention throughout
+// this file (see organizeSessionDescription/applyDeloadVolumeReduction).
+function coreEntryFromBlock(blockFn, phaseNum, deload) {
+  const [header, ...lines] = blockFn(phaseNum, deload).split('\n')
+  return { subtitle: header.replace(/^Core\s*—\s*/, '').replace(/:$/, ''), lines }
 }
 
 // ─── Phase configs ────────────────────────────────────────────────────────────
@@ -513,6 +527,57 @@ function generateCollisionArchetypeWeeks(dayFns, daysPerWeek = 4) {
   return weeks
 }
 
+// Shared Finisher Engine wiring for every Collision-archetype sport (see
+// finisherEngine.js for the weighting/allocation/scheduling math, shared
+// verbatim by every archetype). Each sport supplies its own content bank
+// (LINEMEN_FINISHERS etc., below) — this just calls into the engine with
+// this archetype's key and renders whichever family the engine assigned to
+// `dayIndex` that week. `days` is the day-count of the CALLING layout (4 for
+// the anchor, 3 for the hand-consolidated 3-day version) — each layout gets
+// its own independently-computed plan, not a slice of the 4-day one, same
+// "hand-consolidated, not sliced" precedent the day-content itself follows.
+function collisionFinisher(bank, dayIndex, days, info) {
+  const plan = finisherEngine.planWeekFinishers('collision', info.phaseNum, days)[dayIndex]
+  return finisherEngine.renderFinisher(bank, plan, info.phaseNum, info.deload)
+}
+
+// Linemen's own finisher content — reuses already-vetted vocabulary from
+// its own Day 5 (Sled Push, Loaded Carry Mix, Grip Work) and existing
+// rotational/arm-care names already established elsewhere in this file
+// (Med Ball Rotational Throw, Landmine Rotational Press, Band External
+// Rotation, Face Pulls). Core reuses the shared coreBlock verbatim.
+const LINEMEN_FINISHERS = {
+  sprint(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Sled Push: 2x15 yds'] }
+    if (ph === 1) return { subtitle: 'Acceleration Mechanics', lines: ['Sled Push: 4x15 yds (short, choppy steps)'] }
+    if (ph === 2) return { subtitle: 'Acceleration Mechanics', lines: ['Sled Push: 4x20 yds'] }
+    if (ph === 3) return { subtitle: 'Quality Speed', lines: ['Sprint Work: 5x10 yds @ max effort'] }
+    return { subtitle: 'Full-Recovery Reps', lines: ['Sprint Work: 4x10 yds @ max effort (full recovery)'] }
+  },
+  energy(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Farmer Carries: 2x20 yds'] }
+    if (ph === 1) return { subtitle: 'Aerobic Base', lines: ['Loaded Carry Mix: 3 rounds (farmer + suitcase, alternating)'] }
+    if (ph === 2) return { subtitle: 'Interval Work', lines: ['Farmer Carries: 4x30 yds'] }
+    if (ph === 3) return { subtitle: 'Repeat Effort', lines: ['Battle Rope: 4x20s'] }
+    return { subtitle: 'Reduced', lines: ['Farmer Carries: 2x30 yds'] }
+  },
+  core: (ph, dl) => coreEntryFromBlock(coreBlock, ph, dl),
+  rotation(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Med Ball Rotational Throw: 2x5 each side'] }
+    if (ph === 1) return { subtitle: 'Half-Kneeling', lines: ['Med Ball Rotational Throw: 3x6 each side (half-kneeling)'] }
+    if (ph === 2) return { subtitle: 'Standing', lines: ['Landmine Rotational Press: 3x6 each side'] }
+    if (ph === 3) return { subtitle: 'Maximal Velocity', lines: ['Med Ball Rotational Throw: 4x6 each side (max intent)'] }
+    return { subtitle: 'Low Volume, Max Intent', lines: ['Med Ball Rotational Throw: 2x6 each side (max intent)'] }
+  },
+  arm(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Band External Rotation: 2x15 each arm'] }
+    if (ph === 1) return { subtitle: 'Capacity & Scap Control', lines: ['Band External Rotation: 3x15 each arm', 'Face Pulls: 3x15'] }
+    if (ph === 2) return { subtitle: 'Modest Increase', lines: ['Face Pulls: 4x15', 'Grip Work: 2 sets'] }
+    if (ph === 3) return { subtitle: 'Maintenance', lines: ['Grip Work: 3 sets'] }
+    return { subtitle: 'Readiness', lines: ['Band External Rotation: 2x15 each arm', 'Face Pulls: 2x15'] }
+  },
+}
+
 // ─── Football — Linemen (standard goal only; see fbLinemenMGSess below for
 // the muscle-gain variant, which is untouched by this rebuild) ─────────────
 // Adapted from a real D1 4-day upper/lower linemen program — the 4-day
@@ -542,7 +607,7 @@ function linemenDay1Lower(info) {
     day: 'Day 1', focus: 'Lower Power',
     description: `${LINEMEN_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
       `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${COLLISION_NECK}`,
+      `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -559,7 +624,7 @@ function linemenDay2Upper(info) {
     day: 'Day 2', focus: 'Upper Strength',
     description: `${LINEMEN_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
       `Standing BB OHP: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `${LINEMEN_AMRAP_PULLUP}\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${COLLISION_NECK}`,
+      `${LINEMEN_AMRAP_PULLUP}\nSingle Arm DB Bench: 3x10 each arm\nInverted BB Row: 2x5 + 1 AMRAP\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -569,7 +634,7 @@ function linemenDay3Lower(info) {
     day: 'Day 3', focus: 'Lower Strength',
     description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
       `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${COLLISION_NECK}`,
+      `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -579,7 +644,7 @@ function linemenDay4Upper(info) {
     day: 'Day 4', focus: 'Upper Power',
     description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
       `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-      `Bent Over BB Row: 3x10\nSeated Single Arm DB Overhead Press: 3x10 each arm\nSeated Cable Lat Pulldown: 3x12 (underhand grip)\n${COLLISION_NECK}`,
+      `Bent Over BB Row: 3x10\nSeated Single Arm DB Overhead Press: 3x10 each arm\nSeated Cable Lat Pulldown: 3x12 (underhand grip)\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -596,15 +661,15 @@ function linemen3Day(info) {
     { day: 'Day 1', focus: 'Lower Power',
       description: `${LINEMEN_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
         `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${COLLISION_NECK}` },
+        `Barbell RDL: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nPlate Overhead Sit-Ups: 2x8-10\nDouble Leg Calf Raise: 2x10\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 0, 3, info)}` },
     { day: 'Day 2', focus: 'Upper (Full)',
       description: `${LINEMEN_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
         `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-        `${LINEMEN_AMRAP_PULLUP}\nStanding BB OHP: 10/8/6/6 (building)\nBent Over BB Row: 3x10\n${COLLISION_NECK}` },
+        `${LINEMEN_AMRAP_PULLUP}\nStanding BB OHP: 10/8/6/6 (building)\nBent Over BB Row: 3x10\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 1, 3, info)}` },
     { day: 'Day 3', focus: 'Lower Strength',
       description: `${LINEMEN_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
         `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${COLLISION_NECK}` },
+        `Single Leg RDL: 3x8 each leg (2 DB)\nDB Step-Ups: 2x6 each leg (box below knee)\nDB Suitcase Carries: 2x20 yds each side\nSingle Leg Calf Raise: 2x10 each leg\n${COLLISION_NECK}\n\n${collisionFinisher(LINEMEN_FINISHERS, 2, 3, info)}` },
   ]
 }
 
@@ -953,6 +1018,98 @@ function coreFinisher(subtitle, lines) {
   return `Core — ${subtitle}:\n${lines.join('\n')}`
 }
 
+// ─── Shared Finisher Engine wiring for the Field archetype (feat/finisher-
+// engine) — soccer/lacrosse/hockey all route through this. Every sport
+// below keeps authoring its OWN drill names (gkConditioningA/B etc., each
+// sport's own Rotation/Arm anchor movement) — only the day-to-family
+// assignment (which day gets Sprint vs Energy vs Core vs Rotation vs Arm,
+// and each family's phase character/deload taper) now comes from the
+// shared engine instead of being hardcoded per sport. ────────────────────
+
+// Adapter — turns a "Conditioning — <Subtitle>:\n<line>\n<line>" string
+// (the shape every existing per-sport conditioning function already
+// returns) into the {subtitle, lines[]} shape the engine's content banks
+// use. Lets the ALREADY-BUILT, already-vetted per-sport/per-position
+// conditioning content (gkConditioningA, cbConditioningB, ...) plug
+// straight into the engine as the Sprint and Energy families, with zero new
+// content authored for those two families.
+//
+// `subtitles` overrides the parsed header text with family-specific phase
+// language (see SPRINT_SUBTITLES/ENERGY_SUBTITLES below) — every existing
+// per-sport function derives its subtitle from the SAME shared
+// CONDITIONING_SUBTITLES table regardless of whether it's being used as the
+// Sprint or the Energy family, so under the engine's own scheduling (which
+// can now legitimately land Sprint and Energy on ADJACENT days — see
+// finisherEngine.js's scheduleFamilies) two different families could
+// otherwise render the identical subtitle text back to back (e.g.
+// "Conditioning — Aerobic Base:" on both Monday and Tuesday). The
+// underlying drill LINES are untouched either way.
+function conditioningEntryFromFn(fn, ph, dl, subtitles) {
+  const [header, ...lines] = fn(ph, dl).split('\n')
+  const subtitle = dl ? 'Deload (Light)' : (subtitles ? subtitles[ph] : header.replace(/^Conditioning\s*—\s*/, '').replace(/:$/, ''))
+  return { subtitle, lines }
+}
+
+// Family-specific phase-character subtitles (spec's own PER-FAMILY PHASE
+// CHARACTER language) — Sprint: accel mechanics -> quality speed ->
+// full-recovery reps. Energy: aerobic base -> intervals -> repeat-effort ->
+// reduced.
+const SPRINT_SUBTITLES = { 1: 'Acceleration Mechanics', 2: 'Acceleration Mechanics', 3: 'Quality Speed', 4: 'Full-Recovery Reps' }
+const ENERGY_SUBTITLES = { 1: 'Aerobic Base', 2: 'Interval Work', 3: 'Repeat Effort', 4: 'Reduced' }
+
+// Generic phase-progressive Rotation-family content, parameterized by each
+// sport's own already-vetted rotational movement (e.g. Soccer's own "MB
+// Twist Throw", already used on several positions' Day 2) — progresses by
+// movement complexity/intent, not ball weight, per the engine spec:
+// half-kneeling -> standing -> maximal velocity -> low volume/max intent.
+function fieldRotationFinisher(anchorName, ph, dl) {
+  if (dl) return { subtitle: 'Deload (Light)', lines: [`${anchorName}: 2x5 each side`] }
+  if (ph === 1) return { subtitle: 'Half-Kneeling', lines: [`${anchorName}: 3x6 each side (half-kneeling)`] }
+  if (ph === 2) return { subtitle: 'Standing', lines: [`${anchorName}: 3x6 each side`] }
+  if (ph === 3) return { subtitle: 'Maximal Velocity', lines: [`${anchorName}: 4x6 each side (max intent)`] }
+  return { subtitle: 'Low Volume, Max Intent', lines: [`${anchorName}: 2x6 each side (max intent)`] }
+}
+
+// Generic phase-progressive Arm-Care content, parameterized by each sport's
+// own already-vetted shoulder-health anchor (e.g. "Band External Rotation",
+// already used on several positions' Day 2) — capacity/scap control ->
+// modest increase -> maintenance -> readiness, per the engine spec.
+function fieldArmFinisher(anchorName, ph, dl) {
+  if (dl) return { subtitle: 'Deload (Light)', lines: [`${anchorName}: 2x15 each arm`] }
+  if (ph === 1) return { subtitle: 'Capacity & Scap Control', lines: [`${anchorName}: 3x15 each arm`, 'Face Pulls: 3x15'] }
+  if (ph === 2) return { subtitle: 'Modest Increase', lines: [`${anchorName}: 3x15 each arm`] }
+  if (ph === 3) return { subtitle: 'Maintenance', lines: ['Face Pulls: 4x15'] }
+  return { subtitle: 'Readiness', lines: [`${anchorName}: 2x15 each arm`] }
+}
+
+// Assembles a sport's 5-family bank: Sprint/Energy reuse that sport's own
+// already-built conditioning functions verbatim (see conditioningEntryFromFn
+// above); Core reuses the shared coreBlock verbatim; Rotation/Arm use the
+// generic phase templates above with that sport's own anchor movement name.
+function fieldFinisherBank(sprintFn, energyFn, rotationAnchor, armAnchor) {
+  return {
+    sprint: (ph, dl) => conditioningEntryFromFn(sprintFn, ph, dl, SPRINT_SUBTITLES),
+    energy: (ph, dl) => conditioningEntryFromFn(energyFn, ph, dl, ENERGY_SUBTITLES),
+    core: (ph, dl) => coreEntryFromBlock(coreBlock, ph, dl),
+    rotation: (ph, dl) => fieldRotationFinisher(rotationAnchor, ph, dl),
+    arm: (ph, dl) => fieldArmFinisher(armAnchor, ph, dl),
+  }
+}
+
+// Same wiring shape as collisionFinisher above, just keyed to the 'field'
+// archetype (soccer/lacrosse/hockey's own base weighting — see
+// finisherEngine.js) instead of 'collision'. `isFieldSport: true` applies
+// the Peak/Taper Energy exception (0.80 instead of 0.55) so sport-specific
+// conditioning stays present into the season, per the engine spec.
+// `overrides` is an optional POSITION-level weighting delta (e.g. Hockey
+// Goalie's own lateral-power/hip/reactive emphasis vs. Defense's) — see the
+// spec's POSITION OVERRIDES section: differentiates by weighting only,
+// never by inventing new exercises per position.
+function fieldFinisher(bank, dayIndex, days, info, overrides = null) {
+  const plan = finisherEngine.planWeekFinishers('field', info.phaseNum, days, { isFieldSport: true, overrides })[dayIndex]
+  return finisherEngine.renderFinisher(bank, plan, info.phaseNum, info.deload)
+}
+
 // ─── Soccer ───────────────────────────────────────────────────────────────────
 
 const SOC_SPRINT_YARDS = [50, 60, 70, 80]
@@ -969,6 +1126,12 @@ function gkConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Single Leg Squat Jump: 4x5 each leg'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Single Leg Squat Jump: ${conditioningSets(4, ph)}x5 each leg`, 'Resistance Band Lateral Walk: 3x20 each direction'])
 }
+// Goalkeeper's 5-family bank — Sprint/Energy reuse gkConditioningA/B above
+// verbatim (zero new content); Rotation has no existing GK-specific anchor
+// (GK's own Day 2 doesn't carry MB Twist Throw the way the other 5
+// positions' do), so it uses the generic already-vetted Med Ball
+// Rotational Throw; Arm reuses GK's own Band External Rotation.
+const GK_FINISHERS = fieldFinisherBank(gkConditioningA, gkConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
 function soccerGoalkeeperSess(info) {
   const q  = info.pct
@@ -978,13 +1141,13 @@ function soccerGoalkeeperSess(info) {
   const slbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Power & Explosive',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x10 each leg\nCalf Raises: 3xAMAP\n${gkConditioningA(ph, dl)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x10 each leg\nCalf Raises: 3xAMAP\n${fieldFinisher(GK_FINISHERS, 0, 4, info)}` },
     { day: 'Tuesday', focus: 'Upper & Shoulder Health',
-      description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x8 each arm\nOverhead Press: 3x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x20\nReverse Fly: 3x15\n${coreBlock(ph, dl)}` },
+      description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x8 each arm\nOverhead Press: 3x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x20\nReverse Fly: 3x15\n${fieldFinisher(GK_FINISHERS, 1, 4, info)}` },
     { day: 'Thursday', focus: 'Lateral Explosion & Hip Mobility',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: 5x5 each side\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nCossack Squat: 4x6 each side\nResistance Band Lateral Walk: 3x20 each direction\nDB Lateral Lunge: 3x8 each leg\n${gkConditioningB(ph, dl)}` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: 5x5 each side\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nCossack Squat: 4x6 each side\nResistance Band Lateral Walk: 3x20 each direction\nDB Lateral Lunge: 3x8 each leg\n${fieldFinisher(GK_FINISHERS, 2, 4, info)}` },
     { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n${coreBlockB(ph, dl)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n${fieldFinisher(GK_FINISHERS, 3, 4, info)}` },
   ]
 }
 
@@ -1000,6 +1163,12 @@ function cbConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Sprint Work: 6x30 yds @ max effort', 'Deceleration Drill: 4x20 yds (sprint 20 · brake · hold 2s)'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Deceleration Drill: ${conditioningSets(5, ph)}x20 yds (sprint 20 · brake · hold 2s)`, '300 Yard Shuttle: 2x2'])
 }
+// Center Back's 5-family bank — Sprint/Energy reuse cbConditioningA/B
+// verbatim; Rotation reuses CB's own MB Twist Throw (already Day 2
+// content); Arm reuses the same Band External Rotation anchor every soccer
+// position's bank uses, for a consistent "arm care" identity across the
+// team even though it's not literally in CB's own Day 2 today.
+const CB_FINISHERS = fieldFinisherBank(cbConditioningA, cbConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
 function soccerCenterBackSess(info) {
   const q  = info.pct
@@ -1009,13 +1178,13 @@ function soccerCenterBackSess(info) {
   const bj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Max Lower Strength',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nSingle Leg RDL: 3x8 each leg\nBroad Jump: ${bj}x3 (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${cbConditioningA(ph, dl)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nSingle Leg RDL: 3x8 each leg\nBroad Jump: ${bj}x3 (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fieldFinisher(CB_FINISHERS, 0, 4, info)}` },
     { day: 'Tuesday', focus: 'Upper Contact Strength',
-      description: `DB Bench Press: 5x8\nSingle Arm DB Row: 5x8 each arm\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nMB Twist Throw: 4x6 each side\nFace Pulls: 3x15\n${coreBlock(ph, dl)}` },
+      description: `DB Bench Press: 5x8\nSingle Arm DB Row: 5x8 each arm\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nMB Twist Throw: 4x6 each side\nFace Pulls: 3x15\n${fieldFinisher(CB_FINISHERS, 1, 4, info)}` },
     { day: 'Thursday', focus: 'Power, Jumping & Deceleration',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nApproach Jump: 5x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nDB Lateral Lunge: 3x8 each leg\n${cbConditioningB(ph, dl)}` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nApproach Jump: 5x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nDB Lateral Lunge: 3x8 each leg\n${fieldFinisher(CB_FINISHERS, 2, 4, info)}` },
     { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nNeck Strengthening: 3x12 each direction\n${coreBlockB(ph, dl)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nNeck Strengthening: 3x12 each direction\n${fieldFinisher(CB_FINISHERS, 3, 4, info)}` },
   ]
 }
 
@@ -1032,6 +1201,7 @@ function fbConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sled Sprint: 6x20 yds'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Sprint: ${conditioningSets(5, ph)}x20 yds`, 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
 }
+const FB_FINISHERS = fieldFinisherBank(fbConditioningA, fbConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
 function soccerFullbackSess(info) {
   const q  = info.pct
@@ -1041,13 +1211,13 @@ function soccerFullbackSess(info) {
   const lb = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Strength & Sprint',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fbConditioningA(ph, dl)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fieldFinisher(FB_FINISHERS, 0, 4, info)}` },
     { day: 'Tuesday', focus: 'Upper Light & Mobility',
-      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nBanded Monster Walk: 3x10 each direction\nMB Twist Throw: 3x6 each side\nHip 90/90 Hold: 3x30s each side\nCopenhagen Adductor: 3x8 each leg\n${coreBlock(ph, dl)}` },
+      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nBanded Monster Walk: 3x10 each direction\nMB Twist Throw: 3x6 each side\nHip 90/90 Hold: 3x30s each side\nCopenhagen Adductor: 3x8 each leg\n${fieldFinisher(FB_FINISHERS, 1, 4, info)}` },
     { day: 'Thursday', focus: 'Explosion & Sprint Development',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${fbConditioningB(ph, dl)}` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${fieldFinisher(FB_FINISHERS, 2, 4, info)}` },
     { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Hip Abduction: 3x15 each side\n${coreBlockB(ph, dl)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Hip Abduction: 3x15 each side\n${fieldFinisher(FB_FINISHERS, 3, 4, info)}` },
   ]
 }
 
@@ -1063,6 +1233,7 @@ function mfConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['V Drill: 5x3', 'Flying 20s: 6x1'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`V Drill: ${conditioningSets(4, ph)}x3`, 'Star Drill: 3x3'])
 }
+const MF_FINISHERS = fieldFinisherBank(mfConditioningA, mfConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
 function soccerMidfielderSess(info) {
   const q  = info.pct
@@ -1072,13 +1243,13 @@ function soccerMidfielderSess(info) {
   const hbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Strength & Aerobic Base',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHex Bar Jumps: ${hbj}x6 (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\nHip Thrust: 4x8\nGroin Plank: 3x10 each side\n${mfConditioningA(ph, dl)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHex Bar Jumps: ${hbj}x6 (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\nHip Thrust: 4x8\nGroin Plank: 3x10 each side\n${fieldFinisher(MF_FINISHERS, 0, 4, info)}` },
     { day: 'Tuesday', focus: 'Upper & Work Capacity',
-      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nLateral Raise: 3x12\nMB Twist Throw: 4x6 each side\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nBanded Monster Walk: 3x10 each direction\nPush-up: 3xAMAP\n${coreBlock(ph, dl)}` },
+      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nLateral Raise: 3x12\nMB Twist Throw: 4x6 each side\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nBanded Monster Walk: 3x10 each direction\nPush-up: 3xAMAP\n${fieldFinisher(MF_FINISHERS, 1, 4, info)}` },
     { day: 'Thursday', focus: 'Explosion & Change of Direction',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${mfConditioningB(ph, dl)}` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${fieldFinisher(MF_FINISHERS, 2, 4, info)}` },
     { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nPush-up: 3xAMAP\n${coreBlockB(ph, dl)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nPush-up: 3xAMAP\n${fieldFinisher(MF_FINISHERS, 3, 4, info)}` },
   ]
 }
 
@@ -1094,6 +1265,7 @@ function wgConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sled Sprint: 6x20 yds'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Sprint: ${conditioningSets(5, ph)}x20 yds`, '300 Yard Shuttle: 2x2'])
 }
+const WG_FINISHERS = fieldFinisherBank(wgConditioningA, wgConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
 function soccerWingerSess(info) {
   const q  = info.pct
@@ -1103,13 +1275,13 @@ function soccerWingerSess(info) {
   const ah = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Speed-Strength & Horizontal Force',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nReverse Lunge: 3x5 each leg\nNordic Hamstring Curl: 4x5\nAnkle Hops: ${ah}x20 (${explosiveIntent(ph)})\nLateral Bounds: 5x5 each side\nCalf Raises: 4xAMAP\n${wgConditioningA(ph, dl)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nReverse Lunge: 3x5 each leg\nNordic Hamstring Curl: 4x5\nAnkle Hops: ${ah}x20 (${explosiveIntent(ph)})\nLateral Bounds: 5x5 each side\nCalf Raises: 4xAMAP\n${fieldFinisher(WG_FINISHERS, 0, 4, info)}` },
     { day: 'Tuesday', focus: 'Upper Light & Accessory',
-      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nMB Twist Throw: 3x6 each side\nBanded Monster Walk: 3x10 each direction\nCopenhagen Adductor: 3x8 each leg\n${coreBlock(ph, dl)}` },
+      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nMB Twist Throw: 3x6 each side\nBanded Monster Walk: 3x10 each direction\nCopenhagen Adductor: 3x8 each leg\n${fieldFinisher(WG_FINISHERS, 1, 4, info)}` },
     { day: 'Thursday', focus: 'Vertical Strength & Reactive Speed',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nLateral Squat Jump: 4x5\n${wgConditioningB(ph, dl)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nLateral Squat Jump: 4x5\n${fieldFinisher(WG_FINISHERS, 2, 4, info)}` },
     { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Monster Walk: 3x10 each direction\n${coreBlockB(ph, dl)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Monster Walk: 3x10 each direction\n${fieldFinisher(WG_FINISHERS, 3, 4, info)}` },
   ]
 }
 
@@ -1126,6 +1298,7 @@ function skConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 6x1', 'Sled Sprint: 6x20 yds'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Sprint: ${conditioningSets(5, ph)}x20 yds`, 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
 }
+const SK_FINISHERS = fieldFinisherBank(skConditioningA, skConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
 function soccerStrikerSess(info) {
   const q  = info.pct
@@ -1135,13 +1308,13 @@ function soccerStrikerSess(info) {
   const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Vertical Power & Jump Height',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\nCopenhagen Adductor: 3x8 each leg\n${skConditioningA(ph, dl)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\nCopenhagen Adductor: 3x8 each leg\n${fieldFinisher(SK_FINISHERS, 0, 4, info)}` },
     { day: 'Tuesday', focus: 'Upper & Rotational Power',
-      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nMB Twist Throw: 4x6 each side\nMed Ball Overhead Slam: 4x8\nOverhead Press: 3x10\nBanded Monster Walk: 3x10 each direction\n${coreBlock(ph, dl)}` },
+      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nMB Twist Throw: 4x6 each side\nMed Ball Overhead Slam: 4x8\nOverhead Press: 3x10\nBanded Monster Walk: 3x10 each direction\n${fieldFinisher(SK_FINISHERS, 1, 4, info)}` },
     { day: 'Thursday', focus: 'Explosive Speed, Horizontal Power & Shot Drive',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nHex Bar Jumps: 4x5\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nRotational Cable Pull: 3x8 each side\n${skConditioningB(ph, dl)}` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nHex Bar Jumps: 4x5\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nRotational Cable Pull: 3x8 each side\n${fieldFinisher(SK_FINISHERS, 2, 4, info)}` },
     { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nMed Ball Overhead Slam: 4x8\n${coreBlockB(ph, dl)}` },
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nMed Ball Overhead Slam: 4x8\n${fieldFinisher(SK_FINISHERS, 3, 4, info)}` },
   ]
 }
 
@@ -1219,13 +1392,49 @@ const WR_DAY6 = {
 const WRESTLING_WU_LOWER = 'Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side\n\n'
 const WRESTLING_WU_UPPER = 'Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction\n\n'
 
+// Wrestling's own finisher content — grip/mat-conditioning identity (Grip
+// Work, Wrestle-Outs, Battle Rope, already vetted names) plus already-vetted
+// rotational vocabulary shared with the other Collision sports. Core reuses
+// the shared coreBlock verbatim.
+const WRESTLING_FINISHERS = {
+  sprint(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Sprint Work: 3x10 yds'] }
+    if (ph === 1) return { subtitle: 'Acceleration Mechanics', lines: ['Sprint Work: 4x10 yds @ max effort (mat transitions)'] }
+    if (ph === 2) return { subtitle: 'Acceleration Mechanics', lines: ['Sprint Work: 4x15 yds @ max effort'] }
+    if (ph === 3) return { subtitle: 'Quality Speed', lines: ['Sprint Work: 5x15 yds @ max effort'] }
+    return { subtitle: 'Full-Recovery Reps', lines: ['Sprint Work: 3x15 yds @ max effort (full recovery)'] }
+  },
+  energy(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Battle Rope: 2x15s'] }
+    if (ph === 1) return { subtitle: 'Aerobic Base', lines: ['Battle Rope: 3x20s'] }
+    if (ph === 2) return { subtitle: 'Interval Work', lines: ['Battle Rope: 4x20s'] }
+    if (ph === 3) return { subtitle: 'Repeat Effort', lines: ['Wrestle-Outs: 4x30s'] }
+    return { subtitle: 'Reduced', lines: ['Battle Rope: 2x20s'] }
+  },
+  core: (ph, dl) => coreEntryFromBlock(coreBlock, ph, dl),
+  rotation(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Med Ball Rotational Throw: 2x5 each side'] }
+    if (ph === 1) return { subtitle: 'Half-Kneeling', lines: ['Med Ball Rotational Throw: 3x6 each side (half-kneeling)'] }
+    if (ph === 2) return { subtitle: 'Standing', lines: ['Landmine Rotational Press: 3x6 each side'] }
+    if (ph === 3) return { subtitle: 'Maximal Velocity', lines: ['Med Ball Rotational Throw: 4x6 each side (max intent)'] }
+    return { subtitle: 'Low Volume, Max Intent', lines: ['Med Ball Rotational Throw: 2x6 each side (max intent)'] }
+  },
+  arm(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Grip Work: 2 sets'] }
+    if (ph === 1) return { subtitle: 'Capacity & Scap Control', lines: ['Grip Work: 3x30s each (plate pinch · towel hang)'] }
+    if (ph === 2) return { subtitle: 'Modest Increase', lines: ['Band External Rotation: 3x15 each arm', 'Grip Work: 2 sets'] }
+    if (ph === 3) return { subtitle: 'Maintenance', lines: ['Grip Work: 3 sets'] }
+    return { subtitle: 'Readiness', lines: ['Band External Rotation: 2x15 each arm'] }
+  },
+}
+
 function wrestlingDay1Lower(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Day 1', focus: 'Lower Power',
     description: `${WRESTLING_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
       `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nNordic Hamstring Curl: 3x5\nSprawl Drills: 3x10\n${COLLISION_NECK}`,
+      `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nNordic Hamstring Curl: 3x5\nSprawl Drills: 3x10\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -1235,7 +1444,7 @@ function wrestlingDay2Upper(info) {
     day: 'Day 2', focus: 'Upper Strength',
     description: `${WRESTLING_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
       `Overhead Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `Rope Climb: 3 ascents\nBB Row: 4x8\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}`,
+      `Rope Climb: 3 ascents\nBB Row: 4x8\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -1245,7 +1454,7 @@ function wrestlingDay3Lower(info) {
     day: 'Day 3', focus: 'Lower Strength',
     description: `${WRESTLING_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
       `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}`,
+      `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -1255,7 +1464,7 @@ function wrestlingDay4Upper(info) {
     day: 'Day 4', focus: 'Upper Power',
     description: `${WRESTLING_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
       `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-      `Weighted Chin-ups: 4x6\nInverted BB Row: 3x10\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}`,
+      `Weighted Chin-ups: 4x6\nInverted BB Row: 3x10\nGrip Work: 3x30s each (plate pinch · towel hang)\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -1271,15 +1480,15 @@ function wrestlingArchetype3Day(info) {
     { day: 'Day 1', focus: 'Lower Power',
       description: `${WRESTLING_WU_LOWER}Power Clean: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
         `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nSprawl Drills: 3x10\n${COLLISION_NECK}` },
+        `Weighted Pull-ups: 5xAMAP\nFarmer Carries: 3x40 yds\nSprawl Drills: 3x10\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 0, 3, info)}` },
     { day: 'Day 2', focus: 'Upper (Full)',
       description: `${WRESTLING_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
         `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-        `Rope Climb: 3 ascents\nBB Row: 4x8\n${COLLISION_NECK}` },
+        `Rope Climb: 3 ascents\nBB Row: 4x8\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 1, 3, info)}` },
     { day: 'Day 3', focus: 'Lower Strength',
       description: `${WRESTLING_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
         `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-        `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}` },
+        `Single Leg RDL: 3x8 each leg (2 DB)\nBulgarian Split Squat: 3x8 each leg\nDB Suitcase Carries: 3x20 yds each side\n${COLLISION_NECK}\n\n${collisionFinisher(WRESTLING_FINISHERS, 2, 3, info)}` },
   ]
 }
 
@@ -1584,6 +1793,10 @@ function laxConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['V Drill: 5x3', '200m Intervals: 8x1 @ 80-85% effort (90 sec rest)'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`V Drill: ${conditioningSets(4, ph)}x3`, 'Star Drill: 3x3'])
 }
+// Lacrosse's rotation anchor reuses Med Ball Rotational Throw (already
+// Day 2's own content); arm reuses the same Band External Rotation anchor
+// every Field sport's bank uses, for a consistent "arm care" identity.
+const LAX_FINISHERS = fieldFinisherBank(laxConditioningA, laxConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
 function lacrosseArchetypeDay1(info) {
   const { pct: q, phaseNum: ph, deload: dl } = info
@@ -1591,7 +1804,7 @@ function lacrosseArchetypeDay1(info) {
   const lb = explosiveSets(4, ph)
   return {
     day: 'Monday', focus: 'Lower Power & Sprint',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\n${laxConditioningA(ph, dl)}`,
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\n${fieldFinisher(LAX_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -1599,7 +1812,7 @@ function lacrosseArchetypeDay2(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Tuesday', focus: 'Upper & Rotational Shooting Power',
-    description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nGrip Work: 3x30s each\n${coreBlock(ph, dl)}`,
+    description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nGrip Work: 3x30s each\n${fieldFinisher(LAX_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -1609,7 +1822,7 @@ function lacrosseArchetypeDay3(info) {
   const lsj = explosiveSets(4, ph)
   return {
     day: 'Thursday', focus: 'Lower Explosion & Change of Direction',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${laxConditioningB(ph, dl)}`,
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${fieldFinisher(LAX_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -1618,7 +1831,7 @@ function lacrosseArchetypeDay4(info) {
   const r = mainLiftTopReps(ph, 'rotational')
   return {
     day: 'Friday', focus: 'Upper Power',
-    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nGrip Work: 3x30s each\n${coreBlockB(ph, dl)}`,
+    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nGrip Work: 3x30s each\n${fieldFinisher(LAX_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -2003,19 +2216,15 @@ function baseballPlyo(phaseNum) {
 // CONDITIONING_EXERCISE_RE above (stripped on deload weeks, excluded from
 // the accessory volume wave — baseball's conditioning is meant to be
 // minimal and fixed, not something that grows across a phase).
+// Still used by BASEBALL_ARM_CARE/PITCHER_ARM_CARE (the 5-day plan's own
+// dedicated Day 5 — out of scope for the finisher-engine wiring, same
+// "extra day stays as-is" precedent every other archetype follows). The
+// 4-day layout's own Sprint finisher is now engine-driven (see
+// baseballFinisherBank above) — BIKE_LADDER, which had no other use, has
+// been removed as dead code.
 const BASEBALL_SPRINT_PROTOCOL = {
   name: 'Sprint Tempo Protocol', sets: 5, reps: '1',
   note: '30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep',
-}
-
-// Conditioning finisher for Lower Power — classified as conditioning by
-// CONDITIONING_EXERCISE_RE below (exempt from the accessory cap and deload
-// reduction, same as Sprint Tempo Protocol). A single 3-set interval ladder,
-// not a multi-exercise block — same "one real prescription is a complete
-// finisher" precedent Sprint Tempo Protocol already sets.
-const BIKE_LADDER = {
-  name: 'Bike Ladder', sets: 3, reps: '1',
-  note: '10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s',
 }
 
 // ─── Category-based lift variation (baseball only, deterministic) ─────────
@@ -2121,6 +2330,118 @@ function baseballCoreFinisher(weekNumber) {
   }
   return exercises
 }
+
+// ─── Baseball — Shared Finisher Engine wiring (feat/finisher-engine) ──────
+// Rotational/Throwing archetype. Baseball's existing per-day finishers
+// (BIKE_LADDER, BASEBALL_SPRINT_PROTOCOL, the Arm Care circuit,
+// baseballCoreFinisher's own rotating pool) were already well-designed —
+// one finisher per day, day-type-locked so arm-care/core/conditioning never
+// collide on the same day — but were STATIC (identical every week within a
+// phase) and NOT deload-safe: none of them used the "Core/Arm Care/
+// Conditioning —" exempt-header convention, so isConditioningLine silently
+// DELETED them outright on deload weeks rather than tapering — the same gap
+// the Repeat-Sprint archetype had before its own PR #20 finisher
+// restructure. Wiring onto the shared engine fixes both, reusing this
+// existing content as directly as possible: Core keeps baseballCoreFinisher's
+// own week-based rotating pool verbatim; Rotation reuses the existing
+// medBallPoolVariant rotation; Arm reuses the existing Band External
+// Rotation/Face Pulls/Band Pull-Aparts circuit; Sprint/Energy keep their
+// existing Sprint Tempo Protocol/Bike Ladder prescriptions, now with real
+// phase progression instead of one fixed prescription all 16 weeks.
+// Bumps every "SxR" set count in a line by +1 — restores baseball's own
+// PRE-EXISTING pitcher differentiation ("higher sets on the same 3-move
+// circuit," not a different exercise) that predates the engine and would
+// otherwise be lost: the position override changes SCHEDULING (which day/
+// how often arm care shows up), not the content bank's own text, so
+// without this, Pitcher and Position Player would render byte-identical
+// arm-care volume whenever it does land on the same day for both.
+function bumpSets(line) {
+  return line.replace(/(\d+)x/, (_, n) => `${parseInt(n, 10) + 1}x`)
+}
+
+function baseballFinisherBank(weekNumber, isPitcher = false) {
+  return {
+    sprint(ph, dl) {
+      if (dl) return { subtitle: 'Deload (Light)', lines: ['Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep'] }
+      if (ph === 1) return { subtitle: 'Acceleration Mechanics', lines: ['Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep'] }
+      if (ph === 2) return { subtitle: 'Acceleration Mechanics', lines: ['Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep'] }
+      if (ph === 3) return { subtitle: 'Quality Speed', lines: ['Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep'] }
+      return { subtitle: 'Full-Recovery Reps', lines: ['Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep'] }
+    },
+    energy(ph, dl) {
+      if (dl) return { subtitle: 'Deload (Light)', lines: ['Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s'] }
+      if (ph === 1) return { subtitle: 'Aerobic Base', lines: ['Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s'] }
+      if (ph === 2) return { subtitle: 'Interval Work', lines: ['Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s'] }
+      if (ph === 3) return { subtitle: 'Repeat Effort', lines: ['Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s'] }
+      return { subtitle: 'Reduced', lines: ['Bike Ladder: 2x1 — 10s on/20s off, 15s/15s'] }
+    },
+    core(ph, dl) {
+      if (dl) return { subtitle: 'Deload (Light)', lines: ['Dead Bug: 2x8 each side', 'Plank: 2x20 seconds'] }
+      const lines = coreFinisherMovements(weekNumber).map(name =>
+        name === 'Decline Bench Iso' ? `${name}: 3x30s hold` : `${name}: 3x20s`)
+      return { subtitle: 'Finisher (20s on/10s off unless noted)', lines }
+    },
+    rotation(ph, dl) {
+      const anchor = medBallPoolVariant(weekNumber)
+      if (dl) return { subtitle: 'Deload (Light)', lines: [`${anchor}: 2x5 each side`] }
+      if (ph === 1) return { subtitle: 'Half-Kneeling', lines: [`${anchor}: 3x6 each side (half-kneeling)`] }
+      if (ph === 2) return { subtitle: 'Standing', lines: [`${anchor}: 3x6 each side`] }
+      if (ph === 3) return { subtitle: 'Maximal Velocity', lines: [`${anchor}: 4x6 each side (max intent)`] }
+      return { subtitle: 'Low Volume, Max Intent', lines: [`${anchor}: 2x6 each side (max intent)`] }
+    },
+    arm(ph, dl) {
+      let entry
+      if (dl) entry = { subtitle: 'Deload (Light)', lines: ['Band External Rotation: 2x15 each arm', 'Face Pulls: 2x15'] }
+      else if (ph === 1) entry = { subtitle: 'Capacity & Scap Control', lines: ['Band External Rotation: 4x15 each arm', 'Face Pulls: 3x15', 'Band Pull-Aparts: 3x20'] }
+      else if (ph === 2) entry = { subtitle: 'Modest Increase', lines: ['Band External Rotation: 4x15 each arm', 'Face Pulls: 3x15'] }
+      else if (ph === 3) entry = { subtitle: 'Maintenance', lines: ['Face Pulls: 3x15', 'Band Pull-Aparts: 3x20'] }
+      else entry = { subtitle: 'Readiness', lines: ['Band External Rotation: 3x15 each arm'] }
+      return isPitcher ? { ...entry, lines: entry.lines.map(bumpSets) } : entry
+    },
+  }
+}
+
+// Day-type compatibility (see finisherEngine.js's scheduleFamilies/
+// assignSecondaries) — baseball's own PRE-EXISTING "day-type locking" rule
+// (arm-care work never on a lower-body day; Trap Bar Jump/total-body power
+// never on an upper-body day) predates this engine and is a real, tested
+// invariant, not something the engine's normally-free scheduling should
+// silently break. Sprint/Energy are the lower-body-day-compatible families
+// (leg-driven conditioning); Core/Arm are upper-body-day-compatible;
+// Rotation fits either (already appears as an accessory on BOTH a lower day
+// — Med Ball Rotational Throw on Lower Strength — and an upper day — Cable/
+// Band Rotational Chop on Upper Strength — in baseball's own content).
+const BASEBALL_DAY_COMPAT = [
+  ['sprint', 'energy', 'rotation'], // Day 1 — Lower Power
+  ['core', 'arm', 'rotation'],      // Day 2 — Upper Strength
+  ['sprint', 'energy', 'rotation'], // Day 3 — Lower Strength
+  ['core', 'arm', 'rotation'],      // Day 4 — Upper Power
+]
+
+// `dayIndex` slots (0-3) always plan against a 4-day week — baseball's own
+// 3-day layout is a literal slice of the 4-day one (see baseball3Day below,
+// same precedent as the day content itself), not a separately-authored
+// consolidation the way Collision/Field's 3-day layouts are, so the
+// finisher plan is computed the same way. Returned as a single {header:...}
+// exercise object — formatExerciseLine renders it verbatim (embedded
+// newlines and all), so the engine's already-formatted block plugs straight
+// into baseball's exercises-array session shape with no reformatting.
+function baseballFinisher(dayIndex, info, overrides = null) {
+  const bank = baseballFinisherBank(info.week, !!overrides)
+  const plan = finisherEngine.planWeekFinishers('rotational', info.phaseNum, 4, { overrides, dayCompatibility: BASEBALL_DAY_COMPAT })[dayIndex]
+  return { header: finisherEngine.renderFinisher(bank, plan, info.phaseNum, info.deload) }
+}
+
+// Pitcher's own position override — "more arm care + lower rotational-throw
+// volume" (per the spec's own example) — differentiates Pitcher from
+// Position Player by weighting only, same content bank, no new exercises.
+// ±12 is the largest delta that still respects BASEBALL_DAY_COMPAT at
+// every phase — past ±12, Rotation (the lower-body days' flex family
+// alongside Sprint/Energy) gets suppressed hard enough that Phase 1 can be
+// left with no lower-compatible family remaining, forcing a same-day
+// arm-care/lower-body violation (verified by brute-force sweep 8/10/12/14/
+// 16 against every phase; 14 was the first delta to violate).
+const PITCHER_FINISHER_OVERRIDES = { arm: 12, rotation: -12 }
 
 // Formats one exercise object into its "Name: SxR (note)" line. Sport-
 // agnostic — any sport's session builder can use this, not just baseball's.
@@ -2266,7 +2587,7 @@ function baseball4Day(info) {
       { name: 'Barbell Single Leg RDL',   sets: 3, reps: '8',    note: 'each leg', ss: 2 },
       { name: 'Side X Plank',             sets: 3, reps: '30s',  note: 'each side', ss: 2 },
       { name: 'Trap Bar Jump',            sets: explosiveSets(3, info.phaseNum), reps: '3',    note: `Suggested: Keep under 155lbs — ${explosiveIntent(info.phaseNum)}` },
-      BIKE_LADDER,
+      baseballFinisher(0, info),
     ], 'lower_power'),
     // UPPER STRENGTH — DB Bench Press stays fixed here (the bench category
     // swap lives on Upper Power instead); this day is 3 full authored pairs
@@ -2284,10 +2605,7 @@ function baseball4Day(info) {
       { name: 'Lateral Raise',            sets: 3, reps: '12',   ss: 2 },
       { name: 'Forearm Curls (Both Ways)', sets: 3, reps: '10-15', ss: 3 },
       { name: 'Cable/Band Rotational Chop', sets: 3, reps: '6',  note: 'each side', ss: 3 },
-      { header: 'Arm Care — Circuit:' },
-      { name: 'Band Pull-Aparts',         sets: 3, reps: '20' },
-      { name: 'Band External Rotation',   sets: 3, reps: '15',   note: 'each arm' },
-      { name: 'Face Pulls',               sets: 3, reps: '15' },
+      baseballFinisher(1, info),
     ], 'upper_push'),
     // LOWER STRENGTH — Trap Bar Deadlift/Reverse Lunge alternate weekly,
     // never both the same day (whichever the week selects IS the day's only
@@ -2312,7 +2630,7 @@ function baseball4Day(info) {
       { name: weeklyVariant(w, 'Glute Bridge', 'Hip Thrust'), sets: 3, reps: weeklyVariant(w, '15', '8'), ss: 2 },
       { name: 'Copenhagen Adductor',      sets: 3, reps: '8',    note: 'each leg', ss: 3 },
       { name: 'Suitcase Carry',           sets: 3, reps: '20 yds', note: 'each side', ss: 3 },
-      BASEBALL_SPRINT_PROTOCOL,
+      baseballFinisher(2, info),
     ], 'squat_hinge'),
     // UPPER POWER — bench variation (DB Bench Press/Incline DB Press,
     // alternating opposite parity from Upper Strength's fixed one so the
@@ -2330,7 +2648,7 @@ function baseball4Day(info) {
       { name: upperPowerMedBallVariant(w), sets: explosiveSets(4, info.phaseNum), reps: '5',   note: `each side — ${explosiveIntent(info.phaseNum)}`, ss: 2 },
       { ...rotatingChoice(TRICEP_POOL, w, 3, '10'), ss: 3 },
       { ...rotatingChoice(BICEP_POOL, w, 3, '10'), ss: 3 },
-      ...baseballCoreFinisher(w),
+      baseballFinisher(3, info),
     ], 'upper_push'),
   ]
 }
@@ -2421,7 +2739,7 @@ function pitcher4Day(info) {
       { name: 'Side X Plank',             sets: 3, reps: '30s',  note: 'each side', ss: 2 },
       { name: 'Copenhagen Adductor',      sets: 3, reps: '8',    note: 'each leg' },
       { name: 'Trap Bar Jump',            sets: explosiveSets(3, info.phaseNum), reps: '3',    note: `Suggested: Keep under 155lbs — ${explosiveIntent(info.phaseNum)}` },
-      BIKE_LADDER,
+      baseballFinisher(0, info, PITCHER_FINISHER_OVERRIDES),
     ], 'lower_power'),
     // UPPER STRENGTH AND ARM CARE — Landmine Press replaces the bench slot
     // (lower load, no direct overhead pressing); everything else matches
@@ -2434,10 +2752,7 @@ function pitcher4Day(info) {
       { name: 'Lateral Raise',            sets: 3, reps: '12',   ss: 2 },
       { name: 'Forearm Curls (Both Ways)', sets: 3, reps: '10-15', ss: 3 },
       { name: 'Cable/Band Rotational Chop', sets: 3, reps: '6',  note: 'each side', ss: 3 },
-      { header: 'Arm Care — Circuit:' },
-      { name: 'Band Pull-Aparts',         sets: 4, reps: '20' },
-      { name: 'Band External Rotation',   sets: 4, reps: '15',   note: 'each arm' },
-      { name: 'Face Pulls',               sets: 4, reps: '15' },
+      baseballFinisher(1, info, PITCHER_FINISHER_OVERRIDES),
     ], 'upper_push'),
     // LOWER STRENGTH — identical to position player's.
     makeBaseballSession('Day 3', 'Lower Strength', [
@@ -2453,7 +2768,7 @@ function pitcher4Day(info) {
       { name: weeklyVariant(w, 'Glute Bridge', 'Hip Thrust'), sets: 3, reps: weeklyVariant(w, '15', '8'), ss: 2 },
       { name: 'Copenhagen Adductor',      sets: 3, reps: '8',    note: 'each leg', ss: 3 },
       { name: 'Suitcase Carry',           sets: 3, reps: '20 yds', note: 'each side', ss: 3 },
-      BASEBALL_SPRINT_PROTOCOL,
+      baseballFinisher(2, info, PITCHER_FINISHER_OVERRIDES),
     ], 'squat_hinge'),
     // UPPER POWER AND ROTATIONAL — identical to position player's; neither
     // bench variant is an overhead movement, so both stay safe under "no
@@ -2465,7 +2780,7 @@ function pitcher4Day(info) {
       { name: upperPowerMedBallVariant(w), sets: explosiveSets(4, info.phaseNum), reps: '5',   note: `each side — ${explosiveIntent(info.phaseNum)}`, ss: 2 },
       { ...rotatingChoice(TRICEP_POOL, w, 3, '10'), ss: 3 },
       { ...rotatingChoice(BICEP_POOL, w, 3, '10'), ss: 3 },
-      ...baseballCoreFinisher(w),
+      baseballFinisher(3, info, PITCHER_FINISHER_OVERRIDES),
     ], 'upper_push'),
   ]
 }
@@ -2601,13 +2916,51 @@ const HOCKEY_DAY6 = {
 const HOCKEY_ARCHETYPE_WU_LOWER = 'Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
 const HOCKEY_ARCHETYPE_WU_UPPER = 'Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
 
+// Hockey Forwards' own finisher content — skating/puck-battle identity
+// (Sled Sprint, Battle Rope, Lateral Sled Drag, Band External Rotation —
+// several already used elsewhere in this sport's own content). Core reuses
+// the shared coreBlock verbatim. Hockey Forwards has no fixed Neck block
+// (opts out — see the archetype section doc comment above), so this is the
+// sport's FIRST dedicated finisher of any kind.
+const HOCKEY_FORWARDS_FINISHERS = {
+  sprint(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Sled Sprint: 2x20 yds'] }
+    if (ph === 1) return { subtitle: 'Acceleration Mechanics', lines: ['Sled Sprint: 4x20 yds'] }
+    if (ph === 2) return { subtitle: 'Acceleration Mechanics', lines: ['Sled Sprint: 5x20 yds'] }
+    if (ph === 3) return { subtitle: 'Quality Speed', lines: ['Sprint Work: 5x15 yds @ max effort'] }
+    return { subtitle: 'Full-Recovery Reps', lines: ['Sprint Work: 3x15 yds @ max effort (full recovery)'] }
+  },
+  energy(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Battle Rope: 2x15s'] }
+    if (ph === 1) return { subtitle: 'Aerobic Base', lines: ['Battle Rope: 3x20s'] }
+    if (ph === 2) return { subtitle: 'Interval Work', lines: ['Battle Rope: 4x20s'] }
+    if (ph === 3) return { subtitle: 'Repeat Effort', lines: ['Lateral Sled Drag: 4x20 yds each direction'] }
+    return { subtitle: 'Reduced', lines: ['Battle Rope: 2x20s'] }
+  },
+  core: (ph, dl) => coreEntryFromBlock(coreBlock, ph, dl),
+  rotation(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Med Ball Rotational Throw: 2x5 each side'] }
+    if (ph === 1) return { subtitle: 'Half-Kneeling', lines: ['Med Ball Rotational Throw: 3x6 each side (half-kneeling)'] }
+    if (ph === 2) return { subtitle: 'Standing', lines: ['Landmine Rotational Press: 3x6 each side'] }
+    if (ph === 3) return { subtitle: 'Maximal Velocity', lines: ['Med Ball Rotational Throw: 4x6 each side (max intent)'] }
+    return { subtitle: 'Low Volume, Max Intent', lines: ['Med Ball Rotational Throw: 2x6 each side (max intent)'] }
+  },
+  arm(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Band External Rotation: 2x15 each arm'] }
+    if (ph === 1) return { subtitle: 'Capacity & Scap Control', lines: ['Band External Rotation: 3x15 each arm'] }
+    if (ph === 2) return { subtitle: 'Modest Increase', lines: ['Band External Rotation: 3x15 each arm', 'Face Pulls: 3x15'] }
+    if (ph === 3) return { subtitle: 'Maintenance', lines: ['Face Pulls: 4x15'] }
+    return { subtitle: 'Readiness', lines: ['Band External Rotation: 2x15 each arm'] }
+  },
+}
+
 function hockeyArchetypeDay1Lower(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Day 1', focus: 'Lower — First-Step Explosion',
     description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Power Clean: ${collisionOlyScheme(ph, dl)}\n` +
       `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `Bulgarian Split Squat: 3x6 each leg\nCopenhagen Adductor: 3x8 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side`,
+      `Bulgarian Split Squat: 3x6 each leg\nCopenhagen Adductor: 3x8 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -2617,7 +2970,7 @@ function hockeyArchetypeDay2Upper(info) {
     day: 'Day 2', focus: 'Upper — Puck Battle Strength',
     description: `${HOCKEY_ARCHETYPE_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
       `Bench Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `Weighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBand External Rotation: 3x15 each arm`,
+      `Weighted Pull-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBand External Rotation: 3x15 each arm\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -2627,7 +2980,7 @@ function hockeyArchetypeDay3Lower(info) {
     day: 'Day 3', focus: 'Lower — Acceleration & COD',
     description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)}\n` +
       `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Lateral Bound: 5x5 each side\nSplit Squat Jump: 4x5 each leg\nCossack Squat: 3x8 each side`,
+      `Lateral Bound: 5x5 each side\nSplit Squat Jump: 4x5 each leg\nCossack Squat: 3x8 each side\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -2637,7 +2990,7 @@ function hockeyArchetypeDay4Upper(info) {
     day: 'Day 4', focus: 'Upper Power & Conditioning',
     description: `${HOCKEY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
       `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-      `Weighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBattle Rope: 4x20s`,
+      `Weighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nBattle Rope: 4x20s\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -2651,15 +3004,15 @@ function hockeyArchetype3Day(info) {
     { day: 'Day 1', focus: 'Lower — First-Step Explosion',
       description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Power Clean: ${collisionOlyScheme(ph, dl)}\n` +
         `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-        `Bulgarian Split Squat: 3x6 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side` },
+        `Bulgarian Split Squat: 3x6 each leg\nSled Sprint: 6x20 yds\nHip 90/90 Hold: 3x30s each side\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 0, 3, info)}` },
     { day: 'Day 2', focus: 'Upper (Full) — Puck Battle Strength',
       description: `${HOCKEY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
         `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-        `Weighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm` },
+        `Weighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 1, 3, info)}` },
     { day: 'Day 3', focus: 'Lower — Acceleration & COD',
       description: `${HOCKEY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)}\n` +
         `Front Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Lateral Bound: 5x5 each side\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg` },
+        `Lateral Bound: 5x5 each side\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\n\n${collisionFinisher(HOCKEY_FORWARDS_FINISHERS, 2, 3, info)}` },
   ]
 }
 
@@ -2727,6 +3080,9 @@ function hdConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Single Leg Squat Jump: 4x5 each leg'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Single Leg Squat Jump: ${conditioningSets(4, ph)}x5 each leg`, '300 Yard Shuttle: 2x2'])
 }
+// Hockey Defense's rotation/arm anchors reuse its own Day 2 content
+// (Med Ball Rotational Throw, Band External Rotation) verbatim.
+const HD_FINISHERS = fieldFinisherBank(hdConditioningA, hdConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
 function hockeyDefenseArchetypeDay1(info) {
   const { pct: q, phaseNum: ph, deload: dl } = info
@@ -2734,7 +3090,7 @@ function hockeyDefenseArchetypeDay1(info) {
   const lb = explosiveSets(5, ph)
   return {
     day: 'Monday', focus: 'Lower — Lateral Mobility & Single Leg Stability',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: ${lb}x5 each side (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\n${hdConditioningA(ph, dl)}`,
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: ${lb}x5 each side (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\n${fieldFinisher(HD_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -2742,7 +3098,7 @@ function hockeyDefenseArchetypeDay2(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Tuesday', focus: 'Upper — Core Stiffness & Rotational Strength',
-    description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x12 each side\nBand External Rotation: 3x15 each arm\n${coreBlock(ph, dl)}`,
+    description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x12 each side\nBand External Rotation: 3x15 each arm\n${fieldFinisher(HD_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -2751,7 +3107,7 @@ function hockeyDefenseArchetypeDay3(info) {
   const r = mainLiftTopReps(ph, 'rotational')
   return {
     day: 'Thursday', focus: 'Lower — Crossover & Backward Skating Mechanics',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\n${hdConditioningB(ph, dl)}`,
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\n${fieldFinisher(HD_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -2760,7 +3116,7 @@ function hockeyDefenseArchetypeDay4(info) {
   const r = mainLiftTopReps(ph, 'rotational')
   return {
     day: 'Friday', focus: 'Upper Power',
-    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n${coreBlockB(ph, dl)}`,
+    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n${fieldFinisher(HD_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -2786,6 +3142,19 @@ function hgConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Single Leg Squat Jump: 4x5 each leg'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Single Leg Squat Jump: ${conditioningSets(4, ph)}x5 each leg`, 'Flying 20s: 4x1'])
 }
+// Goalie's rotation/arm anchors — no MB Twist Throw/Rotational Throw
+// already in Goalie's own Day 2 (it's DB-only/shoulder-protection content),
+// so Rotation uses the generic already-vetted Med Ball Rotational Throw;
+// Arm reuses Goalie's own Band External Rotation.
+const HG_FINISHERS = fieldFinisherBank(hgConditioningA, hgConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
+// Position override vs. Defense — "lateral power + hip + reactive" (per the
+// spec's own Hockey Goalie example): more Sprint (lateral quickness/
+// reactive movement, now the week's most frequent family) and Core (hip
+// stability), less Rotation (a goalie doesn't need max-velocity rotational
+// shooting power the way Defense's own outlet-pass identity benefits from
+// it) and Energy. Weighting only — same 5 families, same content bank,
+// nothing new invented for this position.
+const HG_OVERRIDES = { sprint: 10, core: 5, rotation: -8, arm: -3, energy: -4 }
 
 function hockeyGoalieArchetypeDay1(info) {
   const { pct: q, phaseNum: ph, deload: dl } = info
@@ -2793,7 +3162,7 @@ function hockeyGoalieArchetypeDay1(info) {
   const slbj = explosiveSets(4, ph)
   return {
     day: 'Monday', focus: 'Lower Power & Butterfly Mechanics',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x10 each side\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nCopenhagen Adductor: 4x8 each leg\nLateral Bound: 5x5 each side\n${hgConditioningA(ph, dl)}`,
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x10 each side\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nCopenhagen Adductor: 4x8 each leg\nLateral Bound: 5x5 each side\n${fieldFinisher(HG_FINISHERS, 0, 4, info, HG_OVERRIDES)}`,
   }
 }
 
@@ -2801,7 +3170,7 @@ function hockeyGoalieArchetypeDay2(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Tuesday', focus: 'Upper & Shoulder Health (Goalie Protection)',
-    description: `DB Bench Press: 4x10 (DB only — protects shoulder joint)\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 4x15\n${coreBlock(ph, dl)}`,
+    description: `DB Bench Press: 4x10 (DB only — protects shoulder joint)\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 4x15\n${fieldFinisher(HG_FINISHERS, 1, 4, info, HG_OVERRIDES)}`,
   }
 }
 
@@ -2811,7 +3180,7 @@ function hockeyGoalieArchetypeDay3(info) {
   const lsj = explosiveSets(4, ph)
   return {
     day: 'Thursday', focus: 'Reactive Lateral & Butterfly Recovery',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nCossack Squat: 3x8 each side\n${hgConditioningB(ph, dl)}`,
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nCossack Squat: 3x8 each side\n${fieldFinisher(HG_FINISHERS, 2, 4, info, HG_OVERRIDES)}`,
   }
 }
 
@@ -2820,7 +3189,7 @@ function hockeyGoalieArchetypeDay4(info) {
   const r = mainLiftTopReps(ph, 'rotational')
   return {
     day: 'Friday', focus: 'Upper Power (Goalie Protection)',
-    description: `Incline DB Press: ${info.ramp}, ${q}×${r} (DB only — protects shoulder joint)\nWeighted Pull-ups: 4x5\nFace Pulls: 3x15\n${coreBlockB(ph, dl)}`,
+    description: `Incline DB Press: ${info.ramp}, ${q}×${r} (DB only — protects shoulder joint)\nWeighted Pull-ups: 4x5\nFace Pulls: 3x15\n${fieldFinisher(HG_FINISHERS, 3, 4, info, HG_OVERRIDES)}`,
   }
 }
 
@@ -2911,13 +3280,49 @@ const RUGBY_DAY6 = {
 const RUGBY_ARCHETYPE_WU_LOWER = 'Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
 const RUGBY_ARCHETYPE_WU_UPPER = 'Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
 
+// Rugby Forwards' own finisher content — scrum/contact identity (Scrum
+// Drive, Sled Push, Landmine Rotational Press, Grip Work — all already
+// vetted, several already used elsewhere in this sport's own content).
+// Core reuses the shared coreBlock verbatim.
+const RUGBY_FORWARDS_FINISHERS = {
+  sprint(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Scrum Drive: 2x10 yds'] }
+    if (ph === 1) return { subtitle: 'Acceleration Mechanics', lines: ['Scrum Drive: 4x10 yds'] }
+    if (ph === 2) return { subtitle: 'Acceleration Mechanics', lines: ['Scrum Drive: 4x15 yds'] }
+    if (ph === 3) return { subtitle: 'Quality Speed', lines: ['Sprint Work: 5x15 yds @ max effort'] }
+    return { subtitle: 'Full-Recovery Reps', lines: ['Sprint Work: 3x15 yds @ max effort (full recovery)'] }
+  },
+  energy(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Sled Push: 2x15 yds'] }
+    if (ph === 1) return { subtitle: 'Aerobic Base', lines: ['Sled Push: 4x20 yds'] }
+    if (ph === 2) return { subtitle: 'Interval Work', lines: ['Farmer Carries: 4x30 yds'] }
+    if (ph === 3) return { subtitle: 'Repeat Effort', lines: ['Battle Rope: 4x20s'] }
+    return { subtitle: 'Reduced', lines: ['Sled Push: 2x20 yds'] }
+  },
+  core: (ph, dl) => coreEntryFromBlock(coreBlock, ph, dl),
+  rotation(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Landmine Rotational Press: 2x5 each side'] }
+    if (ph === 1) return { subtitle: 'Half-Kneeling', lines: ['Med Ball Rotational Throw: 3x6 each side (half-kneeling)'] }
+    if (ph === 2) return { subtitle: 'Standing', lines: ['Landmine Rotational Press: 3x6 each side'] }
+    if (ph === 3) return { subtitle: 'Maximal Velocity', lines: ['Med Ball Rotational Throw: 4x6 each side (max intent)'] }
+    return { subtitle: 'Low Volume, Max Intent', lines: ['Landmine Rotational Press: 2x6 each side (max intent)'] }
+  },
+  arm(ph, dl) {
+    if (dl) return { subtitle: 'Deload (Light)', lines: ['Grip Work: 2 sets'] }
+    if (ph === 1) return { subtitle: 'Capacity & Scap Control', lines: ['Band External Rotation: 3x15 each arm'] }
+    if (ph === 2) return { subtitle: 'Modest Increase', lines: ['Grip Work: 2 sets', 'Band External Rotation: 3x15 each arm'] }
+    if (ph === 3) return { subtitle: 'Maintenance', lines: ['Grip Work: 3 sets'] }
+    return { subtitle: 'Readiness', lines: ['Band External Rotation: 2x15 each arm'] }
+  },
+}
+
 function rugbyArchetypeDay1Lower(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Day 1', focus: 'Lower Power — Scrummage Drive',
     description: `${RUGBY_ARCHETYPE_WU_LOWER}Power Clean from floor: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
       `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-      `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\n${COLLISION_NECK}`,
+      `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -2927,7 +3332,7 @@ function rugbyArchetypeDay2Upper(info) {
     day: 'Day 2', focus: 'Upper Strength & Contact Prep',
     description: `${RUGBY_ARCHETYPE_WU_UPPER}Single Arm DB Split Jerk: ${collisionOlyScheme(ph, dl)}, each arm\n` +
       `Bench Press: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\nDB Shrugs: 3x12\n${COLLISION_NECK}`,
+      `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\nDB Shrugs: 3x12\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -2937,7 +3342,7 @@ function rugbyArchetypeDay3Lower(info) {
     day: 'Day 3', focus: 'Lower Explosion & Carrying',
     description: `${RUGBY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
       `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-      `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${COLLISION_NECK}`,
+      `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -2947,7 +3352,7 @@ function rugbyArchetypeDay4Upper(info) {
     day: 'Day 4', focus: 'Upper Power, Contact & Rotational',
     description: `${RUGBY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
       `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-      `Weighted Chin-ups: 4x6\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\n${COLLISION_NECK}`,
+      `Weighted Chin-ups: 4x6\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -2961,15 +3366,15 @@ function rugbyArchetype3Day(info) {
     { day: 'Day 1', focus: 'Lower Power — Scrummage Drive',
       description: `${RUGBY_ARCHETYPE_WU_LOWER}Power Clean from floor: ${collisionOlyScheme(ph, dl)} (from floor, catch quarter squat)\n` +
         `Back Squat: ${buildCollisionMainLiftRamp(ph, dl)} (full ROM)\n` +
-        `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\n${COLLISION_NECK}` },
+        `Scrum Drive: 4x10 yds\nHip Thrust: 3x10\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 0, 3, info)}` },
     { day: 'Day 2', focus: 'Upper (Full) & Contact Prep',
       description: `${RUGBY_ARCHETYPE_WU_UPPER}BB Split Jerk: ${collisionOlyScheme(ph, dl)}\n` +
         `Close Grip Bench Press: ${buildCollisionMainLiftRamp(ph, dl)} (hands at shoulder width)\n` +
-        `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\n${COLLISION_NECK}` },
+        `Weighted Pull-ups: 5xAMAP\nDB Row: 4x10 each arm\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 1, 3, info)}` },
     { day: 'Day 3', focus: 'Lower Explosion & Carrying',
       description: `${RUGBY_ARCHETYPE_WU_LOWER}Hang Clean Above the Knee: ${collisionOlyScheme(ph, dl)} (start at hip crease, hinge to above kneecaps, explode)\n` +
         `Trap Bar Deadlift: ${buildCollisionMainLiftRamp(ph, dl)}\n` +
-        `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\n${COLLISION_NECK}` },
+        `Bulgarian Split Squat: 3x8 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\n${COLLISION_NECK}\n\n${collisionFinisher(RUGBY_FORWARDS_FINISHERS, 2, 3, info)}` },
   ]
 }
 
@@ -3042,6 +3447,11 @@ function rbConditioningB(ph, deload) {
   if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 4 rounds'])
   return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Flying 20s: ${conditioningSets(4, ph)}x1`, `Sprint + Jog Ladder: 4 rounds up to ${sy} yards`])
 }
+// Rugby Backs has no existing rotational anchor in its own Day 2 (a
+// straightforward strength day, no med-ball/twist work) — Rotation uses the
+// generic already-vetted Med Ball Rotational Throw; Arm reuses the same
+// Band External Rotation anchor every Field sport's bank uses.
+const RB_FINISHERS = fieldFinisherBank(rbConditioningA, rbConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
 function rugbyBacksArchetypeDay1(info) {
   const { pct: q, phaseNum: ph, deload: dl } = info
@@ -3049,7 +3459,7 @@ function rugbyBacksArchetypeDay1(info) {
   const lb = explosiveSets(4, ph)
   return {
     day: 'Monday', focus: 'Lower Strength & Sprint',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 4x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${rbConditioningA(ph, dl)}`,
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 4x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fieldFinisher(RB_FINISHERS, 0, 4, info)}`,
   }
 }
 
@@ -3057,7 +3467,7 @@ function rugbyBacksArchetypeDay2(info) {
   const { phaseNum: ph, deload: dl } = info
   return {
     day: 'Tuesday', focus: 'Upper Contact Strength',
-    description: `Bench Press: 4x8\nWeighted Pull-ups: 4x6\nDB Row: 4x10 each arm\nOverhead Press: 3x10\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph, dl)}`,
+    description: `Bench Press: 4x8\nWeighted Pull-ups: 4x6\nDB Row: 4x10 each arm\nOverhead Press: 3x10\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${fieldFinisher(RB_FINISHERS, 1, 4, info)}`,
   }
 }
 
@@ -3067,7 +3477,7 @@ function rugbyBacksArchetypeDay3(info) {
   const lsj = explosiveSets(4, ph)
   return {
     day: 'Thursday', focus: 'Explosion, Agility & COD',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${rbConditioningB(ph, dl)}`,
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${fieldFinisher(RB_FINISHERS, 2, 4, info)}`,
   }
 }
 
@@ -3076,7 +3486,7 @@ function rugbyBacksArchetypeDay4(info) {
   const r = mainLiftTopReps(ph, 'rotational')
   return {
     day: 'Friday', focus: 'Upper Power',
-    description: `Close Grip Bench Press: ${info.ramp}, ${q}×${r} (hands at shoulder width)\nSingle Arm DB Row: 4x10 each arm\nGrip Work: 3x30s each\n${coreBlockB(ph, dl)}`,
+    description: `Close Grip Bench Press: ${info.ramp}, ${q}×${r} (hands at shoulder width)\nSingle Arm DB Row: 4x10 each arm\nGrip Work: 3x30s each\n${fieldFinisher(RB_FINISHERS, 3, 4, info)}`,
   }
 }
 
@@ -3875,31 +4285,46 @@ const ACCESSORY_ROTATION = {
   'db shoulder press':     { 2: 'Arnold Press',          3: 'Push Press' },
 }
 
-// ─── Session organization: volume cap + pairing (all sports) ──────────────
+// ─── Session organization: pairing + formatting (all sports) ──────────────
 // Every sport's session templates were authored densely — main lift plus
-// 5-8+ accessories on a single day. This pass runs FIRST in the pipeline
+// 4-8+ accessories on a single day. This pass runs FIRST in the pipeline
 // (before accessory rotation/wave/deload), on the fixed, freshly-generated
-// template content, so a cutting decision is based on which physical
-// "slot" exists in the template, not on what a line happens to be rotated
-// into for a particular week — keeps the same slot surviving or getting
-// cut consistently across all 16 weeks.
+// template content.
 //
-// Reorganizes each day into: any inline warm-up preamble a sport already
-// writes (untouched, wherever it is), the main lift alone — UNLESS the day
-// has exactly one plyo/jump line, the one approved exception: bracketed
-// with the main lift as a contrast superset (heavy lift first, so it
-// potentiates the jump) — up to 3 remaining accessories (a pre-existing
-// hand-authored pair, e.g. baseball's press + iso-hold superset, is kept
-// as an atomic, always-first-priority 2-slot unit; everything else is cut
-// down by priority, least sport-specific first, then paired into brackets
-// of 2), conditioning work, and the core block(s) — always last.
+// CORE PRINCIPLE (feat/fix-silent-accessory-drops): no authored movement is
+// ever silently dropped. Every accessory-shaped line the template author
+// wrote for a day survives into the rendered output — full stop. What this
+// pass DOES do is formatting: reorganize each day into any inline warm-up
+// preamble a sport already writes (untouched, wherever it is), the main
+// lift alone — UNLESS the day has exactly one plyo/jump line, the one
+// approved exception: bracketed with the main lift as a contrast superset
+// (heavy lift first, so it potentiates the jump) — then EVERY remaining
+// accessory (a pre-existing hand-authored pair, e.g. baseball's press +
+// iso-hold superset, kept as an atomic 2-exercise unit; everything else
+// paired sequentially into brackets of 2 in the order the template
+// authored them, any genuinely odd leftover rendering as a single line
+// instead of a bracket), conditioning work, and the core block(s) — always
+// last.
+//
+// MAX_ACCESSORIES/SPORT_MAX_ACCESSORIES/resolveAccessoryCapKey previously
+// governed a hard budget that DELETED any candidate once the day's
+// authored count exceeded it — that was the actual root cause of a
+// full-codebase silent-content-loss bug (an audited 125 of ~163 distinct
+// day-templates were dropping 1-7 authored movements apiece, worst case
+// football/linemen's muscle-gain Upper Strength day losing its entire
+// neck/arm-care block). The cap no longer deletes anything (see `kept`
+// below) — these are kept only as a soft, non-destructive sizing signal
+// (still resolved per-sport so `applySessionOrganization`'s call site and
+// any future formatting decision has an accurate "how many accessories
+// does this sport normally author" number to work from), not a filter.
 
-const MAX_ACCESSORIES = 3
+const MAX_ACCESSORIES = 4
 
-// Per-sport override of MAX_ACCESSORIES. Baseball's rebuilt content is
-// deliberately denser (up to 3 full authored pairs on Upper Strength,
-// intentionally not auto-trimmed) — scoped to baseball/softball only, every
-// other sport keeps the default cap of 3 untouched.
+// Per-sport override of MAX_ACCESSORIES — no longer load-bearing for
+// content survival (see the section doc comment above), kept as an
+// accurate sizing signal: baseball's rebuilt content is deliberately dense
+// (up to 3 full authored pairs on Upper Strength), and the 4 Collision-
+// archetype sports/positions below author 5+ movements on purpose.
 const SPORT_MAX_ACCESSORIES = {
   baseball: 6,
   softball: 6,
@@ -3925,23 +4350,29 @@ const SPORT_MAX_ACCESSORIES = {
   hockey_forwards: 5,
 }
 
-// Football's shared MAX_ACCESSORIES cap is raised for linemen only — never
-// for skill/hybrid/qb, and never for a muscle-gain linemen blueprint (that
-// goal still runs the older, denser fbLinemenMGSess template, which was
-// already calibrated against the default cap; leaving it there avoids
-// re-tuning content this task didn't touch). Both call sites that organize
-// a football blueprint (auto-assign below, and blueprintController.js's
-// manual "build from template" tool) must resolve the same key for the
-// same inputs, so this is the one place that decision is made. Wrestling/
-// Rugby Forwards/Hockey Forwards follow the identical goal-gated pattern —
-// their own muscle-gain paths still run their older, pre-archetype content
-// (wrestlingSess, rugbyForwardsSess, hockeyForwardsSess), untouched, so they
-// resolve to the sport-wide default cap exactly as before this archetype work.
+// Football's shared MAX_ACCESSORIES sizing signal is raised for linemen
+// (and, identically, for Wrestling/Rugby Forwards/Hockey Forwards) —
+// PREVIOUSLY gated to `goal !== 'muscle_gain'` on the assumption that each
+// sport's older, pre-archetype muscle-gain template (fbLinemenMGSess,
+// wrestlingSess, rugbyForwardsSess, hockeyForwardsSess) was "already
+// calibrated against the default cap." feat/fix-silent-accessory-drops's
+// full-codebase audit proved that assumption wrong: football/linemen's
+// muscle-gain Upper Strength day alone authors 7 accessory-shaped
+// movements — the single worst silent-drop case found (BB Row, Face
+// Pulls, both neck directions, Lateral Raises, and Tricep Pushdowns were
+// all being deleted under the old default-cap gate). Since the cap no
+// longer deletes anything either way (see the section doc comment above),
+// closing this gate is pure correctness with no remaining downside — both
+// goals now resolve to the same, more-accurate sizing key. Both call sites
+// that organize a football blueprint (auto-assign below, and
+// blueprintController.js's manual "build from template" tool) must resolve
+// the same key for the same inputs, so this is the one place that decision
+// is made.
 function resolveAccessoryCapKey(sport, posId, goal) {
-  if (sport === 'football' && posId === 'linemen' && goal !== 'muscle_gain') return 'football_linemen'
-  if (sport === 'wrestling' && goal !== 'muscle_gain') return 'wrestling_archetype'
-  if (sport === 'rugby' && posId === 'forwards' && goal !== 'muscle_gain') return 'rugby_forwards'
-  if (sport === 'hockey' && posId === 'forwards' && goal !== 'muscle_gain') return 'hockey_forwards'
+  if (sport === 'football' && posId === 'linemen') return 'football_linemen'
+  if (sport === 'wrestling') return 'wrestling_archetype'
+  if (sport === 'rugby' && posId === 'forwards') return 'rugby_forwards'
+  if (sport === 'hockey' && posId === 'forwards') return 'hockey_forwards'
   return sport
 }
 
@@ -4013,6 +4444,7 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
 
   let seenWorkingLine = false
   let inCoreBlock = false
+  let lastCoreHeaderWord = null
   let idxCounter = 0
   let i = 0
 
@@ -4035,7 +4467,21 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
     // survive as a single always-kept unit rather than being cut down by
     // the accessory cap the way a loose conditioning line elsewhere in a
     // session still correctly is.
-    if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
+    //
+    // A day can now genuinely carry TWO of these blocks (feat/finisher-
+    // engine — e.g. Collision's fixed Neck armor PLUS the engine's own
+    // rotating finisher) — blank lines between blocks in the original
+    // template are otherwise stripped by this pass entirely (see the blank-
+    // line branch above), so without this, two different header types would
+    // render back to back with no visual separation. Insert one only when
+    // the header WORD actually changes, so a single block's own multi-line
+    // content is untouched.
+    if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(bare)) {
+      const headerWord = bare.match(/^(Core|Arm Care|Conditioning|Neck)/)[1]
+      if (coreLines.length && headerWord !== lastCoreHeaderWord) coreLines.push('')
+      lastCoreHeaderWord = headerWord
+      inCoreBlock = true; coreLines.push(raw); i++; continue
+    }
     if (inCoreBlock) { coreLines.push(raw); i++; continue }
     if (isConditioningLine(raw)) { conditioningLines.push(raw); i++; continue }
 
@@ -4160,20 +4606,17 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   // anchor — never counted against the accessory cap, never paired.
   out.push(...protocolLines)
 
-  // Cap the combined pool of authored pairs + loose accessories to
-  // MAX_ACCESSORIES total slots, by priority (0 = pre-existing pair or
-  // sport-specific/protected, 1 = normal, 2 = generic filler), stable on
-  // original position within a tier. Then restore original relative order
-  // before re-pairing, so a kept pair's lines and any surviving loose
-  // accessories still read in a sensible sequence.
-  const kept = [...candidates]
-    .sort((a, b) => a.priority - b.priority || a.idx - b.idx)
-    .reduce((acc, c) => {
-      const used = acc.reduce((sum, k) => sum + k.weight, 0)
-      if (used + c.weight <= maxAccessories) acc.push(c)
-      return acc
-    }, [])
-    .sort((a, b) => a.idx - b.idx)
+  // Every candidate renders — no authored movement is ever silently dropped
+  // (see the section doc comment above; this replaced a hard MAX_ACCESSORIES
+  // budget that used to delete anything past it, the actual root cause of a
+  // full-codebase silent-content-loss bug). `kept` is simply every
+  // candidate, restored to original authored order; `priority` (still
+  // computed above — protected/sport-specific = 0, generic filler = 2) no
+  // longer influences what survives, since nothing is cut. The loop below
+  // pairs them into brackets of 2 wherever the count allows, in that same
+  // original order, with any genuinely odd leftover rendering as a single
+  // line instead of a bracket.
+  const kept = [...candidates].sort((a, b) => a.idx - b.idx)
 
   let pendingSingle = null
   for (const c of kept) {
