@@ -926,6 +926,12 @@ const EXERCISE_LIBRARY = {
     description: 'Stand tall, soft bend in the knees. Hinge at the hips, lowering the bar only until it passes just below your kneecaps, then drive your hips forward to return — the beginner-safe substitute for the technical Hang Clean Above the Knee.',
     muscles: 'Hamstrings, glutes, erectors',
   },
+
+  // ─── Repeat-Sprint/Field finisher restructure additions ───────────────────
+  'easy mobility circuit': {
+    description: 'A light, deload-week-only circuit of easy dynamic stretches and low-intensity movement (leg swings, hip circles, walking lunges) to stay loose without adding fatigue.',
+    muscles: 'Full-body mobility, low intensity',
+  },
 }
 
 // Case-insensitive lookup helper

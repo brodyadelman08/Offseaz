@@ -216,7 +216,18 @@ function phasePlyo(phaseNum) {
 }
 
 // Phased core progression (matches client file exactly)
-function coreBlock(phaseNum) {
+// `deload` is an optional, backward-compatible addition (added for the
+// Repeat-Sprint/Field archetype's finisher rework — see the PR #20 review)
+// — every pre-existing call site in this file passes only `phaseNum`, so
+// `deload` defaults false and every one of those call sites is completely
+// unaffected. Only the new Repeat-Sprint day functions pass `info.deload`
+// explicitly, so a deload week's core finisher genuinely tapers (a single,
+// light line) instead of holding at full phase volume the way it silently
+// did everywhere before this — Core was already exempt from the shared
+// deload-reduction pass entirely, which meant "no reduction at all," not
+// "an intentional taper."
+function coreBlock(phaseNum, deload = false) {
+  if (deload) return 'Core — Deload (Light):\nDead Bug: 2x8 each side\nPlank: 2x20 seconds'
   if (phaseNum === 1)
     return 'Core — Anti-Extension:\nDead Bug: 3x10 each side\nAb Wheel: 3x8\nPlank: 3x30 seconds'
   if (phaseNum === 2)
@@ -224,6 +235,25 @@ function coreBlock(phaseNum) {
   if (phaseNum === 3)
     return 'Core — Rotational Power:\nMed Ball Rotational Throw: 4x6 each side\nCable Woodchop: 3x10 each side'
   return 'Core — Lateral Stability:\nCopenhagen Adductor: 3x8 each leg\nSuitcase Carry: 3x20 yds each side'
+}
+
+// Second core-finisher variant — same phase-varying design as coreBlock
+// above, deliberately different movements, so a week's two core-finisher
+// days (see the Repeat-Sprint/Field archetype's day layout) never repeat
+// the same content. Shared/generic the same way coreBlock itself already
+// is (core work has never been sport-specific in this file — every sport
+// that uses coreBlock draws from the identical pool); only the archetype's
+// CONDITIONING finishers are sport-owned (see conditioningFinisher, and
+// each sport's own drill choices below).
+function coreBlockB(phaseNum, deload = false) {
+  if (deload) return 'Core — Deload (Light):\nDead Bug: 2x8 each side\nPlank: 2x20 seconds'
+  if (phaseNum === 1)
+    return 'Core — Rotational Endurance:\nCable Woodchop: 3x12 each side\nBird Dog: 3x10 each side'
+  if (phaseNum === 2)
+    return 'Core — Anti-Flexion:\nPlank: 3x40 seconds\nBird Dog: 3x10 each side'
+  if (phaseNum === 3)
+    return 'Core — Explosive Rotation:\nMed Ball Side Throw: 4x6 each side\nRotational Cable Pull: 3x10 each side'
+  return 'Core — Stability & Control:\nPallof Press: 3x10 each side\nDead Bug: 3x10 each side'
 }
 
 // ─── Phase configs ────────────────────────────────────────────────────────────
@@ -806,115 +836,312 @@ function generateBasketballWeeks(posId, goal, daysPerWeek = 4) {
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [BB_DAY5, BB_DAY6])
 }
 
+// ─── Repeat-Sprint/Field Athlete archetype core (feat/archetype-repeat-sprint) ─
+// Extracted from Soccer, this archetype's benchmark (see the Blueprint
+// Architecture Audit — Soccer already rated 4/5 across all 6 positions
+// before this work, the most evenly-built archetype in the system). Unlike
+// Collision/Max-Strength (extracted from Linemen), this archetype's core
+// math was ALREADY fully shared engine machinery before this extraction —
+// mainLiftTopReps' 'rotational' tier, explosiveSets/explosiveIntent, and
+// coreBlock are the exact same functions baseball/basketball/football QB
+// already use, and the day-count/deload/phase cadence already runs through
+// the fully generic getPhaseInfo/buildWeeksDynamic every non-Collision sport
+// uses. So there is no bespoke rep-scheme or autoregulation math to pull out
+// the way Linemen had — the genuine, extractable "archetype core" here is
+// smaller and structural: the WEEKLY TEMPLATE every Repeat-Sprint/Field
+// sport below follows, plus one small real helper (sprintYardsForPhase).
+//
+// The weekly template (every sport below, every position, every day count
+// this archetype covers):
+//   Day 1 (Monday)    — Lower Strength/Power: one ramped main lift + a
+//                        posterior-chain/unilateral accessory pool + one
+//                        explosiveSets-scaled explosive/lateral line +
+//                        coreBlock(phaseNum).
+//   Day 2 (Tuesday)   — Upper, no ramped lift at all (this archetype is
+//                        deliberately less gym-lift-dense than Collision —
+//                        see the default, un-raised accessory cap below) —
+//                        plain accessory presses/rows + shoulder-health/
+//                        rotational work. No coreBlock — this day is the
+//                        one exception to "every lifting day ends in core."
+//   Day 3 (Thursday)  — Lower Explosion: a SECOND ramped main lift (usually
+//                        a hinge variant — Hex Bar or Trap Bar Deadlift) +
+//                        lateral/COD-specific accessory work +
+//                        coreBlock(phaseNum).
+//   Day 4 (Friday)    — Pure Speed & Conditioning: no lifting at all —
+//                        sprint ladders, shuttles, flying sprints, scaled
+//                        by phase via that sport's own sprintYardsForPhase
+//                        progression. No coreBlock.
+// Real weekday labels (not "Day 1-4") on purpose — a field sport's training
+// week is organized around competition day, not just gym frequency; this
+// carries through as an archetype-level convention for every sport below,
+// same as Soccer's own. 5th/6th extra days (where a sport has them) revert
+// to generic "Day 5"/"Day 6" labels, matching Soccer's own precedent exactly.
+//
+// The accessory cap is deliberately NOT raised (see resolveAccessoryCapKey —
+// no Repeat-Sprint/Field sport gets an entry there) — every sport below
+// resolves to the sport-wide default cap of 3, a genuine, intentional
+// archetype trait distinguishing it from Collision/Max-Strength's raised
+// cap of 5: this archetype is conditioning-forward, not lift-volume-forward.
+
+// Indexes a sport's own sprint-yardage-by-phase array — e.g. Foundation
+// (phase 1) uses the shortest yardage, Peak (phase 3) the longest, matching
+// every Repeat-Sprint/Field sport's own real progression. The single small
+// piece of genuinely shared math this archetype needed (every sport below
+// was reimplementing the identical `Math.min(3, phaseNum - 1)` indexing
+// inline before this extraction).
+function sprintYardsForPhase(yards, phaseNum) {
+  return yards[Math.min(yards.length - 1, phaseNum - 1)]
+}
+
+// ─── Finisher structure (added post-launch — see the PR #20 review) ───────
+// Every Repeat-Sprint/Field day now ends in a finisher, and the finisher's
+// TYPE alternates day to day: Monday/Thursday close with a phase-varying
+// Conditioning block, Tuesday/Friday close with a phase-varying Core block
+// (two distinct variants of each, so a week's two Conditioning days — and
+// its two Core days — never repeat the same content). This section owns
+// the shared STRUCTURE only — the phase-intent labels, the volume-arc math,
+// and the exempt-header formatting (see COLLISION_NECK/coreBlock's own
+// "Core — ...:" convention above, now joined by "Conditioning — ...:",
+// recognized the identical way in organizeSessionDescription/
+// applyDeloadVolumeReduction). Every sport below still authors its OWN
+// drill names inside that structure — nothing here hardcodes an exercise.
+
+// The same 4 labels every sport's Conditioning finisher uses, matching the
+// archetype's own defined phase intent: Foundation is aerobic-base/higher-
+// volume work, Strength adds intensity without dropping volume much,
+// Power/Peak Strength shifts toward true repeat-sprint/max-effort work at
+// lower volume, and the plan's own taper phase backs off further. This is
+// intent-language, not a drill list — genuinely shared across the whole
+// archetype the same way "Foundation/Strength/Power/Peak" phase LABELS
+// already are for every sport's main lift.
+const CONDITIONING_SUBTITLES = { 1: 'Aerobic Base', 2: 'Intensity Build', 3: 'Repeat Sprint', 4: 'Taper' }
+
+// Volume arc for conditioning-finisher set/round counts — same shape as
+// EXPLOSIVE_ARC above (moderate -> build -> peak -> taper) but tuned for a
+// conditioning finisher specifically: Foundation runs the highest volume
+// (aerobic base-building), Strength holds close to it while intensity
+// climbs, Power/Peak Strength drops volume as effort quality goes up (true
+// repeat-sprint work can't be high-volume by definition), Peak Taper drops
+// further so the athlete enters the next block recovered.
+// Wider spread than a first pass (1.15/1.0/0.80/0.60) — at the small base
+// counts (3-5 sets) these conditioning finishers actually use, 1.15 vs 1.0
+// round to the same integer (e.g. base 3: 3.45→3, 3.0→3), making Phase 1 and
+// Phase 2 look identical even though the label changes. 1.3/1.0/0.75/0.5
+// reliably separates at every base this file uses.
+const CONDITIONING_ARC = { 1: 1.3, 2: 1.0, 3: 0.75, 4: 0.5 }
+
+function conditioningSets(baseSets, phaseNum) {
+  return Math.max(1, Math.round(baseSets * CONDITIONING_ARC[phaseNum]))
+}
+
+// Wraps a sport's own drill lines in the shared exempt-header format. Used
+// for BOTH the 4 real phases and the deload state — deload passes its own,
+// separately-authored (already-light) `lines`, not a scaled-down version of
+// the phase content, so a coach reading a deload week sees an intentional,
+// coherent "this is the taper" prescription rather than fractional sets.
+function conditioningFinisher(subtitle, lines) {
+  return `Conditioning — ${subtitle}:\n${lines.join('\n')}`
+}
+
+// Same wrapping convention for a sport-specific SECOND core variant — reuses
+// the exact same "Core — ...:" header the shared, generic coreBlock() above
+// already uses (no new header type needed; core was already fully generic-
+// exempt everywhere). Lets a sport's second core-finisher slot in the week
+// show genuinely different, sport-flavored trunk/rotational work instead of
+// literally repeating coreBlock()'s own output on two different days.
+function coreFinisher(subtitle, lines) {
+  return `Core — ${subtitle}:\n${lines.join('\n')}`
+}
+
 // ─── Soccer ───────────────────────────────────────────────────────────────────
 
 const SOC_SPRINT_YARDS = [50, 60, 70, 80]
 
+// ── Goalkeeper conditioning: reactive/lateral (Monday) vs lateral+hip
+// mobility (Thursday) — two distinct flavors of the same reactive identity.
+function gkConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Lateral Shuffle: 2x20 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Flying 20s: 4x1'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Lateral Shuffle: ${conditioningSets(5, ph)}x20 yds`, '300 Yard Shuttle: 2x2'])
+}
+function gkConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Single Leg Squat Jump: 2x5 each leg', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Single Leg Squat Jump: 4x5 each leg'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Single Leg Squat Jump: ${conditioningSets(4, ph)}x5 each leg`, 'Resistance Band Lateral Walk: 3x20 each direction'])
+}
+
 function soccerGoalkeeperSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const dl = info.deload
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const slbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Power & Explosive',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x10 each leg\nCalf Raises: 3xAMAP\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x10 each leg\nCalf Raises: 3xAMAP\n${gkConditioningA(ph, dl)}` },
     { day: 'Tuesday', focus: 'Upper & Shoulder Health',
-      description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x8 each arm\nOverhead Press: 3x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x20\nReverse Fly: 3x15` },
+      description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x8 each arm\nOverhead Press: 3x10\nBand External Rotation: 4x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 3x20\nReverse Fly: 3x15\n${coreBlock(ph, dl)}` },
     { day: 'Thursday', focus: 'Lateral Explosion & Hip Mobility',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: 5x5 each side\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nCossack Squat: 4x6 each side\nResistance Band Lateral Walk: 3x20 each direction\nDB Lateral Lunge: 3x8 each leg\n${coreBlock(ph)}` },
-    { day: 'Friday', focus: 'Reactive Power & Conditioning',
-      description: `Lateral Shuffle: 8x20 yds\nReactive Lateral Bound: 4x5 each side\nSingle Leg Squat Jump: 4x5 each leg\n300 Yard Shuttle: 2x2\nFlying 20s: 4x1\nSprint + Jog Ladder: 4 rounds up to ${sy} yards` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: 5x5 each side\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nCossack Squat: 4x6 each side\nResistance Band Lateral Walk: 3x20 each direction\nDB Lateral Lunge: 3x8 each leg\n${gkConditioningB(ph, dl)}` },
+    { day: 'Friday', focus: 'Upper Power',
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n${coreBlockB(ph, dl)}` },
   ]
+}
+
+// ── Center Back conditioning: acceleration (Monday) vs deceleration
+// (Thursday) — a center back's real dual demand, closing the ground both ways.
+function cbConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Sled Push: 2x15 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Sprint Work: 6x30 yds @ max effort', 'Flying 20s: 4x1'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Push: ${conditioningSets(5, ph)}x20 yds`, '300 Yard Shuttle: 3x2'])
+}
+function cbConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Deceleration Drill: 2x20 yds (sprint 20 · brake · hold 2s)', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Sprint Work: 6x30 yds @ max effort', 'Deceleration Drill: 4x20 yds (sprint 20 · brake · hold 2s)'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Deceleration Drill: ${conditioningSets(5, ph)}x20 yds (sprint 20 · brake · hold 2s)`, '300 Yard Shuttle: 2x2'])
 }
 
 function soccerCenterBackSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const dl = info.deload
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const bj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Max Lower Strength',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nSingle Leg RDL: 3x8 each leg\nBroad Jump: ${bj}x3 (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nSingle Leg RDL: 3x8 each leg\nBroad Jump: ${bj}x3 (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${cbConditioningA(ph, dl)}` },
     { day: 'Tuesday', focus: 'Upper Contact Strength',
-      description: `DB Bench Press: 5x8\nSingle Arm DB Row: 5x8 each arm\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nMB Twist Throw: 4x6 each side\nFace Pulls: 3x15` },
+      description: `DB Bench Press: 5x8\nSingle Arm DB Row: 5x8 each arm\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nMB Twist Throw: 4x6 each side\nFace Pulls: 3x15\n${coreBlock(ph, dl)}` },
     { day: 'Thursday', focus: 'Power, Jumping & Deceleration',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nApproach Jump: 5x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nDeceleration Drill: 6x20 yds (sprint 20 · brake · hold 2s)\nDB Lateral Lunge: 3x8 each leg\n${coreBlock(ph)}` },
-    { day: 'Friday', focus: 'Acceleration & Conditioning',
-      description: `Sled Push: 6x20 yds\nSprint Work: 6x30 yds @ max effort\n300 Yard Shuttle: 3x2\nFlying 20s: 4x1\nSprint + Jog Ladder: 4 rounds up to ${sy} yards` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nApproach Jump: 5x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nDB Lateral Lunge: 3x8 each leg\n${cbConditioningB(ph, dl)}` },
+    { day: 'Friday', focus: 'Upper Power',
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nNeck Strengthening: 3x12 each direction\n${coreBlockB(ph, dl)}` },
   ]
+}
+
+// ── Fullback conditioning: shuttle/hip-abduction (Monday) vs sled-sprint
+// development (Thursday) — the same two-way repeat-sprint identity as
+// Soccer's own overall archetype, at fullback's own volume.
+function fbConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['300 Yard Shuttle: 1x2', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`300 Yard Shuttle: ${conditioningSets(3, ph)}x2`, 'Banded Hip Abduction: 3x15 each side'])
+}
+function fbConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Sled Sprint: 2x20 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sled Sprint: 6x20 yds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Sprint: ${conditioningSets(5, ph)}x20 yds`, 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
 }
 
 function soccerFullbackSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const dl = info.deload
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const lb = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Strength & Sprint',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fbConditioningA(ph, dl)}` },
     { day: 'Tuesday', focus: 'Upper Light & Mobility',
-      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nBanded Monster Walk: 3x10 each direction\nMB Twist Throw: 3x6 each side\nHip 90/90 Hold: 3x30s each side\nCopenhagen Adductor: 3x8 each leg` },
+      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nBanded Monster Walk: 3x10 each direction\nMB Twist Throw: 3x6 each side\nHip 90/90 Hold: 3x30s each side\nCopenhagen Adductor: 3x8 each leg\n${coreBlock(ph, dl)}` },
     { day: 'Thursday', focus: 'Explosion & Sprint Development',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
-    { day: 'Friday', focus: 'Repeat Sprint Conditioning',
-      description: `Flying 20s: 8x1\n300 Yard Shuttle: 3x2\nSprint Ladder: 10/20/30/20/10 yds — 4 rounds\nSprint + Jog Ladder: 6 rounds up to ${sy} yards\nBanded Hip Abduction: 3x15 each side` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${fbConditioningB(ph, dl)}` },
+    { day: 'Friday', focus: 'Upper Power',
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Hip Abduction: 3x15 each side\n${coreBlockB(ph, dl)}` },
   ]
+}
+
+// ── Midfielder conditioning: aerobic base (Monday, matching the position's
+// own "aerobic base" identity) vs change-of-direction (Thursday).
+function mfConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Aerobic Finish: 5 min easy tempo', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 6x1', '300 Yard Shuttle: 2x2'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`300 Yard Shuttle: ${conditioningSets(3, ph)}x2`, 'Aerobic Finish: 8 min tempo run'])
+}
+function mfConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['V Drill: 2x3', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['V Drill: 5x3', 'Flying 20s: 6x1'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`V Drill: ${conditioningSets(4, ph)}x3`, 'Star Drill: 3x3'])
 }
 
 function soccerMidfielderSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const dl = info.deload
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const hbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Strength & Aerobic Base',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHex Bar Jumps: ${hbj}x6 (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\nHip Thrust: 4x8\nGroin Plank: 3x10 each side\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHex Bar Jumps: ${hbj}x6 (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\nHip Thrust: 4x8\nGroin Plank: 3x10 each side\n${mfConditioningA(ph, dl)}` },
     { day: 'Tuesday', focus: 'Upper & Work Capacity',
-      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nLateral Raise: 3x12\nMB Twist Throw: 4x6 each side\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nBanded Monster Walk: 3x10 each direction\nPush-up: 3xAMAP` },
+      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nLateral Raise: 3x12\nMB Twist Throw: 4x6 each side\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nBanded Monster Walk: 3x10 each direction\nPush-up: 3xAMAP\n${coreBlock(ph, dl)}` },
     { day: 'Thursday', focus: 'Explosion & Change of Direction',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nV Drill: 4x3\n${coreBlock(ph)}` },
-    { day: 'Friday', focus: 'High Volume Conditioning',
-      description: `V Drill: 4x3\nStar Drill: 3x3\n300 Yard Shuttle: 3x2\nFlying 20s: 6x1\nSprint + Jog Ladder: 6 rounds up to ${sy} yards\nAerobic Finish: 10 min tempo run` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${mfConditioningB(ph, dl)}` },
+    { day: 'Friday', focus: 'Upper Power',
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nPush-up: 3xAMAP\n${coreBlockB(ph, dl)}` },
   ]
+}
+
+// ── Winger conditioning: sprint-ladder acceleration (Monday) vs sled-sprint
+// reactive speed (Thursday) — winger's real top-end/reactive dual demand.
+function wgConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Sprint Ladder: 10/20/30/20/10 yds — 1 round', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 4 rounds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sprint Ladder: 10/20/30/20/10 yds — ${conditioningSets(3, ph)} rounds`, '300 Yard Shuttle: 2x2'])
+}
+function wgConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Sled Sprint: 2x20 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sled Sprint: 6x20 yds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Sprint: ${conditioningSets(5, ph)}x20 yds`, '300 Yard Shuttle: 2x2'])
 }
 
 function soccerWingerSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const dl = info.deload
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const ah = explosiveSets(3, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Speed-Strength & Horizontal Force',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nReverse Lunge: 3x5 each leg\nNordic Hamstring Curl: 4x5\nAnkle Hops: ${ah}x20 (${explosiveIntent(ph)})\nLateral Bounds: 5x5 each side\nCalf Raises: 4xAMAP\n${coreBlock(ph)}` },
+      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nReverse Lunge: 3x5 each leg\nNordic Hamstring Curl: 4x5\nAnkle Hops: ${ah}x20 (${explosiveIntent(ph)})\nLateral Bounds: 5x5 each side\nCalf Raises: 4xAMAP\n${wgConditioningA(ph, dl)}` },
     { day: 'Tuesday', focus: 'Upper Light & Accessory',
-      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nMB Twist Throw: 3x6 each side\nBanded Monster Walk: 3x10 each direction\nCopenhagen Adductor: 3x8 each leg` },
+      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nMB Twist Throw: 3x6 each side\nBanded Monster Walk: 3x10 each direction\nCopenhagen Adductor: 3x8 each leg\n${coreBlock(ph, dl)}` },
     { day: 'Thursday', focus: 'Vertical Strength & Reactive Speed',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nLateral Squat Jump: 4x5\nSled Sprint: 6x20 yds\n${coreBlock(ph)}` },
-    { day: 'Friday', focus: 'Speed & Game-Pace Conditioning',
-      description: `Flying 20s: 8x1\nSprint Ladder: 10/20/30/20/10 yds — 4 rounds\n300 Yard Shuttle: 2x2\nSprint + Jog Ladder: 8 rounds up to ${sy} yards` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nLateral Squat Jump: 4x5\n${wgConditioningB(ph, dl)}` },
+    { day: 'Friday', focus: 'Upper Power',
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Monster Walk: 3x10 each direction\n${coreBlockB(ph, dl)}` },
   ]
+}
+
+// ── Striker conditioning: vertical power/broad jump (Monday) vs horizontal
+// power/shot-drive sled work (Thursday) — striker's own vertical + horizontal
+// power split, matching what its main-lift days already emphasize.
+function skConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Broad Jump: 2x3', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 6x1', 'Broad Jump: 4x3'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`300 Yard Shuttle: ${conditioningSets(3, ph)}x2`, 'Broad Jump: 3x3'])
+}
+function skConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Sled Sprint: 2x20 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 6x1', 'Sled Sprint: 6x20 yds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Sled Sprint: ${conditioningSets(5, ph)}x20 yds`, 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
 }
 
 function soccerStrikerSess(info) {
   const q  = info.pct
   const ph = info.phaseNum
-  const sy = SOC_SPRINT_YARDS[Math.min(3, ph - 1)]
+  const dl = info.deload
   const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
   const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
   return [
     { day: 'Monday', focus: 'Lower Vertical Power & Jump Height',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\nCopenhagen Adductor: 3x8 each leg\n${coreBlock(ph)}` },
+      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\nCopenhagen Adductor: 3x8 each leg\n${skConditioningA(ph, dl)}` },
     { day: 'Tuesday', focus: 'Upper & Rotational Power',
-      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nMB Twist Throw: 4x6 each side\nMed Ball Overhead Slam: 4x8\nOverhead Press: 3x10\nBanded Monster Walk: 3x10 each direction` },
+      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nMB Twist Throw: 4x6 each side\nMed Ball Overhead Slam: 4x8\nOverhead Press: 3x10\nBanded Monster Walk: 3x10 each direction\n${coreBlock(ph, dl)}` },
     { day: 'Thursday', focus: 'Explosive Speed, Horizontal Power & Shot Drive',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nHex Bar Jumps: 4x5\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\nRotational Cable Pull: 3x8 each side\n${coreBlock(ph)}` },
-    { day: 'Friday', focus: 'Power & Game-Speed Conditioning',
-      description: `Flying 20s: 6x1\nBroad Jump: 3x3\n300 Yard Shuttle: 2x2\nSprint Ladder: 10/20/30/20/10 yds — 3 rounds\nSprint + Jog Ladder: 4 rounds up to ${sy} yards` },
+      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nHex Bar Jumps: 4x5\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nRotational Cable Pull: 3x8 each side\n${skConditioningB(ph, dl)}` },
+    { day: 'Friday', focus: 'Upper Power',
+      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nMed Ball Overhead Slam: 4x8\n${coreBlockB(ph, dl)}` },
   ]
 }
 
@@ -1335,12 +1562,79 @@ const LAX_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip Flexor Stretch: 3x45s each leg\nHamstring Eccentric: 3x8\nThoracic Rotation: 3x10 each side\nStatic Stretch: Groin · Quads · Calves`,
 }
 
+// ─── Lacrosse — Repeat-Sprint/Field Athlete archetype (standard goal only;
+// see lacrosseSess above for the muscle-gain variant, untouched by this
+// build). Same weekly template Soccer established, same 'rotational' tier,
+// same un-raised default cap. Differentiated from Soccer by lacrosse's own
+// real demand: Tuesday carries genuine overhead/rotational shooting power
+// (Med Ball Rotational Throw, Landmine Rotation, Cable Woodchop, stick-sport
+// Grip Work) rather than Soccer's shoulder-health-focused light upper day —
+// a real point of differentiation, not a reused template.
+
+// ── Lacrosse conditioning: repeat-sprint (Monday, paired with Lower Power &
+// Sprint) vs change-of-direction (Thursday, paired with Lower Explosion &
+// COD) — both drawn from Lacrosse's own old Friday vocabulary.
+function laxConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['300 Yard Shuttle: 1x2', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['200m Intervals: 8x1 @ 80-85% effort (90 sec rest)', 'Broad Jump: 4x3'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`300 Yard Shuttle: ${conditioningSets(3, ph)}x2`, 'Broad Jump: 3x3'])
+}
+function laxConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['V Drill: 2x3', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['V Drill: 5x3', '200m Intervals: 8x1 @ 80-85% effort (90 sec rest)'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`V Drill: ${conditioningSets(4, ph)}x3`, 'Star Drill: 3x3'])
+}
+
+function lacrosseArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lb = explosiveSets(4, ph)
+  return {
+    day: 'Monday', focus: 'Lower Power & Sprint',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\n${laxConditioningA(ph, dl)}`,
+  }
+}
+
+function lacrosseArchetypeDay2(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Tuesday', focus: 'Upper & Rotational Shooting Power',
+    description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nGrip Work: 3x30s each\n${coreBlock(ph, dl)}`,
+  }
+}
+
+function lacrosseArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r   = mainLiftTopReps(ph, 'rotational')
+  const lsj = explosiveSets(4, ph)
+  return {
+    day: 'Thursday', focus: 'Lower Explosion & Change of Direction',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${laxConditioningB(ph, dl)}`,
+  }
+}
+
+function lacrosseArchetypeDay4(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r = mainLiftTopReps(ph, 'rotational')
+  return {
+    day: 'Friday', focus: 'Upper Power',
+    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nGrip Work: 3x30s each\n${coreBlockB(ph, dl)}`,
+  }
+}
+
+function lacrosseArchetypeSess(info) {
+  return [lacrosseArchetypeDay1(info), lacrosseArchetypeDay2(info), lacrosseArchetypeDay3(info), lacrosseArchetypeDay4(info)]
+}
+
+function generateLacrosseArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, STD_PHASES, lacrosseArchetypeSess, daysPerWeek, [LAX_DAY5, LAX_DAY6])
+}
+
 function generateLacrosseWeeks(_, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  const phases = mg ? MG_PHASES : STD_PHASES
-  const fn = mg
-    ? (info) => lacrosseSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : lacrosseSess
+  if (!mg) return generateLacrosseArchetypeWeeks(daysPerWeek)
+  const phases = MG_PHASES
+  const fn = (info) => lacrosseSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [LAX_DAY5, LAX_DAY6])
 }
 
@@ -2406,9 +2700,143 @@ function generateHockeyForwardsArchetypeWeeks(daysPerWeek) {
   }, daysPerWeek)
 }
 
+// ─── Hockey Defense & Hockey Goalie — Repeat-Sprint/Field Athlete archetype
+// (standard goal only; see hockeyDefenseSess/hockeyGoalieSess above for the
+// muscle-gain variants, untouched by this build) — Hockey Forwards is a
+// different archetype (Collision/Max-Strength) and is completely
+// unaffected. Same weekly template Soccer established, same 'rotational'
+// tier, same un-raised default cap. Differentiated from Soccer, and from
+// each other, by real position demand: Defense gets crossover/backward-
+// skating mechanics and anti-rotation work (a defenseman defends and
+// transitions in every direction); Goalie keeps its own distinct reactive/
+// butterfly-recovery emphasis and the DB-only-bench shoulder-protection
+// detail its pre-archetype content already established — genuinely
+// different from Defense, not a shared template with the label swapped.
+
+// ── Hockey Defense conditioning: lateral shuffle/acceleration (Monday,
+// paired with lateral mobility/single-leg stability) vs reactive squat-jump
+// (Thursday, paired with crossover/backward skating) — both drawn from
+// Defense's own old Friday vocabulary.
+function hdConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Lateral Shuffle: 2x20 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Flying 20s: 4x1'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Lateral Shuffle: ${conditioningSets(5, ph)}x20 yds`, '300 Yard Shuttle: 2x2'])
+}
+function hdConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Single Leg Squat Jump: 2x5 each leg', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Single Leg Squat Jump: 4x5 each leg'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Single Leg Squat Jump: ${conditioningSets(4, ph)}x5 each leg`, '300 Yard Shuttle: 2x2'])
+}
+
+function hockeyDefenseArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lb = explosiveSets(5, ph)
+  return {
+    day: 'Monday', focus: 'Lower — Lateral Mobility & Single Leg Stability',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: ${lb}x5 each side (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\n${hdConditioningA(ph, dl)}`,
+  }
+}
+
+function hockeyDefenseArchetypeDay2(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Tuesday', focus: 'Upper — Core Stiffness & Rotational Strength',
+    description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x12 each side\nBand External Rotation: 3x15 each arm\n${coreBlock(ph, dl)}`,
+  }
+}
+
+function hockeyDefenseArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r = mainLiftTopReps(ph, 'rotational')
+  return {
+    day: 'Thursday', focus: 'Lower — Crossover & Backward Skating Mechanics',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\n${hdConditioningB(ph, dl)}`,
+  }
+}
+
+function hockeyDefenseArchetypeDay4(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r = mainLiftTopReps(ph, 'rotational')
+  return {
+    day: 'Friday', focus: 'Upper Power',
+    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\nBand External Rotation: 3x15 each arm\n${coreBlockB(ph, dl)}`,
+  }
+}
+
+function hockeyDefenseArchetypeSess(info) {
+  return [hockeyDefenseArchetypeDay1(info), hockeyDefenseArchetypeDay2(info), hockeyDefenseArchetypeDay3(info), hockeyDefenseArchetypeDay4(info)]
+}
+
+function generateHockeyDefenseArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, HOCKEY_PHASES, hockeyDefenseArchetypeSess, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
+}
+
+// ── Hockey Goalie conditioning: reactive/lateral (Monday, paired with power &
+// butterfly mechanics) vs reactive squat-jump (Thursday, paired with
+// reactive lateral & butterfly recovery) — both drawn from Goalie's own old
+// Friday vocabulary.
+function hgConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Lateral Shuffle: 2x20 yds', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Flying 20s: 4x1'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Lateral Shuffle: ${conditioningSets(5, ph)}x20 yds`, '300 Yard Shuttle: 2x2'])
+}
+function hgConditioningB(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['Single Leg Squat Jump: 2x5 each leg', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Reactive Lateral Bound: 4x5 each side', 'Single Leg Squat Jump: 4x5 each leg'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Single Leg Squat Jump: ${conditioningSets(4, ph)}x5 each leg`, 'Flying 20s: 4x1'])
+}
+
+function hockeyGoalieArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r    = mainLiftTopReps(ph, 'rotational')
+  const slbj = explosiveSets(4, ph)
+  return {
+    day: 'Monday', focus: 'Lower Power & Butterfly Mechanics',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x10 each side\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nCopenhagen Adductor: 4x8 each leg\nLateral Bound: 5x5 each side\n${hgConditioningA(ph, dl)}`,
+  }
+}
+
+function hockeyGoalieArchetypeDay2(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Tuesday', focus: 'Upper & Shoulder Health (Goalie Protection)',
+    description: `DB Bench Press: 4x10 (DB only — protects shoulder joint)\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nBand External Rotation: 3x15 each arm\nYTW Series: 3x10 each\nFace Pulls: 4x15\n${coreBlock(ph, dl)}`,
+  }
+}
+
+function hockeyGoalieArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r   = mainLiftTopReps(ph, 'rotational')
+  const lsj = explosiveSets(4, ph)
+  return {
+    day: 'Thursday', focus: 'Reactive Lateral & Butterfly Recovery',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nCossack Squat: 3x8 each side\n${hgConditioningB(ph, dl)}`,
+  }
+}
+
+function hockeyGoalieArchetypeDay4(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r = mainLiftTopReps(ph, 'rotational')
+  return {
+    day: 'Friday', focus: 'Upper Power (Goalie Protection)',
+    description: `Incline DB Press: ${info.ramp}, ${q}×${r} (DB only — protects shoulder joint)\nWeighted Pull-ups: 4x5\nFace Pulls: 3x15\n${coreBlockB(ph, dl)}`,
+  }
+}
+
+function hockeyGoalieArchetypeSess(info) {
+  return [hockeyGoalieArchetypeDay1(info), hockeyGoalieArchetypeDay2(info), hockeyGoalieArchetypeDay3(info), hockeyGoalieArchetypeDay4(info)]
+}
+
+function generateHockeyGoalieArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, HOCKEY_PHASES, hockeyGoalieArchetypeSess, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
+}
+
 function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   if (!mg && posId === 'forwards') return generateHockeyForwardsArchetypeWeeks(daysPerWeek)
+  if (!mg && posId === 'defense') return generateHockeyDefenseArchetypeWeeks(daysPerWeek)
+  if (!mg && posId === 'goalie') return generateHockeyGoalieArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : HOCKEY_PHASES
   const baseFns = { forwards: hockeyForwardsSess, defense: hockeyDefenseSess, goalie: hockeyGoalieSess }
   const baseFn = baseFns[posId] || hockeyForwardsSess
@@ -2583,9 +3011,87 @@ function generateRugbyForwardsArchetypeWeeks(daysPerWeek) {
   }, daysPerWeek)
 }
 
+// ─── Rugby Backs — Repeat-Sprint/Field Athlete archetype (standard goal
+// only; see rugbyBacksSess above for the muscle-gain variant, untouched by
+// this build) — same weekly template Soccer established (Monday lower
+// strength/power, Tuesday upper, Thursday lower explosion, Friday pure
+// speed/conditioning), same 'rotational' rep tier, same un-raised default
+// accessory cap. Differentiated from Soccer by genuinely more contact
+// tolerance: Tuesday is a real strength day (Bench Press, Weighted
+// Pull-ups, neck work) rather than Soccer's deliberately light upper day —
+// backs still take contact, just less of it than forwards — and Thursday
+// keeps a Trap Bar Deadlift second main lift shared with the Forwards'
+// own Collision-archetype content, rather than Soccer's Hex Bar Deadlift.
+// RUGBY_PHASES (kept — a genuinely more aggressive intensity table than
+// Soccer's own SOC_PHASES, reflecting rugby's real demand) and RUGBY_DAY5/
+// RUGBY_DAY6 (kept — "Contact Conditioning" fits Backs' own contact-tolerance
+// need as well as it always fit Forwards') are both preserved unchanged.
+
+// ── Rugby Backs conditioning: shuttle/sprint-ladder (Monday, paired with
+// Lower Strength & Sprint) vs flying-sprint/sprint+jog-ladder (Thursday,
+// paired with Explosion, Agility & COD) — both drawn from Backs' own old
+// Friday vocabulary.
+function rbConditioningA(ph, deload) {
+  if (deload) return conditioningFinisher('Deload (Light)', ['300 Yard Shuttle: 1x2', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 4 rounds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`300 Yard Shuttle: ${conditioningSets(3, ph)}x2`, 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
+}
+function rbConditioningB(ph, deload) {
+  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
+  if (deload) return conditioningFinisher('Deload (Light)', ['Flying 20s: 2x1', 'Easy Mobility Circuit: 1 round'])
+  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 4 rounds'])
+  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Flying 20s: ${conditioningSets(4, ph)}x1`, `Sprint + Jog Ladder: 4 rounds up to ${sy} yards`])
+}
+
+function rugbyBacksArchetypeDay1(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lb = explosiveSets(4, ph)
+  return {
+    day: 'Monday', focus: 'Lower Strength & Sprint',
+    description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 4x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${rbConditioningA(ph, dl)}`,
+  }
+}
+
+function rugbyBacksArchetypeDay2(info) {
+  const { phaseNum: ph, deload: dl } = info
+  return {
+    day: 'Tuesday', focus: 'Upper Contact Strength',
+    description: `Bench Press: 4x8\nWeighted Pull-ups: 4x6\nDB Row: 4x10 each arm\nOverhead Press: 3x10\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph, dl)}`,
+  }
+}
+
+function rugbyBacksArchetypeDay3(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r  = mainLiftTopReps(ph, 'rotational')
+  const lsj = explosiveSets(4, ph)
+  return {
+    day: 'Thursday', focus: 'Explosion, Agility & COD',
+    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${rbConditioningB(ph, dl)}`,
+  }
+}
+
+function rugbyBacksArchetypeDay4(info) {
+  const { pct: q, phaseNum: ph, deload: dl } = info
+  const r = mainLiftTopReps(ph, 'rotational')
+  return {
+    day: 'Friday', focus: 'Upper Power',
+    description: `Close Grip Bench Press: ${info.ramp}, ${q}×${r} (hands at shoulder width)\nSingle Arm DB Row: 4x10 each arm\nGrip Work: 3x30s each\n${coreBlockB(ph, dl)}`,
+  }
+}
+
+function rugbyBacksArchetypeSess(info) {
+  return [rugbyBacksArchetypeDay1(info), rugbyBacksArchetypeDay2(info), rugbyBacksArchetypeDay3(info), rugbyBacksArchetypeDay4(info)]
+}
+
+function generateRugbyBacksArchetypeWeeks(daysPerWeek) {
+  return buildWeeksDynamic(16, RUGBY_PHASES, rugbyBacksArchetypeSess, daysPerWeek, [RUGBY_DAY5, RUGBY_DAY6])
+}
+
 function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   if (!mg && posId === 'forwards') return generateRugbyForwardsArchetypeWeeks(daysPerWeek)
+  if (!mg && posId === 'backs') return generateRugbyBacksArchetypeWeeks(daysPerWeek)
   const phases = mg ? MG_PHASES : RUGBY_PHASES
   const baseFns = { forwards: rugbyForwardsSess, backs: rugbyBacksSess }
   const baseFn = baseFns[posId] || rugbyForwardsSess
@@ -3522,9 +4028,14 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
     // rule), so there's no real ambiguity in sharing it. "Neck — ...:"
     // (linemen's short 4-way armor block, every session) gets the identical
     // treatment — a fixed, always-kept finisher, never trimmed by the
-    // accessory cap. No existing template emits a line starting "Neck —",
-    // so this is purely additive for every other sport.
-    if (/^(Core|Arm Care|Neck)\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
+    // accessory cap. "Conditioning — ...:" (the Repeat-Sprint/Field
+    // archetype's own phase-varying conditioning finisher — see
+    // conditioningBlock) gets it too, for the same reason: its own drill
+    // lines are hand-authored per phase and per deload state, and must
+    // survive as a single always-kept unit rather than being cut down by
+    // the accessory cap the way a loose conditioning line elsewhere in a
+    // session still correctly is.
+    if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(bare)) { inCoreBlock = true; coreLines.push(raw); i++; continue }
     if (inCoreBlock) { coreLines.push(raw); i++; continue }
     if (isConditioningLine(raw)) { conditioningLines.push(raw); i++; continue }
 
@@ -3923,14 +4434,23 @@ function applyDeloadVolumeReduction(description) {
   const kept = []
 
   for (const line of rawLines) {
-    if (isConditioningLine(line) || isPlyoLine(line)) continue
-
     const bareLine = line.replace(SUPERSET_MARKER_RE, '')
-    // "Arm Care — ...:" / "Neck — ...:" get the same exempt-block treatment
-    // as "Core — ...:" (see organizeSessionDescription) — a standalone
-    // circuit finisher isn't volume-waved or deload-reduced any more than
-    // the core block is.
-    if (/^(Core|Arm Care|Neck)\s*—/.test(bareLine)) {
+    // "Arm Care — ...:" / "Neck — ...:" / "Conditioning — ...:" get the
+    // same exempt-block treatment as "Core — ...:" (see
+    // organizeSessionDescription) — a standalone circuit finisher isn't
+    // volume-waved or deload-reduced any more than the core block is.
+    // Checked BEFORE the blanket conditioning/plyo-line removal below —
+    // deliberately reordered from this function's own prior shape — so a
+    // Conditioning finisher's own drill lines (which necessarily match
+    // isConditioningLine/isPlyoLine by name, same as any other sprint/jump
+    // drill) survive as the deliberately-authored, already phase-tapered
+    // content the archetype puts there, instead of being stripped to
+    // nothing the way a bare conditioning line elsewhere in a session
+    // (outside any exempt header) still correctly is. Provably a no-op for
+    // every existing Core/Arm Care/Neck block in the file today — none of
+    // their own content matches either regex — so this reordering only
+    // ever changes behavior for the new Conditioning block.
+    if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(bareLine)) {
       inCoreBlock = true
       kept.push(line)
       continue
@@ -3940,10 +4460,15 @@ function applyDeloadVolumeReduction(description) {
       kept.push(line)
       continue
     }
+    if (inCoreBlock) {
+      kept.push(line)
+      continue
+    }
+    if (isConditioningLine(line) || isPlyoLine(line)) continue
 
     const colonIdx = bareLine.indexOf(':')
     const name = colonIdx > 0 ? bareLine.slice(0, colonIdx) : bareLine
-    if (inCoreBlock || isMobilityCoreExempt(name)) {
+    if (isMobilityCoreExempt(name)) {
       kept.push(line)
       continue
     }
