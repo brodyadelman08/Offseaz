@@ -556,9 +556,10 @@ describe('Area 5 — Deload week verification', () => {
     for (const line of description.split('\n')) {
       if (line.trim() === '') { inCoreBlock = false; continue }
       // Mirrors blueprintTemplates.js's own exempt-header set (Core/Arm
-      // Care/Neck — see organizeSessionDescription/applyDeloadVolumeReduction)
-      // so "accessory volume" means the same thing here as in production.
-      if (/^(Core|Arm Care|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
+      // Care/Conditioning/Neck — see organizeSessionDescription/
+      // applyDeloadVolumeReduction) so "accessory volume" means the same
+      // thing here as in production.
+      if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
       const colonIdx = line.indexOf(':')
       const name = colonIdx > 0 ? line.slice(0, colonIdx) : line
       if (inCoreBlock || isMobilityExempt(name)) continue
@@ -589,14 +590,25 @@ describe('Area 5 — Deload week verification', () => {
     }
   })
 
-  test('plyometric exercises are absent from every sport\'s deload week', () => {
+  test('plyometric exercises are absent from every sport\'s deload week, outside the tapered Core/Conditioning finisher blocks', () => {
     const PLYO_KEYWORDS = /\b(Box Jumps?|Broad Jumps?|Hurdle Hops?|Depth Jumps?|Depth Drop|Snap Down|Squat Jumps?|Lateral Bounds?|Bounding|Approach Jumps?|Drop Jumps?|Reactive Box Jump|Ankle Hops?|Hop & Stick)\b/i
     for (const tpl of SPORT_TEMPLATES) {
       const pos = tpl.positions[0]
       const deloaded = applyDeloadAdjustments(tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl)))
       const deloadWeek = deloaded[deloaded.length - 1]
       for (const s of deloadWeek.sessions) {
+        // feat/archetype-repeat-sprint — finisher restructure (PR #20
+        // review): deload weeks now TAPER (not delete) the Core/
+        // Conditioning finisher blocks, so a hand-authored light
+        // plyo-flavored drill name is expected and allowed to survive
+        // there. The guarantee this test cares about — no stray plyo
+        // content OUTSIDE those tapered, capped, exempt blocks — still
+        // holds, mirroring applyDeloadVolumeReduction's own skip logic.
+        let inCoreBlock = false
         for (const line of s.description.split('\n')) {
+          if (line.trim() === '') { inCoreBlock = false; continue }
+          if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
+          if (inCoreBlock) continue
           const colonIdx = line.indexOf(':')
           const name = colonIdx > 0 ? line.slice(0, colonIdx) : line
           expect(PLYO_KEYWORDS.test(name)).toBe(false)
@@ -605,14 +617,19 @@ describe('Area 5 — Deload week verification', () => {
     }
   })
 
-  test('conditioning work is absent from every sport\'s deload week', () => {
+  test('conditioning work is absent from every sport\'s deload week, outside the tapered Core/Conditioning finisher blocks', () => {
     const CONDITIONING_RE = /^(Sprint Work|Sprint Ladder|Sprint \+ Close Out|Sprint \+ Jog Ladder|300 Yard Shuttle|Flying 20s|17s Drill|Baseline Sprint|Defensive Slide|Post Sprint|Box Out Drill|Shuffle Step|Full Court Sprint|V Drill|Star Drill|200m Intervals|400m Repeats|Isometric (Squat|Pull) Hold|Weighted Carries|Farmer Carr|Battle Rope|Wrestle-Outs|Sled Push|Sled Sprint|Sled Drag|Pro Agility|5-10-5|Cone Drill|Deceleration Drill|Lateral Shuffle|T-Drill|Aerobic Finish|Tempo Run)\b/
     for (const tpl of SPORT_TEMPLATES) {
       const pos = tpl.positions[0]
       const deloaded = applyDeloadAdjustments(tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl)))
       const deloadWeek = deloaded[deloaded.length - 1]
       for (const s of deloadWeek.sessions) {
+        // Same tapered-not-deleted exemption as the plyometric check above.
+        let inCoreBlock = false
         for (const line of s.description.split('\n')) {
+          if (line.trim() === '') { inCoreBlock = false; continue }
+          if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
+          if (inCoreBlock) continue
           expect(CONDITIONING_RE.test(line)).toBe(false)
         }
       }
@@ -776,6 +793,14 @@ describe('Area 7 — Exercise library coverage', () => {
     'core — finisher (20s on/10s off unless noted)',
     'core — lateral stability', 'core — rotate and press',
     'core — rotational power', 'core — sit-ups', 'cossack squat', 'cossack squat (light)',
+    // feat/archetype-repeat-sprint — finisher restructure (PR #20 review):
+    // new shared "Core — .../Conditioning — ..." block-label header lines,
+    // same "block-label, not a single exercise" gap as the existing
+    // 'core — anti-extension' etc. and 'neck — ...' entries above.
+    'core — deload (light)', 'core — rotational endurance', 'core — anti-flexion',
+    'core — explosive rotation', 'core — stability & control',
+    'conditioning — aerobic base', 'conditioning — intensity build',
+    'conditioning — repeat sprint', 'conditioning — taper', 'conditioning — deload (light)',
     'court conditioning', 'court sprints', 'db bench', 'db shoulder press', 'db squat jump',
     'deceleration drill', 'deep glute stretch', 'deep squat hold', 'defensive slide',
     'defensive slide sprint', 'depth drop', "downward dog → cobra flow",
@@ -982,9 +1007,10 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
     for (const line of description.split('\n')) {
       if (line.trim() === '') { inCoreBlock = false; continue }
       // Mirrors blueprintTemplates.js's own exempt-header set (Core/Arm
-      // Care/Neck — see organizeSessionDescription/applyDeloadVolumeReduction)
-      // so "accessory volume" means the same thing here as in production.
-      if (/^(Core|Arm Care|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
+      // Care/Conditioning/Neck — see organizeSessionDescription/
+      // applyDeloadVolumeReduction) so "accessory volume" means the same
+      // thing here as in production.
+      if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
       const colonIdx = line.indexOf(':')
       const name = colonIdx > 0 ? line.slice(0, colonIdx) : line
       if (inCoreBlock || isMobilityExempt(name)) continue
@@ -1006,9 +1032,10 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
     for (const line of description.split('\n')) {
       if (line.trim() === '') { inCoreBlock = false; continue }
       // Mirrors blueprintTemplates.js's own exempt-header set (Core/Arm
-      // Care/Neck — see organizeSessionDescription/applyDeloadVolumeReduction)
-      // so "accessory volume" means the same thing here as in production.
-      if (/^(Core|Arm Care|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
+      // Care/Conditioning/Neck — see organizeSessionDescription/
+      // applyDeloadVolumeReduction) so "accessory volume" means the same
+      // thing here as in production.
+      if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
       if (inCoreBlock) continue
       if (line.includes('%')) continue
       if (MAIN_LIFT_KEYWORDS_RE.test(line)) continue
@@ -1068,7 +1095,20 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
 
           for (const s of deloadWeek.sessions) {
             expect(s.description).toMatch(/Deload Week/)
+            // feat/archetype-repeat-sprint — finisher restructure (PR #20
+            // review): deload weeks now TAPER (not delete) the Core/
+            // Conditioning finisher blocks, so a hand-authored light plyo-
+            // flavored drill name (e.g. "Broad Jump: 2x3", "Single Leg
+            // Squat Jump: 2x5 each leg") is expected and allowed to survive
+            // there. The guarantee this test actually cares about — no
+            // stray conditioning/plyo content OUTSIDE those tapered,
+            // capped, exempt blocks — still holds, mirroring
+            // applyDeloadVolumeReduction's own inCoreBlock skip logic.
+            let inCoreBlock = false
             for (const line of s.description.split('\n')) {
+              if (line.trim() === '') { inCoreBlock = false; continue }
+              if (/^(Core|Arm Care|Conditioning|Neck)\s*—/.test(line)) { inCoreBlock = true; continue }
+              if (inCoreBlock) continue
               expect(PLYO_KEYWORDS_RE.test(line.split(':')[0])).toBe(false)
               expect(CONDITIONING_HEADER_RE.test(line)).toBe(false)
             }
