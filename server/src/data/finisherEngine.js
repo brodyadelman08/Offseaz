@@ -31,12 +31,27 @@ const FAMILY_LABELS = {
 
 // ── 1. Base weighting per archetype (out of 100) ────────────────────────────
 const BASE_WEIGHTS = {
-  rotational: { sprint: 15, energy: 20, core: 15, rotation: 30, arm: 20 }, // baseball, softball, tennis, golf, QB
+  rotational: { sprint: 15, energy: 20, core: 15, rotation: 30, arm: 20 }, // baseball, softball, tennis, golf, QB, track throwers
   field:      { sprint: 30, energy: 30, core: 15, rotation: 15, arm: 10 }, // soccer, lacrosse, hockey
   collision:  { sprint: 15, energy: 20, core: 25, rotation: 25, arm: 15 }, // linemen, rugby forwards, wrestling
-  speedpower: { sprint: 30, energy: 15, core: 15, rotation: 30, arm: 10 }, // football skill, sprinters, basketball guards
+  speedpower: { sprint: 30, energy: 15, core: 15, rotation: 30, arm: 10 }, // football skill/hybrid, track sprinters, basketball guards
   endurance:  { sprint: 15, energy: 45, core: 25, rotation: 10, arm: 5  }, // cross country, swimming
+  // feat/finisher-engine-rollout — landing-mechanics/explosive-jump sports:
+  // basketball wings/bigs, volleyball, track jumpers. Core is the highest
+  // of any archetype (landing control/anti-rotation is these sports' real
+  // injury-prevention need); Energy is the lowest of the "team sport"
+  // archetypes since a jumper's or big's actual conditioning demand is
+  // repeat-explosive, not sustained running the way field/speed-power is.
+  vertical:   { sprint: 25, energy: 15, core: 30, rotation: 20, arm: 10 }, // basketball wings/bigs, volleyball, track jumpers
 }
+
+// Arm Care is NOT universal — restricted to throwing/overhead sports and
+// positions. The engine itself stays sport-agnostic (same as
+// `isFieldSport` below) — the CALLER (blueprintTemplates.js) decides
+// `hasArmCare: true/false` per sport/position and passes it in; see each
+// sport's own *_FINISHERS wiring for which ones qualify (baseball,
+// softball, tennis, football QB only, volleyball, swimming, track
+// throwers — every other sport/position defaults to false).
 
 // ── 2. Phase multipliers (apply to every archetype identically) ────────────
 const PHASE_MULTIPLIERS = {
@@ -53,7 +68,17 @@ const PHASE_MULTIPLIERS = {
 const FIELD_ENERGY_PHASE4_MULTIPLIER = 0.80
 
 // Renormalized 0-100 weight per family for a given archetype + phase.
-function normalizedWeights(archetype, phaseNum, { isFieldSport = false, overrides = null } = {}) {
+// `hasArmCare` (default true, preserving every archetype's existing
+// behavior): when false, Arm's adjusted weight is zeroed and redistributed
+// PROPORTIONALLY across the other 4 families (each gets a share
+// proportional to its own already-adjusted weight, so an archetype's
+// existing emphasis — e.g. Rotation staying dominant for golf — is
+// preserved rather than flattened by an even split). Arm Care is not
+// universal; every sport/position that doesn't throw/serve/spike
+// overhead gets its shoulder work from normal lifting instead — see each
+// sport's own *_FINISHERS wiring in blueprintTemplates.js for which ones
+// pass `hasArmCare: true`.
+function normalizedWeights(archetype, phaseNum, { isFieldSport = false, overrides = null, hasArmCare = true } = {}) {
   const base = BASE_WEIGHTS[archetype]
   if (!base) throw new Error(`finisherEngine: unknown archetype "${archetype}"`)
   const idx = Math.min(4, Math.max(1, phaseNum)) - 1
@@ -63,17 +88,32 @@ function normalizedWeights(archetype, phaseNum, { isFieldSport = false, override
     if (fam === 'energy' && isFieldSport && phaseNum === 4) mult = FIELD_ENERGY_PHASE4_MULTIPLIER
     adjusted[fam] = base[fam] * mult
   }
+  if (!hasArmCare) {
+    const armWeight = adjusted.arm
+    adjusted.arm = 0
+    const others = FAMILIES.filter(f => f !== 'arm')
+    const othersSum = others.reduce((s, f) => s + adjusted[f], 0)
+    for (const f of others) adjusted[f] += armWeight * (adjusted[f] / othersSum)
+  }
   // Position overrides (see POSITION OVERRIDES in the spec) — a flat +/-
-  // delta applied to the ADJUSTED (already phase-scaled) weight, before
-  // renormalizing, e.g. a pitcher's extra arm-care emphasis or golf's
-  // extra core/rotation emphasis. Differentiates by weighting only — no
-  // sport gains a family it didn't already have, no exercises are invented
-  // per position.
+  // delta applied to the ADJUSTED (already phase-scaled, already arm-care-
+  // redistributed) weight, before renormalizing, e.g. a pitcher's extra
+  // arm-care emphasis or golf's extra core/rotation emphasis.
+  // Differentiates by weighting only — no sport gains a family it didn't
+  // already have, no exercises are invented per position.
   if (overrides) {
     for (const fam of FAMILIES) {
       if (overrides[fam]) adjusted[fam] = Math.max(1, adjusted[fam] + overrides[fam])
     }
   }
+  // hasArmCare is an absolute guarantee, not just a phase-scaling step —
+  // the Math.max(1, ...) floor above exists so a position override can
+  // never zero out a family entirely, but that same floor would silently
+  // reintroduce a nonzero Arm weight (and defeat hasArmCare: false) for
+  // any position whose own override happens to include a negative `arm`
+  // delta (e.g. Hockey Goalie's HG_OVERRIDES). Re-clamped here, after
+  // overrides, so nothing upstream can undo it.
+  if (!hasArmCare) adjusted.arm = 0
   const sum = FAMILIES.reduce((s, f) => s + adjusted[f], 0)
   const normalized = {}
   for (const fam of FAMILIES) normalized[fam] = (adjusted[fam] / sum) * 100
@@ -143,15 +183,23 @@ function scheduleFamilies(slots, days, dayCompatibility = null) {
 }
 
 // Families with zero primary slots still show up as a secondary somewhere
-// in the week. Placed on the lowest-fatigue primary days first (a secondary
-// stacks fatigue onto whatever primary is already scheduled that day), one
-// per day where possible; only doubles up on a day if there are more
-// under-represented families than days. Respects the same `dayCompatibility`
-// constraint scheduleFamilies does — a secondary is still that family
-// showing up on that day, so it must be day-type-compatible too.
-function assignSecondaries(primaryOrder, dayCompatibility = null) {
+// in the week — UNLESS their normalized weight is genuinely zero (e.g. Arm
+// Care for a sport with `hasArmCare: false`), in which case zero primary
+// slots means "excluded by design," not "unlucky in the rounding," and it
+// must not appear at all — forcing a weight-0 family in as a secondary
+// would silently defeat the entire point of turning it off. `normalized`
+// (optional, from normalizedWeights) is how this function tells the two
+// cases apart; omit it to keep the old "every non-primary family still
+// gets a secondary" behavior. Otherwise: placed on the lowest-fatigue
+// primary days first (a secondary stacks fatigue onto whatever primary is
+// already scheduled that day), one per day where possible; only doubles up
+// on a day if there are more under-represented families than days.
+// Respects the same `dayCompatibility` constraint scheduleFamilies does —
+// a secondary is still that family showing up on that day, so it must be
+// day-type-compatible too.
+function assignSecondaries(primaryOrder, dayCompatibility = null, normalized = null) {
   const present = new Set(primaryOrder)
-  const missing = FAMILIES.filter(f => !present.has(f))
+  const missing = FAMILIES.filter(f => !present.has(f) && (!normalized || normalized[f] > 0))
   const secondaries = primaryOrder.map(() => [])
   if (missing.length === 0) return secondaries
   const dayRank = primaryOrder
@@ -173,6 +221,26 @@ function assignSecondaries(primaryOrder, dayCompatibility = null) {
 }
 
 // ── 5. Public entry point ───────────────────────────────────────────────────
+// Field-sport core floor: Core's own weight reliably wins it exactly ONE
+// primary slot per week at typical day counts (see finisherEngine's own
+// design notes) — never zero, but also never more than one, since it's not
+// "missing" the way assignSecondaries' own under-represented-family logic
+// checks for. Field athletes' real trunk-work need is better served by a
+// SECOND touch, so when Core lands exactly one primary slot, this
+// guarantees it a secondary slot on a second day too — without changing
+// any base weighting, purely a scheduling-layer floor. No-op if Core
+// already picked up a secondary incidentally (e.g. paired with an
+// under-represented family that happened to land on Core's own primary day
+// — rare, but checked rather than assumed).
+function ensureCoreFloor(primaryOrder, secondaryOrder, dayCompatibility) {
+  if (secondaryOrder.some(s => s.includes('core'))) return
+  const isCompatible = (i) => !dayCompatibility || dayCompatibility[i].includes('core')
+  let idx = primaryOrder.findIndex((f, i) => f !== 'core' && secondaryOrder[i].length === 0 && isCompatible(i))
+  if (idx < 0) idx = primaryOrder.findIndex((f, i) => f !== 'core' && isCompatible(i))
+  if (idx < 0) idx = primaryOrder.findIndex(f => f !== 'core') // last resort: ignore compatibility
+  if (idx >= 0) secondaryOrder[idx].push('core')
+}
+
 // Computes the whole week's day->{primary, secondary[]} assignment once
 // (call it once per week per sport, then read dayIndex out for each
 // session). `days` is the count of PRIMARY-finisher training days that
@@ -181,11 +249,14 @@ function assignSecondaries(primaryOrder, dayCompatibility = null) {
 // not this function. `opts.dayCompatibility` (optional): see
 // scheduleFamilies/assignSecondaries above — a sport's own day-type theming
 // constraint (e.g. baseball's "arm-care never on a lower-body day").
+// `opts.isFieldSport` also triggers the core floor above (see
+// ensureCoreFloor) — field sports only, per the spec.
 function planWeekFinishers(archetype, phaseNum, days, opts = {}) {
   const normalized = normalizedWeights(archetype, phaseNum, opts)
   const slots = allocateSlots(normalized, days)
   const primaryOrder = scheduleFamilies(slots, days, opts.dayCompatibility)
-  const secondaryOrder = assignSecondaries(primaryOrder, opts.dayCompatibility)
+  const secondaryOrder = assignSecondaries(primaryOrder, opts.dayCompatibility, normalized)
+  if (opts.isFieldSport && slots.core === 1) ensureCoreFloor(primaryOrder, secondaryOrder, opts.dayCompatibility)
   return primaryOrder.map((primary, i) => ({ primary, secondary: secondaryOrder[i] }))
 }
 
@@ -233,11 +304,29 @@ function renderFinisher(contentBank, plan, phaseNum, deload) {
   return buildFinisherBlock(plan.primary, { subtitle: primaryEntry.subtitle, lines })
 }
 
+// ── 7. Endurance mode — a CONTENT convention, not a math one ────────────
+// Cross Country and Swimming's own sport practice (running/swimming
+// mileage) already IS their energy-system training — the finisher's own
+// 'energy' family must never duplicate that as a second real conditioning
+// block. `endurance` archetype's own base Energy weight (45, the highest
+// of any archetype) still governs how OFTEN the family gets scheduled —
+// that's correct, matching how often a light touch is appropriate — but
+// the CONTENT authored for it (in blueprintTemplates.js's own
+// *_FINISHERS banks for cross_country/swimming) must stay a short aerobic
+// flush / controlled tempo / technique-aerobic / very-short-speed / mobility
+// touch, never a real interval session. This export exists so that
+// intent is named and discoverable, not just a comment convention split
+// across two files — pass it to a sport's *_FINISHERS bank construction
+// (see cross_country/swimming's own wiring) as a reminder/marker; the
+// engine's own math doesn't consume it.
+const ENDURANCE_FINISHER_MODE = 'aerobic-flush-not-a-workout'
+
 module.exports = {
   FAMILIES,
   FAMILY_LABELS,
   BASE_WEIGHTS,
   PHASE_MULTIPLIERS,
+  ENDURANCE_FINISHER_MODE,
   normalizedWeights,
   allocateSlots,
   scheduleFamilies,
