@@ -406,7 +406,7 @@ function applyHipSubstitutions(description) {
 
 // ─── Quadriceps (strain) ────────────────────────────────────────────────────
 const QUAD_REMOVE_RE = /^Depth Jumps?\b/
-const QUAD_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|Sled (?:Push|Sprint|Drag)|Broad Jumps?|(?:DB |Split |Single Leg )?Squat Jumps?|Approach Jumps?|Bounding|Hex Bar Jumps?|Lateral (?:Bounds?|Squat Jump)|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Resistance Band Sprint)\b/i
+const QUAD_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled (?:Push|Sprint|Drag)|Broad Jumps?|(?:DB |Split |Single Leg )?Squat Jumps?|Approach Jumps?|Bounding|Hex Bar Jumps?|Lateral (?:Bounds?|Squat Jump)|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Resistance Band Sprint)\b/i
 
 function applyQuadricepsSubstitutions(description) {
   return description.split('\n')
@@ -432,7 +432,7 @@ function applyQuadricepsSubstitutions(description) {
 // Hamstring Curls swap above. ────────────────────────────────────────────
 const HAMSTRING_REMOVE_RE = /^Good Mornings?\b/
 const HAMSTRING_RDL_RE = /^(?:Barbell )?(?:Single Leg )?RDL\b/
-const HAMSTRING_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|Sled Sprint|Broad Jumps?|Bounding|Lateral Bounds?|Flying 20s|300 Yard Shuttle|Resistance Band Sprint)\b/i
+const HAMSTRING_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled Sprint|Broad Jumps?|Bounding|Lateral Bounds?|Flying 20s|300 Yard Shuttle|Resistance Band Sprint)\b/i
 
 function applyHamstringSubstitutions(description) {
   return description.split('\n')
@@ -454,7 +454,7 @@ function applyHamstringSubstitutions(description) {
 const ANKLE_REMOVE_RE = /^Depth Jumps?\b/
 const ANKLE_SLRDL_RE = /^(?:Barbell )?Single Leg RDL\b/
 const ANKLE_CALF_RE = /^(?:Calf Raises?|Seated Calf Raise|Single Leg Calf Raise|Tibialis Raises)\b/i
-const ANKLE_COD_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|Sled Sprint|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Lateral Shuffle|Defensive Slide(?: Sprint)?|Pro Agility Drill|T-Drill|Deceleration Drill|17s Drill|Resistance Band Sprint)\b/i
+const ANKLE_COD_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled Sprint|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Lateral Shuffle|Defensive Slide(?: Sprint)?|Pro Agility Drill|T-Drill|Deceleration Drill|17s Drill|Resistance Band Sprint)\b/i
 
 function applyAnkleSubstitutions(description) {
   return description.split('\n')

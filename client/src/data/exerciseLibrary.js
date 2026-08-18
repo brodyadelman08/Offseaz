@@ -294,6 +294,22 @@ const EXERCISE_LIBRARY = {
     description: 'Attach a harness to a sled. Accelerate forward dragging the sled, maintaining forward lean and high knees.',
     muscles: 'Quads, glutes, hip flexors, calves',
   },
+  'easy strides': {
+    description: 'Relaxed, controlled accelerations at a comfortable effort — not max speed — used to keep the legs sharp without adding fatigue on top of running training.',
+    muscles: 'Full lower body, cardiovascular system',
+  },
+  'strides': {
+    description: 'Short, controlled accelerations building smoothly toward a fast but not max-effort speed, focusing on relaxed, efficient running form.',
+    muscles: 'Full lower body, cardiovascular system',
+  },
+  'aerobic flush': {
+    description: 'An easy, conversational-pace jog used as light aerobic work on a lifting day — not a conditioning workout, just enough to keep the aerobic system ticking over.',
+    muscles: 'Cardiovascular system',
+  },
+  'controlled tempo': {
+    description: 'A sustained effort at a comfortably hard, conversational pace — not a max-effort interval — used to build aerobic capacity without adding heavy fatigue.',
+    muscles: 'Cardiovascular system, full lower body',
+  },
   'box jump': {
     description: 'Stand facing a box. Swing your arms back, hinge slightly, then explosively jump onto the box, landing softly in a quarter-squat. Step down between reps.',
     muscles: 'Quads, glutes, calves',
