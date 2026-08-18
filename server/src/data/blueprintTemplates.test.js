@@ -468,18 +468,24 @@ describe('Area 17 — Injury system upgrade', () => {
   })
 
   test('Elbow: a PLAIN (non-percentage) heavy-press line still gets an explicit 50% load note, not silently left at full load', () => {
-    // Muscle-gain Linemen's Day4 has "Overhead Press: 4x10" — a flat NxR
-    // line with no % ramp at all, unlike Bench/Close Grip Bench which are
-    // always "@ XX%". scaleAllPercentages alone is a no-op on a line with no
-    // "%" in it, so this specifically exercises the fallback path.
-    const bp = generateBlueprintForAthlete(mkSurvey({ primary_goal: 'muscle_gain', injury_areas: ['Elbow'] }))
-    const baseline = generateBlueprintForAthlete(mkSurvey({ primary_goal: 'muscle_gain', injury_areas: [] }))
-    const text = fullText(bp)
-    const baseText = fullText(baseline)
+    // Muscle-gain Linemen's Day4 used to have "Overhead Press: 4x10" — a
+    // flat NxR line with no % ramp at all, unlike Bench/Close Grip Bench
+    // which are always "@ XX%". feat/blueprint-cleanup retired that old
+    // pre-archetype content (Linemen muscle_gain now shares the same
+    // modern archetype day content standard-goal Linemen gets, which has
+    // no such line) — Football QB's own Day 4 ("Overhead Press: 3x10")
+    // is the current stand-in: same plain, non-ramped shape,
+    // scaleAllPercentages is still a no-op on it, same fallback path.
+    // Marker-stripped since QB's own accessory pairing brackets it with
+    // Single Arm DB Row.
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Football', position: 'QB', injury_areas: ['Elbow'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Football', position: 'QB', injury_areas: [] }))
+    const text = stripMarkers(fullText(bp))
+    const baseText = stripMarkers(fullText(baseline))
 
     const baseOHP = baseText.split('\n').find(l => /^Overhead Press:/.test(l))
-    expect(baseOHP).toBe('Overhead Press: 4x10') // confirms this really is a plain, unscaled line
-    expect(text).toMatch(/^Overhead Press: 4x10 \(50% load\)$/m)
+    expect(baseOHP).toBe('Overhead Press: 3x10') // confirms this really is a plain, unscaled line
+    expect(text).toMatch(/^Overhead Press: 3x10 \(50% load\)$/m)
   })
 
   test('Wrist: Front Squat -> Cross-Arm Front Squat at 50%, catch-position Oly lifts -> Clean Pull, push-ups reduced, grip work reduced, biceps AND triceps accessories reduced, legs otherwise fine', () => {
@@ -1521,25 +1527,39 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
   // organizeSessionDescription's own doc comment) — this was in fact the
   // exact real-world case the full-codebase silent-drop audit flagged as
   // worst-case (football/linemen muscle_gain's Upper Strength day was
-  // losing 7 movements). Now verifies the opposite: generic filler AND
-  // every other authored accessory all survive, correctly paired.
-  test('generic filler (Bicep Curls, Tricep Extensions) is never dropped — every authored accessory on the day survives, paired into supersets', () => {
+  // losing 7 movements, back when muscle_gain routed to the old,
+  // pre-archetype fbLinemenMGSess template). Verifies the same "nothing
+  // silently dropped, everything correctly paired" invariant against
+  // Linemen muscle_gain's CURRENT content — feat/blueprint-cleanup retired
+  // fbLinemenMGSess and wired muscle_gain onto the same modern Collision-
+  // archetype day content every standard-goal Linemen week gets, with the
+  // shared mgNote() blurb (same pattern every other sport's own
+  // muscle_gain path already uses) appended on top. Bicep Curls/Tricep
+  // Extensions now only ever appear inside mgNote()'s fixed blurb text —
+  // a single flat sentence, not individually-authored accessory lines — so
+  // they're no longer separately bracketed the way the old template's own
+  // standalone lines were; the day's real authored accessories (Barbell
+  // RDL, Goblet Lateral Lunge, Plate Overhead Sit-Ups, Double Leg Calf
+  // Raise) are what's checked for correct pairing.
+  test('Linemen muscle_gain: mgNote() additions survive, and every authored accessory on the modern archetype day survives, paired into supersets', () => {
     const bp = generateBlueprintForAthlete({
       sport: 'Football', position: 'Linemen', primary_goal: 'muscle_gain',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description
+    expect(day1).toContain('Muscle Gain additions')
     expect(day1).toContain('Bicep Curls')
     expect(day1).toContain('Tricep Extensions')
-    expect(day1).toContain('Bulgarian Split Squat')
-    expect(day1).toContain('Leg Curl')
+    expect(day1).toContain('Barbell RDL')
+    expect(day1).toContain('Goblet Lateral Lunge')
+    expect(day1).toContain('Plate Overhead Sit-Ups')
     expect(day1).toContain('Double Leg Calf Raise')
-    // Bicep Curls paired into a bracket (not left dangling as a standalone
-    // line) — the day's total accessory count (Bulgarian Split Squat, Leg
-    // Curl, Double Leg Calf Raise, Bicep Curls, Tricep Extensions = 5, odd)
-    // means exactly one trails unpaired; Bicep Curls itself still forms a
-    // real ⟦SS⟧ pair with Double Leg Calf Raise.
-    expect(day1).toMatch(/⟦SS\d+⟧Bicep Curls:/)
+    // The day's 4 real accessories (even count) pair cleanly into two
+    // brackets — nothing left dangling unbracketed.
+    expect(day1).toMatch(/⟦SS\d+⟧Barbell RDL:/)
+    expect(day1).toMatch(/⟦SS\d+⟧Goblet Lateral Lunge:/)
+    expect(day1).toMatch(/⟦SS\d+⟧Plate Overhead Sit-Ups:/)
+    expect(day1).toMatch(/⟦SS\d+⟧Double Leg Calf Raise:/)
   })
 
   test('Tibialis Raises rotates in as a real working lower-body accessory (not a warm-up) via the calf-raise rotation slot', () => {
