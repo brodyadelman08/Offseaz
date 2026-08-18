@@ -5453,304 +5453,392 @@ Sprint Work: 4x10 yds",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals football/linemen — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Hypertrophy Base (66%) · Week 1 of 4",
+    "objective": "Phase 1 — Hypertrophy Base (65%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+        "description": "Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 4x3
-Back Squat: 6x8-10 @ 66%
-⟦SS1⟧Bulgarian Split Squat: 3x10 each leg
-⟦SS1⟧Leg Curl: 3x12
-⟦SS2⟧Double Leg Calf Raise: 4x15
-⟦SS2⟧Bicep Curls: 3x12
-Tricep Extensions: 3x12",
+Power Clean: build to a strong set of 5x5 — start light and build (from floor, catch quarter squat)
+Front Squat: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10 (full ROM)
+⟦SS1⟧Barbell RDL: 3x8
+⟦SS1⟧Goblet Lateral Lunge: 3x4 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 2x8-10
+⟦SS2⟧Double Leg Calf Raise: 2x10
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Acceleration Mechanics:
+Sled Push: 4x15 yds (short, choppy steps)",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+        "description": "Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 6x8-10 @ 66%
-⟦SS1⟧Incline DB Press: 5x10
-⟦SS1⟧DB Fly: 3x12
-⟦SS2⟧Weighted Pull-ups: 5x6
-⟦SS2⟧BB Row: 5x10
-⟦SS3⟧Lateral Raises: 3x15
-⟦SS3⟧Face Pulls: 4x15
-⟦SS4⟧Tricep Pushdowns: 4x12
-⟦SS4⟧Neck Flexion: 2x15
-⟦SS5⟧Neck Extension: 2x15
-⟦SS5⟧Lateral Neck Flexion: 2x15 each side",
+Single Arm DB Split Jerk: build to a strong set of 5x5 — start light and build, each arm
+Standing BB OHP: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 3x10 each arm
+⟦SS1⟧Inverted BB Row: 2x5 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Loaded Carry Mix: 3 rounds (farmer + suitcase, alternating)",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (56%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 2x2
-Back Squat: 3x6-10 @ 56%
-⟦SS1⟧Bulgarian Split Squat: 2x8 each leg
-⟦SS1⟧Leg Curl: 2x9
-⟦SS2⟧Double Leg Calf Raise: 2x11
-⟦SS2⟧Bicep Curls: 2x9
-Tricep Extensions: 2x9",
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Front Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Barbell RDL: 2x6
+⟦SS1⟧Goblet Lateral Lunge: 2x3 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 1x6-10
+⟦SS2⟧Double Leg Calf Raise: 1x8
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 3x6-10 @ 56%
-⟦SS1⟧Incline DB Press: 3x8
-⟦SS1⟧DB Fly: 2x9
-⟦SS2⟧Weighted Pull-ups: 3x5
-⟦SS2⟧BB Row: 3x8
-⟦SS3⟧Lateral Raises: 2x11
-⟦SS3⟧Face Pulls: 2x11
-⟦SS4⟧Tricep Pushdowns: 2x9
-⟦SS4⟧Neck Flexion: 1x11
-⟦SS5⟧Neck Extension: 1x11
-⟦SS5⟧Lateral Neck Flexion: 1x11 each side",
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Standing BB OHP: 35%×10, 55%×10
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 2x8 each arm
+⟦SS1⟧Inverted BB Row: 1x4 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Volume Build (70%) · Week 1 of 4",
+    "objective": "Phase 2 — Volume Build (68%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+        "description": "Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 4x3
-Back Squat: 6x8-10 @ 70%
-⟦SS1⟧Bulgarian Split Squat: 3x10 each leg
-⟦SS1⟧Leg Curl: 3x12
-⟦SS2⟧Double Leg Calf Raise: 4x15
-⟦SS2⟧Bicep Curls: 3x12
-Tricep Extensions: 3x12",
+Power Clean: build to a strong set of 4x4 — start light and build (from floor, catch quarter squat)
+Front Squat: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10 (full ROM)
+⟦SS1⟧Barbell RDL: 3x8
+⟦SS1⟧Goblet Lateral Lunge: 3x4 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 2x8-10
+⟦SS2⟧Double Leg Calf Raise: 2x10
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Acceleration Mechanics:
+Sled Push: 4x20 yds",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+        "description": "Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 6x8-10 @ 70%
-⟦SS1⟧Incline DB Press: 5x10
-⟦SS1⟧DB Fly: 3x12
-⟦SS2⟧Weighted Pull-ups: 5x6
-⟦SS2⟧BB Row: 5x10
-⟦SS3⟧Lateral Raises: 3x15
-⟦SS3⟧Face Pulls: 4x15
-⟦SS4⟧Tricep Pushdowns: 4x12
-⟦SS4⟧Neck Flexion: 2x15
-⟦SS5⟧Neck Extension: 2x15
-⟦SS5⟧Lateral Neck Flexion: 2x15 each side",
+Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build, each arm
+Standing BB OHP: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 3x10 each arm
+⟦SS1⟧Inverted BB Row: 2x5 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Interval Work:
+Farmer Carries: 4x30 yds",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (59%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 2x2
-Back Squat: 3x6-10 @ 59%
-⟦SS1⟧Bulgarian Split Squat: 2x8 each leg
-⟦SS1⟧Leg Curl: 2x9
-⟦SS2⟧Double Leg Calf Raise: 2x11
-⟦SS2⟧Bicep Curls: 2x9
-Tricep Extensions: 2x9",
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Front Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Barbell RDL: 2x6
+⟦SS1⟧Goblet Lateral Lunge: 2x3 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 1x6-10
+⟦SS2⟧Double Leg Calf Raise: 1x8
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 3x6-10 @ 59%
-⟦SS1⟧Incline DB Press: 3x8
-⟦SS1⟧DB Fly: 2x9
-⟦SS2⟧Weighted Pull-ups: 3x5
-⟦SS2⟧BB Row: 3x8
-⟦SS3⟧Lateral Raises: 2x11
-⟦SS3⟧Face Pulls: 2x11
-⟦SS4⟧Tricep Pushdowns: 2x9
-⟦SS4⟧Neck Flexion: 1x11
-⟦SS5⟧Neck Extension: 1x11
-⟦SS5⟧Lateral Neck Flexion: 1x11 each side",
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Standing BB OHP: 35%×10, 55%×10
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 2x8 each arm
+⟦SS1⟧Inverted BB Row: 1x4 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength-Volume (74%) · Week 1 of 4",
+    "objective": "Phase 3 — Strength-Volume (72%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+        "description": "Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 4x3
-Back Squat: 6x8-10 @ 74%
-⟦SS1⟧Bulgarian Split Squat: 3x10 each leg
-⟦SS1⟧Leg Curl: 3x12
-⟦SS2⟧Double Leg Calf Raise: 4x15
-⟦SS2⟧Bicep Curls: 3x12
-Tricep Extensions: 3x12",
+Power Clean: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
+Front Squat: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8 (full ROM)
+⟦SS1⟧Barbell RDL: 3x8
+⟦SS1⟧Goblet Lateral Lunge: 3x4 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 2x8-10
+⟦SS2⟧Double Leg Calf Raise: 2x10
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Quality Speed:
+Sprint Work: 5x10 yds @ max effort",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+        "description": "Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 6x8-10 @ 74%
-⟦SS1⟧Incline DB Press: 5x10
-⟦SS1⟧DB Fly: 3x12
-⟦SS2⟧Weighted Pull-ups: 5x6
-⟦SS2⟧BB Row: 5x10
-⟦SS3⟧Lateral Raises: 3x15
-⟦SS3⟧Face Pulls: 4x15
-⟦SS4⟧Tricep Pushdowns: 4x12
-⟦SS4⟧Neck Flexion: 2x15
-⟦SS5⟧Neck Extension: 2x15
-⟦SS5⟧Lateral Neck Flexion: 2x15 each side",
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Standing BB OHP: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 3x10 each arm
+⟦SS1⟧Inverted BB Row: 2x5 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Repeat Effort:
+Battle Rope: 4x20s",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (63%) · Week 4 of 4",
+    "objective": "Phase 3 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 2x2
-Back Squat: 3x6-10 @ 63%
-⟦SS1⟧Bulgarian Split Squat: 2x8 each leg
-⟦SS1⟧Leg Curl: 2x9
-⟦SS2⟧Double Leg Calf Raise: 2x11
-⟦SS2⟧Bicep Curls: 2x9
-Tricep Extensions: 2x9",
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Front Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Barbell RDL: 2x6
+⟦SS1⟧Goblet Lateral Lunge: 2x3 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 1x6-10
+⟦SS2⟧Double Leg Calf Raise: 1x8
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 3x6-10 @ 63%
-⟦SS1⟧Incline DB Press: 3x8
-⟦SS1⟧DB Fly: 2x9
-⟦SS2⟧Weighted Pull-ups: 3x5
-⟦SS2⟧BB Row: 3x8
-⟦SS3⟧Lateral Raises: 2x11
-⟦SS3⟧Face Pulls: 2x11
-⟦SS4⟧Tricep Pushdowns: 2x9
-⟦SS4⟧Neck Flexion: 1x11
-⟦SS5⟧Neck Extension: 1x11
-⟦SS5⟧Lateral Neck Flexion: 1x11 each side",
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Standing BB OHP: 35%×10, 55%×10
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 2x8 each arm
+⟦SS1⟧Inverted BB Row: 1x4 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Volume (77%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak Volume (76%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+        "description": "Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 4x3
-Back Squat: 6x8-10 @ 77%
-⟦SS1⟧Bulgarian Split Squat: 3x10 each leg
-⟦SS1⟧Leg Curl: 3x12
-⟦SS2⟧Double Leg Calf Raise: 4x15
-⟦SS2⟧Bicep Curls: 3x12
-Tricep Extensions: 3x12",
+Power Clean: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
+Front Squat: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8 (full ROM)
+⟦SS1⟧Barbell RDL: 3x8
+⟦SS1⟧Goblet Lateral Lunge: 3x4 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 2x8-10
+⟦SS2⟧Double Leg Calf Raise: 2x10
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 4x10 yds @ max effort (full recovery)",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+        "description": "Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 6x8-10 @ 77%
-⟦SS1⟧Incline DB Press: 5x10
-⟦SS1⟧DB Fly: 3x12
-⟦SS2⟧Weighted Pull-ups: 5x6
-⟦SS2⟧BB Row: 5x10
-⟦SS3⟧Lateral Raises: 3x15
-⟦SS3⟧Face Pulls: 4x15
-⟦SS4⟧Tricep Pushdowns: 4x12
-⟦SS4⟧Neck Flexion: 2x15
-⟦SS5⟧Neck Extension: 2x15
-⟦SS5⟧Lateral Neck Flexion: 2x15 each side",
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Standing BB OHP: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 3x10 each arm
+⟦SS1⟧Inverted BB Row: 2x5 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Reduced:
+Farmer Carries: 2x30 yds",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (64%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
+Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squat x5
 
-Power Clean from floor: 2x2
-Back Squat: 3x6-10 @ 64%
-⟦SS1⟧Bulgarian Split Squat: 2x8 each leg
-⟦SS1⟧Leg Curl: 2x9
-⟦SS2⟧Double Leg Calf Raise: 2x11
-⟦SS2⟧Bicep Curls: 2x9
-Tricep Extensions: 2x9",
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Front Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Barbell RDL: 2x6
+⟦SS1⟧Goblet Lateral Lunge: 2x3 each leg
+⟦SS2⟧Plate Overhead Sit-Ups: 1x6-10
+⟦SS2⟧Double Leg Calf Raise: 1x8
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5
+Upper Body Warm-Up Series: Prone Swimmers x5 · Push-Up to Pike x5 · Band Pull-Aparts x20
 
-Bench Press: 3x6-10 @ 64%
-⟦SS1⟧Incline DB Press: 3x8
-⟦SS1⟧DB Fly: 2x9
-⟦SS2⟧Weighted Pull-ups: 3x5
-⟦SS2⟧BB Row: 3x8
-⟦SS3⟧Lateral Raises: 2x11
-⟦SS3⟧Face Pulls: 2x11
-⟦SS4⟧Tricep Pushdowns: 2x9
-⟦SS4⟧Neck Flexion: 1x11
-⟦SS5⟧Neck Extension: 1x11
-⟦SS5⟧Lateral Neck Flexion: 1x11 each side",
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Standing BB OHP: 35%×10, 55%×10
+Neutral-Grip Pull-Ups: Set 1 = AMRAP (record reps), then 5 work sets per your Set-1 result — 1-5 reps→5x1 · 6-10→5x2 · 11-15→5x3 · 16-20→5x4 · 21+→5x5
+⟦SS1⟧Single Arm DB Bench: 2x8 each arm
+⟦SS1⟧Inverted BB Row: 1x4 + 1 AMRAP
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Farmer Carries: 2x20 yds",
         "focus": "Upper Strength — Hypertrophy",
       },
     ],
@@ -8559,316 +8647,300 @@ Easy Mobility Circuit: 1 round",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals hockey/forwards — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Hypertrophy Base (66%) · Week 1 of 4",
+    "objective": "Phase 1 — Hypertrophy Base (65%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Box Jumps: 5x5
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: build to a strong set of 5x5 — start light and build
+Trap Bar Deadlift: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Sled Sprint: 6x20 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Acceleration Mechanics:
+Sled Sprint: 4x20 yds",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 5x5 — start light and build, each arm
+Bench Press: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10
 ⟦SS1⟧Weighted Pull-ups: 5x5
 ⟦SS1⟧Single Arm DB Row: 5x10 each arm
-⟦SS2⟧Med Ball Chest Pass: 4x8 (moderate intent — controlled speed)
-⟦SS2⟧Face Pulls: 4x15
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Aerobic Base:
+Battle Rope: 3x20s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (56%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: lighter, no build — 3x5
+Trap Bar Deadlift: 35%×10, 55%×10
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-⟦SS2⟧Med Ball Chest Pass: 2x6 (moderate intent — controlled speed)
-⟦SS2⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Volume Build (70%) · Week 1 of 4",
+    "objective": "Phase 2 — Volume Build (68%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧Broad Jumps: 5x3
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: build to a strong set of 4x4 — start light and build
+Trap Bar Deadlift: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Sled Sprint: 6x20 yds
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Acceleration Mechanics:
+Sled Sprint: 5x20 yds",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build, each arm
+Bench Press: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
 ⟦SS1⟧DB Row: 4x5
 ⟦SS1⟧Chest Supported Row: 4x10 each arm
-⟦SS2⟧Med Ball Chest Pass: 5x8 (add volume — building intent)
-⟦SS2⟧Reverse Flys: 3x15
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Interval Work:
+Battle Rope: 4x20s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (59%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: lighter, no build — 3x5
+Trap Bar Deadlift: 35%×10, 55%×10
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-⟦SS2⟧Med Ball Chest Pass: 3x6 (add volume — building intent)
-⟦SS2⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength-Volume (74%) · Week 1 of 4",
+    "objective": "Phase 3 — Strength-Volume (72%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
-⟦SS1⟧Hurdle Hops: 4x6
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: build to a strong set of 3x3 — start light and build
+Trap Bar Deadlift: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Sled Sprint: 6x20 yds
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Quality Speed:
+Sprint Work: 5x15 yds @ max effort",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Bench Press: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
 ⟦SS1⟧Weighted Chin-ups: 3x5
 ⟦SS1⟧Pull-ups: 3x10 each arm
-⟦SS2⟧Med Ball Chest Pass: 5x8 (high intent — near-max effort)
-⟦SS2⟧DB Row: 3x15
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Repeat Effort:
+Lateral Sled Drag: 4x20 yds each direction",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (63%) · Week 4 of 4",
+    "objective": "Phase 3 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 32%×10, 41%×8, 50%×6, 57%×5, 63%×4
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: lighter, no build — 3x5
+Trap Bar Deadlift: 35%×10, 55%×10
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 32%×10, 41%×8, 50%×6, 57%×5, 63%×4
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-⟦SS2⟧Med Ball Chest Pass: 3x6 (high intent — near-max effort)
-⟦SS2⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Volume (77%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak Volume (76%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Hang Power Clean: 4x3
-Trap Bar Deadlift: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Depth Jumps: 4x5
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
-Hip Thrust: 3x8
+        "description": "Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: build to a strong set of 3x3 — start light and build
+Trap Bar Deadlift: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
+Bulgarian Split Squat: 3x6 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Sled Sprint: 6x20 yds
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Full-Recovery Reps:
+Sprint Work: 3x15 yds @ max effort (full recovery)",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
+        "description": "Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Bench Press: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
 ⟦SS1⟧Weighted Pull-ups: 2x5
 ⟦SS1⟧Single Arm DB Row: 2x10 each arm
-⟦SS2⟧Med Ball Chest Pass: 3x8 (tapered — lowest volume, stay sharp)
-⟦SS2⟧Face Pulls: 2x15
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Reduced:
+Battle Rope: 2x20s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (64%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Hang Power Clean: 2x2
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x6
+Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Hang Power Clean: lighter, no build — 3x5
+Trap Bar Deadlift: 35%×10, 55%×10
+Bulgarian Split Squat: 2x5 each leg
+Copenhagen Adductor: 3x8 each leg
+Hip 90/90 Hold: 3x30s each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Deload (Light):
+Sled Sprint: 2x20 yds",
         "focus": "Lower — First-Step Explosion — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
+Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
 ⟦SS1⟧Single Arm DB Row: 2x8 each arm
-⟦SS2⟧Med Ball Chest Pass: 2x6 (tapered — lowest volume, stay sharp)
-⟦SS2⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-YTW Series: 3x10 each
-Band Pull-Aparts: 3x20
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
         "focus": "Upper — Puck Battle Strength — Hypertrophy",
       },
     ],
@@ -10941,320 +11013,384 @@ Easy Mobility Circuit: 1 round",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals rugby/forwards — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Hypertrophy Base (66%) · Week 1 of 4",
+    "objective": "Phase 1 — Hypertrophy Base (65%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS2⟧Med Ball Rotational Slam: 4x8 (moderate intent — controlled speed)
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Power Clean from floor: build to a strong set of 5x5 — start light and build (from floor, catch quarter squat)
+Back Squat: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Acceleration Mechanics:
+Scrum Drive: 4x10 yds",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Weighted Pull-ups: 7x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 5x5 — start light and build, each arm
+Bench Press: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10
+⟦SS1⟧Weighted Pull-ups: 7xAMAP
 ⟦SS1⟧DB Row: 4x10 each arm
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧DB Shrugs: 3x12
-⟦SS3⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Face Pulls: 4x15
+DB Shrugs: 3x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Sled Push: 4x20 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (56%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
 ⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS2⟧Med Ball Rotational Slam: 2x6 (moderate intent — controlled speed)
+Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Scrum Drive: 2x10 yds",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
-⟦SS1⟧Weighted Pull-ups: 3x4
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧DB Row: 2x8 each arm
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧DB Shrugs: 2x9
-⟦SS3⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Face Pulls: 2x11
+DB Shrugs: 2x9
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Volume Build (70%) · Week 1 of 4",
+    "objective": "Phase 2 — Volume Build (68%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS2⟧Med Ball Rotational Slam: 5x8 (add volume — building intent)
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Power Clean from floor: build to a strong set of 4x4 — start light and build (from floor, catch quarter squat)
+Back Squat: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Acceleration Mechanics:
+Scrum Drive: 4x15 yds",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧DB Row: 5x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build, each arm
+Bench Press: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
+⟦SS1⟧DB Row: 5xAMAP
 ⟦SS1⟧DB Row: 4x10 each arm
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧DB Shrugs: 3x12
-⟦SS3⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Reverse Flys: 3x15
+DB Shrugs: 3x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Interval Work:
+Farmer Carries: 4x30 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (59%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
 ⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS2⟧Med Ball Rotational Slam: 3x6 (add volume — building intent)
+Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Scrum Drive: 2x10 yds",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
-⟦SS1⟧Weighted Pull-ups: 3x4
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧DB Row: 2x8 each arm
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧DB Shrugs: 2x9
-⟦SS3⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Face Pulls: 2x11
+DB Shrugs: 2x9
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength-Volume (74%) · Week 1 of 4",
+    "objective": "Phase 3 — Strength-Volume (72%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS2⟧Med Ball Rotational Slam: 5x8 (high intent — near-max effort)
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Power Clean from floor: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Quality Speed:
+Sprint Work: 5x15 yds @ max effort",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
-⟦SS1⟧Weighted Chin-ups: 4x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Bench Press: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
+⟦SS1⟧Weighted Chin-ups: 4xAMAP
 ⟦SS1⟧DB Row: 4x10 each arm
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧DB Shrugs: 3x12
-⟦SS3⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧DB Row: 3x15
+DB Shrugs: 3x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Repeat Effort:
+Battle Rope: 4x20s",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (63%) · Week 4 of 4",
+    "objective": "Phase 3 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×4
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
 ⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS2⟧Med Ball Rotational Slam: 3x6 (high intent — near-max effort)
+Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Scrum Drive: 2x10 yds",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 32%×10, 41%×8, 50%×6, 57%×5, 63%×4
-⟦SS1⟧Weighted Pull-ups: 3x4
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧DB Row: 2x8 each arm
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧DB Shrugs: 2x9
-⟦SS3⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Face Pulls: 2x11
+DB Shrugs: 2x9
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Volume (77%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak Volume (76%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Power Clean from floor: 5x3 working up
-Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Hip Thrust: 4x10
-⟦SS1⟧Nordic Hamstring Curl: 4x5
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS2⟧Med Ball Rotational Slam: 3x8 (tapered — lowest volume, stay sharp)
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
-Sled Push: 6x20 yds
+        "description": "Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Power Clean from floor: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8 (full ROM)
+⟦SS1⟧Scrum Drive: 4x10 yds
+⟦SS1⟧Hip Thrust: 3x10
+Nordic Hamstring Curl: 3x5
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 3x15 yds @ max effort (full recovery)",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Weighted Pull-ups: 3x5
+        "description": "Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Bench Press: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧DB Row: 4x10 each arm
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧DB Shrugs: 3x12
-⟦SS3⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Face Pulls: 2x15
+DB Shrugs: 3x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Reduced:
+Sled Push: 2x20 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (64%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Power Clean from floor: 3x2 working up
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
+Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10
+
+Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
+⟦SS1⟧Scrum Drive: 2x8 yds
 ⟦SS1⟧Hip Thrust: 2x8
-⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS2⟧Med Ball Rotational Slam: 2x6 (tapered — lowest volume, stay sharp)
+Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength & Scrummage Drive — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Scrum Drive: 2x10 yds",
+        "focus": "Lower Power — Scrummage Drive — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
-⟦SS1⟧Weighted Pull-ups: 3x4
+Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Bench Press: 35%×10, 55%×10
+⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧DB Row: 2x8 each arm
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧DB Shrugs: 2x9
-⟦SS3⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Face Pulls: 2x11
+DB Shrugs: 2x9
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sled Push: 2x15 yds",
         "focus": "Upper Strength & Contact Prep — Hypertrophy",
       },
     ],
@@ -19415,291 +19551,389 @@ Court Sprints: 3x full court (45s rest)",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals wrestling/wrestling — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Hypertrophy Base (66%) · Week 1 of 4",
+    "objective": "Phase 1 — Hypertrophy Base (65%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a strong set of 5x5 — start light and build (from floor, catch quarter squat)
+Back Squat: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 7xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-⟦SS2⟧Single Leg RDL: 3x8 each leg
-⟦SS2⟧Cossack Squat: 3x5 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+Farmer Carries: 3x40 yds
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Acceleration Mechanics:
+Sprint Work: 4x10 yds @ max effort (mat transitions)",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-⟦SS1⟧Weighted Pull-ups: 7xAMAP
-⟦SS1⟧BB Row: 4x6
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Grip Work: 3x30 seconds each
-⟦SS3⟧Face Pulls: 4x15
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a strong set of 5x5 — start light and build, each arm
+Overhead Press: 35%×12, 45%×10, 55%×10, 60%×8, 65%×8-10
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Aerobic Base:
+Battle Rope: 3x20s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (56%) · Week 4 of 4",
+    "objective": "Phase 1 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Single Leg RDL: 2x6 each leg
-⟦SS2⟧Cossack Squat: 2x4 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Extension:
-Dead Bug: 3x10 each side
-Ab Wheel: 3x8
-Plank: 3x30 seconds",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sprint Work: 3x10 yds",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Grip Work: 2x23 seconds each
-⟦SS3⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Overhead Press: 35%×10, 55%×10
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Volume Build (70%) · Week 1 of 4",
+    "objective": "Phase 2 — Volume Build (68%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a strong set of 4x4 — start light and build (from floor, catch quarter squat)
+Back Squat: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10 (full ROM)
 ⟦SS1⟧DB Row: 5xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-⟦SS2⟧Single Leg RDL: 3x8 each leg
-⟦SS2⟧Cossack Squat: 3x5 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+Farmer Carries: 3x40 yds
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Acceleration Mechanics:
+Sprint Work: 4x15 yds @ max effort",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧DB Row: 5xAMAP
-⟦SS1⟧BB Row: 4x6
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Grip Work: 3x30 seconds each
-⟦SS3⟧Reverse Flys: 3x15
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build, each arm
+Overhead Press: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Interval Work:
+Battle Rope: 4x20s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (59%) · Week 4 of 4",
+    "objective": "Phase 2 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Single Leg RDL: 2x6 each leg
-⟦SS2⟧Cossack Squat: 2x4 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Anti-Rotation:
-Pallof Press: 3x10 each side
-Half Kneeling Cable Press: 3x10 each side",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sprint Work: 3x10 yds",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Grip Work: 2x23 seconds each
-⟦SS3⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Overhead Press: 35%×10, 55%×10
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength-Volume (74%) · Week 1 of 4",
+    "objective": "Phase 3 — Strength-Volume (72%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8 (full ROM)
 ⟦SS1⟧Weighted Chin-ups: 4xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-⟦SS2⟧Single Leg RDL: 3x8 each leg
-⟦SS2⟧Cossack Squat: 3x5 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+Farmer Carries: 3x40 yds
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Quality Speed:
+Sprint Work: 5x15 yds @ max effort",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
-⟦SS1⟧Weighted Chin-ups: 4xAMAP
-⟦SS1⟧BB Row: 4x6
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Grip Work: 3x30 seconds each
-⟦SS3⟧DB Row: 3x15
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Overhead Press: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Repeat Effort:
+Wrestle-Outs: 4x30s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (63%) · Week 4 of 4",
+    "objective": "Phase 3 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×4 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Single Leg RDL: 2x6 each leg
-⟦SS2⟧Cossack Squat: 2x4 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Rotational Power:
-Med Ball Rotational Throw: 4x6 each side
-Cable Woodchop: 3x10 each side",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sprint Work: 3x10 yds",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 32%×10, 41%×8, 50%×6, 57%×5, 63%×4
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Grip Work: 2x23 seconds each
-⟦SS3⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Overhead Press: 35%×10, 55%×10
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Volume (77%) · Week 1 of 4",
+    "objective": "Phase 4 — Peak Volume (76%) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3 (top set — max effort)
+        "description": "Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
+Back Squat: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 3x5
-⟦SS2⟧Single Leg RDL: 3x8 each leg
-⟦SS2⟧Cossack Squat: 3x5 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 3x10
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+Farmer Carries: 3x40 yds
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Full-Recovery Reps:
+Sprint Work: 3x15 yds @ max effort (full recovery)",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
-        "description": "Bench Press: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 4x6
-⟦SS2⟧Overhead Press: 4x8
-⟦SS2⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Grip Work: 3x30 seconds each
-⟦SS3⟧Face Pulls: 2x15
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+        "description": "Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
+Overhead Press: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
+⟦SS1⟧BB Row: 4x8
+⟦SS1⟧Grip Work: 3x30s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Reduced:
+Battle Rope: 2x20s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (64%) · Week 4 of 4",
+    "objective": "Phase 4 — Deload (55%) · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3 (top set — max effort)
+Wrestling Movement Warm-up: Sprawls x10 · Shot Entries x10 each side · Hip Heist x10 each side
+
+Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
+Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
 ⟦SS1⟧Nordic Hamstring Curl: 2x4
-⟦SS2⟧Single Leg RDL: 2x6 each leg
-⟦SS2⟧Cossack Squat: 2x4 each side
-Hip 90/90 Stretch: 3x30s each side
+Sprawl Drills: 2x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
-Core — Lateral Stability:
-Copenhagen Adductor: 3x8 each leg
-Suitcase Carry: 3x20 yds each side",
-        "focus": "Lower Max Strength — Hypertrophy",
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Sprint Work: 3x10 yds",
+        "focus": "Lower Power — Hypertrophy",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
-⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧BB Row: 2x5
-⟦SS2⟧Overhead Press: 2x6
-⟦SS2⟧Neck Strengthening: 2x9 each direction
-⟦SS3⟧Grip Work: 2x23 seconds each
-⟦SS3⟧Face Pulls: 2x11
-Band External Rotation: 3x15 each arm
-Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15",
-        "focus": "Upper Max Strength — Hypertrophy",
+Upper Body Warm-up: Band Pull-Aparts x20 · Scap Push-Ups x10 · Arm Circles x10 each direction
+
+Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
+Overhead Press: 35%×10, 55%×10
+⟦SS1⟧BB Row: 2x6
+⟦SS1⟧Grip Work: 2x23s each (plate pinch · towel hang)
+Rope Climb: 3 ascents
+Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
+
+Neck — 4-Way (band or manual resistance):
+Neck Flexion: 2x15
+Neck Extension: 2x15
+Lateral Neck Flexion: 2x15 each side
+
+Conditioning — Deload (Light):
+Battle Rope: 2x15s",
+        "focus": "Upper Strength — Hypertrophy",
       },
     ],
     "week": 16,
