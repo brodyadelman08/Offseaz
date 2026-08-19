@@ -2059,27 +2059,92 @@ const TRACK_THROW_FINISHERS = {
   },
 }
 
-function trackThrowFinisher(dayIndex, info) {
-  const plan = finisherEngine.planWeekFinishers('rotational', info.phaseNum, 4, { hasArmCare: true })[dayIndex]
-  return finisherEngine.renderFinisher(TRACK_THROW_FINISHERS, plan, info.phaseNum, info.deload)
+// feat/day-layout-engine — Track Throwers' pack. hasArmCare:true (real
+// overhead/throwing demand), no warmup lines (Track never had them). Old
+// Day1's Power Clean is dropped — Rotational has no MAIN_OLY slot at all
+// (same documented archetype simplification as Baseball/Tennis/Golf/QB).
+// Old Day2's Overhead Press ("4x8", a plain accessory) is promoted to the
+// ramped MAIN_PRESS_V lift on "Upper & Shoulder Health" — that day
+// structurally wants a genuine vertical press, same conformance fix
+// applied to Rugby Forwards/Hockey Forwards/Tennis/Golf/QB. Old Day4's
+// Push Press is dropped as redundant with the now-ramped Overhead Press
+// (same call made for QB); Close Grip Bench Press (already ramped in the
+// old content) fills MAIN_PRESS_H. Old Day1/3's calf-raise lines and
+// Day3's DB Step-Ups have no home in the new, leaner slot counts —
+// dropped (documented, deliberate, matches the pattern already applied
+// across every migrated sport this PR). displayFocus restores throwers'
+// own richer day names as pure output relabeling.
+const TRACK_THROW_PACK = {
+  finisherBank: TRACK_THROW_FINISHERS,
+  hasArmCare: true,
+  displayFocus: {
+    'Lower Power': 'Lower Power — Squat',
+    'Upper & Shoulder Health': 'Upper Strength, Rotational & Shoulder Health',
+    'Lower Strength': 'Lower Strength — Deadlift',
+    'Upper Power & Rotational': 'Upper Power, Rotational & Shoulder Health',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+      ACC_UNILATERAL_LOWER: 'Goblet Lateral Lunge: 4x4 each leg',
+    },
+    'Upper & Shoulder Health': { // 4-day only
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_H: 'BB Row: 4x8',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper & Rotational': { // 3-day only
+      MAIN_PRESS_H: 'Close Grip Bench Press',
+      ACC_PULL_H: 'BB Row: 4x8',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Strength': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_SQUAT: 'Goblet Squat: 4x10',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5', // 4-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Upper Power & Rotational': { // 4-day only
+      MAIN_PRESS_H: 'Close Grip Bench Press',
+      ACC_PULL_H: 'BB Row: 4x8',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+    },
+    'Shoulder Health & Power Accessory': { // 5-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Vertical Press Emphasis': { // 6-day
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Horizontal Press Emphasis': { // 6-day
+      MAIN_PRESS_H: 'Close Grip Bench Press',
+      ACC_PULL_H: 'BB Row: 4x8',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Explosion': { // 6-day
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Goblet Lateral Lunge: 4x4 each leg',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Arm-Care Emphasis': { // 6-day
+      ACC_PULL_H: 'BB Row: 4x8',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+    },
+  },
 }
 
-function trackThrowSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/throwing archetype, same tier as baseball/golf/tennis
-  return [
-    // Fix 1: Day 1 is now a squat day — Trap Bar Deadlift moved to Day 3
-    { day: 'Day 1', focus: 'Lower Power — Squat',
-      description: `Power Clean from floor: 5x3 working up, last set AMAP\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nGoblet Lateral Lunge: 3x4 each leg\nDouble Leg Calf Raise: 3x15\n${trackThrowFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper Strength, Rotational & Shoulder Health',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nBB Row: 4x8\nOverhead Press: 4x8\n${trackThrowFinisher(1, info)}` },
-    // Trap Bar DL is primary; RDL removed (flagged: TBD + RDL); Hip Thrust replaces it
-    { day: 'Day 3', focus: 'Lower Strength — Deadlift',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nDB Step-Ups: 3x6 each leg\nHip Thrust: 3x10\nNordic Hamstring Curl: 3x5\nSingle Leg Calf Raise: 3x12\n${trackThrowFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Upper Power, Rotational & Shoulder Health',
-      description: `Push Press: 4x5\nClose Grip Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\n${trackThrowFinisher(3, info)}` },
-  ]
+function generateTrackThrowWeeks(daysPerWeek, mg = false) {
+  const phases = mg ? MG_PHASES : STD_PHASES
+  const weeks = generateRotationalWeeksFromPack(TRACK_THROW_PACK, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // Track Jumpers — Vertical/Court archetype, arm care OFF. Sprint/Energy
@@ -2142,10 +2207,6 @@ const TRACK_SPRINT_DAY5 = (info) => ({
   day: 'Day 5', focus: 'Sprint Mechanics & Acceleration',
   description: `Wicket Runs: 4x40m\nBlock Start Acceleration: 6x20m\nHill Sprints: 5x40m\nResistance Band Sprint Marches: 4x20m\nAnkle Circuit: 3x20 each\n${coreBlock(info.phaseNum)}`,
 })
-const TRACK_THROW_DAY5 = (info) => ({
-  day: 'Day 5', focus: 'Power Accessory & Recovery',
-  description: `Overhead Squat: 4x5 (technique)\nRotational Med Ball Throw: 4x6 each side\nFace Pulls: 4x15\nBand External Rotation: 3x15\nFoam Roll: 10 minutes\n${coreBlock(info.phaseNum)}`,
-})
 const TRACK_JUMP_DAY5 = (info) => ({
   day: 'Day 5', focus: 'Elastic Strength & Bounding',
   description: `Ankle Hops: 4x20\nSingle Leg Bounding: 4x5 each leg\nDrop Jump: 4x5\nReactive Box Jump: 3x5\nLateral Hurdle Hops: 3x5 each side\n${coreBlock(info.phaseNum)}`,
@@ -2157,13 +2218,19 @@ const TRACK_DAY6 = {
 
 function generateTrackWeeks(subtype, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
+  // Throwers (Rotational/Throwing archetype) now route through their own
+  // purpose-built day-layout pack, day-count-aware for all of 3/4/5/6
+  // days — see generateTrackThrowWeeks/TRACK_THROW_PACK above. Sprint/Jump
+  // are Speed/Power and Vertical/Court archetype sports respectively,
+  // still on the older generic bolt-on path pending their own migration.
+  if (subtype === 'throw') return generateTrackThrowWeeks(daysPerWeek, mg)
   const phases = mg ? MG_PHASES : STD_PHASES
-  const baseFns = { sprint: trackSprintSess, throw: trackThrowSess, jump: trackJumpSess }
+  const baseFns = { sprint: trackSprintSess, jump: trackJumpSess }
   const baseFn = baseFns[subtype] || trackSprintSess
   const fn = mg
     ? (info) => baseFn(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
     : baseFn
-  const day5Fns = { sprint: TRACK_SPRINT_DAY5, throw: TRACK_THROW_DAY5, jump: TRACK_JUMP_DAY5 }
+  const day5Fns = { sprint: TRACK_SPRINT_DAY5, jump: TRACK_JUMP_DAY5 }
   const day5 = day5Fns[subtype] || TRACK_SPRINT_DAY5
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [day5, TRACK_DAY6])
 }
