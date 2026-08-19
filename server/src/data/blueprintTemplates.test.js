@@ -1538,9 +1538,17 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
   // Extensions now only ever appear inside mgNote()'s fixed blurb text —
   // a single flat sentence, not individually-authored accessory lines — so
   // they're no longer separately bracketed the way the old template's own
-  // standalone lines were; the day's real authored accessories (Barbell
-  // RDL, Goblet Lateral Lunge, Plate Overhead Sit-Ups, Double Leg Calf
-  // Raise) are what's checked for correct pairing.
+  // standalone lines were.
+  //
+  // feat/day-layout-engine — Day 1's own authored accessories changed
+  // again: the purpose-built Collision templates give "Lower Power" two
+  // accessory slots (ACC_HINGE/ACC_UNILATERAL_LOWER — Barbell RDL/
+  // Bulgarian Split Squat), not four; Goblet Lateral Lunge/Plate Overhead
+  // Sit-Ups/Double Leg Calf Raise don't have a corresponding slot on this
+  // specific day anymore (Goblet Lateral Lunge moved to the "Lower
+  // Strength" day's own ACC_SQUAT slot; ACC_CORE now renders via the
+  // finisher engine's own core family instead of a fixed inline line —
+  // see buildCollisionRenderers' ACC_CORE doc comment).
   test('Linemen muscle_gain: mgNote() additions survive, and every authored accessory on the modern archetype day survives, paired into supersets', () => {
     const bp = generateBlueprintForAthlete({
       sport: 'Football', position: 'Linemen', primary_goal: 'muscle_gain',
@@ -1551,15 +1559,11 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(day1).toContain('Bicep Curls')
     expect(day1).toContain('Tricep Extensions')
     expect(day1).toContain('Barbell RDL')
-    expect(day1).toContain('Goblet Lateral Lunge')
-    expect(day1).toContain('Plate Overhead Sit-Ups')
-    expect(day1).toContain('Double Leg Calf Raise')
-    // The day's 4 real accessories (even count) pair cleanly into two
-    // brackets — nothing left dangling unbracketed.
+    expect(day1).toContain('Bulgarian Split Squat')
+    // The day's 2 real accessories pair cleanly into one bracket —
+    // nothing left dangling unbracketed.
     expect(day1).toMatch(/⟦SS\d+⟧Barbell RDL:/)
-    expect(day1).toMatch(/⟦SS\d+⟧Goblet Lateral Lunge:/)
-    expect(day1).toMatch(/⟦SS\d+⟧Plate Overhead Sit-Ups:/)
-    expect(day1).toMatch(/⟦SS\d+⟧Double Leg Calf Raise:/)
+    expect(day1).toMatch(/⟦SS\d+⟧Bulgarian Split Squat:/)
   })
 
   test('Tibialis Raises rotates in as a real working lower-body accessory (not a warm-up) via the calf-raise rotation slot', () => {
