@@ -965,26 +965,89 @@ const FOOTBALL_QB_FINISHERS = {
   },
 }
 
-function fbQBFinisher(dayIndex, info) {
-  const plan = finisherEngine.planWeekFinishers('rotational', info.phaseNum, 4, { hasArmCare: true })[dayIndex]
-  return finisherEngine.renderFinisher(FOOTBALL_QB_FINISHERS, plan, info.phaseNum, info.deload)
+// feat/day-layout-engine — QB's pack. hasArmCare:true (real throwing
+// demand) — ACC_SHOULDER slots defer to the finisher engine's own arm
+// family, same as Tennis. QB's own day names already match two of the
+// generic template labels verbatim ('Upper & Shoulder Health', and 'Upper
+// & Rotational' happens to equal the 3-day template's own label too), so
+// no displayFocus override is needed there; 'Lower'/'Lower Explosion' do
+// need one. Old fixed "Hang Clean: 3x3"/"Power Clean: 4x3" drop (no
+// MAIN_OLY slot); Push Press (a second, redundant vertical press on the
+// same day as Overhead Press) drops in favor of Overhead Press filling
+// MAIN_PRESS_V; phasePlyo/Single Leg Calf Raise don't have a slot on the
+// 4-day "Lower Explosion" day either (no PLYO/calf-grip slot there).
+const FOOTBALL_QB_PACK = {
+  finisherBank: FOOTBALL_QB_FINISHERS,
+  hasArmCare: true,
+  warmupLower: WU_LOWER.trimEnd(),
+  warmupUpper: WU_UPPER.trimEnd(),
+  displayFocus: {
+    'Lower Power': 'Lower',
+    'Lower Strength': 'Lower Explosion',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+    },
+    'Upper & Shoulder Health': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper & Rotational': { // shared literal key — matches BOTH the
+      // 3-day template's own label AND QB's own 4-day Day 2 name.
+      MAIN_PRESS_H: 'DB Bench',
+      ACC_PULL_H: 'Bent Over BB Row: 4x8',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Strength': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_SQUAT: 'Goblet Squat: 4x10',
+      ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Upper Power & Rotational': {
+      MAIN_PRESS_H: 'DB Bench',
+      ACC_PULL_H: 'Bent Over BB Row: 4x8',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+    },
+    'Shoulder Health & Power Accessory': {
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Vertical Press Emphasis': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Horizontal Press Emphasis': {
+      MAIN_PRESS_H: 'DB Bench',
+      ACC_PULL_H: 'Bent Over BB Row: 4x8',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Hip Thrust: 4x8',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Arm-Care Emphasis': {
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+    },
+  },
 }
 
-function fbQBSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/speed tier: 8/6/5/4 by phase
-  return [
-    { day: 'Day 1', focus: 'Lower',
-      description: `${WU_LOWER}Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nBulgarian Split Squat: 3x6 each leg\nHip Thrust: 4x8\nLateral Bounds: 3x5 each side\n${fbQBFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper & Rotational',
-      description: `${WU_UPPER}Hang Clean: 3x3\nDB Bench: 4x10\nPull-ups: 4xAMAP\n${fbQBFinisher(1, info)}` },
-    // Fix 3: phasePlyo
-    { day: 'Day 3', focus: 'Lower Explosion',
-      description: `${WU_LOWER}Power Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nSingle Leg Calf Raise: 3x15\n${fbQBFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Upper & Shoulder Health',
-      description: `${WU_UPPER}Push Press: 4x5\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\n${fbQBFinisher(3, info)}` },
-  ]
+function generateQBWeeks(daysPerWeek, mg = false) {
+  const phases = mg ? MG_PHASES : FB_PHASES
+  const weeks = generateRotationalWeeksFromPack(FOOTBALL_QB_PACK, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 const FB_DAY5 = (info) => ({
@@ -1008,13 +1071,16 @@ function generateFootballWeeks(posId, goal, daysPerWeek = 4) {
   if (posId !== 'skill' && posId !== 'hybrid' && posId !== 'qb') {
     return generateLinemenWeeks(daysPerWeek, mg)
   }
+  // QB (Rotational/Throwing archetype) now routes through its own
+  // purpose-built day-layout pack, day-count-aware for all of 3/4/5/6
+  // days — see generateQBWeeks/FOOTBALL_QB_PACK above.
+  if (posId === 'qb') return generateQBWeeks(daysPerWeek, mg)
   const phases = mg ? MG_PHASES : FB_PHASES
-  // posId is guaranteed to be exactly 'skill'/'hybrid'/'qb' here — anything
-  // else already returned above via generateLinemenWeeks.
+  // posId is guaranteed to be exactly 'skill'/'hybrid' here — qb already
+  // returned above, anything else returned via generateLinemenWeeks.
   const fns = {
     skill: (info) => mg ? fbSkillSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbSkillSess(info),
     hybrid: (info) => mg ? fbHybridSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbHybridSess(info),
-    qb: (info) => mg ? fbQBSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbQBSess(info),
   }
   return buildWeeksDynamic(16, phases, fns[posId], daysPerWeek, [FB_DAY5, FB_DAY6])
 }
@@ -4018,6 +4084,106 @@ function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
 
 // ─── Tennis ───────────────────────────────────────────────────────────────────
 
+// ─── Day Layout Engine wiring: Rotational/Throwing archetype
+// (feat/day-layout-engine) ───────────────────────────────────────────────
+// Same "pack supplies tag->exercise, shared renderer supplies the math"
+// split as Collision (see buildCollisionRenderers above), but this
+// archetype's main-lift math is the ALREADY-shared mainLiftTopReps('rotational')
+// + each sport's own getPhaseInfo(w, ITS_OWN_PHASES)/info.ramp — no
+// archetype-level phase function of its own the way Collision has
+// collisionPhaseInfo, since Rotational sports already run their own phase
+// tables (TENNIS_PHASES, GOLF_PHASES, FB_PHASES, BASEBALL_PHASES, ...)
+// through the pre-existing shared getPhaseInfo. No MAIN_OLY and no NECK
+// in any of this archetype's templates (see dayLayoutEngine.js) — Oly-
+// style lines some sports used to carry (Tennis's old fixed "Power Clean:
+// 3x3"/"Hang Clean: 3x3") don't have a slot here and are dropped, matching
+// the archetype's own design intent (rotational power expression via
+// MED_BALL/rotation work, not barbell Oly lifts).
+function buildRotationalRenderers(pack) {
+  function mainEntry(focusLabel, tagName) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (!entry) throw new Error(`Rotational pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'string' ? { name: entry, suffix: '' } : { name: entry.name, suffix: entry.suffix || '' }
+  }
+  function accEntry(focusLabel, tagName, ctx) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (entry === undefined) throw new Error(`Rotational pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'function' ? entry(ctx) : entry
+  }
+
+  const renderers = {}
+  for (const tagName of ['MAIN_SQUAT', 'MAIN_HINGE', 'MAIN_PRESS_H', 'MAIN_PRESS_V']) {
+    renderers[tagName] = (slotDef, ctx) => {
+      const { name, suffix } = mainEntry(ctx.dayTemplate.focus, tagName)
+      const r = mainLiftTopReps(ctx.phaseNum, 'rotational')
+      return `${name}: ${ctx.ramp}, ${ctx.pct}×${r}${suffix}`
+    }
+  }
+  for (const tagName of [
+    'ACC_SQUAT', 'ACC_HINGE', 'ACC_UNILATERAL_LOWER', 'ACC_POSTERIOR',
+    'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
+    'PLYO', 'SPEED', 'MED_BALL',
+  ]) {
+    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+  }
+  // Same as Collision's ACC_CORE — never rendered directly, the finisher
+  // engine's own 'core' family already owns coreBlock() content for this
+  // archetype (see the fuller doc comment on buildCollisionRenderers).
+  renderers.ACC_CORE = () => null
+  // Same duplication risk, one level removed: for a hasArmCare:true sport,
+  // the finisher engine's own 'arm' family already renders real shoulder-
+  // health content (Band External Rotation/YTW Series/...) on whichever
+  // day it's scheduled — an ACC_SHOULDER slot rendering the SAME kind of
+  // content inline risks colliding with it on that day. For a
+  // hasArmCare:false sport there's no arm-family content to collide with,
+  // so ACC_SHOULDER renders normally there — a real, generic shoulder-
+  // health accessory (distinct from arm care, open to every sport).
+  if (pack.hasArmCare) renderers.ACC_SHOULDER = () => null
+  if (pack.warmupLower || pack.warmupUpper) {
+    renderers.WARMUP = (ctx) => {
+      const lu = dayLayoutEngine.dayLowerOrUpper(ctx.dayTemplate)
+      if (lu === 'lower') return pack.warmupLower || null
+      if (lu === 'upper') return pack.warmupUpper || null
+      return null
+    }
+  }
+  renderers.FINISHER = (dayIndex, ctx) => {
+    const opts = { hasArmCare: !!pack.hasArmCare }
+    if (pack.dayCompatibility) opts.dayCompatibility = pack.dayCompatibility
+    if (pack.finisherOverrides) opts.overrides = pack.finisherOverrides
+    const plan = finisherEngine.planWeekFinishers('rotational', ctx.phaseNum, ctx.days, opts)[dayIndex]
+    return finisherEngine.renderFinisher(pack.finisherBank, plan, ctx.phaseNum, ctx.deload)
+  }
+  return renderers
+}
+
+// Generates all 16 weeks for one Rotational-archetype sport at a given
+// day count, entirely from its pack. `phases` is that sport's own phase
+// table (TENNIS_PHASES, GOLF_PHASES, ...), run through the same shared
+// getPhaseInfo every non-Collision sport already uses — Change 1-4's own
+// block-periodization math is completely untouched by this.
+function generateRotationalWeeksFromPack(pack, phases, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const info = getPhaseInfo(w, phases)
+    const ctx = { ...info, days: Math.max(2, Math.min(6, daysPerWeek)) }
+    let sessions = dayLayoutEngine.buildWeekSessions('rotational', ctx.days, buildRotationalRenderers(pack), ctx)
+    if (pack.displayFocus) {
+      sessions = sessions.map(s => ({ ...s, focus: pack.displayFocus[s.focus] || s.focus }))
+    }
+    weeks.push({
+      week_number: w,
+      objective: info.deload
+        ? `Phase ${info.phaseNum} — Deload (${info.pct}) · Week ${info.wip} of 4`
+        : `Phase ${info.phaseNum} — ${info.phaseLabel} (${info.pct}) · Week ${info.wip} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
 // Tennis's own finisher content — Rotational/Throwing archetype, arm care
 // ON (a real overhead/throwing-adjacent sport — serving). Sprint/Energy
 // reuse TENNIS_DAY5's own already-vetted court-movement vocabulary
@@ -4057,48 +4223,88 @@ const TENNIS_FINISHERS = {
   },
 }
 
-function tennisFinisher(dayIndex, info) {
-  const plan = finisherEngine.planWeekFinishers('rotational', info.phaseNum, 4, { hasArmCare: true })[dayIndex]
-  return finisherEngine.renderFinisher(TENNIS_FINISHERS, plan, info.phaseNum, info.deload)
-}
-
-function tennisSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/throwing archetype, same tier as baseball
-  const lsj  = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  const mbrt = explosiveSets(4, ph)
-  return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift; Bulgarian + Single Leg RDL remain
-    { day: 'Day 1', focus: 'Lower Strength',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nLateral Bound: 4x5 each side\nCalf Raises: 3xAMAP\n${tennisFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper Strength & Balance',
-      description: `Power Clean: 3x3\nBench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nForearm Curls (both directions): 3xAMAP\n${tennisFinisher(1, info)}` },
-    // Fix 3: phasePlyo as primary; Lateral Squat Jump kept (sport-specific); Depth Jump removed from ph 1-2
-    { day: 'Day 3', focus: 'Explosion & Lateral Power',
-      description: `Hang Clean: 3x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\n${tennisFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Rotational Power & Shoulder Health',
-      description: `Split Stance Cable Row: 3x10 each side\nLandmine Press: 3x8 each arm\nBand Pull-Aparts: 4x20\nWrist Curls: 3x15\nReverse Wrist Curls: 3x15\nCable Woodchop: 3x10 each side\n${tennisFinisher(3, info)}` },
-  ]
-}
-
-const TENNIS_DAY5 = (info) => ({
-  day: 'Day 5', focus: 'Court Speed & Agility',
-  description: `5-10-5 Shuttle: 6x1\nLateral Shuffle Sprint: 4x10 yds each way\nReactive Cone Drill: 4x3\nAnkle Hops: 4x20\nSingle Leg Hop & Stick: 3x5 each leg\n${coreBlock(info.phaseNum)}`,
-})
-const TENNIS_DAY6 = {
-  day: 'Day 6', focus: 'Recovery & Shoulder Maintenance',
-  description: `Foam Roll: Full body — 10 minutes\nBand External Rotation: 3x15 each arm\nYTW Series: 2x12 each\nWrist Mobility: 3x10 each direction\nThoracic Rotation: 3x10 each side\nHip Flexor Stretch: 3x45s each leg`,
+// feat/day-layout-engine — Tennis's pack. hasArmCare:true (real overhead/
+// serving demand), so ACC_SHOULDER slots defer entirely to the finisher
+// engine's own arm family (see buildRotationalRenderers' doc comment) —
+// no ACC_SHOULDER entries needed below. Old fixed "Power Clean: 3x3"/
+// "Hang Clean: 3x3" lines drop (no MAIN_OLY slot in this archetype); Day
+// 3's old plyo/lateral-jump content (phasePlyo, Lateral Squat Jump, Single
+// Leg Box Jump) doesn't have a slot in the 4-day template either — none of
+// Rotational's 4-day days carry PLYO, only MED_BALL, reflecting the
+// archetype's own rotational-power-over-jump-power emphasis — a real,
+// visible simplification on 3/4-day plans specifically. Day 2's old main
+// lift was Bench Press (horizontal) on what's structurally the week's
+// VERTICAL-press day; Overhead Press (already in Tennis's own content,
+// just as a fixed accessory before) is promoted to fill that slot, and
+// Bench Press moves to the days that actually want a horizontal press
+// (3-day's 'Upper & Rotational', 6-day's 'Upper — Horizontal Press
+// Emphasis').
+const TENNIS_PACK = {
+  finisherBank: TENNIS_FINISHERS,
+  hasArmCare: true,
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+    },
+    'Upper & Shoulder Health': { // 4-day only
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper & Rotational': { // 3-day only
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Strength': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_SQUAT: 'Goblet Squat: 4x10',
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg', // 4-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Upper Power & Rotational': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+    },
+    'Shoulder Health & Power Accessory': {
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Vertical Press Emphasis': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Horizontal Press Emphasis': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Arm-Care Emphasis': {
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+    },
+  },
 }
 
 function generateTennisWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   const phases = mg ? MG_PHASES : TENNIS_PHASES
-  const fn = mg
-    ? (info) => tennisSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : tennisSess
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [TENNIS_DAY5, TENNIS_DAY6])
+  const weeks = generateRotationalWeeksFromPack(TENNIS_PACK, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── Golf ─────────────────────────────────────────────────────────────────────
@@ -4140,47 +4346,93 @@ const GOLF_FINISHERS = {
   },
 }
 
-function golfFinisher(dayIndex, info) {
-  const plan = finisherEngine.planWeekFinishers('rotational', info.phaseNum, 3, { hasArmCare: false })[dayIndex]
-  return finisherEngine.renderFinisher(GOLF_FINISHERS, plan, info.phaseNum, info.deload)
-}
-
-function golfSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — rotational/throwing archetype, same tier as baseball
-  const dsj  = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Day 1', focus: 'Lower Vertical Strength & Ground Force',
-      description: `Back Squat: ${info.ramp}, ${q}×${r} (explosive intent)\nHip Thrust: 3x10\nStep-Up: 3x6 each leg\nNordic Hamstring Curl: 3x5\nLandmine Thruster: 3x6 each side\nDB Squat Jump: ${dsj}x5 (${explosiveIntent(ph)})\nCore Pallof Press: 3x10 each side\nDead Bug: 3x10\n${golfFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper & Rotational Power',
-      description: `Single Arm DB Row: 4x8 each arm\nDB Bench Press: 4x8\nLandmine Press: 3x8 each arm\nSplit Stance Cable Row: 3x10 each side\nBand Pull-Aparts: 3x20\nCore Cable Woodchop: 3x10 each side\n${golfFinisher(1, info)}` },
-    // Trap Bar Deadlift moved here from Day 1 — separated from Back Squat to avoid bilateral overload
-    { day: 'Day 3', focus: 'Full Body Power & Posterior Chain',
-      description: `Power Clean: 3x3 (explosive intent)\nTrap Bar Deadlift: 40%×10, 50%×8, ${q}×${r}\n${phasePlyo(ph)}\nLateral Bound: 4x5 each side\nSingle Leg RDL: 3x8 each leg\nCore Bird Dog: 3x10\nAnti-Rotation Press: 3x10\n${golfFinisher(2, info)}` },
-  ]
-}
-
-const GOLF_DAY4 = (info) => ({
-  day: 'Day 4', focus: 'Mobility & Rotation Maintenance',
-  description: `Hip 90/90 Rotations: 3x10 each side\nThoracic Rotation: 3x12 each side\nLandmine Rotation: 3x10 each side\nCable Woodchop: 3x12 each side\nGlute Bridge: 3x15\nDeep Squat Hold: 3x30s\n${coreBlock(info.phaseNum)}`,
-})
-const GOLF_DAY5 = (info) => ({
-  day: 'Day 5', focus: 'Rotational Power Peak',
-  description: `Med Ball Rotational Throw: 5x6 each side\nMed Ball Slam: 4x8\nLandmine Thruster: 3x6 each side\nCable Woodchop: 4x10 each side\nSingle Leg RDL: 3x8 each leg\n${coreBlock(info.phaseNum)}`,
-})
-const GOLF_DAY6 = {
-  day: 'Day 6', focus: 'Active Recovery',
-  description: `Foam Roll: Full body — 15 minutes\nCat-Cow: 3x10\nHip 90/90 Hold: 3x45s each side\nThoracic Rotation: 3x10 each side\nDownward Dog → Cobra flow: 3x8\nDeep Glute Stretch: 3x45s each side`,
+// feat/day-layout-engine — Golf's pack. hasArmCare:false, so ACC_SHOULDER
+// renders normally here (real generic shoulder-health content, e.g. Band
+// Pull-Aparts) unlike Tennis. Golf's old "4/5/6-day" content (GOLF_DAY4/5/6)
+// was always a generic bolt-on, not purpose-built — this pack gives every
+// day count real, tag-driven content instead. Old fixed "Power Clean: 3x3"
+// drops (no MAIN_OLY slot); DB Squat Jump/phasePlyo/Anti-Rotation Press
+// don't have a slot on the 3-day template either (no PLYO slot on any
+// Rotational 3/4-day). Day 2 had no ramped main lift at all before — DB
+// Bench Press is promoted to fill MAIN_PRESS_H; Day 2's own
+// "Upper — Shoulder Health" role (4-day+) needed a genuine vertical press
+// Golf's existing vocabulary didn't have — Overhead Press (already vetted
+// elsewhere in this file) fills it.
+const GOLF_PACK = {
+  finisherBank: GOLF_FINISHERS,
+  hasArmCare: false,
+  displayFocus: {
+    'Lower Power': 'Lower Vertical Strength & Ground Force',
+    'Upper & Rotational': 'Upper & Rotational Power',
+    'Lower Strength': 'Full Body Power & Posterior Chain',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: { name: 'Back Squat', suffix: ' (explosive intent)' },
+      ACC_HINGE: 'Hip Thrust: 4x10',
+      ACC_UNILATERAL_LOWER: 'Step-Up: 4x6 each leg',
+    },
+    'Upper & Rotational': { // 3-day only
+      MAIN_PRESS_H: 'DB Bench Press',
+      ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Strength': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_SQUAT: 'Goblet Squat: 4x10',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5', // 4-day
+    },
+    'Upper & Shoulder Health': { // 4-day only
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
+    },
+    'Upper Power & Rotational': {
+      MAIN_PRESS_H: 'DB Bench Press',
+      ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+    },
+    'Shoulder Health & Power Accessory': {
+      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
+    },
+    'Upper — Vertical Press Emphasis': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
+    },
+    'Upper — Horizontal Press Emphasis': {
+      MAIN_PRESS_H: 'DB Bench Press',
+      ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Step-Up: 4x6 each leg',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Upper — Arm-Care Emphasis': {
+      ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
+      ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
+    },
+  },
 }
 
 function generateGolfWeeks(posId, goal, daysPerWeek = 3) {
   const mg = goal === 'muscle_gain'
   const phases = mg ? MG_PHASES : GOLF_PHASES
-  const fn = mg
-    ? (info) => golfSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : golfSess
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [GOLF_DAY4, GOLF_DAY5, GOLF_DAY6])
+  const weeks = generateRotationalWeeksFromPack(GOLF_PACK, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── General Athletic Performance (fallback) ──────────────────────────────────
