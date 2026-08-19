@@ -2458,12 +2458,16 @@ describe('Area 16 — Weighted Push-Ups horizontal-push rotation', () => {
     return line ? line.replace(SUPERSET_MARKER_RE, '').split(':')[0] : null
   }
 
+  // feat/day-layout-engine — soccer's own weekday-named sessions (Monday/
+  // Tuesday/Thursday/Friday) are gone; every day-layout-engine sport
+  // (soccer included, now on the Field archetype) uses generic "Day N"
+  // labels, matching every other sport already migrated this PR.
   const GROUPS = [
     ['football', 'skill',  s => s.day === 'Day 2'],
     ['football', 'hybrid', s => s.day === 'Day 2'],
-    ['soccer',   'goalkeeper',  s => s.day === 'Tuesday'],
-    ['soccer',   'center_back', s => s.day === 'Tuesday'],
-    ['soccer',   'midfielder',  s => s.day === 'Tuesday'],
+    ['soccer',   'goalkeeper',  s => s.day === 'Day 2'],
+    ['soccer',   'center_back', s => s.day === 'Day 2'],
+    ['soccer',   'midfielder',  s => s.day === 'Day 2'],
   ]
 
   for (const [sportId, posId, dayMatch] of GROUPS) {

@@ -1484,6 +1484,99 @@ function fieldFinisher(bank, dayIndex, days, info, overrides = null) {
   return finisherEngine.renderFinisher(bank, plan, info.phaseNum, info.deload)
 }
 
+// ─── Day Layout Engine wiring: Repeat-Sprint/Field archetype
+// (feat/day-layout-engine) ───────────────────────────────────────────────
+// Same "pack supplies tag->exercise, shared renderer supplies the math"
+// split as Collision/Rotational above. Main-lift math is the same shared
+// mainLiftTopReps('rotational') + each sport's own getPhaseInfo(w, ITS_OWN_
+// PHASES) every non-Collision sport already uses. hasArmCare is always
+// false for this whole archetype (none of Soccer/Lacrosse/Hockey Defense-
+// Goalie/Rugby Backs are throwing/overhead positions — matches fieldFinisher's
+// own pre-existing hardcoded `hasArmCare: false`), so ACC_SHOULDER renders
+// real, generic shoulder-health content everywhere (no dedup-null needed).
+//
+// Squat/hinge conformance (same fix already applied across Collision):
+// this archetype's own template structurally wants TWO squat days
+// ("Lower Power" and "Lower Explosion" both carry MAIN_SQUAT on 4/5/6-day)
+// — but every migrated sport's own "Lower Explosion"-equivalent day
+// originally topped out with a HINGE lift (Hex Bar Deadlift/Trap Bar
+// Deadlift), not a squat. Resolved the same way as Collision: Front Squat
+// (a genuine second squat variant) fills "Lower Explosion"'s MAIN_SQUAT on
+// 4/5/6-day; the sport's own original hinge lift relocates to the 3-day-
+// only "Lower Explosion" template, which genuinely wants MAIN_HINGE.
+//
+// Vertical-press conformance (same fix already applied to Rugby Forwards/
+// Hockey Forwards/Tennis/Golf/QB/Track Throwers/Baseball): "Upper Power"
+// structurally wants a genuine vertical press. Every migrated sport here
+// already had "Overhead Press" as a fixed, non-ramped ACCESSORY line (not
+// a main lift) — promoted to the ramped MAIN_PRESS_V slot. The sport's own
+// original flat/non-ramped press accessory (DB Bench Press) fills "Upper
+// Strength"'s own ACC_PRESS slot instead, alongside its own genuinely-
+// ramped horizontal press (Bench Press) filling MAIN_PRESS_H there.
+function buildFieldRenderers(pack) {
+  function mainEntry(focusLabel, tagName) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (!entry) throw new Error(`Field pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'string' ? { name: entry, suffix: '' } : { name: entry.name, suffix: entry.suffix || '' }
+  }
+  function accEntry(focusLabel, tagName, ctx) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (entry === undefined) throw new Error(`Field pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'function' ? entry(ctx) : entry
+  }
+
+  const renderers = {}
+  for (const tagName of ['MAIN_SQUAT', 'MAIN_HINGE', 'MAIN_PRESS_H', 'MAIN_PRESS_V']) {
+    renderers[tagName] = (slotDef, ctx) => {
+      const { name, suffix } = mainEntry(ctx.dayTemplate.focus, tagName)
+      const r = mainLiftTopReps(ctx.phaseNum, 'rotational')
+      return `${name}: ${ctx.ramp}, ${ctx.pct}×${r}${suffix}`
+    }
+  }
+  for (const tagName of [
+    'ACC_SQUAT', 'ACC_HINGE', 'ACC_UNILATERAL_LOWER', 'ACC_POSTERIOR',
+    'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
+    'PLYO', 'SPEED', 'MED_BALL',
+  ]) {
+    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+  }
+  // Same as Collision/Rotational's own ACC_CORE — never rendered directly,
+  // the finisher engine's own 'core' family already owns coreBlock()
+  // content for this archetype.
+  renderers.ACC_CORE = () => null
+  renderers.FINISHER = (dayIndex, ctx) => {
+    return fieldFinisher(pack.finisherBank, dayIndex, ctx.days, ctx, pack.finisherOverrides || null)
+  }
+  return renderers
+}
+
+// Generates all 16 weeks for one Field-archetype sport at a given day
+// count, entirely from its pack. `phases` is that sport's own phase table
+// (SOC_PHASES, HOCKEY_PHASES, RUGBY_PHASES, STD_PHASES for Lacrosse, ...),
+// run through the same shared getPhaseInfo every non-Collision sport
+// already uses.
+function generateFieldWeeksFromPack(pack, phases, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const info = getPhaseInfo(w, phases)
+    const ctx = { ...info, days: Math.max(2, Math.min(6, daysPerWeek)) }
+    let sessions = dayLayoutEngine.buildWeekSessions('field', ctx.days, buildFieldRenderers(pack), ctx)
+    if (pack.displayFocus) {
+      sessions = sessions.map(s => ({ ...s, focus: pack.displayFocus[s.focus] || s.focus }))
+    }
+    weeks.push({
+      week_number: w,
+      objective: info.deload
+        ? `Phase ${info.phaseNum} — Deload (${info.pct}) · Week ${info.wip} of 4`
+        : `Phase ${info.phaseNum} — ${info.phaseLabel} (${info.pct}) · Week ${info.wip} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
 // ─── Soccer ───────────────────────────────────────────────────────────────────
 
 const SOC_SPRINT_YARDS = [50, 60, 70, 80]
@@ -1507,22 +1600,56 @@ function gkConditioningB(ph, deload) {
 // Rotational Throw; Arm reuses GK's own Band External Rotation.
 const GK_FINISHERS = fieldFinisherBank(gkConditioningA, gkConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
-function soccerGoalkeeperSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const slbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Monday', focus: 'Lower Power & Explosive',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nLateral Bound: 5x5 each side\nCopenhagen Adductor: 4x10 each leg\nCalf Raises: 3xAMAP\n${fieldFinisher(GK_FINISHERS, 0, 4, info)}` },
-    { day: 'Tuesday', focus: 'Upper',
-      description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x8 each arm\nOverhead Press: 3x10\nFace Pulls: 3x20\nReverse Fly: 3x15\n${fieldFinisher(GK_FINISHERS, 1, 4, info)}` },
-    { day: 'Thursday', focus: 'Lateral Explosion & Hip Mobility',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: 5x5 each side\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nCossack Squat: 4x6 each side\nResistance Band Lateral Walk: 3x20 each direction\nDB Lateral Lunge: 3x8 each leg\n${fieldFinisher(GK_FINISHERS, 2, 4, info)}` },
-    { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\n${fieldFinisher(GK_FINISHERS, 3, 4, info)}` },
-  ]
+// feat/day-layout-engine — GK's pack. displayFocus restores GK's own
+// richer day names. Lateral Bound/Calf Raises/Resistance Band Lateral
+// Walk have no slot on the leaner template and are dropped (same class of
+// simplification already applied throughout this PR).
+const GK_PACK = {
+  finisherBank: GK_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Power & Explosive',
+    'Upper Strength': 'Upper',
+    'Lower Explosion': 'Lateral Explosion & Hip Mobility',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 4x8 each leg',
+      PLYO: (ctx) => `Single Leg Box Jump: ${explosiveSets(4, ctx.phaseNum)}x4 each leg (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x10',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Cossack Squat: 4x6 each side',
+      ACC_POSTERIOR: 'DB Lateral Lunge: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Weighted Pull-ups: 4x5',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Reverse Fly: 4x15',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Flying 20s: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Flying 20s: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      PLYO: (ctx) => `Single Leg Box Jump: ${explosiveSets(4, ctx.phaseNum)}x4 each leg (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Copenhagen Adductor: 3x8 each leg (light)',
+    },
+  },
 }
 
 // ── Center Back conditioning: acceleration (Monday) vs deceleration
@@ -1544,22 +1671,52 @@ function cbConditioningB(ph, deload) {
 // team even though it's not literally in CB's own Day 2 today.
 const CB_FINISHERS = fieldFinisherBank(cbConditioningA, cbConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
-function soccerCenterBackSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const bj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Monday', focus: 'Max Lower Strength',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nSingle Leg RDL: 3x8 each leg\nBroad Jump: ${bj}x3 (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fieldFinisher(CB_FINISHERS, 0, 4, info)}` },
-    { day: 'Tuesday', focus: 'Upper Contact Strength',
-      description: `DB Bench Press: 5x8\nSingle Arm DB Row: 5x8 each arm\nOverhead Press: 4x8\nNeck Strengthening: 3x12 each direction\nMB Twist Throw: 4x6 each side\nFace Pulls: 3x15\n${fieldFinisher(CB_FINISHERS, 1, 4, info)}` },
-    { day: 'Thursday', focus: 'Power, Jumping & Deceleration',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nApproach Jump: 5x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nDB Lateral Lunge: 3x8 each leg\n${fieldFinisher(CB_FINISHERS, 2, 4, info)}` },
-    { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nNeck Strengthening: 3x12 each direction\n${fieldFinisher(CB_FINISHERS, 3, 4, info)}` },
-  ]
+const CB_PACK = {
+  finisherBank: CB_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Max Lower Strength',
+    'Upper Strength': 'Upper Contact Strength',
+    'Lower Explosion': 'Power, Jumping & Deceleration',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+      ACC_UNILATERAL_LOWER: 'Single Leg RDL: 4x8 each leg',
+      PLYO: (ctx) => `Broad Jump: ${explosiveSets(3, ctx.phaseNum)}x3 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 5x8 each arm',
+      ACC_PRESS: 'DB Bench Press: 5x8',
+      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'DB Lateral Lunge: 4x8 each leg',
+      PLYO: (ctx) => `Approach Jump: ${explosiveSets(3, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Weighted Pull-ups: 4x6',
+      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      ACC_SHOULDER: 'Face Pulls: 4x15',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Sprint Work: ${explosiveSets(4, ctx.phaseNum)}x30 yds @ max effort`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Sprint Work: ${explosiveSets(4, ctx.phaseNum)}x30 yds @ max effort`,
+      PLYO: (ctx) => `Broad Jump: ${explosiveSets(3, ctx.phaseNum)}x3 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Groin Plank: 3x10 each side (light)',
+    },
+  },
 }
 
 // ── Fullback conditioning: shuttle/hip-abduction (Monday) vs sled-sprint
@@ -1577,22 +1734,56 @@ function fbConditioningB(ph, deload) {
 }
 const FB_FINISHERS = fieldFinisherBank(fbConditioningA, fbConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
-function soccerFullbackSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const lb = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Monday', focus: 'Lower Strength & Sprint',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fieldFinisher(FB_FINISHERS, 0, 4, info)}` },
-    { day: 'Tuesday', focus: 'Upper Light & Mobility',
-      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nBanded Monster Walk: 3x10 each direction\nMB Twist Throw: 3x6 each side\nHip 90/90 Hold: 3x30s each side\nCopenhagen Adductor: 3x8 each leg\n${fieldFinisher(FB_FINISHERS, 1, 4, info)}` },
-    { day: 'Thursday', focus: 'Explosion & Sprint Development',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${fieldFinisher(FB_FINISHERS, 2, 4, info)}` },
-    { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Hip Abduction: 3x15 each side\n${fieldFinisher(FB_FINISHERS, 3, 4, info)}` },
-  ]
+// Overhead Press is genuinely new for Fullback (not a repurposed old
+// accessory — FB's own content never had one) — same treatment Golf's own
+// MAIN_PRESS_V got when a sport's real content had no vertical press to
+// promote at all.
+const FB_PACK = {
+  finisherBank: FB_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Strength & Sprint',
+    'Upper Strength': 'Upper Light & Mobility',
+    'Lower Explosion': 'Explosion & Sprint Development',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+      ACC_UNILATERAL_LOWER: 'Single Leg RDL: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x10',
+      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Single Arm DB Row: 4x10 each arm',
+      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      ACC_SHOULDER: 'Lateral Raise: 4x12',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Hip 90/90 Hold: 3x30s each side (light)',
+    },
+  },
 }
 
 // ── Midfielder conditioning: aerobic base (Monday, matching the position's
@@ -1609,22 +1800,52 @@ function mfConditioningB(ph, deload) {
 }
 const MF_FINISHERS = fieldFinisherBank(mfConditioningA, mfConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
-function soccerMidfielderSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const hbj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Monday', focus: 'Lower Strength & Aerobic Base',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHex Bar Jumps: ${hbj}x6 (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\nHip Thrust: 4x8\nGroin Plank: 3x10 each side\n${fieldFinisher(MF_FINISHERS, 0, 4, info)}` },
-    { day: 'Tuesday', focus: 'Upper & Work Capacity',
-      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nLateral Raise: 3x12\nMB Twist Throw: 4x6 each side\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nBanded Monster Walk: 3x10 each direction\nPush-up: 3xAMAP\n${fieldFinisher(MF_FINISHERS, 1, 4, info)}` },
-    { day: 'Thursday', focus: 'Explosion & Change of Direction',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\n${fieldFinisher(MF_FINISHERS, 2, 4, info)}` },
-    { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nKneeling Single Arm Lat Pulldown: 3x8 each arm\nPush-up: 3xAMAP\n${fieldFinisher(MF_FINISHERS, 3, 4, info)}` },
-  ]
+const MF_PACK = {
+  finisherBank: MF_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Strength & Aerobic Base',
+    'Upper Strength': 'Upper & Work Capacity',
+    'Lower Explosion': 'Explosion & Change of Direction',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+      ACC_UNILATERAL_LOWER: 'Single Leg RDL: 4x8 each leg',
+      PLYO: (ctx) => `Hex Bar Jumps: ${explosiveSets(4, ctx.phaseNum)}x6 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x8',
+      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Banded Monster Walk: 4x10 each direction',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Kneeling Single Arm Lat Pulldown: 4x8 each arm',
+      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      ACC_SHOULDER: 'Lateral Raise: 4x12',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `300 Yard Shuttle: ${explosiveSets(3, ctx.phaseNum)}x2`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `300 Yard Shuttle: ${explosiveSets(3, ctx.phaseNum)}x2`,
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Groin Plank: 3x10 each side (light)',
+    },
+  },
 }
 
 // ── Winger conditioning: sprint-ladder acceleration (Monday) vs sled-sprint
@@ -1641,22 +1862,61 @@ function wgConditioningB(ph, deload) {
 }
 const WG_FINISHERS = fieldFinisherBank(wgConditioningA, wgConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
-function soccerWingerSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const ah = explosiveSets(3, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Monday', focus: 'Lower Speed-Strength & Horizontal Force',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nReverse Lunge: 3x5 each leg\nNordic Hamstring Curl: 4x5\nAnkle Hops: ${ah}x20 (${explosiveIntent(ph)})\nLateral Bounds: 5x5 each side\nCalf Raises: 4xAMAP\n${fieldFinisher(WG_FINISHERS, 0, 4, info)}` },
-    { day: 'Tuesday', focus: 'Upper Light & Accessory',
-      description: `DB Bench Press: 3x10\nSingle Arm DB Row: 3x10 each arm\nLateral Raise: 3x12\nMB Twist Throw: 3x6 each side\nBanded Monster Walk: 3x10 each direction\nCopenhagen Adductor: 3x8 each leg\n${fieldFinisher(WG_FINISHERS, 1, 4, info)}` },
-    { day: 'Thursday', focus: 'Vertical Strength & Reactive Speed',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg Lateral Hurdle Hop: 4x5 each leg\nLateral Squat Jump: 4x5\n${fieldFinisher(WG_FINISHERS, 2, 4, info)}` },
-    { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nBanded Monster Walk: 3x10 each direction\n${fieldFinisher(WG_FINISHERS, 3, 4, info)}` },
-  ]
+// Winger's original Day 1/Day 3 main lifts are reversed relative to every
+// other soccer position (hinge first, squat second) — kept in their
+// original day slots rather than force-matched to another position's
+// pattern: "Lower Power" gets a genuine second squat (Front Squat, new,
+// same conformance fix as everywhere else) instead of Day 1's own Trap
+// Bar Deadlift, which relocates to "Lower Explosion"'s 3-day-only
+// MAIN_HINGE slot — the exact slot every other position's own hinge lift
+// already occupies there, so Winger stays structurally consistent with
+// its teammates despite starting from a reversed day order.
+const WG_PACK = {
+  finisherBank: WG_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Speed-Strength & Horizontal Force',
+    'Upper Strength': 'Upper Light & Accessory',
+    'Lower Explosion': 'Vertical Strength & Reactive Speed',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Front Squat',
+      ACC_HINGE: 'Nordic Hamstring Curl: 4x5',
+      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x5 each leg',
+      PLYO: (ctx) => `Ankle Hops: ${explosiveSets(3, ctx.phaseNum)}x20 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x10',
+      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Back Squat',
+      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Single Arm DB Row: 4x10 each arm',
+      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      ACC_SHOULDER: 'Lateral Raise: 4x12',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      MAIN_SQUAT: 'Front Squat',
+      ACC_HINGE: 'Nordic Hamstring Curl: 4x5',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      PLYO: (ctx) => `Ankle Hops: ${explosiveSets(3, ctx.phaseNum)}x20 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Copenhagen Adductor: 3x8 each leg (light)',
+    },
+  },
 }
 
 // ── Striker conditioning: vertical power/broad jump (Monday) vs horizontal
@@ -1674,49 +1934,77 @@ function skConditioningB(ph, deload) {
 }
 const SK_FINISHERS = fieldFinisherBank(skConditioningA, skConditioningB, 'MB Twist Throw', 'Band External Rotation')
 
-function soccerStrikerSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const dl = info.deload
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Monday', focus: 'Lower Vertical Power & Jump Height',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nNordic Hamstring Curl: 4x5\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nSingle Leg Box Jump: 3x4 each leg\nCopenhagen Adductor: 3x8 each leg\n${fieldFinisher(SK_FINISHERS, 0, 4, info)}` },
-    { day: 'Tuesday', focus: 'Upper & Rotational Power',
-      description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x8 each arm\nMB Twist Throw: 4x6 each side\nMed Ball Overhead Slam: 4x8\nOverhead Press: 3x10\nBanded Monster Walk: 3x10 each direction\n${fieldFinisher(SK_FINISHERS, 1, 4, info)}` },
-    { day: 'Thursday', focus: 'Explosive Speed, Horizontal Power & Shot Drive',
-      description: `Hex Bar Deadlift: ${info.ramp}, ${q}×${r}\nHex Bar Jumps: 4x5\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: 4x5\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nRotational Cable Pull: 3x8 each side\n${fieldFinisher(SK_FINISHERS, 2, 4, info)}` },
-    { day: 'Friday', focus: 'Upper Power',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nSingle Arm DB Row: 3x10 each arm\nMed Ball Overhead Slam: 4x8\n${fieldFinisher(SK_FINISHERS, 3, 4, info)}` },
-  ]
+const SK_PACK = {
+  finisherBank: SK_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Vertical Power & Jump Height',
+    'Upper Strength': 'Upper & Rotational Power',
+    'Lower Explosion': 'Explosive Speed, Horizontal Power & Shot Drive',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 4x8 each leg',
+      PLYO: (ctx) => `Approach Jump: ${explosiveSets(5, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x8',
+      MED_BALL: 'Med Ball Overhead Slam: 4x8', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Rotational Cable Pull: 4x8 each side',
+      PLYO: (ctx) => `Hex Bar Jumps: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Single Arm DB Row: 4x10 each arm',
+      MED_BALL: 'Med Ball Overhead Slam: 4x8',
+      ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Flying 20s: ${explosiveSets(3, ctx.phaseNum)}x1`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Flying 20s: ${explosiveSets(3, ctx.phaseNum)}x1`,
+      PLYO: (ctx) => `Approach Jump: ${explosiveSets(5, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Copenhagen Adductor: 3x8 each leg (light)',
+    },
+  },
 }
 
-const SOC_DAY5 = (info) => ({
-  day: 'Day 5', focus: 'Speed & COD',
-  description: `Sprint Ladder: 10/20/30/20/10 yds — 3 rounds\nV Drill: 4x3\nStar Drill: 3x3\n300 Yard Shuttle: 2x2\nFlying 20s: 6x1\n${coreBlock(info.phaseNum)}`,
-})
-const SOC_DAY6 = {
-  day: 'Day 6', focus: 'Active Recovery',
-  description: `Foam Roll: Quads · Hamstrings · Hip Flexors — 15 minutes\nHip Mobility: Hip 90/90 Hold 3x30s each side\nHamstring Flexibility: Nordic Stretch 3x30s\nCalf Flexibility: Seated Calf Stretch 3x45s each leg`,
-}
-
+// feat/day-layout-engine — SOC_DAY5/SOC_DAY6 (the old generic bolted-on
+// 5th/6th days, shared byte-for-byte across all 6 positions) are retired:
+// every position's 5/6-day plan is now purpose-built via its own pack's
+// 'Speed & Change of Direction'/'Recovery & Mobility' entries instead —
+// matches this PR's whole goal.
 function generateSoccerWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   const phases = mg ? MG_PHASES : SOC_PHASES
-  const baseFns = {
-    goalkeeper: soccerGoalkeeperSess,
-    center_back: soccerCenterBackSess,
-    fullback: soccerFullbackSess,
-    midfielder: soccerMidfielderSess,
-    winger: soccerWingerSess,
-    striker: soccerStrikerSess,
+  const packs = {
+    goalkeeper: GK_PACK,
+    center_back: CB_PACK,
+    fullback: FB_PACK,
+    midfielder: MF_PACK,
+    winger: WG_PACK,
+    striker: SK_PACK,
   }
-  const baseFn = baseFns[posId] || soccerMidfielderSess
-  const fn = mg
-    ? (info) => baseFn(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : baseFn
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [SOC_DAY5, SOC_DAY6])
+  const pack = packs[posId] || MF_PACK
+  const weeks = generateFieldWeeksFromPack(pack, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── Wrestling ────────────────────────────────────────────────────────────────
