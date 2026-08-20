@@ -1483,7 +1483,12 @@ describe('Area 10 — Baseball sport-specific content', () => {
     }
   })
 
-  test('Upper Strength (Position Player\'s "Upper & Shoulder Health" day): Overhead Press + Gorilla Row + Med Ball Rotational Throw, press standalone, accessory pair bracketed, static every week', () => {
+  test('Upper Strength (Position Player\'s "Upper & Shoulder Health" day): Overhead Press + Gorilla Row + Med Ball Slam, press standalone, accessory pair bracketed, static every week', () => {
+    // Med Ball Slam, not Med Ball Rotational Throw — the latter is the
+    // finisher engine's own 'rotation' family anchor (medBallPoolVariant),
+    // reused verbatim by baseballFinisherBank; an inline MED_BALL slot
+    // with the same movement risks the exact duplication class already
+    // fixed for ACC_CORE/ACC_SHOULDER elsewhere in this archetype.
     const raw = baseball.generateWeeks('baseball', 'standard', 4)
     const weeks = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
     for (const wk of [0, 1, 2, 3]) {
@@ -1491,7 +1496,7 @@ describe('Area 10 — Baseball sport-specific content', () => {
       expect(day2[0]).toMatch(/^Overhead Press: \d+%/)
       const marked = day2.filter(l => SUPERSET_MARKER_RE.test(l))
       expect(marked[0]).toMatch(/^⟦SS1⟧Gorilla Row:/)
-      expect(marked[1]).toMatch(/^⟦SS1⟧Med Ball Rotational Throw:/)
+      expect(marked[1]).toMatch(/^⟦SS1⟧Med Ball Slam:/)
     }
   })
 
@@ -1514,29 +1519,27 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
   const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
 
   test('a non-baseball sport also gets the accessory cap and auto-pairing — main lift stands alone, its plyo contrast pairs with it, everything else pairs in 2s up to 3 accessory slots', () => {
-    // Fixture note (feat/blueprint-quick-wins): this used to say position:
-    // 'Jumpers', but normalizePosition's track branch only matched the
-    // singular \bjumper\b — "Jumpers" (the real SPORT_TEMPLATES/survey label)
-    // never matched and silently fell through to Sprint, so this test spent
-    // its whole life unknowingly exercising trackSprintSess, not
-    // trackJumpSess. Now that the plural-form gap is fixed (see
-    // normalizePosition), 'Jumpers' correctly reaches trackJumpSess — whose
-    // real Day 1 has TWO plyo-keyword lines (Box Jumps + Approach Jump
-    // Work), so it no longer fits the single-plyo-contrast case this test is
-    // specifically about (that's covered separately — see Area 17/track
-    // tests below). 'Sprinters' is the correct fixture for this test's
-    // actual intent and reproduces the exact assertions already here.
+    // feat/day-layout-engine — Track Sprinters (this test's own prior
+    // fixture) no longer fits: its "Lower Power & Speed" day's own SPEED
+    // slot ("Acceleration Sprints") is now classified as conditioning
+    // (same exempt treatment every other named sprint drill already had —
+    // see CONDITIONING_EXERCISE_RE), so it's no longer eligible for normal
+    // accessory pairing, leaving only one real accessory (Bulgarian Split
+    // Squat) with no partner to pair with. Hockey Goalie's own "Lower
+    // Power" day has no SPEED tag at all (Field's 4-day template reserves
+    // SPEED for the 3-day/5-day keys only) and still produces the exact
+    // main+plyo / accessory-pair shape this test is about.
     const bp = generateBlueprintForAthlete({
-      sport: 'Track and Field', position: 'Sprinters', primary_goal: 'standard',
+      sport: 'Hockey', position: 'Goalie', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description.split('\n')
     const marked = day1.filter(l => SUPERSET_MARKER_RE.test(l))
-    // SS1 = Back Squat + Box Jumps (main lift's plyo contrast), SS2 = an
-    // auto-paired accessory duo — 4 marked lines across 2 groups.
+    // SS1 = Back Squat + Single Leg Box Jump (main lift's plyo contrast),
+    // SS2 = an auto-paired accessory duo — 4 marked lines across 2 groups.
     expect(marked.length).toBe(4)
     expect(marked[0]).toMatch(/^⟦SS1⟧Back Squat:/)
-    expect(marked[1]).toMatch(/^⟦SS1⟧Box Jumps:/)
+    expect(marked[1]).toMatch(/^⟦SS1⟧Single Leg Box Jump:/)
     expect(marked[2]).toMatch(/^⟦SS2⟧/)
     expect(marked[3]).toMatch(/^⟦SS2⟧/)
   })

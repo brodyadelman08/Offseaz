@@ -210,6 +210,10 @@ const EXERCISE_LIBRARY = {
     description: 'Stand facing a cable machine, hold one handle. Pull the handle to your hip, rotating slightly through the torso, while keeping your hips stable.',
     muscles: 'Lats, rhomboids, rear deltoids, obliques',
   },
+  'acceleration sprints': {
+    description: 'Sprint at maximum effort from a standing or 3-point start, focusing on driving out low and building speed over the prescribed distance.',
+    muscles: 'Hip flexors, quads, hamstrings, glutes, calves',
+  },
   'flying 20s': {
     description: 'Sprint through 10–20 yards of build-up, reach full speed, then hit the timing gate and hold maximum velocity for 20 yards. Focus on top-end speed mechanics, not acceleration.',
     muscles: 'Hip flexors, quads, hamstrings, glutes',

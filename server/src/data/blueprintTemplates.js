@@ -1006,7 +1006,7 @@ const FB_SKILL_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Strength': {
@@ -1014,7 +1014,7 @@ const FB_SKILL_PACK = {
       MAIN_PRESS_H: 'Bench Press', // 3-day
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
     },
     'Lower Explosion & Speed': {
@@ -1023,7 +1023,7 @@ const FB_SKILL_PACK = {
       // ACC_HINGE precedent and keeps applyHamstringAdjustments' Single
       // Leg RDL -> Hip Thrust hamstring-injury substitution reachable.
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
     },
     'Upper Power': {
@@ -1032,7 +1032,7 @@ const FB_SKILL_PACK = {
       ACC_PRESS: 'DB Incline Press: 4x10',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -1127,20 +1127,20 @@ const FOOTBALL_QB_PACK = {
     'Upper & Shoulder Health': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper & Rotational': { // shared literal key — matches BOTH the
       // 3-day template's own label AND QB's own 4-day Day 2 name.
       MAIN_PRESS_H: 'DB Bench',
       ACC_PULL_H: 'Bent Over BB Row: 4x8',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_SQUAT: 'Goblet Squat: 4x10',
       ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Upper Power & Rotational': {
       MAIN_PRESS_H: 'DB Bench',
@@ -1148,23 +1148,23 @@ const FOOTBALL_QB_PACK = {
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Shoulder Health & Power Accessory': {
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Horizontal Press Emphasis': {
       MAIN_PRESS_H: 'DB Bench',
       ACC_PULL_H: 'Bent Over BB Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
       ACC_POSTERIOR: 'Hip Thrust: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Arm-Care Emphasis': {
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
@@ -1285,7 +1285,7 @@ const BB_GUARDS_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Lateral Step-Up: 4x8 each leg',
-      SPEED: (ctx) => `Defensive Slide Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `DB Squat Jumps: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Strength': {
@@ -1293,7 +1293,7 @@ const BB_GUARDS_PACK = {
       MAIN_PRESS_H: 'DB Bench', // 3-day
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
     },
     'Lower Explosion & Speed': {
@@ -1303,7 +1303,7 @@ const BB_GUARDS_PACK = {
       // reachable (its own original Day 4 carried this line too, before
       // that whole day was retired for having no template slot).
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      SPEED: (ctx) => `Lateral Deceleration Drill: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum), // 3-day
     },
     'Upper Power': {
@@ -1312,7 +1312,7 @@ const BB_GUARDS_PACK = {
       ACC_PRESS: 'Push-up: 4xAMAP',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Defensive Slide Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -1375,7 +1375,7 @@ const BB_WINGS_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x5 each leg',
-      SPEED: (ctx) => `Baseline Sprint: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum),
     },
     'Upper Strength': {
@@ -1383,13 +1383,13 @@ const BB_WINGS_PACK = {
       MAIN_PRESS_H: 'DB Bench', // 3-day
       ACC_PULL_V: 'Weighted Pull-ups: 4x5',
       ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
     },
     'Lower Explosion & Speed': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      SPEED: (ctx) => `Lateral Deceleration Drill: ${explosiveSets(3, ctx.phaseNum)}x3 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum), // 3-day
     },
     'Upper Power': {
@@ -1398,7 +1398,7 @@ const BB_WINGS_PACK = {
       ACC_PRESS: 'DB Chest Press (varied grip): 4x10',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Baseline Sprint: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -1463,7 +1463,7 @@ const BB_BIGS_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      SPEED: (ctx) => `Post Sprint: ${explosiveSets(4, ctx.phaseNum)}x1 (half court · full stop)`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `DB Squat Jumps: ${explosiveSets(3, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Strength': {
@@ -1471,13 +1471,13 @@ const BB_BIGS_PACK = {
       MAIN_PRESS_H: 'Close Grip Bench Press', // 3-day
       ACC_PULL_V: 'Weighted Pull-ups: 5x5',
       ACC_PULL_H: 'BB Row: 4x8', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
     },
     'Lower Explosion & Speed': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      SPEED: (ctx) => `Shuffle Step: ${explosiveSets(4, ctx.phaseNum)}x full court`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum), // 3-day
     },
     'Upper Power': {
@@ -1486,7 +1486,7 @@ const BB_BIGS_PACK = {
       ACC_PRESS: 'DB Bench: 5x8',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Post Sprint: ${explosiveSets(4, ctx.phaseNum)}x1 (half court · full stop)`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => bballPlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -1882,7 +1882,7 @@ const GK_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
       ACC_PRESS: 'DB Bench Press: 4x10',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
@@ -1894,16 +1894,16 @@ const GK_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Weighted Pull-ups: 4x5',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Reverse Fly: 4x15',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Flying 20s: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Flying 20s: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Single Leg Box Jump: ${explosiveSets(4, ctx.phaseNum)}x4 each leg (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -1949,7 +1949,7 @@ const CB_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 5x8 each arm',
       ACC_PRESS: 'DB Bench Press: 5x8',
-      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
@@ -1961,16 +1961,16 @@ const CB_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Weighted Pull-ups: 4x6',
-      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Face Pulls: 4x15',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Sprint Work: ${explosiveSets(4, ctx.phaseNum)}x30 yds @ max effort`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Hip Thrust: 4x8',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Sprint Work: ${explosiveSets(4, ctx.phaseNum)}x30 yds @ max effort`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Broad Jump: ${explosiveSets(3, ctx.phaseNum)}x3 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -2016,7 +2016,7 @@ const FB_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       ACC_PRESS: 'DB Bench Press: 4x10',
-      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
@@ -2028,16 +2028,16 @@ const FB_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Single Arm DB Row: 4x10 each arm',
-      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Lateral Raise: 4x12',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Hip Thrust: 4x8',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -2078,7 +2078,7 @@ const MF_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
       ACC_PRESS: 'DB Bench Press: 4x8',
-      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
@@ -2090,16 +2090,16 @@ const MF_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Kneeling Single Arm Lat Pulldown: 4x8 each arm',
-      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Lateral Raise: 4x12',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `300 Yard Shuttle: ${explosiveSets(3, ctx.phaseNum)}x2`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Hip Thrust: 4x8',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `300 Yard Shuttle: ${explosiveSets(3, ctx.phaseNum)}x2`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -2149,7 +2149,7 @@ const WG_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       ACC_PRESS: 'DB Bench Press: 4x10',
-      MED_BALL: 'MB Twist Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Back Squat',
@@ -2161,16 +2161,16 @@ const WG_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Single Arm DB Row: 4x10 each arm',
-      MED_BALL: 'MB Twist Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Lateral Raise: 4x12',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Front Squat',
       ACC_HINGE: 'Nordic Hamstring Curl: 4x5',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Sprint Ladder: 10/20/30/20/10 yds — ${explosiveSets(3, ctx.phaseNum)} rounds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Ankle Hops: ${explosiveSets(3, ctx.phaseNum)}x20 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -2228,12 +2228,12 @@ const SK_PACK = {
       ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Flying 20s: ${explosiveSets(3, ctx.phaseNum)}x1`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Hip Thrust: 4x8',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Flying 20s: ${explosiveSets(3, ctx.phaseNum)}x1`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Approach Jump: ${explosiveSets(5, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -2393,7 +2393,7 @@ const WRESTLING_PACK = {
     // the shared-template architecture.
     'Power, Athleticism & Armor': {
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       // "Farmer Carries: SxR yds" (not "Rope Climb: N ascents", which has
       // no "x" multiplication token and so never matches the deload
       // volume-reduction regex) — restores old Day 1's carry-family
@@ -2492,7 +2492,7 @@ const VOLLEYBALL_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x5 each leg',
-      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Strength': {
@@ -2500,12 +2500,12 @@ const VOLLEYBALL_PACK = {
       MAIN_PRESS_H: 'DB Bench', // 3-day
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Explosion & Speed': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
-      SPEED: (ctx) => `Line Jumps: ${explosiveSets(3, ctx.phaseNum)}x20s`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Approach Jump: ${explosiveSets(5, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`, // 3-day
     },
     'Upper Power': {
@@ -2514,7 +2514,7 @@ const VOLLEYBALL_PACK = {
       ACC_PRESS: 'DB Shoulder Press: 4x10',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -2589,7 +2589,7 @@ const TRACK_SPRINT_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      SPEED: (ctx) => `Wicket Drills: ${explosiveSets(3, ctx.phaseNum)}x30m`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Strength': {
@@ -2597,13 +2597,13 @@ const TRACK_SPRINT_PACK = {
       MAIN_PRESS_H: 'Bench Press', // 3-day
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       ACC_PULL_H: 'DB Row: 4x12', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
     },
     'Lower Explosion & Speed': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      SPEED: (ctx) => `Bounding: ${explosiveSets(3, ctx.phaseNum)}x20m`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
     },
     'Upper Power': {
@@ -2612,7 +2612,7 @@ const TRACK_SPRINT_PACK = {
       ACC_PRESS: 'Push-up: 4xAMAP',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Wicket Drills: ${explosiveSets(3, ctx.phaseNum)}x30m`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -2696,19 +2696,19 @@ const TRACK_THROW_PACK = {
     'Upper & Shoulder Health': { // 4-day only
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_H: 'BB Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper & Rotational': { // 3-day only
       MAIN_PRESS_H: 'Close Grip Bench Press',
       ACC_PULL_H: 'BB Row: 4x8',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_SQUAT: 'Goblet Squat: 4x10',
       ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5', // 4-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Upper Power & Rotational': { // 4-day only
       MAIN_PRESS_H: 'Close Grip Bench Press',
@@ -2716,23 +2716,23 @@ const TRACK_THROW_PACK = {
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Shoulder Health & Power Accessory': { // 5-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': { // 6-day
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Horizontal Press Emphasis': { // 6-day
       MAIN_PRESS_H: 'Close Grip Bench Press',
       ACC_PULL_H: 'BB Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Explosion': { // 6-day
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Goblet Lateral Lunge: 4x4 each leg',
       ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Arm-Care Emphasis': { // 6-day
       ACC_PULL_H: 'BB Row: 4x8',
@@ -2801,7 +2801,7 @@ const TRACK_JUMP_PACK = {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Terminal Knee Extension: 4x15 each leg',
-      SPEED: (ctx) => `Bounding: ${explosiveSets(3, ctx.phaseNum)}x20m`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Strength': {
@@ -2809,13 +2809,13 @@ const TRACK_JUMP_PACK = {
       MAIN_PRESS_H: 'Bench Press', // 3-day
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       ACC_PULL_H: 'DB Row: 4x12', // 3-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
     },
     'Lower Explosion & Speed': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      SPEED: (ctx) => `Single Leg Box Jump: ${explosiveSets(3, ctx.phaseNum)}x5 each leg (${explosiveIntent(ctx.phaseNum)})`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
     },
     'Upper Power': {
@@ -2824,7 +2824,7 @@ const TRACK_JUMP_PACK = {
       ACC_PRESS: 'Push-up: 4xAMAP',
     },
     'Reactive Speed': {
-      SPEED: (ctx) => `Bounding: ${explosiveSets(3, ctx.phaseNum)}x20m`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(3, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
     },
     'Upper Armor': {
@@ -3014,25 +3014,36 @@ const CROSS_COUNTRY_PACK = {
   byFocus: {
     'Full Body — Squat & Press': {
       MAIN_SQUAT: (ctx) => `Back Squat: 3x8 @ ${ctx.pct} — no heavy loading`,
-      MAIN_PRESS_H: 'Push-ups: 3xAMAP',
-      ACC_HINGE: 'Single Leg RDL: 3x10 each leg',
+      MAIN_PRESS_H: 'Push-ups: 4xAMAP',
+      ACC_HINGE: 'Single Leg RDL: 4x10 each leg',
     },
     'Full Body — Unilateral & Mobility': { // 3-day
-      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 3x8 each leg',
-      ACC_PULL_H: 'Pull-ups: 3xAMAP',
+      // Bulgarian Split Squat, not Copenhagen Adductor — the latter's exact
+      // "3x8 each leg" text collides with coreBlock's own Phase 4 "Lateral
+      // Stability" variant (Copenhagen Adductor/Suitcase Carry), which the
+      // finisher engine's 'core' family reuses verbatim; a genuinely
+      // different movement avoids the risk outright rather than relying on
+      // set-count luck. 4 sets (not 3), matching the deload-safety lesson
+      // learned on Baseball: a 3-set line only cuts to 2 sets (33%) under
+      // deload, dragging the week's aggregate below the required 40% floor
+      // even though every individual line is genuinely halved.
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_PULL_H: 'Pull-ups: 4xAMAP',
     },
     'Full Body — Unilateral & Pull': { // 4-day
-      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 3x8 each leg',
-      ACC_PULL_H: 'Pull-ups: 3xAMAP',
+      // Bulgarian Split Squat, not Copenhagen Adductor — see the 3-day
+      // key's own comment above (identical reasoning, both fixes).
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_PULL_H: 'Pull-ups: 4xAMAP',
     },
     'Full Body — Hinge & Press': {
       MAIN_HINGE: (ctx) => `Trap Bar Deadlift: 3x8 @ ${ctx.pct} — no heavy loading`,
       MAIN_PRESS_V: 'DB Shoulder Press: 3x10 (light)',
       PLYO: (ctx) => `Ankle Hops: ${explosiveSets(3, ctx.phaseNum)}x20 (${explosiveIntent(ctx.phaseNum)})`,
-      ACC_SHOULDER: 'Band External Rotation: 3x15 each arm',
+      ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
     },
     'Low-Load — Posterior & Mobility': {
-      ACC_POSTERIOR: 'Nordic Hamstring Curl: 3x5',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
     },
     'Hip & Tissue Mobility': {
       ACC_POSTERIOR: 'Hip Thrust: 3x12 (light)',
@@ -3125,7 +3136,7 @@ const LAX_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       ACC_PRESS: 'DB Bench Press: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
@@ -3137,16 +3148,16 @@ const LAX_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Weighted Pull-ups: 4x6',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Hip Thrust: 4x8',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -3263,7 +3274,9 @@ const SWIMMING_PACK = {
     'Full Body — Hinge & Press': {
       MAIN_HINGE: (ctx) => `Trap Bar Deadlift: ${swimSets(ctx)}x8 @ moderate load`,
       MAIN_PRESS_V: (ctx) => `Shoulder Press: ${swimSets(ctx)}x12`,
-      PLYO: (ctx) => `Box Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+      // Broad Jump, not Box Jump — Box Jump is SWIMMING_FINISHERS' own
+      // 'sprint' family anchor; a different movement avoids the collision.
+      PLYO: (ctx) => `Broad Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Low-Load — Posterior & Mobility': {
       ACC_POSTERIOR: (ctx) => `Hip Thrust: ${swimSets(ctx)}x12`,
@@ -3859,19 +3872,19 @@ const BASEBALL_PACK = {
     'Upper & Shoulder Health': { // 4-day only
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper & Rotational': { // 3-day only
       MAIN_PRESS_H: 'DB Bench Press',
       ACC_PULL_H: 'Gorilla Row: 4x8',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_SQUAT: 'Goblet Squat: 4x10',
       ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Upper Power & Rotational': { // 4-day only
       MAIN_PRESS_H: 'DB Bench Press',
@@ -3879,23 +3892,23 @@ const BASEBALL_PACK = {
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Shoulder Health & Power Accessory': { // 5-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': { // 6-day
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Horizontal Press Emphasis': { // 6-day
       MAIN_PRESS_H: 'DB Bench Press',
       ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Explosion': { // 6-day
       MAIN_SQUAT: 'Front Squat',
       ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg',
       ACC_POSTERIOR: 'Hip Thrust: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Arm-Care Emphasis': { // 6-day
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
@@ -3935,19 +3948,19 @@ const PITCHER_PACK = {
     'Upper & Shoulder Health': {
       MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper & Rotational': {
       MAIN_PRESS_H: 'DB Bench Press',
       ACC_PULL_H: 'Gorilla Row: 4x8',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_SQUAT: 'Goblet Squat: 4x10',
       ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper Power & Rotational': {
       MAIN_PRESS_H: 'DB Bench Press',
@@ -3955,23 +3968,23 @@ const PITCHER_PACK = {
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Shoulder Health & Power Accessory': {
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': {
       MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Horizontal Press Emphasis': {
       MAIN_PRESS_H: 'DB Bench Press',
       ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
       ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg',
       ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Arm-Care Emphasis': {
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
@@ -4217,7 +4230,7 @@ const HOCKEY_FORWARDS_PACK = {
     },
     'Power, Athleticism & Armor': {
       PLYO: 'Lateral Bound: 5x5 each side',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_CALF_GRIP: 'Copenhagen Adductor: 4x8 each leg',
     },
     'Lower — Posterior Chain & Athletic': {
@@ -4290,28 +4303,28 @@ const HD_PACK = {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       ACC_PRESS: 'DB Bench Press: 4x10',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
       MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
       PLYO: (ctx) => `Lateral Sled Drag: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Weighted Pull-ups: 4x5',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Lateral Sled Drag: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Lateral Sled Drag: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Lateral Bound: ${explosiveSets(5, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -4381,28 +4394,28 @@ const HG_PACK = {
       MAIN_PRESS_H: { name: 'Incline DB Press', suffix: ' (DB only — protects shoulder joint)' },
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       ACC_PRESS: 'DB Bench Press: 4x10 (DB only — protects shoulder joint)',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
       MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
       ACC_UNILATERAL_LOWER: 'Cossack Squat: 4x8 each side',
-      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
       PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Power': {
       MAIN_PRESS_V: { name: 'DB Shoulder Press', suffix: ' (DB only — protects shoulder joint)' },
       ACC_PULL_V: 'Weighted Pull-ups: 4x5',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Face Pulls: 4x15',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Lateral Shuffle: ${explosiveSets(5, ctx.phaseNum)}x20 yds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(5, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Lateral Shuffle: ${explosiveSets(5, ctx.phaseNum)}x20 yds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(5, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Single Leg Box Jump: ${explosiveSets(4, ctx.phaseNum)}x4 each leg (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -4601,7 +4614,7 @@ const RUGBY_FORWARDS_PACK = {
     },
     'Power, Athleticism & Armor': {
       PLYO: (ctx) => phasePlyo(ctx.phaseNum),
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_CALF_GRIP: 'Sandbag Carry: 4x20 yds',
       NECK: COLLISION_NECK_DEDICATED,
     },
@@ -4685,7 +4698,7 @@ const RB_PACK = {
       MAIN_PRESS_H: 'Close Grip Bench Press',
       ACC_PULL_H: 'DB Row: 4x10 each arm',
       ACC_PRESS: 'Bench Press: 4x8',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
@@ -4697,16 +4710,16 @@ const RB_PACK = {
     'Upper Power': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Weighted Pull-ups: 4x6',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Face Pulls: 4x15',
     },
     'Lower Power & Sprint': {
-      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
     },
     'Speed & Change of Direction': {
-      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
       PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Recovery & Mobility': {
@@ -4924,19 +4937,19 @@ const TENNIS_PACK = {
     'Upper & Shoulder Health': { // 4-day only
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper & Rotational': { // 3-day only
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_SQUAT: 'Goblet Squat: 4x10',
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg', // 4-day
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
     },
     'Upper Power & Rotational': {
       MAIN_PRESS_H: 'Bench Press',
@@ -4944,23 +4957,23 @@ const TENNIS_PACK = {
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
     },
     'Shoulder Health & Power Accessory': {
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Horizontal Press Emphasis': {
       MAIN_PRESS_H: 'Bench Press',
       ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
       ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Arm-Care Emphasis': {
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
@@ -5049,18 +5062,18 @@ const GOLF_PACK = {
       MAIN_PRESS_H: 'DB Bench Press',
       ACC_PULL_H: 'Split Stance Cable Row: 4x10 each side',
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
       ACC_SQUAT: 'Goblet Squat: 4x10',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
       ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5', // 4-day
     },
     'Upper & Shoulder Health': { // 4-day only
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
     },
     'Upper Power & Rotational': {
@@ -5075,7 +5088,7 @@ const GOLF_PACK = {
     'Upper — Vertical Press Emphasis': {
       MAIN_PRESS_V: 'Overhead Press',
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
     },
     'Upper — Horizontal Press Emphasis': {
@@ -5087,7 +5100,7 @@ const GOLF_PACK = {
       MAIN_SQUAT: 'Back Squat',
       ACC_UNILATERAL_LOWER: 'Step-Up: 4x6 each leg',
       ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
-      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Arm-Care Emphasis': {
       ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
@@ -6311,7 +6324,16 @@ function applyAccessoryProgression(weeks, extraRotation = {}, phaseRotation = {}
 // and applyInjuryAdjustments above.
 
 const CONDITIONING_HEADER_RE = /^[\w &]*Conditioning:$/
-const CONDITIONING_EXERCISE_RE = /^(Sprint Work|Sprint Ladder|Sprint \+ Close Out|Sprint \+ Jog Ladder|Repeat Sprint|300 Yard Shuttle|Flying 20s|17s Drill|Baseline Sprint|Defensive Slide(?: Sprint)?|Post Sprint|Box Out Drill|Shuffle Step|Full Court Sprint|V Drill|Star Drill|200m Intervals|400m [Rr]epeats|Isometric (?:Squat|Pull) Hold|Weighted Carries(?: Medley)?|Farmer Carr(?:y|ies)|Battle Rope|Wrestle-Outs|Sled Push|Sled Sprint|Sled Drag|Pro Agility(?: Drill)?|5-10-5(?: Shuttle)?|Cone Drill(?:\s*\(5-10-5\))?|Deceleration Drill|Lateral Shuffle(?: Sprint)?|T-Drill|Aerobic Finish|Tempo [Rr]un|Sprint Tempo Protocol|Bike Ladder)\b/
+// feat/day-layout-engine — "Acceleration Sprints" is the day-layout
+// engine's own universal SPEED-tag text (Field/Speed-Power/Vertical-Court
+// archetype packs), replacing what used to be each sport's own named
+// sprint drill reused verbatim from that same sport's finisher bank (a
+// real duplication risk — see buildFieldRenderers/buildSpeedPowerRenderers'
+// own doc comments). Classified as conditioning here for the exact same
+// reason every other named sprint drill already was — same exempt
+// treatment (silent-drop guarantee, accessory cap, deload handling) the
+// SPEED slot's content always had before the rename.
+const CONDITIONING_EXERCISE_RE = /^(Acceleration Sprints|Sprint Work|Sprint Ladder|Sprint \+ Close Out|Sprint \+ Jog Ladder|Repeat Sprint|300 Yard Shuttle|Flying 20s|17s Drill|Baseline Sprint|Defensive Slide(?: Sprint)?|Post Sprint|Box Out Drill|Shuffle Step|Full Court Sprint|V Drill|Star Drill|200m Intervals|400m [Rr]epeats|Isometric (?:Squat|Pull) Hold|Weighted Carries(?: Medley)?|Farmer Carr(?:y|ies)|Battle Rope|Wrestle-Outs|Sled Push|Sled Sprint|Sled Drag|Pro Agility(?: Drill)?|5-10-5(?: Shuttle)?|Cone Drill(?:\s*\(5-10-5\))?|Deceleration Drill|Lateral Shuffle(?: Sprint)?|T-Drill|Aerobic Finish|Tempo [Rr]un|Sprint Tempo Protocol|Bike Ladder)\b/
 
 // Exercise names that are unambiguously mobility/warm-up/prehab work wherever
 // they appear (exact match on the trimmed, lowercased name before the colon —
