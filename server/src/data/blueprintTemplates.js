@@ -877,7 +877,11 @@ function buildSpeedPowerRenderers(pack) {
     renderers[tagName] = (slotDef, ctx) => {
       const { name, suffix } = mainEntry(ctx.dayTemplate.focus, tagName)
       const r = mainLiftTopReps(ctx.phaseNum, pack.mainLiftTier || 'power')
-      return `${name}: ${ctx.ramp}, ${ctx.pct}×${r}${suffix}`
+      // Basketball Bigs' own pre-existing design: a top-set percentage
+      // boosted +5% (capped 93%) over every other sport's own ctx.pct —
+      // "heavier top set," applied uniformly to every main lift.
+      const topPct = pack.mainLiftPct ? pack.mainLiftPct(ctx) : ctx.pct
+      return `${name}: ${ctx.ramp}, ${topPct}×${r}${suffix}`
     }
   }
   for (const tagName of [
@@ -897,7 +901,15 @@ function buildSpeedPowerRenderers(pack) {
     }
   }
   renderers.FINISHER = (dayIndex, ctx) => {
-    const plan = finisherEngine.planWeekFinishers('speedpower', ctx.phaseNum, ctx.days, { hasArmCare: false, overrides: pack.finisherOverrides || null })[dayIndex]
+    // Structural day layout (dayLayoutEngine's own 'speedpower' template)
+    // is shared by two DIFFERENT finisher-engine archetype weightings:
+    // Football Skill/Hybrid/Track Sprinters/Basketball Guards use
+    // 'speedpower' itself; Basketball Wings/Bigs/Volleyball/Track Jumpers
+    // (the "Vertical/Court" group — no separate structural template of
+    // their own, per spec) use 'vertical' instead. Defaults to
+    // 'speedpower' so every existing pack is unaffected.
+    const finisherArchetype = pack.finisherArchetype || 'speedpower'
+    const plan = finisherEngine.planWeekFinishers(finisherArchetype, ctx.phaseNum, ctx.days, { hasArmCare: false, overrides: pack.finisherOverrides || null })[dayIndex]
     return finisherEngine.renderFinisher(pack.finisherBank, plan, ctx.phaseNum, ctx.deload)
   }
   return renderers
@@ -1001,7 +1013,10 @@ const FB_SKILL_PACK = {
     },
     'Lower Explosion & Speed': {
       MAIN_HINGE: 'Trap Bar Deadlift',
-      ACC_POSTERIOR: 'Hip Thrust: 4x8',
+      // Single Leg RDL (not Hip Thrust) — matches the archetype's own
+      // ACC_HINGE precedent and keeps applyHamstringAdjustments' Single
+      // Leg RDL -> Hip Thrust hamstring-injury substitution reachable.
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
       SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
       PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
     },
@@ -1242,21 +1257,64 @@ function bbGuardFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(BASKETBALL_GUARD_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function bbGuardSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const dbsj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Day 1', focus: 'Lower Lateral & First-Step Quickness',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nLateral Step-Up: 4x8 each leg\nDB Squat Jumps: ${dbsj}x5 (${explosiveIntent(ph)})\nLateral Bounds: 5x5 each side\nAnkle Hops: 3x20\nCalf Raises: 4xAMAP\n${bbGuardFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper',
-      description: `Power Clean: 3x3\nDB Bench: 4x10\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${bbGuardFinisher(1, info)}` },
-    { day: 'Day 3', focus: 'Explosion, Plyos & Landing Mechanics',
-      description: `${bballPlyo(ph)}\nSnap Down: 3x5\nLateral Deceleration Drill: 3x5 each side\nSingle Leg Box Jump: 2x4 each leg\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 3x5\n${bbGuardFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Full Body Power & Court Conditioning',
-      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Step-Ups: 3x8 each leg\nAnkle Hops: 3x20\n${bbGuardFinisher(3, info)}` },
-  ]
+// feat/day-layout-engine — Guards' pack. mainLiftTier: 'rotational'
+// (Guards' own pre-existing 8/6/5/4 tier, distinct from Football Skill/
+// Hybrid's 'power' tier). Guards' original content doesn't split cleanly
+// into the archetype's 2-lower/2-upper shape — Day 2 ("Upper") carries
+// ALL the upper-body content (with no genuine ramped press at all: DB
+// Bench and Overhead Press were both fixed/flat), while Day 4's "Full
+// Body Power" is entirely lower-body work with no upper content and no
+// template slot of its own (Day 1/Day 3 already cover both lower slots).
+// Resolved by promoting DB Bench (horizontal) and Overhead Press
+// (vertical) — Day 2's own two fixed press accessories — into the
+// archetype's two genuinely-ramped MAIN_PRESS slots, splitting Day 2's
+// pull accessories across both upper days; Day 4's own lower-body content
+// (Front Squat/Hip Thrust/Single Leg RDL) has no home anywhere in the
+// new 2-lower/2-upper structure and is dropped. Power Clean/Hang Clean
+// drop (no MAIN_OLY tag in this archetype).
+const BB_GUARDS_PACK = {
+  finisherBank: BASKETBALL_GUARD_FINISHERS,
+  mainLiftTier: 'rotational',
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Lateral Step-Up: 4x8 each leg',
+      SPEED: (ctx) => `Defensive Slide Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      PLYO: (ctx) => `DB Squat Jumps: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_H: 'DB Bench', // 3-day
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      // Single Leg RDL — matches every other ACC_POSTERIOR fill in this
+      // archetype and keeps applyHamstringAdjustments' own substitution
+      // reachable (its own original Day 4 carried this line too, before
+      // that whole day was retired for having no template slot).
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
+      SPEED: (ctx) => `Lateral Deceleration Drill: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum), // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'DB Bench',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm',
+      ACC_PRESS: 'Push-up: 4xAMAP',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Defensive Slide Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'Push-up: 4xAMAP',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+  },
 }
 
 // Wings — Vertical/Court archetype (landing mechanics + repeat-explosive
@@ -1294,21 +1352,55 @@ function bbWingFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(BASKETBALL_WING_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function bbWingsSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Day 1', focus: 'Lower Vertical Power',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x5 each leg\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\n${bballPlyo(ph)}\nCalf Raises: 4xAMAP\nNordic Hamstring Curl: 3x5\n${bbWingFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper',
-      description: `Power Clean: 3x3\nDB Bench: 4x10\nDB Chest Press (varied grip): 3x10\nWeighted Pull-ups: 4x5\nSingle Arm DB Row: 4x12 each arm\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${bbWingFinisher(1, info)}` },
-    { day: 'Day 3', focus: 'Full Body Explosion, Landing Mechanics & Multi-Directional',
-      description: `Hang Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${bballPlyo(ph)}\nDepth Drop: 3x5\nLateral Deceleration Drill: 3x3 each side\nLateral Bound: 4x5 each side\nBounding: 3x20m\nSingle Leg Box Jump: 3x4 each leg\n${bbWingFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Full Body Power & Conditioning',
-      description: `Front Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nLateral Step-Ups: 3x8 each leg\nAnkle Hops: 3x20\n${bbWingFinisher(3, info)}` },
-  ]
+// feat/day-layout-engine — Wings' pack (Vertical/Court archetype — no
+// structural template of its own; uses Speed/Power's own structure per
+// spec, with 'vertical' as the finisher-engine archetype weighting
+// instead). Same structural mismatch/resolution as Guards: Day 2 carries
+// every upper accessory (three flat presses — DB Bench, DB Chest Press,
+// Overhead Press — none ramped); Day 4 is entirely lower-body with no
+// template slot. Overhead Press promotes to MAIN_PRESS_V, DB Bench to
+// MAIN_PRESS_H; DB Chest Press (varied grip) becomes "Upper Power"'s
+// ACC_PRESS. Power Clean/Hang Clean drop (no MAIN_OLY tag).
+const BB_WINGS_PACK = {
+  finisherBank: BASKETBALL_WING_FINISHERS,
+  finisherArchetype: 'vertical',
+  mainLiftTier: 'rotational',
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x5 each leg',
+      SPEED: (ctx) => `Baseline Sprint: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum),
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_H: 'DB Bench', // 3-day
+      ACC_PULL_V: 'Weighted Pull-ups: 4x5',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
+      SPEED: (ctx) => `Lateral Deceleration Drill: ${explosiveSets(3, ctx.phaseNum)}x3 each side`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum), // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'DB Bench',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm',
+      ACC_PRESS: 'DB Chest Press (varied grip): 4x10',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Baseline Sprint: ${explosiveSets(4, ctx.phaseNum)}x1`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'DB Chest Press (varied grip): 4x10',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+  },
 }
 
 // Bigs — Vertical/Court archetype, arm care OFF. Sprint/Energy absorb
@@ -1345,21 +1437,58 @@ function bbBigFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(BASKETBALL_BIG_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function bbBigsSess(info) {
-  const q  = pct(Math.min(0.93, info.f + 0.05))
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — 8/6/5/4 by phase
-  const dbsj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
-  return [
-    { day: 'Day 1', focus: 'Lower Strength & Landing Mechanics',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\nBulgarian Split Squat: 3x6 each leg\nDB Squat Jumps: ${dbsj}x5 (${explosiveIntent(ph)})\nSnap Down: 3x5\nDepth Drop: 3x5\nCalf Raises: 4xAMAP\n${bbBigFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper Volume',
-      description: `Power Clean: 3x3\nDB Bench: 5x8\nWeighted Pull-ups: 5x5\nBB Row: 4x8\nOverhead Press: 4x8\nBand Pull-Aparts: 3x15\n${bbBigFinisher(1, info)}` },
-    { day: 'Day 3', focus: 'Lower Deadlift & Unilateral',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nHip Thrust: 4x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 3xAMAP\n${bbBigFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Full Body Power & Post Conditioning',
-      description: `Hang Clean: 4x3\nClose Grip Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nDB Shrugs: 3x12\n${bbBigFinisher(3, info)}` },
-  ]
+// feat/day-layout-engine — Bigs' pack (Vertical/Court archetype, same
+// 'vertical' finisher weighting as Wings). Bigs' original day order
+// already splits 2-lower/2-upper cleanly (Day 4's own Close Grip Bench
+// Press is genuinely ramped and genuinely upper-body, unlike Guards/
+// Wings' own Day 4) — only the usual reversed-V/H promotion applies:
+// Overhead Press (Day 2, flat) promotes to MAIN_PRESS_V; Close Grip Bench
+// Press (Day 4, already ramped) fills MAIN_PRESS_H; DB Bench (Day 2,
+// flat) becomes "Upper Power"'s ACC_PRESS. mainLiftPct preserves Bigs'
+// own pre-existing +5%-boosted (capped 93%) top-set percentage — a real,
+// deliberate "heavier top set" design choice, not something this
+// migration should flatten to every other sport's plain ctx.pct.
+const BB_BIGS_PACK = {
+  finisherBank: BASKETBALL_BIG_FINISHERS,
+  finisherArchetype: 'vertical',
+  mainLiftTier: 'rotational',
+  mainLiftPct: (ctx) => pct(Math.min(0.93, ctx.f + 0.05)),
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      SPEED: (ctx) => `Post Sprint: ${explosiveSets(4, ctx.phaseNum)}x1 (half court · full stop)`,
+      PLYO: (ctx) => `DB Squat Jumps: ${explosiveSets(3, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_H: 'Close Grip Bench Press', // 3-day
+      ACC_PULL_V: 'Weighted Pull-ups: 5x5',
+      ACC_PULL_H: 'BB Row: 4x8', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
+      SPEED: (ctx) => `Shuffle Step: ${explosiveSets(4, ctx.phaseNum)}x full court`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum), // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'Close Grip Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PRESS: 'DB Bench: 5x8',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Post Sprint: ${explosiveSets(4, ctx.phaseNum)}x1 (half court · full stop)`,
+      PLYO: (ctx) => bballPlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'DB Bench: 5x8',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+  },
 }
 
 const BB_DAY5 = (info) => ({
@@ -1371,15 +1500,23 @@ const BB_DAY6 = {
   description: `Foam Roll: Quads · IT Band · Calves — 15 minutes\nBalance Work: Single Leg Stand 3x30s each leg\nBand Work: Hip Flexor · External Rotation — 2x15 each\nStatic Stretch: Hip Flexors · Hamstrings · Hip Internal Rotation`,
 }
 
+// feat/day-layout-engine — all 3 positions now route through the shared
+// Speed/Power day-layout wiring (Guards on 'speedpower', Wings/Bigs on
+// 'vertical' — the Vertical/Court group's own finisher weighting, no
+// separate structural template of its own, per spec). BB_DAY5/BB_DAY6
+// (the old generic bolt-on days) are retired in favor of each pack's own
+// purpose-built "Reactive Speed"/"Upper Armor" days.
 function generateBasketballWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
   const phases = mg ? MG_PHASES : BB_PHASES
-  const baseFns = { guards: bbGuardSess, wings: bbWingsSess, bigs: bbBigsSess }
-  const baseFn = baseFns[posId] || bbGuardSess
-  const fn = mg
-    ? (info) => baseFn(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : baseFn
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [BB_DAY5, BB_DAY6])
+  const packs = { guards: BB_GUARDS_PACK, wings: BB_WINGS_PACK, bigs: BB_BIGS_PACK }
+  const pack = packs[posId] || BB_GUARDS_PACK
+  const weeks = generateSpeedPowerWeeksFromPack(pack, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── Repeat-Sprint/Field Athlete archetype core (feat/archetype-repeat-sprint) ─

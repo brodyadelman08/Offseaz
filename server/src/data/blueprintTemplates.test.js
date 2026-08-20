@@ -359,16 +359,16 @@ describe('Area 17 — Injury system upgrade', () => {
   test('flat 50% rule: Shoulder\'s Overhead Press fallback note and Knee/Back\'s scaled percentages both land on 50%, never 60%/70%', () => {
     // Linemen (mkSurvey's default) has no literal "Overhead Press" line of
     // its own (it uses "Standing BB OHP") — same combo Area 4's existing
-    // Shoulder test already uses for this exact reason. Football/QB used to
-    // be the fixture here, but feat/day-layout-engine promoted QB's own
-    // Overhead Press to a ramped MAIN_PRESS_V lift (its old "Upper &
-    // Shoulder Health" day genuinely wanted a vertical press, same
-    // conformance fix applied to Rugby Forwards/Hockey Forwards/Tennis/
-    // Golf) — it's no longer a plain, unscaled line. Basketball Guards
-    // (not yet migrated onto an archetype pack; Bench Press already fills
-    // its main press slot) still carries a plain "Overhead Press: 3x10"
+    // Shoulder test already uses for this exact reason. Football/QB, then
+    // Basketball Guards, used to be the fixture here in turn, but
+    // feat/day-layout-engine promoted each one's own Overhead Press to a
+    // ramped MAIN_PRESS_V lift as each archetype was migrated (same
+    // vertical-press conformance fix applied throughout this PR) — it's no
+    // longer a plain, unscaled line for either. Volleyball (not yet
+    // migrated onto an archetype pack; Bench-style DB Bench already fills
+    // its own main press slot) still carries a plain "Overhead Press: 3x10"
     // accessory line, so it's the current stand-in.
-    const shoulderBp = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Guards', injury_areas: ['Shoulder'] }))
+    const shoulderBp = generateBlueprintForAthlete(mkSurvey({ sport: 'Volleyball', position: 'Volleyball', injury_areas: ['Shoulder'] }))
     const text = fullText(shoulderBp)
     expect(text).toMatch(/Landmine Press.*\(50% of your usual Overhead Press load\)/)
     expect(text).not.toMatch(/70% of your usual Overhead Press load/)
@@ -481,17 +481,17 @@ describe('Area 17 — Injury system upgrade', () => {
     // which are always "@ XX%". feat/blueprint-cleanup retired that old
     // pre-archetype content (Linemen muscle_gain now shares the same
     // modern archetype day content standard-goal Linemen gets, which has
-    // no such line); Football QB's own Day 4 ("Overhead Press: 3x10") was
-    // the next stand-in, but feat/day-layout-engine promoted QB's Overhead
-    // Press to a ramped MAIN_PRESS_V lift (same vertical-press conformance
-    // fix applied across Rugby Forwards/Hockey Forwards/Tennis/Golf), so
-    // it's no longer plain. Basketball Guards (not yet migrated onto an
-    // archetype pack) still has "Overhead Press: 3x10" as a genuinely
-    // plain, non-ramped accessory line — same fallback path, scaleAllPercentages
-    // is still a no-op on it. Marker-stripped since Guards' own accessory
-    // pairing brackets it with other lines.
-    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Guards', injury_areas: ['Elbow'] }))
-    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Basketball', position: 'Guards', injury_areas: [] }))
+    // no such line); Football QB, then Basketball Guards, were the next
+    // stand-ins in turn, but feat/day-layout-engine promoted each one's own
+    // Overhead Press to a ramped MAIN_PRESS_V lift as each archetype was
+    // migrated (same vertical-press conformance fix applied throughout
+    // this PR), so neither is plain anymore. Volleyball (not yet migrated
+    // onto an archetype pack) still has "Overhead Press: 3x10" as a
+    // genuinely plain, non-ramped accessory line — same fallback path,
+    // scaleAllPercentages is still a no-op on it. Marker-stripped since
+    // Volleyball's own accessory pairing brackets it with other lines.
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Volleyball', position: 'Volleyball', injury_areas: ['Elbow'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Volleyball', position: 'Volleyball', injury_areas: [] }))
     const text = stripMarkers(fullText(bp))
     const baseText = stripMarkers(fullText(baseline))
 
