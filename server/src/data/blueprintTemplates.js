@@ -892,6 +892,12 @@ function buildSpeedPowerRenderers(pack) {
     renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
   }
   renderers.ACC_CORE = () => null
+  // Same dedup guard as Collision/Rotational/Field's own ACC_SHOULDER —
+  // for a hasArmCare:true sport (Volleyball, the one Speed/Power-templated
+  // sport with a real overhead/throwing-adjacent demand) the finisher
+  // engine's own 'arm' family already renders real shoulder-health content,
+  // so an inline ACC_SHOULDER slot would risk duplicating it.
+  if (pack.hasArmCare) renderers.ACC_SHOULDER = () => null
   if (pack.warmupLower || pack.warmupUpper) {
     renderers.WARMUP = (ctx) => {
       const lu = dayLayoutEngine.dayLowerOrUpper(ctx.dayTemplate)
@@ -909,7 +915,7 @@ function buildSpeedPowerRenderers(pack) {
     // their own, per spec) use 'vertical' instead. Defaults to
     // 'speedpower' so every existing pack is unaffected.
     const finisherArchetype = pack.finisherArchetype || 'speedpower'
-    const plan = finisherEngine.planWeekFinishers(finisherArchetype, ctx.phaseNum, ctx.days, { hasArmCare: false, overrides: pack.finisherOverrides || null })[dayIndex]
+    const plan = finisherEngine.planWeekFinishers(finisherArchetype, ctx.phaseNum, ctx.days, { hasArmCare: !!pack.hasArmCare, overrides: pack.finisherOverrides || null })[dayIndex]
     return finisherEngine.renderFinisher(pack.finisherBank, plan, ctx.phaseNum, ctx.deload)
   }
   return renderers
@@ -2467,42 +2473,66 @@ function volleyballFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(VOLLEYBALL_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function volleyballSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — vertical/jump/court archetype, same tier as basketball
-  const aj = explosiveSets(5, ph) // Change 3 — explosive volume by phase
-  return [
-    // Fix 3: phasePlyo replaces Box Jump + Depth Jump multi-list
-    { day: 'Day 1', focus: 'Lower Power, Landing Mechanics & Patellar Tendon Prehab',
-      description: `Back Squat: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x5 each leg\n${phasePlyo(ph)}\nSnap Down: 3x5\nDepth Drop: 3x5\nSingle Leg Box Jump: 3x5 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 4xAMAP\n${volleyballFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper & Shoulder Health',
-      description: `DB Bench: 4x10\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nOverhead Press: 3x10\n${volleyballFinisher(1, info)}` },
-    { day: 'Day 3', focus: 'Full Body Explosion',
-      description: `Power Clean: 4x3\nTrap Bar Deadlift: ${info.ramp}, ${q}×${r}\nApproach Jump: ${aj}x5 (${explosiveIntent(ph)})\nHip Thrust: 4x8\nBand Pull-Aparts: 3x20\n${volleyballFinisher(2, info)}` },
-  ]
-}
-
-const VB_DAY4 = (info) => ({
-  day: 'Day 4', focus: 'Speed & Conditioning',
-  description: `Court Sprints: 10x full court (45s rest)\nLateral Shuffle: 4x10 yds each way\nLine Jumps: 3x20s\nReactive Box Jump: 4x4\nTerminal Knee Extension: 3x15 each leg\nCore Finisher: Plank 3x45s · Dead Bug 3x10 · Hanging Knee Raise 3x12\n${coreBlock(info.phaseNum)}`,
-})
-const VB_DAY5 = (info) => ({
-  day: 'Day 5', focus: 'Upper Accessory & Shoulder Health',
-  description: `DB Shoulder Press: 4x10\nFace Pulls: 4x15\nBand External Rotation: 3x15 each arm\nSerratus Wall Slides: 3x12\nTricep Pushdown: 3x15\nBicep Curl: 3x12\n${coreBlock(info.phaseNum)}`,
-})
-const VB_DAY6 = {
-  day: 'Day 6', focus: 'Recovery & Mobility',
-  description: `Foam Roll: Full body — 10 minutes\nDownward Dog → Runner's Lunge flow: 3x5 each side\nHip 90/90 Hold: 3x45s each side\nThoracic Rotation: 3x10 each side\nStatic Stretch: Quads · Hip Flexors · Chest · Shoulders`,
+// feat/day-layout-engine — Volleyball's pack (Vertical/Court archetype,
+// 'vertical' finisher weighting, hasArmCare:true — the one sport in this
+// group with a real overhead/throwing-adjacent demand, per the user's
+// own explicit allow-list). Overhead Press promotes to MAIN_PRESS_V, DB
+// Bench to MAIN_PRESS_H (same reversed-slot promotion as Guards/Wings/
+// Bigs); DB Shoulder Press (VB_DAY5's own vetted vocabulary) fills
+// "Upper Power"'s ACC_PRESS. Power Clean drops (no MAIN_OLY tag). Snap
+// Down/Depth Drop/Single Leg Box Jump/Calf Raises/Band Pull-Aparts have
+// no slot and are dropped — VB_DAY4/5/6 (the old generic bolt-on days)
+// retired in favor of the archetype's own purpose-built 5/6-day layout.
+const VOLLEYBALL_PACK = {
+  finisherBank: VOLLEYBALL_FINISHERS,
+  finisherArchetype: 'vertical',
+  hasArmCare: true,
+  mainLiftTier: 'rotational',
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x5 each leg',
+      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_H: 'DB Bench', // 3-day
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
+      SPEED: (ctx) => `Line Jumps: ${explosiveSets(3, ctx.phaseNum)}x20s`,
+      PLYO: (ctx) => `Approach Jump: ${explosiveSets(5, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`, // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'DB Bench',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm',
+      ACC_PRESS: 'DB Shoulder Press: 4x10',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'DB Shoulder Press: 4x10',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm',
+    },
+  },
 }
 
 function generateVolleyballWeeks(_, goal, daysPerWeek = 3) {
   const mg = goal === 'muscle_gain'
   const phases = mg ? MG_PHASES : STD_PHASES
-  const fn = mg
-    ? (info) => volleyballSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : volleyballSess
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [VB_DAY4, VB_DAY5, VB_DAY6])
+  const weeks = generateSpeedPowerWeeksFromPack(VOLLEYBALL_PACK, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── Track & Field ────────────────────────────────────────────────────────────
@@ -2542,23 +2572,55 @@ function trackSprintFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(TRACK_SPRINT_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function trackSprintSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — non-contact speed archetype, same tier as football QB/basketball/soccer
-  const bnd = explosiveSets(3, ph) // Change 3 — explosive volume by phase
-  return [
-    // Fix 3: phasePlyo replaces Box Jump + Broad Jump list
-    { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 5x3\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nCopenhagen Adductor: 3x8 each leg\nBanded Hip Flexion: 3x12 each leg\n${trackSprintFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${trackSprintFinisher(1, info)}` },
-    // Fix 3: phasePlyo as primary; Bounding is sprint-specific, kept
-    { day: 'Day 3', focus: 'Explosion',
-      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBounding: ${bnd}x20m (${explosiveIntent(ph)})\n${trackSprintFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Posterior Chain',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\n${trackSprintFinisher(3, info)}` },
-  ]
+// feat/day-layout-engine — Track Sprinters' pack. Original content had 3
+// lower-flavored days (Day1 squat, Day3 a SECOND squat, Day4 hinge) and
+// only 1 upper day — same class of mismatch as Basketball Guards/Wings.
+// Resolved by keeping Day1's Back Squat (MAIN_SQUAT) and Day4's Trap Bar
+// Deadlift (MAIN_HINGE, already a natural fit — no promotion needed);
+// Day3's own redundant Front Squat has no slot and drops, with Bounding
+// (Day3's own sprint-specific plyo) relocating to "Lower Explosion &
+// Speed"'s own SPEED slot. Day2's Bench Press (already ramped) fills
+// MAIN_PRESS_H; Overhead Press (flat) promotes to MAIN_PRESS_V. Power
+// Clean/Hang Clean drop (no MAIN_OLY tag).
+const TRACK_SPRINT_PACK = {
+  finisherBank: TRACK_SPRINT_FINISHERS,
+  mainLiftTier: 'rotational',
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      SPEED: (ctx) => `Wicket Drills: ${explosiveSets(3, ctx.phaseNum)}x30m`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_H: 'Bench Press', // 3-day
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      ACC_PULL_H: 'DB Row: 4x12', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
+      SPEED: (ctx) => `Bounding: ${explosiveSets(3, ctx.phaseNum)}x20m`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'DB Row: 4x12',
+      ACC_PRESS: 'Push-up: 4xAMAP',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Wicket Drills: ${explosiveSets(3, ctx.phaseNum)}x30m`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'Push-up: 4xAMAP',
+      ACC_PULL_H: 'DB Row: 4x12',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+  },
 }
 
 // Track Throwers — Rotational/Throwing archetype, arm care ON (the
@@ -2724,25 +2786,53 @@ function trackJumpFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(TRACK_JUMP_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function trackJumpSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'rotational') // Change 1 — non-contact jump archetype, same tier as basketball
-  const slbj = explosiveSets(3, ph) // Change 3 — explosive volume by phase
-  // Single Leg Depth Jump only in phases 3-4 (Fix 3 — no depth jumps ph 1-2)
-  const singleLegDepth = ph >= 3 ? '\nSingle Leg Depth Jump: 4x4 each leg' : ''
-  return [
-    // Fix 3: phasePlyo; Single Leg Depth Jump gated to phases 3-4
-    { day: 'Day 1', focus: 'Lower Power',
-      description: `Power Clean: 5x3\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x8\n${phasePlyo(ph)}${singleLegDepth}\nSingle Leg RDL: 3x8 each leg\nTerminal Knee Extension: 3x15 each leg\n${trackJumpFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nPull-ups: 4xAMAP\nDB Row: 3x12\nOverhead Press: 3x10\nBand Pull-Aparts: 3x15\n${trackJumpFinisher(1, info)}` },
-    // Fix 3: phasePlyo as primary; jump-specific drills kept; Single Leg Broad Jump phases 2+
-    { day: 'Day 3', focus: 'Explosion — Jumps Focus',
-      description: `Hang Clean: 4x3\nFront Squat: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}${ph >= 2 ? '\nSingle Leg Broad Jump: 3x3 each leg' : ''}\nSingle Leg Box Jump: ${slbj}x5 each leg (${explosiveIntent(ph)})\n${trackJumpFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Posterior Chain',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nNordic Hamstring Curl: 4x5\nHip Thrust: 4x10\nSingle Leg Calf Raise: 4xAMAP\n${trackJumpFinisher(3, info)}` },
-  ]
+// feat/day-layout-engine — Track Jumpers' pack (Vertical/Court archetype,
+// 'vertical' finisher weighting). Same structural shape and resolution as
+// Track Sprinters: Day1 squat + Day4 hinge fill the two lower slots,
+// Day3's redundant Front Squat drops with its own Single Leg Box Jump
+// relocating to "Lower Explosion & Speed"'s SPEED slot; Day2's Bench
+// Press/Overhead Press fill the two upper MAIN_ slots. Power Clean/Hang
+// Clean drop.
+const TRACK_JUMP_PACK = {
+  finisherBank: TRACK_JUMP_FINISHERS,
+  finisherArchetype: 'vertical',
+  mainLiftTier: 'rotational',
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Terminal Knee Extension: 4x15 each leg',
+      SPEED: (ctx) => `Bounding: ${explosiveSets(3, ctx.phaseNum)}x20m`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_H: 'Bench Press', // 3-day
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      ACC_PULL_H: 'DB Row: 4x12', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
+      SPEED: (ctx) => `Single Leg Box Jump: ${explosiveSets(3, ctx.phaseNum)}x5 each leg (${explosiveIntent(ctx.phaseNum)})`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'DB Row: 4x12',
+      ACC_PRESS: 'Push-up: 4xAMAP',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Bounding: ${explosiveSets(3, ctx.phaseNum)}x20m`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'Push-up: 4xAMAP',
+      ACC_PULL_H: 'DB Row: 4x12',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+  },
 }
 
 const TRACK_SPRINT_DAY5 = (info) => ({
@@ -2758,23 +2848,24 @@ const TRACK_DAY6 = {
   description: `Foam Roll: Full body — 15 minutes\nHip Flexor Stretch: 3x45s each leg\nHamstring Eccentric: 3x8\nCalf Raise Static Stretch: 3x45s\nThoracic Rotation: 3x10 each side\nAnkle Mobility Circles: 3x10 each`,
 }
 
+// feat/day-layout-engine — all 3 sub-events now route through their own
+// purpose-built day-layout packs, day-count-aware for all of 3/4/5/6 days
+// (Throwers on the Rotational archetype, Sprinters on Speed/Power,
+// Jumpers on the Vertical/Court group). TRACK_SPRINT_DAY5/TRACK_JUMP_DAY5/
+// TRACK_DAY6 (the old generic bolt-on days) are retired in favor of each
+// pack's own purpose-built "Reactive Speed"/"Upper Armor" days.
 function generateTrackWeeks(subtype, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  // Throwers (Rotational/Throwing archetype) now route through their own
-  // purpose-built day-layout pack, day-count-aware for all of 3/4/5/6
-  // days — see generateTrackThrowWeeks/TRACK_THROW_PACK above. Sprint/Jump
-  // are Speed/Power and Vertical/Court archetype sports respectively,
-  // still on the older generic bolt-on path pending their own migration.
   if (subtype === 'throw') return generateTrackThrowWeeks(daysPerWeek, mg)
   const phases = mg ? MG_PHASES : STD_PHASES
-  const baseFns = { sprint: trackSprintSess, jump: trackJumpSess }
-  const baseFn = baseFns[subtype] || trackSprintSess
-  const fn = mg
-    ? (info) => baseFn(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : baseFn
-  const day5Fns = { sprint: TRACK_SPRINT_DAY5, jump: TRACK_JUMP_DAY5 }
-  const day5 = day5Fns[subtype] || TRACK_SPRINT_DAY5
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [day5, TRACK_DAY6])
+  const packs = { sprint: TRACK_SPRINT_PACK, jump: TRACK_JUMP_PACK }
+  const pack = packs[subtype] || TRACK_SPRINT_PACK
+  const weeks = generateSpeedPowerWeeksFromPack(pack, phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── Cross Country ────────────────────────────────────────────────────────────

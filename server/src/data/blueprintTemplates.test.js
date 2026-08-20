@@ -360,15 +360,16 @@ describe('Area 17 — Injury system upgrade', () => {
     // Linemen (mkSurvey's default) has no literal "Overhead Press" line of
     // its own (it uses "Standing BB OHP") — same combo Area 4's existing
     // Shoulder test already uses for this exact reason. Football/QB, then
-    // Basketball Guards, used to be the fixture here in turn, but
-    // feat/day-layout-engine promoted each one's own Overhead Press to a
-    // ramped MAIN_PRESS_V lift as each archetype was migrated (same
-    // vertical-press conformance fix applied throughout this PR) — it's no
-    // longer a plain, unscaled line for either. Volleyball (not yet
-    // migrated onto an archetype pack; Bench-style DB Bench already fills
-    // its own main press slot) still carries a plain "Overhead Press: 3x10"
+    // Basketball Guards, then Volleyball, were the fixture here in turn,
+    // but feat/day-layout-engine promoted each one's own Overhead Press to
+    // a ramped MAIN_PRESS_V lift as each archetype was migrated (same
+    // vertical-press conformance fix applied throughout this PR) — none of
+    // them are plain anymore. Hockey Goalie's muscle_gain path (the one
+    // remaining bespoke, pre-archetype fallback — standard-goal Goalie
+    // already migrated onto the Field archetype, see generateHockeyWeeks'
+    // own `!mg &&` gate) still carries a plain "Overhead Press: 3x10"
     // accessory line, so it's the current stand-in.
-    const shoulderBp = generateBlueprintForAthlete(mkSurvey({ sport: 'Volleyball', position: 'Volleyball', injury_areas: ['Shoulder'] }))
+    const shoulderBp = generateBlueprintForAthlete(mkSurvey({ sport: 'Hockey', position: 'Goalie', primary_goal: 'muscle_gain', injury_areas: ['Shoulder'] }))
     const text = fullText(shoulderBp)
     expect(text).toMatch(/Landmine Press.*\(50% of your usual Overhead Press load\)/)
     expect(text).not.toMatch(/70% of your usual Overhead Press load/)
@@ -481,17 +482,19 @@ describe('Area 17 — Injury system upgrade', () => {
     // which are always "@ XX%". feat/blueprint-cleanup retired that old
     // pre-archetype content (Linemen muscle_gain now shares the same
     // modern archetype day content standard-goal Linemen gets, which has
-    // no such line); Football QB, then Basketball Guards, were the next
-    // stand-ins in turn, but feat/day-layout-engine promoted each one's own
-    // Overhead Press to a ramped MAIN_PRESS_V lift as each archetype was
-    // migrated (same vertical-press conformance fix applied throughout
-    // this PR), so neither is plain anymore. Volleyball (not yet migrated
-    // onto an archetype pack) still has "Overhead Press: 3x10" as a
-    // genuinely plain, non-ramped accessory line — same fallback path,
-    // scaleAllPercentages is still a no-op on it. Marker-stripped since
-    // Volleyball's own accessory pairing brackets it with other lines.
-    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Volleyball', position: 'Volleyball', injury_areas: ['Elbow'] }))
-    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Volleyball', position: 'Volleyball', injury_areas: [] }))
+    // no such line); Football QB, then Basketball Guards, then Volleyball,
+    // were the next stand-ins in turn, but feat/day-layout-engine promoted
+    // each one's own Overhead Press to a ramped MAIN_PRESS_V lift as each
+    // archetype was migrated (same vertical-press conformance fix applied
+    // throughout this PR), so none of them are plain anymore. Hockey
+    // Goalie's muscle_gain path (the one remaining bespoke, pre-archetype
+    // fallback — see the flat-50%-rule test above's own comment) still has
+    // "Overhead Press: 3x10" as a genuinely plain, non-ramped accessory
+    // line — same fallback path, scaleAllPercentages is still a no-op on
+    // it. Marker-stripped since Goalie's own accessory pairing brackets it
+    // with other lines.
+    const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Hockey', position: 'Goalie', primary_goal: 'muscle_gain', injury_areas: ['Elbow'] }))
+    const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Hockey', position: 'Goalie', primary_goal: 'muscle_gain', injury_areas: [] }))
     const text = stripMarkers(fullText(bp))
     const baseText = stripMarkers(fullText(baseline))
 
@@ -1538,19 +1541,34 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     expect(marked[3]).toMatch(/^⟦SS2⟧/)
   })
 
-  test('Oly-lift/ramped-lift split regression: a session with BOTH a technical Olympic lift and a separate %-ramped lift keeps the Oly lift standalone and only pairs the ramped lift with the plyo contrast — they never get bundled into one group', () => {
-    // Same fixture correction as the test above — see its comment.
+  test('Oly-lift/ramped-lift split regression: a session with BOTH a technical Olympic lift and a separate %-ramped lift keeps the Oly lift standalone, never bundled into the ramped lift\'s own accessory pairing', () => {
+    // Track Sprinters used to be the fixture here, but feat/day-layout-
+    // engine dropped its Power Clean entirely (Speed/Power's own template
+    // has no MAIN_OLY tag, same as Rotational's). Rugby Forwards (Collision
+    // archetype, which DOES have MAIN_OLY) still carries a real Power
+    // Clean alongside a ramped Back Squat on the same day — the day-layout
+    // engine's own assembler never brackets a MAIN_ line with anything
+    // (see dayLayoutEngine.js's "MAIN_ lines always render standalone"
+    // convention), so Back Squat now pairs with its own authored accessory
+    // pair instead of a content-detected jump — the regression this test
+    // actually guards (Oly lift never bundled with the ramped lift's own
+    // pairing) still holds exactly as before.
     const bp = generateBlueprintForAthlete({
-      sport: 'Track and Field', position: 'Sprinters', primary_goal: 'standard',
+      sport: 'Rugby', position: 'Prop', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
     const day1 = bp.weeks[0].sessions[0].description
     // Power Clean (technical Oly lift, no %) must render with NO superset
-    // marker — it stands alone, never bundled with the ramped squat + jump.
-    expect(firstMatchingLine(day1, /Power Clean/)).toMatch(/^Power Clean:/)
+    // marker — it stands alone, never bundled with anything.
+    expect(firstMatchingLine(day1, /Power Clean/)).toMatch(/^Power Clean/)
     expect(firstMatchingLine(day1, /Power Clean/)).not.toMatch(SUPERSET_MARKER_RE)
-    // Back Squat (the %-ramped lift) is the one that pairs with the jump.
-    expect(firstMatchingLine(day1, /Back Squat/)).toMatch(/^⟦SS1⟧Back Squat:/)
+    // Back Squat (the %-ramped lift) is also standalone — its own
+    // accessory pair (Barbell RDL + Bulgarian Split Squat) is what's
+    // bracketed, and Power Clean is never part of that group.
+    expect(firstMatchingLine(day1, /Back Squat/)).toMatch(/^Back Squat:/)
+    expect(firstMatchingLine(day1, /Back Squat/)).not.toMatch(SUPERSET_MARKER_RE)
+    expect(firstMatchingLine(day1, /Barbell RDL/)).toMatch(/^⟦SS1⟧Barbell RDL:/)
+    expect(firstMatchingLine(day1, /Bulgarian Split Squat/)).toMatch(/^⟦SS1⟧Bulgarian Split Squat:/)
   })
 
   // feat/fix-silent-accessory-drops — this used to test that generic filler
