@@ -2687,54 +2687,62 @@ function laxConditioningB(ph, deload) {
 // every Field sport's bank uses, for a consistent "arm care" identity.
 const LAX_FINISHERS = fieldFinisherBank(laxConditioningA, laxConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
-function lacrosseArchetypeDay1(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r  = mainLiftTopReps(ph, 'rotational')
-  const lb = explosiveSets(4, ph)
-  return {
-    day: 'Monday', focus: 'Lower Power & Sprint',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 3x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\n${fieldFinisher(LAX_FINISHERS, 0, 4, info)}`,
-  }
-}
-
-function lacrosseArchetypeDay2(info) {
-  const { phaseNum: ph, deload: dl } = info
-  return {
-    day: 'Tuesday', focus: 'Upper & Rotational Shooting Power',
-    description: `DB Bench Press: 4x8\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nMed Ball Rotational Throw: 4x6 each side\nLandmine Rotation: 3x8 each side\nCable Woodchop: 3x10 each side\nGrip Work: 3x30s each\n${fieldFinisher(LAX_FINISHERS, 1, 4, info)}`,
-  }
-}
-
-function lacrosseArchetypeDay3(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r   = mainLiftTopReps(ph, 'rotational')
-  const lsj = explosiveSets(4, ph)
-  return {
-    day: 'Thursday', focus: 'Lower Explosion & Change of Direction',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${fieldFinisher(LAX_FINISHERS, 2, 4, info)}`,
-  }
-}
-
-function lacrosseArchetypeDay4(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r = mainLiftTopReps(ph, 'rotational')
-  return {
-    day: 'Friday', focus: 'Upper Power',
-    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x6\nGrip Work: 3x30s each\n${fieldFinisher(LAX_FINISHERS, 3, 4, info)}`,
-  }
-}
-
-function lacrosseArchetypeSess(info) {
-  return [lacrosseArchetypeDay1(info), lacrosseArchetypeDay2(info), lacrosseArchetypeDay3(info), lacrosseArchetypeDay4(info)]
-}
-
-function generateLacrosseArchetypeWeeks(daysPerWeek) {
-  return buildWeeksDynamic(16, STD_PHASES, lacrosseArchetypeSess, daysPerWeek, [LAX_DAY5, LAX_DAY6])
+// feat/day-layout-engine — Lacrosse's pack. displayFocus restores the
+// original 4-day names. Landmine Rotation/Cable Woodchop/Grip Work (Day
+// 2's own rich rotational/grip vocabulary) have no slot on the leaner
+// template — dropped (Band External Rotation fills ACC_SHOULDER instead,
+// same generic-shoulder-health treatment used across this archetype).
+const LAX_PACK = {
+  finisherBank: LAX_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Power & Sprint',
+    'Upper Strength': 'Upper & Rotational Shooting Power',
+    'Lower Explosion': 'Lower Explosion & Change of Direction',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+      ACC_UNILATERAL_LOWER: 'Single Leg RDL: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x8',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Weighted Pull-ups: 4x6',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Hip Thrust: 4x8',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 3x5 (light)',
+    },
+  },
 }
 
 function generateLacrosseWeeks(_, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  if (!mg) return generateLacrosseArchetypeWeeks(daysPerWeek)
+  if (!mg) return generateFieldWeeksFromPack(LAX_PACK, STD_PHASES, daysPerWeek)
   const phases = MG_PHASES
   const fn = (info) => lacrosseSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [LAX_DAY5, LAX_DAY6])
@@ -3848,48 +3856,59 @@ function hdConditioningB(ph, deload) {
 // (Med Ball Rotational Throw, Band External Rotation) verbatim.
 const HD_FINISHERS = fieldFinisherBank(hdConditioningA, hdConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
-function hockeyDefenseArchetypeDay1(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r  = mainLiftTopReps(ph, 'rotational')
-  const lb = explosiveSets(5, ph)
-  return {
-    day: 'Monday', focus: 'Lower — Lateral Mobility & Single Leg Stability',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x8 each side\nCopenhagen Adductor: 3x8 each leg\nLateral Bound: ${lb}x5 each side (${explosiveIntent(ph)})\nSingle Leg RDL: 3x8 each leg\n${fieldFinisher(HD_FINISHERS, 0, 4, info)}`,
-  }
-}
-
-function hockeyDefenseArchetypeDay2(info) {
-  const { phaseNum: ph, deload: dl } = info
-  return {
-    day: 'Tuesday', focus: 'Upper — Core Stiffness & Rotational Strength',
-    description: `DB Bench Press: 4x10\nSingle Arm DB Row: 4x10 each arm\nMed Ball Rotational Throw: 4x6 each side\nPallof Press: 3x12 each side\n${fieldFinisher(HD_FINISHERS, 1, 4, info)}`,
-  }
-}
-
-function hockeyDefenseArchetypeDay3(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r = mainLiftTopReps(ph, 'rotational')
-  return {
-    day: 'Thursday', focus: 'Lower — Crossover & Backward Skating Mechanics',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Sled Drag: 4x20 yds each direction\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nBulgarian Split Squat: 3x6 each leg\n${fieldFinisher(HD_FINISHERS, 2, 4, info)}`,
-  }
-}
-
-function hockeyDefenseArchetypeDay4(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r = mainLiftTopReps(ph, 'rotational')
-  return {
-    day: 'Friday', focus: 'Upper Power',
-    description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 4x5\n${fieldFinisher(HD_FINISHERS, 3, 4, info)}`,
-  }
-}
-
-function hockeyDefenseArchetypeSess(info) {
-  return [hockeyDefenseArchetypeDay1(info), hockeyDefenseArchetypeDay2(info), hockeyDefenseArchetypeDay3(info), hockeyDefenseArchetypeDay4(info)]
+// feat/day-layout-engine — Hockey Defense's pack. Pallof Press (a core
+// move) has no slot — dropped, the finisher engine's own core family
+// covers this day instead, same dedup pattern used throughout this PR.
+const HD_PACK = {
+  finisherBank: HD_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower — Lateral Mobility & Single Leg Stability',
+    'Upper Strength': 'Upper — Core Stiffness & Rotational Strength',
+    'Lower Explosion': 'Lower — Crossover & Backward Skating Mechanics',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      ACC_UNILATERAL_LOWER: 'Cossack Squat: 4x8 each side',
+      PLYO: (ctx) => `Lateral Bound: ${explosiveSets(5, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x10',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Sled Drag: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Weighted Pull-ups: 4x5',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band External Rotation: 4x15 each arm',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Lateral Sled Drag: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Lateral Sled Drag: ${explosiveSets(4, ctx.phaseNum)}x20 yds each direction`,
+      PLYO: (ctx) => `Lateral Bound: ${explosiveSets(5, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Copenhagen Adductor: 3x8 each leg (light)',
+    },
+  },
 }
 
 function generateHockeyDefenseArchetypeWeeks(daysPerWeek) {
-  return buildWeeksDynamic(16, HOCKEY_PHASES, hockeyDefenseArchetypeSess, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
+  return generateFieldWeeksFromPack(HD_PACK, HOCKEY_PHASES, daysPerWeek)
 }
 
 // ── Hockey Goalie conditioning: reactive/lateral (Monday, paired with power &
@@ -3920,49 +3939,67 @@ const HG_FINISHERS = fieldFinisherBank(hgConditioningA, hgConditioningB, 'Med Ba
 // nothing new invented for this position.
 const HG_OVERRIDES = { sprint: 10, core: 5, rotation: -8, arm: -3, energy: -4 }
 
-function hockeyGoalieArchetypeDay1(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r    = mainLiftTopReps(ph, 'rotational')
-  const slbj = explosiveSets(4, ph)
-  return {
-    day: 'Monday', focus: 'Lower Power & Butterfly Mechanics',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nCossack Squat: 3x10 each side\nSingle Leg Box Jump: ${slbj}x4 each leg (${explosiveIntent(ph)})\nCopenhagen Adductor: 4x8 each leg\nLateral Bound: 5x5 each side\n${fieldFinisher(HG_FINISHERS, 0, 4, info, HG_OVERRIDES)}`,
-  }
-}
-
-function hockeyGoalieArchetypeDay2(info) {
-  const { phaseNum: ph, deload: dl } = info
-  return {
-    day: 'Tuesday', focus: 'Upper (DB Only — Protects Shoulder Joint)',
-    description: `DB Bench Press: 4x10 (DB only — protects shoulder joint)\nSingle Arm DB Row: 4x10 each arm\nOverhead Press: 3x10\nFace Pulls: 4x15\n${fieldFinisher(HG_FINISHERS, 1, 4, info, HG_OVERRIDES)}`,
-  }
-}
-
-function hockeyGoalieArchetypeDay3(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r   = mainLiftTopReps(ph, 'rotational')
-  const lsj = explosiveSets(4, ph)
-  return {
-    day: 'Thursday', focus: 'Reactive Lateral & Butterfly Recovery',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nResistance Band Lateral Walk: 3x20 each direction\nCossack Squat: 3x8 each side\n${fieldFinisher(HG_FINISHERS, 2, 4, info, HG_OVERRIDES)}`,
-  }
-}
-
-function hockeyGoalieArchetypeDay4(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r = mainLiftTopReps(ph, 'rotational')
-  return {
-    day: 'Friday', focus: 'Upper Power (Goalie Protection)',
-    description: `Incline DB Press: ${info.ramp}, ${q}×${r} (DB only — protects shoulder joint)\nWeighted Pull-ups: 4x5\nFace Pulls: 3x15\n${fieldFinisher(HG_FINISHERS, 3, 4, info, HG_OVERRIDES)}`,
-  }
-}
-
-function hockeyGoalieArchetypeSess(info) {
-  return [hockeyGoalieArchetypeDay1(info), hockeyGoalieArchetypeDay2(info), hockeyGoalieArchetypeDay3(info), hockeyGoalieArchetypeDay4(info)]
+// feat/day-layout-engine — Hockey Goalie's pack. "DB only — protects
+// shoulder joint" is Goalie's own explicit, pre-existing design
+// constraint (same class as Pitcher's "no direct overhead pressing") —
+// preserved by keeping every press DB-based: Incline DB Press (Goalie's
+// own genuinely-ramped press, originally on Day 4) fills MAIN_PRESS_H;
+// MAIN_PRESS_V uses DB Shoulder Press (a DB-only vertical press, not the
+// barbell-style Overhead Press every other Field sport promotes here) so
+// the vertical-press conformance fix never compromises Goalie's own
+// shoulder-protection identity.
+const HG_PACK = {
+  finisherBank: HG_FINISHERS,
+  finisherOverrides: HG_OVERRIDES,
+  displayFocus: {
+    'Lower Power': 'Lower Power & Butterfly Mechanics',
+    'Upper Strength': 'Upper (DB Only — Protects Shoulder Joint)',
+    'Lower Explosion': 'Reactive Lateral & Butterfly Recovery',
+    'Upper Power': 'Upper Power (Goalie Protection)',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      ACC_UNILATERAL_LOWER: 'Cossack Squat: 4x10 each side',
+      PLYO: (ctx) => `Single Leg Box Jump: ${explosiveSets(4, ctx.phaseNum)}x4 each leg (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: { name: 'Incline DB Press', suffix: ' (DB only — protects shoulder joint)' },
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      ACC_PRESS: 'DB Bench Press: 4x10 (DB only — protects shoulder joint)',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Cossack Squat: 4x8 each side',
+      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: { name: 'DB Shoulder Press', suffix: ' (DB only — protects shoulder joint)' },
+      ACC_PULL_V: 'Weighted Pull-ups: 4x5',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Face Pulls: 4x15',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Lateral Shuffle: ${explosiveSets(5, ctx.phaseNum)}x20 yds`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Lateral Shuffle: ${explosiveSets(5, ctx.phaseNum)}x20 yds`,
+      PLYO: (ctx) => `Single Leg Box Jump: ${explosiveSets(4, ctx.phaseNum)}x4 each leg (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Copenhagen Adductor: 3x8 each leg (light)',
+    },
+  },
 }
 
 function generateHockeyGoalieArchetypeWeeks(daysPerWeek) {
-  return buildWeeksDynamic(16, HOCKEY_PHASES, hockeyGoalieArchetypeSess, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
+  return generateFieldWeeksFromPack(HG_PACK, HOCKEY_PHASES, daysPerWeek)
 }
 
 function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
@@ -4210,49 +4247,63 @@ function rbConditioningB(ph, deload) {
 // Band External Rotation anchor every Field sport's bank uses.
 const RB_FINISHERS = fieldFinisherBank(rbConditioningA, rbConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
 
-function rugbyBacksArchetypeDay1(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r  = mainLiftTopReps(ph, 'rotational')
-  const lb = explosiveSets(4, ph)
-  return {
-    day: 'Monday', focus: 'Lower Strength & Sprint',
-    description: `Back Squat: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nNordic Hamstring Curl: 4x5\nLateral Bounds: ${lb}x5 each side (${explosiveIntent(ph)})\nGroin Plank: 3x10 each side\n${fieldFinisher(RB_FINISHERS, 0, 4, info)}`,
-  }
-}
-
-function rugbyBacksArchetypeDay2(info) {
-  const { phaseNum: ph, deload: dl } = info
-  return {
-    day: 'Tuesday', focus: 'Upper Contact Strength',
-    description: `Bench Press: 4x8\nWeighted Pull-ups: 4x6\nDB Row: 4x10 each arm\nOverhead Press: 3x10\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${fieldFinisher(RB_FINISHERS, 1, 4, info)}`,
-  }
-}
-
-function rugbyBacksArchetypeDay3(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r  = mainLiftTopReps(ph, 'rotational')
-  const lsj = explosiveSets(4, ph)
-  return {
-    day: 'Thursday', focus: 'Explosion, Agility & COD',
-    description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nBulgarian Split Squat: 3x6 each leg\nLateral Squat Jump: ${lsj}x5 each side (${explosiveIntent(ph)})\nSingle Leg Lateral Hurdle Hop: 3x5 each leg\nSled Sprint: 6x20 yds\n${fieldFinisher(RB_FINISHERS, 2, 4, info)}`,
-  }
-}
-
-function rugbyBacksArchetypeDay4(info) {
-  const { pct: q, phaseNum: ph, deload: dl } = info
-  const r = mainLiftTopReps(ph, 'rotational')
-  return {
-    day: 'Friday', focus: 'Upper Power',
-    description: `Close Grip Bench Press: ${info.ramp}, ${q}×${r} (hands at shoulder width)\nSingle Arm DB Row: 4x10 each arm\nGrip Work: 3x30s each\n${fieldFinisher(RB_FINISHERS, 3, 4, info)}`,
-  }
-}
-
-function rugbyBacksArchetypeSess(info) {
-  return [rugbyBacksArchetypeDay1(info), rugbyBacksArchetypeDay2(info), rugbyBacksArchetypeDay3(info), rugbyBacksArchetypeDay4(info)]
+// feat/day-layout-engine — Rugby Backs' pack. Unlike every other Field
+// sport, Backs' own genuinely-ramped press was Day 4's Close Grip Bench
+// Press (Day 2's "Bench Press" was the FLAT, non-ramped one) — Close Grip
+// Bench Press fills MAIN_PRESS_H, Bench Press fills ACC_PRESS instead of
+// the usual DB Bench Press. Neck Strengthening/Grip Work have no slot
+// (Field's own templates carry no NECK tag at all, unlike Collision) and
+// are dropped.
+const RB_PACK = {
+  finisherBank: RB_FINISHERS,
+  displayFocus: {
+    'Lower Power': 'Lower Strength & Sprint',
+    'Upper Strength': 'Upper Contact Strength',
+    'Lower Explosion': 'Explosion, Agility & COD',
+  },
+  byFocus: {
+    'Lower Power': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      PLYO: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Strength': {
+      MAIN_PRESS_H: 'Close Grip Bench Press',
+      ACC_PULL_H: 'DB Row: 4x10 each arm',
+      ACC_PRESS: 'Bench Press: 4x8',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side', // 3-day
+    },
+    'Lower Explosion': {
+      MAIN_SQUAT: 'Front Squat',
+      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Upper Power': {
+      MAIN_PRESS_V: 'Overhead Press',
+      ACC_PULL_V: 'Weighted Pull-ups: 4x6',
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Face Pulls: 4x15',
+    },
+    'Lower Power & Sprint': {
+      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      MAIN_SQUAT: 'Back Squat',
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+    },
+    'Speed & Change of Direction': {
+      SPEED: (ctx) => `Sled Sprint: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
+      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Recovery & Mobility': {
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 3x5 (light)',
+    },
+  },
 }
 
 function generateRugbyBacksArchetypeWeeks(daysPerWeek) {
-  return buildWeeksDynamic(16, RUGBY_PHASES, rugbyBacksArchetypeSess, daysPerWeek, [RUGBY_DAY5, RUGBY_DAY6])
+  return generateFieldWeeksFromPack(RB_PACK, RUGBY_PHASES, daysPerWeek)
 }
 
 function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
