@@ -1463,24 +1463,33 @@ describe('Area 10 — Baseball sport-specific content', () => {
     expect(pitcherText).toMatch(/^Landmine Press: \d+%×\d+.*\(angled — no direct overhead loading\)$/m)
   })
 
-  // feat/day-layout-engine — Stage 1 is static per-slot resolution, no
-  // phase/week-varying pools (that's Stage 2's job); the old weeklyVariant
-  // Front Squat/Back Squat alternation on this day is gone — Back Squat
-  // renders the same way every week. It's the day's sole MAIN_ line
-  // (never bracketed — main lifts stand alone, matching every other
-  // sport), followed by Single Leg RDL + Bulgarian Split Squat bracketed
-  // as the day's one accessory pair.
-  test('Lower Power: Back Squat renders standalone (no weekly name variation), with Single Leg RDL + Bulgarian Split Squat bracketed as the accessory pair, every week', () => {
+  // feat/variety-engine — the old weeklyVariant Front Squat/Back Squat
+  // alternation on this day is still gone (Back Squat is the day's sole
+  // MAIN_ line, never bracketed, standalone every week, matching every
+  // other sport). Single Leg RDL is the day's ACC_HINGE ANCHOR — the
+  // variety engine's core guarantee is that it renders the exact same
+  // exercise all 16 weeks, prescription-only progression. Bulgarian Split
+  // Squat is the ACC_UNILATERAL_LOWER FILLER paired with it — week 1
+  // matches Stage 1's exact static choice, then rotates through the
+  // variety engine's pool from week 2 on (deterministic, same mechanism
+  // every sport now gets — baseball is no longer a special case exempted
+  // from it).
+  test('Lower Power: Back Squat renders standalone; Single Leg RDL (ACC_HINGE anchor) bracketed with the ACC_UNILATERAL_LOWER filler, which rotates from week 2', () => {
     const raw = baseball.generateWeeks('baseball', 'standard', 4)
     const organized = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
+    const fillerByWeek = []
     for (const wk of [0, 1, 2, 3]) {
       const day1 = organized[wk].sessions[0].description.split('\n')
       expect(day1[0]).toMatch(/^Back Squat: \d+%/)
       expect(SUPERSET_MARKER_RE.test(day1[0])).toBe(false)
       const marked = day1.filter(l => SUPERSET_MARKER_RE.test(l))
-      expect(marked[0]).toMatch(/^⟦SS1⟧Single Leg RDL:/)
-      expect(marked[1]).toMatch(/^⟦SS1⟧Bulgarian Split Squat:/)
+      expect(marked[0]).toMatch(/^⟦SS1⟧Single Leg RDL:/) // anchor — identical every week
+      expect(marked[1]).toMatch(/^⟦SS1⟧[A-Za-z].*:/) // filler — still a real, bracketed accessory every week
+      fillerByWeek.push(marked[1])
     }
+    expect(fillerByWeek[0]).toMatch(/^⟦SS1⟧Bulgarian Split Squat:/) // week 1 = Stage 1's own static choice
+    expect(fillerByWeek[1]).not.toBe(fillerByWeek[0]) // week 2 rotates
+    expect(fillerByWeek[3]).toBe(fillerByWeek[2]) // deload week freezes at week 3's pick, doesn't revert or advance
   })
 
   test('Upper Strength (Position Player\'s "Upper & Shoulder Health" day): Overhead Press + Gorilla Row + Med Ball Slam, press standalone, accessory pair bracketed, static every week', () => {
@@ -1989,30 +1998,47 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
   // finisher engine's own, pre-existing week-based rotation (medBallPool
   // Variant, still reused verbatim inside baseballFinisherBank's 'rotation'
   // family) is covered by Area 10's core-finisher-rotation test instead.
-  describe('static per-slot content (Stage 1 — variety pools are Stage 2)', () => {
-    test('Lower Strength: Trap Bar Deadlift (main lift, standalone) brackets with Goblet Squat, every week — no more weekly Trap Bar Deadlift/Reverse Lunge alternation', () => {
+  // feat/variety-engine — renamed from "Stage 1 — variety pools are Stage
+  // 2": Stage 2 has landed, and baseball's ACC_SQUAT/ACC_PULL_H/ACC_PULL_V
+  // anchors here are exactly the slots the variety engine's core guarantee
+  // protects (never rotate — main lifts and anchors are the day's stable,
+  // measurable core). What's no longer static is the FILLER half of each
+  // pair (ACC_POSTERIOR/ACC_PULL_V), which rotates from week 2 like every
+  // other sport's now that baseball is no longer specially exempted.
+  describe('static ANCHOR content — the variety engine\'s filler pools now govern the rest', () => {
+    test('Lower Strength: Trap Bar Deadlift (main lift, standalone) brackets with Goblet Squat (ACC_SQUAT anchor, never rotates) + the ACC_POSTERIOR filler (rotates from week 2)', () => {
       const raw = baseball.generateWeeks('baseball', 'standard', 4)
       const weeks = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
+      const fillerByWeek = []
       for (const wk of [0, 1, 2, 3]) {
         const lines = weeks[wk].sessions[2].description.split('\n')
         expect(lines[0]).toMatch(/^Trap Bar Deadlift: \d+%/)
         expect(SUPERSET_MARKER_RE.test(lines[0])).toBe(false)
         const marked = lines.filter(l => SUPERSET_MARKER_RE.test(l))
-        expect(marked[0]).toMatch(/^⟦SS1⟧Goblet Squat:/)
-        expect(marked[1]).toMatch(/^⟦SS1⟧Hip Thrust:/)
+        expect(marked[0]).toMatch(/^⟦SS1⟧Goblet Squat:/) // anchor — identical every week
+        expect(marked[1]).toMatch(/^⟦SS1⟧[A-Za-z].*:/)
+        fillerByWeek.push(marked[1])
       }
+      expect(fillerByWeek[0]).toMatch(/^⟦SS1⟧Hip Thrust:/) // week 1 = Stage 1's own static choice
+      expect(fillerByWeek[1]).not.toBe(fillerByWeek[0])
+      expect(fillerByWeek[3]).toBe(fillerByWeek[2]) // deload freezes at week 3's pick
     })
 
-    test('Upper Power (Position Player\'s "Upper Power & Rotational" day): DB Bench Press (main lift, standalone) brackets with Single Arm DB Row + Pull-ups — no more weekly bench-variant alternation', () => {
+    test('Upper Power (Position Player\'s "Upper Power & Rotational" day): DB Bench Press (main lift, standalone) brackets with Single Arm DB Row (ACC_PULL_H anchor, never rotates) + the ACC_PULL_V filler (rotates from week 2)', () => {
       const raw = baseball.generateWeeks('baseball', 'standard', 4)
       const weeks = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
+      const fillerByWeek = []
       for (const wk of [0, 1, 2, 3]) {
         const lines = weeks[wk].sessions[3].description.split('\n')
         expect(lines[0]).toMatch(/^DB Bench Press: \d+%/)
         const marked = lines.filter(l => SUPERSET_MARKER_RE.test(l))
-        expect(marked[0]).toMatch(/^⟦SS1⟧Single Arm DB Row:/)
-        expect(marked[1]).toMatch(/^⟦SS1⟧Pull-ups:/)
+        expect(marked[0]).toMatch(/^⟦SS1⟧Single Arm DB Row:/) // anchor — identical every week
+        expect(marked[1]).toMatch(/^⟦SS1⟧[A-Za-z].*:/)
+        fillerByWeek.push(marked[1])
       }
+      expect(fillerByWeek[0]).toMatch(/^⟦SS1⟧Pull-ups:/) // week 1 = Stage 1's own static choice
+      expect(fillerByWeek[1]).not.toBe(fillerByWeek[0])
+      expect(fillerByWeek[3]).toBe(fillerByWeek[2]) // deload freezes at week 3's pick
     })
   })
 
@@ -2410,7 +2436,7 @@ describe('Area 15 — Shared block periodization', () => {
     }
   })
 
-  test('Football linemen is completely unaffected: same phase labels/rep windows as the untouched bespoke engine, and its own pre-existing Single Leg RDL wip-rotation still fires (never phase-based)', () => {
+  test('Football linemen is completely unaffected: same phase labels/rep windows as the untouched bespoke engine, and its own Single Leg RDL anchor never rotates (even though linemen was never registered in SPORT_PHASE_ACCESSORY_ROTATION)', () => {
     const football = SPORT_TEMPLATES.find(t => t.id === 'football')
     const weeks = football.generateWeeks('linemen', 'standard', 4)
     // Linemen's own phase labels (Accumulation/Intensification/Peak/Peak) —
@@ -2423,21 +2449,26 @@ describe('Area 15 — Shared block periodization', () => {
     // same Peak numbers as phase 3, exactly as it did before this rebuild.
     const topPctOf = (weekIdx) => lastPercent(firstMatchingLine(weeks[weekIdx].sessions[0].description, /Front Squat:/))
     expect(topPctOf(10)).toBe(topPctOf(14)) // week 11 (phase 3, wip 3) === week 15 (phase 4, wip 3)
-    // The pre-existing GLOBAL wip-based ACCESSORY_ROTATION still governs
-    // linemen's Single Leg RDL (Good Mornings on wip 2) — proves Change 4's
-    // new phase table never reaches linemen through the shared sport-level
-    // lookup (resolvePhaseRotationKey returns null for linemen).
+    // feat/variety-engine — the global wip-based ACCESSORY_ROTATION table
+    // used to rotate linemen's "Single Leg RDL" (a Collision-archetype
+    // ACC_HINGE[anchor:true] slot on "Lower Strength") to "Good Mornings"
+    // on wip 2, precisely because that downstream pass matched on rendered
+    // TEXT with no idea it was renaming an anchor. varietyEngine.js's
+    // resolveFiller() is the single naming authority now: anchors never
+    // rotate, full stop — including for a sport like linemen that was
+    // never even registered in SPORT_PHASE_ACCESSORY_ROTATION and used to
+    // fall straight through to the bare global table. Proving it stays
+    // "Single Leg RDL" here confirms the retirement is total, not just
+    // "wherever a phase table already happened to cover it."
     const rotation = SPORT_ACCESSORY_ROTATION.football || {}
     const capKey = resolveAccessoryCapKey('football', 'linemen', 'standard')
     const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey('football', 'linemen')] || {}
     expect(phaseRotation).toEqual({})
     const organized = applySessionOrganization(weeks, rotation, capKey)
     const withAccessories = applyAccessoryProgression(organized, rotation, phaseRotation)
-    // Week 6 = phase 2, wip 2 (linemen's own phase math) — Day 3's Single Leg
-    // RDL should still be wip-rotated to "Good Mornings" by the untouched
-    // global table, not left as "Single Leg RDL" or moved by phase.
     const day3Week6 = withAccessories[5].sessions.find(s => s.day === 'Day 3').description
-    expect(day3Week6).toContain('Good Mornings:')
+    expect(day3Week6).toContain('Single Leg RDL:')
+    expect(day3Week6).not.toContain('Good Mornings:')
   })
 
   test('resolvePhaseRotationKey resolves every football position explicitly — skill/hybrid/qb to \'football\', linemen to null — never a silent default', () => {
@@ -2521,7 +2552,14 @@ describe('Area 16 — Weighted Push-Ups horizontal-push rotation', () => {
       }
     })
 
-    test(`${sportId}/${posId}: Weighted Push-Ups appears strictly less often than either primary variant (Close Grip Bench Press / DB Bench Press)`, () => {
+    // feat/variety-engine — "Close Grip Bench Press" was dropped from
+    // ACC_PRESS's own pool entirely (it's a common MAIN_PRESS_H/finisher-
+    // anchor name elsewhere in the file — landing on it here produced a
+    // real same-day duplicate on other sports sharing this same generic
+    // pool; see varietyEngine.js's own comment on ACC_PRESS). DB Bench
+    // Press is still in the pool and remains the primary variant to
+    // compare against.
+    test(`${sportId}/${posId}: Weighted Push-Ups appears strictly less often than the primary DB Bench Press variant`, () => {
       const weeks = fullPipeline(sportId, posId, 'standard', 4)
       const counts = {}
       for (let w = 1; w <= 16; w++) {
@@ -2529,28 +2567,34 @@ describe('Area 16 — Weighted Push-Ups horizontal-push rotation', () => {
         if (n) counts[n] = (counts[n] || 0) + 1
       }
       expect(counts['Weighted Push-Ups']).toBe(1)
-      expect(counts['Close Grip Bench Press']).toBeGreaterThan(counts['Weighted Push-Ups'])
       expect(counts['DB Bench Press']).toBeGreaterThan(counts['Weighted Push-Ups'])
     })
   }
 
-  test('football QB and linemen never see Weighted Push-Ups (QB has no incline-press accessory; linemen is the untouched bespoke engine)', () => {
+  // feat/variety-engine — "only football/soccer got this option" is no
+  // longer true, and that's the whole point of making varietyEngine.js's
+  // pools authoritative: ANY sport whose day-layout template gives it a
+  // real ACC_PRESS filler slot now draws from the exact same pool, so
+  // Weighted Push-Ups is reachable there too — coverage no longer depends
+  // on whether a specific sport happened to be hand-added to the old,
+  // retired ACCESSORY_ROTATION/SOCCER_/FOOTBALL_PHASE_ACCESSORY_ROTATION
+  // tables. QB and Baseball are still excluded, but structurally — the
+  // Rotational archetype's own day-layout templates give neither sport an
+  // ACC_PRESS slot at all (see dayLayoutEngine.js), so the tag never
+  // renders for them regardless of pool content.
+  test('football QB and Baseball never see Weighted Push-Ups — no ACC_PRESS slot at all in the Rotational archetype template they share; Linemen and Basketball now can, since ACC_PRESS is a real filler slot for them too', () => {
     const qbWeeks = fullPipeline('football', 'qb', 'standard', 4)
     const linemenWeeks = SPORT_TEMPLATES.find(t => t.id === 'football').generateWeeks('linemen', 'standard', 4)
+    const baseballWeeks = SPORT_TEMPLATES.find(t => t.id === 'baseball').generateWeeks('baseball', 'standard', 4)
+    const basketballWeeks = fullPipeline('basketball', 'guards', 'standard', 4)
     const qbText = qbWeeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
     const linemenText = linemenWeeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
+    const baseballText = baseballWeeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
+    const basketballText = basketballWeeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
     expect(qbText).not.toContain('Weighted Push-Ups')
-    expect(linemenText).not.toContain('Weighted Push-Ups')
-  })
-
-  test('baseball and basketball are untouched — Weighted Push-Ups never appears (only football/soccer got this option)', () => {
-    const baseball = SPORT_TEMPLATES.find(t => t.id === 'baseball')
-    const basketball = SPORT_TEMPLATES.find(t => t.id === 'basketball')
-    for (const [tpl, posId] of [[baseball, 'baseball'], [basketball, 'guards'], [basketball, 'wings'], [basketball, 'bigs']]) {
-      const weeks = fullPipeline(tpl.id, posId, 'standard', 4)
-      const text = weeks.map(w => w.sessions.map(s => s.description).join('\n')).join('\n')
-      expect(text).not.toContain('Weighted Push-Ups')
-    }
+    expect(baseballText).not.toContain('Weighted Push-Ups')
+    expect(linemenText).toContain('Weighted Push-Ups')
+    expect(basketballText).toContain('Weighted Push-Ups')
   })
 
   test('Weighted Push-Ups is in the exercise library with a real description', () => {
