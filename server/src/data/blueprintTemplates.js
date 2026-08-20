@@ -4,6 +4,7 @@
 
 const finisherEngine = require('./finisherEngine')
 const dayLayoutEngine = require('./dayLayoutEngine')
+const varietyEngine = require('./varietyEngine')
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
@@ -621,9 +622,13 @@ function buildCollisionRenderers(pack) {
     'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
     'PLYO', 'SPEED', 'MED_BALL',
   ]) {
-    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+    renderers[tagName] = (slotDef, ctx) => {
+      const packChoice = accEntry(ctx.dayTemplate.focus, tagName, ctx)
+      return varietyEngine.resolveFiller('collision', slotDef, tagName, ctx, packChoice)
+    }
   }
-  // ACC_CORE renders nothing in Stage 1 — the finisher engine's own
+  // ACC_CORE renders nothing in Stage 1 (unchanged in Stage 2 — see
+  // varietyEngine.js's own header comment) — the finisher engine's own
   // 'core' family already renders coreBlock() content, weighted/phased/
   // anti-clustered across the week; if this slot ALSO called coreBlock()
   // directly, a day where the finisher engine independently picks 'core'
@@ -889,7 +894,10 @@ function buildSpeedPowerRenderers(pack) {
     'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
     'PLYO', 'SPEED', 'MED_BALL',
   ]) {
-    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+    renderers[tagName] = (slotDef, ctx) => {
+      const packChoice = accEntry(ctx.dayTemplate.focus, tagName, ctx)
+      return varietyEngine.resolveFiller('speedpower', slotDef, tagName, ctx, packChoice)
+    }
   }
   renderers.ACC_CORE = () => null
   // Same dedup guard as Collision/Rotational/Field's own ACC_SHOULDER —
@@ -1800,7 +1808,10 @@ function buildFieldRenderers(pack) {
     'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
     'PLYO', 'SPEED', 'MED_BALL',
   ]) {
-    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+    renderers[tagName] = (slotDef, ctx) => {
+      const packChoice = accEntry(ctx.dayTemplate.focus, tagName, ctx)
+      return varietyEngine.resolveFiller('field', slotDef, tagName, ctx, packChoice)
+    }
   }
   // Same as Collision/Rotational's own ACC_CORE — never rendered directly,
   // the finisher engine's own 'core' family already owns coreBlock()
@@ -2914,7 +2925,10 @@ function buildEnduranceRenderers(pack) {
     'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
     'PLYO', 'SPEED', 'MED_BALL',
   ]) {
-    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+    renderers[tagName] = (slotDef, ctx) => {
+      const packChoice = accEntry(ctx.dayTemplate.focus, tagName, ctx)
+      return varietyEngine.resolveFiller('endurance', slotDef, tagName, ctx, packChoice)
+    }
   }
   renderers.ACC_CORE = () => null
   if (pack.hasArmCare) renderers.ACC_SHOULDER = () => null
@@ -4793,7 +4807,10 @@ function buildRotationalRenderers(pack) {
     'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
     'PLYO', 'SPEED', 'MED_BALL',
   ]) {
-    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+    renderers[tagName] = (slotDef, ctx) => {
+      const packChoice = accEntry(ctx.dayTemplate.focus, tagName, ctx)
+      return varietyEngine.resolveFiller('rotational', slotDef, tagName, ctx, packChoice)
+    }
   }
   // Same as Collision's ACC_CORE — never rendered directly, the finisher
   // engine's own 'core' family already owns coreBlock() content for this
@@ -5613,7 +5630,12 @@ function applyQuadricepsAdjustments(description) {
 // applyHipAdjustments above, which is unrelated and stays exactly as-is) —
 // an athlete now flags Hamstring directly and gets its own dedicated,
 // hamstring-specific substitution set below. ────────────────────────────────
-const HAMSTRING_REMOVE_RE = /^Good Mornings?\b/
+// feat/variety-engine — Eccentric Nordic Curl (new) joins Good Mornings as
+// a full removal, not a volume/load reduction: an eccentric-loaded Nordic
+// variant is exactly the kind of hamstring-strain-provoking movement that
+// stays off the plan entirely while that flag is active, same rationale as
+// every other REMOVE_RE in this file (Depth Jumps for Quad/Ankle, etc.).
+const HAMSTRING_REMOVE_RE = /^(?:Good Mornings?|Eccentric Nordic Curl)\b/
 const HAMSTRING_RDL_RE = /^(?:Barbell )?(?:Single Leg )?RDL\b/
 const HAMSTRING_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled Sprint|Broad Jumps?|Bounding|Lateral Bounds?|Flying 20s|300 Yard Shuttle|Resistance Band Sprint)\b/i
 
@@ -5638,7 +5660,9 @@ function applyHamstringAdjustments(description) {
 // ─── Ankle ──────────────────────────────────────────────────────────────────
 const ANKLE_REMOVE_RE = /^Depth Jumps?\b/
 const ANKLE_SLRDL_RE = /^(?:Barbell )?Single Leg RDL\b/
-const ANKLE_CALF_RE = /^(?:Calf Raises?|Seated Calf Raise|Single Leg Calf Raise|Tibialis Raises)\b/i
+// feat/variety-engine — KB Tibialis Raises (new) matches via the optional
+// "KB " prefix; plain "Tibialis Raises" stays matched too.
+const ANKLE_CALF_RE = /^(?:Calf Raises?|Seated Calf Raise|Single Leg Calf Raise|(?:KB )?Tibialis Raises)\b/i
 const ANKLE_COD_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled Sprint|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Lateral Shuffle|Defensive Slide(?: Sprint)?|Pro Agility Drill|T-Drill|Deceleration Drill|17s Drill|Resistance Band Sprint)\b/i
 
 function applyAnkleAdjustments(description) {
@@ -5813,6 +5837,17 @@ const ACCESSORY_ROTATION = {
   'leg curl':              { 2: 'Nordic Hamstring Curl', 3: 'Single Leg RDL' },
   'db shoulder press':     { 2: 'Arnold Press',          3: 'Push Press' },
 }
+
+// feat/variety-engine — register every name already governed by the older,
+// name-keyed accessory-rotation systems above (the global table, every
+// per-sport wip table, every per-sport phase table) so varietyEngine.js's
+// resolver defers to them instead of double-rotating the same line — see
+// the fuller comment on varietyEngine.js's own setGlobalExemptNames.
+varietyEngine.setGlobalExemptNames([
+  ...Object.keys(ACCESSORY_ROTATION),
+  ...Object.values(SPORT_ACCESSORY_ROTATION).flatMap(t => Object.keys(t)),
+  ...Object.values(SPORT_PHASE_ACCESSORY_ROTATION).flatMap(t => Object.keys(t)),
+])
 
 // ─── Session organization: pairing + formatting (all sports) ──────────────
 // Every sport's session templates were authored densely — main lift plus
