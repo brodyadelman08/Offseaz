@@ -844,6 +844,92 @@ function generateLinemenWeeks(daysPerWeek = 4, mg = false) {
   return applyCollisionMgWrapper(generateCollisionWeeksFromPack(LINEMEN_PACK, daysPerWeek, mg), mg)
 }
 
+// ─── Day Layout Engine wiring: Speed/Power archetype
+// (feat/day-layout-engine) ───────────────────────────────────────────────
+// Same "pack supplies tag->exercise, shared renderer supplies the math"
+// split as Field/Collision/Rotational above. hasArmCare is always false
+// for this whole archetype (none of Football Skill/Hybrid/Track Sprinters/
+// Basketball Guards are throwing/overhead positions — matches every
+// existing *Finisher() wrapper's own hardcoded `hasArmCare: false`).
+//
+// Note the archetype's own reversed press assignment vs Collision/Field/
+// Rotational: "Upper Strength" wants MAIN_PRESS_V here, "Upper Power"
+// wants MAIN_PRESS_H — the opposite of every other archetype. And unlike
+// Collision/Field, this archetype's own "Lower Explosion & Speed" day
+// wants MAIN_HINGE, not a second squat — every migrated sport's own
+// existing hinge lift already sits there with no conformance fix needed.
+function buildSpeedPowerRenderers(pack) {
+  function mainEntry(focusLabel, tagName) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (!entry) throw new Error(`Speed/Power pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'string' ? { name: entry, suffix: '' } : { name: entry.name, suffix: entry.suffix || '' }
+  }
+  function accEntry(focusLabel, tagName, ctx) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (entry === undefined) throw new Error(`Speed/Power pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'function' ? entry(ctx) : entry
+  }
+
+  const renderers = {}
+  for (const tagName of ['MAIN_SQUAT', 'MAIN_HINGE', 'MAIN_PRESS_H', 'MAIN_PRESS_V']) {
+    renderers[tagName] = (slotDef, ctx) => {
+      const { name, suffix } = mainEntry(ctx.dayTemplate.focus, tagName)
+      const r = mainLiftTopReps(ctx.phaseNum, pack.mainLiftTier || 'power')
+      return `${name}: ${ctx.ramp}, ${ctx.pct}×${r}${suffix}`
+    }
+  }
+  for (const tagName of [
+    'ACC_SQUAT', 'ACC_HINGE', 'ACC_UNILATERAL_LOWER', 'ACC_POSTERIOR',
+    'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
+    'PLYO', 'SPEED', 'MED_BALL',
+  ]) {
+    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+  }
+  renderers.ACC_CORE = () => null
+  if (pack.warmupLower || pack.warmupUpper) {
+    renderers.WARMUP = (ctx) => {
+      const lu = dayLayoutEngine.dayLowerOrUpper(ctx.dayTemplate)
+      if (lu === 'lower') return pack.warmupLower || null
+      if (lu === 'upper') return pack.warmupUpper || null
+      return null
+    }
+  }
+  renderers.FINISHER = (dayIndex, ctx) => {
+    const plan = finisherEngine.planWeekFinishers('speedpower', ctx.phaseNum, ctx.days, { hasArmCare: false, overrides: pack.finisherOverrides || null })[dayIndex]
+    return finisherEngine.renderFinisher(pack.finisherBank, plan, ctx.phaseNum, ctx.deload)
+  }
+  return renderers
+}
+
+// Generates all 16 weeks for one Speed/Power-archetype sport at a given
+// day count, entirely from its pack. `phases` is that sport's own phase
+// table, run through the same shared getPhaseInfo every non-Collision
+// sport already uses. `pack.mainLiftTier` defaults to 'power' (Change 1's
+// 6/5/4/3 tier, matching Football Skill/Hybrid's own pre-existing choice)
+// — Basketball Guards overrides to 'rotational' (8/6/5/4), its own
+// pre-existing tier.
+function generateSpeedPowerWeeksFromPack(pack, phases, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const info = getPhaseInfo(w, phases)
+    const ctx = { ...info, days: Math.max(2, Math.min(6, daysPerWeek)) }
+    let sessions = dayLayoutEngine.buildWeekSessions('speedpower', ctx.days, buildSpeedPowerRenderers(pack), ctx)
+    if (pack.displayFocus) {
+      sessions = sessions.map(s => ({ ...s, focus: pack.displayFocus[s.focus] || s.focus }))
+    }
+    weeks.push({
+      week_number: w,
+      objective: info.deload
+        ? `Phase ${info.phaseNum} — Deload (${info.pct}) · Week ${info.wip} of 4`
+        : `Phase ${info.phaseNum} — ${info.phaseLabel} (${info.pct}) · Week ${info.wip} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
 // Football Skill/Hybrid's shared finisher content — Speed/Power archetype,
 // arm care OFF (not throwing positions — QB is the one football exception,
 // see FOOTBALL_QB_FINISHERS below). One shared bank for both positions
@@ -885,44 +971,70 @@ function fbSkillFinisher(dayIndex, info) {
   return finisherEngine.renderFinisher(FOOTBALL_SKILL_FINISHERS, plan, info.phaseNum, info.deload)
 }
 
-function fbSkillSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'power') // Change 1 — power tier: 6/5/4/3 by phase
-  const dbsj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  const mbcp = explosiveSets(4, ph)
-  return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift, added Hip Thrust; Fix 3: phasePlyo
-    { day: 'Day 1', focus: 'Lower Power',
-      description: `${WU_LOWER}Power Clean from floor: 5x3 working up\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nDB Squat Jumps: ${dbsj}x5 (${explosiveIntent(ph)})\n${phasePlyo(ph)}\nLateral Bounds: 3x5 each side\n${fbSkillFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper Strength',
-      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: ${info.ramp}, ${q}×${r}\nDB Incline Press: 3x10\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nBand Pull-Aparts: 3x15\n${fbSkillFinisher(1, info)}` },
-    // Fix 3: phasePlyo replaces multi-plyo list
-    { day: 'Day 3', focus: 'Lower Explosion',
-      description: `${WU_LOWER}Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nBulgarian Split Squat: 3x6 each leg\nDB Squat Jumps: ${dbsj}x5 (${explosiveIntent(ph)})\n${phasePlyo(ph)}\n${fbSkillFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Upper Power',
-      description: `${WU_UPPER}Push Press: 4x5\nWeighted Pull-ups: 4x5\nBent Over BB Row: 4x8\nMed Ball Chest Pass: ${mbcp}x5 (${explosiveIntent(ph)})\n${fbSkillFinisher(3, info)}` },
-  ]
+// feat/day-layout-engine — Football Skill's pack. Push Press (Day 4's own
+// explosive, non-ramped vertical-press accessory) promotes to the ramped
+// MAIN_PRESS_V "Upper Strength" wants — the archetype's own reversed V/H
+// assignment means this is a genuinely natural fit (Push Press already IS
+// a vertical press pattern), not an artificial swap. Bench Press (already
+// ramped) simply moves from Day 2 to "Upper Power"'s MAIN_PRESS_H. Power
+// Clean/Hang Clean drop (no MAIN_OLY tag in this archetype, same as
+// Rotational's own precedent). Med Ball Chest Pass has no slot on "Upper
+// Power" (no MED_BALL there) — dropped.
+const FB_SKILL_PACK = {
+  finisherBank: FOOTBALL_SKILL_FINISHERS,
+  warmupLower: WU_LOWER.trimEnd(),
+  warmupUpper: WU_UPPER.trimEnd(),
+  byFocus: {
+    'Lower Power & Speed': {
+      MAIN_SQUAT: 'Back Squat',
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
+      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Strength': {
+      MAIN_PRESS_V: 'Push Press',
+      MAIN_PRESS_H: 'Bench Press', // 3-day
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
+      ACC_PULL_H: 'Single Arm DB Row: 4x12 each arm', // 3-day
+      MED_BALL: 'Med Ball Rotational Throw: 4x6 each side',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+    'Lower Explosion & Speed': {
+      MAIN_HINGE: 'Trap Bar Deadlift',
+      ACC_POSTERIOR: 'Hip Thrust: 4x8',
+      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum), // 3-day
+    },
+    'Upper Power': {
+      MAIN_PRESS_H: 'Bench Press',
+      ACC_PULL_H: 'Bent Over BB Row: 4x8',
+      ACC_PRESS: 'DB Incline Press: 4x10',
+    },
+    'Reactive Speed': {
+      SPEED: (ctx) => `Lateral Bounds: ${explosiveSets(3, ctx.phaseNum)}x5 each side`,
+      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
+    },
+    'Upper Armor': {
+      ACC_PRESS: 'DB Incline Press: 4x10',
+      ACC_PULL_H: 'Bent Over BB Row: 4x8',
+      ACC_SHOULDER: 'Band Pull-Aparts: 4x15',
+    },
+  },
 }
 
-function fbHybridSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'power') // Change 1 — hybrid explicitly maps to the power tier, same as skill
-  const dbsj = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  const mbcp = explosiveSets(4, ph)
-  return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift, added Hip Thrust; Fix 3: phasePlyo
-    { day: 'Day 1', focus: 'Lower Power',
-      description: `${WU_LOWER}Power Clean from floor: 5x3 working up\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 3x8\nDB Squat Jumps: ${dbsj}x5 (${explosiveIntent(ph)})\n${phasePlyo(ph)}\nLateral Bounds: 3x5 each side\nSled Push: 4x20 yds\n${fbSkillFinisher(0, info)}` },
-    { day: 'Day 2', focus: 'Upper Strength',
-      description: `${WU_UPPER}Hang Clean: 4x3\nBench Press: ${info.ramp}, ${q}×${r}\nIncline DB Press: 4x8\nPull-ups: 4xAMAP\nSingle Arm DB Row: 3x12 each arm\nBand Pull-Aparts: 3x15\n${NECK}\n\n${fbSkillFinisher(1, info)}` },
-    // Fix 3: phasePlyo replaces multi-plyo list
-    { day: 'Day 3', focus: 'Lower Explosion',
-      description: `${WU_LOWER}Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\nSingle Leg RDL: 3x8 each leg\nBulgarian Split Squat: 3x6 each leg\nDB Squat Jumps: ${dbsj}x5 (${explosiveIntent(ph)})\n${phasePlyo(ph)}\n${fbSkillFinisher(2, info)}` },
-    { day: 'Day 4', focus: 'Upper Power',
-      description: `${WU_UPPER}Push Press: 4x5\nWeighted Pull-ups: 4x5\nBent Over BB Row: 4x8\nMed Ball Chest Pass: ${mbcp}x5 (${explosiveIntent(ph)})\n${NECK}\n\n${fbSkillFinisher(3, info)}` },
-  ]
+// Hybrid — same shape as Skill; Sled Push (Day 1) and the neck block
+// (Day 2/4) have no slot (no ACC_CALF_GRIP-adjacent extra on "Lower Power
+// & Speed", and this archetype's templates carry no NECK tag at all) and
+// are dropped. Incline DB Press (vs. Skill's DB Incline Press) is the one
+// genuine, pre-existing wording difference between the two positions,
+// preserved.
+const FB_HYBRID_PACK = {
+  ...FB_SKILL_PACK,
+  byFocus: {
+    ...FB_SKILL_PACK.byFocus,
+    'Upper Power': { ...FB_SKILL_PACK.byFocus['Upper Power'], ACC_PRESS: 'Incline DB Press: 4x8' },
+    'Upper Armor': { ...FB_SKILL_PACK.byFocus['Upper Armor'], ACC_PRESS: 'Incline DB Press: 4x8' },
+  },
 }
 
 // QB's own finisher content — Rotational/Throwing archetype (same tier as
@@ -1075,14 +1187,19 @@ function generateFootballWeeks(posId, goal, daysPerWeek = 4) {
   // purpose-built day-layout pack, day-count-aware for all of 3/4/5/6
   // days — see generateQBWeeks/FOOTBALL_QB_PACK above.
   if (posId === 'qb') return generateQBWeeks(daysPerWeek, mg)
+  // Skill/Hybrid (Speed/Power archetype) now route through their own
+  // purpose-built day-layout packs, day-count-aware for all of 3/4/5/6
+  // days — see FB_SKILL_PACK/FB_HYBRID_PACK above. FB_DAY5/FB_DAY6 (the
+  // old generic bolt-on days) are retired in favor of each pack's own
+  // "Reactive Speed"/"Upper Armor" purpose-built days.
   const phases = mg ? MG_PHASES : FB_PHASES
-  // posId is guaranteed to be exactly 'skill'/'hybrid' here — qb already
-  // returned above, anything else returned via generateLinemenWeeks.
-  const fns = {
-    skill: (info) => mg ? fbSkillSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbSkillSess(info),
-    hybrid: (info) => mg ? fbHybridSess(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })) : fbHybridSess(info),
-  }
-  return buildWeeksDynamic(16, phases, fns[posId], daysPerWeek, [FB_DAY5, FB_DAY6])
+  const packs = { skill: FB_SKILL_PACK, hybrid: FB_HYBRID_PACK }
+  const weeks = generateSpeedPowerWeeksFromPack(packs[posId], phases, daysPerWeek)
+  if (!mg) return weeks
+  return weeks.map(week => ({
+    ...week,
+    sessions: week.sessions.map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() })),
+  }))
 }
 
 // ─── Basketball ───────────────────────────────────────────────────────────────

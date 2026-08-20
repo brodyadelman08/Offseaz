@@ -2462,9 +2462,15 @@ describe('Area 16 — Weighted Push-Ups horizontal-push rotation', () => {
   // Tuesday/Thursday/Friday) are gone; every day-layout-engine sport
   // (soccer included, now on the Field archetype) uses generic "Day N"
   // labels, matching every other sport already migrated this PR.
+  // feat/day-layout-engine — football's own DB/Incline Press accessory
+  // moved from Day 2 ("Upper Strength", which the Speed/Power archetype's
+  // own template gives no ACC_PRESS slot at all) to Day 4 ("Upper Power",
+  // which does) — Bench Press (the horizontal press) made the same move,
+  // for the same structural reason (the archetype's own reversed V/H
+  // press assignment — see FB_SKILL_PACK's own doc comment).
   const GROUPS = [
-    ['football', 'skill',  s => s.day === 'Day 2'],
-    ['football', 'hybrid', s => s.day === 'Day 2'],
+    ['football', 'skill',  s => s.day === 'Day 4'],
+    ['football', 'hybrid', s => s.day === 'Day 4'],
     ['soccer',   'goalkeeper',  s => s.day === 'Day 2'],
     ['soccer',   'center_back', s => s.day === 'Day 2'],
     ['soccer',   'midfielder',  s => s.day === 'Day 2'],
@@ -2536,7 +2542,7 @@ describe('Area 16 — Weighted Push-Ups horizontal-push rotation', () => {
 
   test('the exact substituted line reads "Weighted Push-Ups: <sets>x<reps>" (5-10 rep range) on its one active week', () => {
     const weeks = fullPipeline('football', 'skill', 'standard', 4)
-    const day = weeks[1].sessions.find(s => s.day === 'Day 2') // week 2
+    const day = weeks[1].sessions.find(s => s.day === 'Day 4') // week 2
     const line = day.description.split('\n').find(l => /Weighted Push-Ups:/.test(l))
     expect(line).toBeTruthy()
     const m = line.replace(SUPERSET_MARKER_RE, '').match(/Weighted Push-Ups:\s*\d+x(\d+)/)
