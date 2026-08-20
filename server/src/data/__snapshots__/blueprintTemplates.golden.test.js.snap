@@ -921,7 +921,7 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -933,7 +933,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -946,7 +946,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -964,7 +964,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -974,7 +974,7 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -986,7 +986,7 @@ Mountain Climbers: 3x20s",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Standing:
@@ -1006,7 +1006,7 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1018,7 +1018,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1031,7 +1031,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1059,7 +1059,7 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -1069,7 +1069,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -1100,7 +1100,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1112,7 +1112,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1129,7 +1129,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -1139,7 +1139,7 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -1151,7 +1151,7 @@ Decline Bench Iso: 3x30s hold",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Low Volume, Max Intent:
@@ -1171,7 +1171,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1183,7 +1183,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1196,7 +1196,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1261,7 +1261,7 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1273,7 +1273,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1286,7 +1286,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1304,7 +1304,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -1314,7 +1314,7 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -1326,7 +1326,7 @@ Mountain Climbers: 3x20s",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Standing:
@@ -1346,7 +1346,7 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1358,7 +1358,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1371,7 +1371,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1399,7 +1399,7 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -1409,7 +1409,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -1440,7 +1440,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1452,7 +1452,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1469,7 +1469,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -1479,7 +1479,7 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -1491,7 +1491,7 @@ Decline Bench Iso: 3x30s hold",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Low Volume, Max Intent:
@@ -1511,7 +1511,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1523,7 +1523,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1536,7 +1536,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1601,7 +1601,7 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1613,7 +1613,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1627,7 +1627,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1644,7 +1644,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -1654,7 +1654,7 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -1666,7 +1666,7 @@ Mountain Climbers: 3x20s",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Standing:
@@ -1686,7 +1686,7 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1698,7 +1698,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1711,7 +1711,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1739,7 +1739,7 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -1749,7 +1749,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -1780,7 +1780,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1792,7 +1792,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1809,7 +1809,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -1819,7 +1819,7 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -1831,7 +1831,7 @@ Decline Bench Iso: 3x30s hold",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Low Volume, Max Intent:
@@ -1851,7 +1851,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1863,7 +1863,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1876,7 +1876,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1941,7 +1941,7 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1953,7 +1953,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -1967,7 +1967,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -1984,7 +1984,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -1994,7 +1994,7 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -2006,7 +2006,7 @@ Mountain Climbers: 3x20s",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Standing:
@@ -2026,7 +2026,7 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -2038,7 +2038,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -2051,7 +2051,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -2079,7 +2079,7 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -2089,7 +2089,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -2120,7 +2120,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -2132,7 +2132,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -2149,7 +2149,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -2159,7 +2159,7 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -2171,7 +2171,7 @@ Decline Bench Iso: 3x30s hold",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Low Volume, Max Intent:
@@ -2191,7 +2191,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -2203,7 +2203,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -2216,7 +2216,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -2273,7 +2273,7 @@ Box Out Drill: 2 minutes",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 61%×8
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -2306,7 +2306,7 @@ Box Out Drill: 1 minute",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 75%×6
 ⟦SS1⟧DB Squat Jumps: 4x5 (add volume — building intent)
-Reverse Lunge: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -2339,7 +2339,7 @@ Box Out Drill: 3 minutes",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 64%×6
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -2372,7 +2372,7 @@ Box Out Drill: 1 minute",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 79%×5
 ⟦SS1⟧DB Squat Jumps: 4x5 (high intent — near-max effort)
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -2438,7 +2438,7 @@ Box Out Drill: 1 minute",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 82%×4
 ⟦SS1⟧DB Squat Jumps: 2x5 (tapered — lowest volume, stay sharp)
-Bulgarian Split Squat: 2x6 each leg
+Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 3x20 yds
 
@@ -2471,7 +2471,7 @@ Box Out Drill: 2 minutes",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 69%×4
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -2541,7 +2541,7 @@ Box Out Drill: 2 minutes",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 64%×8
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Post Sprint: 2x1 (half court · full stop)
@@ -2572,7 +2572,7 @@ Box Out Drill: 1 minute",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 81%×6
 ⟦SS1⟧DB Squat Jumps: 4x5 (add volume — building intent)
-Reverse Lunge: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -2603,7 +2603,7 @@ Box Out Drill: 3 minutes",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 71%×6
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Post Sprint: 2x1 (half court · full stop)
@@ -2634,7 +2634,7 @@ Box Out Drill: 1 minute",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 87%×5
 ⟦SS1⟧DB Squat Jumps: 4x5 (high intent — near-max effort)
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Quality Speed:
@@ -2696,7 +2696,7 @@ Box Out Drill: 1 minute",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 73%×4
 ⟦SS1⟧DB Squat Jumps: 2x5 (tapered — lowest volume, stay sharp)
-Bulgarian Split Squat: 2x6 each leg
+Walking Lunge: 4x8 each leg
 Acceleration Sprints: 3x20 yds
 
 Conditioning — Full-Recovery Reps:
@@ -2727,7 +2727,7 @@ Box Out Drill: 2 minutes",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 64%×4
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Post Sprint: 2x1 (half court · full stop)
@@ -2827,7 +2827,7 @@ Med Ball Rotational Throw: 2x5 each side
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧DB Squat Jumps: 5x5 (add volume — building intent)
-Reverse Lunge: 4x8 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -2891,7 +2891,7 @@ Med Ball Rotational Throw: 2x5 each side
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧DB Squat Jumps: 5x5 (high intent — near-max effort)
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -3084,7 +3084,7 @@ Med Ball Rotational Throw: 2x5 each side
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧DB Squat Jumps: 5x5 (add volume — building intent)
-Reverse Lunge: 4x8 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -3144,7 +3144,7 @@ Med Ball Rotational Throw: 2x5 each side
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧DB Squat Jumps: 5x5 (high intent — near-max effort)
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Quality Speed:
@@ -3303,7 +3303,7 @@ Baseline Defensive Slide: 3x1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
-Bulgarian Split Squat: 2x4 each leg
+Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -3336,7 +3336,7 @@ Baseline Defensive Slide: 2x1",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Broad Jumps: 3x3
-Reverse Lunge: 4x5 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -3369,7 +3369,7 @@ Sprint + Close Out: 4 rounds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -3402,7 +3402,7 @@ Baseline Defensive Slide: 2x1",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Hurdle Hops: 3x5
-Walking Lunge: 3x5 each leg
+Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -3435,7 +3435,7 @@ Sprint + Close Out: 6 rounds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
-Bulgarian Split Squat: 2x4 each leg
+Bulgarian Split Squat: 2x5 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -3468,7 +3468,7 @@ Baseline Defensive Slide: 2x1",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Depth Jumps: 3x4
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 3x20 yds
 
@@ -3501,7 +3501,7 @@ Baseline Defensive Slide: 2x1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -3571,7 +3571,7 @@ Baseline Defensive Slide: 3x1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-Bulgarian Split Squat: 2x4 each leg
+Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Baseline Sprint: 2x1
@@ -3602,7 +3602,7 @@ Baseline Defensive Slide: 2x1",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧Broad Jumps: 3x3
-Reverse Lunge: 4x5 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -3633,7 +3633,7 @@ Sprint + Close Out: 4 rounds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Baseline Sprint: 2x1
@@ -3664,7 +3664,7 @@ Baseline Defensive Slide: 2x1",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧Hurdle Hops: 3x5
-Walking Lunge: 3x5 each leg
+Bulgarian Split Squat: 3x6 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Quality Speed:
@@ -3695,7 +3695,7 @@ Sprint + Close Out: 6 rounds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-Bulgarian Split Squat: 2x4 each leg
+Bulgarian Split Squat: 2x5 each leg
 
 Conditioning — Deload (Light):
 Baseline Sprint: 2x1
@@ -3726,7 +3726,7 @@ Baseline Defensive Slide: 2x1",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Depth Jumps: 3x4
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 4x8 each leg
 Acceleration Sprints: 3x20 yds
 
 Conditioning — Full-Recovery Reps:
@@ -3757,7 +3757,7 @@ Baseline Defensive Slide: 2x1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Baseline Sprint: 2x1
@@ -3824,7 +3824,7 @@ Easy Strides: 3x50m (relaxed)",
 
 Back Squat: 2x6 @ 58% — no heavy loading
 ⟦SS1⟧Push-ups: 2xAMAP
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Hip Thrust: 2x9
 
 Conditioning — Deload (Light):
 Aerobic Flush: 10 min easy jog
@@ -3836,7 +3836,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Single Arm DB Row: 2x8 each arm
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -3854,7 +3854,7 @@ Easy Strides: 2x50m (relaxed)",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ 67% — no heavy loading
 ⟦SS1⟧Push-ups: 4xAMAP
-⟦SS1⟧Good Mornings: 4x10 each leg
+⟦SS1⟧Single Leg RDL: 4x10 each leg
 
 Conditioning — Interval Work:
 Aerobic Flush: 15 min easy jog
@@ -3864,7 +3864,7 @@ Med Ball Rotational Throw: 3x6 each side",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 4x6 each leg
-DB Row: 4xAMAP
+Chest Supported Row: 4x12
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -3896,7 +3896,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 2x9
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -3914,7 +3914,7 @@ Easy Strides: 2x50m (relaxed)",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ 67% — no heavy loading
 ⟦SS1⟧Push-ups: 4xAMAP
-⟦SS1⟧Romanian Deadlift: 3x10 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
 
 Conditioning — Repeat Effort:
 Controlled Tempo: 10 min @ conversational pace
@@ -3924,7 +3924,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 4x6 each leg
-Chin-ups: 3xAMAP
+Chest Supported Row: 4x10
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
@@ -3944,7 +3944,7 @@ Strides: 4x60m (controlled — not max effort)",
 
 Back Squat: 2x6 @ 58% — no heavy loading
 ⟦SS1⟧Push-ups: 2xAMAP
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Aerobic Flush: 10 min easy jog
@@ -3956,7 +3956,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -3974,7 +3974,7 @@ Easy Strides: 2x50m (relaxed)",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ 67% — no heavy loading
 ⟦SS1⟧Push-ups: 4xAMAP
-⟦SS1⟧Single Leg RDL: 2x10 each leg
+⟦SS1⟧Single Leg RDL: 2x8 each leg
 
 Conditioning — Reduced:
 Aerobic Flush: 10 min easy jog
@@ -3984,7 +3984,7 @@ Med Ball Rotational Throw: 2x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 4x6 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 4x10
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -4004,7 +4004,7 @@ Easy Strides: 2x50m (relaxed)",
 
 Back Squat: 2x6 @ 58% — no heavy loading
 ⟦SS1⟧Push-ups: 2xAMAP
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Aerobic Flush: 10 min easy jog
@@ -4016,7 +4016,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -4070,7 +4070,7 @@ Easy Strides: 3x50m (relaxed)",
 
 Back Squat: 2x6 @ 58% — no heavy loading
 ⟦SS1⟧Push-ups: 2xAMAP
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Hip Thrust: 2x9
 
 Conditioning — Deload (Light):
 Aerobic Flush: 10 min easy jog
@@ -4082,7 +4082,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Single Arm DB Row: 2x8 each arm
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -4100,7 +4100,7 @@ Easy Strides: 2x50m (relaxed)",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ 67% — no heavy loading
 ⟦SS1⟧Push-ups: 4xAMAP
-⟦SS1⟧Good Mornings: 4x10 each leg
+⟦SS1⟧Single Leg RDL: 4x10 each leg
 
 Conditioning — Interval Work:
 Aerobic Flush: 15 min easy jog
@@ -4110,7 +4110,7 @@ Med Ball Rotational Throw: 3x6 each side",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 4x6 each leg
-DB Row: 4xAMAP
+Chest Supported Row: 4x12
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -4142,7 +4142,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 2x9
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -4160,7 +4160,7 @@ Easy Strides: 2x50m (relaxed)",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ 67% — no heavy loading
 ⟦SS1⟧Push-ups: 4xAMAP
-⟦SS1⟧Romanian Deadlift: 3x10 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
 
 Conditioning — Repeat Effort:
 Controlled Tempo: 10 min @ conversational pace
@@ -4170,7 +4170,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 4x6 each leg
-Chin-ups: 3xAMAP
+Chest Supported Row: 4x10
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
@@ -4190,7 +4190,7 @@ Strides: 4x60m (controlled — not max effort)",
 
 Back Squat: 2x6 @ 58% — no heavy loading
 ⟦SS1⟧Push-ups: 2xAMAP
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Aerobic Flush: 10 min easy jog
@@ -4202,7 +4202,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -4220,7 +4220,7 @@ Easy Strides: 2x50m (relaxed)",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ 67% — no heavy loading
 ⟦SS1⟧Push-ups: 4xAMAP
-⟦SS1⟧Single Leg RDL: 2x10 each leg
+⟦SS1⟧Single Leg RDL: 2x8 each leg
 
 Conditioning — Reduced:
 Aerobic Flush: 10 min easy jog
@@ -4230,7 +4230,7 @@ Med Ball Rotational Throw: 2x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 4x6 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 4x10
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -4250,7 +4250,7 @@ Easy Strides: 2x50m (relaxed)",
 
 Back Squat: 2x6 @ 58% — no heavy loading
 ⟦SS1⟧Push-ups: 2xAMAP
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Aerobic Flush: 10 min easy jog
@@ -4262,7 +4262,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg
-Pull-ups: 2xAMAP
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -4323,7 +4323,7 @@ Pro Agility Drill: 4x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -4359,7 +4359,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
 ⟦SS1⟧Broad Jumps: 5x3
-Reverse Lunge: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 4x20 yds
 
@@ -4395,7 +4395,7 @@ Pro Agility Drill: 6x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -4431,7 +4431,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
 ⟦SS1⟧Hurdle Hops: 4x6
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 4x20 yds
 
@@ -4503,7 +4503,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 2x6 each leg
+Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 2x20 yds
 
@@ -4539,7 +4539,7 @@ Pro Agility Drill: 3x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -4614,7 +4614,7 @@ Pro Agility Drill: 4x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×6
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sprint Work: 4x10 yds
@@ -4648,7 +4648,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×5
 ⟦SS1⟧Broad Jumps: 5x3
-Reverse Lunge: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 4x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -4682,7 +4682,7 @@ Pro Agility Drill: 6x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sprint Work: 4x10 yds
@@ -4716,7 +4716,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×4
 ⟦SS1⟧Hurdle Hops: 4x6
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Acceleration Sprints: 4x20 yds
 
 Conditioning — Quality Speed:
@@ -4784,7 +4784,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×3
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 2x6 each leg
+Walking Lunge: 4x8 each leg
 Acceleration Sprints: 2x20 yds
 
 Conditioning — Full-Recovery Reps:
@@ -4818,7 +4818,7 @@ Pro Agility Drill: 3x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×3
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Work: 4x10 yds
@@ -4899,7 +4899,7 @@ Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squa
 Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
 Front Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -4939,7 +4939,7 @@ Sled Push: 2x15 yds",
 Power Clean: build to a strong set of 4x4 — start light and build (from floor, catch quarter squat)
 Front Squat: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10 (full ROM)
 ⟦SS1⟧Barbell RDL: 3x8
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Anti-Rotation:
@@ -4979,7 +4979,7 @@ Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squa
 Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
 Front Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -5019,7 +5019,7 @@ Farmer Carries: 2x20 yds",
 Power Clean: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
 Front Squat: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8 (full ROM)
 ⟦SS1⟧Barbell RDL: 3x8
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Rotational Power:
@@ -5099,7 +5099,7 @@ Farmer Carries: 2x20 yds",
 Power Clean: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
 Front Squat: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8 (full ROM)
 ⟦SS1⟧Barbell RDL: 3x8
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Lateral Stability:
@@ -5139,7 +5139,7 @@ Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squa
 Power Clean: lighter, no build — 3x5 (from floor, catch quarter squat)
 Front Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -5223,7 +5223,7 @@ Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squa
 Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
 Front Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Farmer Carries: 2x20 yds
@@ -5261,7 +5261,7 @@ Sled Push: 2x15 yds",
 Power Clean: build to heavy doubles — 3,3,2,2, start light and build (from floor, catch quarter squat)
 Front Squat: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6 (full ROM)
 ⟦SS1⟧Barbell RDL: 3x8
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -5299,7 +5299,7 @@ Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squa
 Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
 Front Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -5337,7 +5337,7 @@ Farmer Carries: 2x20 yds",
 Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
 Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Barbell RDL: 3x8
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
@@ -5413,7 +5413,7 @@ Farmer Carries: 2x20 yds",
 Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
 Front Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Barbell RDL: 3x8
-⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -5451,7 +5451,7 @@ Empty BB Warm-Up Complex: RDL x5 · Hang Clean x5 · Front Squat x5 · Back Squa
 Power Clean: lighter, no build — 3x3 (from floor, catch quarter squat)
 Front Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -5532,7 +5532,7 @@ Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · L
 
 Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -5548,7 +5548,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5569,8 +5569,8 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Good Mornings: 4x8 each leg
-⟦SS1⟧Reverse Lunge: 4x6 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Standing:
@@ -5584,7 +5584,7 @@ Pro Agility Drill: 6x1",
 
 DB Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Bent Over BB Row: 4x8
-⟦SS1⟧DB Row: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5608,7 +5608,7 @@ Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · L
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -5624,7 +5624,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5645,8 +5645,8 @@ Dead Bug: 2x8 each side",
         "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-⟦SS1⟧Romanian Deadlift: 3x8 each leg
-⟦SS1⟧Walking Lunge: 3x6 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Quality Speed:
@@ -5660,7 +5660,7 @@ Med Ball Rotational Throw: 4x6 each side",
 
 DB Bench: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Bent Over BB Row: 4x8
-⟦SS1⟧Chin-ups: 3xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5700,7 +5700,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5722,7 +5722,7 @@ Band External Rotation: 2x15 each arm",
 
 Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Single Leg RDL: 2x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Low Volume, Max Intent:
@@ -5736,7 +5736,7 @@ Pro Agility Drill: 3x1",
 
 DB Bench: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Bent Over BB Row: 4x8
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5760,7 +5760,7 @@ Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · L
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -5776,7 +5776,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -5840,7 +5840,7 @@ Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · L
 
 Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 300 Yard Shuttle: 1x1 (90 sec rest)
@@ -5855,7 +5855,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 31%×10, 40%×8, 50%×6, 56%×5, 62%×8
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Arm Care — Deload (Light):
@@ -5875,8 +5875,8 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×6
-⟦SS1⟧Good Mornings: 4x8 each leg
-⟦SS1⟧Reverse Lunge: 4x6 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Standing:
 Landmine Press: 3x8 each arm
@@ -5889,7 +5889,7 @@ Pro Agility Drill: 6x1",
 
 DB Bench: 39%×10, 51%×8, 62%×6, 70%×5, 78%×6
 ⟦SS1⟧Bent Over BB Row: 4x8
-⟦SS1⟧DB Row: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Arm Care — Modest Increase:
@@ -5912,7 +5912,7 @@ Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · L
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Med Ball Rotational Throw: 2x5 each side
@@ -5927,7 +5927,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 34%×10, 44%×8, 54%×6, 61%×5, 68%×6
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Arm Care — Deload (Light):
@@ -5947,8 +5947,8 @@ Dead Bug: 2x8 each side",
         "description": "Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×5
-⟦SS1⟧Romanian Deadlift: 3x8 each leg
-⟦SS1⟧Walking Lunge: 3x6 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
 
 Conditioning — Quality Speed:
 Sprint Work: 6x20 yds · 4x40 yds @ 95%
@@ -5961,7 +5961,7 @@ Med Ball Rotational Throw: 4x6 each side",
 
 DB Bench: 43%×10, 55%×8, 68%×6, 77%×5, 85%×5
 ⟦SS1⟧Bent Over BB Row: 4x8
-⟦SS1⟧Chin-ups: 3xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -5999,7 +5999,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 37%×10, 47%×8, 58%×6, 66%×5, 73%×5
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -6020,7 +6020,7 @@ Band External Rotation: 2x15 each arm",
 
 Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×4
 ⟦SS1⟧Single Leg RDL: 2x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Low Volume, Max Intent:
 Med Ball Rotational Throw: 2x6 each side (max intent)
@@ -6033,7 +6033,7 @@ Pro Agility Drill: 3x1",
 
 DB Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×4
 ⟦SS1⟧Bent Over BB Row: 4x8
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Arm Care — Readiness:
@@ -6056,7 +6056,7 @@ Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · L
 
 Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Med Ball Rotational Throw: 2x5 each side
@@ -6071,7 +6071,7 @@ Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · 
 
 DB Bench: 31%×10, 40%×8, 50%×6, 56%×5, 62%×4
 ⟦SS1⟧Bent Over BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Arm Care — Deload (Light):
@@ -6133,7 +6133,7 @@ Pro Agility Drill: 4x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×6
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -6169,7 +6169,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
 ⟦SS1⟧Broad Jumps: 5x3
-Reverse Lunge: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 4x20 yds
 
@@ -6205,7 +6205,7 @@ Pro Agility Drill: 6x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×5
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -6241,7 +6241,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
 ⟦SS1⟧Hurdle Hops: 4x6
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 4x20 yds
 
@@ -6313,7 +6313,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×3
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 2x6 each leg
+Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 2x20 yds
 
@@ -6349,7 +6349,7 @@ Pro Agility Drill: 3x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×3
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -6424,7 +6424,7 @@ Pro Agility Drill: 4x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×6
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sprint Work: 4x10 yds
@@ -6458,7 +6458,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×5
 ⟦SS1⟧Broad Jumps: 5x3
-Reverse Lunge: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 4x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -6492,7 +6492,7 @@ Pro Agility Drill: 6x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sprint Work: 4x10 yds
@@ -6526,7 +6526,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×4
 ⟦SS1⟧Hurdle Hops: 4x6
-Walking Lunge: 3x6 each leg
+Bulgarian Split Squat: 3x6 each leg
 Acceleration Sprints: 4x20 yds
 
 Conditioning — Quality Speed:
@@ -6594,7 +6594,7 @@ Med Ball Rotational Throw: 2x5 each side
 
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×3
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 2x6 each leg
+Walking Lunge: 4x8 each leg
 Acceleration Sprints: 2x20 yds
 
 Conditioning — Full-Recovery Reps:
@@ -6628,7 +6628,7 @@ Pro Agility Drill: 3x1",
 Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation
 
 ⟦SS1⟧Back Squat: 31%×10, 40%×8, 50%×6, 56%×5, 62%×3
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Work: 4x10 yds
@@ -7284,10 +7284,10 @@ Half Kneeling Cable Press: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧DB Row: 4x5
-⟦SS1⟧Chest Supported Row: 4x10 each arm
+⟦SS1⟧Weighted Pull-ups: 4x5
+⟦SS1⟧Single Arm DB Row: 4x10 each arm
 ⟦SS2⟧Med Ball Rotational Throw: 5x6 each side (add volume — building intent)
-⟦SS2⟧Reverse Flys: 3x15
+⟦SS2⟧Face Pulls: 3x15
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
@@ -7363,10 +7363,10 @@ Cable Woodchop: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-⟦SS1⟧Weighted Chin-ups: 3x5
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Weighted Pull-ups: 3x5
+⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS2⟧Med Ball Rotational Throw: 5x6 each side (high intent — near-max effort)
-⟦SS2⟧DB Row: 3x15
+⟦SS2⟧Face Pulls: 3x15
 Pallof Press: 3x12 each side
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
@@ -7586,7 +7586,7 @@ Pallof Press: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧Chest Supported Row: 4x10 each arm
+⟦SS1⟧Single Arm DB Row: 4x10 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Interval Work:
@@ -7649,7 +7649,7 @@ Med Ball Rotational Throw: 4x6 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -7813,7 +7813,7 @@ Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each l
 Hang Power Clean: lighter, no build — 3x5
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -7830,7 +7830,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x9
 Band External Rotation: 4x15 each arm
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -7853,7 +7853,7 @@ Sled Sprint: 2x20 yds",
 Hang Power Clean: build to a strong set of 4x4 — start light and build
 Back Squat: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Anti-Rotation:
@@ -7868,9 +7868,9 @@ Sled Sprint: 5x20 yds",
 
 Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build, each arm
 Overhead Press: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
-⟦SS1⟧DB Row: 4x5
-⟦SS1⟧Chest Supported Row: 4x10 each arm
-Reverse Flys: 4x12
+⟦SS1⟧Weighted Pull-ups: 4x5
+⟦SS1⟧Chest Supported Row: 4x10
+Face Pulls: 4x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Standing:
@@ -7893,7 +7893,7 @@ Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each l
 Hang Power Clean: lighter, no build — 3x5
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -7911,7 +7911,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧DB Row: 2x8 each arm
 Cuban Press: 2x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -7948,8 +7948,8 @@ Sprint Work: 5x15 yds @ max effort",
 
 Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
 Overhead Press: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
-⟦SS1⟧Weighted Chin-ups: 3x5
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Weighted Pull-ups: 3x5
+⟦SS1⟧DB Row: 4x6 each arm
 Cuban Press: 4x10
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -7991,7 +7991,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Band External Rotation: 4x12 each arm
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8013,7 +8013,7 @@ Battle Rope: 2x15s",
 Hang Power Clean: build to a strong set of 3x3 — start light and build
 Back Squat: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Lateral Stability:
@@ -8029,7 +8029,7 @@ Sprint Work: 3x15 yds @ max effort (full recovery)",
 Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
 Overhead Press: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
 ⟦SS1⟧Weighted Pull-ups: 2x5
-⟦SS1⟧Single Arm DB Row: 2x10 each arm
+⟦SS1⟧Chest Supported Row: 4x8
 Face Pulls: 2x15
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8053,7 +8053,7 @@ Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each l
 Hang Power Clean: lighter, no build — 3x5
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -8071,7 +8071,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Face Pulls: 2x11
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8137,7 +8137,7 @@ Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each l
 Hang Power Clean: lighter, no build — 3x3
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Battle Rope: 2x15s
@@ -8153,7 +8153,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x9
 Band External Rotation: 4x15 each arm
 
 Core — Deload (Light):
@@ -8175,7 +8175,7 @@ Sled Sprint: 2x20 yds",
 Hang Power Clean: build to heavy doubles — 3,3,2,2, start light and build
 Back Squat: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -8189,9 +8189,9 @@ Sled Sprint: 5x20 yds",
 
 Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and build, each arm
 Overhead Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
-⟦SS1⟧DB Row: 4x5
-⟦SS1⟧Chest Supported Row: 4x10 each arm
-Reverse Flys: 4x12
+⟦SS1⟧Weighted Pull-ups: 4x5
+⟦SS1⟧Chest Supported Row: 4x10
+Face Pulls: 4x12
 
 Conditioning — Standing:
 Landmine Rotational Press: 3x6 each side
@@ -8213,7 +8213,7 @@ Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each l
 Hang Power Clean: lighter, no build — 3x3
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -8230,7 +8230,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧DB Row: 2x8 each arm
 Cuban Press: 2x8
 
 Conditioning — Deload (Light):
@@ -8265,8 +8265,8 @@ Sprint Work: 5x15 yds @ max effort",
 
 Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
 Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
-⟦SS1⟧Weighted Chin-ups: 3x5
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Weighted Pull-ups: 3x5
+⟦SS1⟧DB Row: 4x6 each arm
 Cuban Press: 4x10
 
 Conditioning — Maximal Velocity:
@@ -8306,7 +8306,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Band External Rotation: 4x12 each arm
 
 Conditioning — Deload (Light):
@@ -8327,7 +8327,7 @@ Battle Rope: 2x15s",
 Hang Power Clean: build to a heavy single off a triple — 3,2,2,1,1, start light and build
 Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -8342,7 +8342,7 @@ Sprint Work: 3x15 yds @ max effort (full recovery)",
 Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
 Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 ⟦SS1⟧Weighted Pull-ups: 2x5
-⟦SS1⟧Single Arm DB Row: 2x10 each arm
+⟦SS1⟧Chest Supported Row: 4x8
 Face Pulls: 2x15
 
 Conditioning — Low Volume, Max Intent:
@@ -8365,7 +8365,7 @@ Hockey Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each l
 Hang Power Clean: lighter, no build — 3x3
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -8382,7 +8382,7 @@ Hockey Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 2x4
-⟦SS1⟧Single Arm DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Face Pulls: 2x11
 
 Conditioning — Deload (Light):
@@ -8498,10 +8498,10 @@ Half Kneeling Cable Press: 3x10 each side",
       {
         "day": "Day 2",
         "description": "DB Bench Press: 4x10 (DB only — protects shoulder joint)
-⟦SS1⟧DB Row: 4x5
-⟦SS1⟧Chest Supported Row: 4x10 each arm
+⟦SS1⟧Weighted Pull-ups: 4x5
+⟦SS1⟧Single Arm DB Row: 4x10 each arm
 ⟦SS2⟧Overhead Press: 3x10
-⟦SS2⟧Reverse Flys: 4x15
+⟦SS2⟧Face Pulls: 4x15
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -8573,10 +8573,10 @@ Cable Woodchop: 3x10 each side",
       {
         "day": "Day 2",
         "description": "DB Bench Press: 4x10 (DB only — protects shoulder joint)
-⟦SS1⟧Weighted Chin-ups: 3x5
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Weighted Pull-ups: 3x5
+⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS2⟧Overhead Press: 3x10
-⟦SS2⟧DB Row: 3x15
+⟦SS2⟧Face Pulls: 3x15
 Band External Rotation: 3x15 each arm
 YTW Series: 3x10 each
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -8788,7 +8788,7 @@ Pallof Press: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Incline DB Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6 (DB only — protects shoulder joint)
-⟦SS1⟧Chest Supported Row: 4x10 each arm
+⟦SS1⟧Single Arm DB Row: 4x10 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Interval Work:
@@ -8851,7 +8851,7 @@ Med Ball Rotational Throw: 4x6 each side",
       {
         "day": "Day 2",
         "description": "Incline DB Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5 (DB only — protects shoulder joint)
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -9048,7 +9048,7 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Lateral Bounds: 5x5 each side (add volume — building intent)
 ⟦SS2⟧Hip Thrust: 3x8
-⟦SS2⟧Good Mornings: 3x8 each leg
+⟦SS2⟧Single Leg RDL: 3x8 each leg
 Nordic Hamstring Curl: 3x5
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9061,7 +9061,7 @@ Half Kneeling Cable Press: 3x10 each side",
         "day": "Day 2",
         "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Pull-ups: 4xAMAP
-⟦SS1⟧Chest Supported Row: 4x10 each arm
+⟦SS1⟧Single Arm DB Row: 4x10 each arm
 ⟦SS2⟧Overhead Press: 3x10
 ⟦SS2⟧Med Ball Rotational Throw: 5x6 each side (add volume — building intent)
 ⟦SS3⟧Landmine Rotation: 3x8 each side
@@ -9121,7 +9121,7 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 ⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Lateral Bounds: 5x5 each side (high intent — near-max effort)
 ⟦SS2⟧Hip Thrust: 3x8
-⟦SS2⟧Romanian Deadlift: 3x8 each leg
+⟦SS2⟧Single Leg RDL: 3x8 each leg
 Nordic Hamstring Curl: 3x5
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9134,7 +9134,7 @@ Cable Woodchop: 3x10 each side",
         "day": "Day 2",
         "description": "Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Pull-ups: 4xAMAP
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS2⟧Overhead Press: 3x10
 ⟦SS2⟧Med Ball Rotational Throw: 5x6 each side (high intent — near-max effort)
 ⟦SS3⟧Landmine Rotation: 3x8 each side
@@ -9344,7 +9344,7 @@ Pallof Press: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧Chest Supported Row: 4x10 each arm
+⟦SS1⟧Single Arm DB Row: 4x10 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Interval Work:
@@ -9407,7 +9407,7 @@ Med Ball Rotational Throw: 4x6 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Pull-ups: 3x10 each arm
+⟦SS1⟧Single Arm DB Row: 3x10 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -9607,7 +9607,7 @@ Plank: 3x30 seconds",
         "description": "Power Clean: 4x3
 Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
 ⟦SS1⟧Broad Jumps: 5x3
-⟦SS1⟧Good Mornings: 3x8 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
 Lateral Bounds: 5x5 each side (add volume — building intent)
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Sprint Work: 8x40 yds
@@ -9620,12 +9620,12 @@ Half Kneeling Cable Press: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-⟦SS1⟧DB Row: 5x5
+⟦SS1⟧Weighted Pull-ups: 5x5
 ⟦SS1⟧DB Row: 4x10 each arm
 ⟦SS2⟧Overhead Press: 4x8
 ⟦SS2⟧DB Shrugs: 3x12
 ⟦SS3⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧Reverse Flys: 3x15
+⟦SS3⟧Face Pulls: 3x15
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Anti-Rotation:
@@ -9682,7 +9682,7 @@ Half Kneeling Cable Press: 3x10 each side",
         "description": "Power Clean: 4x3
 Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
 ⟦SS1⟧Hurdle Hops: 4x6
-⟦SS1⟧Romanian Deadlift: 3x8 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
 Lateral Bounds: 5x5 each side (high intent — near-max effort)
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Sprint Work: 8x40 yds
@@ -9695,12 +9695,12 @@ Cable Woodchop: 3x10 each side",
       {
         "day": "Day 2",
         "description": "Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×4
-⟦SS1⟧Weighted Chin-ups: 4x5
+⟦SS1⟧Weighted Pull-ups: 4x5
 ⟦SS1⟧DB Row: 4x10 each arm
 ⟦SS2⟧Overhead Press: 4x8
 ⟦SS2⟧DB Shrugs: 3x12
 ⟦SS3⟧Neck Strengthening: 3x12 each direction
-⟦SS3⟧DB Row: 3x15
+⟦SS3⟧Face Pulls: 3x15
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Rotational Power:
@@ -9898,7 +9898,7 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 39%×10, 51%×8, 62%×6, 70%×5, 78%×6
-Good Mornings: 4x8 each leg
+Single Leg RDL: 4x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -9961,7 +9961,7 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 43%×10, 55%×8, 68%×6, 77%×5, 85%×5
-Romanian Deadlift: 3x8 each leg
+Single Leg RDL: 3x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Quality Speed:
@@ -10137,7 +10137,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -10154,7 +10154,7 @@ Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up 
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x9
 Band External Rotation: 4x15 each arm
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10177,7 +10177,7 @@ Scrum Drive: 2x10 yds",
 Power Clean from floor: build to a strong set of 4x4 — start light and build (from floor, catch quarter squat)
 Back Squat: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Reverse Lunge: 4x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Anti-Rotation:
@@ -10192,9 +10192,9 @@ Scrum Drive: 4x15 yds",
 
 Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build, each arm
 Overhead Press: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
-⟦SS1⟧DB Row: 5xAMAP
-⟦SS1⟧DB Row: 4x10 each arm
-Reverse Flys: 4x12
+⟦SS1⟧Weighted Pull-ups: 5xAMAP
+⟦SS1⟧Chest Supported Row: 4x10
+Face Pulls: 4x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Standing:
@@ -10217,7 +10217,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -10257,7 +10257,7 @@ Sled Push: 2x15 yds",
 Power Clean from floor: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
 Back Squat: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Walking Lunge: 3x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Rotational Power:
@@ -10272,8 +10272,8 @@ Sprint Work: 5x15 yds @ max effort",
 
 Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
 Overhead Press: 40%×12, 50%×10, 60%×8, 68%×8, 72%×6-8
-⟦SS1⟧Weighted Chin-ups: 4xAMAP
-⟦SS1⟧DB Row: 4x10 each arm
+⟦SS1⟧Weighted Pull-ups: 4xAMAP
+⟦SS1⟧DB Row: 4x6 each arm
 Cuban Press: 4x10
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10297,7 +10297,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -10315,7 +10315,7 @@ Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up 
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Band External Rotation: 4x12 each arm
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10337,7 +10337,7 @@ Sled Push: 2x15 yds",
 Power Clean from floor: build to a strong set of 3x3 — start light and build (from floor, catch quarter squat)
 Back Squat: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Bulgarian Split Squat: 2x8 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Lateral Stability:
@@ -10353,7 +10353,7 @@ Sprint Work: 3x15 yds @ max effort (full recovery)",
 Single Arm DB Split Jerk: build to a strong set of 3x3 — start light and build, each arm
 Overhead Press: 42%×12, 52%×10, 62%×8, 70%×8, 76%×6-8
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 4x10 each arm
+⟦SS1⟧Chest Supported Row: 4x8
 Face Pulls: 2x15
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10377,7 +10377,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x5 (from floor, catch quarter squat)
 Back Squat: 35%×10, 55%×10 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Core — Deload (Light):
@@ -10395,7 +10395,7 @@ Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up 
 Single Arm DB Split Jerk: lighter, no build — 3x5, each arm
 Overhead Press: 35%×10, 55%×10
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Face Pulls: 2x11
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10461,7 +10461,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Sled Push: 2x15 yds
@@ -10477,7 +10477,7 @@ Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up 
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x9
 Band External Rotation: 4x15 each arm
 
 Core — Deload (Light):
@@ -10499,7 +10499,7 @@ Scrum Drive: 2x10 yds",
 Power Clean from floor: build to heavy doubles — 3,3,2,2, start light and build (from floor, catch quarter squat)
 Back Squat: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Reverse Lunge: 4x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -10513,9 +10513,9 @@ Scrum Drive: 4x15 yds",
 
 Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and build, each arm
 Overhead Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
-⟦SS1⟧DB Row: 5xAMAP
-⟦SS1⟧DB Row: 4x10 each arm
-Reverse Flys: 4x12
+⟦SS1⟧Weighted Pull-ups: 5xAMAP
+⟦SS1⟧Chest Supported Row: 4x10
+Face Pulls: 4x12
 
 Conditioning — Standing:
 Landmine Rotational Press: 3x6 each side
@@ -10537,7 +10537,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -10575,7 +10575,7 @@ Sled Push: 2x15 yds",
 Power Clean from floor: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
 Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Walking Lunge: 3x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
@@ -10589,8 +10589,8 @@ Sprint Work: 5x15 yds @ max effort",
 
 Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
 Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
-⟦SS1⟧Weighted Chin-ups: 4xAMAP
-⟦SS1⟧DB Row: 4x10 each arm
+⟦SS1⟧Weighted Pull-ups: 4xAMAP
+⟦SS1⟧DB Row: 4x6 each arm
 Cuban Press: 4x10
 
 Conditioning — Maximal Velocity:
@@ -10613,7 +10613,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -10630,7 +10630,7 @@ Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up 
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Band External Rotation: 4x12 each arm
 
 Conditioning — Deload (Light):
@@ -10651,7 +10651,7 @@ Sled Push: 2x15 yds",
 Power Clean from floor: build to a heavy single off a triple — 3,2,2,1,1, start light and build (from floor, catch quarter squat)
 Back Squat: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4 (full ROM)
 ⟦SS1⟧Barbell RDL: 4x8
-⟦SS1⟧Bulgarian Split Squat: 2x8 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -10666,7 +10666,7 @@ Sprint Work: 3x15 yds @ max effort (full recovery)",
 Single Arm DB Split Jerk: build to a heavy single off a triple — 3,2,2,1,1, start light and build, each arm
 Overhead Press: 40%×10, 50%×8, 60%×6, 70%×5, 80%×3, 90%×1-4
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 4x10 each arm
+⟦SS1⟧Chest Supported Row: 4x8
 Face Pulls: 2x15
 
 Conditioning — Low Volume, Max Intent:
@@ -10689,7 +10689,7 @@ Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each le
 Power Clean from floor: lighter, no build — 3x3 (from floor, catch quarter squat)
 Back Squat: 40%×10, 70%×5 (full ROM)
 ⟦SS1⟧Barbell RDL: 2x6
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -10706,7 +10706,7 @@ Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up 
 Single Arm DB Split Jerk: lighter, no build — 3x3, each arm
 Overhead Press: 40%×10, 70%×5
 ⟦SS1⟧Weighted Pull-ups: 3xAMAP
-⟦SS1⟧DB Row: 2x8 each arm
+⟦SS1⟧Chest Supported Row: 2x6
 Face Pulls: 2x11
 
 Conditioning — Deload (Light):
@@ -11855,7 +11855,7 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-Good Mornings: 4x8 each leg
+Single Leg RDL: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -11922,7 +11922,7 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-Romanian Deadlift: 3x8 each leg
+Single Leg RDL: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -12124,7 +12124,7 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-Good Mornings: 4x8 each leg
+Single Leg RDL: 4x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -12187,7 +12187,7 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-Romanian Deadlift: 3x8 each leg
+Single Leg RDL: 3x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Quality Speed:
@@ -13951,7 +13951,7 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -13963,7 +13963,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -13976,7 +13976,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -13994,7 +13994,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -14004,7 +14004,7 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -14016,7 +14016,7 @@ Mountain Climbers: 3x20s",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Standing:
@@ -14036,7 +14036,7 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14048,7 +14048,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -14061,7 +14061,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14089,7 +14089,7 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -14099,7 +14099,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -14130,7 +14130,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14142,7 +14142,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14159,7 +14159,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -14169,7 +14169,7 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -14181,7 +14181,7 @@ Decline Bench Iso: 3x30s hold",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Low Volume, Max Intent:
@@ -14201,7 +14201,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -14213,7 +14213,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -14226,7 +14226,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14291,7 +14291,7 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14303,7 +14303,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -14316,7 +14316,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14334,7 +14334,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -14344,7 +14344,7 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -14356,7 +14356,7 @@ Mountain Climbers: 3x20s",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Standing:
@@ -14376,7 +14376,7 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14388,7 +14388,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -14401,7 +14401,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14429,7 +14429,7 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -14439,7 +14439,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Repeat Effort:
@@ -14470,7 +14470,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14482,7 +14482,7 @@ Med Ball Overhead Slam: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14499,7 +14499,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -14509,7 +14509,7 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
@@ -14521,7 +14521,7 @@ Decline Bench Iso: 3x30s hold",
       {
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x10
+⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Conditioning — Low Volume, Max Intent:
@@ -14541,7 +14541,7 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -14553,7 +14553,7 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Core — Deload (Light):
@@ -14566,7 +14566,7 @@ Plank: 2x20 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x8
+⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -14621,7 +14621,7 @@ Band External Rotation: 3x15 each arm",
 
 Back Squat: 2x6 @ moderate load
 ⟦SS1⟧DB Bench: 2x9
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Hip Thrust: 2x9
 
 Conditioning — Deload (Light):
 Resistance Band Sprint: 2x20 yds
@@ -14633,7 +14633,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Single Arm DB Row: 2x8 each arm
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14652,7 +14652,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ moderate load
 ⟦SS1⟧DB Bench: 3x12
-⟦SS1⟧Single Leg RDL: 3x10 each leg
+⟦SS1⟧Single Leg RDL: 4x10 each leg
 
 Conditioning — Interval Work:
 Resistance Band Sprint: 4x20 yds
@@ -14662,7 +14662,7 @@ Med Ball Rotational Throw: 3x6 each side",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 3x6 each leg (light)
-DB Row: 3x12
+Chest Supported Row: 4x12
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -14695,7 +14695,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Chest Supported Row: 2x9
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14714,7 +14714,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 4x8 @ moderate load
 ⟦SS1⟧DB Bench: 4x12
-⟦SS1⟧Single Leg RDL: 4x10 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
 
 Conditioning — Repeat Effort:
 Ankle Hops: 4x20
@@ -14724,7 +14724,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 3x6 each leg (light)
-DB Row: 4x12
+Chest Supported Row: 4x10
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
@@ -14745,7 +14745,7 @@ YTW Series: 4x10 each",
 
 Back Squat: 2x6 @ moderate load
 ⟦SS1⟧DB Bench: 2x9
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Resistance Band Sprint: 2x20 yds
@@ -14757,7 +14757,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14776,7 +14776,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 4x8 @ moderate load
 ⟦SS1⟧DB Bench: 4x12
-⟦SS1⟧Single Leg RDL: 4x10 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
 
 Conditioning — Reduced:
 Resistance Band Sprint: 2x20 yds (light)
@@ -14786,7 +14786,7 @@ Med Ball Rotational Throw: 2x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 3x6 each leg (light)
-DB Row: 4x12
+Chest Supported Row: 4x10
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -14807,7 +14807,7 @@ Serratus Wall Slides: 3x12",
 
 Back Squat: 2x6 @ moderate load
 ⟦SS1⟧DB Bench: 2x9
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Resistance Band Sprint: 2x20 yds
@@ -14819,7 +14819,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14875,7 +14875,7 @@ Band External Rotation: 3x15 each arm",
 
 Back Squat: 2x6 @ moderate load
 ⟦SS1⟧DB Bench: 2x9
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Hip Thrust: 2x9
 
 Conditioning — Deload (Light):
 Resistance Band Sprint: 2x20 yds
@@ -14887,7 +14887,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Single Arm DB Row: 2x8 each arm
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14906,7 +14906,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 3x8 @ moderate load
 ⟦SS1⟧DB Bench: 3x12
-⟦SS1⟧Single Leg RDL: 3x10 each leg
+⟦SS1⟧Single Leg RDL: 4x10 each leg
 
 Conditioning — Interval Work:
 Resistance Band Sprint: 4x20 yds
@@ -14916,7 +14916,7 @@ Med Ball Rotational Throw: 3x6 each side",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 3x6 each leg (light)
-DB Row: 3x12
+Chest Supported Row: 4x12
 
 Core — Anti-Rotation:
 Pallof Press: 3x10 each side
@@ -14949,7 +14949,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Chest Supported Row: 2x9
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14968,7 +14968,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 4x8 @ moderate load
 ⟦SS1⟧DB Bench: 4x12
-⟦SS1⟧Single Leg RDL: 4x10 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
 
 Conditioning — Repeat Effort:
 Ankle Hops: 4x20
@@ -14978,7 +14978,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 3x6 each leg (light)
-DB Row: 4x12
+Chest Supported Row: 4x10
 
 Core — Rotational Power:
 Med Ball Rotational Throw: 4x6 each side
@@ -14999,7 +14999,7 @@ YTW Series: 4x10 each",
 
 Back Squat: 2x6 @ moderate load
 ⟦SS1⟧DB Bench: 2x9
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Resistance Band Sprint: 2x20 yds
@@ -15011,7 +15011,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -15030,7 +15030,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 4x8 @ moderate load
 ⟦SS1⟧DB Bench: 4x12
-⟦SS1⟧Single Leg RDL: 4x10 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
 
 Conditioning — Reduced:
 Resistance Band Sprint: 2x20 yds (light)
@@ -15040,7 +15040,7 @@ Med Ball Rotational Throw: 2x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "Bulgarian Split Squat: 3x6 each leg (light)
-DB Row: 4x12
+Chest Supported Row: 4x10
 
 Core — Lateral Stability:
 Copenhagen Adductor: 3x8 each leg
@@ -15061,7 +15061,7 @@ Serratus Wall Slides: 3x12",
 
 Back Squat: 2x6 @ moderate load
 ⟦SS1⟧DB Bench: 2x9
-⟦SS1⟧Single Leg RDL: 2x8 each leg
+⟦SS1⟧Single Leg RDL: 2x6 each leg
 
 Conditioning — Deload (Light):
 Resistance Band Sprint: 2x20 yds
@@ -15073,7 +15073,7 @@ Med Ball Rotational Throw: 2x5 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Bulgarian Split Squat: 2x5 each leg (light)
-DB Row: 2x9
+Chest Supported Row: 2x8
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -15132,7 +15132,7 @@ Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
 
 Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -15165,8 +15165,8 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Good Mornings: 4x8 each leg
-⟦SS1⟧Reverse Lunge: 4x6 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Standing:
@@ -15200,7 +15200,7 @@ Pallof Press: 3x10 each side",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -15233,8 +15233,8 @@ Dead Bug: 2x8 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-⟦SS1⟧Romanian Deadlift: 3x8 each leg
-⟦SS1⟧Walking Lunge: 3x6 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Quality Speed:
@@ -15302,7 +15302,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Single Leg RDL: 2x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Low Volume, Max Intent:
@@ -15336,7 +15336,7 @@ Copenhagen Adductor: 3x8 each leg",
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -15408,7 +15408,7 @@ Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Reactive Cone Drill: 2x3
@@ -15439,8 +15439,8 @@ Med Ball Rotational Throw: 2x5 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧Good Mornings: 4x8 each leg
-⟦SS1⟧Reverse Lunge: 4x6 each leg
+⟦SS1⟧Single Leg RDL: 4x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Standing:
 Rotational Cable Pull: 3x8 each side
@@ -15472,7 +15472,7 @@ Pallof Press: 3x10 each side",
 
 Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Med Ball Rotational Throw: 2x5 each side
@@ -15503,8 +15503,8 @@ Dead Bug: 2x8 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Romanian Deadlift: 3x8 each leg
-⟦SS1⟧Walking Lunge: 3x6 each leg
+⟦SS1⟧Single Leg RDL: 3x8 each leg
+⟦SS1⟧Bulgarian Split Squat: 3x6 each leg
 
 Conditioning — Quality Speed:
 5-10-5 Shuttle: 6x1
@@ -15568,7 +15568,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧Single Leg RDL: 2x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS1⟧Walking Lunge: 4x8 each leg
 
 Conditioning — Low Volume, Max Intent:
 Med Ball Rotational Throw: 2x6 each side (max intent)
@@ -15600,7 +15600,7 @@ Copenhagen Adductor: 3x8 each leg",
 
 Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Med Ball Rotational Throw: 2x5 each side
@@ -16193,7 +16193,7 @@ Sled Sprint: 5x20 yds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -16225,7 +16225,7 @@ Sled Sprint: 3x20 yds",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Broad Jumps: 5x3
-Bulgarian Split Squat: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 4x20 yds
 
@@ -16257,7 +16257,7 @@ Sled Sprint: 6x20 yds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -16353,7 +16353,7 @@ Sled Sprint: 3x20 yds",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 4x6 each leg
+Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 2x20 yds
 
@@ -16385,7 +16385,7 @@ Sled Sprint: 3x20 yds (full recovery)",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -16452,7 +16452,7 @@ Sled Sprint: 5x20 yds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-Bulgarian Split Squat: 2x5 each leg
+Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Wicket Drills: 2x30m
@@ -16482,7 +16482,7 @@ Sled Sprint: 3x20 yds",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧Broad Jumps: 5x3
-Bulgarian Split Squat: 4x6 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 4x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -16512,7 +16512,7 @@ Sled Sprint: 6x20 yds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Wicket Drills: 2x30m
@@ -16602,7 +16602,7 @@ Sled Sprint: 3x20 yds",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 4x6 each leg
+Walking Lunge: 4x8 each leg
 Acceleration Sprints: 2x20 yds
 
 Conditioning — Full-Recovery Reps:
@@ -16632,7 +16632,7 @@ Sled Sprint: 3x20 yds (full recovery)",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Wicket Drills: 2x30m
@@ -16716,7 +16716,7 @@ Dead Bug: 2x8 each side",
 
 Close Grip Bench Press: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16735,7 +16735,7 @@ Med Ball Rotational Throw: 2x6 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Glute Bridge: 4x8
+⟦SS1⟧Hip Thrust: 4x8
 ⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16748,7 +16748,7 @@ Grip Work: 4x30s each (plate pinch · towel hang)",
         "day": "Day 2",
         "description": "Close Grip Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧BB Row: 4x8
-⟦SS1⟧DB Row: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16785,7 +16785,7 @@ Grip Work: 2x30s each (plate pinch · towel hang)",
 
 Close Grip Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16804,7 +16804,7 @@ Dead Bug: 2x8 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-⟦SS1⟧Romanian Deadlift: 3x8
+⟦SS1⟧Hip Thrust: 3x8
 ⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16817,7 +16817,7 @@ Med Ball Rotational Throw: 4x6 each side",
         "day": "Day 2",
         "description": "Close Grip Bench Press: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧BB Row: 4x8
-⟦SS1⟧Chin-ups: 3xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16853,7 +16853,7 @@ Dead Bug: 2x8 each side",
 
 Close Grip Bench Press: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16885,7 +16885,7 @@ Grip Work: 2x30s each (plate pinch · towel hang)",
         "day": "Day 2",
         "description": "Close Grip Bench Press: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧BB Row: 4x8
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16921,7 +16921,7 @@ Grip Work: 2x30s each (plate pinch · towel hang)",
 
 Close Grip Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -16992,7 +16992,7 @@ Dead Bug: 2x8 each side",
 
 Close Grip Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Seated Cable Lat Pulldown: 2x9
 Med Ball Slam: 2x6
 
 Arm Care — Deload (Light):
@@ -17010,7 +17010,7 @@ Med Ball Rotational Throw: 2x6 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧Glute Bridge: 4x8
+⟦SS1⟧Hip Thrust: 4x8
 ⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 
 Conditioning — Standing:
@@ -17022,7 +17022,7 @@ Grip Work: 4x30s each (plate pinch · towel hang)",
         "day": "Day 2",
         "description": "Close Grip Bench Press: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧BB Row: 4x8
-⟦SS1⟧DB Row: 4xAMAP
+⟦SS1⟧Pull-Ups: 4x6
 Med Ball Slam: 4x8
 
 Arm Care — Modest Increase:
@@ -17057,7 +17057,7 @@ Grip Work: 2x30s each (plate pinch · towel hang)",
 
 Close Grip Bench Press: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Pull-Ups: 2x5
 Med Ball Slam: 2x6
 
 Arm Care — Deload (Light):
@@ -17075,7 +17075,7 @@ Dead Bug: 2x8 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Romanian Deadlift: 3x8
+⟦SS1⟧Hip Thrust: 3x8
 ⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
 
 Conditioning — Quality Speed:
@@ -17087,7 +17087,7 @@ Med Ball Rotational Throw: 4x6 each side",
         "day": "Day 2",
         "description": "Close Grip Bench Press: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧BB Row: 4x8
-⟦SS1⟧Chin-ups: 3xAMAP
+⟦SS1⟧Weighted Pull-Ups: 4x5
 Med Ball Slam: 4x8
 
 Conditioning — Maximal Velocity:
@@ -17121,7 +17121,7 @@ Dead Bug: 2x8 each side",
 
 Close Grip Bench Press: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Weighted Pull-Ups: 2x4
 Med Ball Slam: 2x6
 
 Conditioning — Deload (Light):
@@ -17151,7 +17151,7 @@ Grip Work: 2x30s each (plate pinch · towel hang)",
         "day": "Day 2",
         "description": "Close Grip Bench Press: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧BB Row: 4x8
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 4x10
 Med Ball Slam: 4x8
 
 Arm Care — Readiness:
@@ -17185,7 +17185,7 @@ Grip Work: 2x30s each (plate pinch · towel hang)",
 
 Close Grip Bench Press: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
 ⟦SS1⟧BB Row: 2x6
-⟦SS1⟧Pull-ups: 2xAMAP
+⟦SS1⟧Lat Pulldown: 2x8
 Med Ball Slam: 2x6
 
 Arm Care — Deload (Light):
@@ -17244,7 +17244,7 @@ Band External Rotation: 4x15 each arm",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
-Bulgarian Split Squat: 2x4 each leg
+Reverse Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -17278,7 +17278,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Broad Jumps: 5x3
-Reverse Lunge: 4x5 each leg
+Bulgarian Split Squat: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -17290,7 +17290,7 @@ Med Ball Rotational Throw: 3x6 each side",
       {
         "day": "Day 2",
         "description": "DB Bench: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Chest Supported Row: 4x12 each arm
+⟦SS1⟧Single Arm DB Row: 4x12 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -17312,7 +17312,7 @@ Band External Rotation: 4x15 each arm",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -17346,7 +17346,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Hurdle Hops: 4x6
-Walking Lunge: 3x5 each leg
+Bulgarian Split Squat: 3x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 5x20 yds
 
@@ -17358,7 +17358,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "DB Bench: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-⟦SS1⟧Pull-ups: 3x12 each arm
+⟦SS1⟧Single Arm DB Row: 3x12 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -17380,7 +17380,7 @@ YTW Series: 3x10 each",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
-Bulgarian Split Squat: 2x4 each leg
+Bulgarian Split Squat: 2x5 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -17414,7 +17414,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 Acceleration Sprints: 3x20 yds
 
@@ -17448,7 +17448,7 @@ Band External Rotation: 3x15 each arm",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x6 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Deload (Light):
@@ -17520,7 +17520,7 @@ Band External Rotation: 4x15 each arm",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-Bulgarian Split Squat: 2x4 each leg
+Reverse Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Lateral Bounds: 2x5 each side
@@ -17552,7 +17552,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
 ⟦SS1⟧Broad Jumps: 5x3
-Reverse Lunge: 4x5 each leg
+Bulgarian Split Squat: 4x8 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Acceleration Mechanics:
@@ -17563,7 +17563,7 @@ Med Ball Rotational Throw: 3x6 each side",
       {
         "day": "Day 2",
         "description": "DB Bench: 38%×10, 49%×8, 61%×6, 68%×5, 76%×6
-⟦SS1⟧Chest Supported Row: 4x12 each arm
+⟦SS1⟧Single Arm DB Row: 4x12 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Core — Anti-Rotation:
@@ -17584,7 +17584,7 @@ Band External Rotation: 4x15 each arm",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×6
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x8 each leg
 
 Conditioning — Deload (Light):
 Lateral Bounds: 2x5 each side
@@ -17616,7 +17616,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
 ⟦SS1⟧Hurdle Hops: 4x6
-Walking Lunge: 3x5 each leg
+Bulgarian Split Squat: 3x6 each leg
 Acceleration Sprints: 5x20 yds
 
 Conditioning — Quality Speed:
@@ -17627,7 +17627,7 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
       {
         "day": "Day 2",
         "description": "DB Bench: 41%×10, 53%×8, 66%×6, 74%×5, 82%×5
-⟦SS1⟧Pull-ups: 3x12 each arm
+⟦SS1⟧Single Arm DB Row: 3x12 each arm
 ⟦SS1⟧Med Ball Slam: 4x8
 
 Core — Rotational Power:
@@ -17648,7 +17648,7 @@ YTW Series: 3x10 each",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×5
-Bulgarian Split Squat: 2x4 each leg
+Bulgarian Split Squat: 2x5 each leg
 
 Conditioning — Deload (Light):
 Lateral Bounds: 2x5 each side
@@ -17680,7 +17680,7 @@ Band External Rotation: 2x15 each arm",
         "day": "Day 1",
         "description": "⟦SS1⟧Back Squat: 43%×10, 56%×8, 69%×6, 77%×5, 86%×4
 ⟦SS1⟧Depth Jumps: 4x5
-Bulgarian Split Squat: 2x5 each leg
+Walking Lunge: 4x8 each leg
 Acceleration Sprints: 3x20 yds
 
 Conditioning — Full-Recovery Reps:
@@ -17712,7 +17712,7 @@ Band External Rotation: 3x15 each arm",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 ⟦SS1⟧Back Squat: 37%×10, 47%×8, 58%×6, 66%×5, 73%×4
-Bulgarian Split Squat: 2x4 each leg
+Walking Lunge: 2x6 each leg
 
 Conditioning — Deload (Light):
 Lateral Bounds: 2x5 each side
@@ -17850,7 +17850,7 @@ Single Arm DB Split Jerk: build to a strong set of 4x4 — start light and build
 Overhead Press: 38%×12, 48%×10, 58%×10, 64%×8, 68%×8-10
 ⟦SS1⟧Rope Climb: 4x1 ascent
 ⟦SS1⟧Chest Supported Row: 4x10
-Reverse Flys: 4x12
+Face Pulls: 4x12
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — Standing:
@@ -18171,7 +18171,7 @@ Single Arm DB Split Jerk: build to heavy doubles — 3,3,2,2, start light and bu
 Overhead Press: 40%×10, 53%×8, 65%×6, 75%×5, 85%×3-6
 ⟦SS1⟧Rope Climb: 4x1 ascent
 ⟦SS1⟧Chest Supported Row: 4x10
-Reverse Flys: 4x12
+Face Pulls: 4x12
 
 Conditioning — Standing:
 Landmine Rotational Press: 3x6 each side

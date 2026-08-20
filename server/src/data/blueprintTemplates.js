@@ -132,33 +132,27 @@ function explosiveIntent(phaseNum) {
   return EXPLOSIVE_ARC[phaseNum].intent
 }
 
-// Change 4 — phase-keyed accessory rotation. Resolves a name/volume by
-// PHASE (constant across all non-deload weeks of that phase) instead of the
-// existing wip-based ACCESSORY_ROTATION/ACCESSORY_VOLUME_WAVE (which still
-// runs unchanged for every sport, and for every accessory NOT listed in a
-// sport's phase table below — see applyAccessoryProgression). Every phase
-// table below reuses names already vetted as safe substitutes by the
-// existing wip-based ACCESSORY_ROTATION/BASEBALL_ACCESSORY_ROTATION tables
-// (no new exercise names invented). Shape per key: phase 1 (Foundation) and
-// phase 4 (Peak) both show the base/anchor name — Foundation at the highest
-// volume (work-capacity), Peak at the lowest (stripped down); phase 2
-// (Development) and phase 3 (Strength/Power) show the already-vetted
-// alternate names, treated respectively as the "heavier/more focused" and
-// "explosive/specific/more unilateral" slots.
+// Change 4 — phase-keyed accessory VOLUME (naming role retired, see
+// hasPhaseAccessoryEntry below). Resolves a volume multiplier by PHASE
+// (constant across all non-deload weeks of that phase) instead of the
+// standard wip-based ACCESSORY_VOLUME_WAVE, for any accessory whose name is
+// still a key in a sport's own phase table (SOCCER_PHASE_ACCESSORY_ROTATION
+// etc., below) — "Foundation = highest volume (work-capacity), Peak =
+// lowest (stripped down)," phase 2/3 in between.
 const PHASE_ACCESSORY_MULT = { 1: 1.3, 2: 1.0, 3: 0.85, 4: 0.5 }
 
-// A phase entry is normally a plain name string (unchanged every week of
-// that phase). It may instead be a function `(weekNumber) => name` for a
-// phase that needs week-to-week texture within itself — e.g. a low-
-// frequency 3rd rotation option that shouldn't show every week of that
-// phase. weekNumber is always a "normal" (non-deload) week here —
-// applyAccessoryProgression never calls this for a wip-4 week at all.
-function resolvePhaseAccessory(name, phaseNum, phaseRotation, weekNumber) {
-  const entry = phaseRotation[name.toLowerCase().trim()]
-  if (!entry) return null
-  const raw = entry[phaseNum]
-  const resolved = typeof raw === 'function' ? raw(weekNumber) : raw
-  return { name: resolved || name, mult: PHASE_ACCESSORY_MULT[phaseNum] }
+// feat/variety-engine — varietyEngine.js's resolveFiller() is now the
+// single authority for which exercise NAME an accessory line shows (both
+// anchor slots, which it never renames, and filler slots, which it
+// rotates through its own pools). This function no longer resolves or
+// returns a name at all — it exists only to preserve the volume ARC this
+// table used to carry alongside its (now-retired) naming role: any
+// accessory whose current name is still a key in a sport's phaseRotation
+// table gets PHASE_ACCESSORY_MULT's "Foundation = high volume, Peak =
+// stripped down" progression instead of the standard within-phase wip
+// wave — see applyAccessoryProgression below, the only caller.
+function hasPhaseAccessoryEntry(name, phaseRotation) {
+  return !!phaseRotation[name.toLowerCase().trim()]
 }
 
 // ─── Superset notation (structural capability only) ────────────────────────
@@ -3319,48 +3313,32 @@ const BASEBALL_PHASES = [
   { label: 'Peak Taper',  low: 0.65, high: 0.72 },
 ]
 
-// Baseball-scoped accessory rotation — merged OVER the shared global
-// ACCESSORY_ROTATION table (see applyAccessoryProgression's extraRotation
-// param), so these entries only ever apply to baseball's own generated
-// weeks. "Med Ball Rotational Throw" etc. are also used by several OTHER
-// sports' templates (football, basketball, hockey, ...) — this table
-// intentionally does NOT touch the shared global one, so baseball's
-// rotational-power/arm-care pool never leaks into another sport's plan.
+// feat/variety-engine — this table's naming role is retired (see the big
+// comment above const PHASE_ACCESSORY_MULT / applyAccessoryProgression
+// below) — varietyEngine.js's resolveFiller() owns exercise naming now,
+// and baseball's own ACC_* slots go through it like every other sport's.
+// This table's ONE remaining live consumer is applySessionOrganization's
+// `protectedNames` set, built from Object.keys(extraRotation) — every key
+// below (including the "empty override" ones, whose {} value never
+// mattered for naming and still doesn't) stays PROTECTED FROM PAIRING,
+// because baseball's own inline weeklyVariant()/medBallPoolVariant()
+// category-variation system (a completely separate mechanism, baked
+// directly into BASEBALL_PACK's byFocus function values, evaluated before
+// dayLayoutEngine even renders a line) still independently varies these
+// exact names week to week — bracketing one of them with a neighbor would
+// pair two lines whose names move on different, uncoordinated schedules.
 const BASEBALL_ACCESSORY_ROTATION = {
-  // Arm care pool #1 (anchor: Band External Rotation)
-  'band external rotation':    { 2: 'Scap Push-Ups',  3: 'YTW Raises' },
-  // Arm care pool #2 (anchor: Face Pulls)
-  'face pulls':                { 2: 'Prone Swimmers', 3: 'Crossover Symmetry Band Series' },
-  // Lower-body accessory pool (anchor: Calf Raises) — overrides the shared
-  // global ACCESSORY_ROTATION's own 'calf raises' entry for baseball only,
-  // so Tibialis Raises (wall-supported, leaning back) appears as a real
-  // working accessory on lower days without touching any other sport.
-  'calf raises':               { 2: 'Tibialis Raises', 3: 'Seated Calf Raise' },
-  // The med-ball rotational/power pool (Med Ball Rotational Throw, Scoop
-  // Toss, Shotput Throw, Overhead Slam, Broad Jump + Throw) used to rotate
-  // via this table's wip-based mechanism (2 entries per 4-week phase). It's
-  // now driven entirely by the deterministic weekly category-variation
-  // system (medBallPoolVariant/upperPowerMedBallVariant below) instead, so
-  // those 5 names are intentionally absent here — the old entries are gone,
-  // not just unused, so this table can never fight the new one for control
-  // of the same line on a wip-2/3 week.
-  //
-  // Empty overrides below block the shared global ACCESSORY_ROTATION table
-  // from independently rotating names this rebuild's category-variation
-  // system already controls deterministically (see rotateAccessoryName —
-  // extraRotation is checked before the global table, and an entry with no
-  // numbered keys always resolves to "leave the name unchanged"). Without
-  // these, e.g. Reverse Lunge would randomly rename itself to Walking Lunge/
-  // Bulgarian Split Squat on a wip-2/3 week, fighting the Trap Bar Deadlift/
-  // Reverse Lunge weekly anchor swap.
-  'bulgarian split squat':     {},
-  'db bench press':            {},
-  'incline db press':          {},
-  'lateral raise':             {},
-  'reverse lunge':             {},
-  'single leg rdl':            {},
-  'pull-ups':                  {},
-  'goblet squat':              {},
+  'band external rotation': {},
+  'face pulls': {},
+  'calf raises': {},
+  'bulgarian split squat': {},
+  'db bench press': {},
+  'incline db press': {},
+  'lateral raise': {},
+  'reverse lunge': {},
+  'single leg rdl': {},
+  'pull-ups': {},
+  'goblet squat': {},
 }
 
 // Per-sport extra-rotation lookup passed into applyAccessoryProgression.
@@ -5807,47 +5785,23 @@ function applyInjuryAdjustments(weeks, injuryAreasRaw) {
 // than main-lift intensity.
 const ACCESSORY_VOLUME_WAVE = { 1: 1.0, 2: 0.80, 3: 1.15 }
 
-// Curated (non-random) rotation table: base accessory name -> what it becomes
-// on wip 2 / wip 3. wip 1 always shows the exercise the base session template
-// already prescribes (the "anchor" name), so week 1 of every phase looks
-// exactly like it does today. Only movements with a safe, equivalent
-// substitute (same joint pattern / same training effect) are listed —
-// anything not in this table still gets the volume wave, it just doesn't
-// rotate names. Keys are matched case-insensitively against the exercise name
-// with surrounding whitespace trimmed.
-const ACCESSORY_ROTATION = {
-  'db row':                { 2: 'Chest Supported Row',   3: 'Pull-ups' },
-  'pull-ups':              { 2: 'DB Row',                3: 'Chin-ups' },
-  'single leg rdl':        { 2: 'Good Mornings',         3: 'Romanian Deadlift' },
-  // Note: never rotate into a name on MOBILITY_EXACT_EXEMPT (e.g. "Band
-  // Pull-Aparts" / "YTW Series") — those are treated as exempt warm-up work
-  // by the deload pass regardless of context, so a real accessory rotated
-  // into one of those names would silently stop counting as volume, and (for
-  // "YTW Series" specifically) could collide with a session that already
-  // prescribes it as its own distinct warm-up line.
-  'face pulls':            { 2: 'Reverse Flys',          3: 'DB Row' },
-  'bulgarian split squat': { 2: 'Reverse Lunge',         3: 'Walking Lunge' },
-  'walking lunge':         { 2: 'Bulgarian Split Squat', 3: 'Reverse Lunge' },
-  'reverse lunge':         { 2: 'Walking Lunge',         3: 'Bulgarian Split Squat' },
-  'calf raises':           { 2: 'Seated Calf Raise',     3: 'Single Leg Calf Raise' },
-  'db bench press':        { 2: 'Incline DB Press',      3: 'Close Grip Bench Press' },
-  'incline db press':      { 2: 'Close Grip Bench Press', 3: 'DB Bench Press' },
-  'lateral raise':         { 2: 'Front Raise',           3: 'Cuban Press' },
-  'goblet squat':          { 2: 'Front Squat',           3: 'Box Squat' },
-  'leg curl':              { 2: 'Nordic Hamstring Curl', 3: 'Single Leg RDL' },
-  'db shoulder press':     { 2: 'Arnold Press',          3: 'Push Press' },
-}
-
-// feat/variety-engine — register every name already governed by the older,
-// name-keyed accessory-rotation systems above (the global table, every
-// per-sport wip table, every per-sport phase table) so varietyEngine.js's
-// resolver defers to them instead of double-rotating the same line — see
-// the fuller comment on varietyEngine.js's own setGlobalExemptNames.
-varietyEngine.setGlobalExemptNames([
-  ...Object.keys(ACCESSORY_ROTATION),
-  ...Object.values(SPORT_ACCESSORY_ROTATION).flatMap(t => Object.keys(t)),
-  ...Object.values(SPORT_PHASE_ACCESSORY_ROTATION).flatMap(t => Object.keys(t)),
-])
+// feat/variety-engine — RETIRED. This table (and SPORT_ACCESSORY_ROTATION/
+// BASEBALL_ACCESSORY_ROTATION's own wip-based entries) used to rename
+// accessory lines by matching the CURRENT rendered name, with no awareness
+// of which dayLayoutEngine slot produced it — which is exactly why it used
+// to rename ANCHOR slots too (an anchor's whole point is measurability: the
+// same exercise, 16 weeks straight). varietyEngine.js's resolveFiller() is
+// now the single authority on exercise naming (anchor slots keep theirs
+// forever; filler slots rotate through its own tag-keyed pools, which
+// already reuse this table's same vetted vocabulary — Reverse Lunge/
+// Walking Lunge/Bulgarian Split Squat, DB Row/Pull-Ups/Chest Supported Row,
+// Face Pulls/Cuban Press/Band External Rotation, Seated/Single Leg Calf
+// Raise, DB Bench Press/Close Grip Bench Press, Good Mornings/Romanian
+// Deadlift). applyAccessoryProgression below no longer renames anything —
+// it only scales SET COUNT now (see its own comment) — so this table has
+// no remaining consumer; kept here, inert, as the historical record of
+// which substitutions were already vetted, in case a future pool addition
+// wants to reuse one.
 
 // ─── Session organization: pairing + formatting (all sports) ──────────────
 // Every sport's session templates were authored densely — main lift plus
@@ -6277,26 +6231,30 @@ function isAccessoryLine(line, inCoreBlock) {
          /^(.*?):\s*(\d+)x(\d+)\s*warmup,\s*(\d+)x(\d+[a-zA-Z]*|AMAP)\s*working(.*)$/.test(stripped)
 }
 
-// extraRotation lets a sport merge its own rotation entries on top of the
-// shared table below, taking priority when both define the same key — see
-// SPORT_ACCESSORY_ROTATION near generateBlueprintForAthlete. Scoped to
-// whichever call passes it; the shared ACCESSORY_ROTATION table (and every
-// other sport that doesn't pass one) is completely unaffected.
-function rotateAccessoryName(name, wip, extraRotation = {}) {
-  const key = name.toLowerCase().trim()
-  const entry = extraRotation[key] || ACCESSORY_ROTATION[key]
-  if (!entry || !entry[wip]) return name
-  return entry[wip]
-}
-
-function applyAccessoryProgression(weeks, extraRotation = {}, phaseRotation = {}) {
+// feat/variety-engine — this pass NEVER renames an accessory line anymore.
+// varietyEngine.js's resolveFiller() is the single authority on exercise
+// NAME (anchor slots keep theirs forever; filler slots get it from a
+// pool) — this function's only remaining job is SET-COUNT scaling:
+// PHASE_ACCESSORY_MULT's cross-phase volume arc (Foundation = high
+// volume, Peak = stripped down) for any accessory whose current name is
+// still a key in the sport's own phaseRotation table (preserves that
+// arc for exactly the exercises that used to carry it), or the standard
+// within-phase wip wave for everything else — identical math to before,
+// minus the rename.
+//
+// `extraRotation` is accepted (existing call sites still pass it) but is
+// now unused — SPORT_ACCESSORY_ROTATION/ACCESSORY_ROTATION never had a
+// volume role distinct from the standard wip wave, only a naming one, and
+// naming is retired. The parameter stays for backward compatibility with
+// existing call sites rather than a signature churn across every caller.
+function applyAccessoryProgression(weeks, _extraRotation = {}, phaseRotation = {}) {
   return weeks.map(week => {
     const wip = ((week.week_number - 1) % 4) + 1
     if (wip === 4) return week // deload weeks: applyDeloadAdjustments handles volume on its own, separately
 
     const volumeFactor = ACCESSORY_VOLUME_WAVE[wip]
-    // Change 4 — phase (not just wip) drives rotation/volume for any key
-    // present in phaseRotation. Same phase math as getPhaseInfo (capped at 4).
+    // Phase (not just wip) drives volume for any key present in
+    // phaseRotation. Same phase math as getPhaseInfo (capped at 4).
     const phaseNum = Math.min(4, Math.floor((week.week_number - 1) / 4) + 1)
 
     return {
@@ -6312,21 +6270,11 @@ function applyAccessoryProgression(weeks, extraRotation = {}, phaseRotation = {}
           return withMarkerPreserved(line, stripped => {
             const colonIdx = stripped.indexOf(':')
             const name = stripped.slice(0, colonIdx)
-            const rest = stripped.slice(colonIdx)
 
-            // Phase-keyed rotation takes priority over the wip-based
-            // rotation/wave below for any key the sport's phaseRotation
-            // table lists — every other accessory (the "stable core") keeps
-            // today's exact wip-based behavior, completely untouched.
-            const phaseHit = resolvePhaseAccessory(name, phaseNum, phaseRotation, week.week_number)
-            if (phaseHit) {
-              const renamed = phaseHit.name === name ? stripped : phaseHit.name + rest
-              return scaleAccessoryLineVolume(renamed, phaseHit.mult)
-            }
-
-            const rotated = rotateAccessoryName(name, wip, extraRotation)
-            const renamed = rotated === name ? stripped : rotated + rest
-            return scaleAccessoryLineVolume(renamed, volumeFactor)
+            const mult = hasPhaseAccessoryEntry(name, phaseRotation)
+              ? PHASE_ACCESSORY_MULT[phaseNum]
+              : volumeFactor
+            return scaleAccessoryLineVolume(stripped, mult)
           })
         })
         return { ...session, description: lines.join('\n') }

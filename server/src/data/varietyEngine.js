@@ -133,11 +133,28 @@ const VARIETY_POOLS = {
     3: { default: tier(['Weighted Pull-Ups: 4x5', 'Lat Pulldown: 4x8']) },
     4: { default: tier(['Lat Pulldown: 4x10', 'Pull-Ups: 4x6']) },
   },
+  // "Close Grip Bench Press" and "Landmine Rotational Press" are
+  // deliberately absent here — both are extremely common MAIN_PRESS_H/
+  // finisher-anchor choices across Collision-archetype sports (Linemen,
+  // Hockey Forwards, Wrestling, Rugby), so a pool pick landing on either
+  // risks duplicating that day's own main lift or finisher line verbatim
+  // (confirmed empirically: both produced real same-day duplicates during
+  // development, on days where the sport's own MAIN_PRESS_H or finisher
+  // bank already used the same name). Every name below is a genuine
+  // accessory-tier press variant, never a MAIN_ choice anywhere in this
+  // file, so it's safe regardless of which sport/day it lands on.
   ACC_PRESS: {
-    1: { default: tier(['DB Bench Press: 4x12', 'Landmine Rotational Press: 4x10 each side']) },
-    2: { default: tier(['DB Bench Press: 4x8', 'Close Grip Bench Press: 4x8']) },
-    3: { default: tier(['Close Grip Bench Press: 4x6', 'DB Bench Press: 4x6']) },
-    4: { default: tier(['DB Bench Press: 4x8', 'Landmine Rotational Press: 4x10 each side']) },
+    // Weighted Push-Ups — a lower-frequency 3rd horizontal-push option,
+    // folded in from the retired ACCESSORY_ROTATION/SOCCER_/FOOTBALL_
+    // PHASE_ACCESSORY_ROTATION "phase1WithWeightedPushUpOption" special
+    // case (see blueprintTemplates.js's own retirement comment). Landing
+    // in Foundation's generic slot (not the pack's own prepended choice)
+    // preserves the original "real but low-frequency" character without a
+    // dedicated per-week special case.
+    1: { default: tier(['Weighted Push-Ups: 4x10', 'Weighted Dips: 4x10']) },
+    2: { default: tier(['DB Bench Press: 4x8', 'Weighted Dips: 4x8']) },
+    3: { default: tier(['Weighted Dips: 4x6', 'DB Bench Press: 4x6']) },
+    4: { default: tier(['DB Bench Press: 4x8', 'Weighted Push-Ups: 4x10']) },
   },
   ACC_SHOULDER: {
     1: { default: tier(['Band External Rotation: 4x15 each arm', 'Face Pulls: 4x15', 'Band Pull-Aparts: 4x20']) },
@@ -221,31 +238,25 @@ function fillerStepsForDay(numFillers, wipClamped) {
   return steps
 }
 
-// ─── Pre-existing Change 4 coexistence ──────────────────────────────────
-// blueprintTemplates.js already has a comprehensive, per-sport, name-keyed
-// accessory-rotation system (the global ACCESSORY_ROTATION table, every
-// SPORT_ACCESSORY_ROTATION entry, and every SPORT_PHASE_ACCESSORY_ROTATION
-// table) that runs AFTER this file, in applyAccessoryProgression, matching
-// purely on the CURRENT rendered exercise name. If this resolver picked a
-// pool exercise whose name happens to be one of those tables' keys, that
-// downstream pass would immediately rewrite it again — silently fighting
-// this resolver's own deterministic pool[(N-1)%len] math and producing an
-// unpredictable double-rotation (see e.g. Football Skill/Hybrid's
-// "Weighted Push-Ups on exactly week 2" test, which broke this way during
-// development). Rather than trying to reconcile two independent rotation
-// axes on the same line, this resolver simply defers entirely — every name
-// already owned by that older system stays exactly as Stage 1 left it,
-// and only names OUTSIDE that footprint get this PR's new pool-based
-// variety. blueprintTemplates.js registers the full name set once, at
-// module load, via setGlobalExemptNames — see the call right after
-// SPORT_PHASE_ACCESSORY_ROTATION is defined.
-let globalExemptNames = new Set()
-function setGlobalExemptNames(names) { globalExemptNames = new Set(names) }
-function nameOf(text) {
-  const idx = text.indexOf(':')
-  return (idx > 0 ? text.slice(0, idx) : text).trim().toLowerCase()
-}
-
+// ─── Single authoritative rotation system ───────────────────────────────
+// blueprintTemplates.js used to ALSO rotate accessory names downstream, in
+// applyAccessoryProgression, via a comprehensive per-sport, name-keyed
+// system (the global ACCESSORY_ROTATION table, every SPORT_ACCESSORY_
+// ROTATION entry, every SPORT_PHASE_ACCESSORY_ROTATION table) — matching
+// purely on the CURRENT rendered exercise name, with zero awareness of
+// which dayLayoutEngine slot produced that line. That's exactly why it
+// used to rename ANCHOR lines too (e.g. Soccer's `ACC_UNILATERAL_LOWER`
+// anchor, "Bulgarian Split Squat," changing to "Reverse Lunge"/"Walking
+// Lunge" by phase even though the slot was anchor:true) — a name-matching
+// pass downstream of this file has no way to know that.
+//
+// blueprintTemplates.js's applyAccessoryProgression has been stripped of
+// its naming role entirely (it only scales SET COUNT now — see its own
+// comment) — THIS resolver is the only place in the codebase that ever
+// picks an accessory's exercise NAME. That is what makes the anchor
+// guarantee below actually hold: an anchor slot's name is returned
+// unchanged here and nothing downstream ever touches it again.
+//
 // ─── Top-level resolver ─────────────────────────────────────────────────
 // Called from each archetype's renderer for every ACC_* tag (anchor or
 // filler alike) — `packChoiceText` is that renderer's already-resolved
@@ -254,9 +265,8 @@ function nameOf(text) {
 // pick. `ctx` is the same per-day render context buildSessionFromTemplate
 // already threads through (phaseNum/wip/deload/dayTemplate/...).
 function resolveFiller(archetypeKey, slotDef, tagName, ctx, packChoiceText) {
-  if (slotDef.anchor) return packChoiceText // anchors never rotate/transform
+  if (slotDef.anchor) return packChoiceText // anchors never rotate/transform — authoritative, no downstream override exists anymore
   if (!POOLED_TAGS.has(tagName)) return packChoiceText // PLYO/SPEED/MED_BALL — out of scope this PR
-  if (globalExemptNames.has(nameOf(packChoiceText))) return packChoiceText // already owned by Change 4 — see above
 
   const fillerSlots = ctx.dayTemplate.slots.filter(s => !s.anchor && POOLED_TAGS.has(s.tag))
   const fillerIndex = fillerSlots.indexOf(slotDef)
@@ -287,7 +297,6 @@ module.exports = {
   VARIETY_POOLS,
   ACC_CORE_POOLS,
   resolveFiller,
-  setGlobalExemptNames,
   // exported for direct unit testing of the rotation math
   fillerStepsForDay,
   getPool,
