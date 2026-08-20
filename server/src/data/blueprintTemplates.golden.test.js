@@ -184,15 +184,20 @@ describe('Routing regression — position-fallback bugs fixed on feat/blueprint-
     expect(jumpBp.title).not.toBe(sprint.title)
     expect(throwBp.title).not.toBe(jumpBp.title)
 
-    // Content-level guard, not just the title. Deliberately checked against
-    // an Olympic-lift/protocol line (never subject to the accessory cap —
-    // see organizeSessionDescription) rather than a plain accessory, which
-    // the cap can legitimately trim on any given day regardless of routing.
-    expect(throwBp.weeks[0].sessions[0].description).toContain('Power Clean from floor: 5x3 working up, last set AMAP')
-    expect(sprint.weeks[0].sessions[0].description).not.toContain('Power Clean from floor: 5x3 working up, last set AMAP')
-    // Day 3, not Day 1 — Jumpers' "Single Leg Box Jump" line lives there.
-    expect(jumpBp.weeks[0].sessions[2].description).toContain('Single Leg Box Jump')
-    expect(sprint.weeks[0].sessions[2].description).not.toContain('Single Leg Box Jump')
+    // Content-level guard, not just the title. feat/day-layout-engine
+    // moved Throwers onto the Rotational archetype (no MAIN_OLY tag —
+    // its old "Power Clean from floor" is gone) and Jumpers onto the
+    // Vertical/Court group's own Speed/Power-templated structure, so the
+    // markers below are each pack's own current, still-distinctive
+    // content rather than the old bespoke functions' text.
+    expect(throwBp.weeks[0].sessions[0].focus).toBe('Lower Power — Squat')
+    expect(sprint.weeks[0].sessions[0].focus).not.toBe('Lower Power — Squat')
+    expect(throwBp.weeks[0].sessions[0].description).toContain('Hip Thrust')
+    expect(sprint.weeks[0].sessions[0].description).not.toContain('Hip Thrust')
+    // Jumpers' own "Terminal Knee Extension" (vs. Sprinters' "Bulgarian
+    // Split Squat") on the same day-index-0 accessory pair.
+    expect(jumpBp.weeks[0].sessions[0].description).toContain('Terminal Knee Extension')
+    expect(sprint.weeks[0].sessions[0].description).not.toContain('Terminal Knee Extension')
 
     expect(snapshotWeeks(sprint.weeks, [1])).toMatchSnapshot('sprinters week 1')
     expect(snapshotWeeks(throwBp.weeks, [1])).toMatchSnapshot('throwers week 1')
@@ -233,7 +238,13 @@ describe('Routing regression — position-fallback bugs fixed on feat/blueprint-
 
 describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/blueprint-quick-wins', () => {
   const REP_ARC_CASES = [
-    ['Hockey', 'Forward', /^Trap Bar Deadlift\b/],
+    // feat/day-layout-engine — Hockey Forwards' own squat/hinge
+    // conformance fix (the shared Collision template wants a genuine
+    // second squat on "Lower Strength", not a hinge) moved Trap Bar
+    // Deadlift off Day 1 entirely (now Back Squat, 3-day-only MAIN_HINGE,
+    // and the 6-day "Lower — Posterior Chain & Athletic" bonus day) —
+    // same pattern as every other Collision sport already listed here.
+    ['Hockey', 'Forward', /^Back Squat\b/],
     ['Hockey', 'Defense', /^Back Squat\b/],
     ['Hockey', 'Goalie', /^Back Squat\b/],
     ['Rugby', 'Prop', /^Back Squat\b/],
@@ -270,12 +281,21 @@ describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/bluepri
     expect(week1Day3).not.toBe(week9Day3)
   })
 
-  test('Swimming: Day 4\'s explosive lines (Box Jump, Medicine Ball Overhead Throw, Lateral Bound) vary between Phase 1 and Phase 3', () => {
+  // feat/day-layout-engine — Swimming's old dedicated "Day 4" (Medicine
+  // Ball Overhead Throw/Box Jump/Lateral Bound, a daysPerWeek>=4 extra) is
+  // retired; a jump line survives as "Full Body — Hinge & Press"'s own
+  // PLYO slot (now session index 2, not 3 — that day's own real content,
+  // Trap Bar Deadlift + Shoulder Press, consolidated onto it instead of a
+  // separate bolt-on day) — Broad Jump, not Box Jump, since Box Jump is
+  // SWIMMING_FINISHERS' own 'sprint' family anchor and would otherwise
+  // risk landing on the same day as its own finisher content twice.
+  // Medicine Ball Overhead Throw/Lateral Bound have no slot and are dropped.
+  test('Swimming: "Full Body — Hinge & Press"\'s Broad Jump varies between Phase 1 and Phase 3', () => {
     const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Swimming', position: 'All', time_per_week: '4' }))
-    const week1Day4 = bp.weeks[0].sessions[3].description
-    const week9Day4 = bp.weeks[8].sessions[3].description
-    expect(week1Day4).toContain('Box Jump')
-    expect(week1Day4).not.toBe(week9Day4)
+    const week1 = bp.weeks[0].sessions[2].description
+    const week9 = bp.weeks[8].sessions[2].description
+    expect(week1).toContain('Broad Jump')
+    expect(week1).not.toBe(week9)
   })
 
   test('Softball needs no dedicated coverage — it already inherits the full Change 1/3/4 arc via its existing reuse of the baseball generator', () => {
