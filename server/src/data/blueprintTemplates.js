@@ -2868,6 +2868,86 @@ function generateTrackWeeks(subtype, goal, daysPerWeek = 4) {
   }))
 }
 
+// ─── Day Layout Engine wiring: Endurance archetype (feat/day-layout-engine) ─
+// Same "pack supplies tag->exercise, shared renderer supplies the math"
+// split as every other archetype above — but Endurance's own two sports
+// (Cross Country, Swimming) never used the shared %-ramp math at all:
+// their main lifts are deliberately light, non-percentage prescriptions
+// (XC: a fixed "3x8 @ 65-70% only — no heavy loading"; Swimming: a
+// phase-tiered set count "@ moderate load", no % anywhere), matching the
+// archetype's own "SUPPORT only, never peaks heavy" design intent. So
+// unlike every other archetype's MAIN_ renderer, a pack's MAIN_ entry
+// here is a (ctx) => 'full rendered line' function — no {name,suffix}
+// wrapper, no shared ramped-format construction; XC's own function still
+// reuses ctx.pct (from the same shared getPhaseInfo everyone else uses,
+// with a pack-specific phases table pinned to a flat 65-70% band all 16
+// weeks — real week-to-week variation within that light band, deload
+// cut included for free, but never escalating) rather than reinventing
+// its own percentage math.
+//
+// recoveryOnly days (Day 6 on both sports' own old bolt-on, now the
+// archetype's own template flag) bypass the finisher engine's family
+// allocation entirely — Sprint/Energy/Core/Rotation/Arm are all real
+// training stimuli, and a day flagged recoveryOnly must never receive
+// one. pack.recoveryContent supplies that day's fixed, genuinely gentle
+// text directly instead.
+function buildEnduranceRenderers(pack) {
+  function mainEntry(focusLabel, tagName, ctx) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (!entry) throw new Error(`Endurance pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'function' ? entry(ctx) : entry
+  }
+  function accEntry(focusLabel, tagName, ctx) {
+    const byTag = pack.byFocus[focusLabel]
+    const entry = byTag && byTag[tagName]
+    if (entry === undefined) throw new Error(`Endurance pack missing ${tagName} for day "${focusLabel}"`)
+    return typeof entry === 'function' ? entry(ctx) : entry
+  }
+
+  const renderers = {}
+  for (const tagName of ['MAIN_SQUAT', 'MAIN_HINGE', 'MAIN_PRESS_H', 'MAIN_PRESS_V']) {
+    renderers[tagName] = (slotDef, ctx) => mainEntry(ctx.dayTemplate.focus, tagName, ctx)
+  }
+  for (const tagName of [
+    'ACC_SQUAT', 'ACC_HINGE', 'ACC_UNILATERAL_LOWER', 'ACC_POSTERIOR',
+    'ACC_PULL_H', 'ACC_PULL_V', 'ACC_PRESS', 'ACC_SHOULDER', 'ACC_CALF_GRIP',
+    'PLYO', 'SPEED', 'MED_BALL',
+  ]) {
+    renderers[tagName] = (slotDef, ctx) => accEntry(ctx.dayTemplate.focus, tagName, ctx)
+  }
+  renderers.ACC_CORE = () => null
+  if (pack.hasArmCare) renderers.ACC_SHOULDER = () => null
+  renderers.FINISHER = (dayIndex, ctx) => {
+    if (ctx.dayTemplate.recoveryOnly) return pack.recoveryContent ? pack.recoveryContent(ctx) : null
+    const plan = finisherEngine.planWeekFinishers('endurance', ctx.phaseNum, ctx.days, { hasArmCare: !!pack.hasArmCare, overrides: pack.finisherOverrides || null })[dayIndex]
+    return finisherEngine.renderFinisher(pack.finisherBank, plan, ctx.phaseNum, ctx.deload)
+  }
+  return renderers
+}
+
+// Generates all 16 weeks for one Endurance-archetype sport at a given
+// day count, entirely from its pack.
+function generateEnduranceWeeksFromPack(pack, phases, daysPerWeek) {
+  const weeks = []
+  for (let w = 1; w <= 16; w++) {
+    const info = getPhaseInfo(w, phases)
+    const ctx = { ...info, days: Math.max(2, Math.min(6, daysPerWeek)) }
+    let sessions = dayLayoutEngine.buildWeekSessions('endurance', ctx.days, buildEnduranceRenderers(pack), ctx)
+    if (pack.displayFocus) {
+      sessions = sessions.map(s => ({ ...s, focus: pack.displayFocus[s.focus] || s.focus }))
+    }
+    weeks.push({
+      week_number: w,
+      objective: info.deload
+        ? `Phase ${info.phaseNum} — Deload · Week ${info.wip} of 4`
+        : `Phase ${info.phaseNum} — ${info.phaseLabel} · Week ${info.wip} of 4`,
+      sessions,
+    })
+  }
+  return weeks
+}
+
 // ─── Cross Country ────────────────────────────────────────────────────────────
 
 // Cross Country — Endurance archetype, arm care OFF (not a throwing/
@@ -2905,73 +2985,63 @@ const CROSS_COUNTRY_FINISHERS = {
   },
 }
 
-function xcFinisher(dayIndex, phaseNum, deload) {
-  const plan = finisherEngine.planWeekFinishers('endurance', phaseNum, 2, { hasArmCare: false })[dayIndex]
-  return finisherEngine.renderFinisher(CROSS_COUNTRY_FINISHERS, plan, phaseNum, deload)
-}
 
-function xcSess(phaseNum, deload = false) {
-  const lo = deload ? Math.round(65 * (1 - DELOAD_PCT_CUT)) : 65
-  const hi = deload ? Math.round(70 * (1 - DELOAD_PCT_CUT)) : 70
-  return [
-    { day: 'Day 1', focus: 'Lower (Low Load)',
-      description: `Back Squat: 3x8 @ ${lo}-${hi}% only — no heavy loading\nSingle Leg RDL: 3x10 each leg\nNordic Hamstring Curl: 3x5\nCalf Raises: 4xAMAP\nHip Thrust: 3x12\nCopenhagen Adductor: 3x8 each leg\n${xcFinisher(0, phaseNum, deload)}` },
-    { day: 'Day 2', focus: 'Full Body Light',
-      description: `Trap Bar Deadlift: 3x8 @ ${lo}-${hi}% only — no heavy loading\nGoblet Squat: 3x12\nPull-ups: 3xAMAP\nPush-ups: 3xAMAP\nBand Work: Hip Abduction · External Rotation — 3x15 each\n${xcFinisher(1, phaseNum, deload)}` },
-  ]
-}
-
-const XC_PHASE_LABELS = ['Injury Prevention Base', 'Base Strength', 'Maintenance', 'Pre-Season Taper']
-
-// Change 3 — Day 3's plyo/explosive lines now vary by phase (volume + intent
-// note) via the same explosiveSets/explosiveIntent mechanism every other
-// sport uses, instead of being a flat const identical every week of the
-// 16-week plan. Everything else on this day (Box Step-Up, Glute Bridge, Hip
-// 90/90 Hold, Calf Raise, Band Hip Abduction) is untouched — Cross Country's
-// deliberately light, non-%-ramped main-lift design (see xcSess/generateXCWeeks)
-// means Change 1's tiered rep arc has no ramped line to attach to here.
-const XC_DAY3 = (phaseNum) => ({
-  day: 'Day 3', focus: 'Plyometrics & Injury Prevention',
-  description: `Ankle Hops: ${explosiveSets(3, phaseNum)}x20 (${explosiveIntent(phaseNum)})\nSingle Leg Hop & Stick: ${explosiveSets(3, phaseNum)}x5 each leg (${explosiveIntent(phaseNum)})\nBox Step-Up: 3x12 each leg\nGlute Bridge: 3x15\nHip 90/90 Hold: 2x45s each side\nCalf Raise: 3xAMAP\nBand Hip Abduction: 3x15 each side`,
-})
-const XC_DAY4 = {
-  day: 'Day 4', focus: 'Core & Hip Strength',
-  description: `Glute Bridge Hold: 3x60s\nSingle Leg Glute Bridge: 3x12 each leg\nCopenhagen Adductor: 3x8 each leg\nBird Dog: 3x10 each side\nDead Bug: 3x10 each side\nSide-Lying Hip Abduction: 3x15 each\nPlank with Hip Dip: 3x10 each side`,
-}
-const XC_DAY5 = {
-  day: 'Day 5', focus: 'Upper Body & Posterior Chain',
-  description: `Pull-ups: 3xAMAP\nFace Pulls: 3x15\nBand Pull-Aparts: 3x20\nDB Row: 3x12 each arm\nPush-ups: 3xAMAP\nFoam Roll: Upper back — 5 minutes`,
-}
-const XC_DAY6 = {
-  day: 'Day 6', focus: 'Active Recovery & Mobility',
-  description: `Foam Roll: Full body — 10 minutes\nHip Flexor Stretch: 3x45s each leg\nHamstring Eccentric: 3x8\nAnkle Circles: 3x20 each direction\nHip 90/90 Hold: 2x45s each side\nCalf Stretch: 3x45s each leg\nLight Walking Lunge: 2x10 each leg`,
+// feat/day-layout-engine — XC's pack. A flat 65-70% band, every phase,
+// all 16 weeks (no phase-to-phase intensification at all) — reuses the
+// exact same shared getPhaseInfo wave/deload math every other sport's
+// ctx.pct comes from, just pinned to that one light band, so "no heavy
+// loading" now gets real week-to-week variation within the band (and
+// deload-safe for free) instead of a static "65-70%" string shown
+// unchanged all 16 weeks. Calf Raises/Band Hip Abduction (Day 1/2's own
+// accessories) have no slot on the leaner template and are dropped;
+// Push-ups (Day 2) promotes into MAIN_PRESS_H (XC had no press movement
+// of its own at all before); a new, equally light DB Shoulder Press
+// fills MAIN_PRESS_V, since XC had no vertical press either.
+const XC_PHASES = [
+  { label: 'Injury Prevention Base', low: 0.65, high: 0.70 },
+  { label: 'Base Strength', low: 0.65, high: 0.70 },
+  { label: 'Maintenance', low: 0.65, high: 0.70 },
+  { label: 'Pre-Season Taper', low: 0.65, high: 0.70 },
+]
+const XC_RECOVERY_CONTENT = () => `Foam Roll: Full body — 10 minutes\nHip Flexor Stretch: 3x45s each leg\nHamstring Eccentric: 3x8\nAnkle Circles: 3x20 each direction\nHip 90/90 Hold: 2x45s each side\nCalf Stretch: 3x45s each leg\nLight Walking Lunge: 2x10 each leg`
+const CROSS_COUNTRY_PACK = {
+  finisherBank: CROSS_COUNTRY_FINISHERS,
+  recoveryContent: XC_RECOVERY_CONTENT,
+  displayFocus: {
+    'Full Body — Squat & Press': 'Lower (Low Load)',
+    'Full Body — Hinge & Press': 'Full Body Light',
+  },
+  byFocus: {
+    'Full Body — Squat & Press': {
+      MAIN_SQUAT: (ctx) => `Back Squat: 3x8 @ ${ctx.pct} — no heavy loading`,
+      MAIN_PRESS_H: 'Push-ups: 3xAMAP',
+      ACC_HINGE: 'Single Leg RDL: 3x10 each leg',
+    },
+    'Full Body — Unilateral & Mobility': { // 3-day
+      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 3x8 each leg',
+      ACC_PULL_H: 'Pull-ups: 3xAMAP',
+    },
+    'Full Body — Unilateral & Pull': { // 4-day
+      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 3x8 each leg',
+      ACC_PULL_H: 'Pull-ups: 3xAMAP',
+    },
+    'Full Body — Hinge & Press': {
+      MAIN_HINGE: (ctx) => `Trap Bar Deadlift: 3x8 @ ${ctx.pct} — no heavy loading`,
+      MAIN_PRESS_V: 'DB Shoulder Press: 3x10 (light)',
+      PLYO: (ctx) => `Ankle Hops: ${explosiveSets(3, ctx.phaseNum)}x20 (${explosiveIntent(ctx.phaseNum)})`,
+      ACC_SHOULDER: 'Band External Rotation: 3x15 each arm',
+    },
+    'Low-Load — Posterior & Mobility': {
+      ACC_POSTERIOR: 'Nordic Hamstring Curl: 3x5',
+    },
+    'Hip & Tissue Mobility': {
+      ACC_POSTERIOR: 'Hip Thrust: 3x12 (light)',
+    },
+  },
 }
 
 function generateXCWeeks(_, goal, daysPerWeek = 2) {
-  return Array.from({ length: 16 }, (_, i) => {
-    const w   = i + 1
-    const phi = Math.min(3, Math.floor((w - 1) / 4))
-    const wip = ((w - 1) % 4) + 1
-    // Every phase's 4th week deloads now, not just the plan's final phase —
-    // matches every other sport (see getPhaseInfo). XC's load itself stays a
-    // fixed, deliberately light 65-70% range in every non-deload week
-    // ("no heavy loading" is the sport's own design, not something this
-    // rebuild changes) — only the deload cadence changes here.
-    const isDeload = wip === 4
-    const base  = xcSess(phi + 1, isDeload)
-    const extra = []
-    if (daysPerWeek >= 3) extra.push(XC_DAY3(phi + 1))
-    if (daysPerWeek >= 4) extra.push(XC_DAY4)
-    if (daysPerWeek >= 5) extra.push(XC_DAY5)
-    if (daysPerWeek >= 6) extra.push(XC_DAY6)
-    return {
-      week_number: w,
-      objective: isDeload
-        ? `Phase ${phi + 1} — Deload · Week ${wip} of 4`
-        : `Phase ${phi + 1} — ${XC_PHASE_LABELS[phi]} · Week ${wip} of 4`,
-      sessions: daysPerWeek <= base.length ? base.slice(0, Math.max(2, daysPerWeek)) : [...base, ...extra],
-    }
-  })
+  return generateEnduranceWeeksFromPack(CROSS_COUNTRY_PACK, XC_PHASES, daysPerWeek)
 }
 
 // ─── Lacrosse ─────────────────────────────────────────────────────────────────
@@ -3142,73 +3212,70 @@ const SWIMMING_FINISHERS = {
   },
 }
 
-function swimFinisher(dayIndex, phaseNum) {
-  const plan = finisherEngine.planWeekFinishers('endurance', phaseNum, 3, { hasArmCare: true })[dayIndex]
-  return finisherEngine.renderFinisher(SWIMMING_FINISHERS, plan, phaseNum, false)
-}
-
-function swimSess(phaseNum) {
-  const sets = phaseNum <= 2 ? 3 : 4
-  const s = (n) => `${sets}x${n}`
-  return [
-    { day: 'Day 1', focus: 'Upper & Posterior Chain',
-      description: `Trap Bar Deadlift: ${s(8)} @ moderate load\nPull-ups: ${s('AMAP')}\nDB Row: ${s(12)}\nPush-ups: ${s('AMAP')}\n${swimFinisher(0, phaseNum)}` },
-    { day: 'Day 2', focus: 'Lower',
-      description: `Back Squat: ${s(8)} @ moderate load\nGoblet Squat: ${s(12)}\nSingle Leg RDL: ${s(10)} each leg\nHip Thrust: ${s(12)}\n${swimFinisher(1, phaseNum)}` },
-    { day: 'Day 3', focus: 'Full Dryland',
-      description: `Lat Pulldown: ${s(12)}\nDB Bench: ${s(12)}\nShoulder Press: ${s(12)}\nPull-ups: ${s('AMAP')}\nBand Pull-Aparts: 4x20\n${swimFinisher(2, phaseNum)}` },
-  ]
-}
-
-function swimDay4(phaseNum) {
-  const sets = phaseNum <= 2 ? 3 : 4
-  const s = (n) => `${sets}x${n}`
-  // Change 3 — the day's three genuinely explosive/power lines (med ball
-  // throw, box jump, lateral bound) now use the same phase-scaled
-  // explosiveSets/explosiveIntent arc every other sport's power work uses,
-  // instead of the old blunt "3 sets before phase 3, 4 after" bump. The two
-  // conditioning-tempo lines (Resistance Band Sprint, Ankle Hops) keep the
-  // existing s() helper — swimming has no % lifting anywhere (see swimSess),
-  // so Change 1's tiered rep arc has no ramped line to attach to on any day.
-  const mbot = explosiveSets(4, phaseNum)
-  const bj   = explosiveSets(4, phaseNum)
-  const lb   = explosiveSets(4, phaseNum)
-  return {
-    day: 'Day 4', focus: 'Power & Explosiveness',
-    description: `Medicine Ball Overhead Throw: ${mbot}x8 (${explosiveIntent(phaseNum)})\nBox Jump: ${bj}x5 (${explosiveIntent(phaseNum)})\nResistance Band Sprint: ${s(20)} yds\nAnkle Hops: ${s(20)}\nLateral Bound: ${lb}x5 each side (${explosiveIntent(phaseNum)})\n${coreBlock(phaseNum)}`,
-  }
-}
-function swimDay5(phaseNum) {
-  const sets = phaseNum <= 2 ? 3 : 4
-  const s = (n) => `${sets}x${n}`
-  return {
-    day: 'Day 5', focus: 'Shoulder Health & Accessory',
-    description: `YTW Series: ${s(12)} each\nFace Pulls: ${s(15)}\nSerratus Wall Slides: ${s(12)}\nBand External Rotation: ${s(15)} each arm\nWrist Circles & Strengthening: 3x15 each direction\n${coreBlock(phaseNum)}`,
-  }
-}
-const SWIM_DAY6 = {
-  day: 'Day 6', focus: 'Recovery & Flexibility',
-  description: `Foam Roll: Full body — 10 minutes\nDownward Dog → Cobra flow: 3x10\nThoracic Rotation: 3x10 each side\nShoulder Cross-Body Stretch: 3x45s each arm\nHip 90/90 Hold: 2x45s each side`,
+// feat/day-layout-engine — Swimming's pack. Its own day content already
+// splits cleanly into the archetype's "full body" shape once regrouped by
+// PATTERN rather than the old Day1/2/3 split: Day2's Back Squat + Day3's
+// DB Bench (a real horizontal press, previously stranded on its own
+// "Full Dryland" day) become one squat+press day; Day1's Trap Bar
+// Deadlift + Day3's Shoulder Press (a real vertical press) become one
+// hinge+press day — no promotion needed, just consolidation, since
+// Swimming already had genuine squat/hinge/horizontal-press/vertical-
+// press content, just spread across a 3rd day the template doesn't have
+// room for. Goblet Squat/Lat Pulldown/Push-ups(Day1)/Wrist Circles have
+// no slot and are dropped. hasArmCare:true (reinterpreted as shoulder/
+// scapular capacity, not throwing-style — per the user's own explicit
+// instruction) nulls ACC_SHOULDER on "Full Body — Hinge & Press"; Band
+// External Rotation still fills XC-style ACC_SHOULDER... n/a here (no
+// slot needs it once hasArmCare is set). No % lifting anywhere (unchanged
+// from before) — every MAIN_ entry is a (ctx) => line function using the
+// same phaseNum<=2?3:4 set-count tiering Swimming's own content always
+// used, at a flat "moderate load" note instead of a percentage.
+const SWIM_PHASES = [
+  { label: 'Base Dryland', low: 0.65, high: 0.70 },
+  { label: 'Build Dryland', low: 0.65, high: 0.70 },
+  { label: 'Strength Dryland', low: 0.65, high: 0.70 },
+  { label: 'Peak Dryland', low: 0.65, high: 0.70 },
+]
+function swimSets(ctx) { return ctx.phaseNum <= 2 ? 3 : 4 }
+const SWIM_RECOVERY_CONTENT = () => `Foam Roll: Full body — 10 minutes\nDownward Dog → Cobra flow: 3x10\nThoracic Rotation: 3x10 each side\nShoulder Cross-Body Stretch: 3x45s each arm\nHip 90/90 Hold: 2x45s each side`
+const SWIMMING_PACK = {
+  finisherBank: SWIMMING_FINISHERS,
+  hasArmCare: true,
+  recoveryContent: SWIM_RECOVERY_CONTENT,
+  displayFocus: {
+    'Full Body — Squat & Press': 'Lower',
+    'Full Body — Hinge & Press': 'Upper & Posterior Chain',
+  },
+  byFocus: {
+    'Full Body — Squat & Press': {
+      MAIN_SQUAT: (ctx) => `Back Squat: ${swimSets(ctx)}x8 @ moderate load`,
+      MAIN_PRESS_H: (ctx) => `DB Bench: ${swimSets(ctx)}x12`,
+      ACC_HINGE: (ctx) => `Single Leg RDL: ${swimSets(ctx)}x10 each leg`,
+    },
+    'Full Body — Unilateral & Mobility': { // 3-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 3x6 each leg (light)',
+      ACC_PULL_H: (ctx) => `DB Row: ${swimSets(ctx)}x12`,
+    },
+    'Full Body — Unilateral & Pull': { // 4-day
+      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 3x6 each leg (light)',
+      ACC_PULL_H: (ctx) => `DB Row: ${swimSets(ctx)}x12`,
+    },
+    'Full Body — Hinge & Press': {
+      MAIN_HINGE: (ctx) => `Trap Bar Deadlift: ${swimSets(ctx)}x8 @ moderate load`,
+      MAIN_PRESS_V: (ctx) => `Shoulder Press: ${swimSets(ctx)}x12`,
+      PLYO: (ctx) => `Box Jump: ${explosiveSets(4, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
+    },
+    'Low-Load — Posterior & Mobility': {
+      ACC_POSTERIOR: (ctx) => `Hip Thrust: ${swimSets(ctx)}x12`,
+    },
+    'Hip & Tissue Mobility': {
+      ACC_POSTERIOR: (ctx) => `Hip Thrust: ${swimSets(ctx)}x12`,
+    },
+  },
 }
 
 function generateSwimmingWeeks(_, goal, daysPerWeek = 3) {
-  return Array.from({ length: 16 }, (_, i) => {
-    const w   = i + 1
-    const phi = Math.min(3, Math.floor((w - 1) / 4))
-    const wip = ((w - 1) % 4) + 1
-    const base = swimSess(phi + 1)
-    const extra = []
-    if (daysPerWeek >= 4) extra.push(swimDay4(phi + 1))
-    if (daysPerWeek >= 5) extra.push(swimDay5(phi + 1))
-    if (daysPerWeek >= 6) extra.push(SWIM_DAY6)
-    return {
-      week_number: w,
-      objective: phi === 3 && wip === 4
-        ? `Phase 4 — Taper · Week ${wip} of 4`
-        : `Phase ${phi + 1} — ${SWIM_PHASE_LABELS[phi]} · Week ${wip} of 4`,
-      sessions: daysPerWeek <= base.length ? base.slice(0, Math.max(2, daysPerWeek)) : [...base, ...extra],
-    }
-  })
+  return generateEnduranceWeeksFromPack(SWIMMING_PACK, SWIM_PHASES, daysPerWeek)
 }
 
 // ─── Baseball ─────────────────────────────────────────────────────────────────
@@ -3426,9 +3493,10 @@ const VOLLEYBALL_PHASE_ACCESSORY_ROTATION = {
   'face pulls':            { 1: 'Face Pulls',            2: 'Reverse Flys',        3: 'DB Row',               4: 'Face Pulls' },
 }
 
-// Cross Country — only 2 always-present days (extra days 3-6 are static, see
-// XC_DAY3's own Change 3 update above); Single Leg RDL and Pull-ups are the
-// two names guaranteed present regardless of daysPerWeek.
+// Cross Country — Single Leg RDL and Pull-ups (CROSS_COUNTRY_PACK's own
+// ACC_HINGE/ACC_PULL_H fills on "Full Body — Squat & Press"/"Full Body —
+// Unilateral & Mobility") are the two names guaranteed present regardless
+// of daysPerWeek — every day count's own template includes both days.
 const XC_PHASE_ACCESSORY_ROTATION = {
   'single leg rdl': { 1: 'Single Leg RDL', 2: 'Good Mornings', 3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
   'pull-ups':       { 1: 'Pull-ups',        2: 'DB Row',        3: 'Chin-ups',           4: 'Pull-ups' },
