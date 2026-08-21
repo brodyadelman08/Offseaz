@@ -46,7 +46,7 @@ async function create(req, res) {
  */
 async function mine(req, res) {
   try {
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
     res.json({ team, my_access_level: accessLevel })
   } catch (err) {
     res.status(500).json({ error: err.message })
@@ -132,7 +132,7 @@ async function coaches(req, res) {
       return res.status(403).json({ error: 'Coaches only' })
     }
 
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
     if (!team) return res.json({ coaches: [] })
 
     const coachList = await getTeamCoaches(team.id)
@@ -220,7 +220,7 @@ async function myCoachTeams(req, res) {
 // ─── Transfer team ownership ──────────────────────────────────────────────────
 
 async function transferOwnership(req, res) {
-  const { new_head_coach_id } = req.body
+  const { new_head_coach_id, team_id } = req.body
 
   if (!new_head_coach_id) {
     return res.status(400).json({ error: 'new_head_coach_id is required' })
@@ -232,7 +232,7 @@ async function transferOwnership(req, res) {
       return res.status(403).json({ error: 'Coaches only' })
     }
 
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id)
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, team_id || req.query.team_id || null)
     if (!team) {
       return res.status(404).json({ error: 'No team found' })
     }

@@ -14,6 +14,7 @@ export default function CoachProfile() {
   const { session, profile, updateProfile, signOut } = useAuth()
   const coachCtx = useCoachAccess()
   const accessLevel = coachCtx?.accessLevel ?? null
+  const activeTeamId = coachCtx?.activeTeamId ?? null
 
   // ── Name editing ──────────────────────────────────────────────────────────
   const [editingName, setEditingName] = useState(false)
@@ -51,13 +52,23 @@ export default function CoachProfile() {
   const [deleteTeamErr,     setDeleteTeamErr]     = useState('')
 
   // ── Load data ──────────────────────────────────────────────────────────────
+  // Scoped to the currently-active team (same as every other coach page) —
+  // without this, a coach with multiple teams always saw/managed their first
+  // (oldest) team here regardless of which team was selected in the sidebar,
+  // including the roster shown and the team targeted by "Delete Team".
   const loadData = useCallback(async () => {
+    // Wait for CoachAccessContext to resolve activeTeamId before fetching —
+    // otherwise the first, unscoped call resolves against the coach's
+    // default team and can flash/overwrite the correctly-scoped one. Same
+    // race class fixed on Leaderboard/Accountability/Feed/Messages/Athletes.
+    if (coachCtx?.loading) return
     setLoading(true)
     try {
+      const qs = activeTeamId ? `?team_id=${activeTeamId}` : ''
       const [teamRes, rosterRes, coachRes] = await Promise.all([
-        api.get('/api/teams/mine'),
-        api.get('/api/roster'),
-        api.get('/api/teams/coaches').catch(() => ({ data: { coaches: [] } })),
+        api.get(`/api/teams/mine${qs}`),
+        api.get(`/api/roster${qs}`),
+        api.get(`/api/teams/coaches${qs}`).catch(() => ({ data: { coaches: [] } })),
       ])
       setTeam(teamRes.data.team || null)
       setRoster(rosterRes.data.roster || [])
@@ -67,7 +78,7 @@ export default function CoachProfile() {
     } finally {
       setLoading(false)
     }
-  }, [])
+  }, [activeTeamId, coachCtx?.loading])
 
   useEffect(() => { loadData() }, [loadData])
 
@@ -115,7 +126,8 @@ export default function CoachProfile() {
     setRemoving(athlete.id)
     setConfirmRemove(null)
     try {
-      await api.delete(`/api/roster/${athlete.id}`)
+      const qs = activeTeamId ? `?team_id=${activeTeamId}` : ''
+      await api.delete(`/api/roster/${athlete.id}${qs}`)
       setRoster(prev => prev.filter(a => a.id !== athlete.id))
     } catch (err) {
       console.error('[CoachProfile] remove athlete error:', err)
@@ -129,7 +141,7 @@ export default function CoachProfile() {
     setTransferErr('')
     setTransferring(true)
     try {
-      await api.post('/api/teams/transfer-ownership', { new_head_coach_id: selectedNewOwner })
+      await api.post('/api/teams/transfer-ownership', { new_head_coach_id: selectedNewOwner, team_id: activeTeamId })
       setTransferDone(true)
       // Refresh access level by reloading the page (context will update on next mount)
       setTimeout(() => window.location.reload(), 1500)
