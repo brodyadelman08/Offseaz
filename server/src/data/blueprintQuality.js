@@ -283,10 +283,11 @@ function checkDeloadReducesVolume() {
 // renderers call) — a day with neither a lower- nor upper-body MAIN_ tag
 // (a bonus/accessory/recovery day) is DESIGNED to have no warm-up line,
 // so this check only requires one where dayLowerOrUpper() says one should
-// exist. Baseball is a documented special case: its warm-up is attached
-// as a separate `session.warmup` field, not text woven into `description`
-// (see blueprintTemplates.js's own comment on generateBaseballWeeksFromPack)
-// — checked there instead of in the text.
+// exist. Every archetype (baseball included) now produces the exact same
+// `session.warmup = { label, lines }` shape — see dayLayoutEngine.js's
+// buildSessionFromTemplate and blueprintTemplates.js's own
+// generateBaseballWeeksFromPack — so this check has one, simple, structural
+// signal instead of a text heuristic.
 //
 // "Exactly one finisher" = exactly one family header (Core/Conditioning/
 // Arm Care) as the day's only block, OR (Endurance's recoveryOnly days)
@@ -305,21 +306,7 @@ function checkOneFinisherOneWarmup() {
       const dayTpl = template[i]
       if (!dayTpl) continue // 5/6-day sports whose template has fewer authored days than requested slots
       const expectWarmup = dayLayoutEngine.dayLowerOrUpper(dayTpl) !== null
-      const hasWarmupField = (typeof s.warmup === 'string' && s.warmup.trim() !== '') ||
-        (s.warmup && typeof s.warmup === 'object' && Array.isArray(s.warmup.lines) && s.warmup.lines.length > 0)
-      // Structural signal, not a name match — the new sport-tailored
-      // warm-ups (e.g. "Court Acceleration Prep," "Easy Dynamic Flush")
-      // don't all contain the literal word "warm-up" the way WU_LOWER/
-      // LINEMEN_WU_LOWER do. buildSessionFromTemplate's own assembly order
-      // is `parts.push(warmup, '')` BEFORE any main/accessory line, so a
-      // real warm-up always means line 0 is non-blank and line 1 is blank;
-      // with no warm-up, the day's own first main/accessory line is line 0
-      // and line 1 is a second content line (never blank). Week 1 is never
-      // a deload week, so the "Deload Week." banner's own leading blank
-      // line can't produce a false positive here.
-      const descLines = s.description.split('\n')
-      const hasWarmupText = (descLines[0] || '').trim() !== '' && descLines[1] === ''
-      const hasWarmup = hasWarmupField || hasWarmupText
+      const hasWarmup = !!(s.warmup && Array.isArray(s.warmup.lines) && s.warmup.lines.length > 0)
       if (expectWarmup && !hasWarmup) {
         violations.push({ check: 'one-finisher-one-warmup', ...entry, day: s.day, detail: `Day "${s.day}" (${dayTpl.focus}) expected a warm-up (has a lower/upper MAIN_ tag) but none found` })
       }

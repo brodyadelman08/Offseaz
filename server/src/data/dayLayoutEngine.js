@@ -459,6 +459,23 @@ function getTemplate(archetype, days) {
 // cap/silent-drop pass, applied globally in generateBlueprintForAthlete)
 // is completely unaffected by and unaware of this assembler; it just sees
 // the same shape of "Name: SxR" lines it already parses today.
+// feat/warmup-consistent-display — converts a single-line warm-up string
+// ("Label: Movement 1 · Movement 2 · ...") into the exact {label, lines}
+// shape baseball's own session.warmup object has always used, so every
+// sport's warm-up renders through the SAME always-visible client block
+// (see SessionDescription.jsx's WarmupBlock) instead of being baked into
+// `description` text. `lines` here won't all have baseball's own "Name:
+// SxR" per-line shape (these are prep movements, not loaded exercises),
+// which is fine — the shared renderer handles plain text lines too.
+function parseWarmupLine(text) {
+  const colonIdx = text.indexOf(':')
+  if (colonIdx < 0) return { label: 'Warm-Up', lines: [text.trim()] }
+  const label = text.slice(0, colonIdx).trim()
+  const rest = text.slice(colonIdx + 1).trim()
+  const lines = rest.split('·').map(s => s.trim()).filter(Boolean)
+  return { label, lines: lines.length > 0 ? lines : [rest] }
+}
+
 function buildSessionFromTemplate(dayTemplate, dayIndex, renderers, ctx) {
   // Enriched per-day context — dayIndex and the day's own template (so a
   // sport's renderer closures can pick per-day content, e.g. which
@@ -477,9 +494,14 @@ function buildSessionFromTemplate(dayTemplate, dayIndex, renderers, ctx) {
     else accLines.push(rendered)
   }
 
+  // feat/warmup-consistent-display — warm-up is no longer woven into
+  // `description` text (it used to be the day's first line + a blank
+  // line). It's returned as its own `session.warmup` field instead,
+  // matching baseball's own pre-existing, already-correct shape — one
+  // unified always-visible presentation for every sport, not two
+  // different ones depending on which archetype generated the day.
   const parts = []
-  const warmup = renderers.WARMUP ? renderers.WARMUP(dayCtx) : null
-  if (warmup) parts.push(warmup, '')
+  const warmupText = renderers.WARMUP ? renderers.WARMUP(dayCtx) : null
   parts.push(...mainLines, ...accLines)
   if (dayTemplate.neck && renderers.NECK) parts.push(renderers.NECK(dayCtx))
 
@@ -487,7 +509,9 @@ function buildSessionFromTemplate(dayTemplate, dayIndex, renderers, ctx) {
   let description = parts.join('\n')
   if (finisher) description += `\n\n${finisher}`
 
-  return { day: `Day ${dayIndex + 1}`, focus: dayTemplate.focus, description }
+  const session = { day: `Day ${dayIndex + 1}`, focus: dayTemplate.focus, description }
+  if (warmupText) session.warmup = parseWarmupLine(warmupText)
+  return session
 }
 
 // Builds every session for one week from an archetype's template at a
