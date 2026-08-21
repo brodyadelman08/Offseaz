@@ -4,6 +4,7 @@ import api from '../services/api'
 import SessionDescription from '../components/SessionDescription'
 import AvatarUpload from '../components/AvatarUpload'
 import { LockIcon } from '../components/Icons'
+import { useCoachAccess } from '../context/CoachAccessContext'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -16,6 +17,7 @@ function today() {
 export default function BlueprintDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
+  const { team } = useCoachAccess()
 
   const [blueprint, setBlueprint]     = useState(null)
   const [assignments, setAssignments] = useState([])
@@ -34,18 +36,27 @@ export default function BlueprintDetail() {
   const [locking, setLocking]                 = useState(false)
 
   useEffect(() => {
-    api.get(`/api/blueprints/${id}`)
+    const url = team?.id ? `/api/blueprints/${id}?team_id=${team.id}` : `/api/blueprints/${id}`
+    api.get(url)
       .then(bpRes => {
         setBlueprint(bpRes.data.blueprint)
         setAssignments(bpRes.data.assignments || [])
       })
       .catch(() => navigate('/coach'))
       .finally(() => setLoading(false))
+  }, [id, team?.id, navigate])
 
-    api.get('/api/survey/team')
+  // Roster must be scoped to the blueprint's OWN team, not just whatever team
+  // is active in the sidebar — assignment always writes against blueprint.team_id
+  // (see blueprintController.assign/bulkAssign), so the athlete list shown here
+  // has to match that exactly or a coach could see (and think they're assigning
+  // to) a roster from a different team than the one this blueprint belongs to.
+  useEffect(() => {
+    if (!blueprint?.team_id) return
+    api.get(`/api/survey/team?team_id=${blueprint.team_id}`)
       .then(teamRes => setAthletes(teamRes.data.athletes || []))
-      .catch(() => {})
-  }, [id, navigate])
+      .catch(() => setAthletes([]))
+  }, [blueprint?.team_id])
 
   // Athletes already individually assigned this blueprint
   const assignedSet = useMemo(

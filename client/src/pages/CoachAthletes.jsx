@@ -91,7 +91,7 @@ export default function CoachAthletes() {
     setAthLoading(true)
     Promise.all([
       api.get(`/api/roster${team?.id ? `?team_id=${team.id}` : ''}`).then(r => r.data.roster || []).catch(() => []),
-      api.get('/api/checkins/team').then(r => r.data.checkins || []).catch(() => []),
+      api.get(`/api/checkins/team${team?.id ? `?team_id=${team.id}` : ''}`).then(r => r.data.checkins || []).catch(() => []),
     ]).then(([roster, checkins]) => {
       setAthletes(roster)
       const map = {}
