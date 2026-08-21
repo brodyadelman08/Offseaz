@@ -536,6 +536,49 @@ function checkNoDuplicateLinesWithinDay() {
   return violations
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// Check 9 — No barbell Overhead Press on throwing sports
+// ═══════════════════════════════════════════════════════════════════════
+// Permanent guardrail (feat/baseball-ohp-superset-fix): throwing-shoulder
+// health means baseball/softball must never prescribe a literal, barbell
+// 'Overhead Press' — Incline DB Press is the ceiling. Matches on the exact
+// exercise NAME (text before the colon), so it does NOT false-positive on
+// a genuinely different, DB/unilateral movement that happens to share the
+// words "overhead press" (e.g. varietyEngine's ACC_PRESS filler pool
+// includes 'Seated Single Arm DB Overhead Press' for some sports — a
+// distinct name, not caught here, and not in scope for this specific
+// fix). Scoped to exactly baseball/softball — the two sports this rule
+// has actually been enforced for — NOT the full Rotational archetype:
+// Tennis/Golf/Football QB/Track Throwers still carry a literal, ramped
+// 'Overhead Press' as MAIN_PRESS_V as of this check's introduction (a
+// separate, confirmed, not-yet-fixed finding — see the investigation this
+// fix followed). Asserting the same rule for them here would make this
+// check fail immediately on an unrelated, pre-existing gap this PR did not
+// touch; if/when that gap gets fixed, THROWING_SPORTS_NO_OHP is exactly
+// where to add them.
+const THROWING_SPORTS_NO_OHP = new Set(['baseball', 'softball'])
+function checkNoBarbellOverheadPressOnThrowingSports() {
+  const violations = []
+  for (const entry of matrix()) {
+    if (!THROWING_SPORTS_NO_OHP.has(entry.sportId)) continue
+    let weeks
+    try { weeks = generate(entry) } catch (e) { continue }
+    for (const w of weeks) {
+      for (const s of w.sessions) {
+        const { lines } = parseDescription(s.description)
+        const ohp = lines.find(l => l.name === 'Overhead Press')
+        if (ohp) {
+          violations.push({
+            check: 'no-barbell-ohp-throwing', ...entry, week: w.week_number, day: s.day,
+            detail: `barbell "Overhead Press" found on ${s.day}, week ${w.week_number}: "${ohp.raw.trim()}"`,
+          })
+        }
+      }
+    }
+  }
+  return violations
+}
+
 module.exports = {
   archetypeFor,
   matrix,
@@ -547,4 +590,6 @@ module.exports = {
   checkArmCareAllowListedSpots,
   checkAnchorsHoldAcross16Weeks,
   checkNoDuplicateLinesWithinDay,
+  checkNoBarbellOverheadPressOnThrowingSports,
+  __parseDescriptionForTest: parseDescription,
 }

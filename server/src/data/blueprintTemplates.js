@@ -3992,6 +3992,56 @@ function baseballFinisherBankFor(isPitcher) {
   return (ctx) => baseballFinisherBank(ctx.week, isPitcher)
 }
 
+// feat/baseball-ohp-superset-fix — two targeted content fixes, Position
+// Player only (Pitcher was already correct on both counts — see
+// PITCHER_PACK's own comment — and is untouched here):
+//
+// 1. No barbell Overhead Press. MAIN_PRESS_V used to resolve to a literal,
+//    percentage-ramped 'Overhead Press' (see buildRotationalRenderers —
+//    MAIN_ tags render as a real ramped main lift, not a light accessory)
+//    on both days that carry the tag. Throwing-shoulder health means
+//    baseball/softball must never load a barbell overhead press; Incline
+//    DB Press is the ceiling. Both MAIN_PRESS_V entries below now resolve
+//    to 'Incline DB Press' (the exact vetted exerciseLibrary.js name —
+//    'incline db press' — word order matters for the client's lookup) with
+//    a suffix explaining why, mirroring Pitcher's own Landmine Press note.
+//    Since softball has no dedicated pack (normalizeSport maps it onto
+//    'baseball', see generateBaseballWeeks), this fixes softball too, at
+//    every day count and goal — there's no separate softball code path to
+//    also patch.
+//
+// 2. A second superset per day. Every Rotational-archetype day template
+//    only ever supplies 2-3 accessory-tag slots after ACC_CORE/ACC_SHOULDER
+//    null out (see buildRotationalRenderers' own comment on why those two
+//    tags render null for hasArmCare sports) — too few candidates for
+//    organizeSessionDescription's pairing pass to ever form more than one
+//    bracket, regardless of day. Pre-migration baseball routinely authored
+//    2-3 supersets/day (see git history on this file, 92a44b8^, e.g. three
+//    explicit `ss:` groups on one day) — the day-layout migration thinned
+//    that out as a side effect, not a deliberate one.
+//    Option A patch (explicitly NOT a dayLayoutEngine.js template change,
+//    which would also alter every other Rotational sport — Tennis/Golf/QB/
+//    Track Throw — a separate, not-yet-approved task): extend specific
+//    ACC_* entries below into multiple newline-separated exercises. Only
+//    ANCHOR-flagged tags (per the 'rotational' template in
+//    dayLayoutEngine.js) and MED_BALL are extended this way — anchor slots
+//    always render their pack text verbatim (varietyEngine.resolveFiller's
+//    `if (slotDef.anchor) return packChoiceText`), and MED_BALL is entirely
+//    outside variety-engine scope (not in POOLED_TAGS) — so both are safe
+//    to make multi-line without the variety engine's pool silently
+//    overriding the extra content on non-week-1 weeks, which would make
+//    the superset count inconsistent week to week. A genuinely pooled,
+//    non-anchor tag (ACC_UNILATERAL_LOWER on 'Lower Power', ACC_POSTERIOR
+//    on 'Lower Strength', ACC_PULL_V where non-anchor, ...) is left exactly
+//    as it was — still a single, phase/week-rotating line — both to avoid
+//    that inconsistency and because touching it would be a variety-engine
+//    change, out of this patch's scope. New exercise names below are
+//    checked against exerciseLibrary.js (exact match required — the
+//    lookup is a plain lowercase string match, no plural/word-order
+//    normalization) and against every finisher-family's own vocabulary
+//    (baseballFinisherBank's arm/rotation/core families) to avoid
+//    reintroducing the same same-day duplicate-line class fixed on
+//    feat/variety-engine.
 const BASEBALL_PACK = {
   finisherBank: baseballFinisherBankFor(false),
   hasArmCare: true,
@@ -4009,53 +4059,83 @@ const BASEBALL_PACK = {
       // every other Rotational sport's own ACC_HINGE text (see Golf/Tennis/
       // QB/Track Throwers) and keeps applyHipAdjustments' pre-existing
       // Single Leg RDL -> Hamstring Curls hip-injury substitution reachable
-      // (its regex is anchored to the exact start of the line).
-      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      // (its regex is anchored to the exact start of the line — the 2nd/3rd
+      // lines added below are untouched by it either way).
+      // ACC_HINGE is anchor:true on every day count this key is used at
+      // (3/4/6-day) — safe to extend to 3 lines: paired with the pool-
+      // driven ACC_UNILATERAL_LOWER line, this reaches 2 full supersets.
+      // Note: "Glute Bridge"/"Suitcase Carry" are deliberately NOT used as
+      // the 2nd/3rd lines below (or anywhere else in this pack) — both are
+      // in MOBILITY_EXACT_EXEMPT (isMobilityCoreExempt), so isAccessoryLine
+      // silently excludes them from organizeSessionDescription's pairing
+      // candidates entirely (they'd render as untouched, unpaired trailing
+      // lines instead) — confirmed by direct trace, not assumed.
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg\nNordic Hamstring Curl: 4x6\nHip Thrust: 4x10',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
     },
     'Upper & Shoulder Health': { // 4-day only
-      MAIN_PRESS_V: 'Overhead Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      MAIN_PRESS_V: { name: 'Incline DB Press', suffix: ' (dumbbells only — no barbell overhead pressing, for throwing-shoulder health)' },
+      // ACC_PULL_H is anchor:true here, MED_BALL is never pool-driven
+      // (outside POOLED_TAGS) — both safe to extend; together they're
+      // exactly 2 full supersets (ACC_SHOULDER nulls out on this day for
+      // hasArmCare sports, so no 3rd accessory tag competes for a slot).
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper & Rotational': { // 3-day only
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP', // non-anchor here — left as a single, phase-rotating line, on purpose
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
-      ACC_SQUAT: 'Goblet Squat: 4x10',
-      ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4-day
-      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
+      // ACC_SQUAT is anchor:true at 4/6-day (paired below with the
+      // pool-driven ACC_POSTERIOR line) but non-anchor at 3-day, where
+      // MED_BALL (always safe) carries the 2nd-pair job instead — both
+      // values coexist here since each day count only ever reads the tag
+      // its own template actually declares.
+      ACC_SQUAT: 'Goblet Squat: 4x10\nStep-Ups: 4x6 each leg\nCossack Squat: 3x10 each side',
+      ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4/6-day — non-anchor, left as a single, phase-rotating line
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8\nLateral Bounds: 4x5 each side', // 3-day
     },
     'Upper Power & Rotational': { // 4-day only
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      // Only safe tag on this 3-slot day (ACC_PULL_V is non-anchor, pool-
+      // driven) — extended to 3 lines so, paired with ACC_PULL_V's single
+      // pool line, this still reaches 2 full supersets.
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm\nChest Supported Row: 4x10\nReverse Flys: 3x15',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
-    'Shoulder Health & Power Accessory': { // 5-day
-      MED_BALL: 'Med Ball Slam: 4x8',
+    'Shoulder Health & Power Accessory': { // 5-day — MED_BALL is the ONLY
+      // accessory tag this bonus day carries at all (ACC_CORE/ACC_SHOULDER
+      // both null out), so it alone has to supply both pairs.
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8\nBroad Jumps: 3x5 (submax)\nLateral Bounds: 4x5 each side',
     },
     'Upper — Vertical Press Emphasis': { // 6-day
-      MAIN_PRESS_V: 'Overhead Press',
-      ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      MAIN_PRESS_V: { name: 'Incline DB Press', suffix: ' (dumbbells only — no barbell overhead pressing, for throwing-shoulder health)' },
+      ACC_PULL_V: 'Pull-ups: 4xAMAP\nChest Supported Row: 4x10', // anchor on this day count
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper — Horizontal Press Emphasis': { // 6-day
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Lower Explosion': { // 6-day
       MAIN_SQUAT: 'Front Squat',
-      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg',
-      ACC_POSTERIOR: 'Hip Thrust: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg\nStep-Ups: 4x6 each leg', // anchor on this day
+      ACC_POSTERIOR: 'Hip Thrust: 4x8', // non-anchor — left as a single, phase-rotating line
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
-    'Upper — Arm-Care Emphasis': { // 6-day
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+    'Upper — Arm-Care Emphasis': { // 6-day — no MAIN_ tag at all, so
+      // organizeSessionDescription's "no ramped/oly lift" rule promotes
+      // whichever accessory is authored FIRST to stand alone as the day's
+      // free anchor line, removing it from the pairing pool entirely. Extend
+      // ACC_PULL_H (anchor:true) to 4 lines so, even after the 1st is
+      // promoted away, the remaining 3 plus ACC_PULL_V's single pool line
+      // still reach 2 full supersets.
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm\nChest Supported Row: 4x10\nDB Row: 4x10 each arm\nSeated Cable Lat Pulldown: 4x12',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
   },

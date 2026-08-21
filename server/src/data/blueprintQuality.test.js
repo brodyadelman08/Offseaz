@@ -193,3 +193,31 @@ describe('Check 8 — no duplicate lines within a day', () => {
     expect(unexpected).toEqual([])
   })
 })
+
+describe('Check 9 — no barbell Overhead Press on throwing sports', () => {
+  // feat/baseball-ohp-superset-fix — permanent guardrail, not a documented-
+  // baseline check like the others above: this one asserts a bare `[]`,
+  // every sport/position/day-count/goal/week, because the whole point is
+  // that it must fail the moment barbell Overhead Press reappears anywhere
+  // in baseball or softball, with no allowance for "already-known" cases.
+  test('baseball and softball never prescribe a literal, barbell "Overhead Press", at any position/day-count/goal/week', () => {
+    const violations = q.checkNoBarbellOverheadPressOnThrowingSports()
+    if (violations.length) console.error(violations.map(v => `${v.sportId}/${v.posId} ${v.days}d ${v.goal}: ${v.detail}`).join('\n'))
+    expect(violations).toEqual([])
+  })
+
+  // Guards the check itself, not the generator — proves it actually flags
+  // a literal barbell Overhead Press line rather than being a structural
+  // no-op, without depending on the real generator's current content (so
+  // it can't accidentally pass just because baseball happens to be clean
+  // right now). Exercises the exact same parseDescription -> name-match
+  // path checkNoBarbellOverheadPressOnThrowingSports itself uses.
+  test('sanity: the underlying line-matching logic actually flags "Overhead Press", and does not false-positive on a same-worded DB variant', () => {
+    const { lines } = q.__parseDescriptionForTest(
+      'Incline DB Press: 4x8\nOverhead Press: 3x10\nSeated Single Arm DB Overhead Press: 3x10 each arm'
+    )
+    const flagged = lines.filter(l => l.name === 'Overhead Press')
+    expect(flagged).toHaveLength(1)
+    expect(flagged[0].raw).toBe('Overhead Press: 3x10')
+  })
+})
