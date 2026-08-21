@@ -1,7 +1,7 @@
 import { useState } from 'react'
 import ExerciseInfoButton from './ExerciseInfoButton'
 import { lookupExercise } from '../data/exerciseLibrary'
-import { AlertIcon, ChevronDownIcon, ChevronUpIcon } from './Icons'
+import { AlertIcon, FlameIcon, ChevronDownIcon, ChevronUpIcon } from './Icons'
 import { parseSupersetGroups, SUPERSET_MARKER_RE } from '../utils/supersets'
 
 // Runs `transform` on a line with any leading ⟦SS<n>⟧ superset marker held
@@ -194,32 +194,53 @@ const SUPERSET_LABEL_STYLE = { fontSize: 9, fontWeight: 800, color: '#308EBD', l
 const SUPERSET_BAR_STYLE = { flex: 1, width: 2, background: '#308EBD', marginTop: 3, borderRadius: 1, minHeight: 8 }
 const SUPERSET_LINES_STYLE = { flex: 1, minWidth: 0 }
 
-// Day-type warm-up block — collapsed by default, tap-to-expand, matching the
-// same ▲/▼ chevron convention BlueprintDetail.jsx already uses for its week
-// list. Warm-ups are fixed/consistent (server never rotates or waves them —
-// see session.warmup in blueprintTemplates.js), so this is purely a display
-// affordance for keeping a long warm-up from overwhelming the session view.
+// Day-type warm-up block — a collapsible card, COLLAPSED by default, for
+// every sport (see session.warmup in dayLayoutEngine.js/blueprintTemplates.js
+// — every archetype now produces this same {label, lines} shape, baseball's
+// own pre-existing one included, and every sport now shares this exact
+// collapsible presentation — this was baseball's original WarmupBlock
+// behavior, restored and generalized rather than replaced). Deliberately
+// styled as a distinct, clearly-optional block (dashed border, muted
+// "(optional)" label, chevron affordance) rather than another item in the
+// main lift list — an athlete taps to expand it, and can otherwise scroll
+// straight past it to Day content below. It carries no completion state of
+// its own: logging (see the Log button in AthletePlan.jsx) is keyed by
+// session index, not by anything read from `description` or `warmup` or by
+// whether the card is expanded, so this block can never gate or count
+// toward it.
 const WARMUP_WRAP_STYLE = {
-  border: '1px solid var(--border)',
+  border: '1px dashed var(--border)',
   borderRadius: 10,
-  marginBottom: 10,
-  overflow: 'hidden',
+  marginBottom: 12,
+  padding: '10px 12px',
+  background: 'var(--card-inner, rgba(48,142,189,0.06))',
 }
 const WARMUP_HEADER_STYLE = {
   display: 'flex',
   alignItems: 'center',
   justifyContent: 'space-between',
+  gap: 6,
   width: '100%',
-  padding: '8px 12px',
-  background: 'var(--card-inner, rgba(127,127,127,0.06))',
+  background: 'none',
   border: 'none',
+  padding: 0,
+  margin: 0,
   cursor: 'pointer',
-  fontSize: 13,
-  fontWeight: 700,
-  color: 'var(--text-2)',
   textAlign: 'left',
+  font: 'inherit',
 }
-const WARMUP_BODY_STYLE = { padding: '10px 12px', lineHeight: 1.6 }
+const WARMUP_LABEL_STYLE = {
+  display: 'flex',
+  alignItems: 'center',
+  gap: 6,
+  fontSize: 12,
+  fontWeight: 700,
+  color: 'var(--text-3)',
+  textTransform: 'uppercase',
+  letterSpacing: 0.4,
+}
+const WARMUP_BODY_STYLE = { display: 'flex', flexDirection: 'column', gap: 2, lineHeight: 1.6, marginTop: 6 }
+const WARMUP_LINE_STYLE = { fontSize: 13, color: 'var(--text-2)', fontWeight: 400 }
 
 function WarmupBlock({ warmup, flaggedSet, maxes }) {
   const [open, setOpen] = useState(false)
@@ -227,8 +248,11 @@ function WarmupBlock({ warmup, flaggedSet, maxes }) {
 
   return (
     <div style={WARMUP_WRAP_STYLE}>
-      <button style={WARMUP_HEADER_STYLE} onClick={() => setOpen(o => !o)} type="button">
-        <span>{warmup.label || 'Warm-Up'}</span>
+      <button type="button" style={WARMUP_HEADER_STYLE} onClick={() => setOpen(o => !o)} aria-expanded={open}>
+        <span style={WARMUP_LABEL_STYLE}>
+          <FlameIcon size={13} color="var(--text-3)" />
+          <span>{warmup.label || 'Warm-Up'} (optional)</span>
+        </span>
         {open
           ? <ChevronUpIcon size={14} color="var(--text-3)" />
           : <ChevronDownIcon size={14} color="var(--text-3)" />}
@@ -236,7 +260,7 @@ function WarmupBlock({ warmup, flaggedSet, maxes }) {
       {open && (
         <div style={WARMUP_BODY_STYLE}>
           {warmup.lines.map((line, i) => (
-            <div key={i}>{renderLineContent(line, flaggedSet, maxes)}</div>
+            <div key={i} style={WARMUP_LINE_STYLE}>{renderLineContent(line, flaggedSet, maxes)}</div>
           ))}
         </div>
       )}
@@ -280,6 +304,11 @@ function isUpperBodySession(focus, description) {
   return /^(Bench Press|DB Bench Press|Incline (DB )?Press|Close Grip Bench Press|Overhead Press|Push Press|Landmine Press|BB Split Jerk|Behind Neck Press|Arnold Press|DB Shoulder Press)\b/m.test(description)
 }
 
+// feat/warmup-consistent-display — `description` no longer ever starts with
+// warm-up text (it's a separate `warmup` field now, rendered by WarmupBlock
+// above), so the old "is line 0 already warm-up-shaped, insert after it
+// instead of at the top" special case is gone — this required shoulder-
+// health line always belongs at the very top of the real content.
 function ensureShoulderWarmup(description, focus) {
   if (!isUpperBodySession(focus, description)) return description
   let text = description
@@ -291,12 +320,7 @@ function ensureShoulderWarmup(description, focus) {
       return
     }
     const lines = text.split('\n')
-    let insertAt = 0
-    if (/warm-?up/i.test(lines[0] || '')) {
-      insertAt = 1
-      while (lines[insertAt] === '') insertAt++
-    }
-    lines.splice(insertAt, 0, insertLine)
+    lines.splice(0, 0, insertLine)
     text = lines.join('\n')
   }
 
@@ -803,11 +827,13 @@ function renderLineContent(line, flaggedSet, maxes) {
  *   maxes           {object}   - { liftKey: { current: { weight_lbs, estimated_1rm, is_estimated } } }
  *                                 from /api/maxes — percentage math keys off estimated_1rm,
  *                                 not the raw weight_lbs the athlete logged (see maxesService.js)
- *   warmup          {object}   - optional { label, lines } day-type warm-up block
- *                                 (see session.warmup in blueprintTemplates.js).
- *                                 Rendered as a collapsed, tap-to-expand block above
- *                                 the main content — never rotated/waved, so it's
- *                                 passed straight through with no substitution pass.
+ *   warmup          {object}   - optional { label, lines } day-type warm-up block, the
+ *                                 same shape for every sport (see session.warmup in
+ *                                 dayLayoutEngine.js/blueprintTemplates.js). Rendered as
+ *                                 a collapsible, collapsed-by-default "(optional)" card
+ *                                 above the main content — tap the chevron to expand.
+ *                                 Never rotated/waved, so it's passed straight through
+ *                                 with no substitution pass.
  *   style           {object}   - optional style overrides for the wrapper element
  */
 export default function SessionDescription({ description, focus = '', injuryAreas = [], injuryModified = false, maxes = {}, warmup = null, style }) {

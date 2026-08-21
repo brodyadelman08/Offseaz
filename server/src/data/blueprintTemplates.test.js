@@ -797,15 +797,6 @@ describe('Area 7 — Exercise library coverage', () => {
     'cat-cow', 'close grip bench', 'coach note', 'copenhagen plank', 'core bird dog',
     'core cable woodchop', 'core finisher', 'core maintenance', 'core pallof press',
     'arm care — circuit',
-    // Linemen fixed warm-up-complex LABEL lines (see LINEMEN_WU_LOWER/
-    // LINEMEN_WU_UPPER) — same "preamble label, not a single exercise"
-    // gap already accepted above for 'lower body warm-up'/'upper body warm-up'.
-    'empty bb warm-up complex', 'upper body warm-up series',
-    // feat/archetype-collision — Wrestling/Rugby Forwards/Hockey Forwards'
-    // own fixed warm-up-complex LABEL lines, same "preamble label, not a
-    // single exercise" gap as Linemen's own above.
-    'wrestling movement warm-up', 'rugby lower-body warm-up', 'rugby upper-body warm-up',
-    'hockey lower-body warm-up', 'hockey upper-body warm-up',
     // Linemen's "Neck — ...:" header lines — same kind of block-label gap
     // already accepted above for 'core — anti-extension' etc. and
     // 'arm care — circuit'.
@@ -846,7 +837,7 @@ describe('Area 7 — Exercise library coverage', () => {
     'landmine rotational press', 'landmine thruster', 'lateral band walk',
     'lateral bound', 'lateral deceleration drill', 'lateral neck flexion',
     'lateral shuffle', 'lateral shuffle sprint', 'lateral sled drag', 'lateral step-up',
-    'light med ball work', 'line jumps', 'lower body warm-up', 'med ball rotational slam',
+    'light med ball work', 'line jumps', 'med ball rotational slam',
     'med ball scoop toss', 'medicine ball overhead throw', 'neck extension',
     'neck flexion', 'pallof press', 'pro agility drill', 'pull-up max set', 'push-up',
     'push-up max set', 'reactive box jump', 'reactive cone drill', 'reactive lateral bound',
@@ -860,20 +851,9 @@ describe('Area 7 — Exercise library coverage', () => {
     'sprint + close out', 'sprint + jog ladder', 'sprint ladder', 'sprint tempo protocol',
     'sprint work',
     'static stretch', 'step-up', 'suitcase carry', 'terminal knee extension',
-    'thoracic rotation', 'tricep pushdown', 'upper body warm-up', 'weighted carries medley',
+    'thoracic rotation', 'tricep pushdown', 'weighted carries medley',
     'wicket runs', 'wrestle-outs', 'wrist circles & strengthening', 'wrist curls',
     'wrist mobility',
-    // feat/warmup-revamp — the new sport-tailored warm-up LABEL lines
-    // (e.g. "Soccer Movement Prep: Hip Circles ... · Carioca ...") are the
-    // exact same "preamble label, not a single exercise" gap already
-    // accepted above for 'lower body warm-up'/'upper body warm-up' —
-    // these are just per-sport versions of it, one per new warm-up added.
-    'acceleration mechanics prep', 'backs movement prep', 'contact-ready upper prep',
-    'court acceleration prep', 'court movement prep', 'easy dynamic flush',
-    'lacrosse movement prep', 'overhead-ready shoulder prep', 'reactive/elastic prep',
-    'reactive/jump prep', 'shoulder & rotational prep', 'skating movement prep',
-    'soccer movement prep', 'stick-ready upper prep', 'swing-ready shoulder prep',
-    'throws movement prep', 'upper body activation',
   ])
 
   test('no NEW exercise name (beyond the known/tracked baseline) is missing from exerciseLibrary.js', () => {
@@ -1661,7 +1641,13 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     }
   })
 
-  test('each baseball day type carries the correct collapsed warm-up block, and non-baseball sports get none (baseball-only for now)', () => {
+  // feat/warmup-consistent-display — every archetype now produces the same
+  // session.warmup { label, lines } shape (dayLayoutEngine.js's own
+  // buildSessionFromTemplate parses whatever the archetype's WARMUP
+  // renderer returns into it), so "baseball-only for now" is no longer
+  // true — Football/Linemen (Collision archetype) gets a real warm-up too,
+  // parsed from its own LINEMEN_WU_LOWER/LINEMEN_WU_UPPER text.
+  test('each baseball day type carries the correct warm-up block, and every other sport now gets one too (not baseball-only anymore)', () => {
     const bp = generateBlueprintForAthlete({
       sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
@@ -1679,7 +1665,14 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
       sport: 'Football', position: 'Linemen', primary_goal: 'standard',
       time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
     })
-    expect(football.weeks[0].sessions[0].warmup).toBeUndefined()
+    const fbDay1 = football.weeks[0].sessions[0]
+    expect(fbDay1.warmup).toBeDefined()
+    expect(fbDay1.warmup.label).toBe('Empty BB Warm-Up Complex')
+    expect(fbDay1.warmup.lines).toEqual(['RDL x5', 'Hang Clean x5', 'Front Squat x5', 'Back Squat x5'])
+    // ...and description no longer carries any warm-up text at all — it's
+    // exclusively in the `warmup` field now, for every sport.
+    expect(fbDay1.description).not.toMatch(/warm-?up/i)
+    expect(day1.description).not.toMatch(/^Jog:/m)
   })
 
   test('the warm-up block is consistent week to week (not rotated) for the same day type', () => {

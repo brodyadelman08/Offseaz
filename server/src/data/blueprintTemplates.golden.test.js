@@ -92,6 +92,7 @@ function snapshotWeeks(weeks, weekNumbers = REPRESENTATIVE_WEEKS) {
         day: s.day,
         focus: s.focus,
         description: s.description,
+        ...(s.warmup ? { warmup: s.warmup } : {}),
         ...(s.injury_modified ? { injury_modified: true } : {}),
       })),
     }))
