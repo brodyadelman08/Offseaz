@@ -863,6 +863,17 @@ describe('Area 7 — Exercise library coverage', () => {
     'thoracic rotation', 'tricep pushdown', 'upper body warm-up', 'weighted carries medley',
     'wicket runs', 'wrestle-outs', 'wrist circles & strengthening', 'wrist curls',
     'wrist mobility',
+    // feat/warmup-revamp — the new sport-tailored warm-up LABEL lines
+    // (e.g. "Soccer Movement Prep: Hip Circles ... · Carioca ...") are the
+    // exact same "preamble label, not a single exercise" gap already
+    // accepted above for 'lower body warm-up'/'upper body warm-up' —
+    // these are just per-sport versions of it, one per new warm-up added.
+    'acceleration mechanics prep', 'backs movement prep', 'contact-ready upper prep',
+    'court acceleration prep', 'court movement prep', 'easy dynamic flush',
+    'lacrosse movement prep', 'overhead-ready shoulder prep', 'reactive/elastic prep',
+    'reactive/jump prep', 'shoulder & rotational prep', 'skating movement prep',
+    'soccer movement prep', 'stick-ready upper prep', 'swing-ready shoulder prep',
+    'throws movement prep', 'upper body activation',
   ])
 
   test('no NEW exercise name (beyond the known/tracked baseline) is missing from exerciseLibrary.js', () => {

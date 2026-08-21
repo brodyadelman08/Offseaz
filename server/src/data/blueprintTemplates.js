@@ -351,6 +351,72 @@ const GOLF_PHASES = [
 
 const WU_LOWER = 'Lower Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10 · Box Jump 3x3 activation\n\n'
 const WU_UPPER = 'Upper Body Warm-up: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5\n\n'
+
+// ─── feat/warmup-revamp — sport-tailored warm-ups ──────────────────────────────
+// The quality suite (blueprintQuality.test.js) found 11 sports with ZERO
+// warm-up text on every single day: buildFieldRenderers/buildEnduranceRenderers
+// never registered a WARMUP renderer at all (fixed above, in each function),
+// and 6 more packs (Basketball x3, Volleyball, Track Sprint/Jump, Tennis, Golf,
+// Track Throw) never set warmupLower/warmupUpper even though their own
+// archetype's renderer already supported it.
+//
+// Every constant below follows the exact WU_LOWER/WU_UPPER shape (a single
+// "Label: Movement X · Movement Y · ..." line, trailing \n\n, assigned to a
+// pack with `.trimEnd()` — matches FOOTBALL_QB_PACK's own existing usage) and
+// the Linemen/Prone-Swimmers-Push-Up-to-Pike-Band-Pull-Aparts "upper series"
+// spirit — a short, purposeful movement-prep list, not a novel format.
+//
+// One warm-up PER SPORT (not per position) — every position within a sport
+// shares the same constant, assigned at each of that sport's own packs below.
+// The one documented exception is Track: Sprinters/Throwers/Jumpers get 3
+// genuinely distinct warm-ups, because accel mechanics, rotational/shoulder
+// prep, and reactive/elastic prep are different enough demands to not share
+// one generic "track" warm-up — every other multi-position sport (Soccer's 6
+// positions, Hockey's Defense/Goalie, Basketball's Guards/Wings/Bigs) does
+// share one.
+
+// Field archetype (Soccer, Hockey Defense/Goalie, Rugby Backs, Lacrosse) —
+// dynamic movement prep + mobility for running/cutting/acceleration, tailored
+// per sport's own actual demand rather than one shared generic "field" text.
+const SOCCER_WU_LOWER = 'Soccer Movement Prep: Hip Circles 10 each direction · Lateral Lunge Walk 10 yds · Carioca 10 yds each way · High Knees/Butt Kicks 10 yds each · Build-Up Strides 2x20 yds\n\n'
+const SOCCER_WU_UPPER = 'Upper Body Activation: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up to Downward Dog 2x8 · Med Ball Chest Pass 3x5\n\n'
+const HOCKEY_WU_LOWER = 'Skating Movement Prep: Hip Circles 10 each direction · Lateral Lunge Walk 10 yds · Groin/Adductor Rock-Back 8 each side · Skater Bounds 2x6 each side · Build-Up Strides 2x20 yds\n\n'
+const HOCKEY_WU_UPPER = 'Upper Body Activation: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up to Downward Dog 2x8 · Med Ball Chest Pass 3x5\n\n'
+const RUGBY_BACKS_WU_LOWER = 'Backs Movement Prep: Hip Circles 10 each direction · Walking Lunge with Twist 10 yds · Lateral Shuffle 2x10 yds each way · Build-Up Strides 2x20 yds · Broad Jumps 3 (submax)\n\n'
+const RUGBY_BACKS_WU_UPPER = 'Contact-Ready Upper Prep: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up to Downward Dog 2x8 · Med Ball Chest Pass 3x5\n\n'
+const LAX_WU_LOWER = 'Lacrosse Movement Prep: Hip Circles 10 each direction · Walking Knee Hug 10 yds · Lateral Shuffle 2x10 yds each way · Carioca 10 yds each way · Build-Up Strides 2x20 yds\n\n'
+const LAX_WU_UPPER = 'Stick-Ready Upper Prep: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Trunk Rotation 2x10 each side · Med Ball Rotational Pass 3x5 each side\n\n'
+
+// Rotational/throwing sports (Tennis, Golf, Track Throw) — shoulder +
+// rotational prep, matching their swing/throw demand.
+const TENNIS_WU_LOWER = 'Court Movement Prep: Hip Circles 10 each direction · Lateral Lunge Walk 10 yds · Carioca 10 yds each way · Split-Step Bounds 2x8\n\n'
+const TENNIS_WU_UPPER = 'Shoulder & Rotational Prep: Arm Circles 2x10 each direction · Band External Rotation 2x15 each arm · Trunk Rotation 2x10 each side · Med Ball Rotational Pass 3x5 each side\n\n'
+const GOLF_WU_LOWER = 'Lower Body Warm-up: Hip Circles 10 each direction · 90/90 Hip Rotations 5 each side · Walking Lunge with Twist 10 yds\n\n'
+const GOLF_WU_UPPER = 'Swing-Ready Shoulder Prep: Arm Circles 2x10 each direction · Band External Rotation 2x15 each arm · Trunk Rotation 2x10 each side · Med Ball Rotational Pass 3x5 each side\n\n'
+const TRACK_THROW_WU_LOWER = 'Throws Movement Prep: Hip Circles 10 each direction · Walking Lunge with Twist 10 yds · Broad Jumps 3 (submax)\n\n'
+const TRACK_THROW_WU_UPPER = 'Shoulder & Rotational Prep: Arm Circles 2x10 each direction · Band External Rotation 2x15 each arm · Trunk Rotation 2x10 each side · Med Ball Rotational Pass 3x5 each side\n\n'
+
+// Speed/power and court sports (Basketball, Volleyball, Track Sprint, Track
+// Jump) — acceleration/reactive prep, tailored to each sport's own primary
+// qualifying quality (Basketball = court acceleration, Volleyball = jump/
+// overhead-reactive, Sprint = pure accel mechanics, Jump = elastic/reactive).
+const BASKETBALL_WU_LOWER = 'Court Acceleration Prep: Hip Circles 10 each direction · High Knees/Butt Kicks 10 yds each · Lateral Shuffle 2x10 yds each way · Line Jumps 2x10s · Build-Up Strides 2x20 yds\n\n'
+const BASKETBALL_WU_UPPER = 'Upper Body Activation: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10 · Med Ball Chest Pass 3x5\n\n'
+const VOLLEYBALL_WU_LOWER = 'Reactive/Jump Prep: Hip Circles 10 each direction · Ankle Hops 2x10 · Line Jumps 2x10s · Broad Jumps 3 (submax) · Build-Up Strides 2x20 yds\n\n'
+const VOLLEYBALL_WU_UPPER = 'Overhead-Ready Shoulder Prep: Arm Circles 2x10 each direction · Band External Rotation 2x15 each arm · Push-up 2x10 · Med Ball Overhead Throw 3x5\n\n'
+const TRACK_SPRINT_WU_LOWER = 'Acceleration Mechanics Prep: Hip Circles 10 each direction · A-Skips 10 yds · High Knees/Butt Kicks 10 yds each · Build-Up Strides 2x20 yds · Short Sprints 2x15 yds\n\n'
+const TRACK_SPRINT_WU_UPPER = 'Upper Body Activation: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10\n\n'
+const TRACK_JUMP_WU_LOWER = 'Reactive/Elastic Prep: Hip Circles 10 each direction · Ankle Hops 2x10 · A-Skips 10 yds · Broad Jumps 3 (submax) · Build-Up Strides 2x20 yds\n\n'
+const TRACK_JUMP_WU_UPPER = 'Upper Body Activation: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15 · Push-up 2x10\n\n'
+
+// Endurance (Cross Country, Swimming) — a lighter dynamic flush, not a full
+// power-sport activation series; Swimming's upper prep leans shoulder-
+// friendly given the sport's own overuse-injury pattern.
+const CROSS_COUNTRY_WU_LOWER = 'Easy Dynamic Flush: Leg Swings 10 each (front/back + side) · Walking Lunge 10 yds · Easy Strides 2x50m (relaxed) · Ankle Circles 10 each direction\n\n'
+const CROSS_COUNTRY_WU_UPPER = 'Light Upper Flush: Arm Circles 2x10 each direction · Band Pull-Aparts 2x15\n\n'
+const SWIMMING_WU_LOWER = 'Easy Dynamic Flush: Leg Swings 10 each (front/back + side) · Hip Circles 10 each direction · Walking Lunge 10 yds\n\n'
+const SWIMMING_WU_UPPER = 'Shoulder-Friendly Upper Flush: Arm Circles 2x10 each direction (forward + backward) · Band External Rotation 2x15 each arm (light) · Scap Push-Ups 2x8\n\n'
+
 const SPRINT_STD   = '\n\nSprint Work: 10x10 yds · 6x20 yds · 4x40 yds'
 const SPRINT_SKILL = '\n\nSprint Work: 10x10 yds · 8x20 yds · 6x40 yds @ 95%'
 // Fix 2 — Neck protocol for contact positions (Linemen, Hybrid). ~5 min. Growing evidence for concussion severity reduction.
@@ -1116,6 +1182,8 @@ const FOOTBALL_QB_PACK = {
   hasArmCare: true,
   warmupLower: WU_LOWER.trimEnd(),
   warmupUpper: WU_UPPER.trimEnd(),
+  dayCompatibility: rotationalDayCompat,
+  finisherPlanDays: rotationalFinisherPlanDays,
   displayFocus: {
     'Lower Power': 'Lower',
     'Lower Strength': 'Lower Explosion',
@@ -1283,6 +1351,8 @@ function bbGuardFinisher(dayIndex, info) {
 const BB_GUARDS_PACK = {
   finisherBank: BASKETBALL_GUARD_FINISHERS,
   mainLiftTier: 'rotational',
+  warmupLower: BASKETBALL_WU_LOWER.trimEnd(),
+  warmupUpper: BASKETBALL_WU_UPPER.trimEnd(),
   byFocus: {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
@@ -1373,6 +1443,8 @@ const BB_WINGS_PACK = {
   finisherBank: BASKETBALL_WING_FINISHERS,
   finisherArchetype: 'vertical',
   mainLiftTier: 'rotational',
+  warmupLower: BASKETBALL_WU_LOWER.trimEnd(),
+  warmupUpper: BASKETBALL_WU_UPPER.trimEnd(),
   byFocus: {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
@@ -1460,6 +1532,8 @@ const BB_BIGS_PACK = {
   finisherBank: BASKETBALL_BIG_FINISHERS,
   finisherArchetype: 'vertical',
   mainLiftTier: 'rotational',
+  warmupLower: BASKETBALL_WU_LOWER.trimEnd(),
+  warmupUpper: BASKETBALL_WU_UPPER.trimEnd(),
   mainLiftPct: (ctx) => pct(Math.min(0.93, ctx.f + 0.05)),
   byFocus: {
     'Lower Power & Speed': {
@@ -1811,6 +1885,17 @@ function buildFieldRenderers(pack) {
   // the finisher engine's own 'core' family already owns coreBlock()
   // content for this archetype.
   renderers.ACC_CORE = () => null
+  // feat/warmup-revamp — Field archetype never had a WARMUP renderer at
+  // all (a real gap the quality suite caught: every Field sport had zero
+  // warm-up text on every day). Same mechanism SpeedPower/Rotational
+  // already use — pack.warmupLower/warmupUpper, picked by the day's own
+  // lower/upper MAIN_ tag composition.
+  renderers.WARMUP = (ctx) => {
+    const lu = dayLayoutEngine.dayLowerOrUpper(ctx.dayTemplate)
+    if (lu === 'lower') return pack.warmupLower || null
+    if (lu === 'upper') return pack.warmupUpper || null
+    return null
+  }
   renderers.FINISHER = (dayIndex, ctx) => {
     return fieldFinisher(pack.finisherBank, dayIndex, ctx.days, ctx, pack.finisherOverrides || null)
   }
@@ -1871,6 +1956,8 @@ const GK_FINISHERS = fieldFinisherBank(gkConditioningA, gkConditioningB, 'Med Ba
 // simplification already applied throughout this PR).
 const GK_PACK = {
   finisherBank: GK_FINISHERS,
+  warmupLower: SOCCER_WU_LOWER.trimEnd(),
+  warmupUpper: SOCCER_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Power & Explosive',
     'Upper Strength': 'Upper',
@@ -1938,6 +2025,8 @@ const CB_FINISHERS = fieldFinisherBank(cbConditioningA, cbConditioningB, 'MB Twi
 
 const CB_PACK = {
   finisherBank: CB_FINISHERS,
+  warmupLower: SOCCER_WU_LOWER.trimEnd(),
+  warmupUpper: SOCCER_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Max Lower Strength',
     'Upper Strength': 'Upper Contact Strength',
@@ -2005,6 +2094,8 @@ const FB_FINISHERS = fieldFinisherBank(fbConditioningA, fbConditioningB, 'MB Twi
 // promote at all.
 const FB_PACK = {
   finisherBank: FB_FINISHERS,
+  warmupLower: SOCCER_WU_LOWER.trimEnd(),
+  warmupUpper: SOCCER_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Strength & Sprint',
     'Upper Strength': 'Upper Light & Mobility',
@@ -2067,6 +2158,8 @@ const MF_FINISHERS = fieldFinisherBank(mfConditioningA, mfConditioningB, 'MB Twi
 
 const MF_PACK = {
   finisherBank: MF_FINISHERS,
+  warmupLower: SOCCER_WU_LOWER.trimEnd(),
+  warmupUpper: SOCCER_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Strength & Aerobic Base',
     'Upper Strength': 'Upper & Work Capacity',
@@ -2138,6 +2231,8 @@ const WG_FINISHERS = fieldFinisherBank(wgConditioningA, wgConditioningB, 'MB Twi
 // its teammates despite starting from a reversed day order.
 const WG_PACK = {
   finisherBank: WG_FINISHERS,
+  warmupLower: SOCCER_WU_LOWER.trimEnd(),
+  warmupUpper: SOCCER_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Speed-Strength & Horizontal Force',
     'Upper Strength': 'Upper Light & Accessory',
@@ -2201,6 +2296,8 @@ const SK_FINISHERS = fieldFinisherBank(skConditioningA, skConditioningB, 'MB Twi
 
 const SK_PACK = {
   finisherBank: SK_FINISHERS,
+  warmupLower: SOCCER_WU_LOWER.trimEnd(),
+  warmupUpper: SOCCER_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Vertical Power & Jump Height',
     'Upper Strength': 'Upper & Rotational Power',
@@ -2492,6 +2589,8 @@ const VOLLEYBALL_PACK = {
   finisherBank: VOLLEYBALL_FINISHERS,
   finisherArchetype: 'vertical',
   hasArmCare: true,
+  warmupLower: VOLLEYBALL_WU_LOWER.trimEnd(),
+  warmupUpper: VOLLEYBALL_WU_UPPER.trimEnd(),
   mainLiftTier: 'rotational',
   byFocus: {
     'Lower Power & Speed': {
@@ -2590,6 +2689,8 @@ function trackSprintFinisher(dayIndex, info) {
 const TRACK_SPRINT_PACK = {
   finisherBank: TRACK_SPRINT_FINISHERS,
   mainLiftTier: 'rotational',
+  warmupLower: TRACK_SPRINT_WU_LOWER.trimEnd(),
+  warmupUpper: TRACK_SPRINT_WU_UPPER.trimEnd(),
   byFocus: {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
@@ -2686,6 +2787,10 @@ const TRACK_THROW_FINISHERS = {
 const TRACK_THROW_PACK = {
   finisherBank: TRACK_THROW_FINISHERS,
   hasArmCare: true,
+  warmupLower: TRACK_THROW_WU_LOWER.trimEnd(),
+  warmupUpper: TRACK_THROW_WU_UPPER.trimEnd(),
+  dayCompatibility: rotationalDayCompat,
+  finisherPlanDays: rotationalFinisherPlanDays,
   displayFocus: {
     'Lower Power': 'Lower Power — Squat',
     'Upper & Shoulder Health': 'Upper Strength, Rotational & Shoulder Health',
@@ -2802,6 +2907,8 @@ const TRACK_JUMP_PACK = {
   finisherBank: TRACK_JUMP_FINISHERS,
   finisherArchetype: 'vertical',
   mainLiftTier: 'rotational',
+  warmupLower: TRACK_JUMP_WU_LOWER.trimEnd(),
+  warmupUpper: TRACK_JUMP_WU_UPPER.trimEnd(),
   byFocus: {
     'Lower Power & Speed': {
       MAIN_SQUAT: 'Back Squat',
@@ -2926,6 +3033,17 @@ function buildEnduranceRenderers(pack) {
   }
   renderers.ACC_CORE = () => null
   if (pack.hasArmCare) renderers.ACC_SHOULDER = () => null
+  // feat/warmup-revamp — Endurance never had a WARMUP renderer either (the
+  // quality suite's other big finding — its recovery/low-fatigue days
+  // never expected one anyway, but "Full Body — Squat & Press"/"Full Body
+  // — Hinge & Press" do have a lower/upper MAIN_ tag and got nothing).
+  // Same pack.warmupLower/warmupUpper mechanism as every other archetype.
+  renderers.WARMUP = (ctx) => {
+    const lu = dayLayoutEngine.dayLowerOrUpper(ctx.dayTemplate)
+    if (lu === 'lower') return pack.warmupLower || null
+    if (lu === 'upper') return pack.warmupUpper || null
+    return null
+  }
   renderers.FINISHER = (dayIndex, ctx) => {
     if (ctx.dayTemplate.recoveryOnly) return pack.recoveryContent ? pack.recoveryContent(ctx) : null
     const plan = finisherEngine.planWeekFinishers('endurance', ctx.phaseNum, ctx.days, { hasArmCare: !!pack.hasArmCare, overrides: pack.finisherOverrides || null })[dayIndex]
@@ -3015,6 +3133,8 @@ const XC_RECOVERY_CONTENT = () => `Foam Roll: Full body — 10 minutes\nHip Flex
 const CROSS_COUNTRY_PACK = {
   finisherBank: CROSS_COUNTRY_FINISHERS,
   recoveryContent: XC_RECOVERY_CONTENT,
+  warmupLower: CROSS_COUNTRY_WU_LOWER.trimEnd(),
+  warmupUpper: CROSS_COUNTRY_WU_UPPER.trimEnd(),
   displayFocus: {
     'Full Body — Squat & Press': 'Lower (Low Load)',
     'Full Body — Hinge & Press': 'Full Body Light',
@@ -3036,13 +3156,13 @@ const CROSS_COUNTRY_PACK = {
       // deload, dragging the week's aggregate below the required 40% floor
       // even though every individual line is genuinely halved.
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      ACC_PULL_H: 'Pull-ups: 4xAMAP',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Full Body — Unilateral & Pull': { // 4-day
       // Bulgarian Split Squat, not Copenhagen Adductor — see the 3-day
       // key's own comment above (identical reasoning, both fixes).
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      ACC_PULL_H: 'Pull-ups: 4xAMAP',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Full Body — Hinge & Press': {
       MAIN_HINGE: (ctx) => `Trap Bar Deadlift: 3x8 @ ${ctx.pct} — no heavy loading`,
@@ -3128,6 +3248,8 @@ const LAX_FINISHERS = fieldFinisherBank(laxConditioningA, laxConditioningB, 'Med
 // same generic-shoulder-health treatment used across this archetype).
 const LAX_PACK = {
   finisherBank: LAX_FINISHERS,
+  warmupLower: LAX_WU_LOWER.trimEnd(),
+  warmupUpper: LAX_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Power & Sprint',
     'Upper Strength': 'Upper & Rotational Shooting Power',
@@ -3261,6 +3383,8 @@ const SWIMMING_PACK = {
   finisherBank: SWIMMING_FINISHERS,
   hasArmCare: true,
   recoveryContent: SWIM_RECOVERY_CONTENT,
+  warmupLower: SWIMMING_WU_LOWER.trimEnd(),
+  warmupUpper: SWIMMING_WU_UPPER.trimEnd(),
   displayFocus: {
     'Full Body — Squat & Press': 'Lower',
     'Full Body — Hinge & Press': 'Upper & Posterior Chain',
@@ -3271,13 +3395,16 @@ const SWIMMING_PACK = {
       MAIN_PRESS_H: (ctx) => `DB Bench: ${swimSets(ctx)}x12`,
       ACC_HINGE: (ctx) => `Single Leg RDL: ${swimSets(ctx)}x10 each leg`,
     },
+    // feat/warmup-revamp — Lat Pulldown (not DB Row) now that this slot is
+    // ACC_PULL_V — a genuine fit for swimming's own freestyle/back pulling
+    // phase, not just a relabel of the same movement.
     'Full Body — Unilateral & Mobility': { // 3-day
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 3x6 each leg (light)',
-      ACC_PULL_H: (ctx) => `DB Row: ${swimSets(ctx)}x12`,
+      ACC_PULL_V: (ctx) => `Lat Pulldown: ${swimSets(ctx)}x12`,
     },
     'Full Body — Unilateral & Pull': { // 4-day
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 3x6 each leg (light)',
-      ACC_PULL_H: (ctx) => `DB Row: ${swimSets(ctx)}x12`,
+      ACC_PULL_V: (ctx) => `Lat Pulldown: ${swimSets(ctx)}x12`,
     },
     'Full Body — Hinge & Press': {
       MAIN_HINGE: (ctx) => `Trap Bar Deadlift: ${swimSets(ctx)}x8 @ moderate load`,
@@ -3717,6 +3844,31 @@ function baseballDayCompat(ctx) {
   if (days === 5) return [L, U, L, U, U]
   if (days === 6) return [L, U, L, U, L, U]
   return [L, U, L, U] // 3-day floors to this same 4-entry array; 4-day itself
+}
+
+// feat/warmup-revamp — the quality suite found Arm Care landing on a
+// lower-body day for 3 more Rotational-archetype sports (Football QB,
+// Tennis, Track Throw) on the same condensed day-counts baseball already
+// guards against (3-day, and 6-day's own Day 1) — same root cause,
+// exactly the fallback baseballDayCompat/baseballFinisherPlanDays exist to
+// prevent, just never applied outside baseball. All 4 sports share the
+// exact same dayLayoutEngine.js 'rotational' template day-type sequence
+// (Lower/Upper/Lower/Upper at 4-day, +1 upper-flavored bonus day at 5,
+// +1 more lower/upper pair at 6 — see baseballFinisherPlanDays' own
+// comment), so the identical floor-to-4 + compatibility arrays apply
+// without modification; this is a genuinely shared, sport-agnostic fix,
+// not a baseball-specific one duplicated 3 times by coincidence.
+const ROTATIONAL_LOWER_COMPAT = BASEBALL_LOWER_COMPAT
+const ROTATIONAL_UPPER_COMPAT = BASEBALL_UPPER_COMPAT
+function rotationalFinisherPlanDays(ctx) {
+  return Math.max(4, ctx.days)
+}
+function rotationalDayCompat(ctx) {
+  const L = ROTATIONAL_LOWER_COMPAT, U = ROTATIONAL_UPPER_COMPAT
+  const days = rotationalFinisherPlanDays(ctx)
+  if (days === 5) return [L, U, L, U, U]
+  if (days === 6) return [L, U, L, U, L, U]
+  return [L, U, L, U]
 }
 
 // Pitcher's own position override — "more arm care + lower rotational-throw
@@ -4279,6 +4431,8 @@ const HD_FINISHERS = fieldFinisherBank(hdConditioningA, hdConditioningB, 'Med Ba
 // covers this day instead, same dedup pattern used throughout this PR.
 const HD_PACK = {
   finisherBank: HD_FINISHERS,
+  warmupLower: HOCKEY_WU_LOWER.trimEnd(),
+  warmupUpper: HOCKEY_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower — Lateral Mobility & Single Leg Stability',
     'Upper Strength': 'Upper — Core Stiffness & Rotational Strength',
@@ -4369,6 +4523,8 @@ const HG_OVERRIDES = { sprint: 10, core: 5, rotation: -8, arm: -3, energy: -4 }
 const HG_PACK = {
   finisherBank: HG_FINISHERS,
   finisherOverrides: HG_OVERRIDES,
+  warmupLower: HOCKEY_WU_LOWER.trimEnd(),
+  warmupUpper: HOCKEY_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Power & Butterfly Mechanics',
     'Upper Strength': 'Upper (DB Only — Protects Shoulder Joint)',
@@ -4674,6 +4830,8 @@ const RB_FINISHERS = fieldFinisherBank(rbConditioningA, rbConditioningB, 'Med Ba
 // are dropped.
 const RB_PACK = {
   finisherBank: RB_FINISHERS,
+  warmupLower: RUGBY_BACKS_WU_LOWER.trimEnd(),
+  warmupUpper: RUGBY_BACKS_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Strength & Sprint',
     'Upper Strength': 'Upper Contact Strength',
@@ -4923,6 +5081,10 @@ const TENNIS_FINISHERS = {
 const TENNIS_PACK = {
   finisherBank: TENNIS_FINISHERS,
   hasArmCare: true,
+  dayCompatibility: rotationalDayCompat,
+  finisherPlanDays: rotationalFinisherPlanDays,
+  warmupLower: TENNIS_WU_LOWER.trimEnd(),
+  warmupUpper: TENNIS_WU_UPPER.trimEnd(),
   byFocus: {
     'Lower Power': {
       MAIN_SQUAT: 'Back Squat',
@@ -5042,6 +5204,8 @@ const GOLF_FINISHERS = {
 const GOLF_PACK = {
   finisherBank: GOLF_FINISHERS,
   hasArmCare: false,
+  warmupLower: GOLF_WU_LOWER.trimEnd(),
+  warmupUpper: GOLF_WU_UPPER.trimEnd(),
   displayFocus: {
     'Lower Power': 'Lower Vertical Strength & Ground Force',
     'Upper & Rotational': 'Upper & Rotational Power',
