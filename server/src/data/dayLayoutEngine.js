@@ -294,8 +294,15 @@ const TEMPLATES = {
       day('Full Body — Squat & Press', [
         slot('MAIN_SQUAT'), slot('MAIN_PRESS_H'), slot('ACC_HINGE'), slot('ACC_CORE'),
       ]),
+      // feat/warmup-revamp — was ACC_PULL_H; both packs' own content for
+      // this slot (Cross Country's "Pull-ups," Swimming's row-family pick)
+      // was always a vertical-pull movement in spirit, and Endurance had
+      // no ACC_PULL_V slot anywhere, so the quality suite's movement-
+      // pattern check flagged a real gap. Retagging (not adding a new
+      // slot) matches what the content already was/should be, rather than
+      // growing the day.
       day('Full Body — Unilateral & Mobility', [
-        slot('ACC_UNILATERAL_LOWER', true), slot('ACC_PULL_H'), slot('ACC_CORE'),
+        slot('ACC_UNILATERAL_LOWER', true), slot('ACC_PULL_V'), slot('ACC_CORE'),
       ], { lowFatigue: true }),
       day('Full Body — Hinge & Press', [
         // MAIN_PRESS_V is explicitly filler here, not the "All MAIN_ =
@@ -311,7 +318,7 @@ const TEMPLATES = {
         slot('MAIN_SQUAT'), slot('MAIN_PRESS_H'), slot('ACC_HINGE'), slot('ACC_CORE'),
       ]),
       day('Full Body — Unilateral & Pull', [
-        slot('ACC_UNILATERAL_LOWER', true), slot('ACC_PULL_H'), slot('ACC_CORE'),
+        slot('ACC_UNILATERAL_LOWER', true), slot('ACC_PULL_V'), slot('ACC_CORE'),
       ]),
       day('Full Body — Hinge & Press', [
         slot('MAIN_HINGE'), slot('MAIN_PRESS_V', false), slot('PLYO'), slot('ACC_SHOULDER'),

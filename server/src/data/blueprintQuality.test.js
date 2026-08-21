@@ -53,11 +53,16 @@ describe('Check 1 — movement pattern coverage per archetype/day-count', () => 
     //  - Every 3-day template is the most condensed layout in its
     //    archetype and structurally omits at least one pattern to fit 3
     //    days — a real design tradeoff (condensed session), not a defect.
-    //  - Endurance NEVER has a dedicated vertical-pull slot at ANY day
-    //    count (3-6) — its 4 templates simply don't include ACC_PULL_V
-    //    anywhere. Worth a second look: every other archetype gets a
-    //    pull-up/lat-pulldown-family movement somewhere; Endurance
-    //    (Cross Country, Swimming) never does.
+    //  - feat/warmup-revamp fixed Endurance's "no vertical pull at any day
+    //    count" gap by retagging its one pull-family slot (dayLayoutEngine
+    //    .js's "Full Body — Unilateral & Mobility/Pull" day) from
+    //    ACC_PULL_H to ACC_PULL_V — the actual content in both packs
+    //    (Cross Country's "Pull-ups," Swimming's now-"Lat Pulldown") was
+    //    always a vertical-pull movement in spirit, so this corrects a
+    //    tag/content mismatch rather than adding a new slot. The day only
+    //    ever had room for ONE pull-family slot, so this necessarily
+    //    trades "no vertical pull" for "no horizontal pull" — a real,
+    //    known tradeoff, not a new regression the suite is missing.
     const baseline = [
       'collision|3', 'rotational|3', 'field|3', 'speedpower|3',
       'endurance|3', 'endurance|4', 'endurance|5', 'endurance|6',
@@ -66,9 +71,9 @@ describe('Check 1 — movement pattern coverage per archetype/day-count', () => 
     if (unexpected.length) console.error(unexpected.map(v => v.detail).join('\n'))
     expect(unexpected).toEqual([])
     // Confirms the 4 permanent (non-3-day) Endurance gaps are specifically
-    // "no vertical pull," not something broader silently regressing.
+    // "no horizontal pull" now, not something broader silently regressing.
     for (const v of violations.filter(x => x.archetype === 'endurance' && x.days !== 3)) {
-      expect(v.missing).toEqual(['vertical pull'])
+      expect(v.missing).toEqual(['horizontal pull'])
     }
   })
 })
@@ -94,48 +99,22 @@ describe('Check 4 — exactly one finisher, one warm-up per day', () => {
     expect(finisherViolations).toEqual([])
   })
 
-  // feat/blueprint-quality — a real, verified architecture finding: the
-  // Field and Endurance archetype renderer factories (buildFieldRenderers/
-  // buildEnduranceRenderers in blueprintTemplates.js) never register a
-  // WARMUP renderer at all — `renderers.WARMUP` is only ever assigned in
-  // buildCollisionRenderers (unconditional) and buildSpeedPowerRenderers/
-  // buildRotationalRenderers (conditional on pack.warmupLower/warmupUpper).
-  // Every Field-archetype sport therefore has ZERO warm-up text on every
-  // day, at every day-count, full stop — this isn't a per-sport content
-  // gap, it's that the archetype's own renderer wiring has no warm-up
-  // mechanism to opt into. Endurance is the same story, but only visible
-  // on days that structurally carry a lower/upper MAIN_ tag (its
-  // low-fatigue/unilateral-only days never expected one anyway).
-  // Separately, within the two archetypes that DO support warm-ups
-  // (SpeedPower, Rotational), these specific packs simply never set
-  // pack.warmupLower/warmupUpper: Basketball (all 3 positions), Volleyball,
-  // Track Sprint, Track Jump (SpeedPower); Tennis, Golf (Rotational).
-  // Baseball/Softball/Pitcher are NOT in this list — they use a wholly
-  // separate `session.warmup` object field (see generateBaseballWeeksFromPack's
-  // own doc comment), which this check already accounts for. Track Throw
-  // (TRACK_THROW_PACK, Rotational archetype) also never sets warmupLower/
-  // warmupUpper, same as Tennis/Golf.
-  test('warm-up presence matches the known architecture gaps — Field/Endurance archetypes have no warm-up renderer at all; Basketball/Volleyball/Track (all 3 sub-events)/Tennis/Golf packs never set warmupLower/warmupUpper', () => {
+  // feat/warmup-revamp — FIXED. buildFieldRenderers/buildEnduranceRenderers
+  // now register a WARMUP renderer (same pack.warmupLower/warmupUpper
+  // mechanism SpeedPower/Rotational already used), and every pack that
+  // never set those fields now does, with sport-tailored content: one
+  // warm-up per SPORT (not per position — Soccer's 6 positions, Hockey's
+  // Defense/Goalie, Basketball's Guards/Wings/Bigs, Rugby's Backs, and
+  // Lacrosse each share a single sport-tailored warm-up across every
+  // position), except Track, which gets 3 genuinely distinct warm-ups
+  // (Sprinters/Throwers/Jumpers — different enough demands to not share
+  // one). Baseball/Softball/Pitcher were never in this gap — they use a
+  // wholly separate `session.warmup` object field, unaffected by any of
+  // this and still correctly detected by the check itself.
+  test('every day expecting a warm-up has one, for every sport/position/day-count', () => {
     const violations = q.checkOneFinisherOneWarmup().filter(v => v.detail.includes('expected a warm-up'))
-    const sportsWithNoWarmupEver = new Set([
-      'soccer', 'hockey', 'rugby', 'lacrosse', // field archetype (hockey/rugby only for their field-archetype positions — see below)
-      'basketball', 'volleyball', 'track', // speedpower/rotational packs with no warmupLower/Upper
-      'tennis', 'golf', // rotational packs with no warmupLower/Upper
-      'cross_country', 'swimming', // endurance archetype
-    ])
-    // hockey/rugby's Collision positions (forwards) DO have warm-ups —
-    // only their Field-archetype positions (defense/goalie, backs) don't.
-    const unexpected = violations.filter(v => {
-      if (v.sportId === 'hockey' || v.sportId === 'rugby') return v.posId !== (v.sportId === 'hockey' ? 'defense' : 'backs') && v.posId !== 'goalie'
-      return !sportsWithNoWarmupEver.has(v.sportId)
-    })
-    if (unexpected.length) console.error(unexpected.map(v => `${v.sportId}/${v.posId} ${v.detail}`).join('\n'))
-    expect(unexpected).toEqual([])
-    // Sanity: this is a big, real gap — assert it's still actually present
-    // (not accidentally zero, which would mean the baseline above is stale
-    // and this test should be revisited/tightened rather than silently
-    // staying green for the wrong reason).
-    expect(violations.length).toBeGreaterThan(0)
+    if (violations.length) console.error(violations.map(v => `${v.sportId}/${v.posId} ${v.days}d ${v.day}: ${v.detail}`).join('\n'))
+    expect(violations).toEqual([])
   })
 })
 
@@ -170,28 +149,15 @@ describe('Check 6 — arm care appears only in allow-listed spots', () => {
   // also legitimate, ungated ACC_SHOULDER pool content available to every
   // sport regardless of hasArmCare).
   //
-  // Verified, real finding: 3 Rotational-archetype sports/day-counts land
-  // an "Arm Care —" block on a lower-body day — Football QB (3-day Day 3,
-  // 6-day Day 1), Tennis (3-day Day 3, 6-day Day 1), Track Throw (3-day
-  // Day 3, 6-day Day 1). All 3 are condensed day-counts (3-day: only 3
-  // finisher-eligible slots for 5 families; 6-day Day 1 specifically) —
-  // consistent with the finisher engine's own documented last-resort
-  // fallback ("ignore compatibility rather than drop the family entirely"
-  // — see scheduleFamilies/assignSecondaries in finisherEngine.js) firing
-  // when there aren't enough day-compatible slots. Baseball has its own
-  // explicit dayCompatibility guard (baseballDayCompat) specifically to
-  // never let this fallback fire; these 3 sports don't have an equivalent
-  // guard.
-  test('arm care lands on a lower-body day only in the documented, condensed-day-count cases', () => {
+  // feat/warmup-revamp — FIXED. Football QB, Tennis, and Track Throw now
+  // carry the same rotationalDayCompat + rotationalFinisherPlanDays guard
+  // baseball already had (floors finisher planning to 4 "virtual" days
+  // even on a 3-day/6-day plan, so the engine's own last-resort "ignore
+  // compatibility" fallback never has to fire for these sports either).
+  test('arm care never lands on a lower-body day, for every sport/position/day-count', () => {
     const violations = q.checkArmCareAllowListedSpots()
-    const baseline = new Set([
-      'football|qb|3', 'football|qb|6',
-      'tennis|tennis|3', 'tennis|tennis|6',
-      'track|throw|3', 'track|throw|6',
-    ])
-    const unexpected = violations.filter(v => !baseline.has(`${v.sportId}|${v.posId}|${v.days}`))
-    if (unexpected.length) console.error(unexpected.map(v => v.detail).join('\n'))
-    expect(unexpected).toEqual([])
+    if (violations.length) console.error(violations.map(v => v.detail).join('\n'))
+    expect(violations).toEqual([])
   })
 })
 
