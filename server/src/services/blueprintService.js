@@ -46,25 +46,6 @@ async function getBlueprintsByTeam(teamId) {
   }))
 }
 
-async function getBlueprintsByCoach(coachId) {
-  const { data, error } = await supabaseAdmin
-    .from('blueprints')
-    .select(`
-      id, title, description, num_weeks, created_at,
-      blueprint_assignments ( id )
-    `)
-    .eq('coach_id', coachId)
-    .order('created_at', { ascending: false })
-
-  if (error) throw error
-
-  return (data || []).map(b => ({
-    ...b,
-    assignment_count: b.blueprint_assignments?.length ?? 0,
-    blueprint_assignments: undefined,
-  }))
-}
-
 async function getBlueprintById(blueprintId) {
   const { data: blueprint, error: bpError } = await supabaseAdmin
     .from('blueprints')
@@ -409,7 +390,6 @@ async function saveAthleteOverrides(athleteId, assignmentId, overrides) {
 
 module.exports = {
   createBlueprint,
-  getBlueprintsByCoach,
   getBlueprintsByTeam,
   getBlueprintById,
   getAssignments,
