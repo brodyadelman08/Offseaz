@@ -3,7 +3,6 @@ const { resolveCoachTeamAndAccess, getAthleteTeam, isAthleteOnTeam, filterAthlet
 const { SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, SPORT_ACCESSORY_ROTATION, resolveAccessoryCapKey, SPORT_PHASE_ACCESSORY_ROTATION, resolvePhaseRotationKey } = require('../data/blueprintTemplates')
 const {
   createBlueprint,
-  getBlueprintsByCoach,
   getBlueprintsByTeam,
   getBlueprintById,
   getAssignments,
@@ -148,17 +147,17 @@ async function list(req, res) {
       return res.status(403).json({ error: 'Only coaches can list blueprints' })
     }
 
-    // Head coaches: use existing coach-scoped query
-    // Assistant coaches: use team-scoped query so they can see the team's blueprints
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
-    let blueprints
-    if (!team) {
-      blueprints = []
-    } else if (accessLevel === 'head_coach') {
-      blueprints = await getBlueprintsByCoach(req.user.id)
-    } else {
-      blueprints = await getBlueprintsByTeam(team.id)
-    }
+    // Always scope to the resolved (active) team, for head coaches and
+    // assistants alike. A head coach who owns multiple teams previously hit
+    // getBlueprintsByCoach() here, which filters only by coach_id — that
+    // returned every blueprint across ALL of their teams merged into one
+    // list, regardless of which team_id was requested, so a coach viewing
+    // Team B would see Team A's blueprints mixed in (and clicking one
+    // opened a Team A blueprint while believing they were still in Team B).
+    // getBlueprintsByTeam already worked correctly for assistants; there's
+    // no reason head coaches need a different, team-blind query.
+    const { team } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    const blueprints = team ? await getBlueprintsByTeam(team.id) : []
     res.json({ blueprints })
   } catch (err) {
     res.status(500).json({ error: err.message })
