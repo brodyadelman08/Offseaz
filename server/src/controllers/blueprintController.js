@@ -67,7 +67,7 @@ async function generateFromTemplate(req, res) {
 }
 
 async function create(req, res) {
-  const { title, description, num_weeks, weeks, locked } = req.body
+  const { title, description, num_weeks, weeks, locked, team_id } = req.body
 
   if (!title || !title.trim()) {
     return res.status(400).json({ error: 'Title is required' })
@@ -118,7 +118,13 @@ async function create(req, res) {
       return res.status(403).json({ error: 'Only coaches can create blueprints' })
     }
 
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    // Accepts team_id from the body or query, same as assign()/bulkAssign()/
+    // transferOwnership() — without it (the case before this fix), a
+    // multi-team coach's new blueprint silently landed on their FIRST team
+    // regardless of which team was active in the builder, and #31's new
+    // strict active-team check then rejected the immediate post-save
+    // redirect to that blueprint, which read as "saving does nothing."
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, team_id || req.query.team_id || null)
     if (!team) {
       return res.status(400).json({ error: 'Create a team before building a blueprint' })
     }

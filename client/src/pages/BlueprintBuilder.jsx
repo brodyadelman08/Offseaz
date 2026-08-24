@@ -2,6 +2,7 @@ import { useState, useEffect } from 'react'
 import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { stripSupersetMarker } from '../utils/supersets'
+import { useCoachAccess } from '../context/CoachAccessContext'
 import {
   PlusIcon, CalendarIcon, DumbbellIcon, BoltIcon, EditIcon, CopyIcon, LockIcon, UnlockIcon,
   FootballIcon, BasketballIcon, BaseballIcon, SoftballIcon, SoccerIcon, HockeyIcon,
@@ -219,6 +220,7 @@ function BoldDesc({ text, maxChars }) {
 
 export default function BlueprintBuilder() {
   const navigate = useNavigate()
+  const { team, loading: teamLoading } = useCoachAccess()
   const [phase, setPhase] = useState('pick')
   const [submitting, setSubmitting] = useState(false)
   const [error, setError] = useState('')
@@ -416,9 +418,17 @@ export default function BlueprintBuilder() {
 
   async function handleSubmit() {
     if (!form.title.trim()) { setError('Please enter a title for this blueprint.'); return }
+    // Without team_id, the server fell back to the coach's first-created
+    // team regardless of which team was active here — invisible before #31
+    // (the detail page tolerated the mismatch), but #31's strict active-team
+    // check then rejected the very next request (the post-save redirect
+    // into the new blueprint), which read as "saving does nothing." Block
+    // the save instead of silently creating it under the wrong team.
+    if (teamLoading) { setError('Still loading your team — try again in a moment.'); return }
+    if (!team?.id) { setError('Create a team before building a blueprint.'); return }
     setError(''); setSubmitting(true)
     try {
-      const res = await api.post('/api/blueprints', form)
+      const res = await api.post(`/api/blueprints?team_id=${team.id}`, form)
       navigate(`/coach/blueprints/${res.data.blueprint.id}`)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to save blueprint.')

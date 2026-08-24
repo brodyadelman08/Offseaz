@@ -75,7 +75,7 @@ class FakeQuery {
 jest.mock('../config/supabase', () => ({ from: jest.fn() }))
 const supabaseAdmin = require('../config/supabase')
 
-const { detail, assign, bulkAssign } = require('./blueprintController')
+const { create, detail, assign, bulkAssign } = require('./blueprintController')
 
 // ─── Fixture: one head coach, two teams, one blueprint per team ────────────
 const COACH_ID = 'coach-1'
@@ -114,6 +114,46 @@ let db
 beforeEach(() => {
   db = freshDb()
   supabaseAdmin.from.mockImplementation(table => new FakeQuery(table, db))
+})
+
+// ─── Regression test: create() must land the new blueprint under the
+// caller's ACTIVE team, not silently their first-created one ───────────────
+//
+// Bug found right after the above fix shipped: BlueprintBuilder.jsx never
+// sent team_id when saving, so create() always fell back to the coach's
+// first-created team regardless of which team was active in the builder.
+// Before this fix's detail()/assign()/bulkAssign() change, that mismatch
+// was invisible (the isOwner bypass tolerated it) — so a coach building a
+// blueprint from Team B silently got a Team A blueprint back and could
+// still open it. Once isOwner was removed, the immediate post-save
+// redirect into the new blueprint started hitting the SAME strict
+// active-team check and got rejected — which read as "saving does
+// nothing" even though a (wrongly-scoped) row really was created.
+describe('create() — must land under the caller\'s active team, not their first-created one', () => {
+  function validPayload(extra = {}) {
+    return {
+      title: 'New Plan', description: null, num_weeks: 1,
+      weeks: [{ week_number: 1, objective: '', sessions: [] }],
+      ...extra,
+    }
+  }
+
+  test('a coach whose active team is Team B (not their first team) gets the blueprint created under Team B when team_id is sent', async () => {
+    const req = { body: validPayload({ team_id: TEAM_B_ID }), query: {}, user: { id: COACH_ID } }
+    const res = mockRes()
+    await create(req, res)
+    expect(res.status).toHaveBeenCalledWith(201)
+    const created = db.blueprints.find(b => b.title === 'New Plan')
+    expect(created.team_id).toBe(TEAM_B_ID)
+  })
+
+  test('team_id also works via query string, matching how list()/detail() take it', async () => {
+    const req = { body: validPayload(), query: { team_id: TEAM_B_ID }, user: { id: COACH_ID } }
+    const res = mockRes()
+    await create(req, res)
+    expect(res.status).toHaveBeenCalledWith(201)
+    expect(db.blueprints.find(b => b.title === 'New Plan').team_id).toBe(TEAM_B_ID)
+  })
 })
 
 describe('detail() — must match the active team, not just be owned by the coach', () => {
