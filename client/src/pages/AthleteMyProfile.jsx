@@ -871,10 +871,26 @@ export default function AthleteMyProfile() {
           </div>
         )}
         {autoPlan && (
-          <div>
-            <span style={styles.autoBadge}><BoltIcon size={12} color="#F75709" /> Personalized Plan — Generated from Your Survey</span>
+          // Once a coach plan is assigned it takes priority as the active
+          // plan (see feat/plan-priority) — the personalized plan is
+          // archived, not deleted, and this card is its secondary home:
+          // still visible here with its own progress, but no longer shown
+          // on the main plan page unless the coach plan goes away.
+          <div
+            style={coachPlan ? { cursor: 'pointer' } : undefined}
+            onClick={coachPlan ? () => navigate('/athlete/plan?view=personalized') : undefined}
+          >
+            <span style={styles.autoBadge}>
+              <BoltIcon size={12} color="#F75709" />
+              {coachPlan ? ' Personalized Plan — Archived' : ' Personalized Plan — Generated from Your Survey'}
+            </span>
             <p style={{ ...styles.planName, marginTop: 8 }}>{autoPlan.title}</p>
             <p style={styles.planMeta}>{autoPlan.num_weeks}-week plan · Started {fmtDate(autoPlan.starts_on)}</p>
+            {coachPlan && (
+              <p style={{ fontSize: 12, color: 'var(--text-3)', fontStyle: 'italic', margin: '4px 0 0', textDecoration: 'underline' }}>
+                View archived plan
+              </p>
+            )}
           </div>
         )}
       </div>
