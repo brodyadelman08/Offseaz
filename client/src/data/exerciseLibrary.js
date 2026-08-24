@@ -956,6 +956,20 @@ const EXERCISE_LIBRARY = {
     description: 'A light, deload-week-only circuit of easy dynamic stretches and low-intensity movement (leg swings, hip circles, walking lunges) to stay loose without adding fatigue.',
     muscles: 'Full-body mobility, low intensity',
   },
+
+  // ─── Variety Engine additions (feat/variety-engine) ────────────────────────
+  'eccentric nordic curl': {
+    description: 'Kneel with your feet anchored, starting from the TOP (torso upright) rather than the floor. Lower your torso toward the floor as slowly as possible over about 5 seconds using only your hamstrings, then use your hands to self-assist back up to the start.',
+    muscles: 'Hamstrings (eccentric focus)',
+  },
+  'side plank sprinter pose': {
+    description: 'Hold a side plank on your forearm. Drive your top knee up and forward into a sprinter\'s knee-drive position while keeping your hips lifted and square, then reset and hold. Switch sides for the prescribed time each.',
+    muscles: 'Obliques, glute medius, hip flexors (anti-lateral-flexion)',
+  },
+  'kb tibialis raises': {
+    description: 'Stand facing a wall or rack with your heels a few inches out and holding on for balance. Set a light kettlebell on the top of each foot (or one at a time) and lift your toes toward your shins, then lower under control.',
+    muscles: 'Tibialis anterior (shin)',
+  },
 }
 
 // Case-insensitive lookup helper
