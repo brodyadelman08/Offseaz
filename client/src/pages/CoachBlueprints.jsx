@@ -24,6 +24,15 @@ export default function CoachBlueprints() {
   const [deleteErr, setDeleteErr]   = useState('')
 
   useEffect(() => {
+    // Clear the previous team's cards and show the loading skeleton the
+    // instant the active team changes — without this, switching teams left
+    // the OLD team's cards on screen (fully clickable) until the new fetch
+    // resolved. A coach who switched teams and clicked quickly could land on
+    // a blueprint whose team_id didn't match their now-active team, and the
+    // assign page (correctly scoped to that blueprint's real team) would
+    // then show that blueprint's real roster — reading as "wrong team".
+    setLoading(true)
+    setBlueprints([])
     const url = team?.id ? `/api/blueprints?team_id=${team.id}` : '/api/blueprints'
     api.get(url)
       .then(r => setBlueprints(r.data.blueprints || []))

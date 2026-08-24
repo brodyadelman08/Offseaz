@@ -174,12 +174,17 @@ async function detail(req, res) {
     }
 
     const blueprint = await getBlueprintById(id)
-    // Head coach: must own the blueprint. Assistant: must be on the same team.
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
-    const isOwner   = blueprint.coach_id === req.user.id
-    const isSameTeam = team && blueprint.team_id === team.id
-    if (!isOwner && !isSameTeam) {
+    // Must be viewing the SAME team the blueprint actually belongs to — not
+    // just own it. A head coach owns every blueprint across all of their
+    // teams, so "isOwner" alone let them open (and, before this fix, assign)
+    // a blueprint from a different team than the one they're currently
+    // viewing, while the page rendered as if it were the active team's.
+    const { team } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    if (!team) {
       return res.status(403).json({ error: 'Not your blueprint' })
+    }
+    if (blueprint.team_id !== team.id) {
+      return res.status(403).json({ error: 'This blueprint belongs to a different team. Switch to that team to view it.', code: 'wrong_team' })
     }
 
     const assignments = await getAssignments(id)
@@ -194,7 +199,7 @@ async function detail(req, res) {
 
 async function assign(req, res) {
   const { id } = req.params
-  const { assign_to, athlete_id, starts_on } = req.body
+  const { assign_to, athlete_id, starts_on, team_id } = req.body
 
   if (!assign_to || !['team', 'athlete'].includes(assign_to)) {
     return res.status(400).json({ error: 'assign_to must be "team" or "athlete"' })
@@ -210,11 +215,14 @@ async function assign(req, res) {
     }
 
     const blueprint = await getBlueprintById(id)
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
-    const isOwner    = blueprint.coach_id === req.user.id
-    const isSameTeam = team && blueprint.team_id === team.id
-    if (!isOwner && !isSameTeam) {
+    // Must be viewing the SAME team the blueprint actually belongs to — see
+    // the comment in detail() above for why "isOwner alone" isn't enough.
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, team_id || req.query.team_id || null)
+    if (!team) {
       return res.status(403).json({ error: 'Not your blueprint' })
+    }
+    if (blueprint.team_id !== team.id) {
+      return res.status(403).json({ error: 'This blueprint belongs to a different team. Switch to that team to view it.', code: 'wrong_team' })
     }
     if (accessLevel === 'view_only') {
       return res.status(403).json({ error: 'View-only coaches cannot assign blueprints' })
@@ -339,7 +347,7 @@ async function saveOverrides(req, res) {
 
 async function bulkAssign(req, res) {
   const { id } = req.params
-  const { athlete_ids, starts_on } = req.body
+  const { athlete_ids, starts_on, team_id } = req.body
 
   if (!Array.isArray(athlete_ids) || athlete_ids.length === 0) {
     return res.status(400).json({ error: 'athlete_ids must be a non-empty array' })
@@ -352,11 +360,14 @@ async function bulkAssign(req, res) {
     }
 
     const blueprint = await getBlueprintById(id)
-    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
-    const isOwner    = blueprint.coach_id === req.user.id
-    const isSameTeam = team && blueprint.team_id === team.id
-    if (!isOwner && !isSameTeam) {
+    // Must be viewing the SAME team the blueprint actually belongs to — see
+    // the comment in detail() above for why "isOwner alone" isn't enough.
+    const { team, accessLevel } = await resolveCoachTeamAndAccess(req.user.id, team_id || req.query.team_id || null)
+    if (!team) {
       return res.status(403).json({ error: 'Not your blueprint' })
+    }
+    if (blueprint.team_id !== team.id) {
+      return res.status(403).json({ error: 'This blueprint belongs to a different team. Switch to that team to view it.', code: 'wrong_team' })
     }
     if (accessLevel === 'view_only') {
       return res.status(403).json({ error: 'View-only coaches cannot assign blueprints' })

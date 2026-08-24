@@ -17,7 +17,7 @@ function today() {
 export default function BlueprintDetail() {
   const { id } = useParams()
   const navigate = useNavigate()
-  const { team } = useCoachAccess()
+  const { team, loading: teamLoading } = useCoachAccess()
 
   const [blueprint, setBlueprint]     = useState(null)
   const [assignments, setAssignments] = useState([])
@@ -36,15 +36,26 @@ export default function BlueprintDetail() {
   const [locking, setLocking]                 = useState(false)
 
   useEffect(() => {
-    const url = team?.id ? `/api/blueprints/${id}?team_id=${team.id}` : `/api/blueprints/${id}`
-    api.get(url)
+    // Wait for CoachAccessContext to resolve the active team before ever
+    // fetching — firing early with no team_id would let the server fall
+    // back to the coach's first team, which can briefly render a different
+    // team's blueprint before the correctly-scoped request lands. Same race
+    // class fixed on Leaderboard/Accountability/Feed/Messages/Athletes.
+    if (teamLoading) return
+    api.get(`/api/blueprints/${id}?team_id=${team?.id || ''}`)
       .then(bpRes => {
         setBlueprint(bpRes.data.blueprint)
         setAssignments(bpRes.data.assignments || [])
       })
-      .catch(() => navigate('/coach'))
+      .catch(() => {
+        // blueprintController.detail() rejects a blueprint whose team_id
+        // doesn't match the active team (code: 'wrong_team') rather than
+        // serving it — send the coach to the (correctly team-scoped)
+        // blueprint list instead of the generic dashboard.
+        navigate('/coach/blueprints')
+      })
       .finally(() => setLoading(false))
-  }, [id, team?.id, navigate])
+  }, [id, team?.id, teamLoading, navigate])
 
   // Roster must be scoped to the blueprint's OWN team, not just whatever team
   // is active in the sidebar — assignment always writes against blueprint.team_id
@@ -127,11 +138,12 @@ export default function BlueprintDetail() {
       await api.post(`/api/blueprints/${id}/assign-bulk`, {
         athlete_ids: [...checked],
         starts_on: startsOn,
+        team_id: team?.id,
       })
       const count = checked.size
       setAssignSuccess(`Plan assigned to ${count} athlete${count === 1 ? '' : 's'} — they'll see it in their feed and dashboard.`)
       setChecked(new Set())
-      const res = await api.get(`/api/blueprints/${id}`)
+      const res = await api.get(`/api/blueprints/${id}?team_id=${team?.id || ''}`)
       setAssignments(res.data.assignments || [])
     } catch (err) {
       setAssignError(err.response?.data?.error || 'Assignment failed.')
