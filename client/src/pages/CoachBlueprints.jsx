@@ -3,6 +3,7 @@ import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import { PlusIcon, TrashIcon } from '../components/Icons'
 import { useCoachAccess } from '../context/CoachAccessContext'
+import ConfirmDeleteModal from '../components/ConfirmDeleteModal'
 
 const ORANGE = '#F75709'
 
@@ -18,8 +19,20 @@ export default function CoachBlueprints() {
   )
   // Which card is being hovered (id or null)
   const [hoveredId, setHoveredId]   = useState(null)
-  // Which blueprint is awaiting delete confirmation (id or null)
+  // Which blueprint is awaiting delete confirmation (id or null) — the
+  // lighter, inline-on-card confirm used only for blueprints nobody is
+  // assigned to (see handleTrashClick).
   const [confirmId, setConfirmId]   = useState(null)
+  // The blueprint (full object, not just id — needs .title/.assignment_count
+  // to render the warning) awaiting the heavier "type DELETE" modal, shown
+  // instead of the inline confirm whenever assignment_count > 0: deleting an
+  // assigned blueprint also deletes every assigned athlete's logged
+  // progress (see blueprintService.js's deleteBlueprint — it cascades
+  // through workout_logs/athlete_plan_overrides/blueprint_assignments
+  // before dropping the blueprint itself), which is a meaningfully bigger
+  // consequence than deleting an unused draft and deserves a harder-to-
+  // miss confirmation than the inline overlay.
+  const [assignedWarningBp, setAssignedWarningBp] = useState(null)
   const [deleting, setDeleting]     = useState(false)
   const [deleteErr, setDeleteErr]   = useState('')
 
@@ -41,13 +54,14 @@ export default function CoachBlueprints() {
   }, [team?.id])
 
   async function handleDelete(e, blueprintId) {
-    e.stopPropagation()
+    if (e) e.stopPropagation()
     setDeleting(true)
     setDeleteErr('')
     try {
       await api.delete(`/api/blueprints/${blueprintId}`)
       setBlueprints(prev => prev.filter(b => b.id !== blueprintId))
       setConfirmId(null)
+      setAssignedWarningBp(null)
     } catch (err) {
       setDeleteErr(err.response?.data?.error || 'Delete failed.')
     } finally {
@@ -59,6 +73,21 @@ export default function CoachBlueprints() {
     e.stopPropagation()
     setConfirmId(null)
     setDeleteErr('')
+  }
+
+  // Trash-icon entry point — routes to the appropriate confirmation tier.
+  // assignment_count comes straight from the same list fetch that already
+  // renders the "N assigned" badge on the card, so the count shown here is
+  // exactly what the coach can already see on screen, not a second,
+  // possibly-inconsistent source.
+  function handleTrashClick(e, bp) {
+    e.stopPropagation()
+    setDeleteErr('')
+    if (bp.assignment_count > 0) {
+      setAssignedWarningBp(bp)
+    } else {
+      setConfirmId(bp.id)
+    }
   }
 
   return (
@@ -143,7 +172,7 @@ export default function CoachBlueprints() {
                       opacity: isTouchDevice || isHovered ? 1 : 0,
                       pointerEvents: isTouchDevice || isHovered ? 'auto' : 'none',
                     }}
-                    onClick={e => { e.stopPropagation(); setConfirmId(bp.id); setDeleteErr('') }}
+                    onClick={e => handleTrashClick(e, bp)}
                     title="Delete blueprint"
                   >
                     <TrashIcon size={14} color="var(--text-3)" />
@@ -201,6 +230,19 @@ export default function CoachBlueprints() {
             )
           })}
         </div>
+      )}
+
+      {/* ── Heavier confirmation for a blueprint with active assignments ── */}
+      {assignedWarningBp && (
+        <ConfirmDeleteModal
+          title={`Delete "${assignedWarningBp.title}"?`}
+          warningText={`This plan is assigned to ${assignedWarningBp.assignment_count} athlete${assignedWarningBp.assignment_count === 1 ? '' : 's'}. Deleting it will remove their plan and permanently erase their logged progress. This cannot be undone.`}
+          confirmLabel="Delete Plan"
+          loading={deleting}
+          error={deleteErr}
+          onConfirm={() => handleDelete(null, assignedWarningBp.id)}
+          onCancel={() => { setAssignedWarningBp(null); setDeleteErr('') }}
+        />
       )}
     </div>
   )
