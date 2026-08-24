@@ -23,9 +23,11 @@
 
 const {
   generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments,
-  SPORT_MAX_ACCESSORIES, resolveAccessoryCapKey,
+  SPORT_MAX_ACCESSORIES, resolveAccessoryCapKey, applySessionOrganization,
+  SPORT_ACCESSORY_ROTATION,
 } = require('./blueprintTemplates')
 const dayLayoutEngine = require('./dayLayoutEngine')
+const movementPatterns = require('./movementPatterns')
 
 const SUPERSET_MARKER_RE = /^⟦SS\d+⟧/
 function stripMarker(line) { return line.replace(SUPERSET_MARKER_RE, '') }
@@ -110,6 +112,38 @@ function* matrix({ goals = ['standard', 'muscle_gain'] } = {}) {
 
 function generate(entry) {
   return entry.tpl.generateWeeks(entry.posId, entry.goal, entry.days)
+}
+
+// Same as generate(), but also runs the superset-pairing pass
+// (applySessionOrganization) — the step that actually assigns ⟦SS⟧
+// markers. generate() alone never has any (see organizeSessionDescription's
+// own doc comment: pairing is a separate, later pass, not baked into the
+// per-sport generators) — every check that inspects superset GROUPING
+// (as opposed to plain exercise content) needs this instead of generate().
+function generateOrganized(entry) {
+  const weeks = generate(entry)
+  return applySessionOrganization(weeks, SPORT_ACCESSORY_ROTATION[entry.sportId] || {}, resolveAccessoryCapKey(entry.sportId, entry.posId, entry.goal))
+}
+
+// Every ⟦SSn⟧-marked group in a session's description, as arrays of exercise
+// NAMES in original render order (grouped by their shared group number).
+// Local, CAPTURING copy of the marker pattern — the module-level
+// SUPERSET_MARKER_RE above has no capture group (every other use in this
+// file only ever strips the marker, never needs the group number), but
+// this function needs the actual digit to tell ⟦SS1⟧ apart from ⟦SS2⟧.
+const SUPERSET_MARKER_GROUP_RE = /^⟦SS(\d+)⟧/
+function supersetGroups(description) {
+  const groups = new Map()
+  for (const raw of description.split('\n')) {
+    const m = raw.match(SUPERSET_MARKER_GROUP_RE)
+    if (!m) continue
+    const bare = stripMarker(raw)
+    const colonIdx = bare.indexOf(':')
+    const name = colonIdx > 0 ? bare.slice(0, colonIdx).trim() : bare.trim()
+    if (!groups.has(m[1])) groups.set(m[1], [])
+    groups.get(m[1]).push(name)
+  }
+  return [...groups.values()]
 }
 
 function ctxLabel(entry, extra = '') {
@@ -539,28 +573,29 @@ function checkNoDuplicateLinesWithinDay() {
 // ═══════════════════════════════════════════════════════════════════════
 // Check 9 — No barbell Overhead Press on throwing sports
 // ═══════════════════════════════════════════════════════════════════════
-// Permanent guardrail (feat/baseball-ohp-superset-fix): throwing-shoulder
-// health means baseball/softball must never prescribe a literal, barbell
-// 'Overhead Press' — Incline DB Press is the ceiling. Matches on the exact
+// Permanent guardrail (feat/baseball-ohp-superset-fix, widened on
+// feat/superset-ohp-fixes): throwing-shoulder health means a throwing/
+// overhead sport must never prescribe a literal, barbell 'Overhead Press'
+// — Landmine Press/Incline DB Press is the ceiling. Matches on the exact
 // exercise NAME (text before the colon), so it does NOT false-positive on
 // a genuinely different, DB/unilateral movement that happens to share the
 // words "overhead press" (e.g. varietyEngine's ACC_PRESS filler pool
 // includes 'Seated Single Arm DB Overhead Press' for some sports — a
-// distinct name, not caught here, and not in scope for this specific
-// fix). Scoped to exactly baseball/softball — the two sports this rule
-// has actually been enforced for — NOT the full Rotational archetype:
-// Tennis/Golf/Football QB/Track Throwers still carry a literal, ramped
-// 'Overhead Press' as MAIN_PRESS_V as of this check's introduction (a
-// separate, confirmed, not-yet-fixed finding — see the investigation this
-// fix followed). Asserting the same rule for them here would make this
-// check fail immediately on an unrelated, pre-existing gap this PR did not
-// touch; if/when that gap gets fixed, THROWING_SPORTS_NO_OHP is exactly
-// where to add them.
-const THROWING_SPORTS_NO_OHP = new Set(['baseball', 'softball'])
+// distinct name, not caught here).
+//
+// Keyed by exact "sportId/posId" pair, not sportId alone — Football and
+// Track each have OTHER positions (skill/linemen; sprint/jump) with no
+// throwing-shoulder rationale and no barbell-OHP restriction; only their
+// QB/Throw position is in scope. All six sports named in the throwing-
+// shoulder-health fix are covered now — this is no longer a partial rule.
+const THROWING_SPORTS_NO_OHP = new Set([
+  'baseball/baseball', 'baseball/pitcher', 'softball/softball',
+  'football/qb', 'tennis/tennis', 'golf/golf', 'track/throw',
+])
 function checkNoBarbellOverheadPressOnThrowingSports() {
   const violations = []
   for (const entry of matrix()) {
-    if (!THROWING_SPORTS_NO_OHP.has(entry.sportId)) continue
+    if (!THROWING_SPORTS_NO_OHP.has(`${entry.sportId}/${entry.posId}`)) continue
     let weeks
     try { weeks = generate(entry) } catch (e) { continue }
     for (const w of weeks) {
@@ -579,6 +614,115 @@ function checkNoBarbellOverheadPressOnThrowingSports() {
   return violations
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// Check 10 — No superset ever pairs two same-primary-muscle/pattern moves
+// ═══════════════════════════════════════════════════════════════════════
+// Permanent guardrail (feat/superset-ohp-fixes). Ground truth for "do these
+// two names compete" is movementPatterns.js — the SAME classifier
+// organizeSessionDescription's own pairing algorithm uses to decide what it
+// will and won't bracket together, so this check can never drift from what
+// the generator actually avoids; it is a genuine regression guard, not a
+// second, independently-maintained opinion.
+//
+// One deliberate, pre-existing exception: the %-ramped MAIN lift paired
+// with a SINGLE plyo/jump line on a power-focus day (a real strength-
+// training technique — contrast/complex training, heavy lift potentiates
+// the jump — assembled by organizeSessionDescription's own `keepPlyo`
+// branch, structurally separate from and BEFORE the general pairing pass
+// this check's own target algorithm runs). Detected here the same way
+// parseDescription already distinguishes a main lift (isRamped) from
+// everything else — a pair where one line is ramped and the other
+// classifies into a PLYO_* category is exempt; every other combination,
+// including a same-category PLYO+PLYO or PLYO+its-strength-sibling pair
+// in the general accessory pool, is a genuine violation.
+function checkNoSamePatternSupersets() {
+  const violations = []
+  const unclassifiedNames = new Set()
+  for (const entry of matrix()) {
+    let weeks
+    try { weeks = generateOrganized(entry) } catch (e) { continue }
+    for (const w of weeks) {
+      for (const s of w.sessions) {
+        for (const group of supersetGroups(s.description)) {
+          for (let i = 0; i < group.length; i++) {
+            for (let j = i + 1; j < group.length; j++) {
+              const a = group[i], b = group[j]
+              if (!movementPatterns.classify(a)) unclassifiedNames.add(a)
+              if (!movementPatterns.classify(b)) unclassifiedNames.add(b)
+              if (!movementPatterns.competes(a, b)) continue
+              // The ramped-main-lift + single-plyo contrast pairing.
+              const aPlyo = String(movementPatterns.classify(a)).startsWith('PLYO_')
+              const bPlyo = String(movementPatterns.classify(b)).startsWith('PLYO_')
+              if ((isRampedLikeName(a, s.description) && bPlyo) || (isRampedLikeName(b, s.description) && aPlyo)) continue
+              violations.push({
+                check: 'no-same-pattern-supersets', ...entry, week: w.week_number, day: s.day,
+                detail: `"${a}" + "${b}" (${movementPatterns.classify(a)}) same-pattern superset on ${s.day}, week ${w.week_number}`,
+              })
+            }
+          }
+        }
+      }
+    }
+  }
+  return { violations, unclassifiedNames: [...unclassifiedNames] }
+}
+
+// True if `name` is the ramped main-lift line for this exact session — i.e.
+// its full rendered line (found by name prefix) carries a "%" top-set ramp.
+// Superset groups only ever store the bare exercise NAME (see
+// supersetGroups), so re-deriving "is this the ramped line" needs the
+// original description back.
+function isRampedLikeName(name, description) {
+  return description.split('\n').some(raw => {
+    const bare = stripMarker(raw)
+    const colonIdx = bare.indexOf(':')
+    const lineName = colonIdx > 0 ? bare.slice(0, colonIdx).trim() : bare.trim()
+    return lineName === name && /%[×x]/.test(bare)
+  })
+}
+
+// ═══════════════════════════════════════════════════════════════════════
+// Check 11 — Standard strength days carry at least 2 supersets
+// ═══════════════════════════════════════════════════════════════════════
+// Permanent guardrail (feat/superset-ohp-fixes). "Standard strength day" =
+// NOT an Endurance-archetype day (that archetype's own light/aerobic
+// design legitimately carries less pairable accessory content — see Check
+// 1's own documented Endurance gaps) and NOT a day dayLayoutEngine.js
+// itself flags recoveryOnly/lowFatigue (a deliberately light bonus/
+// recovery day, same exemption Check 4/5 already give those days). Every
+// other day is expected to reach 2 real, non-competing superset pairs
+// where its own accessory content can support it — this check counts
+// DISTINCT ⟦SSn⟧ group numbers actually rendered (week 1, representative
+// per Check 7's own anchor-stability guarantee — superset composition
+// doesn't change week to week for anchor content), not exercise-line
+// count, so it only ever counts REAL, already non-competing pairs
+// (Check 10 owns catching a bad pairing; this owns catching too few good
+// ones).
+function checkStandardDaysHaveTwoSupersets() {
+  const violations = []
+  for (const entry of matrix({ goals: ['standard'] })) {
+    const arch = archetypeFor(entry.sportId, entry.posId)
+    let weeks
+    try { weeks = generateOrganized(entry) } catch (e) { continue }
+    const template = arch ? dayLayoutEngine.getTemplate(arch, entry.days) : null
+    const week1 = weeks[0]
+    for (let i = 0; i < week1.sessions.length; i++) {
+      const s = week1.sessions[i]
+      const dayTpl = template && template[i]
+      const isExempt = arch === 'endurance' || (dayTpl && (dayTpl.recoveryOnly || dayTpl.lowFatigue))
+      if (isExempt) continue
+      const count = supersetGroups(s.description).length
+      if (count < 2) {
+        violations.push({
+          check: 'standard-day-two-supersets', ...entry, day: s.day, focus: s.focus, count,
+          detail: `Day "${s.day}" (${s.focus}) has only ${count} superset(s), expected >= 2`,
+        })
+      }
+    }
+  }
+  return violations
+}
+
 module.exports = {
   archetypeFor,
   matrix,
@@ -591,5 +735,7 @@ module.exports = {
   checkAnchorsHoldAcross16Weeks,
   checkNoDuplicateLinesWithinDay,
   checkNoBarbellOverheadPressOnThrowingSports,
+  checkNoSamePatternSupersets,
+  checkStandardDaysHaveTwoSupersets,
   __parseDescriptionForTest: parseDescription,
 }

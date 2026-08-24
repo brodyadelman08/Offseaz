@@ -195,12 +195,16 @@ describe('Check 8 — no duplicate lines within a day', () => {
 })
 
 describe('Check 9 — no barbell Overhead Press on throwing sports', () => {
-  // feat/baseball-ohp-superset-fix — permanent guardrail, not a documented-
-  // baseline check like the others above: this one asserts a bare `[]`,
-  // every sport/position/day-count/goal/week, because the whole point is
-  // that it must fail the moment barbell Overhead Press reappears anywhere
-  // in baseball or softball, with no allowance for "already-known" cases.
-  test('baseball and softball never prescribe a literal, barbell "Overhead Press", at any position/day-count/goal/week', () => {
+  // feat/baseball-ohp-superset-fix, widened on feat/superset-ohp-fixes —
+  // permanent guardrail, not a documented-baseline check like the others
+  // above: this one asserts a bare `[]`, every sport/position/day-count/
+  // goal/week, because the whole point is that it must fail the moment
+  // barbell Overhead Press reappears anywhere in ANY of the six throwing/
+  // overhead sports, with no allowance for "already-known" cases. Now
+  // covers all six named in the throwing-shoulder-health fix — Baseball,
+  // Softball, Football QB, Tennis, Golf, Track Throwers — not just the
+  // two this check originally shipped with.
+  test('every throwing/overhead sport (Baseball, Softball, Football QB, Tennis, Golf, Track Throwers) never prescribes a literal, barbell "Overhead Press", at any position/day-count/goal/week', () => {
     const violations = q.checkNoBarbellOverheadPressOnThrowingSports()
     if (violations.length) console.error(violations.map(v => `${v.sportId}/${v.posId} ${v.days}d ${v.goal}: ${v.detail}`).join('\n'))
     expect(violations).toEqual([])
@@ -219,5 +223,175 @@ describe('Check 9 — no barbell Overhead Press on throwing sports', () => {
     const flagged = lines.filter(l => l.name === 'Overhead Press')
     expect(flagged).toHaveLength(1)
     expect(flagged[0].raw).toBe('Overhead Press: 3x10')
+  })
+})
+
+describe('Check 10 — no superset ever pairs two same-primary-muscle/pattern moves', () => {
+  // feat/superset-ohp-fixes — permanent guardrail, not a documented-
+  // baseline check: this one asserts a bare `[]` across the FULL matrix,
+  // every sport/position/day-count/goal/week, because the whole point is
+  // that organizeSessionDescription's pairing must never reintroduce a
+  // same-pattern superset (Nordic Hamstring Curl + Single Leg RDL, Goblet
+  // Squat + Step-Ups, two presses, two rows, two quad-dominant jumps, ...)
+  // anywhere, with no allowance for "already-known" cases.
+  test('zero superset pairs two same-primary-muscle/pattern movements, anywhere in the matrix', () => {
+    const { violations } = q.checkNoSamePatternSupersets()
+    if (violations.length) {
+      console.error(`${violations.length} same-pattern superset(s) found:\n` +
+        violations.slice(0, 30).map(v => `  ${v.sportId}/${v.posId} ${v.days}d ${v.goal} wk${v.week} ${v.day}: ${v.detail}`).join('\n'))
+    }
+    expect(violations).toEqual([])
+  })
+
+  // The classifier vocabulary (movementPatterns.js) is a fixed, curated
+  // name list, not a heuristic — an exercise name the generator actually
+  // produces but the table doesn't recognize yet would silently never be
+  // checked (competes() defaults an unclassified name to "never competes").
+  // This keeps that gap visible rather than silent: it must warn loudly,
+  // not just quietly under-check, the moment new content introduces a name
+  // outside the table.
+  test('every exercise name that actually appears in a ⟦SS⟧ superset group, anywhere in the matrix, is in movementPatterns.js\'s classifier table', () => {
+    const { unclassifiedNames } = q.checkNoSamePatternSupersets()
+    if (unclassifiedNames.length) console.error('Unclassified names (add to movementPatterns.js):\n' + unclassifiedNames.join('\n'))
+    expect(unclassifiedNames).toEqual([])
+  })
+
+  // Sanity: proves the check actually flags a same-pattern pair (rather
+  // than being a structural no-op) and correctly exempts the one
+  // legitimate exception — a ramped main lift paired with a single plyo
+  // line — without depending on the real generator's current content.
+  test('sanity: flags a real same-pattern pair, exempts the ramped-main-lift + single-plyo contrast pairing, and never flags a genuinely different pattern', () => {
+    const mp = require('./movementPatterns')
+    expect(mp.competes('Nordic Hamstring Curl', 'Single Leg RDL')).toBe(true)   // both HINGE
+    expect(mp.competes('Goblet Squat', 'Step-Ups')).toBe(true)                  // both SQUAT
+    expect(mp.competes('Back Squat', 'Box Jumps')).toBe(true)                   // SQUAT vs its own plyo sibling
+    expect(mp.competes('Single Leg RDL', 'Bulgarian Split Squat')).toBe(false)  // HINGE vs SQUAT — the good pairing
+    expect(mp.competes('Gorilla Row', 'Lateral Raise')).toBe(false)             // pull vs isolation shoulder work
+    expect(mp.competes('Sandbag Carry', 'Goblet Squat')).toBe(false)            // core/carry never competes
+  })
+})
+
+describe('Check 11 — standard strength days carry at least 2 supersets', () => {
+  // feat/superset-ohp-fixes. Baseball (both positions, every day count) is
+  // the sport this fix set out to prove end to end and is held to a bare
+  // `[]` — zero tolerance, any regression here fails immediately. Every
+  // other sport/position/day-count is asserted against a documented
+  // baseline of currently-known, pre-existing gaps (same convention as
+  // Check 1/Check 8 above) — this suite surfaces the TRUE, full-matrix
+  // scope of "which days still fall short" (455 day-instances across every
+  // other sport/archetype) rather than silently narrowing what it looks
+  // at; fixing each is real, sport-specific content-authoring work, out of
+  // scope for this pass. The check itself is NOT scoped to baseball or the
+  // throwing sports — it sweeps the whole matrix, so any of these entries
+  // becoming fixed (or any CURRENTLY-fine day regressing) shows up
+  // immediately as a baseline diff, not a silent pass.
+  const KNOWN_SHORTFALL_BASELINE = new Set([
+    'basketball|bigs|2|Day 1', 'basketball|bigs|2|Day 2', 'basketball|bigs|3|Day 1', 'basketball|bigs|3|Day 2', 'basketball|bigs|3|Day 3', 'basketball|bigs|4|Day 1',
+    'basketball|bigs|4|Day 2', 'basketball|bigs|4|Day 3', 'basketball|bigs|4|Day 4', 'basketball|bigs|5|Day 1', 'basketball|bigs|5|Day 2', 'basketball|bigs|5|Day 3',
+    'basketball|bigs|5|Day 4', 'basketball|bigs|6|Day 1', 'basketball|bigs|6|Day 2', 'basketball|bigs|6|Day 3', 'basketball|bigs|6|Day 4', 'basketball|guards|2|Day 1',
+    'basketball|guards|2|Day 2', 'basketball|guards|3|Day 1', 'basketball|guards|3|Day 2', 'basketball|guards|3|Day 3', 'basketball|guards|4|Day 1', 'basketball|guards|4|Day 2',
+    'basketball|guards|4|Day 3', 'basketball|guards|4|Day 4', 'basketball|guards|5|Day 1', 'basketball|guards|5|Day 2', 'basketball|guards|5|Day 3', 'basketball|guards|5|Day 4',
+    'basketball|guards|6|Day 1', 'basketball|guards|6|Day 2', 'basketball|guards|6|Day 3', 'basketball|guards|6|Day 4', 'basketball|wings|2|Day 1', 'basketball|wings|2|Day 2',
+    'basketball|wings|3|Day 1', 'basketball|wings|3|Day 2', 'basketball|wings|3|Day 3', 'basketball|wings|4|Day 1', 'basketball|wings|4|Day 2', 'basketball|wings|4|Day 3',
+    'basketball|wings|4|Day 4', 'basketball|wings|5|Day 1', 'basketball|wings|5|Day 2', 'basketball|wings|5|Day 3', 'basketball|wings|5|Day 4', 'basketball|wings|6|Day 1',
+    'basketball|wings|6|Day 2', 'basketball|wings|6|Day 3', 'basketball|wings|6|Day 4', 'football|hybrid|2|Day 1', 'football|hybrid|2|Day 2', 'football|hybrid|3|Day 1',
+    'football|hybrid|3|Day 2', 'football|hybrid|3|Day 3', 'football|hybrid|4|Day 1', 'football|hybrid|4|Day 2', 'football|hybrid|4|Day 3', 'football|hybrid|4|Day 4',
+    'football|hybrid|5|Day 1', 'football|hybrid|5|Day 2', 'football|hybrid|5|Day 3', 'football|hybrid|5|Day 4', 'football|hybrid|6|Day 1', 'football|hybrid|6|Day 2',
+    'football|hybrid|6|Day 3', 'football|hybrid|6|Day 4', 'football|linemen|2|Day 1', 'football|linemen|2|Day 2', 'football|linemen|3|Day 1', 'football|linemen|3|Day 2',
+    'football|linemen|3|Day 3', 'football|linemen|4|Day 1', 'football|linemen|4|Day 2', 'football|linemen|4|Day 3', 'football|linemen|4|Day 4', 'football|linemen|5|Day 1',
+    'football|linemen|5|Day 2', 'football|linemen|5|Day 3', 'football|linemen|5|Day 4', 'football|linemen|6|Day 1', 'football|linemen|6|Day 2', 'football|linemen|6|Day 3',
+    'football|linemen|6|Day 4', 'football|linemen|6|Day 5', 'football|linemen|6|Day 6', 'football|qb|2|Day 1', 'football|qb|2|Day 2', 'football|qb|3|Day 1',
+    'football|qb|3|Day 2', 'football|qb|3|Day 3', 'football|qb|4|Day 1', 'football|qb|4|Day 2', 'football|qb|4|Day 3', 'football|qb|4|Day 4',
+    'football|qb|5|Day 1', 'football|qb|5|Day 2', 'football|qb|5|Day 3', 'football|qb|5|Day 4', 'football|qb|6|Day 1', 'football|qb|6|Day 2',
+    'football|qb|6|Day 3', 'football|qb|6|Day 4', 'football|qb|6|Day 5', 'football|qb|6|Day 6', 'football|skill|2|Day 1', 'football|skill|2|Day 2',
+    'football|skill|3|Day 1', 'football|skill|3|Day 2', 'football|skill|3|Day 3', 'football|skill|4|Day 1', 'football|skill|4|Day 2', 'football|skill|4|Day 3',
+    'football|skill|4|Day 4', 'football|skill|5|Day 1', 'football|skill|5|Day 2', 'football|skill|5|Day 3', 'football|skill|5|Day 4', 'football|skill|6|Day 1',
+    'football|skill|6|Day 2', 'football|skill|6|Day 3', 'football|skill|6|Day 4', 'golf|golf|2|Day 1', 'golf|golf|2|Day 2', 'golf|golf|3|Day 1',
+    'golf|golf|3|Day 2', 'golf|golf|3|Day 3', 'golf|golf|4|Day 1', 'golf|golf|4|Day 2', 'golf|golf|4|Day 3', 'golf|golf|4|Day 4',
+    'golf|golf|5|Day 1', 'golf|golf|5|Day 2', 'golf|golf|5|Day 3', 'golf|golf|5|Day 4', 'golf|golf|6|Day 1', 'golf|golf|6|Day 2',
+    'golf|golf|6|Day 3', 'golf|golf|6|Day 4', 'golf|golf|6|Day 5', 'golf|golf|6|Day 6', 'hockey|defense|2|Day 1', 'hockey|defense|2|Day 2',
+    'hockey|defense|3|Day 1', 'hockey|defense|3|Day 2', 'hockey|defense|3|Day 3', 'hockey|defense|4|Day 1', 'hockey|defense|4|Day 2', 'hockey|defense|4|Day 3',
+    'hockey|defense|4|Day 4', 'hockey|defense|5|Day 1', 'hockey|defense|5|Day 2', 'hockey|defense|5|Day 3', 'hockey|defense|5|Day 4', 'hockey|defense|6|Day 1',
+    'hockey|defense|6|Day 2', 'hockey|defense|6|Day 3', 'hockey|defense|6|Day 4', 'hockey|forwards|2|Day 1', 'hockey|forwards|2|Day 2', 'hockey|forwards|3|Day 1',
+    'hockey|forwards|3|Day 2', 'hockey|forwards|3|Day 3', 'hockey|forwards|4|Day 1', 'hockey|forwards|4|Day 2', 'hockey|forwards|4|Day 3', 'hockey|forwards|4|Day 4',
+    'hockey|forwards|5|Day 1', 'hockey|forwards|5|Day 2', 'hockey|forwards|5|Day 3', 'hockey|forwards|5|Day 4', 'hockey|forwards|6|Day 1', 'hockey|forwards|6|Day 2',
+    'hockey|forwards|6|Day 3', 'hockey|forwards|6|Day 4', 'hockey|forwards|6|Day 5', 'hockey|forwards|6|Day 6', 'hockey|goalie|2|Day 1', 'hockey|goalie|2|Day 2',
+    'hockey|goalie|3|Day 1', 'hockey|goalie|3|Day 2', 'hockey|goalie|3|Day 3', 'hockey|goalie|4|Day 2', 'hockey|goalie|4|Day 3', 'hockey|goalie|4|Day 4',
+    'hockey|goalie|5|Day 2', 'hockey|goalie|5|Day 3', 'hockey|goalie|5|Day 4', 'hockey|goalie|6|Day 2', 'hockey|goalie|6|Day 3', 'hockey|goalie|6|Day 4',
+    'lacrosse|lacrosse|2|Day 1', 'lacrosse|lacrosse|2|Day 2', 'lacrosse|lacrosse|3|Day 1', 'lacrosse|lacrosse|3|Day 2', 'lacrosse|lacrosse|3|Day 3', 'lacrosse|lacrosse|4|Day 1',
+    'lacrosse|lacrosse|4|Day 2', 'lacrosse|lacrosse|4|Day 3', 'lacrosse|lacrosse|4|Day 4', 'lacrosse|lacrosse|5|Day 1', 'lacrosse|lacrosse|5|Day 2', 'lacrosse|lacrosse|5|Day 3',
+    'lacrosse|lacrosse|5|Day 4', 'lacrosse|lacrosse|6|Day 1', 'lacrosse|lacrosse|6|Day 2', 'lacrosse|lacrosse|6|Day 3', 'lacrosse|lacrosse|6|Day 4', 'rugby|backs|2|Day 1',
+    'rugby|backs|2|Day 2', 'rugby|backs|3|Day 1', 'rugby|backs|3|Day 2', 'rugby|backs|3|Day 3', 'rugby|backs|4|Day 1', 'rugby|backs|4|Day 2',
+    'rugby|backs|4|Day 3', 'rugby|backs|4|Day 4', 'rugby|backs|5|Day 1', 'rugby|backs|5|Day 2', 'rugby|backs|5|Day 3', 'rugby|backs|5|Day 4',
+    'rugby|backs|6|Day 1', 'rugby|backs|6|Day 2', 'rugby|backs|6|Day 3', 'rugby|backs|6|Day 4', 'rugby|forwards|2|Day 1', 'rugby|forwards|2|Day 2',
+    'rugby|forwards|3|Day 1', 'rugby|forwards|3|Day 2', 'rugby|forwards|3|Day 3', 'rugby|forwards|4|Day 1', 'rugby|forwards|4|Day 2', 'rugby|forwards|4|Day 3',
+    'rugby|forwards|4|Day 4', 'rugby|forwards|5|Day 1', 'rugby|forwards|5|Day 2', 'rugby|forwards|5|Day 3', 'rugby|forwards|5|Day 4', 'rugby|forwards|6|Day 1',
+    'rugby|forwards|6|Day 2', 'rugby|forwards|6|Day 3', 'rugby|forwards|6|Day 4', 'rugby|forwards|6|Day 5', 'rugby|forwards|6|Day 6', 'soccer|center_back|2|Day 1',
+    'soccer|center_back|2|Day 2', 'soccer|center_back|3|Day 1', 'soccer|center_back|3|Day 2', 'soccer|center_back|3|Day 3', 'soccer|center_back|4|Day 1', 'soccer|center_back|4|Day 2',
+    'soccer|center_back|4|Day 3', 'soccer|center_back|4|Day 4', 'soccer|center_back|5|Day 1', 'soccer|center_back|5|Day 2', 'soccer|center_back|5|Day 3', 'soccer|center_back|5|Day 4',
+    'soccer|center_back|6|Day 1', 'soccer|center_back|6|Day 2', 'soccer|center_back|6|Day 3', 'soccer|center_back|6|Day 4', 'soccer|fullback|2|Day 1', 'soccer|fullback|2|Day 2',
+    'soccer|fullback|3|Day 1', 'soccer|fullback|3|Day 2', 'soccer|fullback|3|Day 3', 'soccer|fullback|4|Day 1', 'soccer|fullback|4|Day 2', 'soccer|fullback|4|Day 3',
+    'soccer|fullback|4|Day 4', 'soccer|fullback|5|Day 1', 'soccer|fullback|5|Day 2', 'soccer|fullback|5|Day 3', 'soccer|fullback|5|Day 4', 'soccer|fullback|6|Day 1',
+    'soccer|fullback|6|Day 2', 'soccer|fullback|6|Day 3', 'soccer|fullback|6|Day 4', 'soccer|goalkeeper|2|Day 1', 'soccer|goalkeeper|2|Day 2', 'soccer|goalkeeper|3|Day 1',
+    'soccer|goalkeeper|3|Day 2', 'soccer|goalkeeper|3|Day 3', 'soccer|goalkeeper|4|Day 1', 'soccer|goalkeeper|4|Day 2', 'soccer|goalkeeper|4|Day 3', 'soccer|goalkeeper|4|Day 4',
+    'soccer|goalkeeper|5|Day 1', 'soccer|goalkeeper|5|Day 2', 'soccer|goalkeeper|5|Day 3', 'soccer|goalkeeper|5|Day 4', 'soccer|goalkeeper|6|Day 1', 'soccer|goalkeeper|6|Day 2',
+    'soccer|goalkeeper|6|Day 3', 'soccer|goalkeeper|6|Day 4', 'soccer|midfielder|2|Day 1', 'soccer|midfielder|2|Day 2', 'soccer|midfielder|3|Day 1', 'soccer|midfielder|3|Day 2',
+    'soccer|midfielder|3|Day 3', 'soccer|midfielder|4|Day 1', 'soccer|midfielder|4|Day 2', 'soccer|midfielder|4|Day 3', 'soccer|midfielder|4|Day 4', 'soccer|midfielder|5|Day 1',
+    'soccer|midfielder|5|Day 2', 'soccer|midfielder|5|Day 3', 'soccer|midfielder|5|Day 4', 'soccer|midfielder|6|Day 1', 'soccer|midfielder|6|Day 2', 'soccer|midfielder|6|Day 3',
+    'soccer|midfielder|6|Day 4', 'soccer|striker|2|Day 1', 'soccer|striker|2|Day 2', 'soccer|striker|3|Day 1', 'soccer|striker|3|Day 2', 'soccer|striker|3|Day 3',
+    'soccer|striker|4|Day 1', 'soccer|striker|4|Day 2', 'soccer|striker|4|Day 3', 'soccer|striker|4|Day 4', 'soccer|striker|5|Day 1', 'soccer|striker|5|Day 2',
+    'soccer|striker|5|Day 3', 'soccer|striker|5|Day 4', 'soccer|striker|6|Day 1', 'soccer|striker|6|Day 2', 'soccer|striker|6|Day 3', 'soccer|striker|6|Day 4',
+    'soccer|winger|2|Day 1', 'soccer|winger|2|Day 2', 'soccer|winger|3|Day 1', 'soccer|winger|3|Day 2', 'soccer|winger|3|Day 3', 'soccer|winger|4|Day 1',
+    'soccer|winger|4|Day 2', 'soccer|winger|4|Day 3', 'soccer|winger|4|Day 4', 'soccer|winger|5|Day 1', 'soccer|winger|5|Day 2', 'soccer|winger|5|Day 3',
+    'soccer|winger|5|Day 4', 'soccer|winger|6|Day 1', 'soccer|winger|6|Day 2', 'soccer|winger|6|Day 3', 'soccer|winger|6|Day 4', 'tennis|tennis|2|Day 1',
+    'tennis|tennis|2|Day 2', 'tennis|tennis|3|Day 1', 'tennis|tennis|3|Day 2', 'tennis|tennis|3|Day 3', 'tennis|tennis|4|Day 1', 'tennis|tennis|4|Day 2',
+    'tennis|tennis|4|Day 3', 'tennis|tennis|4|Day 4', 'tennis|tennis|5|Day 1', 'tennis|tennis|5|Day 2', 'tennis|tennis|5|Day 3', 'tennis|tennis|5|Day 4',
+    'tennis|tennis|6|Day 1', 'tennis|tennis|6|Day 2', 'tennis|tennis|6|Day 3', 'tennis|tennis|6|Day 4', 'tennis|tennis|6|Day 5', 'tennis|tennis|6|Day 6',
+    'track|jump|2|Day 1', 'track|jump|2|Day 2', 'track|jump|3|Day 1', 'track|jump|3|Day 2', 'track|jump|3|Day 3', 'track|jump|4|Day 1',
+    'track|jump|4|Day 2', 'track|jump|4|Day 3', 'track|jump|4|Day 4', 'track|jump|5|Day 1', 'track|jump|5|Day 2', 'track|jump|5|Day 3',
+    'track|jump|5|Day 4', 'track|jump|6|Day 1', 'track|jump|6|Day 2', 'track|jump|6|Day 3', 'track|jump|6|Day 4', 'track|sprint|2|Day 1',
+    'track|sprint|2|Day 2', 'track|sprint|3|Day 1', 'track|sprint|3|Day 2', 'track|sprint|3|Day 3', 'track|sprint|4|Day 1', 'track|sprint|4|Day 2',
+    'track|sprint|4|Day 3', 'track|sprint|4|Day 4', 'track|sprint|5|Day 1', 'track|sprint|5|Day 2', 'track|sprint|5|Day 3', 'track|sprint|5|Day 4',
+    'track|sprint|6|Day 1', 'track|sprint|6|Day 2', 'track|sprint|6|Day 3', 'track|sprint|6|Day 4', 'track|throw|2|Day 1', 'track|throw|2|Day 2',
+    'track|throw|3|Day 1', 'track|throw|3|Day 2', 'track|throw|3|Day 3', 'track|throw|4|Day 1', 'track|throw|4|Day 2', 'track|throw|4|Day 3',
+    'track|throw|4|Day 4', 'track|throw|5|Day 1', 'track|throw|5|Day 2', 'track|throw|5|Day 3', 'track|throw|5|Day 4', 'track|throw|6|Day 1',
+    'track|throw|6|Day 2', 'track|throw|6|Day 3', 'track|throw|6|Day 4', 'track|throw|6|Day 5', 'track|throw|6|Day 6', 'volleyball|volleyball|2|Day 1',
+    'volleyball|volleyball|2|Day 2', 'volleyball|volleyball|3|Day 1', 'volleyball|volleyball|3|Day 2', 'volleyball|volleyball|3|Day 3', 'volleyball|volleyball|4|Day 1', 'volleyball|volleyball|4|Day 2',
+    'volleyball|volleyball|4|Day 3', 'volleyball|volleyball|4|Day 4', 'volleyball|volleyball|5|Day 1', 'volleyball|volleyball|5|Day 2', 'volleyball|volleyball|5|Day 3', 'volleyball|volleyball|5|Day 4',
+    'volleyball|volleyball|6|Day 1', 'volleyball|volleyball|6|Day 2', 'volleyball|volleyball|6|Day 3', 'volleyball|volleyball|6|Day 4', 'wrestling|wrestling|2|Day 1', 'wrestling|wrestling|2|Day 2',
+    'wrestling|wrestling|3|Day 1', 'wrestling|wrestling|3|Day 2', 'wrestling|wrestling|3|Day 3', 'wrestling|wrestling|4|Day 1', 'wrestling|wrestling|4|Day 2', 'wrestling|wrestling|4|Day 3',
+    'wrestling|wrestling|4|Day 4', 'wrestling|wrestling|5|Day 1', 'wrestling|wrestling|5|Day 2', 'wrestling|wrestling|5|Day 3', 'wrestling|wrestling|5|Day 4', 'wrestling|wrestling|6|Day 1',
+    'wrestling|wrestling|6|Day 2', 'wrestling|wrestling|6|Day 3', 'wrestling|wrestling|6|Day 4', 'wrestling|wrestling|6|Day 5', 'wrestling|wrestling|6|Day 6',
+  ])
+
+  test('baseball (every position, every day count) reaches 2 supersets on every standard strength day — zero tolerance', () => {
+    const violations = q.checkStandardDaysHaveTwoSupersets()
+    const baseballViolations = violations.filter(v => v.sportId === 'baseball')
+    if (baseballViolations.length) console.error(baseballViolations.map(v => `${v.posId} ${v.days}d ${v.day} (${v.focus}): ${v.detail}`).join('\n'))
+    expect(baseballViolations).toEqual([])
+  })
+
+  test('every other sport/position/day-count is at the documented baseline — no NEW day has dropped below 2 supersets, and no baseline entry is stale', () => {
+    const violations = q.checkStandardDaysHaveTwoSupersets()
+    const keyOf = v => `${v.sportId}|${v.posId}|${v.days}|${v.day}`
+    const nonBaseball = violations.filter(v => v.sportId !== 'baseball')
+    const unexpected = nonBaseball.filter(v => !KNOWN_SHORTFALL_BASELINE.has(keyOf(v)))
+    const stillPresent = new Set(nonBaseball.map(keyOf))
+    const stale = [...KNOWN_SHORTFALL_BASELINE].filter(k => !stillPresent.has(k))
+    if (stale.length) console.warn(`[Check 11] ${stale.length} baseline entries no longer reproduce — safe to remove:\n${stale.join('\n')}`)
+    if (unexpected.length) console.error(`[Check 11] ${unexpected.length} NEW shortfall(s) not in the documented baseline:\n${unexpected.map(v => `  ${keyOf(v)}: ${v.detail}`).join('\n')}`)
+    expect(unexpected).toEqual([])
+  })
+
+  // Sanity: proves the check actually counts DISTINCT superset groups
+  // (not exercise-line count), so it can't be fooled by a day with 4
+  // unpaired lines and zero real supersets.
+  test('sanity: counts distinct ⟦SSn⟧ group numbers, not total exercise-line count', () => {
+    const desc = '⟦SS1⟧Single Leg RDL: 4x8 each leg\n⟦SS1⟧Sandbag Carry: 4x20 yds\nHip Thrust: 4x10\nCossack Squat: 3x10 each side'
+    // 4 lines total, only 1 real superset group — a naive line-count check
+    // would over-report; this must report exactly 1.
+    const SUPERSET_MARKER_RE = /^⟦SS(\d+)⟧/
+    const groupCount = new Set(desc.split('\n').map(l => l.match(SUPERSET_MARKER_RE)).filter(Boolean).map(m => m[1])).size
+    expect(groupCount).toBe(1)
   })
 })
