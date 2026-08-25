@@ -222,6 +222,61 @@ async function getAthletePlan(athleteId) {
   return { auto_plan, coach_plan }
 }
 
+// feat/reassign-warning — read-only support for the assign-flow warning
+// gate (client decides whether to show it; this just answers "which of
+// this team's athletes already have one"). "Active coach plan" uses the
+// exact same definition getAthletePlan() above already uses for its own
+// `coach_plan` — a blueprint_assignments row (individual OR team-wide)
+// whose blueprint is NOT auto-generated (description doesn't start with
+// "Auto-generated") — so this can never disagree with what the athlete
+// actually sees as their current coach-assigned plan. Auto-generated
+// (survey-derived) plans are a separate, independent track — assigning a
+// new coach blueprint doesn't touch or reset that one, so it's
+// deliberately excluded here.
+async function getTeamActivePlanAthleteIds(teamId) {
+  const { data: memberRows, error: memberErr } = await supabaseAdmin
+    .from('team_members')
+    .select('athlete_id')
+    .eq('team_id', teamId)
+    .eq('access_level', 'athlete')
+  if (memberErr) throw memberErr
+
+  const athleteIds = (memberRows || []).map(m => m.athlete_id)
+  if (athleteIds.length === 0) return []
+
+  const [{ data: indivRows, error: indivErr }, { data: teamRows, error: teamErr }] = await Promise.all([
+    supabaseAdmin
+      .from('blueprint_assignments')
+      .select('athlete_id, blueprints(description)')
+      .in('athlete_id', athleteIds),
+    supabaseAdmin
+      .from('blueprint_assignments')
+      .select('id, blueprints(description)')
+      .eq('team_id', teamId),
+  ])
+  if (indivErr) throw indivErr
+  if (teamErr) throw teamErr
+
+  // Matches getAthletePlan()'s own filtering exactly: only rows with a
+  // surviving linked blueprint count (a row whose blueprint was deleted
+  // out from under it is dropped there too, via `.filter(a => a.blueprints)`).
+  const isCoachPlan = row => !!row.blueprints && !(row.blueprints.description || '').startsWith('Auto-generated')
+
+  const activeIds = new Set()
+  for (const row of indivRows || []) {
+    if (row.athlete_id && isCoachPlan(row)) activeIds.add(row.athlete_id)
+  }
+  // A team-wide coach assignment (assign_to: 'team') puts every athlete on
+  // the team on that plan — same "most recent coach_plan wins" resolution
+  // getAthletePlan() applies per athlete, just evaluated once for the whole
+  // roster instead of one athlete at a time.
+  if ((teamRows || []).some(isCoachPlan)) {
+    for (const id of athleteIds) activeIds.add(id)
+  }
+
+  return [...activeIds]
+}
+
 // Finds the athlete's current individual auto-generated assignment (if any),
 // i.e. the plan that was built from their survey answers — never a
 // coach-built/coach-assigned plan. Used by survey retake to know what to
@@ -396,6 +451,7 @@ module.exports = {
   assignBlueprint,
   bulkAssignBlueprint,
   getAthletePlan,
+  getTeamActivePlanAthleteIds,
   getAthleteAutoAssignment,
   updateBlueprintUpcomingWeeks,
   toggleLock,
