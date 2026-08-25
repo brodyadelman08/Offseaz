@@ -5,6 +5,7 @@
 const finisherEngine = require('./finisherEngine')
 const dayLayoutEngine = require('./dayLayoutEngine')
 const varietyEngine = require('./varietyEngine')
+const movementPatterns = require('./movementPatterns')
 
 // ─── Utilities ────────────────────────────────────────────────────────────────
 
@@ -198,6 +199,61 @@ function withMarkerPreserved(line, transform) {
   const m = line.match(SUPERSET_MARKER_RE)
   if (!m) return transform(line)
   return m[0] + transform(line.slice(m[0].length))
+}
+
+// Extracts the exercise NAME (text before the first colon) from a rendered
+// "Name: SxR..." line, stripping any already-present ⟦SS<n>⟧ marker first —
+// used only to feed movementPatterns.competes(), never to alter the line.
+function exerciseNameOf(line) {
+  const bare = line.replace(SUPERSET_MARKER_RE, '')
+  const colonIdx = bare.indexOf(':')
+  return (colonIdx > 0 ? bare.slice(0, colonIdx) : bare).trim()
+}
+
+// feat/superset-ohp-fixes — pairs a run of same-day accessory/filler
+// candidates into NON-COMPETING superset groups (see movementPatterns.js,
+// the same classifier blueprintQuality.js's own guardrail check uses, so
+// this pairing and that check can never drift apart).
+//
+// Greedy NEAREST-FORWARD compatible match, in original authored order: for
+// each not-yet-paired candidate, take the first LATER candidate that
+// doesn't compete with it. This means an already-compatible adjacent pair
+// is completely untouched — byte-identical to the old purely-positional
+// pairing — and only a genuine same-pattern collision ever changes which
+// two lines end up bracketed together (by reaching past the colliding
+// neighbor for the next compatible one instead). A candidate with no
+// compatible partner anywhere in the run renders solo rather than forcing
+// a bad pairing — see FIX 1's day-template content additions for how days
+// that were short a real partner get real accessory volume instead of a
+// forced junk pairing.
+function pairCompatibleSingles(items) {
+  const n = items.length
+  const partnerOf = new Array(n).fill(-1)
+  for (let i = 0; i < n; i++) {
+    if (partnerOf[i] !== -1) continue
+    for (let j = i + 1; j < n; j++) {
+      if (partnerOf[j] !== -1) continue
+      if (!movementPatterns.competes(exerciseNameOf(items[i].lines[0]), exerciseNameOf(items[j].lines[0]))) {
+        partnerOf[i] = j
+        partnerOf[j] = i
+        break
+      }
+    }
+  }
+  const groups = []
+  const emitted = new Array(n).fill(false)
+  for (let i = 0; i < n; i++) {
+    if (emitted[i]) continue
+    const p = partnerOf[i]
+    if (p > i) {
+      groups.push({ kind: 'pair', lines: [items[i].lines[0], items[p].lines[0]] })
+      emitted[i] = true; emitted[p] = true
+    } else if (p === -1) {
+      groups.push({ kind: 'single', line: items[i].lines[0] })
+      emitted[i] = true
+    }
+  }
+  return groups
 }
 
 function mgNote() {
@@ -1127,7 +1183,12 @@ const FOOTBALL_QB_PACK = {
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
     },
     'Upper & Shoulder Health': {
-      MAIN_PRESS_V: 'Overhead Press',
+      // feat/superset-ohp-fixes — no barbell Overhead Press: QB is a
+      // throwing sport (same throwing-shoulder-health rationale already
+      // applied to Baseball/Softball). Landmine Press (angled, no direct
+      // overhead loading) fills the vertical-press slot instead, same
+      // substitute and phrasing as Baseball's PITCHER_PACK.
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
@@ -1153,7 +1214,7 @@ const FOOTBALL_QB_PACK = {
       MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': {
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
@@ -1893,7 +1954,15 @@ const GK_PACK = {
       MAIN_SQUAT: 'Front Squat',
       MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
       ACC_UNILATERAL_LOWER: 'Cossack Squat: 4x6 each side',
-      ACC_POSTERIOR: 'DB Lateral Lunge: 4x8 each leg',
+      // feat/no-competing-supersets — was 'DB Lateral Lunge', a lunge-
+      // pattern (quad-dominant) movement mismatched to this tag's own
+      // posterior-chain intent, which paired it with this same day's
+      // ACC_UNILATERAL_LOWER (Cossack Squat/Bulgarian Split Squat — also
+      // squat-pattern) into a same-pattern superset. Copenhagen Adductor is
+      // ACC_POSTERIOR's own established vocabulary elsewhere in this file
+      // for exactly this "light lateral/adductor" role, and is adductor-
+      // isolation, not squat-pattern — de-conflicts the pairing.
+      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
       PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Power': {
@@ -1947,7 +2016,14 @@ const CB_PACK = {
     'Lower Power': {
       MAIN_SQUAT: 'Back Squat',
       ACC_HINGE: 'Hip Thrust: 4x8',
-      ACC_UNILATERAL_LOWER: 'Single Leg RDL: 4x8 each leg',
+      // feat/no-competing-supersets — was 'Single Leg RDL', itself a
+      // hip-hinge/hamstring movement mismatched to this tag's own
+      // unilateral-lower intent, which paired it with this same day's
+      // ACC_HINGE (Hip Thrust — also hip-hinge) into a same-pattern
+      // superset. Copenhagen Adductor matches GK_PACK's own established
+      // choice for this exact day/tag combination — adductor-isolation,
+      // not hip-hinge, de-conflicts the pairing.
+      ACC_UNILATERAL_LOWER: 'Copenhagen Adductor: 4x8 each leg',
       PLYO: (ctx) => `Broad Jump: ${explosiveSets(3, ctx.phaseNum)}x3 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Strength': {
@@ -1960,7 +2036,15 @@ const CB_PACK = {
       MAIN_SQUAT: 'Front Squat',
       MAIN_HINGE: 'Hex Bar Deadlift', // 3-day
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      ACC_POSTERIOR: 'DB Lateral Lunge: 4x8 each leg',
+      // feat/no-competing-supersets — was 'DB Lateral Lunge', a lunge-
+      // pattern (quad-dominant) movement mismatched to this tag's own
+      // posterior-chain intent, which paired it with this same day's
+      // ACC_UNILATERAL_LOWER (Cossack Squat/Bulgarian Split Squat — also
+      // squat-pattern) into a same-pattern superset. Copenhagen Adductor is
+      // ACC_POSTERIOR's own established vocabulary elsewhere in this file
+      // for exactly this "light lateral/adductor" role, and is adductor-
+      // isolation, not squat-pattern — de-conflicts the pairing.
+      ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
       PLYO: (ctx) => `Approach Jump: ${explosiveSets(3, ctx.phaseNum)}x5 (${explosiveIntent(ctx.phaseNum)})`,
     },
     'Upper Power': {
@@ -2699,7 +2783,7 @@ const TRACK_THROW_PACK = {
       ACC_UNILATERAL_LOWER: 'Goblet Lateral Lunge: 4x4 each leg',
     },
     'Upper & Shoulder Health': { // 4-day only
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_H: 'BB Row: 4x8',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
@@ -2724,7 +2808,7 @@ const TRACK_THROW_PACK = {
       MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': { // 6-day
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
@@ -3840,6 +3924,56 @@ function baseballFinisherBankFor(isPitcher) {
   return (ctx) => baseballFinisherBank(ctx.week, isPitcher)
 }
 
+// feat/baseball-ohp-superset-fix — two targeted content fixes, Position
+// Player only (Pitcher was already correct on both counts — see
+// PITCHER_PACK's own comment — and is untouched here):
+//
+// 1. No barbell Overhead Press. MAIN_PRESS_V used to resolve to a literal,
+//    percentage-ramped 'Overhead Press' (see buildRotationalRenderers —
+//    MAIN_ tags render as a real ramped main lift, not a light accessory)
+//    on both days that carry the tag. Throwing-shoulder health means
+//    baseball/softball must never load a barbell overhead press; Incline
+//    DB Press is the ceiling. Both MAIN_PRESS_V entries below now resolve
+//    to 'Incline DB Press' (the exact vetted exerciseLibrary.js name —
+//    'incline db press' — word order matters for the client's lookup) with
+//    a suffix explaining why, mirroring Pitcher's own Landmine Press note.
+//    Since softball has no dedicated pack (normalizeSport maps it onto
+//    'baseball', see generateBaseballWeeks), this fixes softball too, at
+//    every day count and goal — there's no separate softball code path to
+//    also patch.
+//
+// 2. A second superset per day. Every Rotational-archetype day template
+//    only ever supplies 2-3 accessory-tag slots after ACC_CORE/ACC_SHOULDER
+//    null out (see buildRotationalRenderers' own comment on why those two
+//    tags render null for hasArmCare sports) — too few candidates for
+//    organizeSessionDescription's pairing pass to ever form more than one
+//    bracket, regardless of day. Pre-migration baseball routinely authored
+//    2-3 supersets/day (see git history on this file, 92a44b8^, e.g. three
+//    explicit `ss:` groups on one day) — the day-layout migration thinned
+//    that out as a side effect, not a deliberate one.
+//    Option A patch (explicitly NOT a dayLayoutEngine.js template change,
+//    which would also alter every other Rotational sport — Tennis/Golf/QB/
+//    Track Throw — a separate, not-yet-approved task): extend specific
+//    ACC_* entries below into multiple newline-separated exercises. Only
+//    ANCHOR-flagged tags (per the 'rotational' template in
+//    dayLayoutEngine.js) and MED_BALL are extended this way — anchor slots
+//    always render their pack text verbatim (varietyEngine.resolveFiller's
+//    `if (slotDef.anchor) return packChoiceText`), and MED_BALL is entirely
+//    outside variety-engine scope (not in POOLED_TAGS) — so both are safe
+//    to make multi-line without the variety engine's pool silently
+//    overriding the extra content on non-week-1 weeks, which would make
+//    the superset count inconsistent week to week. A genuinely pooled,
+//    non-anchor tag (ACC_UNILATERAL_LOWER on 'Lower Power', ACC_POSTERIOR
+//    on 'Lower Strength', ACC_PULL_V where non-anchor, ...) is left exactly
+//    as it was — still a single, phase/week-rotating line — both to avoid
+//    that inconsistency and because touching it would be a variety-engine
+//    change, out of this patch's scope. New exercise names below are
+//    checked against exerciseLibrary.js (exact match required — the
+//    lookup is a plain lowercase string match, no plural/word-order
+//    normalization) and against every finisher-family's own vocabulary
+//    (baseballFinisherBank's arm/rotation/core families) to avoid
+//    reintroducing the same same-day duplicate-line class fixed on
+//    feat/variety-engine.
 const BASEBALL_PACK = {
   finisherBank: baseballFinisherBankFor(false),
   hasArmCare: true,
@@ -3857,53 +3991,107 @@ const BASEBALL_PACK = {
       // every other Rotational sport's own ACC_HINGE text (see Golf/Tennis/
       // QB/Track Throwers) and keeps applyHipAdjustments' pre-existing
       // Single Leg RDL -> Hamstring Curls hip-injury substitution reachable
-      // (its regex is anchored to the exact start of the line).
-      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      // (its regex is anchored to the exact start of the line — the 2nd/3rd
+      // lines added below are untouched by it either way).
+      // ACC_HINGE is anchor:true on every day count this key is used at
+      // (3/4/6-day) — safe to extend. feat/superset-ohp-fixes: 3 straight
+      // hinge/hamstring lines here (Single Leg RDL/Nordic/Hip Thrust) plus
+      // ACC_UNILATERAL_LOWER's own single squat-pattern line is 3 HINGE + 1
+      // SQUAT candidates — organizeSessionDescription's now movement-
+      // pattern-aware pairing can only ever form ONE valid non-competing
+      // pair out of that mix (whichever hinge line reaches the lone squat
+      // line), leaving the other two hinge lines unpaired rather than
+      // forced into a same-pattern bracket. A 4th line, Sandbag Carry
+      // (loaded carry/anti-lateral-flexion — CORE_CARRY in
+      // movementPatterns.js, competes with nothing), gives every one of
+      // the 3 hinge lines a genuine, distinct non-competing partner (2
+      // pair off against the squat line and the carry line; the 3rd
+      // stands alone same as before) — reaching 2 full supersets without
+      // cutting any existing content. NOT Copenhagen Adductor/Suitcase
+      // Carry/Glute Bridge — all three are in MOBILITY_EXACT_EXEMPT
+      // (isMobilityCoreExempt), so isAccessoryLine silently excludes them
+      // from organizeSessionDescription's pairing candidates entirely
+      // (confirmed by direct trace: adding one here rendered as an
+      // untouched, unpaired trailing line, not a 4th pairing candidate at
+      // all — the day stayed stuck at 1 superset).
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg\nNordic Hamstring Curl: 4x6\nHip Thrust: 4x10\nSandbag Carry: 4x20 yds',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
     },
     'Upper & Shoulder Health': { // 4-day only
-      MAIN_PRESS_V: 'Overhead Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      MAIN_PRESS_V: { name: 'Incline DB Press', suffix: ' (dumbbells only — no barbell overhead pressing, for throwing-shoulder health)' },
+      // ACC_PULL_H is anchor:true here, MED_BALL is never pool-driven
+      // (outside POOLED_TAGS) — both safe to extend; together they're
+      // exactly 2 full supersets (ACC_SHOULDER nulls out on this day for
+      // hasArmCare sports, so no 3rd accessory tag competes for a slot).
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper & Rotational': { // 3-day only
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      ACC_PULL_V: 'Pull-ups: 4xAMAP', // non-anchor here — left as a single, phase-rotating line, on purpose
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
-      ACC_SQUAT: 'Goblet Squat: 4x10',
-      ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4-day
-      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
+      // ACC_SQUAT is anchor:true at 4/6-day (paired below with the
+      // pool-driven ACC_POSTERIOR line) but non-anchor at 3-day, where
+      // MED_BALL (always safe) carries the 2nd-pair job instead — both
+      // values coexist here since each day count only ever reads the tag
+      // its own template actually declares. feat/superset-ohp-fixes: at
+      // 4/6-day, 3 straight squat-pattern lines (Goblet Squat/Step-Ups/
+      // Cossack Squat) plus ACC_POSTERIOR's own single hinge-pattern line
+      // is 3 SQUAT + 1 HINGE — same shape as ACC_HINGE's own fix above,
+      // same reasoning: only one valid non-competing pair is possible out
+      // of that mix. A 4th line, Sandbag Carry (CORE_CARRY, competes with
+      // nothing — see that fix's own comment for why NOT Copenhagen
+      // Adductor/Suitcase Carry/Glute Bridge, all MOBILITY_EXACT_EXEMPT and
+      // silently excluded from pairing entirely), gives a genuine partner
+      // to a 2nd squat line, so 2 of the 3 squat lines pair off (one
+      // against the hinge line, one against the carry line) and reach 2
+      // full supersets — the 3rd stands alone same as before, no existing
+      // content cut.
+      ACC_SQUAT: 'Goblet Squat: 4x10\nStep-Ups: 4x6 each leg\nCossack Squat: 3x10 each side\nSandbag Carry: 4x20 yds',
+      ACC_POSTERIOR: 'Hip Thrust: 4x8', // 4/6-day — non-anchor, left as a single, phase-rotating line
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8\nLateral Bounds: 4x5 each side', // 3-day
     },
     'Upper Power & Rotational': { // 4-day only
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      // Only safe tag on this 3-slot day (ACC_PULL_V is non-anchor, pool-
+      // driven) — extended to 3 lines so, paired with ACC_PULL_V's single
+      // pool line, this still reaches 2 full supersets.
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm\nChest Supported Row: 4x10\nReverse Flys: 3x15',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
-    'Shoulder Health & Power Accessory': { // 5-day
-      MED_BALL: 'Med Ball Slam: 4x8',
+    'Shoulder Health & Power Accessory': { // 5-day — MED_BALL is the ONLY
+      // accessory tag this bonus day carries at all (ACC_CORE/ACC_SHOULDER
+      // both null out), so it alone has to supply both pairs.
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8\nBroad Jumps: 3x5 (submax)\nLateral Bounds: 4x5 each side',
     },
     'Upper — Vertical Press Emphasis': { // 6-day
-      MAIN_PRESS_V: 'Overhead Press',
-      ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      MAIN_PRESS_V: { name: 'Incline DB Press', suffix: ' (dumbbells only — no barbell overhead pressing, for throwing-shoulder health)' },
+      ACC_PULL_V: 'Pull-ups: 4xAMAP\nChest Supported Row: 4x10', // anchor on this day count
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper — Horizontal Press Emphasis': { // 6-day
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Lower Explosion': { // 6-day
       MAIN_SQUAT: 'Front Squat',
-      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg',
-      ACC_POSTERIOR: 'Hip Thrust: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg\nStep-Ups: 4x6 each leg', // anchor on this day
+      ACC_POSTERIOR: 'Hip Thrust: 4x8', // non-anchor — left as a single, phase-rotating line
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
-    'Upper — Arm-Care Emphasis': { // 6-day
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+    'Upper — Arm-Care Emphasis': { // 6-day — no MAIN_ tag at all, so
+      // organizeSessionDescription's "no ramped/oly lift" rule promotes
+      // whichever accessory is authored FIRST to stand alone as the day's
+      // free anchor line, removing it from the pairing pool entirely. Extend
+      // ACC_PULL_H (anchor:true) to 4 lines so, even after the 1st is
+      // promoted away, the remaining 3 plus ACC_PULL_V's single pool line
+      // still reach 2 full supersets.
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm\nChest Supported Row: 4x10\nDB Row: 4x10 each arm\nSeated Cable Lat Pulldown: 4x12',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
   },
@@ -3933,30 +4121,61 @@ const PITCHER_PACK = {
       // every other Rotational sport's own ACC_HINGE text (see Golf/Tennis/
       // QB/Track Throwers) and keeps applyHipAdjustments' pre-existing
       // Single Leg RDL -> Hamstring Curls hip-injury substitution reachable
-      // (its regex is anchored to the exact start of the line).
-      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
+      // (its regex is anchored to the exact start of the line). Extended
+      // to the same 4-line ACC_HINGE shape as BASEBALL_PACK's own
+      // (already-verified) fix for the identical single-superset shortfall
+      // — see that pack's comment for the full reasoning; Sandbag Carry
+      // gives 2 of the 3 hinge lines a genuine non-competing partner (one
+      // against the squat line, one against the carry line) instead of
+      // only one.
+      ACC_HINGE: 'Single Leg RDL: 4x8 each leg\nNordic Hamstring Curl: 4x6\nHip Thrust: 4x10\nSandbag Carry: 4x20 yds',
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
     },
     'Upper & Shoulder Health': {
       MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      // ACC_PULL_H is anchor:true here, MED_BALL is never pool-driven —
+      // both safe to extend, same shape as BASEBALL_PACK's own fix: a
+      // single line on each tag was only ever one superset total (Gorilla
+      // Row + Med Ball Slam, one cross-category pair); a 2nd line on each
+      // reaches 2 full supersets (Row+Lateral Raise, Slam+Chest Pass).
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper & Rotational': {
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
+      // Same 2-line ACC_PULL_H + 2-line MED_BALL shape as BASEBALL_PACK's
+      // own (already-verified) fix for this exact 3-day-only focus: a
+      // single line on each was only ever one cross-category superset
+      // (Gorilla Row + Med Ball Slam); a 2nd on each reaches 2 full
+      // supersets (Row+Lateral Raise, Slam+Chest Pass).
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Lower Strength': {
       MAIN_HINGE: 'Trap Bar Deadlift',
-      ACC_SQUAT: 'Goblet Squat: 4x10',
+      // ACC_POSTERIOR (Copenhagen Adductor — the deliberate pitcher-
+      // specific "enhanced hip stability" swap, see this pack's own top
+      // comment) is in MOBILITY_EXACT_EXEMPT, so it was NEVER a pairing
+      // candidate at all — left exactly as-is, not touched by this fix.
+      // Before this fix ACC_SQUAT's single line therefore had no eligible
+      // partner whatsoever (0 supersets, confirmed by direct trace).
+      // Extended to the same 5-line ACC_SQUAT shape as BASEBALL_PACK's own
+      // 'Lower Strength' fix, PLUS one extra safe line (Anti-Rotation
+      // Press) specifically because Copenhagen Adductor contributes
+      // nothing here: Sandbag Carry pairs off the 1st squat line, Anti-
+      // Rotation Press pairs off the 2nd, reaching 2 full supersets
+      // entirely from ACC_SQUAT's own content.
+      ACC_SQUAT: 'Goblet Squat: 4x10\nStep-Ups: 4x6 each leg\nCossack Squat: 3x10 each side\nSandbag Carry: 4x20 yds\nAnti-Rotation Press: 3x10 each side',
       ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper Power & Rotational': {
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      // Only safe (anchor) tag on this 2-slot day — extended to 3 lines,
+      // same shape as BASEBALL_PACK's own fix, so paired with ACC_PULL_V's
+      // single pool line this still reaches 2 full supersets instead of 1.
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm\nChest Supported Row: 4x10\nReverse Flys: 3x15',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
     'Shoulder Health & Power Accessory': {
@@ -3964,22 +4183,41 @@ const PITCHER_PACK = {
     },
     'Upper — Vertical Press Emphasis': {
       MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
-      ACC_PULL_V: 'Pull-ups: 4xAMAP',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      // ACC_PULL_V is anchor at 6-day (same as BASEBALL_PACK's own fix) —
+      // extended to 2 lines, paired with MED_BALL's own 2 lines below,
+      // reaches 2 full supersets instead of 1.
+      ACC_PULL_V: 'Pull-ups: 4xAMAP\nChest Supported Row: 4x10',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper — Horizontal Press Emphasis': {
       MAIN_PRESS_H: 'DB Bench Press',
-      ACC_PULL_H: 'Gorilla Row: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      // Same shape as BASEBALL_PACK's own fix for this exact 6-day-only
+      // focus.
+      ACC_PULL_H: 'Gorilla Row: 4x8\nLateral Raise: 3x12',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Lower Explosion': {
       MAIN_SQUAT: 'Front Squat',
-      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg',
+      // ACC_UNILATERAL_LOWER is anchor on this day (same as BASEBALL_PACK's
+      // own fix) — extended to 2 squat-pattern lines. ACC_POSTERIOR (
+      // Copenhagen Adductor, the deliberate pitcher-specific swap) is
+      // MOBILITY_EXACT_EXEMPT and contributes nothing to pairing either
+      // way (see 'Lower Strength' above) — MED_BALL's own 2 lines below
+      // give both squat lines a genuine, distinct non-competing partner
+      // (Reverse Lunge+Med Ball Slam, Step-Ups+Med Ball Chest Pass)
+      // instead, reaching 2 full supersets without relying on it.
+      ACC_UNILATERAL_LOWER: 'Reverse Lunge: 4x6 each leg\nStep-Ups: 4x6 each leg',
       ACC_POSTERIOR: 'Copenhagen Adductor: 4x8 each leg',
-      MED_BALL: 'Med Ball Slam: 4x8',
+      MED_BALL: 'Med Ball Slam: 4x8\nMed Ball Chest Pass: 4x8',
     },
     'Upper — Arm-Care Emphasis': {
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
+      // No MAIN_ tag on this day — the day's first-authored accessory line
+      // gets promoted to stand alone (see BASEBALL_PACK's own comment on
+      // the identical day). Extended to the same 4-line ACC_PULL_H shape
+      // as that fix: even after the 1st line is promoted away, the
+      // remaining 3 plus ACC_PULL_V's single pool line still reach 2 full
+      // supersets instead of 1.
+      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm\nChest Supported Row: 4x10\nDB Row: 4x10 each arm\nSeated Cable Lat Pulldown: 4x12',
       ACC_PULL_V: 'Pull-ups: 4xAMAP',
     },
   },
@@ -4930,7 +5168,7 @@ const TENNIS_PACK = {
       ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
     },
     'Upper & Shoulder Health': { // 4-day only
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
@@ -4955,7 +5193,7 @@ const TENNIS_PACK = {
       MED_BALL: 'Med Ball Slam: 4x8',
     },
     'Upper — Vertical Press Emphasis': {
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
       MED_BALL: 'Med Ball Slam: 4x8',
     },
@@ -5066,7 +5304,7 @@ const GOLF_PACK = {
       ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5', // 4-day
     },
     'Upper & Shoulder Health': { // 4-day only
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_H: 'Single Arm DB Row: 4x8 each arm',
       MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
@@ -5081,7 +5319,7 @@ const GOLF_PACK = {
       ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
     },
     'Upper — Vertical Press Emphasis': {
-      MAIN_PRESS_V: 'Overhead Press',
+      MAIN_PRESS_V: { name: 'Landmine Press', suffix: ' (angled — no direct overhead loading)' },
       ACC_PULL_V: 'Seated Cable Lat Pulldown: 4x12',
       MED_BALL: 'Med Ball Slam: 4x8',
       ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
@@ -6130,27 +6368,40 @@ function organizeSessionDescription(description, focus, protectedNames, maxAcces
   // full-codebase silent-content-loss bug). `kept` is simply every
   // candidate, restored to original authored order; `priority` (still
   // computed above — protected/sport-specific = 0, generic filler = 2) no
-  // longer influences what survives, since nothing is cut. The loop below
-  // pairs them into brackets of 2 wherever the count allows, in that same
-  // original order, with any genuinely odd leftover rendering as a single
-  // line instead of a bracket.
+  // longer influences what survives, since nothing is cut.
+  //
+  // feat/superset-ohp-fixes — pairing is no longer purely positional. A
+  // 'pair'-kind candidate (a pre-existing hand-authored ⟦SS⟧ group — see the
+  // marker branch above) is a deliberate, already-decided 2-exercise unit
+  // and is emitted as-is, unconditionally; it is never reconsidered here.
+  // Every run of 'single'-kind candidates BETWEEN (or around) any 'pair'
+  // boundaries is matched independently by pairCompatibleSingles, which
+  // guarantees no two lines sharing a primary muscle/pattern are ever
+  // bracketed together — see that function's own comment for exactly how.
   const kept = [...candidates].sort((a, b) => a.idx - b.idx)
 
-  let pendingSingle = null
-  for (const c of kept) {
-    if (c.kind === 'pair') {
-      if (pendingSingle) { out.push(pendingSingle); pendingSingle = null }
-      out.push(...superset(groupNum, c.lines))
-      groupNum++
-    } else if (pendingSingle) {
-      out.push(...superset(groupNum, [pendingSingle, c.lines[0]]))
-      groupNum++
-      pendingSingle = null
-    } else {
-      pendingSingle = c.lines[0]
+  function flushSingleRun(run) {
+    for (const g of pairCompatibleSingles(run)) {
+      if (g.kind === 'pair') {
+        out.push(...superset(groupNum, g.lines))
+        groupNum++
+      } else {
+        out.push(g.line)
+      }
     }
   }
-  if (pendingSingle) out.push(pendingSingle)
+
+  let singleRun = []
+  for (const c of kept) {
+    if (c.kind === 'pair') {
+      flushSingleRun(singleRun); singleRun = []
+      out.push(...superset(groupNum, c.lines))
+      groupNum++
+    } else {
+      singleRun.push(c)
+    }
+  }
+  flushSingleRun(singleRun)
 
   out.push(...otherLines)
   out.push(...conditioningLines)
