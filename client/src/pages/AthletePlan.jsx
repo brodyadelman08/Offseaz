@@ -1,5 +1,5 @@
 import { useState, useEffect, useRef } from 'react'
-import { useNavigate, useSearchParams } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import api from '../services/api'
 import {
   DumbbellIcon, CheckCircleIcon, TrophyIcon, BarbellIcon, ClipboardIcon,
@@ -557,19 +557,6 @@ export default function AthletePlan() {
   const activeTeam = useTeam()?.activeTeam ?? null
   const hasTeam    = Boolean(activeTeam)
 
-  // Plan-priority (feat/plan-priority): when a coach plan exists it's the
-  // one and only plan shown here by default — the personalized (auto-
-  // generated) plan is archived, not deleted, and stays reachable only via
-  // ?view=personalized so this page never shows both plans at once. Each
-  // plan keeps tracking its own progress independently either way (see
-  // currentWeekCoach/currentWeekAuto below) — viewing the archive never
-  // touches the coach plan's progress, and falling back to the personalized
-  // plan (once the coach plan is removed) never resets it either, since
-  // nothing here ever writes to a plan's current_week except logging a
-  // session on it.
-  const [searchParams, setSearchParams] = useSearchParams()
-  const viewArchived = searchParams.get('view') === 'personalized'
-
   const [coachPlan, setCoachPlan]  = useState(undefined)
   const [autoPlan,  setAutoPlan]   = useState(undefined)
   const [logs,      setLogs]       = useState([])
@@ -670,44 +657,7 @@ export default function AthletePlan() {
   const previewMode      = !hasTeam && Boolean(autoPlan)
   const activePlan       = coachPlan || autoPlan
   const activeCurrentWeek = coachPlan ? currentWeekCoach : currentWeekAuto
-  const showCompletion   = !viewArchived && !previewMode && activePlan && activeCurrentWeek >= activePlan.num_weeks
-
-  // Archive view — reached only via the "view archived plan" link below, and
-  // only meaningful while a coach plan exists to take priority over it (if
-  // it doesn't, the personalized plan is already the active plan shown in
-  // the normal view below, so there's nothing separate to archive). Reuses
-  // the exact same PlanView + currentWeekAuto state as the normal view, so
-  // browsing the archive never touches the coach plan's progress and never
-  // resets the personalized plan's own progress either.
-  if (viewArchived && autoPlan && coachPlan) {
-    return (
-      <div style={styles.container}>
-        <button style={styles.backLink} onClick={() => setSearchParams({})}>
-          ← Back to your plan
-        </button>
-        <div style={styles.planSection}>
-          <div style={styles.labelRow}>
-            <span style={styles.archivedLabel}>
-              <BoltIcon size={13} color="var(--text-3)" /> Personalized Plan — Archived
-            </span>
-          </div>
-          <p style={styles.archivedNote}>
-            This is the plan generated from your survey. Your coach has assigned you a plan, so that one is active —
-            this one is kept here for reference and keeps tracking its own progress.
-          </p>
-          <PlanView
-            plan={autoPlan}
-            currentWeek={currentWeekAuto}
-            setCurrentWeek={setCurrentWeekAuto}
-            logs={logs}
-            setLogs={setLogs}
-            maxes={maxes}
-            injuryAreas={injuryAreas}
-          />
-        </div>
-      </div>
-    )
-  }
+  const showCompletion   = !previewMode && activePlan && activeCurrentWeek >= activePlan.num_weeks
 
   return (
     <div style={styles.container}>
@@ -722,7 +672,7 @@ export default function AthletePlan() {
         />
       )}
 
-      {/* Coach plan — active whenever it exists (see feat/plan-priority) */}
+      {/* Coach plan */}
       {hasTeam && (
         coachPlan ? (
           <div style={styles.planSection}>
@@ -740,22 +690,14 @@ export default function AthletePlan() {
               maxes={maxes}
               injuryAreas={injuryAreas}
             />
-            {autoPlan && (
-              <button style={styles.archiveLink} onClick={() => setSearchParams({ view: 'personalized' })}>
-                <EyeIcon size={13} color="currentColor" /> You also have a personalized plan — view archived plan
-              </button>
-            )}
           </div>
         ) : (
           <div style={styles.noCoachNotice}>Your coach has not assigned a training plan yet.</div>
         )
       )}
 
-      {/* Personalized (auto-generated) plan — only the active plan when
-          there's no coach plan to take priority over it. Once a coach plan
-          exists this section stops rendering here entirely (see the archive
-          view above) — the main page never shows both plans at once. */}
-      {!coachPlan && autoPlan && (
+      {/* Auto plan */}
+      {autoPlan && (
         <div style={styles.planSection}>
           <div style={styles.labelRow}>
             <span style={previewMode ? styles.previewLabel : styles.autoLabel}>
@@ -795,20 +737,8 @@ const styles = {
   coachLabel:   { display:'inline-block', fontSize:13, fontWeight:700, color:BLUE, background:'rgba(48,142,189,.12)', border:'1px solid rgba(48,142,189,.25)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
   autoLabel:    { display:'inline-block', fontSize:13, fontWeight:700, color:ORANGE, background:'rgba(247,87,9,.08)', border:'1px solid rgba(247,87,9,.2)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
   previewLabel: { display:'inline-block', fontSize:13, fontWeight:700, color:'var(--text-3)', background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.12)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
-  archivedLabel:{ display:'inline-block', fontSize:13, fontWeight:700, color:'var(--text-3)', background:'rgba(255,255,255,.05)', border:'1px solid rgba(255,255,255,.12)', padding:'6px 16px', borderRadius:20, letterSpacing:.2 },
   lockedDesc:   { fontSize:13, color:'var(--text-3)', fontStyle:'italic', padding:'8px 12px', background:'rgba(255,255,255,.04)', borderRadius:8, marginTop:6, userSelect:'none' },
   noCoachNotice:{ background:'var(--card)', border:'1px solid var(--border)', borderRadius:14, padding:'16px 20px', marginBottom:28, color:'var(--text-2)', fontSize:14, fontStyle:'italic' },
-  archivedNote: { fontSize:13, color:'var(--text-3)', margin:'-6px 0 18px', lineHeight:1.5 },
-  archiveLink:  {
-    display:'inline-flex', alignItems:'center', gap:6, marginTop:18,
-    fontSize:13, fontWeight:600, color:'var(--text-2)',
-    background:'none', border:'none', cursor:'pointer', padding:0, textDecoration:'underline',
-  },
-  backLink: {
-    display:'inline-flex', alignItems:'center', gap:6,
-    fontSize:13, fontWeight:500, color:'var(--text-2)',
-    background:'none', border:'none', cursor:'pointer', padding:'0 0 20px',
-  },
 
   planMeta:   { color:'var(--text-3)', fontSize:13, margin:'0 0 16px' },
 
