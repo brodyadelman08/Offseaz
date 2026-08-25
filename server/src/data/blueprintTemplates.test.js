@@ -1452,14 +1452,22 @@ describe('Area 10 — Baseball sport-specific content', () => {
   // overhead pressing" constraint by filling the same slot with Landmine
   // Press (an angled, shoulder-safer press — already pitcher's own
   // pre-existing bench-slot substitute) instead.
-  test('Position Player gets a genuine Overhead Press as its vertical-press main lift; Pitcher never gets direct overhead pressing — Landmine Press fills that slot instead, flagged as angled/no-overhead', () => {
+  // feat/baseball-ohp-superset-fix — barbell Overhead Press is gone from
+  // Position Player too now, for throwing-shoulder health (it was never a
+  // light accessory — MAIN_PRESS_V renders as a real ramped main lift, see
+  // buildRotationalRenderers). Incline DB Press is the new vertical-press
+  // main lift, matching Pitcher's own pre-existing "no direct overhead
+  // pressing" constraint (Landmine Press), just with a different DB
+  // substitute and its own explaining suffix.
+  test('neither Position Player nor Pitcher ever gets direct barbell overhead pressing — Position Player gets Incline DB Press, Pitcher keeps Landmine Press', () => {
     const positionWeeks = baseball.generateWeeks('baseball', 'standard', 4)
     const pitcherWeeks  = baseball.generateWeeks('pitcher', 'standard', 4)
     const positionText  = allDescriptions(positionWeeks).join('\n')
     const pitcherText   = allDescriptions(pitcherWeeks).join('\n')
 
-    expect(positionText).toMatch(/^Overhead Press: \d+%/m)
+    expect(/^Overhead Press\b/m.test(positionText)).toBe(false)
     expect(/\bOverhead Press\b/.test(pitcherText)).toBe(false)
+    expect(positionText).toMatch(/^Incline DB Press: \d+%×\d+.*\(dumbbells only — no barbell overhead pressing, for throwing-shoulder health\)$/m)
     expect(pitcherText).toMatch(/^Landmine Press: \d+%×\d+.*\(angled — no direct overhead loading\)$/m)
   })
 
@@ -1474,7 +1482,23 @@ describe('Area 10 — Baseball sport-specific content', () => {
   // variety engine's pool from week 2 on (deterministic, same mechanism
   // every sport now gets — baseball is no longer a special case exempted
   // from it).
-  test('Lower Power: Back Squat renders standalone; Single Leg RDL (ACC_HINGE anchor) bracketed with the ACC_UNILATERAL_LOWER filler, which rotates from week 2', () => {
+  // feat/superset-ohp-fixes — ACC_HINGE is now 4 static lines (Single Leg
+  // RDL/Nordic Hamstring Curl/Hip Thrust/Sandbag Carry — NOT Glute Bridge/
+  // Copenhagen Adductor, both MOBILITY_EXACT_EXEMPT and silently excluded
+  // from pairing). organizeSessionDescription's pairing is now movement-
+  // pattern-aware (see movementPatterns.js): Single Leg RDL/Nordic
+  // Hamstring Curl/Hip Thrust are all HINGE-pattern and can never bracket
+  // with each other, so with the ACC_UNILATERAL_LOWER filler (SQUAT-
+  // pattern) as the only non-hinge partner available, at most 2 of the 3
+  // hinge lines can pair off — SS1 = Single Leg RDL + Sandbag Carry
+  // (CORE_CARRY, competes with nothing — both anchor, identical every
+  // week), SS2 = Nordic Hamstring Curl (anchor) + the ACC_UNILATERAL_LOWER
+  // filler (still rotates from week 2, unchanged) — and Hip Thrust stands
+  // alone, unbracketed but still static/anchor every week (there is no
+  // valid 3rd non-competing partner left for it once the other two hinge
+  // lines have paired off against the squat-pattern filler and the carry
+  // line — forcing one would violate the no-same-pattern-superset rule).
+  test('Lower Power: Back Squat renders standalone; SS1 = Single Leg RDL + Sandbag Carry (static every week), SS2 = Nordic Hamstring Curl + the ACC_UNILATERAL_LOWER filler (rotates from week 2), Hip Thrust stands alone (no valid non-competing partner left)', () => {
     const raw = baseball.generateWeeks('baseball', 'standard', 4)
     const organized = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
     const fillerByWeek = []
@@ -1483,16 +1507,25 @@ describe('Area 10 — Baseball sport-specific content', () => {
       expect(day1[0]).toMatch(/^Back Squat: \d+%/)
       expect(SUPERSET_MARKER_RE.test(day1[0])).toBe(false)
       const marked = day1.filter(l => SUPERSET_MARKER_RE.test(l))
-      expect(marked[0]).toMatch(/^⟦SS1⟧Single Leg RDL:/) // anchor — identical every week
-      expect(marked[1]).toMatch(/^⟦SS1⟧[A-Za-z].*:/) // filler — still a real, bracketed accessory every week
-      fillerByWeek.push(marked[1])
+      expect(marked[0]).toMatch(/^⟦SS1⟧Single Leg RDL:/)  // anchor — identical every week
+      expect(marked[1]).toMatch(/^⟦SS1⟧Sandbag Carry:/)   // anchor — identical every week
+      expect(marked[2]).toMatch(/^⟦SS2⟧Nordic Hamstring Curl:/) // anchor — identical every week
+      expect(marked[3]).toMatch(/^⟦SS2⟧[A-Za-z].*:/)      // filler — still a real, bracketed accessory every week
+      fillerByWeek.push(marked[3])
+      // Hip Thrust: the 3rd hinge line, unbracketed (no valid partner) but
+      // still static/anchor every week — not swallowed, not rotating.
+      const hipThrust = day1.find(l => l.startsWith('Hip Thrust:'))
+      expect(hipThrust).toMatch(/^Hip Thrust: 4x10$/)
     }
-    expect(fillerByWeek[0]).toMatch(/^⟦SS1⟧Bulgarian Split Squat:/) // week 1 = Stage 1's own static choice
+    expect(fillerByWeek[0]).toMatch(/^⟦SS2⟧Bulgarian Split Squat:/) // week 1 = Stage 1's own static choice
     expect(fillerByWeek[1]).not.toBe(fillerByWeek[0]) // week 2 rotates
     expect(fillerByWeek[3]).toBe(fillerByWeek[2]) // deload week freezes at week 3's pick, doesn't revert or advance
   })
 
-  test('Upper Strength (Position Player\'s "Upper & Shoulder Health" day): Overhead Press + Gorilla Row + Med Ball Slam, press standalone, accessory pair bracketed, static every week', () => {
+  // feat/baseball-ohp-superset-fix — Overhead Press -> Incline DB Press
+  // (throwing-shoulder health), and ACC_PULL_H/MED_BALL are now each 2
+  // static lines, reaching 2 full supersets instead of 1.
+  test('Upper Strength (Position Player\'s "Upper & Shoulder Health" day): Incline DB Press standalone, Gorilla Row+Lateral Raise and Med Ball Slam+Med Ball Chest Pass both bracketed, static every week', () => {
     // Med Ball Slam, not Med Ball Rotational Throw — the latter is the
     // finisher engine's own 'rotation' family anchor (medBallPoolVariant),
     // reused verbatim by baseballFinisherBank; an inline MED_BALL slot
@@ -1502,10 +1535,12 @@ describe('Area 10 — Baseball sport-specific content', () => {
     const weeks = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
     for (const wk of [0, 1, 2, 3]) {
       const day2 = weeks[wk].sessions[1].description.split('\n')
-      expect(day2[0]).toMatch(/^Overhead Press: \d+%/)
+      expect(day2[0]).toMatch(/^Incline DB Press: \d+%.*\(dumbbells only — no barbell overhead pressing, for throwing-shoulder health\)$/)
       const marked = day2.filter(l => SUPERSET_MARKER_RE.test(l))
       expect(marked[0]).toMatch(/^⟦SS1⟧Gorilla Row:/)
-      expect(marked[1]).toMatch(/^⟦SS1⟧Med Ball Slam:/)
+      expect(marked[1]).toMatch(/^⟦SS1⟧Lateral Raise:/)
+      expect(marked[2]).toMatch(/^⟦SS2⟧Med Ball Slam:/)
+      expect(marked[3]).toMatch(/^⟦SS2⟧Med Ball Chest Pass:/)
     }
   })
 
@@ -1650,6 +1685,11 @@ describe('Area 11 — Session organization, volume cap, and warm-up blocks', () 
     }
   })
 
+  // feat/superset-ohp-recover — restored to this codebase revision's real
+  // shape (warmup-consistent-display never landed here): baseball is the
+  // one archetype with a structural session.warmup object; every other
+  // archetype (Linemen/Collision included) still weaves its warm-up into
+  // `description`'s own first line as text, so `warmup` stays undefined.
   test('each baseball day type carries the correct collapsed warm-up block, and non-baseball sports get none (baseball-only for now)', () => {
     const bp = generateBlueprintForAthlete({
       sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
@@ -2006,7 +2046,19 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
   // pair (ACC_POSTERIOR/ACC_PULL_V), which rotates from week 2 like every
   // other sport's now that baseball is no longer specially exempted.
   describe('static ANCHOR content — the variety engine\'s filler pools now govern the rest', () => {
-    test('Lower Strength: Trap Bar Deadlift (main lift, standalone) brackets with Goblet Squat (ACC_SQUAT anchor, never rotates) + the ACC_POSTERIOR filler (rotates from week 2)', () => {
+    // feat/superset-ohp-fixes — ACC_SQUAT is now 5 static lines (Goblet
+    // Squat/Step-Ups/Cossack Squat/Sandbag Carry/... — see BASEBALL_PACK's
+    // own comment). organizeSessionDescription's pairing is movement-
+    // pattern-aware now (movementPatterns.js): Goblet Squat/Step-Ups/
+    // Cossack Squat are all SQUAT-pattern and can never bracket with each
+    // other, so SS1 = Goblet Squat + Sandbag Carry (CORE_CARRY, competes
+    // with nothing — both anchor, identical every week), SS2 = Step-Ups
+    // (anchor) + the still-rotating ACC_POSTERIOR filler (HINGE-pattern,
+    // non-competing with the SQUAT-pattern Step-Ups) — and Cossack Squat
+    // stands alone, unbracketed but still static/anchor every week (no
+    // valid 3rd non-competing partner left once the other two squat lines
+    // have paired off).
+    test('Lower Strength: Trap Bar Deadlift (main lift, standalone) brackets with Goblet Squat+Sandbag Carry as SS1 (both anchor, never rotate) and Step-Ups + the ACC_POSTERIOR filler as SS2 (rotates from week 2); Cossack Squat stands alone (no valid non-competing partner left)', () => {
       const raw = baseball.generateWeeks('baseball', 'standard', 4)
       const weeks = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
       const fillerByWeek = []
@@ -2015,16 +2067,28 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
         expect(lines[0]).toMatch(/^Trap Bar Deadlift: \d+%/)
         expect(SUPERSET_MARKER_RE.test(lines[0])).toBe(false)
         const marked = lines.filter(l => SUPERSET_MARKER_RE.test(l))
-        expect(marked[0]).toMatch(/^⟦SS1⟧Goblet Squat:/) // anchor — identical every week
-        expect(marked[1]).toMatch(/^⟦SS1⟧[A-Za-z].*:/)
-        fillerByWeek.push(marked[1])
+        expect(marked[0]).toMatch(/^⟦SS1⟧Goblet Squat:/)   // anchor — identical every week
+        expect(marked[1]).toMatch(/^⟦SS1⟧Sandbag Carry:/)  // anchor — identical every week
+        expect(marked[2]).toMatch(/^⟦SS2⟧Step-Ups:/)       // anchor — identical every week
+        expect(marked[3]).toMatch(/^⟦SS2⟧[A-Za-z].*:/)
+        fillerByWeek.push(marked[3])
+        const cossack = lines.find(l => l.startsWith('Cossack Squat:'))
+        expect(cossack).toMatch(/^Cossack Squat: 3x10 each side$/) // standalone, static every week
       }
-      expect(fillerByWeek[0]).toMatch(/^⟦SS1⟧Hip Thrust:/) // week 1 = Stage 1's own static choice
+      expect(fillerByWeek[0]).toMatch(/^⟦SS2⟧Hip Thrust:/) // week 1 = Stage 1's own static choice
       expect(fillerByWeek[1]).not.toBe(fillerByWeek[0])
       expect(fillerByWeek[3]).toBe(fillerByWeek[2]) // deload freezes at week 3's pick
     })
 
-    test('Upper Power (Position Player\'s "Upper Power & Rotational" day): DB Bench Press (main lift, standalone) brackets with Single Arm DB Row (ACC_PULL_H anchor, never rotates) + the ACC_PULL_V filler (rotates from week 2)', () => {
+    // feat/baseball-ohp-superset-fix — ACC_PULL_H is 3 static lines (Single
+    // Arm DB Row/Chest Supported Row/Reverse Flys). feat/superset-ohp-fixes:
+    // organizeSessionDescription's pairing is movement-pattern-aware now —
+    // Single Arm DB Row and Chest Supported Row are both HORIZ_PULL and can
+    // never bracket with each other, so SS1 pairs Single Arm DB Row with
+    // Reverse Flys (SHOULDER_ACC, non-competing) instead, leaving Chest
+    // Supported Row to pair with the ACC_PULL_V filler (VERT_PULL — a
+    // different pull pattern, non-competing) as SS2.
+    test('Upper Power (Position Player\'s "Upper Power & Rotational" day): DB Bench Press (main lift, standalone) brackets with Single Arm DB Row+Reverse Flys as SS1 (both anchor, never rotate) and Chest Supported Row + the ACC_PULL_V filler as SS2 (rotates from week 2)', () => {
       const raw = baseball.generateWeeks('baseball', 'standard', 4)
       const weeks = applySessionOrganization(raw, SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
       const fillerByWeek = []
@@ -2032,11 +2096,13 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
         const lines = weeks[wk].sessions[3].description.split('\n')
         expect(lines[0]).toMatch(/^DB Bench Press: \d+%/)
         const marked = lines.filter(l => SUPERSET_MARKER_RE.test(l))
-        expect(marked[0]).toMatch(/^⟦SS1⟧Single Arm DB Row:/) // anchor — identical every week
-        expect(marked[1]).toMatch(/^⟦SS1⟧[A-Za-z].*:/)
-        fillerByWeek.push(marked[1])
+        expect(marked[0]).toMatch(/^⟦SS1⟧Single Arm DB Row:/)   // anchor — identical every week
+        expect(marked[1]).toMatch(/^⟦SS1⟧Reverse Flys:/)        // anchor — identical every week
+        expect(marked[2]).toMatch(/^⟦SS2⟧Chest Supported Row:/) // anchor — identical every week
+        expect(marked[3]).toMatch(/^⟦SS2⟧[A-Za-z].*:/)
+        fillerByWeek.push(marked[3])
       }
-      expect(fillerByWeek[0]).toMatch(/^⟦SS1⟧Pull-ups:/) // week 1 = Stage 1's own static choice
+      expect(fillerByWeek[0]).toMatch(/^⟦SS2⟧Pull-ups:/) // week 1 = Stage 1's own static choice
       expect(fillerByWeek[1]).not.toBe(fillerByWeek[0])
       expect(fillerByWeek[3]).toBe(fillerByWeek[2]) // deload freezes at week 3's pick
     })
@@ -2167,7 +2233,27 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
   })
 
   describe('pairing/balance rule — ~90% paired, only main lift or power move standalone', () => {
-    test('across all 4 core baseball days, at least 90% of working exercise lines are bracketed into a pairing, and every standalone line is either a main lift or a finisher', () => {
+    // feat/superset-ohp-fixes — organizeSessionDescription's pairing is now
+    // movement-pattern-aware (movementPatterns.js): it will never bracket
+    // two same-primary-muscle/pattern lines together, even if that leaves
+    // one genuinely unpaired. Day 1's ACC_HINGE has 3 HINGE-pattern lines
+    // (Single Leg RDL/Nordic Hamstring Curl/Hip Thrust) competing for at
+    // most 2 non-competing partners (the SQUAT-pattern filler and the
+    // CORE_CARRY Sandbag Carry line) — Hip Thrust is the mathematically
+    // necessary odd one out. Day 3's ACC_SQUAT has the identical shape
+    // (Goblet Squat/Step-Ups/Cossack Squat, all SQUAT-pattern) — Cossack
+    // Squat is the odd one out there. Both are genuine, deliberate,
+    // documented exceptions to the "everything pairs" rule — not a
+    // regression — see BASEBALL_PACK's own comments on both fixes for the
+    // full reasoning. Excluded from the denominator entirely (same
+    // treatment as a recognized finisher or main lift, which were never
+    // meant to be paired either), so this test still catches any NEW,
+    // undocumented unpaired line as a real failure.
+    const KNOWN_UNPAIRED_BY_DESIGN = new Set([
+      'Day 1: Hip Thrust: 4x10',
+      'Day 3: Cossack Squat: 3x10 each side',
+    ])
+    test('across all 4 core baseball days, at least 90% of working exercise lines are bracketed into a pairing, and every standalone line is either a main lift, a finisher, or a documented odd-one-out from the no-same-pattern-pairing rule', () => {
       const weeks = applySessionOrganization(baseball.generateWeeks('baseball', 'standard', 4), SPORT_ACCESSORY_ROTATION.baseball, 'baseball')
       let total = 0
       let paired = 0
@@ -2181,7 +2267,7 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
       // layout assembler never brackets a MAIN_ line with an accessory —
       // so those names are exempt from the pairing denominator too, same
       // as every other archetype's own main-lift-standalone convention.
-      const FINISHER_OR_MAIN_RE = /^(Bike Ladder|Sprint Tempo Protocol|Back Squat|Trap Bar Deadlift|Overhead Press|DB Bench Press)\b/
+      const FINISHER_OR_MAIN_RE = /^(Bike Ladder|Sprint Tempo Protocol|Back Squat|Trap Bar Deadlift|Incline DB Press|DB Bench Press)\b/
       for (const s of weeks[0].sessions) {
         let inExemptBlock = false
         for (const rawLine of s.description.split('\n')) {
@@ -2197,6 +2283,7 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
           // never meant to be paired at all, same as Core/Arm Care block
           // content above (which is also excluded from the denominator).
           if (FINISHER_OR_MAIN_RE.test(bare)) continue
+          if (KNOWN_UNPAIRED_BY_DESIGN.has(`${s.day}: ${bare}`)) continue
           total++
           unpairedNonExempt.push(`${s.day}: ${bare}`)
         }
@@ -2270,7 +2357,7 @@ describe('Area 14 — Baseball comprehensive rebuild', () => {
       const b3 = baseball.generateWeeks('baseball', 'standard', 3)
       expect(b3[0].sessions[1]).not.toEqual(b4[0].sessions[1])
       expect(b3[0].sessions[1].description).toMatch(/^DB Bench Press: \d+%/)
-      expect(b4[0].sessions[1].description).toMatch(/^Overhead Press: \d+%/)
+      expect(b4[0].sessions[1].description).toMatch(/^Incline DB Press: \d+%/)
     })
 
     test('the 3-day split has no "Upper Strength"/"Upper Power" 4-day-only day names', () => {

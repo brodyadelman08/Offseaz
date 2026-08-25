@@ -879,7 +879,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Aerobic Base:
 Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
@@ -889,8 +892,10 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-ups: 4xAMAP
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating V-Ups: 3x20s
@@ -902,7 +907,12 @@ Alternating Supermans: 3x20s",
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Med Ball Slam: 4x8
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Step-Ups: 4x6 each leg
+⟦SS2⟧Med Ball Slam: 4x8
+⟦SS3⟧Cossack Squat: 3x10 each side
+⟦SS3⟧Med Ball Chest Pass: 4x8
+Lateral Bounds: 4x5 each side
 
 Conditioning — Half-Kneeling:
 Med Ball Rotational Throw: 3x6 each side (half-kneeling)
@@ -921,7 +931,10 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Reverse Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -933,8 +946,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Seated Cable Lat Pulldown: 2x9
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Seated Cable Lat Pulldown: 2x9
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -948,6 +963,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -964,7 +980,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -974,8 +993,10 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-Ups: 4x6
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-Ups: 4x6
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating Supermans: 3x20s
@@ -988,6 +1009,8 @@ Mountain Climbers: 3x20s",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Standing:
 Med Ball Rotational Throw: 3x6 each side
@@ -1006,7 +1029,10 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1018,8 +1044,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-Ups: 2x5
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Pull-Ups: 2x5
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1033,6 +1061,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -1049,7 +1078,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Quality Speed:
 Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
@@ -1059,8 +1091,10 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Weighted Pull-Ups: 4x5
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Weighted Pull-Ups: 4x5
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Conditioning — Maximal Velocity:
 Med Ball Rotational Throw: 4x6 each side (max intent)",
@@ -1071,6 +1105,8 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Repeat Effort:
 Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
@@ -1088,7 +1124,10 @@ Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1100,8 +1139,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Weighted Pull-Ups: 2x4
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Weighted Pull-Ups: 2x4
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side",
@@ -1114,6 +1155,7 @@ Med Ball Overhead Slam: 2x5 each side",
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1129,7 +1171,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Walking Lunge: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Walking Lunge: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -1139,8 +1184,10 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lat Pulldown: 4x10
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Lat Pulldown: 4x10
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Hollow Hold: 3x20s
@@ -1153,6 +1200,8 @@ Decline Bench Iso: 3x30s hold",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Low Volume, Max Intent:
 Med Ball Rotational Throw: 2x6 each side (max intent)
@@ -1171,7 +1220,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x6 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1183,8 +1235,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lat Pulldown: 2x8
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Lat Pulldown: 2x8
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1198,6 +1252,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -1219,7 +1274,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Aerobic Base:
 Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
@@ -1229,8 +1287,10 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-ups: 4xAMAP
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating V-Ups: 3x20s
@@ -1242,7 +1302,12 @@ Alternating Supermans: 3x20s",
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Med Ball Slam: 4x8
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Step-Ups: 4x6 each leg
+⟦SS2⟧Med Ball Slam: 4x8
+⟦SS3⟧Cossack Squat: 3x10 each side
+⟦SS3⟧Med Ball Chest Pass: 4x8
+Lateral Bounds: 4x5 each side
 
 Conditioning — Half-Kneeling:
 Med Ball Rotational Throw: 3x6 each side (half-kneeling)
@@ -1261,7 +1326,10 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Reverse Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1273,8 +1341,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Seated Cable Lat Pulldown: 2x9
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Seated Cable Lat Pulldown: 2x9
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1288,6 +1358,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -1304,7 +1375,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -1314,8 +1388,10 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-Ups: 4x6
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-Ups: 4x6
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating Supermans: 3x20s
@@ -1328,6 +1404,8 @@ Mountain Climbers: 3x20s",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Standing:
 Med Ball Rotational Throw: 3x6 each side
@@ -1346,7 +1424,10 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1358,8 +1439,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-Ups: 2x5
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Pull-Ups: 2x5
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1373,6 +1456,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -1389,7 +1473,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Quality Speed:
 Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
@@ -1399,8 +1486,10 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Weighted Pull-Ups: 4x5
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Weighted Pull-Ups: 4x5
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Conditioning — Maximal Velocity:
 Med Ball Rotational Throw: 4x6 each side (max intent)",
@@ -1411,6 +1500,8 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Repeat Effort:
 Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
@@ -1428,7 +1519,10 @@ Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1440,8 +1534,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Weighted Pull-Ups: 2x4
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Weighted Pull-Ups: 2x4
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side",
@@ -1454,6 +1550,7 @@ Med Ball Overhead Slam: 2x5 each side",
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1469,7 +1566,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Walking Lunge: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Walking Lunge: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -1479,8 +1579,10 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lat Pulldown: 4x10
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Lat Pulldown: 4x10
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Hollow Hold: 3x20s
@@ -1493,6 +1595,8 @@ Decline Bench Iso: 3x30s hold",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Low Volume, Max Intent:
 Med Ball Rotational Throw: 2x6 each side (max intent)
@@ -1511,7 +1615,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x6 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1523,8 +1630,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lat Pulldown: 2x8
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Lat Pulldown: 2x8
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1538,6 +1647,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -1559,7 +1669,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Acceleration Mechanics:
 Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
@@ -1569,8 +1682,10 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-ups: 4xAMAP
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating V-Ups: 3x20s
@@ -1583,7 +1698,11 @@ Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Med Ball Slam: 4x8
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Step-Ups: 4x6 each leg
+⟦SS2⟧Anti-Rotation Press: 3x10 each side
+⟦SS3⟧Cossack Squat: 3x10 each side
+⟦SS3⟧Med Ball Slam: 4x8
 
 Conditioning — Aerobic Base:
 Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
@@ -1601,7 +1720,10 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Reverse Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1613,8 +1735,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Seated Cable Lat Pulldown: 2x9
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Seated Cable Lat Pulldown: 2x9
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1644,7 +1768,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -1654,8 +1781,10 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-Ups: 4x6
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-Ups: 4x6
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating Supermans: 3x20s
@@ -1686,7 +1815,10 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -1698,8 +1830,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-Ups: 2x5
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Pull-Ups: 2x5
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1729,7 +1863,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Quality Speed:
 Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
@@ -1739,8 +1876,10 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Weighted Pull-Ups: 4x5
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Weighted Pull-Ups: 4x5
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Conditioning — Maximal Velocity:
 Med Ball Rotational Throw: 4x6 each side (max intent)",
@@ -1768,7 +1907,10 @@ Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1780,8 +1922,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Weighted Pull-Ups: 2x4
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Weighted Pull-Ups: 2x4
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side",
@@ -1809,7 +1953,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Walking Lunge: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Walking Lunge: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -1819,8 +1966,10 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lat Pulldown: 4x10
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Lat Pulldown: 4x10
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Hollow Hold: 3x20s
@@ -1851,7 +2000,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x6 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1863,8 +2015,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lat Pulldown: 2x8
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Lat Pulldown: 2x8
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1899,7 +2053,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals b
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Acceleration Mechanics:
 Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
@@ -1909,8 +2066,10 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-ups: 4xAMAP
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating V-Ups: 3x20s
@@ -1923,7 +2082,11 @@ Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Med Ball Slam: 4x8
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Step-Ups: 4x6 each leg
+⟦SS2⟧Anti-Rotation Press: 3x10 each side
+⟦SS3⟧Cossack Squat: 3x10 each side
+⟦SS3⟧Med Ball Slam: 4x8
 
 Conditioning — Aerobic Base:
 Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
@@ -1941,7 +2104,10 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Reverse Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -1953,8 +2119,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Seated Cable Lat Pulldown: 2x9
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Seated Cable Lat Pulldown: 2x9
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -1984,7 +2152,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -1994,8 +2165,10 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-Ups: 4x6
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-Ups: 4x6
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating Supermans: 3x20s
@@ -2026,7 +2199,10 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -2038,8 +2214,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-Ups: 2x5
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Pull-Ups: 2x5
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -2069,7 +2247,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Quality Speed:
 Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
@@ -2079,8 +2260,10 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Weighted Pull-Ups: 4x5
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Weighted Pull-Ups: 4x5
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Conditioning — Maximal Velocity:
 Med Ball Rotational Throw: 4x6 each side (max intent)",
@@ -2108,7 +2291,10 @@ Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -2120,8 +2306,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Weighted Pull-Ups: 2x4
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Weighted Pull-Ups: 2x4
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side",
@@ -2149,7 +2337,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Walking Lunge: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Walking Lunge: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -2159,8 +2350,10 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lat Pulldown: 4x10
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Lat Pulldown: 4x10
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Hollow Hold: 3x20s
@@ -2191,7 +2384,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x6 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -2203,8 +2399,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lat Pulldown: 2x8
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Lat Pulldown: 2x8
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -7187,8 +7385,8 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals h
         "day": "Day 1",
         "description": "Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×8
 ⟦SS1⟧Cossack Squat: 3x8 each side
-⟦SS1⟧Lateral Bound: 5x5 each side (moderate intent — controlled speed)
-⟦SS2⟧Copenhagen Plank: 3x20s each side
+⟦SS1⟧Copenhagen Plank: 3x20s each side
+⟦SS2⟧Lateral Bound: 5x5 each side (moderate intent — controlled speed)
 ⟦SS2⟧Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7229,7 +7427,7 @@ Plank: 3x30 seconds",
 
 Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
 ⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS2⟧Copenhagen Plank: 2x15s each side
+⟦SS1⟧Copenhagen Plank: 2x15s each side
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7270,8 +7468,8 @@ Plank: 3x30 seconds",
         "day": "Day 1",
         "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Cossack Squat: 3x8 each side
-⟦SS1⟧Lateral Bound: 6x5 each side (add volume — building intent)
-⟦SS2⟧Copenhagen Plank: 3x20s each side
+⟦SS1⟧Copenhagen Plank: 3x20s each side
+⟦SS2⟧Lateral Bound: 6x5 each side (add volume — building intent)
 ⟦SS2⟧Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7310,7 +7508,7 @@ Half Kneeling Cable Press: 3x10 each side",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
 ⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS2⟧Copenhagen Plank: 2x15s each side
+⟦SS1⟧Copenhagen Plank: 2x15s each side
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7349,8 +7547,8 @@ Half Kneeling Cable Press: 3x10 each side",
         "day": "Day 1",
         "description": "Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Cossack Squat: 3x8 each side
-⟦SS1⟧Lateral Bound: 6x5 each side (high intent — near-max effort)
-⟦SS2⟧Copenhagen Plank: 3x20s each side
+⟦SS1⟧Copenhagen Plank: 3x20s each side
+⟦SS2⟧Lateral Bound: 6x5 each side (high intent — near-max effort)
 ⟦SS2⟧Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7389,7 +7587,7 @@ Cable Woodchop: 3x10 each side",
 
 Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
 ⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS2⟧Copenhagen Plank: 2x15s each side
+⟦SS1⟧Copenhagen Plank: 2x15s each side
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7428,8 +7626,8 @@ Cable Woodchop: 3x10 each side",
         "day": "Day 1",
         "description": "Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Cossack Squat: 3x8 each side
-⟦SS1⟧Lateral Bound: 4x5 each side (tapered — lowest volume, stay sharp)
-⟦SS2⟧Copenhagen Plank: 3x20s each side
+⟦SS1⟧Copenhagen Plank: 3x20s each side
+⟦SS2⟧Lateral Bound: 4x5 each side (tapered — lowest volume, stay sharp)
 ⟦SS2⟧Single Leg RDL: 3x8 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -7468,7 +7666,7 @@ Suitcase Carry: 3x20 yds each side",
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
 ⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS2⟧Copenhagen Plank: 2x15s each side
+⟦SS1⟧Copenhagen Plank: 2x15s each side
 ⟦SS2⟧Single Leg RDL: 2x6 each leg
 Copenhagen Adductor: 3x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
@@ -8404,10 +8602,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals h
       {
         "day": "Day 1",
         "description": "Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×8
-⟦SS1⟧Cossack Squat: 3x10 each side
+Cossack Squat: 3x10 each side
 ⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
-⟦SS2⟧Lateral Bound: 5x5 each side
-⟦SS2⟧Single Leg Box Jump: 3x5 each leg (moderate intent — controlled speed)
+⟦SS1⟧Single Leg Box Jump: 3x5 each leg (moderate intent — controlled speed)
+Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8445,7 +8643,7 @@ Plank: 3x30 seconds",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
+Cossack Squat: 2x8 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8483,10 +8681,10 @@ Plank: 3x30 seconds",
       {
         "day": "Day 1",
         "description": "Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
-⟦SS1⟧Cossack Squat: 3x10 each side
+Cossack Squat: 3x10 each side
 ⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
-⟦SS2⟧Lateral Bound: 5x5 each side
-⟦SS2⟧Single Leg Box Jump: 4x5 each leg (add volume — building intent)
+⟦SS1⟧Single Leg Box Jump: 4x5 each leg (add volume — building intent)
+Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8522,7 +8720,7 @@ Half Kneeling Cable Press: 3x10 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
-⟦SS1⟧Cossack Squat: 2x8 each side
+Cossack Squat: 2x8 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8558,10 +8756,10 @@ Half Kneeling Cable Press: 3x10 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
-⟦SS1⟧Cossack Squat: 3x10 each side
+Cossack Squat: 3x10 each side
 ⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
-⟦SS2⟧Lateral Bound: 5x5 each side
-⟦SS2⟧Single Leg Box Jump: 4x5 each leg (high intent — near-max effort)
+⟦SS1⟧Single Leg Box Jump: 4x5 each leg (high intent — near-max effort)
+Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8597,7 +8795,7 @@ Cable Woodchop: 3x10 each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
-⟦SS1⟧Cossack Squat: 2x8 each side
+Cossack Squat: 2x8 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8633,10 +8831,10 @@ Cable Woodchop: 3x10 each side",
       {
         "day": "Day 1",
         "description": "Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
-⟦SS1⟧Cossack Squat: 3x10 each side
+Cossack Squat: 3x10 each side
 ⟦SS1⟧Single Leg Lateral Hurdle Hop: 3x5 each leg
-⟦SS2⟧Lateral Bound: 5x5 each side
-⟦SS2⟧Single Leg Box Jump: 2x5 each leg (tapered — lowest volume, stay sharp)
+⟦SS1⟧Single Leg Box Jump: 2x5 each leg (tapered — lowest volume, stay sharp)
+Lateral Bound: 5x5 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8672,7 +8870,7 @@ Suitcase Carry: 3x20 yds each side",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
-⟦SS1⟧Cossack Squat: 2x8 each side
+Cossack Squat: 2x8 each side
 Copenhagen Adductor: 4x8 each leg
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -8972,8 +9170,8 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals l
         "description": "Power Clean: 4x3
 ⟦SS1⟧Back Squat: 33%×10, 43%×8, 53%×6, 59%×5, 66%×8
 ⟦SS1⟧Lateral Bounds: 4x5 each side (moderate intent — controlled speed)
-⟦SS2⟧Hip Thrust: 3x8
-⟦SS2⟧Single Leg RDL: 4x8 each leg
+Hip Thrust: 3x8
+Single Leg RDL: 4x8 each leg
 Nordic Hamstring Curl: 3x5
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9009,8 +9207,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 
 Power Clean: 2x2
 ⟦SS1⟧Back Squat: 28%×10, 36%×8, 45%×6, 50%×5, 56%×8
-⟦SS2⟧Hip Thrust: 2x6
-⟦SS2⟧Single Leg RDL: 2x6 each leg
+Hip Thrust: 2x6
+Single Leg RDL: 2x6 each leg
 Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9047,8 +9245,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
         "description": "Power Clean: 4x3
 ⟦SS1⟧Back Squat: 35%×10, 45%×8, 56%×6, 63%×5, 70%×6
 ⟦SS1⟧Lateral Bounds: 5x5 each side (add volume — building intent)
-⟦SS2⟧Hip Thrust: 3x8
-⟦SS2⟧Single Leg RDL: 3x8 each leg
+Hip Thrust: 3x8
+Single Leg RDL: 3x8 each leg
 Nordic Hamstring Curl: 3x5
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9083,8 +9281,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 
 Power Clean: 2x2
 ⟦SS1⟧Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×6
-⟦SS2⟧Hip Thrust: 2x6
-⟦SS2⟧Single Leg RDL: 2x6 each leg
+Hip Thrust: 2x6
+Single Leg RDL: 2x6 each leg
 Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9120,8 +9318,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
         "description": "Power Clean: 4x3
 ⟦SS1⟧Back Squat: 37%×10, 48%×8, 59%×6, 67%×5, 74%×5
 ⟦SS1⟧Lateral Bounds: 5x5 each side (high intent — near-max effort)
-⟦SS2⟧Hip Thrust: 3x8
-⟦SS2⟧Single Leg RDL: 3x8 each leg
+Hip Thrust: 3x8
+Single Leg RDL: 3x8 each leg
 Nordic Hamstring Curl: 3x5
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9156,8 +9354,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 
 Power Clean: 2x2
 ⟦SS1⟧Back Squat: 32%×10, 41%×8, 50%×6, 57%×5, 63%×5
-⟦SS2⟧Hip Thrust: 2x6
-⟦SS2⟧Single Leg RDL: 2x6 each leg
+Hip Thrust: 2x6
+Single Leg RDL: 2x6 each leg
 Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9193,8 +9391,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
         "description": "Power Clean: 4x3
 ⟦SS1⟧Back Squat: 39%×10, 50%×8, 62%×6, 69%×5, 77%×4
 ⟦SS1⟧Lateral Bounds: 3x5 each side (tapered — lowest volume, stay sharp)
-⟦SS2⟧Hip Thrust: 3x8
-⟦SS2⟧Single Leg RDL: 2x8 each leg
+Hip Thrust: 3x8
+Single Leg RDL: 2x8 each leg
 Nordic Hamstring Curl: 3x5
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9229,8 +9427,8 @@ Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compoun
 
 Power Clean: 2x2
 ⟦SS1⟧Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×4
-⟦SS2⟧Hip Thrust: 2x6
-⟦SS2⟧Single Leg RDL: 2x6 each leg
+Hip Thrust: 2x6
+Single Leg RDL: 2x6 each leg
 Nordic Hamstring Curl: 2x4
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -13909,7 +14107,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Aerobic Base:
 Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
@@ -13919,8 +14120,10 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-ups: 4xAMAP
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating V-Ups: 3x20s
@@ -13932,7 +14135,12 @@ Alternating Supermans: 3x20s",
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Med Ball Slam: 4x8
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Step-Ups: 4x6 each leg
+⟦SS2⟧Med Ball Slam: 4x8
+⟦SS3⟧Cossack Squat: 3x10 each side
+⟦SS3⟧Med Ball Chest Pass: 4x8
+Lateral Bounds: 4x5 each side
 
 Conditioning — Half-Kneeling:
 Med Ball Rotational Throw: 3x6 each side (half-kneeling)
@@ -13951,7 +14159,10 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Reverse Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -13963,8 +14174,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Seated Cable Lat Pulldown: 2x9
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Seated Cable Lat Pulldown: 2x9
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -13978,6 +14191,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -13994,7 +14208,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -14004,8 +14221,10 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-Ups: 4x6
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-Ups: 4x6
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating Supermans: 3x20s
@@ -14018,6 +14237,8 @@ Mountain Climbers: 3x20s",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Standing:
 Med Ball Rotational Throw: 3x6 each side
@@ -14036,7 +14257,10 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14048,8 +14272,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-Ups: 2x5
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Pull-Ups: 2x5
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14063,6 +14289,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -14079,7 +14306,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Quality Speed:
 Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
@@ -14089,8 +14319,10 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Weighted Pull-Ups: 4x5
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Weighted Pull-Ups: 4x5
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Conditioning — Maximal Velocity:
 Med Ball Rotational Throw: 4x6 each side (max intent)",
@@ -14101,6 +14333,8 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Repeat Effort:
 Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
@@ -14118,7 +14352,10 @@ Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -14130,8 +14367,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Weighted Pull-Ups: 2x4
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Weighted Pull-Ups: 2x4
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side",
@@ -14144,6 +14383,7 @@ Med Ball Overhead Slam: 2x5 each side",
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14159,7 +14399,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Walking Lunge: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Walking Lunge: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -14169,8 +14412,10 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lat Pulldown: 4x10
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Lat Pulldown: 4x10
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Hollow Hold: 3x20s
@@ -14183,6 +14428,8 @@ Decline Bench Iso: 3x30s hold",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Low Volume, Max Intent:
 Med Ball Rotational Throw: 2x6 each side (max intent)
@@ -14201,7 +14448,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x6 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -14213,8 +14463,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lat Pulldown: 2x8
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Lat Pulldown: 2x8
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14228,6 +14480,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -14249,7 +14502,10 @@ exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals s
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Aerobic Base:
 Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
@@ -14259,8 +14515,10 @@ Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-ups: 4xAMAP
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-ups: 4xAMAP
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating V-Ups: 3x20s
@@ -14272,7 +14530,12 @@ Alternating Supermans: 3x20s",
         "day": "Day 3",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Med Ball Slam: 4x8
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Step-Ups: 4x6 each leg
+⟦SS2⟧Med Ball Slam: 4x8
+⟦SS3⟧Cossack Squat: 3x10 each side
+⟦SS3⟧Med Ball Chest Pass: 4x8
+Lateral Bounds: 4x5 each side
 
 Conditioning — Half-Kneeling:
 Med Ball Rotational Throw: 3x6 each side (half-kneeling)
@@ -14291,7 +14554,10 @@ Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds strid
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Reverse Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14303,8 +14569,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Seated Cable Lat Pulldown: 2x9
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Seated Cable Lat Pulldown: 2x9
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14318,6 +14586,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
 ⟦SS1⟧Cossack Squat: 2x8 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -14334,7 +14603,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Interval Work:
 Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
@@ -14344,8 +14616,10 @@ Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s,
         "day": "Day 2",
         "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Pull-Ups: 4x6
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Pull-Ups: 4x6
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Alternating Supermans: 3x20s
@@ -14358,6 +14632,8 @@ Mountain Climbers: 3x20s",
         "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
 ⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Standing:
 Med Ball Rotational Throw: 3x6 each side
@@ -14376,7 +14652,10 @@ Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds strid
 
 Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x8 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x8 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14388,8 +14667,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 
 DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Pull-Ups: 2x5
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Pull-Ups: 2x5
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14403,6 +14684,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
 ⟦SS1⟧Cossack Squat: 2x6 each side
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -14419,7 +14701,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
         "day": "Day 1",
         "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Bulgarian Split Squat: 4x6 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
+Hip Thrust: 4x10
 
 Conditioning — Quality Speed:
 Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
@@ -14429,8 +14714,10 @@ Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds strid
         "day": "Day 2",
         "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Weighted Pull-Ups: 4x5
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Weighted Pull-Ups: 4x5
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Conditioning — Maximal Velocity:
 Med Ball Rotational Throw: 4x6 each side (max intent)",
@@ -14441,6 +14728,8 @@ Med Ball Rotational Throw: 4x6 each side (max intent)",
         "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
 ⟦SS1⟧Box Squat: 4x6
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Repeat Effort:
 Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
@@ -14458,7 +14747,10 @@ Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
 
 Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -14470,8 +14762,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Weighted Pull-Ups: 2x4
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Weighted Pull-Ups: 2x4
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side",
@@ -14484,6 +14778,7 @@ Med Ball Overhead Slam: 2x5 each side",
 Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
 ⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
@@ -14499,7 +14794,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Walking Lunge: 4x8 each leg
+⟦SS1⟧Sandbag Carry: 4x20 yds
+⟦SS2⟧Nordic Hamstring Curl: 4x6
+⟦SS2⟧Walking Lunge: 4x8 each leg
+Hip Thrust: 4x10
 
 Conditioning — Full-Recovery Reps:
 Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
@@ -14509,8 +14807,10 @@ Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride
         "day": "Day 2",
         "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lat Pulldown: 4x10
-Med Ball Slam: 4x8
+⟦SS1⟧Lateral Raise: 3x12
+⟦SS2⟧Lat Pulldown: 4x10
+⟦SS2⟧Med Ball Slam: 4x8
+Med Ball Chest Pass: 4x8
 
 Core — Finisher (20s on/10s off unless noted):
 Hollow Hold: 3x20s
@@ -14523,6 +14823,8 @@ Decline Bench Iso: 3x30s hold",
         "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
 ⟦SS1⟧Goblet Squat: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
+⟦SS2⟧Med Ball Chest Pass: 4x8
+⟦SS2⟧Lateral Bounds: 4x5 each side
 
 Conditioning — Low Volume, Max Intent:
 Med Ball Rotational Throw: 2x6 each side (max intent)
@@ -14541,7 +14843,10 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
 
 Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS1⟧Sandbag Carry: 2x15 yds
+⟦SS2⟧Nordic Hamstring Curl: 2x5
+⟦SS2⟧Walking Lunge: 2x6 each leg
+Hip Thrust: 2x8
 
 Conditioning — Deload (Light):
 Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
@@ -14553,8 +14858,10 @@ Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds strid
 
 DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lat Pulldown: 2x8
-Med Ball Slam: 2x6
+⟦SS1⟧Lateral Raise: 2x9
+⟦SS2⟧Lat Pulldown: 2x8
+⟦SS2⟧Med Ball Slam: 2x6
+Med Ball Chest Pass: 2x6
 
 Core — Deload (Light):
 Dead Bug: 2x8 each side
@@ -14568,6 +14875,7 @@ Plank: 2x20 seconds",
 Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
 ⟦SS1⟧Goblet Squat: 2x6
 ⟦SS1⟧Med Ball Slam: 2x6
+⟦SS2⟧Med Ball Chest Pass: 2x6
 
 Conditioning — Deload (Light):
 Med Ball Overhead Slam: 2x5 each side
@@ -19470,7 +19778,7 @@ Grip Work: 3x30s each (plate pinch · towel hang)",
       },
       {
         "day": "Day 2",
-        "description": "Overhead Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
+        "description": "Landmine Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8 (angled — no direct overhead loading)
 ⟦SS1⟧BB Row: 4x8
 ⟦SS1⟧Med Ball Slam: 4x8
 
@@ -19517,8 +19825,8 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Hip Thrust: 4x8
-⟦SS1⟧Single Leg RDL: 5x8 each leg
-Broad Jump: 3x3 (moderate intent — controlled speed)
+⟦SS1⟧Broad Jump: 3x3 (moderate intent — controlled speed)
+Copenhagen Adductor: 4x8 each leg
 
 Conditioning — Aerobic Base:
 Deceleration Drill: 7x20 yds (sprint 20 · brake · hold 2s)
@@ -19541,8 +19849,8 @@ Sled Push: 7x20 yds
         "day": "Day 3",
         "description": "⟦SS1⟧Front Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Approach Jump: 3x5 (moderate intent — controlled speed)
-⟦SS2⟧Bulgarian Split Squat: 5x6 each leg
-⟦SS2⟧DB Lateral Lunge: 4x8 each leg
+Bulgarian Split Squat: 5x6 each leg
+Copenhagen Adductor: 4x8 each leg
 
 Core — Anti-Extension:
 Dead Bug: 3x10 each side
@@ -19578,8 +19886,8 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Hip Thrust: 4x8
-⟦SS1⟧Single Leg RDL: 5x8 each leg
-Lateral Bounds: 4x5 each side (moderate intent — controlled speed)
+⟦SS1⟧Lateral Bounds: 4x5 each side (moderate intent — controlled speed)
+Single Leg RDL: 5x8 each leg
 
 Conditioning — Aerobic Base:
 Sled Sprint: 7x20 yds
@@ -19601,8 +19909,8 @@ Banded Hip Abduction: 3x15 each side",
       {
         "day": "Day 3",
         "description": "Front Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Bulgarian Split Squat: 5x6 each leg
-⟦SS1⟧Lateral Squat Jump: 4x5 (moderate intent — controlled speed)
+Bulgarian Split Squat: 5x6 each leg
+Lateral Squat Jump: 4x5 (moderate intent — controlled speed)
 Copenhagen Adductor: 4x8 each leg
 
 Core — Anti-Extension:
@@ -19662,9 +19970,9 @@ Lateral Shuffle: 7x20 yds
       {
         "day": "Day 3",
         "description": "Front Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Cossack Squat: 4x6 each side
-⟦SS1⟧DB Lateral Lunge: 4x8 each leg
+Cossack Squat: 4x6 each side
 Lateral Squat Jump: 4x5 each side (moderate intent — controlled speed)
+Copenhagen Adductor: 4x8 each leg
 
 Core — Anti-Extension:
 Dead Bug: 3x10 each side
@@ -19700,8 +20008,8 @@ exports[`Routing regression — position-fallback bugs fixed on feat/blueprint-q
         "day": "Day 1",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
 ⟦SS1⟧Hip Thrust: 4x8
-⟦SS1⟧Single Leg RDL: 5x8 each leg
-Hex Bar Jumps: 4x6 (moderate intent — controlled speed)
+⟦SS1⟧Hex Bar Jumps: 4x6 (moderate intent — controlled speed)
+Single Leg RDL: 5x8 each leg
 
 Conditioning — Aerobic Base:
 V Drill: 5x3
@@ -19845,8 +20153,8 @@ Sprint Ladder: 10/20/30/20/10 yds — 4 rounds
       {
         "day": "Day 3",
         "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Bulgarian Split Squat: 5x6 each leg
-⟦SS1⟧Lateral Squat Jump: 4x5 (moderate intent — controlled speed)
+Bulgarian Split Squat: 5x6 each leg
+Lateral Squat Jump: 4x5 (moderate intent — controlled speed)
 Copenhagen Adductor: 4x8 each leg
 
 Core — Anti-Extension:
