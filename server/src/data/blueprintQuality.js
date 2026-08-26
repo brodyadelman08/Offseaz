@@ -24,7 +24,7 @@
 const {
   generateBlueprintForAthlete, SPORT_TEMPLATES, applyDeloadAdjustments,
   SPORT_MAX_ACCESSORIES, resolveAccessoryCapKey, applySessionOrganization,
-  SPORT_ACCESSORY_ROTATION,
+  SPORT_ACCESSORY_ROTATION, isConditioningLine,
 } = require('./blueprintTemplates')
 const dayLayoutEngine = require('./dayLayoutEngine')
 const movementPatterns = require('./movementPatterns')
@@ -778,6 +778,67 @@ function checkStandardDaysHaveTwoSupersets() {
   return violations
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// Check 12 — Rugby: max 5 sets on any resistance/loaded line
+// ═══════════════════════════════════════════════════════════════════════
+// Permanent guardrail (feat/rugby-rebuild). Rugby's own spec doc, LOCKED
+// RULES: "Max 5 sets on anything, ever." Scoped to Rugby only — this is a
+// rule that specific doc states for Rugby's own content, not a codebase-
+// wide policy; other sports' %-ramp lines already legitimately render 5
+// warm-up-to-topset STEPS as one line (a different thing — one working
+// set at the end, not 5 working sets of the same prescription) and are
+// out of scope here.
+//
+// "Anything" means resistance/loaded work — an ANCHOR main lift, the
+// Olympic lift, or a plain accessory line. It does NOT mean a conditioning
+// INTERVAL (a shuttle, a sprint rep, a tempo run, a bike sprint) — those
+// count reps of a drill, not working sets of a lift, and the doc's own
+// content deliberately runs one of them past 5 on purpose (Forwards' Day 5
+// Block C: "Bike Sprints: 6x15 sec hard" — confirmed intentional, not a
+// bug, see PR discussion). Ground truth for "conditioning" reuses
+// isConditioningLine — the SAME classifier the generator itself already
+// uses to decide what's exempt from deload/rotation (Farmer Carry is
+// already in its vocabulary) — plus Rugby's own newer interval-drill names
+// that classifier was never extended to cover (they're already protected
+// by their own "Conditioning —" header block for every OTHER purpose, so
+// there was no prior need to add them there).
+const RUGBY_CONDITIONING_INTERVAL_RE = /^(Bike Sprints?|Takeoff Sprints?|Out-and-Back Shuttle|\d+-yd Shuttle Sprints?|Half-Kneeling \d+-Stride Start|Lateral to Sprint)\b/
+
+// The largest SET count a line actually prescribes — the upper end of a
+// "3-5x..." range if present (e.g. Hang Power Clean's own "3-5x3-5" caps
+// at 5 sets, not 3), otherwise the single leading number.
+function leadingSetCount(rawLine) {
+  const bare = stripMarker(rawLine)
+  const m = bare.match(/:\s*(\d+)(?:-(\d+))?[×x]/)
+  if (!m) return null
+  return m[2] ? parseInt(m[2], 10) : parseInt(m[1], 10)
+}
+
+function checkRugbyMaxFiveSets() {
+  const violations = []
+  for (const entry of matrix()) {
+    if (entry.sportId !== 'rugby') continue
+    let weeks
+    try { weeks = generate(entry) } catch (e) { continue }
+    for (const w of weeks) {
+      for (const s of w.sessions) {
+        const { lines } = parseDescription(s.description)
+        for (const l of lines) {
+          if (isConditioningLine(l.raw) || RUGBY_CONDITIONING_INTERVAL_RE.test(l.name)) continue
+          const sets = leadingSetCount(l.raw)
+          if (sets != null && sets > 5) {
+            violations.push({
+              check: 'rugby-max-five-sets', ...entry, week: w.week_number, day: s.day,
+              detail: `"${l.raw.trim()}" prescribes ${sets} sets (> 5) on ${s.day}, week ${w.week_number}`,
+            })
+          }
+        }
+      }
+    }
+  }
+  return violations
+}
+
 module.exports = {
   archetypeFor,
   matrix,
@@ -792,5 +853,6 @@ module.exports = {
   checkNoBarbellOverheadPressOnThrowingSports,
   checkNoSamePatternSupersets,
   checkStandardDaysHaveTwoSupersets,
+  checkRugbyMaxFiveSets,
   __parseDescriptionForTest: parseDescription,
 }

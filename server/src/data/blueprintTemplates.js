@@ -4876,13 +4876,26 @@ function rugbyDay4_4day(pos, info) {
 // 5-DAY's own additive Day 5 — Rugby Speed & Conditioning (no lifting).
 // Block B and Block C are the doc's own stated Forwards/Backs difference;
 // Blocks A/D and the finisher are identical for both.
+// feat/rugby-rebuild (v3) — Block C is now a single work/rest INTERVAL
+// LADDER, one trip through, identical for both positions (the doc's own
+// v3 update dropped the earlier flat "Nx15 sec hard" prescription and the
+// Forwards/Backs set-count difference along with it — Backs' own section
+// explicitly says "Block C = same bike ladder"). Rendered as ONE line
+// (not 5 separate "Bike Sprints" lines) — a real work/rest ladder is one
+// continuous piece of conditioning work, not 5 repeated sets of the same
+// named exercise, and 5 identical names on one day would violate the
+// doc's own "no duplicate exercise within the same day" rule. The name
+// before the colon stays exactly "Bike Sprints" (matches its
+// exerciseLibrary.js cue entry); the ladder itself is the prescription
+// text, structurally exempt from the max-5-sets check the same way any
+// other conditioning interval is (no "Nx" set-count shape for that check
+// to even find on this line).
+const RUGBY_BIKE_LADDER = 'Bike Sprints: 10 sec on / 20 sec off, 15/15, 20/10, 15/15, 10/20 sec (1 trip through the ladder — pyramids up to 20/10 in the middle, back down)'
+
 function rugbyDay5(pos) {
   const blockB = pos === 'backs'
     ? 'Lateral to Sprint: 3x3 each side (5-yd lateral into a 10-yd sprint)'
     : 'Half-Kneeling 3-Stride Start: 3x3 each side'
-  const blockC = pos === 'backs'
-    ? 'Bike Sprints: 5x15 sec hard / 45 sec easy'
-    : 'Bike Sprints: 6x15 sec hard / 45 sec easy'
   return {
     day: 'Day 5', focus: 'Rugby Speed & Conditioning',
     description: [
@@ -4892,8 +4905,8 @@ function rugbyDay5(pos) {
       'Takeoff Sprints: 4x10 yds (60 sec recovery)',
       'Block B (multidirectional):',
       blockB,
-      'Block C (repeated effort):',
-      blockC,
+      'Block C (bike sprint ladder):',
+      RUGBY_BIKE_LADDER,
       'Block D (shuttle):',
       'Out-and-Back Shuttle: 4x10 yds',
       'Pallof Iso Hold: 2x15 sec each side',
@@ -7213,4 +7226,4 @@ const SPORT_TEMPLATES = [
   },
 ]
 
-module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION, SPORT_MAX_ACCESSORIES, resolveAccessoryCapKey, SPORT_PHASE_ACCESSORY_ROTATION, resolvePhaseRotationKey }
+module.exports = { generateBlueprintForAthlete, SPORT_TEMPLATES, TEMPLATE_GOALS, applyDeloadAdjustments, applyAccessoryProgression, applySessionOrganization, superset, SUPERSET_MARKER_RE, SPORT_ACCESSORY_ROTATION, SPORT_MAX_ACCESSORIES, resolveAccessoryCapKey, SPORT_PHASE_ACCESSORY_ROTATION, resolvePhaseRotationKey, isConditioningLine }

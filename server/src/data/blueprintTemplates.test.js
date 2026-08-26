@@ -809,7 +809,7 @@ describe('Area 7 — Exercise library coverage', () => {
     'neck lateral flexion', 'conditioning — farmer carry', 'conditioning — broad jumps',
     'conditioning — 10-yd shuttle sprints', 'conditioning — lateral bound to stick',
     'conditioning — speed & conditioning', 'conditioning — recovery/volume',
-    'block a (short burst)', 'block b (multidirectional)', 'block c (repeated effort)',
+    'block a (short burst)', 'block b (multidirectional)', 'block c (bike sprint ladder)',
     'block d (shuttle)', 'circuit a (2 rounds)', 'circuit b (2 rounds)',
     // feat/blueprint-quick-wins — Track & Field's "Throws"/"Jumps" position
     // labels (the real SPORT_TEMPLATES/survey values) never matched
