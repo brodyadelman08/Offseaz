@@ -4876,21 +4876,20 @@ function rugbyDay4_4day(pos, info) {
 // 5-DAY's own additive Day 5 — Rugby Speed & Conditioning (no lifting).
 // Block B and Block C are the doc's own stated Forwards/Backs difference;
 // Blocks A/D and the finisher are identical for both.
-// feat/rugby-rebuild (v3) — Block C is now a single work/rest INTERVAL
-// LADDER, one trip through, identical for both positions (the doc's own
-// v3 update dropped the earlier flat "Nx15 sec hard" prescription and the
-// Forwards/Backs set-count difference along with it — Backs' own section
-// explicitly says "Block C = same bike ladder"). Rendered as ONE line
-// (not 5 separate "Bike Sprints" lines) — a real work/rest ladder is one
-// continuous piece of conditioning work, not 5 repeated sets of the same
-// named exercise, and 5 identical names on one day would violate the
-// doc's own "no duplicate exercise within the same day" rule. The name
-// before the colon stays exactly "Bike Sprints" (matches its
+// feat/rugby-rebuild (v4) — Block C is a work/rest INTERVAL LADDER, 3
+// ROUNDS through (v4 corrected v3's "1 trip" to 3 rounds, rest as needed
+// between), identical for both positions (Backs' own section explicitly
+// says "same 3-round bike ladder"). Rendered as ONE line (not 15 separate
+// "Bike Sprints" lines for 3 rounds x 5 steps) — a real interval ladder is
+// one continuous piece of conditioning work, not repeated sets of the
+// same named exercise, and that many identical names on one day would
+// violate the doc's own "no duplicate exercise within the same day" rule.
+// The name before the colon stays exactly "Bike Sprints" (matches its
 // exerciseLibrary.js cue entry); the ladder itself is the prescription
 // text, structurally exempt from the max-5-sets check the same way any
 // other conditioning interval is (no "Nx" set-count shape for that check
 // to even find on this line).
-const RUGBY_BIKE_LADDER = 'Bike Sprints: 10 sec on / 20 sec off, 15/15, 20/10, 15/15, 10/20 sec (1 trip through the ladder — pyramids up to 20/10 in the middle, back down)'
+const RUGBY_BIKE_LADDER = 'Bike Sprints: 3 rounds — each round 10 sec on / 20 sec off, 15/15, 20/10, 15/15, 10/20 sec (pyramids up to 20/10 mid-round, back down); rest as needed between rounds'
 
 function rugbyDay5(pos) {
   const blockB = pos === 'backs'
