@@ -338,9 +338,11 @@ function coreEntryFromBlock(blockFn, phaseNum, deload) {
 // contiguous-boundary invariant above is deliberately broken ONLY at the
 // Phase 3 -> Phase 4 seam for these four tables, on purpose — Phase 4 backs
 // off so the athlete enters the season fresh instead of grinding to a new
-// high. Every other sport's table (MG_PHASES, HOCKEY_PHASES, RUGBY_PHASES,
-// TENNIS_PHASES, GOLF_PHASES, WR_PHASES, STD_PHASES) is untouched and keeps
-// climbing straight through Phase 4 exactly as before.
+// high. Every other sport's table (MG_PHASES, HOCKEY_PHASES, TENNIS_PHASES,
+// GOLF_PHASES, WR_PHASES, STD_PHASES) is untouched and keeps climbing
+// straight through Phase 4 exactly as before. (Rugby no longer has a %-based
+// phase table at all — feat/rugby-rebuild replaced it with its own
+// RPE-anchored RUGBY_MAIN_LIFT_SCHEME/rugbyPhaseInfo, see that section.)
 const FB_PHASES = [
   { label: 'Accumulation',   low: 0.65, high: 0.75 },
   { label: 'Strength Build', low: 0.75, high: 0.82 },
@@ -382,12 +384,6 @@ const HOCKEY_PHASES = [
   { label: 'Strength',    low: 0.73, high: 0.80 },
   { label: 'Power Build', low: 0.80, high: 0.85 },
   { label: 'Peak',        low: 0.85, high: 0.88 },
-]
-const RUGBY_PHASES = [
-  { label: 'Accumulation',   low: 0.65, high: 0.75 },
-  { label: 'Strength Build', low: 0.75, high: 0.82 },
-  { label: 'Peak Strength',  low: 0.82, high: 0.88 },
-  { label: 'Maximum Output', low: 0.88, high: 0.93 },
 ]
 const TENNIS_PHASES = [
   { label: 'Foundation',     low: 0.65, high: 0.72 },
@@ -1880,7 +1876,7 @@ function buildFieldRenderers(pack) {
 
 // Generates all 16 weeks for one Field-archetype sport at a given day
 // count, entirely from its pack. `phases` is that sport's own phase table
-// (SOC_PHASES, HOCKEY_PHASES, RUGBY_PHASES, STD_PHASES for Lacrosse, ...),
+// (SOC_PHASES, HOCKEY_PHASES, STD_PHASES for Lacrosse, ...),
 // run through the same shared getPhaseInfo every non-Collision sport
 // already uses.
 function generateFieldWeeksFromPack(pack, phases, daysPerWeek) {
@@ -3549,15 +3545,6 @@ const HOCKEY_PHASE_ACCESSORY_ROTATION = {
   'band external rotation': { 1: 'Band External Rotation', 2: 'Scap Push-Ups',       3: 'YTW Raises',        4: 'Band External Rotation' },
 }
 
-// Rugby — shared across forwards/backs. Both share Single Leg RDL,
-// Bulgarian Split Squat, Weighted Pull-ups, and Face Pulls.
-const RUGBY_PHASE_ACCESSORY_ROTATION = {
-  'single leg rdl':        { 1: 'Single Leg RDL',        2: 'Good Mornings', 3: 'Romanian Deadlift', 4: 'Single Leg RDL' },
-  'bulgarian split squat': { 1: 'Bulgarian Split Squat', 2: 'Reverse Lunge', 3: 'Walking Lunge',      4: 'Bulgarian Split Squat' },
-  'weighted pull-ups':     { 1: 'Weighted Pull-ups',     2: 'DB Row',        3: 'Weighted Chin-ups',  4: 'Weighted Pull-ups' },
-  'face pulls':            { 1: 'Face Pulls',            2: 'Reverse Flys', 3: 'DB Row',             4: 'Face Pulls' },
-}
-
 // Track — shared across sprint/throw/jump (all 3 sub-events, mirroring how
 // basketball/soccer share one table across positions). Pull-ups, Hip
 // Thrust, Nordic Hamstring Curl, and Overhead Press all recur in every
@@ -3626,7 +3613,14 @@ const SWIMMING_PHASE_ACCESSORY_ROTATION = {
 // resolveAccessoryCapKey, applyAccessoryProgression, or the call site.
 // General (the "Other" fallback) and football linemen/muscle-gain
 // deliberately stay unregistered — see each's own comment elsewhere in this
-// file for why.
+// file for why. Rugby (feat/rugby-rebuild) joined that deliberately-
+// unregistered set too — its old phase-rotation table was tuned to the
+// retired archetype-pack implementation's own accessory vocabulary and
+// would otherwise collide with the new hand-authored FILLER ROTATION POOLS
+// (rugbyFiller) on overlapping names (Bulgarian Split Squat) with a much
+// larger, undocumented volume swing (PHASE_ACCESSORY_MULT) the spec doc
+// never asked for — every Rugby accessory now gets the same plain
+// within-phase wip wave every other unregistered sport's content gets.
 const SPORT_PHASE_ACCESSORY_ROTATION = {
   baseball:      BASEBALL_PHASE_ACCESSORY_ROTATION,
   softball:      BASEBALL_PHASE_ACCESSORY_ROTATION,
@@ -3634,7 +3628,6 @@ const SPORT_PHASE_ACCESSORY_ROTATION = {
   basketball:    BASKETBALL_PHASE_ACCESSORY_ROTATION,
   soccer:        SOCCER_PHASE_ACCESSORY_ROTATION,
   hockey:        HOCKEY_PHASE_ACCESSORY_ROTATION,
-  rugby:         RUGBY_PHASE_ACCESSORY_ROTATION,
   track:         TRACK_PHASE_ACCESSORY_ROTATION,
   wrestling:     WRESTLING_PHASE_ACCESSORY_ROTATION,
   volleyball:    VOLLEYBALL_PHASE_ACCESSORY_ROTATION,
@@ -4676,307 +4669,295 @@ function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
   return buildWeeksDynamic(16, phases, fn, daysPerWeek, [HOCKEY_DAY5, HOCKEY_DAY6])
 }
 
-// ─── Rugby ────────────────────────────────────────────────────────────────────
+// ─── Rugby (feat/rugby-rebuild) ─────────────────────────────────────────────
+// HAND-AUTHORED to the letter of "Offseaz - Rugby Program Spec (v2)" — the
+// coach-authored source-of-truth doc. Deliberately NOT built on the generic
+// dayLayoutEngine/varietyEngine/finisherEngine archetype-pack machinery the
+// rest of this file uses (see buildCollisionRenderers etc. above) — the doc
+// is explicit that exercise selection, order, sets, base reps, and superset
+// pairing are hand-authored here, not algorithm-picked. This section writes
+// exact session text directly, the same way this file's oldest sport
+// sections did, before the archetype-pack system existed.
+//
+// Still shared with every other sport, unmodified, via
+// generateBlueprintForAthlete's own pipeline:
+//   - applySessionOrganization respects a pre-marked ⟦SSn⟧ pair as a fixed,
+//     atomic unit and never re-pairs it (see organizeSessionDescription's own
+//     "A pre-existing hand-authored superset group" comment) — this is what
+//     lets the doc's SS-A/SS-B pairings stay authoritative through the same
+//     shared pass every sport's output runs through.
+//   - applyAccessoryProgression (standard within-phase volume wave on any
+//     plain "Name: SxR" line — including the doc's own secondary "ANCHOR"
+//     accessory pairs, e.g. Chest-Supported DB Row/Reverse Lunge, exactly
+//     like every other sport's ACC_* content already waves week to week).
+//   - applyExperienceAdjustments, applyInjuryAdjustments (Back Squat/Front
+//     Squat/Trap Bar Deadlift/Romanian Deadlift/Bulgarian Split Squat all
+//     already have real safety substitutions there).
+//   - applyDeloadAdjustments — halves accessory-line sets on weeks 4/8/12/16;
+//     the doc's true ANCHOR main lifts are exempt via isRampedLiftLine's new
+//     "@ RPE"/"fast, low fatigue" markers below (same mechanism as every
+//     other sport's "%" or Swimming's "@ moderate load"). Every day finisher
+//     (neck or Backs' sprint/agility/carry work) is wrapped in a "Neck —"/
+//     "Conditioning —" header block so it survives a deload week reduced,
+//     never silently deleted — see applyDeloadVolumeReduction's own comment
+//     on why an exempt header, not a bare conditioning-shaped line, is what
+//     protects a day's genuine finisher from disappearing entirely.
 
-function rugbyForwardsSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'power') // Change 1 — contact/scrummage position, same tier as football skill/hybrid
-  const mbrs = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  const mbcp = explosiveSets(4, ph)
-  return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift; Hip Thrust + Nordic remain
-    { day: 'Day 1', focus: 'Lower Max Strength & Scrummage Drive',
-      description: `Power Clean from floor: 5x3 working up\nBack Squat: ${info.ramp}, ${q}×${r}\nHip Thrust: 4x10\nNordic Hamstring Curl: 4x5\nSled Push: 6x20 yds\nNeck Strengthening: 3x12 each direction\nMed Ball Rotational Slam: ${mbrs}x8 (${explosiveIntent(ph)})\n${coreBlock(ph)}` },
-    { day: 'Day 2', focus: 'Upper Strength & Contact Prep',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 5x5\nDB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph)}` },
-    // Fix 3: phasePlyo replaces Box Jump + Broad Jump list
-    { day: 'Day 3', focus: 'Lower Explosion & Carrying',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nFarmer Carries: 4x20 yds\nSandbag Carry: 4x20 yds\n${coreBlock(ph)}` },
-    { day: 'Day 4', focus: 'Upper Power, Contact & Rotational',
-      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nLandmine Rotational Press: 3x6 each side\nMed Ball Chest Pass: ${mbcp}x8 (${explosiveIntent(ph)})\nSled Push: 6x20 yds\n${coreBlock(ph)}` },
-  ]
+// Main-lift phase progression — the doc's own RPE-anchored scheme, applied
+// by PHASE NUMBER (the same week -> phase mapping getPhaseInfo uses
+// elsewhere in this file: 4 phases of 4 weeks, week % 4 === 0 is always a
+// deload). This IS Rugby's "engine" for ANCHOR main lifts — reps/sets
+// descend by phase exactly as the doc specifies; load itself is
+// autoregulated by the athlete off the RPE target and their own logged max,
+// the same autoregulation principle every Olympic-lift line in this file
+// already uses (collisionOlyScheme's "start light and build") — applied here
+// to a barbell squat/press/hinge instead of a technical lift. No percentage
+// is ever hardcoded, per the doc's own explicit instruction.
+const RUGBY_MAIN_LIFT_SCHEME = {
+  1: '3x8-10 @ RPE 7',
+  2: '4x4-6 @ RPE 8',
+  3: '5x2-4 @ RPE 9',
+  4: '2x3-5 (fast, low fatigue)',
+}
+function rugbyMainLift(name, phaseNum, suffix = '') {
+  return `${name}: ${RUGBY_MAIN_LIFT_SCHEME[phaseNum]}${suffix}`
 }
 
-function rugbyBacksSess(info) {
-  const q  = info.pct
-  const ph = info.phaseNum
-  const r  = mainLiftTopReps(ph, 'power') // Change 1 — contact-sport speed position, same tier as football skill/hybrid
-  const lb1  = explosiveSets(4, ph) // Change 3 — explosive volume by phase
-  const lb3  = explosiveSets(4, ph)
-  const mbcp = explosiveSets(4, ph)
-  return [
-    // Fix 1: Squat day — removed Trap Bar Deadlift; power and speed emphasis for backs
-    { day: 'Day 1', focus: 'Lower Power & First-Step Speed',
-      description: `Power Clean: 4x3\nBack Squat: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb1}x5 each side (${explosiveIntent(ph)})\nSprint Work: 8x40 yds\n${coreBlock(ph)}` },
-    { day: 'Day 2', focus: 'Upper Strength',
-      description: `Bench Press: ${info.ramp}, ${q}×${r}\nWeighted Pull-ups: 5x5\nDB Row: 4x10 each arm\nOverhead Press: 4x8\nDB Shrugs: 3x12\nNeck Strengthening: 3x12 each direction\nFace Pulls: 3x15\n${coreBlock(ph)}` },
-    // Fix 3: phasePlyo replaces Box Jump + Broad Jump list
-    { day: 'Day 3', focus: 'Lower Explosion, Agility & COD',
-      description: `Trap Bar Deadlift: ${info.ramp}, ${q}×${r}\n${phasePlyo(ph)}\nBulgarian Split Squat: 3x6 each leg\nSingle Leg RDL: 3x8 each leg\nLateral Bounds: ${lb3}x5 each side (${explosiveIntent(ph)})\nT-Drill: 6x1\n${coreBlock(ph)}` },
-    { day: 'Day 4', focus: 'Upper Power',
-      description: `Hang Clean: 4x3\nClose Grip Bench: ${info.ramp}, ${q}×${r}\nWeighted Chin-ups: 4x5\nSingle Arm DB Row: 4x10 each arm\nMed Ball Chest Pass: ${mbcp}x8 (${explosiveIntent(ph)})\n${coreBlock(ph)}` },
-  ]
+function rugbyPhaseInfo(weekNum) {
+  const phaseNum = Math.min(4, Math.floor((weekNum - 1) / 4) + 1)
+  const wip = ((weekNum - 1) % 4) + 1
+  const labels = ['Foundation', 'Strength', 'Power', 'Peak/Taper']
+  return { week: weekNum, phaseNum, phaseLabel: labels[phaseNum - 1], wip, deload: wip === 4 }
 }
 
-const RUGBY_DAY5 = (info) => ({
-  day: 'Day 5', focus: 'Contact Conditioning',
-  description: `Wrestle-Outs: 4x30s\nWeighted Carries Medley: Farmer / Sandbag / Rack — 3 sets each\nSled Push: 6x20 yds\nBattle Rope: 4x30s\nPush-up Max Set: x3\n${coreBlock(info.phaseNum)}`,
-})
-const RUGBY_DAY6 = {
-  day: 'Day 6', focus: 'Recovery & Mobility',
-  description: `Foam Roll: Full body — 15 minutes\nHip Flexor Stretch: 3x45s each leg\nThoracic Rotation: 3x10 each side\nHamstring Eccentric: 3x8\nStatic Stretch: Adductors · Quads · Calves`,
+// Assembles all 16 weeks from a day-count-appropriate base session function
+// (3-day and 4-day are each their own hand-authored set, per the doc — NOT
+// nested/sliceable from one another, see rugbyForwardsSess3Day/4Day below)
+// plus the doc's own additive Day 5 (conditioning)/Day 6 (recovery)
+// extras. Objective text uses the doc's own RPE-labeled scheme, never a
+// fabricated percentage.
+function buildRugbyWeeks(sessFn, daysPerWeek, extraDayFns) {
+  return Array.from({ length: 16 }, (_, i) => {
+    const w = i + 1
+    const info = rugbyPhaseInfo(w)
+    const base = sessFn(info)
+    const sessions = daysPerWeek <= base.length
+      ? base.slice(0, Math.max(2, daysPerWeek))
+      : [...base, ...extraDayFns.slice(0, daysPerWeek - base.length).map(fn => fn(info))]
+    return {
+      week_number: w,
+      objective: `Phase ${info.phaseNum} — ${info.phaseLabel} (${RUGBY_MAIN_LIFT_SCHEME[info.phaseNum]})${info.deload ? ' · Deload' : ''} · Week ${info.wip} of 4`,
+      sessions,
+    }
+  })
 }
 
-// ─── Rugby Forwards — Collision/Max-Strength archetype (standard goal only;
-// see rugbyForwardsSess above for the muscle-gain variant, untouched by
-// this build) — Rugby Backs is a different archetype (Repeat-Sprint/Field
-// Athlete) and is completely unaffected by this section. ───────────────────
-// Built on the same archetype core as Linemen/Wrestling. Differentiated by
-// scrum/contact-specific work (Scrum Drive, Sandbag Carry, Landmine
-// Rotational Press) in place of Linemen's football-specific movements,
-// sharing the neck-armor block (COLLISION_NECK) as common contact-sport
-// ground with Linemen and Wrestling.
-
-const RUGBY_ARCHETYPE_WU_LOWER = 'Rugby Lower-Body Warm-up: Hip Circles 10 each direction · Leg Swings 10 each leg · Lateral Band Walk 2x10\n\n'
-const RUGBY_ARCHETYPE_WU_UPPER = 'Rugby Upper-Body Warm-up: Band Pull-Aparts x20 · Prone Swimmers x10 · Push-Up to Pike x10\n\n'
-
-// Rugby Forwards' own finisher content — scrum/contact identity (Scrum
-// Drive, Sled Push, Landmine Rotational Press, Grip Work — all already
-// vetted, several already used elsewhere in this sport's own content).
-// Core reuses the shared coreBlock verbatim.
-const RUGBY_FORWARDS_FINISHERS = {
-  sprint(ph, dl) {
-    if (dl) return { subtitle: 'Deload (Light)', lines: ['Scrum Drive: 2x10 yds'] }
-    if (ph === 1) return { subtitle: 'Acceleration Mechanics', lines: ['Scrum Drive: 4x10 yds'] }
-    if (ph === 2) return { subtitle: 'Acceleration Mechanics', lines: ['Scrum Drive: 4x15 yds'] }
-    if (ph === 3) return { subtitle: 'Quality Speed', lines: ['Sprint Work: 5x15 yds @ max effort'] }
-    return { subtitle: 'Full-Recovery Reps', lines: ['Sprint Work: 3x15 yds @ max effort (full recovery)'] }
-  },
-  energy(ph, dl) {
-    if (dl) return { subtitle: 'Deload (Light)', lines: ['Sled Push: 2x15 yds'] }
-    if (ph === 1) return { subtitle: 'Aerobic Base', lines: ['Sled Push: 4x20 yds'] }
-    if (ph === 2) return { subtitle: 'Interval Work', lines: ['Farmer Carries: 4x30 yds'] }
-    if (ph === 3) return { subtitle: 'Repeat Effort', lines: ['Battle Rope: 4x20s'] }
-    return { subtitle: 'Reduced', lines: ['Sled Push: 2x20 yds'] }
-  },
-  core: (ph, dl) => coreEntryFromBlock(coreBlock, ph, dl),
-  rotation(ph, dl) {
-    if (dl) return { subtitle: 'Deload (Light)', lines: ['Landmine Rotational Press: 2x5 each side'] }
-    if (ph === 1) return { subtitle: 'Half-Kneeling', lines: ['Med Ball Rotational Throw: 3x6 each side (half-kneeling)'] }
-    if (ph === 2) return { subtitle: 'Standing', lines: ['Landmine Rotational Press: 3x6 each side'] }
-    if (ph === 3) return { subtitle: 'Maximal Velocity', lines: ['Med Ball Rotational Throw: 4x6 each side (max intent)'] }
-    return { subtitle: 'Low Volume, Max Intent', lines: ['Landmine Rotational Press: 2x6 each side (max intent)'] }
-  },
-  arm(ph, dl) {
-    if (dl) return { subtitle: 'Deload (Light)', lines: ['Grip Work: 2 sets'] }
-    if (ph === 1) return { subtitle: 'Capacity & Scap Control', lines: ['Band External Rotation: 3x15 each arm'] }
-    if (ph === 2) return { subtitle: 'Modest Increase', lines: ['Grip Work: 2 sets', 'Band External Rotation: 3x15 each arm'] }
-    if (ph === 3) return { subtitle: 'Maintenance', lines: ['Grip Work: 3 sets'] }
-    return { subtitle: 'Readiness', lines: ['Band External Rotation: 2x15 each arm'] }
-  },
+// Doc's own FILLER ROTATION POOLS — a FILLER exercise rotates week-to-week
+// WITHIN its named pool only, never to a different muscle/pattern. Any
+// FILLER-tagged item the doc does NOT name a pool for (Hip Thrust, DB
+// Lateral Raise, DB Hammer Curl/Bicep Curl, ...) simply never rotates —
+// "only to a same-purpose alternative from the rotation pools" means no
+// named pool, no rotation, full stop.
+const RUGBY_FILLER_POOLS = {
+  legCurl:        ['Seated Leg Curl', 'Lying Leg Curl', 'Stability-Ball Leg Curl'],
+  antiRotation:   ['Pallof Press', 'Half-Kneeling Pallof Press', 'Cable Woodchop'],
+  unilateralLower: ['Step-Up', 'Bulgarian Split Squat', 'Walking Lunge'],
+  horizontalPull: ['Seated Cable Row', 'One-Arm Cable Row', 'DB Row'],
+  antiExtension:  ['Dead Bug', 'Ab Wheel Rollout', 'Hollow Body Hold'],
+  shoulderPrehab: ['Face Pull', 'Band Pull-Apart', 'Cable Rear-Delt Fly'],
+}
+// Rotation advances on each of a phase's 3 working weeks, freezes on every
+// deload week (matches the immediately preceding week — same invariant the
+// variety engine's own weeks-13-15/deload freeze gives every other sport)
+// and freezes completely for weeks 13-16 (Peak/Taper).
+function rugbyRotationWeek(weekNumber) {
+  if (weekNumber >= 13) return 13
+  const wip = ((weekNumber - 1) % 4) + 1
+  return wip === 4 ? weekNumber - 1 : weekNumber
+}
+// `offset` lets two slots draw from the SAME pool starting at a different
+// member — e.g. Forwards' Day 2 starts at Step-Up, Backs' Day 2 starts one
+// position later at Bulgarian Split Squat ("Bulgarian Split Squat instead
+// of Step-Up" — the doc's own stated Forwards/Backs difference), while both
+// still cycle the identical 3-member pool the doc names once.
+function rugbyFiller(weekNumber, poolKey, setsReps, offset = 0) {
+  const pool = RUGBY_FILLER_POOLS[poolKey]
+  const idx = (rugbyRotationWeek(weekNumber) - 1 + offset) % pool.length
+  return `${pool[idx]}: ${setsReps}`
 }
 
-// feat/day-layout-engine — Rugby Forwards' pack. Two deliberate structural
-// changes, both because the shared 4-day Collision template genuinely
-// wants a specific main-lift split that Rugby's old content didn't quite
-// match:
-//   1. Same squat/hinge conformance fix as Wrestling — Front Squat now
-//      fills Day 3's MAIN_SQUAT slot (4/5/6-day), pairing with Day 1's
-//      Back Squat; Trap Bar Deadlift moves to the 3-day-only MAIN_HINGE
-//      slot and the 6-day Lower C day.
-//   2. Day 2's old main lift was Bench Press — a horizontal press — on a
-//      day the template structurally wants to be the week's VERTICAL-press
-//      day (paired with ACC_PULL_V, mirroring Linemen's Standing BB OHP/
-//      Wrestling's Overhead Press). Overhead Press now fills that slot;
-//      Day 4 already had a genuine horizontal press (Close Grip Bench)
-//      covering that plane for the week.
-// Landmine Rotational Press deliberately does NOT appear as an inline
-// accessory anywhere in this pack even though it's real Rugby vocabulary
-// — RUGBY_FORWARDS_FINISHERS.rotation already renders it, and duplicating
-// it inline risks the same double-render the day the finisher engine also
-// picks 'rotation' for that day (see ACC_CORE's own doc comment above for
-// the general version of this risk).
-const RUGBY_FORWARDS_PACK = {
-  warmupLower: RUGBY_ARCHETYPE_WU_LOWER,
-  warmupUpper: RUGBY_ARCHETYPE_WU_UPPER,
-  finisherBank: RUGBY_FORWARDS_FINISHERS,
-  // byFocus is keyed by the shared template's own generic labels (see
-  // buildCollisionRenderers/generateCollisionWeeksFromPack) — Rugby's own
-  // richer day names ("Lower Power — Scrummage Drive", etc.) are restored
-  // as OUTPUT text only via displayFocus below, after content resolution.
-  displayFocus: {
-    'Lower Power': 'Lower Power — Scrummage Drive',
-    'Upper Strength': 'Upper Strength & Contact Prep',
-    'Lower Strength': 'Lower Explosion & Carrying',
-    'Upper Power': 'Upper Power, Contact & Rotational',
-  },
-  byFocus: {
-    'Lower Power': {
-      MAIN_OLY: { name: 'Power Clean from floor', suffix: ' (from floor, catch quarter squat)' },
-      MAIN_SQUAT: { name: 'Back Squat', suffix: ' (full ROM)' },
-      ACC_HINGE: 'Barbell RDL: 4x8',
-      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x8 each leg',
-    },
-    'Upper Strength': {
-      MAIN_OLY: { name: 'Single Arm DB Split Jerk', suffix: ', each arm' },
-      MAIN_PRESS_V: 'Overhead Press',
-      ACC_PULL_V: 'Weighted Pull-ups: 5xAMAP',
-      ACC_PRESS: 'Seated Single Arm DB Overhead Press: 4x10 each arm',
-      ACC_PULL_H: 'DB Row: 4x10 each arm',
-      ACC_SHOULDER: 'DB Shrugs: 4x12', // 3-day only
-    },
-    'Lower Strength': {
-      MAIN_OLY: { name: 'Hang Clean Above the Knee', suffix: ' (start at hip crease, hinge to above kneecaps, explode)' },
-      MAIN_SQUAT: { name: 'Front Squat', suffix: ' (full ROM)' }, // 4-day
-      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day only
-      ACC_SQUAT: 'Goblet Squat: 4x10', // 3-day only
-      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
-      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x8 each leg',
-      ACC_CALF_GRIP: 'Farmer Carries: 4x20 yds',
-    },
-    'Upper Power': {
-      MAIN_OLY: 'BB Split Jerk',
-      MAIN_PRESS_H: { name: 'Close Grip Bench Press', suffix: ' (hands at shoulder width)' },
-      ACC_PULL_H: 'Single Arm DB Row: 4x10 each arm',
-      ACC_PRESS: 'Single Arm DB Bench: 4x10 each arm',
-      ACC_PULL_V: 'Weighted Chin-ups: 4x6',
-    },
-    'Power, Athleticism & Armor': {
-      PLYO: (ctx) => phasePlyo(ctx.phaseNum),
-      MED_BALL: 'Med Ball Slam: 4x8',
-      ACC_CALF_GRIP: 'Sandbag Carry: 4x20 yds',
-      NECK: COLLISION_NECK_DEDICATED,
-    },
-    'Lower — Posterior Chain & Athletic': {
-      MAIN_HINGE: 'Trap Bar Deadlift',
-      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x8 each leg',
-      ACC_POSTERIOR: 'Single Leg RDL: 4x8 each leg',
-      ACC_CALF_GRIP: 'Sandbag Carry: 4x20 yds',
-    },
-    'Upper — Hypertrophy & Armor': {
-      ACC_PRESS: (ctx) => weeklyVariant(ctx.week, 'Incline DB Press: 4x10', 'Weighted Dips: 4x10'),
-      ACC_PULL_H: 'Chest Supported Row: 4x12',
-      ACC_SHOULDER: 'Band Pull-Aparts: 4x20',
-    },
-  },
+// Universal warm-up (identical before every lifting session, per the doc) —
+// Forwards add a 4-way neck-isometric block; Backs add A-Skips to the march.
+function rugbyWarmupLines(pos) {
+  const lines = ['Warm-up:', '3 min easy bike or light jog', 'A-March: 10 yds']
+  if (pos === 'backs') lines.push('A-Skips: 10 yds')
+  lines.push('Squat-to-Stand: x6', "World's Greatest Stretch: 4 each side", 'Band Pull-Aparts: x15')
+  if (pos === 'forwards') lines.push('4-Way Manual Neck Isometrics: 10 sec each side')
+  return lines
 }
 
-function generateRugbyForwardsArchetypeWeeks(daysPerWeek, mg = false) {
-  return applyCollisionMgWrapper(generateCollisionWeeksFromPack(RUGBY_FORWARDS_PACK, daysPerWeek, mg), mg)
+// Day 1 — Squat + Horizontal Press/Pull. Identical for Forwards/Backs except
+// the finisher (Forwards: Neck Flexion; Backs: Broad Jumps — no neck work).
+function rugbyDay1(pos, info) {
+  const { phaseNum, week } = info
+  const ssA = superset(1, ['Chest-Supported DB Row: 3x8-10', 'Reverse Lunge: 3x6-8 each leg'])
+  const ssB = superset(2, [rugbyFiller(week, 'legCurl', '3x10-12'), rugbyFiller(week, 'antiRotation', '3x8 each side')])
+  const finisher = pos === 'backs'
+    ? ['Conditioning — Broad Jumps:', 'Broad Jumps: 3x3']
+    : ['Neck — Flexion:', 'Neck Flexion: 2x15 sec isometric']
+  return {
+    day: 'Day 1', focus: 'Squat + Horizontal Press/Pull',
+    description: [...rugbyWarmupLines(pos), rugbyMainLift('Back Squat', phaseNum), rugbyMainLift('Bench Press', phaseNum), ...ssA, ...ssB, ...finisher].join('\n'),
+  }
 }
 
-// ─── Rugby Backs — Repeat-Sprint/Field Athlete archetype (standard goal
-// only; see rugbyBacksSess above for the muscle-gain variant, untouched by
-// this build) — same weekly template Soccer established (Monday lower
-// strength/power, Tuesday upper, Thursday lower explosion, Friday pure
-// speed/conditioning), same 'rotational' rep tier, same un-raised default
-// accessory cap. Differentiated from Soccer by genuinely more contact
-// tolerance: Tuesday is a real strength day (Bench Press, Weighted
-// Pull-ups, neck work) rather than Soccer's deliberately light upper day —
-// backs still take contact, just less of it than forwards — and Thursday
-// keeps a Trap Bar Deadlift second main lift shared with the Forwards'
-// own Collision-archetype content, rather than Soccer's Hex Bar Deadlift.
-// RUGBY_PHASES (kept — a genuinely more aggressive intensity table than
-// Soccer's own SOC_PHASES, reflecting rugby's real demand) and RUGBY_DAY5/
-// RUGBY_DAY6 (kept — "Contact Conditioning" fits Backs' own contact-tolerance
-// need as well as it always fit Forwards') are both preserved unchanged.
-
-// ── Rugby Backs conditioning: shuttle/sprint-ladder (Monday, paired with
-// Lower Strength & Sprint) vs flying-sprint/sprint+jog-ladder (Thursday,
-// paired with Explosion, Agility & COD) — both drawn from Backs' own old
-// Friday vocabulary.
-function rbConditioningA(ph, deload) {
-  if (deload) return conditioningFinisher('Deload (Light)', ['300 Yard Shuttle: 1x2', 'Easy Mobility Circuit: 1 round'])
-  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 4 rounds'])
-  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`300 Yard Shuttle: ${conditioningSets(3, ph)}x2`, 'Sprint Ladder: 10/20/30/20/10 yds — 3 rounds'])
-}
-function rbConditioningB(ph, deload) {
-  const sy = sprintYardsForPhase(SOC_SPRINT_YARDS, ph)
-  if (deload) return conditioningFinisher('Deload (Light)', ['Flying 20s: 2x1', 'Easy Mobility Circuit: 1 round'])
-  if (ph === 3) return conditioningFinisher(CONDITIONING_SUBTITLES[3], ['Flying 20s: 8x1', 'Sprint Ladder: 10/20/30/20/10 yds — 4 rounds'])
-  return conditioningFinisher(CONDITIONING_SUBTITLES[ph], [`Flying 20s: ${conditioningSets(4, ph)}x1`, `Sprint + Jog Ladder: 4 rounds up to ${sy} yards`])
-}
-// Rugby Backs has no existing rotational anchor in its own Day 2 (a
-// straightforward strength day, no med-ball/twist work) — Rotation uses the
-// generic already-vetted Med Ball Rotational Throw; Arm reuses the same
-// Band External Rotation anchor every Field sport's bank uses.
-const RB_FINISHERS = fieldFinisherBank(rbConditioningA, rbConditioningB, 'Med Ball Rotational Throw', 'Band External Rotation')
-
-// feat/day-layout-engine — Rugby Backs' pack. Unlike every other Field
-// sport, Backs' own genuinely-ramped press was Day 4's Close Grip Bench
-// Press (Day 2's "Bench Press" was the FLAT, non-ramped one) — Close Grip
-// Bench Press fills MAIN_PRESS_H, Bench Press fills ACC_PRESS instead of
-// the usual DB Bench Press. Neck Strengthening/Grip Work have no slot
-// (Field's own templates carry no NECK tag at all, unlike Collision) and
-// are dropped.
-const RB_PACK = {
-  finisherBank: RB_FINISHERS,
-  displayFocus: {
-    'Lower Power': 'Lower Strength & Sprint',
-    'Upper Strength': 'Upper Contact Strength',
-    'Lower Explosion': 'Explosion, Agility & COD',
-  },
-  byFocus: {
-    'Lower Power': {
-      MAIN_SQUAT: 'Back Squat',
-      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
-      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      PLYO: (ctx) => `Lateral Bounds: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
-    },
-    'Upper Strength': {
-      MAIN_PRESS_H: 'Close Grip Bench Press',
-      ACC_PULL_H: 'DB Row: 4x10 each arm',
-      ACC_PRESS: 'Bench Press: 4x8',
-      MED_BALL: 'Med Ball Slam: 4x8', // 3-day
-    },
-    'Lower Explosion': {
-      MAIN_SQUAT: 'Front Squat',
-      MAIN_HINGE: 'Trap Bar Deadlift', // 3-day
-      ACC_UNILATERAL_LOWER: 'Bulgarian Split Squat: 4x6 each leg',
-      ACC_POSTERIOR: 'Nordic Hamstring Curl: 4x5',
-      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
-    },
-    'Upper Power': {
-      MAIN_PRESS_V: 'Overhead Press',
-      ACC_PULL_V: 'Weighted Pull-ups: 4x6',
-      MED_BALL: 'Med Ball Slam: 4x8',
-      ACC_SHOULDER: 'Face Pulls: 4x15',
-    },
-    'Lower Power & Sprint': {
-      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
-      MAIN_SQUAT: 'Back Squat',
-      ACC_HINGE: 'Single Leg RDL: 4x8 each leg',
-    },
-    'Speed & Change of Direction': {
-      SPEED: (ctx) => `Acceleration Sprints: ${explosiveSets(4, ctx.phaseNum)}x20 yds`,
-      PLYO: (ctx) => `Lateral Squat Jump: ${explosiveSets(4, ctx.phaseNum)}x5 each side (${explosiveIntent(ctx.phaseNum)})`,
-    },
-    'Recovery & Mobility': {
-      ACC_POSTERIOR: 'Nordic Hamstring Curl: 3x5 (light)',
-    },
-  },
+// Day 2 — Olympic Power + Shoulder-Safe Press (3-day's own label adds
+// "+ Vertical Pull"; content is identical). Farmer Carry is the finisher on
+// BOTH positions — "carry is the finisher," matching the doc's own locked
+// rule that a heavy carry is never stacked before explosive/conditioning
+// work. Only the SS-A unilateral-lower filler differs (see rugbyFiller's
+// own offset doc comment).
+function rugbyDay2(pos, info, focusLabel) {
+  const { week } = info
+  const unilateral = rugbyFiller(week, 'unilateralLower', '3x6-8 each leg', pos === 'backs' ? 1 : 0)
+  const ssA = superset(1, ['Half-Kneeling Landmine Press: 3x8 each arm', unilateral])
+  const ssB = superset(2, ['Face Pull: 2x12-15', rugbyFiller(week, 'antiExtension', '2x6 each side')])
+  return {
+    day: 'Day 2', focus: focusLabel,
+    description: [...rugbyWarmupLines(pos), 'Hang Power Clean: 3-5x3-5', 'Weighted/Assisted Pull-Up: 3x5-8', ...ssA, ...ssB, 'Conditioning — Farmer Carry:', 'Farmer Carry: 3x25 yds'].join('\n'),
+  }
 }
 
-function generateRugbyBacksArchetypeWeeks(daysPerWeek) {
-  return generateFieldWeeksFromPack(RB_PACK, RUGBY_PHASES, daysPerWeek)
+// 3-DAY's own consolidated Day 3 — Hinge + Incline + Posterior Chain.
+function rugbyDay3_3day(pos, info) {
+  const { phaseNum, week } = info
+  const ssA = superset(1, ['Front Squat: 3x6-8', rugbyFiller(week, 'horizontalPull', '3x8-10')])
+  const ssB = superset(2, ['Hip Thrust: 3x8-10', 'Copenhagen Plank: 2x15-25 sec each side'])
+  const finisher = pos === 'backs'
+    ? ['Conditioning — 10-yd Shuttle Sprints:', '10-yd Shuttle Sprints: 4 reps (45 sec rest)']
+    : ['Neck — Extension:', 'Neck Extension: 2x15 sec isometric']
+  return {
+    day: 'Day 3', focus: 'Hinge + Incline + Posterior Chain',
+    description: [...rugbyWarmupLines(pos), rugbyMainLift('Trap Bar Deadlift', phaseNum), 'DB Incline Press: 3x6-8', ...ssA, ...ssB, ...finisher].join('\n'),
+  }
+}
+
+// 4-DAY's own Day 3 — Secondary Squat + Incline Push.
+function rugbyDay3_4day(pos, info) {
+  const { phaseNum, week } = info
+  const ssA = superset(1, ['Romanian Deadlift: 3x6-8', 'Neutral-Grip Lat Pulldown: 3x8-10'])
+  const ssB = superset(2, ['DB Lateral Raise: 2x12-15', 'Copenhagen Plank: 2x15-25 sec each side'])
+  const finisher = pos === 'backs'
+    ? ['Conditioning — 10-yd Shuttle Sprints:', '10-yd Shuttle Sprints: 4 reps (45 sec rest)']
+    : ['Neck — Extension:', 'Neck Extension: 2x15 sec isometric']
+  return {
+    day: 'Day 3', focus: 'Secondary Squat + Incline Push',
+    description: [...rugbyWarmupLines(pos), rugbyMainLift('Front Squat', phaseNum), 'DB Incline Press: 3x6-8', ...ssA, ...ssB, ...finisher].join('\n'),
+  }
+}
+
+// 4-DAY's own Day 4 — Heavy Hinge + Close-Grip Push. Only the curl differs
+// by position (DB Hammer Curl / Bicep Curl — the doc's own stated
+// difference; neither has a named rotation pool, so neither ever rotates).
+function rugbyDay4_4day(pos, info) {
+  const { phaseNum, week } = info
+  const curl = pos === 'backs' ? 'Bicep Curl: 2x10-12' : 'DB Hammer Curl: 2x10-12'
+  const ssA = superset(1, ['Hip Thrust: 3x8-10', rugbyFiller(week, 'horizontalPull', '3x8-10')])
+  const ssB = superset(2, [curl, rugbyFiller(week, 'shoulderPrehab', '2x15', 1)])
+  const finisher = pos === 'backs'
+    ? ['Conditioning — Lateral Bound to Stick:', 'Lateral Bound to Stick: 3x3 each side']
+    : ['Neck — Lateral Flexion:', 'Neck Lateral Flexion: 2x15 sec each side isometric']
+  return {
+    day: 'Day 4', focus: 'Heavy Hinge + Close-Grip Push',
+    description: [...rugbyWarmupLines(pos), rugbyMainLift('Trap Bar Deadlift', phaseNum), 'Close Grip Bench Press: 3x5-8', ...ssA, ...ssB, ...finisher].join('\n'),
+  }
+}
+
+// 5-DAY's own additive Day 5 — Rugby Speed & Conditioning (no lifting).
+// Block B and Block C are the doc's own stated Forwards/Backs difference;
+// Blocks A/D and the finisher are identical for both.
+function rugbyDay5(pos) {
+  const blockB = pos === 'backs'
+    ? 'Lateral to Sprint: 3x3 each side (5-yd lateral into a 10-yd sprint)'
+    : 'Half-Kneeling 3-Stride Start: 3x3 each side'
+  const blockC = pos === 'backs'
+    ? 'Bike Sprints: 5x15 sec hard / 45 sec easy'
+    : 'Bike Sprints: 6x15 sec hard / 45 sec easy'
+  return {
+    day: 'Day 5', focus: 'Rugby Speed & Conditioning',
+    description: [
+      'Warm-up: normal + progressive accelerations',
+      'Conditioning — Speed & Conditioning:',
+      'Block A (short burst):',
+      'Takeoff Sprints: 4x10 yds (60 sec recovery)',
+      'Block B (multidirectional):',
+      blockB,
+      'Block C (repeated effort):',
+      blockC,
+      'Block D (shuttle):',
+      'Out-and-Back Shuttle: 4x10 yds',
+      'Pallof Iso Hold: 2x15 sec each side',
+    ].join('\n'),
+  }
+}
+
+// 6-DAY's own additive Day 6 — Recovery/Volume (very light, no failure).
+// Only the finisher differs by position (Backs: Low-Amplitude Pogos —
+// elasticity, no neck; Forwards: Neck Lateral Flexion, light). The whole
+// day sits under one "Conditioning —" header block (same protection as
+// Day 5 — see that function's own comment): without it, the generic
+// pairing pass would scatter/re-pair these circuit lines instead of
+// leaving the doc's exact Circuit A/B grouping alone.
+function rugbyDay6(pos) {
+  const finisher = pos === 'backs'
+    ? 'Low-Amplitude Pogos: 2x10'
+    : 'Neck Lateral Flexion: 1x15 sec each side (light)'
+  return {
+    day: 'Day 6', focus: 'Recovery/Volume',
+    description: [
+      'Warm-up: 5 min easy bike + mobility',
+      'Conditioning — Recovery/Volume:',
+      'Circuit A (2 rounds):',
+      'Band Row: 2x15',
+      'Bodyweight Split Squat: 2x12 each leg',
+      'Band External Rotation: 2x15',
+      'Circuit B (2 rounds):',
+      'Push-Up: 2x10-15',
+      'Bodyweight Hamstring Curl: 2x10',
+      'Dead Bug: 2x8 each side',
+      finisher,
+    ].join('\n'),
+  }
+}
+
+function rugbyForwardsSess3Day(info) {
+  return [rugbyDay1('forwards', info), rugbyDay2('forwards', info, 'Olympic Power + Vertical Pull + Shoulder-Safe Press'), rugbyDay3_3day('forwards', info)]
+}
+function rugbyForwardsSess4Day(info) {
+  return [rugbyDay1('forwards', info), rugbyDay2('forwards', info, 'Olympic Power + Shoulder-Safe Press'), rugbyDay3_4day('forwards', info), rugbyDay4_4day('forwards', info)]
+}
+function rugbyBacksSess3Day(info) {
+  return [rugbyDay1('backs', info), rugbyDay2('backs', info, 'Olympic Power + Vertical Pull + Shoulder-Safe Press'), rugbyDay3_3day('backs', info)]
+}
+function rugbyBacksSess4Day(info) {
+  return [rugbyDay1('backs', info), rugbyDay2('backs', info, 'Olympic Power + Shoulder-Safe Press'), rugbyDay3_4day('backs', info), rugbyDay4_4day('backs', info)]
+}
+
+function generateRugbyForwardsWeeks(daysPerWeek, mg = false) {
+  const sessFn = daysPerWeek === 3 ? rugbyForwardsSess3Day : rugbyForwardsSess4Day
+  const weeks = buildRugbyWeeks(sessFn, daysPerWeek, [(info) => rugbyDay5('forwards', info), () => rugbyDay6('forwards')])
+  return applyCollisionMgWrapper(weeks, mg) // generic, sport-agnostic hypertrophy note — see its own doc comment
+}
+function generateRugbyBacksWeeks(daysPerWeek, mg = false) {
+  const sessFn = daysPerWeek === 3 ? rugbyBacksSess3Day : rugbyBacksSess4Day
+  const weeks = buildRugbyWeeks(sessFn, daysPerWeek, [(info) => rugbyDay5('backs', info), () => rugbyDay6('backs')])
+  return applyCollisionMgWrapper(weeks, mg)
 }
 
 function generateRugbyWeeks(posId, goal, daysPerWeek = 4) {
   const mg = goal === 'muscle_gain'
-  // feat/blueprint-cleanup — Rugby Forwards (Collision archetype) now
-  // routes through the modern generator for both goals. Backs (Field
-  // archetype) is untouched — still standard-goal only, per this fix's
-  // scope.
-  if (posId === 'forwards') return generateRugbyForwardsArchetypeWeeks(daysPerWeek, mg)
-  if (!mg && posId === 'backs') return generateRugbyBacksArchetypeWeeks(daysPerWeek)
-  const phases = mg ? MG_PHASES : RUGBY_PHASES
-  const baseFns = { forwards: rugbyForwardsSess, backs: rugbyBacksSess }
-  const baseFn = baseFns[posId] || rugbyForwardsSess
-  const fn = mg
-    ? (info) => baseFn(info).map(s => ({ ...s, focus: s.focus + ' — Hypertrophy', description: s.description + mgNote() }))
-    : baseFn
-  return buildWeeksDynamic(16, phases, fn, daysPerWeek, [RUGBY_DAY5, RUGBY_DAY6])
+  if (posId === 'backs') return generateRugbyBacksWeeks(daysPerWeek, mg)
+  return generateRugbyForwardsWeeks(daysPerWeek, mg)
 }
 
 // ─── Tennis ───────────────────────────────────────────────────────────────────
@@ -5478,8 +5459,20 @@ function normalizePosition(sport, rawPos) {
   }
 
   if (sport === 'rugby') {
-    if (/\b(prop|hooker|lock|flanker|number\s*8|no\.?\s*8|numbe?r?\s*eight)\b/.test(p)) return 'forwards'
-    if (/\b(scrum\s*half|fly\s*half|center|centre|wing|fullback|winger|back)\b/.test(p)) return 'backs'
+    // feat/rugby-rebuild — bug fix: "forwards?" added so the literal
+    // position label "Forwards" (SPORT_TEMPLATES' own positions[0].label)
+    // is genuinely detected, not just landing on 'forwards' by accident via
+    // the fallback default below — same class of gap as the "backs?" fix
+    // just below.
+    if (/\b(prop|hooker|lock|flanker|number\s*8|no\.?\s*8|numbe?r?\s*eight|forwards?)\b/.test(p)) return 'forwards'
+    // feat/rugby-rebuild — bug fix: "backs?" (not "back") so the plural
+    // "Backs" (SPORT_TEMPLATES' own position.label for this position, and
+    // POS_LABELS' own 'rugby_backs' sublabel text) actually matches —
+    // "back" alone has a \b word boundary requirement right after it that
+    // "backs" never satisfies (the "s" keeps it one word), so a coach or
+    // athlete whose position value is literally "Backs" was silently
+    // falling through to the "forwards" fallback below instead.
+    if (/\b(scrum\s*half|fly\s*half|center|centre|wing|fullback|winger|backs?)\b/.test(p)) return 'backs'
     logPositionFallback('rugby', rawPos, 'forwards')
     return 'forwards'
   }
@@ -6430,8 +6423,15 @@ function isRampedLiftLine(line) {
   // Swimming has no percentage-based lifts (its Trap Bar Deadlift/Back Squat
   // lines read "@ moderate load" instead, with their own pre-existing
   // phase-based set-count progression baked into the template) — "@ moderate
-  // load" is that sport's equivalent main-lift marker.
-  return line.includes('%') || line.includes('@ moderate load')
+  // load" is that sport's equivalent main-lift marker. Rugby (feat/rugby-
+  // rebuild) has neither — its ANCHOR main lifts are RPE-anchored per the
+  // doc's own explicit "does NOT hardcode percentages" instruction (see
+  // RUGBY_MAIN_LIFT_SCHEME) — "@ RPE <n>" covers phases 1-3, and phase 4's
+  // own doc text ("2x3-5, fast, low fatigue") carries no RPE number at all
+  // (a taper is intentionally qualitative, not target-RPE'd) so "fast, low
+  // fatigue" is Rugby's own second, equally-real marker for that phase —
+  // same two-marker-per-sport shape as Swimming's own "@ moderate load".
+  return line.includes('%') || line.includes('@ moderate load') || /@\s*RPE\s*\d/.test(line) || line.includes('fast, low fatigue')
 }
 
 // Olympic-lift technical variants are prescribed as low-rep, flat "Name: SxR"
@@ -6514,7 +6514,16 @@ function applyAccessoryProgression(weeks, _extraRotation = {}, phaseRotation = {
         let inCoreBlock = false
         const lines = session.description.split('\n').map(line => {
           const bareLine = line.replace(SUPERSET_MARKER_RE, '')
-          if (/^Core\s*—/.test(bareLine)) { inCoreBlock = true; return line }
+          // feat/rugby-rebuild — "Conditioning —"/"Arm Care —"/"Neck —" were
+          // missing from this header check (present in both sibling passes,
+          // organizeSessionDescription and applyDeloadVolumeReduction) —
+          // a real, pre-existing gap: any sport's finisher-family content
+          // that happens to match "Name: SxR" was silently vulnerable to
+          // the within-phase wip-wave on top of whatever phase-appropriate
+          // text its own finisher bank already authored. Rugby's own fixed
+          // Day 5/6 conditioning content (deliberately static, matching the
+          // spec doc's own numbers) is what surfaced it.
+          if (/^(Core|Conditioning|Arm Care|Neck)\s*—/.test(bareLine)) { inCoreBlock = true; return line }
           if (line === '') { inCoreBlock = false; return line }
           if (!isAccessoryLine(line, inCoreBlock)) return line
 
@@ -6680,6 +6689,21 @@ function applyDeloadVolumeReduction(description) {
       continue
     }
     if (isConditioningLine(line) || isPlyoLine(line)) continue
+    // A ramped/main-lift line was never actually reachable here for any
+    // sport before feat/rugby-rebuild — every existing sport's %-ramp uses
+    // the Unicode "×" sign, which reduceAccessoryVolume's ascii-"x" regex
+    // below simply never matches, so it always fell through unchanged by
+    // accident of character choice, not by design. Rugby's own ANCHOR main
+    // lifts (RUGBY_MAIN_LIFT_SCHEME) use plain ascii "x", the same
+    // convention every "Name: SxR" accessory line already uses, and DO
+    // match that regex — silently halving a main lift's own doc-specified
+    // phase prescription on deload weeks. Make the exemption explicit
+    // instead of relying on an accidental character mismatch, matching
+    // isAccessoryLine's own explicit isRampedLiftLine/isMainLiftLine check.
+    if (isRampedLiftLine(line) || isMainLiftLine(line)) {
+      kept.push(line)
+      continue
+    }
 
     const colonIdx = bareLine.indexOf(':')
     const name = colonIdx > 0 ? bareLine.slice(0, colonIdx) : bareLine
@@ -6989,22 +7013,26 @@ const SPORT_TEMPLATES = [
     id: 'rugby',
     label: 'Rugby',
     daysPerWeekPicker: true,
+    // feat/rugby-rebuild — matches the spec doc exactly: 3/4/5/6-day only
+    // (no 2-day program is authored), 3-day and 4-day are each their own
+    // hand-authored day set (not a slice of one another).
     daysOptions: [
-      { days: 2, desc: 'Lower + Upper (2 sessions)' },
-      { days: 3, desc: 'Lower + Upper + Explosion (3 sessions)' },
+      { days: 3, desc: 'Consolidated full body (3 sessions)' },
       { days: 4, desc: 'Full 4-day split (recommended)' },
-      { days: 5, desc: '4-day + Power Conditioning' },
-      { days: 6, desc: '5-day + Active Recovery' },
+      { days: 5, desc: '4-day + Speed & Conditioning' },
+      { days: 6, desc: '5-day + Recovery/Volume' },
     ],
     positions: [
-      { id: 'forwards', label: 'Forwards', sublabel: 'Prop · Hooker · Lock · Flanker · No.8', desc: 'Maximum strength, contact durability, scrummaging power. Neck work, sled, and farmer carries emphasis.' },
-      { id: 'backs',    label: 'Backs',    sublabel: 'SH · FH · Centre · Wing · Fullback',    desc: 'Speed, explosion, and agility. Sprint work replaces sled on Days 1 & 3. Lateral bounds added to Day 3.' },
+      { id: 'forwards', label: 'Forwards', sublabel: 'Prop · Hooker · Lock · Flanker · No.8', desc: 'Max strength, size, contact durability. Neck work every session; Farmer Carry as the Day 2 finisher.' },
+      { id: 'backs',    label: 'Backs',    sublabel: 'SH · FH · Centre · Wing · Fullback',    desc: 'Speed, power, change of direction. No neck work — sprint/agility finishers instead (Broad Jumps, Shuttle Sprints, Lateral Bound to Stick).' },
     ],
+    // Rugby's own RPE-anchored scheme (see RUGBY_MAIN_LIFT_SCHEME) — no
+    // hardcoded percentage, per the spec doc's own explicit instruction.
     phases: [
-      { num: 1, label: 'Accumulation',   pct: '65–75%', weeks: '1–4'   },
-      { num: 2, label: 'Strength Build', pct: '75–82%', weeks: '5–8'   },
-      { num: 3, label: 'Peak Strength',  pct: '82–88%', weeks: '9–12'  },
-      { num: 4, label: 'Maximum Output', pct: '88–93%', weeks: '13–16' },
+      { num: 1, label: 'Foundation',  pct: '3x8-10 @ RPE 7', weeks: '1–4'   },
+      { num: 2, label: 'Strength',    pct: '4x4-6 @ RPE 8',  weeks: '5–8'   },
+      { num: 3, label: 'Power',       pct: '5x2-4 @ RPE 9',  weeks: '9–12'  },
+      { num: 4, label: 'Peak/Taper',  pct: '2x3-5, fast, low fatigue', weeks: '13–16' },
     ],
     generateWeeks: generateRugbyWeeks,
   },

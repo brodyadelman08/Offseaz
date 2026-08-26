@@ -234,7 +234,15 @@ describe('Routing regression — position-fallback bugs fixed on feat/blueprint-
 // still wired up, without hardcoding which tier (power vs rotational) each
 // position uses. Cross Country and Swimming have no %-ramped main lift to
 // carry Change 1 at all (by design — see their own session-builder
-// comments), so they're covered by the explosive-arc check only.
+// comments), so they're covered by the explosive-arc check only. Rugby
+// (feat/rugby-rebuild) joined that same category — its own ANCHOR main
+// lifts are RPE-anchored, never %-ramped, per the spec doc's own explicit
+// "does NOT hardcode percentages" instruction (RUGBY_MAIN_LIFT_SCHEME) —
+// its own real, equivalent rep-descent behavior (3x8-10 -> 4x4-6 -> 5x2-4
+// -> 2x3-5, verified as genuinely non-increasing TOTAL volume, not just
+// raw rep count) is exhaustively covered instead by blueprintQuality.js's
+// Check 2 (checkRepDescentAcrossPhases), across every position/day-count/
+// goal combination, not just one fixture each.
 
 describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/blueprint-quick-wins', () => {
   const REP_ARC_CASES = [
@@ -247,8 +255,8 @@ describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/bluepri
     ['Hockey', 'Forward', /^Back Squat\b/],
     ['Hockey', 'Defense', /^Back Squat\b/],
     ['Hockey', 'Goalie', /^Back Squat\b/],
-    ['Rugby', 'Prop', /^Back Squat\b/],
-    ['Rugby', 'Fly Half', /^Back Squat\b/],
+    // Rugby/Prop and Rugby/Fly Half removed — see this describe block's own
+    // updated header comment (feat/rugby-rebuild).
     ['Track and Field', 'Sprints', /^Back Squat\b/],
     ['Track and Field', 'Throws', /^Back Squat\b/],
     ['Track and Field', 'Jumps', /^Back Squat\b/],
@@ -311,13 +319,16 @@ describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/bluepri
 
 // ─── 4. Injury-substitution golden set ─────────────────────────────────────
 // Rugby/Prop (survey-realistic free text — a real Survey.jsx Rugby position
-// option — verified to correctly route to Forwards and to exercise all 9
-// substitution triggers implemented today: Back Squat, Front Squat, Bench
-// Press, Trap Bar Deadlift, Single Leg RDL, Bulgarian Split Squat, Box
-// Jumps, RDL/Romanian-Deadlift-shaped hinge work, Suitcase/Farmer Carries,
-// and Chin-ups/heavy pressing all appear in its real 16-week content). A
-// future change that renames one of those triggers without updating the
-// matching applyXAdjustments regex will show up here as a snapshot diff
+// option — verified to correctly route to Forwards). feat/rugby-rebuild
+// replaced Rugby's content with the spec doc's own hand-authored vocabulary
+// (Back Squat, Front Squat, Bench Press, Trap Bar Deadlift, Bulgarian Split
+// Squat, Romanian Deadlift, Farmer Carry) — 8 of the 9 substitution triggers
+// still fire for real on week 1 (Shoulder/Knee/Back/Hip/Quadriceps/
+// Hamstring/Elbow/Wrist); Ankle genuinely has nothing to match (no jumps,
+// calf work, or sprint/COD drills in Forwards' own content — that's Backs'
+// territory), see the "actually changes the text" test's own comment. A
+// future change that renames one of the 8 real triggers without updating
+// the matching applyXAdjustments regex will show up here as a snapshot diff
 // where the substitution silently stops firing.
 
 describe('Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas', () => {
@@ -337,8 +348,21 @@ describe('Injury-substitution golden set — Rugby/Prop × every one of the 9 in
   }
 
   test('baseline (no injury) vs each area actually changes the text — a substitution that silently stops firing is a real regression, not just a snapshot diff', () => {
+    // feat/rugby-rebuild — Rugby Forwards' content is now hand-authored to
+    // the spec doc exactly, replacing the old vocabulary this describe
+    // block's own header comment lists (Single Leg RDL, Box Jumps, Suitcase
+    // Carry, Chin-ups, ...). The doc's real Forwards content has no
+    // ankle-relevant exercise at all — no jumps, no calf work, no sprint/
+    // COD drills (that's Backs' own territory: sprint/agility finishers
+    // replace Forwards' neck work entirely, per the doc's own explicit
+    // Forwards/Backs split) — so applyAnkleAdjustments (Depth Jumps, Single
+    // Leg RDL, Calf Raises, sprint/COD volume) has nothing to match on
+    // week 1, genuinely, not as a bug. Ankle is still snapshotted above
+    // (an unchanged-from-baseline snapshot for Forwards is itself accurate,
+    // real output) — just excluded from this specific "every area changes
+    // something" assertion.
     const baseline = generateBlueprintForAthlete(mkSurvey({ sport: 'Rugby', position: 'Prop' })).weeks[0]
-    for (const area of AREAS.filter(a => a !== 'None')) {
+    for (const area of AREAS.filter(a => a !== 'None' && a !== 'Ankle')) {
       const withInjury = generateBlueprintForAthlete(mkSurvey({
         sport: 'Rugby', position: 'Prop', injury_areas: [area],
       })).weeks[0]

@@ -970,6 +970,168 @@ const EXERCISE_LIBRARY = {
     description: 'Stand facing a wall or rack with your heels a few inches out and holding on for balance. Set a light kettlebell on the top of each foot (or one at a time) and lift your toes toward your shins, then lower under control.',
     muscles: 'Tibialis anterior (shin)',
   },
+
+  // ─── Rugby Program Spec (v2) additions (feat/rugby-rebuild) ───────────────
+  'chest-supported db row': {
+    description: 'Set an incline bench to a steep angle and lie chest-down on it, a dumbbell in each hand hanging straight down. Row both dumbbells up to your ribs, squeezing your shoulder blades together, then lower under control.',
+    muscles: 'Lats, rhomboids, rear delts',
+  },
+  'seated leg curl': {
+    description: 'Sit in the leg curl machine with the pad against the back of your lower legs. Curl your heels down and back toward the seat, then return under control without letting the weight stack slam.',
+    muscles: 'Hamstrings',
+  },
+  'lying leg curl': {
+    description: 'Lie face-down on the leg curl machine with the pad just above your heels. Curl your heels up toward your glutes, then lower under control.',
+    muscles: 'Hamstrings',
+  },
+  'stability-ball leg curl': {
+    description: 'Lie on your back with your heels on top of a stability ball, arms flat on the floor for support. Bridge your hips up, then curl the ball in toward your glutes by bending your knees, and roll it back out. Keep your hips up the whole time.',
+    muscles: 'Hamstrings, glutes, core',
+  },
+  'pallof press': {
+    description: 'Stand side-on to a cable column or band anchor, hands holding the handle at your chest. Press the handle straight out in front of you and hold, resisting the pull rotating your torso toward the anchor, then bring it back to your chest.',
+    muscles: 'Core (anti-rotation)',
+  },
+  'half-kneeling pallof press': {
+    description: 'Same setup as the Pallof Press, but from a half-kneeling position (one knee down, same-side leg as the anchor down for the harder variation). Press the handle straight out and hold, resisting rotation, then return.',
+    muscles: 'Core (anti-rotation), hip stability',
+  },
+  'cable woodchop': {
+    description: 'Set a cable at high or low pulley, stand side-on to it. Pull the handle across your body in a chopping motion (high-to-low or low-to-high), rotating through your torso and hips, then return under control. Complete all reps on one side before switching.',
+    muscles: 'Obliques, core (rotational)',
+  },
+  'half-kneeling landmine press': {
+    description: 'Load a barbell into a landmine attachment (or wedge it in a corner). From a half-kneeling position, press the free end up and slightly forward at an angle until your arm is extended, then lower under control. Complete all reps on one side before switching.',
+    muscles: 'Shoulders, triceps, core — angled path, no direct overhead loading',
+  },
+  'step-up': {
+    description: 'Stand in front of a box or bench. Drive through the heel of your lead foot to step fully up onto it, standing tall at the top, then step back down under control. Complete all reps on one side before switching.',
+    muscles: 'Quads, glutes',
+  },
+  'face pull': {
+    description: 'Set a cable or band at head height. Pull the rope/band toward your face, leading with your elbows high and out to the sides, finishing with your hands by your ears and squeezing your shoulder blades together.',
+    muscles: 'Rear delts, rotator cuff, upper back',
+  },
+  'farmer carry': {
+    description: 'Pick up a heavy dumbbell or farmer\'s handle in each hand and walk the prescribed distance with a tall posture, braced core, and shoulders back — no leaning or shrugging.',
+    muscles: 'Grip, traps, core, full-body stability',
+  },
+  'weighted/assisted pull-up': {
+    description: 'Use added weight (a belt or held dumbbell) if you can already do the prescribed reps bodyweight, or a resistance band/assist machine if you can\'t — pull your chin over the bar each rep, then lower under full control.',
+    muscles: 'Lats, biceps, upper back',
+  },
+  'db incline press': {
+    description: 'Set a bench to 30–45°. Press a dumbbell in each hand from shoulder height straight up until your arms are extended, then lower under control to the stretch.',
+    muscles: 'Upper chest, front delts, triceps',
+  },
+  'neutral-grip lat pulldown': {
+    description: 'Using a neutral-grip (palms facing each other) handle, pull the bar down to your upper chest, driving your elbows down and back, then let it return under control to a full stretch.',
+    muscles: 'Lats, biceps, upper back',
+  },
+  'db lateral raise': {
+    description: 'Holding a light dumbbell in each hand at your sides, raise both arms out to shoulder height with a slight bend in the elbows, then lower under control. Don\'t use momentum.',
+    muscles: 'Lateral (side) deltoids',
+  },
+  'db hammer curl': {
+    description: 'Holding a dumbbell in each hand with a neutral (palms-facing-in) grip, curl both up toward your shoulders without swinging, then lower under control.',
+    muscles: 'Biceps, forearms',
+  },
+  'bicep curl': {
+    description: 'Holding a dumbbell or barbell with an underhand grip, curl the weight up toward your shoulders keeping your elbows pinned at your sides, then lower under control.',
+    muscles: 'Biceps',
+  },
+  'band pull-apart': {
+    description: 'Hold a light resistance band at chest height with arms extended in front of you, shoulder-width grip. Pull the band apart by driving your arms out to the sides until it touches your chest, squeezing your shoulder blades together, then return under control.',
+    muscles: 'Rear delts, upper back',
+  },
+  'cable rear-delt fly': {
+    description: 'Standing at a cable machine with the pulleys set high, cross the handles and pull them out and back in a wide arc to shoulder height, squeezing your shoulder blades together, then return under control.',
+    muscles: 'Rear delts, upper back',
+  },
+  'ab wheel rollout': {
+    description: 'Kneeling, grip the ab wheel and roll it forward as far as you can while keeping your core braced and your back flat (not sagging), then pull it back to the start using your abs, not your hips.',
+    muscles: 'Core (anti-extension)',
+  },
+  'hollow body hold': {
+    description: 'Lie on your back, lower back pressed into the floor. Lift your shoulders and legs off the ground into a slight "banana" shape, arms reaching overhead, and hold — the lower your back stays glued to the floor, the better.',
+    muscles: 'Core (anti-extension)',
+  },
+  '10-yd shuttle sprints': {
+    description: 'From a standing start, sprint 10 yards, touch the line, sprint back to the start, and touch again — that\'s one rep. Go at full effort each rep, with full recovery between reps.',
+    muscles: 'Full-body speed, change of direction',
+  },
+  'lateral bound to stick': {
+    description: 'From a single-leg athletic stance, push off explosively to bound sideways as far as you can, landing on the opposite leg and holding ("sticking") the landing for a full second before resetting. Complete all reps on one side before switching.',
+    muscles: 'Glutes, quads, hip stability (lateral power)',
+  },
+  'takeoff sprints': {
+    description: 'From a two-point stalked start (staggered feet, low body angle), drive out explosively for the full distance, focusing on short, powerful first steps before opening your stride.',
+    muscles: 'Full-body acceleration',
+  },
+  'half-kneeling 3-stride start': {
+    description: 'Start in a half-kneeling position facing the direction you\'ll sprint. Drive up and out explosively, taking exactly 3 hard strides before decelerating. Reset and repeat, alternating your down knee.',
+    muscles: 'Full-body acceleration, first-step power',
+  },
+  'bike sprints': {
+    description: 'On a stationary or assault bike, sprint at maximum effort for the prescribed time, then pedal easy for the rest interval. Stay seated or standing, whichever lets you produce the most power.',
+    muscles: 'Full-body conditioning (anaerobic)',
+  },
+  'out-and-back shuttle': {
+    description: 'From a standing start, sprint out to the marked distance, touch the ground or a cone, and sprint back to the start at full effort.',
+    muscles: 'Full-body speed, change of direction',
+  },
+  'pallof iso hold': {
+    description: 'Stand side-on to a cable column or band anchor, hands holding the handle pressed straight out from your chest. Hold that position, bracing hard to resist the pull rotating your torso toward the anchor, for the prescribed time. Switch sides.',
+    muscles: 'Core (anti-rotation, isometric)',
+  },
+  'lateral to sprint': {
+    description: 'From an athletic stance, shuffle laterally for the prescribed distance, then plant and drive immediately into a forward sprint for the second distance. One fluid transition, not two separate movements.',
+    muscles: 'Full-body speed, change of direction',
+  },
+  'low-amplitude pogos': {
+    description: 'Standing tall, hop in place using quick, small ankle-driven bounces — stiff legs, minimal knee bend, barely leaving the ground. Focus on a fast, light ground contact each rep.',
+    muscles: 'Calves, ankles (reactive elasticity)',
+  },
+  'band row': {
+    description: 'Anchor a resistance band at chest height (or loop it around a sturdy post) and step back to create tension. Row the band handles to your ribs, squeezing your shoulder blades together, then return under control.',
+    muscles: 'Lats, rhomboids, rear delts',
+  },
+  'bodyweight split squat': {
+    description: 'From a split stance (one foot forward, one back), lower your rear knee straight down toward the floor keeping your torso upright, then drive back up through your front heel. Complete all reps on one side before switching.',
+    muscles: 'Quads, glutes',
+  },
+  'push-up': {
+    description: 'Hands just outside shoulder-width, body in a straight line from head to heels. Lower your chest to just above the floor, then press back up to full arm extension without letting your hips sag.',
+    muscles: 'Chest, front delts, triceps, core',
+  },
+  'bodyweight hamstring curl': {
+    description: 'Kneeling with your ankles anchored (a partner holding them, or under a fixed pad), lower your torso forward as slowly as possible using only your hamstrings, catching yourself with your hands as you approach the floor and pushing back to the start.',
+    muscles: 'Hamstrings',
+  },
+  'one-arm cable row': {
+    description: 'Standing or kneeling, pull a single cable handle to your ribs one arm at a time, driving your elbow back and squeezing your shoulder blade, then return under control. Complete all reps on one side before switching.',
+    muscles: 'Lats, rhomboids, rear delts',
+  },
+  'seated cable row': {
+    description: 'Seated at a low cable row station, feet braced, pull the handle to your torso keeping your back flat and elbows close, then return to a full stretch under control.',
+    muscles: 'Lats, rhomboids, rear delts',
+  },
+  'hang power clean': {
+    description: 'Start standing with the bar at hip/thigh height (not the floor). Explosively extend your hips and shrug the bar upward, pulling yourself under it to catch it on your front shoulders in a quarter-squat, then stand tall.',
+    muscles: 'Full-body power (hips, traps, legs) — technical, autoregulated by feel',
+  },
+  'a-march': {
+    description: 'Walking forward, drive one knee up to hip height while staying tall through your torso, then step it down and repeat with the other leg — a marching rhythm, not a run.',
+    muscles: 'Hip flexors, warm-up activation',
+  },
+  'squat-to-stand': {
+    description: 'Stand with feet shoulder-width, hinge forward and grab your toes/shins, then sink into a deep squat while keeping hold, drive your hips up to straighten your legs (keeping the stretch), then stand all the way up.',
+    muscles: 'Hamstrings, hips, ankles — dynamic warm-up',
+  },
+  '4-way manual neck isometrics': {
+    description: 'Using your own hand (or a partner\'s) for resistance, press your head into the hand in each of 4 directions — forward, backward, and to each side — holding each for the prescribed time without letting your head actually move.',
+    muscles: 'Neck (all directions, isometric)',
+  },
 }
 
 // Case-insensitive lookup helper

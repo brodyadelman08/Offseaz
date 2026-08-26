@@ -44,7 +44,14 @@ function archetypeFor(sportId, posId) {
       return 'speedpower' // skill, hybrid
     case 'baseball': case 'softball': return 'rotational'
     case 'wrestling': return 'collision'
-    case 'rugby': return posId === 'forwards' ? 'collision' : 'field' // backs
+    // feat/rugby-rebuild — Rugby (both positions) is now hand-authored
+    // directly (see blueprintTemplates.js's own Rugby section doc comment),
+    // not a dayLayoutEngine archetype-pack consumer — `null` correctly opts
+    // it out of every check below that uses dayLayoutEngine.getTemplate()
+    // as ground truth (Checks 4/5/6/11), since there is no longer a generic
+    // template to compare its output against. Checks 2/3/7/8/9/10 (text-only,
+    // no archetype lookup) still run against Rugby normally.
+    case 'rugby': return null
     case 'hockey': return posId === 'forwards' ? 'collision' : 'field' // defense, goalie
     case 'soccer': return 'field'
     case 'lacrosse': return 'field'
@@ -88,7 +95,11 @@ function parseDescription(description) {
     const colonIdx = line.indexOf(':')
     if (colonIdx <= 0) continue
     const name = line.slice(0, colonIdx).trim()
-    const isRamped = /%[×x]/.test(line) || /@ moderate load/.test(line) || /@\s*\d+%/.test(line)
+    // feat/rugby-rebuild — "@ RPE <n>" / "fast, low fatigue" is Rugby's own
+    // ramped-main-lift marker (see blueprintTemplates.js's isRampedLiftLine,
+    // the exact same two-pattern addition, kept in sync with this copy).
+    const isRamped = /%[×x]/.test(line) || /@ moderate load/.test(line) || /@\s*\d+%/.test(line) ||
+      /@\s*RPE\s*\d/.test(line) || /fast, low fatigue/.test(line)
     lines.push({ raw, name, isRamped, inBlock, blockKind })
   }
   return { lines, headers, hasDeloadBanner }
@@ -209,6 +220,30 @@ function lastRepCount(line) {
   return parseInt(matches[matches.length - 1][1], 10)
 }
 
+// feat/rugby-rebuild — Rugby's own ANCHOR main-lift lines are a flat "Nx
+// R-R @ RPE n" scheme (e.g. "3x8-10 @ RPE 7"), not a %-ramp — a real taper
+// phase can legitimately raise the rep FLOOR slightly while cutting SETS
+// (Rugby's own Peak/Taper: 2x3-5 vs Power's 5x2-4 — reps tick up 2->3, but
+// total volume drops hard, 5x2=10 -> 2x3=6) — lastRepCount alone would
+// wrongly flag that as an increase. Prefer SETS x rep-floor (genuine total
+// volume) whenever a line carries an explicit, non-%-ramped leading set
+// count; fall back to the original rep-only metric for every %-ramp line
+// (which has no single "sets" count of its own — a ramp is several sets at
+// climbing %, not N sets at one intensity), so every other sport's check is
+// byte-identical to before.
+function repDescentMetric(line) {
+  // Scoped strictly to Rugby's own two RPE-anchored markers (see
+  // isRampedLiftLine's identical pair in blueprintTemplates.js) — NOT any
+  // line lacking a "%", which would also catch Swimming's own "@ moderate
+  // load" flat-set lines (legitimate, different design: dryland sets
+  // genuinely climb phase to phase there) and wrongly flag them too.
+  if (/@\s*RPE\s*\d/.test(line) || /fast, low fatigue/.test(line)) {
+    const flat = line.match(/:\s*(\d+)[×x](\d+)(?:-\d+)?/)
+    if (flat) return parseInt(flat[1], 10) * parseInt(flat[2], 10)
+  }
+  return lastRepCount(line)
+}
+
 function checkRepDescentAcrossPhases() {
   const violations = []
   for (const entry of matrix()) {
@@ -223,7 +258,7 @@ function checkRepDescentAcrossPhases() {
       for (const s of week.sessions) {
         const { lines } = parseDescription(s.description)
         const ramped = lines.find(l => l.isRamped && !l.inBlock)
-        if (ramped) { found = lastRepCount(ramped.raw); break }
+        if (ramped) { found = repDescentMetric(ramped.raw); break }
       }
       repsByPhase.push(found)
     }
@@ -721,7 +756,15 @@ function checkStandardDaysHaveTwoSupersets() {
     for (let i = 0; i < week1.sessions.length; i++) {
       const s = week1.sessions[i]
       const dayTpl = template && template[i]
-      const isExempt = arch === 'endurance' || (dayTpl && (dayTpl.recoveryOnly || dayTpl.lowFatigue))
+      // feat/rugby-rebuild — Rugby has no dayLayoutEngine template (arch is
+      // null, see archetypeFor's own comment) to carry a recoveryOnly/
+      // lowFatigue flag, but its 5-day/6-day extra days are the exact same
+      // real thing by design: Day 5 (Rugby Speed & Conditioning) is
+      // no-lifting field work, Day 6 (Recovery/Volume) is an explicitly
+      // "very light, no failure" fixed circuit — the spec doc never asks
+      // for superset pairing on either.
+      const isRugbyBonusDay = entry.sportId === 'rugby' && (s.focus === 'Rugby Speed & Conditioning' || s.focus === 'Recovery/Volume')
+      const isExempt = arch === 'endurance' || (dayTpl && (dayTpl.recoveryOnly || dayTpl.lowFatigue)) || isRugbyBonusDay
       if (isExempt) continue
       const count = supersetGroups(s.description).length
       if (count < 2) {

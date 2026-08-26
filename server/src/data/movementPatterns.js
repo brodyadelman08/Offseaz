@@ -33,6 +33,7 @@ const CAT = {
   PLYO_SQUAT: 'PLYO_SQUAT',       // jump family — quad/knee-dominant power
   PLYO_LATERAL: 'PLYO_LATERAL',   // lateral bound/hop family — still hip/quad-dominant
   GRIP: 'GRIP',
+  ARM_ACC: 'ARM_ACC',             // isolated bicep/tricep curl work — feat/rugby-rebuild
 }
 
 const NAME_TO_CAT = {
@@ -46,6 +47,12 @@ const NAME_TO_CAT = {
   'trap bar deadlift': CAT.HINGE, 'hex bar deadlift': CAT.HINGE, 'barbell rdl': CAT.HINGE,
   'single leg rdl': CAT.HINGE, 'good mornings': CAT.HINGE, 'nordic hamstring curl': CAT.HINGE,
   'eccentric nordic curl': CAT.HINGE, 'hip thrust': CAT.HINGE,
+  // feat/rugby-rebuild — Romanian Deadlift (a real, distinct name from
+  // Barbell RDL already above — same hip-hinge pattern) and the doc's own
+  // 3-member Leg Curl filler pool (posterior-chain/hamstring-dominant, same
+  // family as Nordic Hamstring Curl just above).
+  'romanian deadlift': CAT.HINGE, 'seated leg curl': CAT.HINGE, 'lying leg curl': CAT.HINGE,
+  'stability-ball leg curl': CAT.HINGE,
   // HORIZONTAL PUSH
   'bench press': CAT.HORIZ_PUSH, 'db bench': CAT.HORIZ_PUSH, 'db bench press': CAT.HORIZ_PUSH,
   'db chest press (varied grip)': CAT.HORIZ_PUSH, 'single arm db bench': CAT.HORIZ_PUSH,
@@ -58,21 +65,42 @@ const NAME_TO_CAT = {
   // it's never blindly superset-paired with another vertical-press line.
   'overhead press': CAT.VERT_PUSH, 'db shoulder press': CAT.VERT_PUSH, 'shoulder press': CAT.VERT_PUSH,
   'seated single arm db overhead press': CAT.VERT_PUSH, 'landmine press': CAT.VERT_PUSH,
+  // feat/rugby-rebuild — Half-Kneeling Landmine Press is a real, distinct
+  // name from plain Landmine Press above (same vertical-press pattern).
+  'half-kneeling landmine press': CAT.VERT_PUSH,
   // HORIZONTAL PULL / ROW
   'bb row': CAT.HORIZ_PULL, 'bent over bb row': CAT.HORIZ_PULL, 'gorilla row': CAT.HORIZ_PULL,
   'db row': CAT.HORIZ_PULL, 'single arm db row': CAT.HORIZ_PULL, 'chest supported row': CAT.HORIZ_PULL,
   'split stance cable row': CAT.HORIZ_PULL, 'inverted bb row': CAT.HORIZ_PULL,
+  // feat/rugby-rebuild
+  'chest-supported db row': CAT.HORIZ_PULL, 'seated cable row': CAT.HORIZ_PULL, 'one-arm cable row': CAT.HORIZ_PULL,
   // VERTICAL PULL
   'lat pulldown': CAT.VERT_PULL, 'seated cable lat pulldown': CAT.VERT_PULL,
   'kneeling single arm lat pulldown': CAT.VERT_PULL, 'pull-ups': CAT.VERT_PULL, 'pull-up': CAT.VERT_PULL,
   'weighted pull-ups': CAT.VERT_PULL, 'weighted chin-ups': CAT.VERT_PULL, 'rope climb': CAT.VERT_PULL,
+  // feat/rugby-rebuild — "Weighted/Assisted Pull-Up" is the doc's own
+  // single combined name (one prescription covering both directions).
+  'weighted/assisted pull-up': CAT.VERT_PULL, 'neutral-grip lat pulldown': CAT.VERT_PULL,
   // SHOULDER ACCESSORY (isolation — rear/lateral delt, rotator cuff)
   'lateral raise': CAT.SHOULDER_ACC, 'reverse flys': CAT.SHOULDER_ACC, 'face pulls': CAT.SHOULDER_ACC,
   'cuban press': CAT.SHOULDER_ACC,
+  // feat/rugby-rebuild — singular "Face Pull" (the doc's own wording,
+  // distinct string from plural "Face Pulls" above), DB Lateral Raise (same
+  // lateral-delt isolation as plain Lateral Raise), Band Pull-Apart
+  // (singular; scap/rear-delt, same family as Face Pull/Face Pulls), and
+  // Cable Rear-Delt Fly (rear-delt isolation, same bucket).
+  'face pull': CAT.SHOULDER_ACC, 'db lateral raise': CAT.SHOULDER_ACC,
+  'band pull-apart': CAT.SHOULDER_ACC, 'cable rear-delt fly': CAT.SHOULDER_ACC,
   // TRAP / NECK
   'db shrugs': CAT.TRAP_NECK, 'neck strengthening': CAT.TRAP_NECK,
   // CALF
   'seated calf raise': CAT.CALF, 'single leg calf raise': CAT.CALF, 'kb tibialis raises': CAT.CALF,
+  // ARM ACCESSORY (isolated bicep/tricep curl work) — feat/rugby-rebuild.
+  // Not in STRICT_CATEGORIES (see below): an isolated arm curl is exactly
+  // the kind of low-competing accessory the existing CORE_CARRY/GRIP
+  // exemption already models — never the primary mover for anything else
+  // in this file's vocabulary.
+  'bicep curl': CAT.ARM_ACC, 'db hammer curl': CAT.ARM_ACC,
   // CORE / CARRY / ROTATIONAL / LATERAL-WALK — deliberately NOT strict (see
   // STRICT_CATEGORIES below): the user's own rule allows "a strength
   // movement with core/mobility."
@@ -82,6 +110,13 @@ const NAME_TO_CAT = {
   'rotational cable pull': CAT.CORE_CARRY, 'banded monster walk': CAT.CORE_CARRY,
   'resistance band lateral walk': CAT.CORE_CARRY, 'sprawl drills': CAT.CORE_CARRY,
   'lateral sled drag': CAT.CORE_CARRY,
+  // feat/rugby-rebuild — Pallof Press family (anti-rotation core, matches
+  // the existing "anti-rotation press" precedent just above), Cable
+  // Woodchop (rotational core, already used elsewhere in this file's own
+  // coreBlock content), Dead Bug/Ab Wheel Rollout/Hollow Body Hold
+  // (anti-extension core, same family as the existing Ab Wheel usage).
+  'pallof press': CAT.CORE_CARRY, 'half-kneeling pallof press': CAT.CORE_CARRY, 'cable woodchop': CAT.CORE_CARRY,
+  'dead bug': CAT.CORE_CARRY, 'ab wheel rollout': CAT.CORE_CARRY, 'hollow body hold': CAT.CORE_CARRY,
   // POWER / EXPLOSIVE (med ball) — the explosive version of the SAME joint
   // action as their strength-pattern counterpart, so each competes with
   // its strength sibling too (see CROSS_COMPETES below), not just itself.
