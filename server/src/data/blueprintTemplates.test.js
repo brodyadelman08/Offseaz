@@ -809,7 +809,8 @@ describe('Area 7 — Exercise library coverage', () => {
     'neck lateral flexion', 'conditioning — farmer carry', 'conditioning — broad jumps',
     'conditioning — 10-yd shuttle sprints', 'conditioning — lateral bound to stick',
     'conditioning — speed & conditioning', 'conditioning — recovery/volume',
-    'block a (short burst)', 'block b (multidirectional)', 'block c (bike sprint ladder)',
+    'block a (short burst)', 'block b (multidirectional)', 'block c (energy system)',
+    'block d (change of direction)',
     'block d (shuttle)', 'circuit a (2 rounds)', 'circuit b (2 rounds)',
     // feat/blueprint-quick-wins — Track & Field's "Throws"/"Jumps" position
     // labels (the real SPORT_TEMPLATES/survey values) never matched
@@ -1335,11 +1336,21 @@ describe('Area 9 — Rebuilt week-to-week progression', () => {
     // any sport, target group or not.
     const TAPER_SPORTS = new Set(['baseball', 'softball', 'basketball', 'soccer'])
     for (const tpl of SPORT_TEMPLATES) {
-      // feat/rugby-rebuild — Rugby joins cross_country/swimming's own
-      // exclusion above: its ANCHOR main lifts are RPE-anchored per the
-      // spec doc's own explicit "does NOT hardcode percentages" instruction
-      // (RUGBY_MAIN_LIFT_SCHEME) — the objective string carries no "(NN%"
-      // token at all, so there's no percentage here to check for a dip.
+      // feat/rugby-rebuild (v5) — Rugby's own main lifts ARE %-ramped again
+      // (RUGBY_PCT_TABLE), but stays excluded here for two real reasons,
+      // neither a false positive to chase:
+      //  1. pctOf()'s own regex (/\((\d+)%/) requires whole-number digits
+      //     immediately before "%" — Rugby's objective carries decimal
+      //     percentages (e.g. "(87.5%×2)"), which that regex can't parse
+      //     ("\d+" then "%" with no "." allowed in between), so it returns
+      //     null here, not a real percentage to compare.
+      //  2. Even with an updated parser, Rugby's own Power phase
+      //     deliberately drops intensity below Strength's peak (Strength
+      //     tops at 87.5%, Power's own top only reaches 75-80%) — the v5
+      //     doc's own explicit design ("explosive, ramp to ~75-80% ...
+      //     keep bar speed"), a genuine, intentional dip at the Phase 2->3
+      //     seam, not the Phase 3->4 seam this test's TAPER_SPORTS
+      //     exception already covers. A real dip, not a regression.
       if (tpl.id === 'cross_country' || tpl.id === 'swimming' || tpl.id === 'rugby') continue
       const pos = tpl.positions[0]
       const weeks = tpl.generateWeeks(pos.id, 'standard', maxDaysFor(tpl))

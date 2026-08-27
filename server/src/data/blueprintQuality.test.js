@@ -479,16 +479,19 @@ describe('Check 12 — Rugby: max 5 sets on any resistance/loaded line', () => {
     expect(violations).toEqual([])
   })
 
-  // Sanity: Day 5 Block C is the doc's own work/rest interval LADDER, 3
-  // ROUNDS through (v4 corrected v3's "1 trip" to 3 rounds, rest as needed
-  // between rounds — each round: 10s on/20s off, 15/15, 20/10, 15/15,
-  // 10/20, pyramiding up to the hardest ratio mid-round and back down),
-  // rendered as ONE line under the "Bike Sprints" name, identical for both
-  // positions. Proves the ladder rendering survives the check with zero
-  // violations AND that "Bike Sprints" is still recognized as a
-  // conditioning name (not just passing because this particular line has
-  // no "Nx" shape to match at all).
-  test('sanity: the bike sprint ladder renders as 3 rounds on one line (not flat sets) and produces zero violations for either position', () => {
+  // Sanity: Day 5 Block C (v5 — "energy system," now rotates week-to-week
+  // through a 4-member pool: Bike Sprint Ladder, Sled Push Intervals,
+  // Prowler Intervals, Tempo Runs) opens on week 1 at the Bike Sprint
+  // Ladder for both positions (rotation offset 0 for both — no position
+  // split on this block), rendered as ONE line under the "Bike Sprints"
+  // name with its own fixed 3-round interval structure (10s on/20s off,
+  // 15/15, 20/10, 15/15, 10/20 per round, pyramiding up to the hardest
+  // ratio mid-round and back down) plus a phase-appropriate rest note.
+  // Proves the ladder rendering survives the check with zero violations
+  // AND that "Bike Sprints" is still recognized as a conditioning name
+  // (not just passing because this particular line has no "Nx" shape to
+  // match at all).
+  test('sanity: week 1\'s bike sprint ladder renders as 3 rounds on one line (not flat sets) and produces zero violations for either position', () => {
     const { generateBlueprintForAthlete } = require('./blueprintTemplates')
     for (const [pos, label] of [['Prop', 'forwards'], ['Fly Half', 'backs']]) {
       const bp = generateBlueprintForAthlete({
@@ -496,7 +499,7 @@ describe('Check 12 — Rugby: max 5 sets on any resistance/loaded line', () => {
       })
       const day5 = bp.weeks[0].sessions[4].description
       expect(day5).toMatch(/Bike Sprints: 3 rounds — each round 10 sec on \/ 20 sec off, 15\/15, 20\/10, 15\/15, 10\/20 sec/)
-      expect(day5).toMatch(/rest as needed between rounds/)
+      expect(day5).toMatch(/build aerobic base/) // Foundation-phase rest note
       // Exactly one "Bike Sprints" line — not one line per round/step
       // (would violate the doc's own "no duplicate exercise within the
       // same day" rule).

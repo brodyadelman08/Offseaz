@@ -234,15 +234,15 @@ describe('Routing regression — position-fallback bugs fixed on feat/blueprint-
 // still wired up, without hardcoding which tier (power vs rotational) each
 // position uses. Cross Country and Swimming have no %-ramped main lift to
 // carry Change 1 at all (by design — see their own session-builder
-// comments), so they're covered by the explosive-arc check only. Rugby
-// (feat/rugby-rebuild) joined that same category — its own ANCHOR main
-// lifts are RPE-anchored, never %-ramped, per the spec doc's own explicit
-// "does NOT hardcode percentages" instruction (RUGBY_MAIN_LIFT_SCHEME) —
-// its own real, equivalent rep-descent behavior (3x8-10 -> 4x4-6 -> 5x2-4
-// -> 2x3-5, verified as genuinely non-increasing TOTAL volume, not just
-// raw rep count) is exhaustively covered instead by blueprintQuality.js's
-// Check 2 (checkRepDescentAcrossPhases), across every position/day-count/
-// goal combination, not just one fixture each.
+// comments), so they're covered by the explosive-arc check only.
+//
+// Rugby (feat/rugby-rebuild v5) is back in the main list below — its own
+// ANCHOR main lifts (Back Squat/Front Squat/Bench Press/Trap Bar Deadlift)
+// are %-ramped again, per the v5 doc's own "shared Offseaz percentage
+// table (same as baseball)" instruction (RUGBY_PCT_TABLE), replacing v2-v4's
+// RPE-anchored scheme — week 1's top set is 75%x5, week 9's is 75%x3, a
+// genuine rep-count drop this check catches directly, the same as every
+// other %-ramped sport.
 
 describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/blueprint-quick-wins', () => {
   const REP_ARC_CASES = [
@@ -255,8 +255,8 @@ describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/bluepri
     ['Hockey', 'Forward', /^Back Squat\b/],
     ['Hockey', 'Defense', /^Back Squat\b/],
     ['Hockey', 'Goalie', /^Back Squat\b/],
-    // Rugby/Prop and Rugby/Fly Half removed — see this describe block's own
-    // updated header comment (feat/rugby-rebuild).
+    ['Rugby', 'Prop', /^Back Squat\b/],
+    ['Rugby', 'Fly Half', /^Back Squat\b/],
     ['Track and Field', 'Sprints', /^Back Squat\b/],
     ['Track and Field', 'Throws', /^Back Squat\b/],
     ['Track and Field', 'Jumps', /^Back Squat\b/],

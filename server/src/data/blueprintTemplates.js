@@ -4703,24 +4703,61 @@ function generateHockeyWeeks(posId, goal, daysPerWeek = 4) {
 //     on why an exempt header, not a bare conditioning-shaped line, is what
 //     protects a day's genuine finisher from disappearing entirely.
 
-// Main-lift phase progression — the doc's own RPE-anchored scheme, applied
-// by PHASE NUMBER (the same week -> phase mapping getPhaseInfo uses
-// elsewhere in this file: 4 phases of 4 weeks, week % 4 === 0 is always a
-// deload). This IS Rugby's "engine" for ANCHOR main lifts — reps/sets
-// descend by phase exactly as the doc specifies; load itself is
-// autoregulated by the athlete off the RPE target and their own logged max,
-// the same autoregulation principle every Olympic-lift line in this file
-// already uses (collisionOlyScheme's "start light and build") — applied here
-// to a barbell squat/press/hinge instead of a technical lift. No percentage
-// is ever hardcoded, per the doc's own explicit instruction.
-const RUGBY_MAIN_LIFT_SCHEME = {
-  1: '3x8-10 @ RPE 7',
-  2: '4x4-6 @ RPE 8',
-  3: '5x2-4 @ RPE 9',
-  4: '2x3-5 (fast, low fatigue)',
+// Main-lift PERCENTAGE RAMP (feat/rugby-rebuild v5 — replaces v2-v4's
+// RPE-anchored scheme). Applies to Back Squat, Front Squat, Bench Press,
+// Trap-Bar Deadlift: these ramp UP across sets to a top set, off the
+// athlete's logged 1RM, using buildRamp() — the SAME shared warm-up-ramp
+// mechanism every %-based sport in this file already uses (baseball,
+// football skill/hybrid/qb, basketball, soccer, ...) — "uses the shared
+// Offseaz percentage table (same as baseball)," per the doc's own
+// instruction, not a bespoke Rugby-only ramp shape. Reps DESCEND as %
+// climbs; every value below is a SPECIFIC number, never a range (the
+// doc's own locked rule: "SPECIFIC REPS ONLY on main lifts").
+//
+// The doc gives explicit wk1/wk3 top-set anchor points per phase (e.g.
+// Foundation: "top 75%x5 (wk1) climbing to 80%x4 (wk3)") without spelling
+// out wk2 or the full Power/Peak week-by-week breakdown (those two are
+// described as ranges — "~75-80% x2-3", "~82.5-88% x1-2" — which the
+// SPECIFIC-REPS rule still requires resolving to one number per week).
+// RUGBY_PCT_TABLE below interpolates the missing middle week and resolves
+// each range to a specific, monotonically-climbing-%/non-increasing-reps
+// value consistent with the doc's own stated shape and every explicit
+// anchor point it does give.
+const RUGBY_PCT_TABLE = {
+  1: { label: 'Foundation',  weeks: [{ pct: 75, reps: 5 }, { pct: 77.5, reps: 5 }, { pct: 80, reps: 4 }],   deload: { pct: 60, reps: 5 } },
+  2: { label: 'Strength',    weeks: [{ pct: 82.5, reps: 3 }, { pct: 85, reps: 2 }, { pct: 87.5, reps: 2 }], deload: { pct: 65, reps: 4 } },
+  3: { label: 'Power',       weeks: [{ pct: 75, reps: 3 }, { pct: 77.5, reps: 3 }, { pct: 80, reps: 2 }],   deload: { pct: 60, reps: 4 } },
+  4: { label: 'Peak/Taper',  weeks: [{ pct: 82.5, reps: 2 }, { pct: 85, reps: 2 }, { pct: 88, reps: 1 }],   deload: { pct: 60, reps: 4 } },
 }
-function rugbyMainLift(name, phaseNum, suffix = '') {
-  return `${name}: ${RUGBY_MAIN_LIFT_SCHEME[phaseNum]}${suffix}`
+// AMRAP is offered as an OPTIONAL top-set choice only where the doc allows
+// it: Foundation/Strength phases (never Power — "keep bar speed" — or
+// Peak/Taper — "near max," both explicitly "NO AMRAP" regardless of rep
+// count) AND only when that week's top set is genuinely 3+ reps ("NEVER
+// on x1-2 heavy/max days") — both conditions checked together below.
+const RUGBY_PCT_AMRAP_PHASES = { 1: true, 2: true, 3: false, 4: false }
+
+function rugbyPctStep(phaseNum, wip) {
+  const table = RUGBY_PCT_TABLE[phaseNum]
+  return wip === 4 ? table.deload : table.weeks[wip - 1]
+}
+function rugbyPctMainLift(name, phaseNum, wip, suffix = '') {
+  const step = rugbyPctStep(phaseNum, wip)
+  const ramp = buildRamp(step.pct / 100)
+  const amrapOk = wip !== 4 && RUGBY_PCT_AMRAP_PHASES[phaseNum] && step.reps >= 3
+  const amrapNote = amrapOk ? ' (AMRAP optional on the top set)' : ''
+  return `${name}: ${ramp}, ${step.pct}%×${step.reps}${amrapNote}${suffix}`
+}
+
+// OLYMPIC LIFT (Hang Power Clean) — its own separate scheme, not the
+// percentage ramp above: power-oriented, never a grind, moderate load
+// (~60-75%, autoregulated by feel rather than a literal % — matching
+// every other Olympic-lift line in this file, e.g. collisionOlyScheme's
+// "start light and build" prose), fast, specific low reps that do NOT
+// climb across weeks within a phase (the doc gives one set x rep value
+// per PHASE, not per week) and are NEVER AMRAP.
+const RUGBY_OLY_SCHEME = { 1: '4x3', 2: '4x3', 3: '4x2', 4: '3x2' }
+function rugbyHangPowerClean(phaseNum) {
+  return `Hang Power Clean: ${RUGBY_OLY_SCHEME[phaseNum]} (moderate load — fast and explosive, never a grind, never AMRAP)`
 }
 
 function rugbyPhaseInfo(weekNum) {
@@ -4734,8 +4771,9 @@ function rugbyPhaseInfo(weekNum) {
 // (3-day and 4-day are each their own hand-authored set, per the doc — NOT
 // nested/sliceable from one another, see rugbyForwardsSess3Day/4Day below)
 // plus the doc's own additive Day 5 (conditioning)/Day 6 (recovery)
-// extras. Objective text uses the doc's own RPE-labeled scheme, never a
-// fabricated percentage.
+// extras. Objective text shows the week's own top-set % (Back Squat's own
+// table — the shared reference lift), matching how every %-based sport's
+// objective already displays its real top set, not a fabricated number.
 function buildRugbyWeeks(sessFn, daysPerWeek, extraDayFns) {
   return Array.from({ length: 16 }, (_, i) => {
     const w = i + 1
@@ -4744,9 +4782,10 @@ function buildRugbyWeeks(sessFn, daysPerWeek, extraDayFns) {
     const sessions = daysPerWeek <= base.length
       ? base.slice(0, Math.max(2, daysPerWeek))
       : [...base, ...extraDayFns.slice(0, daysPerWeek - base.length).map(fn => fn(info))]
+    const step = rugbyPctStep(info.phaseNum, info.wip)
     return {
       week_number: w,
-      objective: `Phase ${info.phaseNum} — ${info.phaseLabel} (${RUGBY_MAIN_LIFT_SCHEME[info.phaseNum]})${info.deload ? ' · Deload' : ''} · Week ${info.wip} of 4`,
+      objective: `Phase ${info.phaseNum} — ${info.phaseLabel} (${step.pct}%×${step.reps})${info.deload ? ' · Deload' : ''} · Week ${info.wip} of 4`,
       sessions,
     }
   })
@@ -4779,11 +4818,15 @@ function rugbyRotationWeek(weekNumber) {
 // member — e.g. Forwards' Day 2 starts at Step-Up, Backs' Day 2 starts one
 // position later at Bulgarian Split Squat ("Bulgarian Split Squat instead
 // of Step-Up" — the doc's own stated Forwards/Backs difference), while both
-// still cycle the identical 3-member pool the doc names once.
-function rugbyFiller(weekNumber, poolKey, setsReps, offset = 0) {
-  const pool = RUGBY_FILLER_POOLS[poolKey]
+// still cycle the identical 3-member pool the doc names once. Also the
+// general-purpose rotator behind Day 5/6's own conditioning/recovery pools
+// (see rugbyPoolRotate) — same cadence, any pool array.
+function rugbyPoolRotate(weekNumber, pool, offset = 0) {
   const idx = (rugbyRotationWeek(weekNumber) - 1 + offset) % pool.length
-  return `${pool[idx]}: ${setsReps}`
+  return pool[idx]
+}
+function rugbyFiller(weekNumber, poolKey, setsReps, offset = 0) {
+  return `${rugbyPoolRotate(weekNumber, RUGBY_FILLER_POOLS[poolKey], offset)}: ${setsReps}`
 }
 
 // Universal warm-up (identical before every lifting session, per the doc) —
@@ -4799,15 +4842,15 @@ function rugbyWarmupLines(pos) {
 // Day 1 — Squat + Horizontal Press/Pull. Identical for Forwards/Backs except
 // the finisher (Forwards: Neck Flexion; Backs: Broad Jumps — no neck work).
 function rugbyDay1(pos, info) {
-  const { phaseNum, week } = info
-  const ssA = superset(1, ['Chest-Supported DB Row: 3x8-10', 'Reverse Lunge: 3x6-8 each leg'])
-  const ssB = superset(2, [rugbyFiller(week, 'legCurl', '3x10-12'), rugbyFiller(week, 'antiRotation', '3x8 each side')])
+  const { phaseNum, wip, week } = info
+  const ssA = superset(1, ['Chest-Supported DB Row: 3x8', 'Reverse Lunge: 3x8 each leg'])
+  const ssB = superset(2, [rugbyFiller(week, 'legCurl', '3x10'), rugbyFiller(week, 'antiRotation', '3x8 each side')])
   const finisher = pos === 'backs'
     ? ['Conditioning — Broad Jumps:', 'Broad Jumps: 3x3']
     : ['Neck — Flexion:', 'Neck Flexion: 2x15 sec isometric']
   return {
     day: 'Day 1', focus: 'Squat + Horizontal Press/Pull',
-    description: [...rugbyWarmupLines(pos), rugbyMainLift('Back Squat', phaseNum), rugbyMainLift('Bench Press', phaseNum), ...ssA, ...ssB, ...finisher].join('\n'),
+    description: [...rugbyWarmupLines(pos), rugbyPctMainLift('Back Squat', phaseNum, wip), rugbyPctMainLift('Bench Press', phaseNum, wip), ...ssA, ...ssB, ...finisher].join('\n'),
   }
 }
 
@@ -4818,41 +4861,41 @@ function rugbyDay1(pos, info) {
 // work. Only the SS-A unilateral-lower filler differs (see rugbyFiller's
 // own offset doc comment).
 function rugbyDay2(pos, info, focusLabel) {
-  const { week } = info
-  const unilateral = rugbyFiller(week, 'unilateralLower', '3x6-8 each leg', pos === 'backs' ? 1 : 0)
+  const { phaseNum, week } = info
+  const unilateral = rugbyFiller(week, 'unilateralLower', '3x8 each leg', pos === 'backs' ? 1 : 0)
   const ssA = superset(1, ['Half-Kneeling Landmine Press: 3x8 each arm', unilateral])
-  const ssB = superset(2, ['Face Pull: 2x12-15', rugbyFiller(week, 'antiExtension', '2x6 each side')])
+  const ssB = superset(2, ['Face Pull: 2x15', rugbyFiller(week, 'antiExtension', '2x6 each side')])
   return {
     day: 'Day 2', focus: focusLabel,
-    description: [...rugbyWarmupLines(pos), 'Hang Power Clean: 3-5x3-5', 'Weighted/Assisted Pull-Up: 3x5-8', ...ssA, ...ssB, 'Conditioning — Farmer Carry:', 'Farmer Carry: 3x25 yds'].join('\n'),
+    description: [...rugbyWarmupLines(pos), rugbyHangPowerClean(phaseNum), 'Weighted/Assisted Pull-Up: 3x6', ...ssA, ...ssB, 'Conditioning — Farmer Carry:', 'Farmer Carry: 3x25 yds'].join('\n'),
   }
 }
 
 // 3-DAY's own consolidated Day 3 — Hinge + Incline + Posterior Chain.
 function rugbyDay3_3day(pos, info) {
-  const { phaseNum, week } = info
-  const ssA = superset(1, ['Front Squat: 3x6-8', rugbyFiller(week, 'horizontalPull', '3x8-10')])
-  const ssB = superset(2, ['Hip Thrust: 3x8-10', 'Copenhagen Plank: 2x15-25 sec each side'])
+  const { phaseNum, wip, week } = info
+  const ssA = superset(1, ['Front Squat: 3x6', rugbyFiller(week, 'horizontalPull', '3x10')])
+  const ssB = superset(2, ['Hip Thrust: 3x10', 'Copenhagen Plank: 2x20 sec each side'])
   const finisher = pos === 'backs'
     ? ['Conditioning — 10-yd Shuttle Sprints:', '10-yd Shuttle Sprints: 4 reps (45 sec rest)']
     : ['Neck — Extension:', 'Neck Extension: 2x15 sec isometric']
   return {
     day: 'Day 3', focus: 'Hinge + Incline + Posterior Chain',
-    description: [...rugbyWarmupLines(pos), rugbyMainLift('Trap Bar Deadlift', phaseNum), 'DB Incline Press: 3x6-8', ...ssA, ...ssB, ...finisher].join('\n'),
+    description: [...rugbyWarmupLines(pos), rugbyPctMainLift('Trap Bar Deadlift', phaseNum, wip), 'DB Incline Press: 3x8', ...ssA, ...ssB, ...finisher].join('\n'),
   }
 }
 
 // 4-DAY's own Day 3 — Secondary Squat + Incline Push.
 function rugbyDay3_4day(pos, info) {
-  const { phaseNum, week } = info
-  const ssA = superset(1, ['Romanian Deadlift: 3x6-8', 'Neutral-Grip Lat Pulldown: 3x8-10'])
-  const ssB = superset(2, ['DB Lateral Raise: 2x12-15', 'Copenhagen Plank: 2x15-25 sec each side'])
+  const { phaseNum, wip, week } = info
+  const ssA = superset(1, ['Romanian Deadlift: 3x6', 'Neutral-Grip Lat Pulldown: 3x10'])
+  const ssB = superset(2, ['DB Lateral Raise: 2x15', 'Copenhagen Plank: 2x20 sec each side'])
   const finisher = pos === 'backs'
     ? ['Conditioning — 10-yd Shuttle Sprints:', '10-yd Shuttle Sprints: 4 reps (45 sec rest)']
     : ['Neck — Extension:', 'Neck Extension: 2x15 sec isometric']
   return {
     day: 'Day 3', focus: 'Secondary Squat + Incline Push',
-    description: [...rugbyWarmupLines(pos), rugbyMainLift('Front Squat', phaseNum), 'DB Incline Press: 3x6-8', ...ssA, ...ssB, ...finisher].join('\n'),
+    description: [...rugbyWarmupLines(pos), rugbyPctMainLift('Front Squat', phaseNum, wip), 'DB Incline Press: 3x8', ...ssA, ...ssB, ...finisher].join('\n'),
   }
 }
 
@@ -4860,57 +4903,124 @@ function rugbyDay3_4day(pos, info) {
 // by position (DB Hammer Curl / Bicep Curl — the doc's own stated
 // difference; neither has a named rotation pool, so neither ever rotates).
 function rugbyDay4_4day(pos, info) {
-  const { phaseNum, week } = info
-  const curl = pos === 'backs' ? 'Bicep Curl: 2x10-12' : 'DB Hammer Curl: 2x10-12'
-  const ssA = superset(1, ['Hip Thrust: 3x8-10', rugbyFiller(week, 'horizontalPull', '3x8-10')])
+  const { phaseNum, wip, week } = info
+  const curl = pos === 'backs' ? 'Bicep Curl: 2x12' : 'DB Hammer Curl: 2x12'
+  const ssA = superset(1, ['Hip Thrust: 3x10', rugbyFiller(week, 'horizontalPull', '3x10')])
   const ssB = superset(2, [curl, rugbyFiller(week, 'shoulderPrehab', '2x15', 1)])
   const finisher = pos === 'backs'
     ? ['Conditioning — Lateral Bound to Stick:', 'Lateral Bound to Stick: 3x3 each side']
     : ['Neck — Lateral Flexion:', 'Neck Lateral Flexion: 2x15 sec each side isometric']
   return {
     day: 'Day 4', focus: 'Heavy Hinge + Close-Grip Push',
-    description: [...rugbyWarmupLines(pos), rugbyMainLift('Trap Bar Deadlift', phaseNum), 'Close Grip Bench Press: 3x5-8', ...ssA, ...ssB, ...finisher].join('\n'),
+    description: [...rugbyWarmupLines(pos), rugbyPctMainLift('Trap Bar Deadlift', phaseNum, wip), 'Close Grip Bench Press: 3x6', ...ssA, ...ssB, ...finisher].join('\n'),
   }
 }
 
-// 5-DAY's own additive Day 5 — Rugby Speed & Conditioning (no lifting).
-// Block B and Block C are the doc's own stated Forwards/Backs difference;
-// Blocks A/D and the finisher are identical for both.
-// feat/rugby-rebuild (v4) — Block C is a work/rest INTERVAL LADDER, 3
-// ROUNDS through (v4 corrected v3's "1 trip" to 3 rounds, rest as needed
-// between), identical for both positions (Backs' own section explicitly
-// says "same 3-round bike ladder"). Rendered as ONE line (not 15 separate
-// "Bike Sprints" lines for 3 rounds x 5 steps) — a real interval ladder is
-// one continuous piece of conditioning work, not repeated sets of the
-// same named exercise, and that many identical names on one day would
-// violate the doc's own "no duplicate exercise within the same day" rule.
-// The name before the colon stays exactly "Bike Sprints" (matches its
-// exerciseLibrary.js cue entry); the ladder itself is the prescription
-// text, structurally exempt from the max-5-sets check the same way any
-// other conditioning interval is (no "Nx" set-count shape for that check
-// to even find on this line).
-const RUGBY_BIKE_LADDER = 'Bike Sprints: 3 rounds — each round 10 sec on / 20 sec off, 15/15, 20/10, 15/15, 10/20 sec (pyramids up to 20/10 mid-round, back down); rest as needed between rounds'
+// ─── Day 5 — CONDITIONING VARIETY (feat/rugby-rebuild v5) ──────────────────
+// Each of the 4 blocks + the core finisher ROTATES week-to-week within its
+// own named pool (same rugbyRotationWeek cadence as every lifting-day
+// filler — advances on a phase's 3 working weeks, freezes on deload weeks
+// and for weeks 13-16) AND the volume/rest PROGRESSES by phase (Foundation
+// = build volume/aerobic base, longer rest; Strength = moderate; Power =
+// max-intent short work, full recovery; Peak = sharp low-volume, stay
+// fresh) — two independent axes of variety, exactly as the doc names both
+// separately ("rotates week-to-week AND progresses by phase"). Block B's
+// pool is position-specific (the doc's own Forwards/Backs difference);
+// Blocks A/C/D and the Finisher pool are shared.
+const RUGBY_DAY5_POOLS = {
+  blockA: ['10-yd Takeoff Sprints', 'Flying 10s', 'Resisted Sprints', 'Hill Sprints'],
+  blockB_forwards: ['Half-Kneeling 3-Stride Start', 'Short Shuttle', '5-10-5 Pro Agility'],
+  blockB_backs: ['Lateral to Sprint', 'Crossover-to-Sprint', 'Curved Sprint'],
+  blockC: ['Bike Sprint Ladder', 'Sled Push Intervals', 'Prowler Intervals', 'Tempo Runs'],
+  blockD: ['Out-and-Back Shuttle', 'Box Drill', 'T-Drill'],
+  finisher: ['Pallof Iso Hold', 'Dead Bug', 'Hollow Hold', 'Side Plank'],
+}
+// Phase-progression tables — one shared shape per block "purpose," applied
+// uniformly regardless of which pool member rotated in this week (the
+// pool members are same-purpose alternatives, so the same rep/rest formula
+// fits whichever one is showing).
+const RUGBY_DAY5_PHASE = {
+  blockA:  { 1: '4x10 yds (60 sec recovery)', 2: '4x10 yds (60 sec recovery)', 3: '5x10 yds @ max effort (90 sec full recovery)', 4: '3x10 yds @ max effort (90 sec full recovery)' },
+  blockB:  { 1: '3x3 each side', 2: '3x3 each side', 3: '4x3 each side (full recovery)', 4: '2x3 each side (fresh, low volume)' },
+  blockD:  { 1: '4x10 yds', 2: '4x10 yds', 3: '5x10 yds (full recovery)', 4: '3x10 yds (fresh, low volume)' },
+  finisher: { 1: '2x15 sec each side', 2: '2x15 sec each side', 3: '2x15 sec each side', 4: '1x15 sec each side (light)' },
+}
+// Block C (energy system) — rounds-based; the doc's own Bike Sprint Ladder
+// keeps its exact internal structure (3 rounds: 10/20, 15/15, 20/10,
+// 15/15, 10/20 per round) every time it rotates in — that shape is the
+// pool member's own fixed identity, not something the phase formula
+// rewrites — only the rest-between-rounds guidance flexes by phase, same
+// as the sled/prowler/tempo alternatives' own rounds count.
+const RUGBY_DAY5_BLOCKC_ROUNDS = { 1: 3, 2: 3, 3: 2, 4: 2 }
+const RUGBY_DAY5_BLOCKC_REST = {
+  1: 'longer rest between rounds — build aerobic base',
+  2: 'moderate rest between rounds',
+  3: 'full recovery between rounds — max intent',
+  4: 'full recovery between rounds — stay sharp, low volume',
+}
+function rugbyDay5BlockC(name, phaseNum) {
+  if (name === 'Bike Sprint Ladder') {
+    return `Bike Sprints: 3 rounds — each round 10 sec on / 20 sec off, 15/15, 20/10, 15/15, 10/20 sec (pyramids up to 20/10 mid-round, back down); ${RUGBY_DAY5_BLOCKC_REST[phaseNum]}`
+  }
+  return `${name}: ${RUGBY_DAY5_BLOCKC_ROUNDS[phaseNum]} rounds (${RUGBY_DAY5_BLOCKC_REST[phaseNum]})`
+}
 
-function rugbyDay5(pos) {
-  const blockB = pos === 'backs'
-    ? 'Lateral to Sprint: 3x3 each side (5-yd lateral into a 10-yd sprint)'
-    : 'Half-Kneeling 3-Stride Start: 3x3 each side'
+function rugbyDay5(pos, info) {
+  const { phaseNum, week } = info
+  const blockAName = rugbyPoolRotate(week, RUGBY_DAY5_POOLS.blockA, 0)
+  const blockA = `${blockAName}: ${RUGBY_DAY5_PHASE.blockA[phaseNum]}`
+  const blockBPool = pos === 'backs' ? RUGBY_DAY5_POOLS.blockB_backs : RUGBY_DAY5_POOLS.blockB_forwards
+  const blockBName = rugbyPoolRotate(week, blockBPool, 0)
+  const blockB = `${blockBName}: ${RUGBY_DAY5_PHASE.blockB[phaseNum]}`
+  const blockCName = rugbyPoolRotate(week, RUGBY_DAY5_POOLS.blockC, 0)
+  const blockD_Name = rugbyPoolRotate(week, RUGBY_DAY5_POOLS.blockD, 0)
+  const blockD = `${blockD_Name}: ${RUGBY_DAY5_PHASE.blockD[phaseNum]}`
+  const finisherName = rugbyPoolRotate(week, RUGBY_DAY5_POOLS.finisher, 0)
+  const finisher = `${finisherName}: ${RUGBY_DAY5_PHASE.finisher[phaseNum]}`
   return {
     day: 'Day 5', focus: 'Rugby Speed & Conditioning',
     description: [
       'Warm-up: normal + progressive accelerations',
       'Conditioning — Speed & Conditioning:',
       'Block A (short burst):',
-      'Takeoff Sprints: 4x10 yds (60 sec recovery)',
+      blockA,
       'Block B (multidirectional):',
       blockB,
-      'Block C (bike sprint ladder):',
-      RUGBY_BIKE_LADDER,
-      'Block D (shuttle):',
-      'Out-and-Back Shuttle: 4x10 yds',
-      'Pallof Iso Hold: 2x15 sec each side',
+      'Block C (energy system):',
+      rugbyDay5BlockC(blockCName, phaseNum),
+      'Block D (change of direction):',
+      blockD,
+      finisher,
     ].join('\n'),
   }
+}
+
+// ─── Day 6 — RECOVERY VARIETY (feat/rugby-rebuild v5) ──────────────────────
+// "6 exercises across 2 circuits... rotate exercises weekly within pools" —
+// each circuit shows 3 of its own 5-member pool per week (not 1-of-3 like
+// the lifting-day fillers), via 3 parallel rotating slots at offsets 0/1/2
+// into the SAME 5-item pool: since the offsets are always < the pool size,
+// the 3 slots are guaranteed distinct every week (no duplicate exercise —
+// the doc's own locked rule).
+const RUGBY_DAY6_POOLS = {
+  circuitA: ['Band Row', 'Bodyweight Split Squat', 'Band External Rotation', 'Band Pull-Apart', 'Face Pull'],
+  circuitB: ['Push-Up', 'Bodyweight Hamstring Curl', 'Dead Bug', 'Bird Dog', 'Glute Bridge'],
+}
+// Specific sets/reps per exercise (doc's own ceiling: "max 3 sets, 10-20
+// reps") — constant regardless of which week it rotates in; only WHICH 3
+// of the 5 show up changes.
+const RUGBY_DAY6_PRESCRIPTION = {
+  'Band Row': '2x15', 'Bodyweight Split Squat': '2x12 each leg', 'Band External Rotation': '2x15',
+  'Band Pull-Apart': '2x15', 'Face Pull': '2x15',
+  'Push-Up': '2x12', 'Bodyweight Hamstring Curl': '2x10', 'Dead Bug': '2x8 each side',
+  'Bird Dog': '2x8 each side', 'Glute Bridge': '2x15',
+}
+function rugbyDay6Circuit(weekNumber, poolKey) {
+  const pool = RUGBY_DAY6_POOLS[poolKey]
+  return [0, 1, 2].map(offset => {
+    const name = rugbyPoolRotate(weekNumber, pool, offset)
+    return `${name}: ${RUGBY_DAY6_PRESCRIPTION[name]}`
+  })
 }
 
 // 6-DAY's own additive Day 6 — Recovery/Volume (very light, no failure).
@@ -4920,7 +5030,8 @@ function rugbyDay5(pos) {
 // Day 5 — see that function's own comment): without it, the generic
 // pairing pass would scatter/re-pair these circuit lines instead of
 // leaving the doc's exact Circuit A/B grouping alone.
-function rugbyDay6(pos) {
+function rugbyDay6(pos, info) {
+  const { week } = info
   const finisher = pos === 'backs'
     ? 'Low-Amplitude Pogos: 2x10'
     : 'Neck Lateral Flexion: 1x15 sec each side (light)'
@@ -4930,13 +5041,9 @@ function rugbyDay6(pos) {
       'Warm-up: 5 min easy bike + mobility',
       'Conditioning — Recovery/Volume:',
       'Circuit A (2 rounds):',
-      'Band Row: 2x15',
-      'Bodyweight Split Squat: 2x12 each leg',
-      'Band External Rotation: 2x15',
+      ...rugbyDay6Circuit(week, 'circuitA'),
       'Circuit B (2 rounds):',
-      'Push-Up: 2x10-15',
-      'Bodyweight Hamstring Curl: 2x10',
-      'Dead Bug: 2x8 each side',
+      ...rugbyDay6Circuit(week, 'circuitB'),
       finisher,
     ].join('\n'),
   }
@@ -4957,12 +5064,12 @@ function rugbyBacksSess4Day(info) {
 
 function generateRugbyForwardsWeeks(daysPerWeek, mg = false) {
   const sessFn = daysPerWeek === 3 ? rugbyForwardsSess3Day : rugbyForwardsSess4Day
-  const weeks = buildRugbyWeeks(sessFn, daysPerWeek, [(info) => rugbyDay5('forwards', info), () => rugbyDay6('forwards')])
+  const weeks = buildRugbyWeeks(sessFn, daysPerWeek, [(info) => rugbyDay5('forwards', info), (info) => rugbyDay6('forwards', info)])
   return applyCollisionMgWrapper(weeks, mg) // generic, sport-agnostic hypertrophy note — see its own doc comment
 }
 function generateRugbyBacksWeeks(daysPerWeek, mg = false) {
   const sessFn = daysPerWeek === 3 ? rugbyBacksSess3Day : rugbyBacksSess4Day
-  const weeks = buildRugbyWeeks(sessFn, daysPerWeek, [(info) => rugbyDay5('backs', info), () => rugbyDay6('backs')])
+  const weeks = buildRugbyWeeks(sessFn, daysPerWeek, [(info) => rugbyDay5('backs', info), (info) => rugbyDay6('backs', info)])
   return applyCollisionMgWrapper(weeks, mg)
 }
 

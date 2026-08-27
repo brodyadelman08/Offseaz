@@ -1132,6 +1132,65 @@ const EXERCISE_LIBRARY = {
     description: 'Using your own hand (or a partner\'s) for resistance, press your head into the hand in each of 4 directions — forward, backward, and to each side — holding each for the prescribed time without letting your head actually move.',
     muscles: 'Neck (all directions, isometric)',
   },
+
+  // ─── Rugby Program Spec (v5) additions — Day 5 CONDITIONING VARIETY pools
+  // (feat/rugby-rebuild) ───────────────────────────────────────────────────
+  '10-yd takeoff sprints': {
+    description: 'From a standing or two-point start, sprint 10 yards at full effort, focusing on a powerful first-step drive out of the start.',
+    muscles: 'Full-body acceleration',
+  },
+  'flying 10s': {
+    description: 'Build up over 10-15 yards to reach top speed, then sprint 10 yards already at full speed (a "flying" start, not from a standstill).',
+    muscles: 'Full-body max-velocity speed',
+  },
+  'resisted sprints': {
+    description: 'Attach a light resistance band or sled to your waist (a partner can also provide light manual resistance) and sprint 10 yards against the resistance, driving hard with each step.',
+    muscles: 'Full-body acceleration (overload)',
+  },
+  'hill sprints': {
+    description: 'Sprint uphill at full effort for the prescribed distance, driving your knees up and arms hard. Walk back down for full recovery between reps.',
+    muscles: 'Full-body acceleration, low-impact overload',
+  },
+  'short shuttle': {
+    description: 'Set two markers 5 yards apart. Sprint from one to the other and back, touching the ground or line at each end, at full effort.',
+    muscles: 'Full-body speed, change of direction',
+  },
+  '5-10-5 pro agility': {
+    description: 'Start straddling the middle line of 3 markers 5 yards apart. Sprint 5 yards to one side and touch the line, sprint 10 yards to the far side and touch, then sprint 5 yards back through the start.',
+    muscles: 'Full-body change of direction',
+  },
+  'crossover-to-sprint': {
+    description: 'From an athletic stance, take 2-3 crossover (carioca-style) steps in one direction, then plant and drive into a sprint. One fluid transition, not two separate movements.',
+    muscles: 'Full-body change of direction, hip mobility',
+  },
+  'curved sprint': {
+    description: 'Sprint the prescribed distance along a gentle curve (not a straight line), leaning into the turn — mimics breaking away on an angle rather than straight-line speed.',
+    muscles: 'Full-body speed with a lateral/rotational demand',
+  },
+  'sled push intervals': {
+    description: 'Load a sled with a moderate weight. Push it hard for the prescribed distance/time, driving through your legs with a forward lean, then walk it back and repeat.',
+    muscles: 'Full-body conditioning (legs, glutes, low-impact)',
+  },
+  'prowler intervals': {
+    description: 'Same movement as a sled push (a "prowler" is a common sled design) — drive it hard for the prescribed distance/time with a forward lean, then recover and repeat.',
+    muscles: 'Full-body conditioning (legs, glutes, low-impact)',
+  },
+  'tempo runs': {
+    description: 'Run the prescribed distance at a controlled, moderately-hard pace (not a max-effort sprint) — about 70-80% effort — with equal or slightly longer rest than the work time.',
+    muscles: 'Full-body aerobic/tempo conditioning',
+  },
+  'box drill': {
+    description: 'Set 4 markers in a square. Sprint/shuffle around all 4 corners in sequence (forward, shuffle, backpedal, shuffle) at full effort, then reset.',
+    muscles: 'Full-body change of direction',
+  },
+  't-drill': {
+    description: 'Set 4 markers in a "T" shape. Sprint forward to the base of the T, shuffle to one side, shuffle back across to the other side, shuffle back to center, then backpedal to the start.',
+    muscles: 'Full-body change of direction',
+  },
+  'side plank': {
+    description: 'Prop yourself up on one forearm, body in a straight line from head to feet, hips lifted off the floor. Hold, keeping your hips square and not sagging. Switch sides.',
+    muscles: 'Obliques, glute medius (anti-lateral-flexion)',
+  },
 }
 
 // Case-insensitive lookup helper

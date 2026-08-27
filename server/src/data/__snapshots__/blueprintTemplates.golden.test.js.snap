@@ -9719,7 +9719,7 @@ Med Ball Rotational Throw: 2x5 each side",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals rugby/backs — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -9731,11 +9731,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9753,11 +9753,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Bulgarian Split Squat: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Bulgarian Split Squat: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9775,12 +9775,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -9791,7 +9791,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Deload · Week 4 of 4",
+    "objective": "Phase 1 — Foundation (60%×5) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -9805,11 +9805,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 2x8
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9829,11 +9829,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Step-Up: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Step-Up: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Hollow Body Hold: 1x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9853,12 +9853,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧DB Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧DB Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -9869,7 +9869,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Week 1 of 4",
+    "objective": "Phase 2 — Strength (82.5%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -9881,11 +9881,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Lying Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Lying Leg Curl: 3x10
 ⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9903,11 +9903,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Walking Lunge: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Walking Lunge: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Ab Wheel Rollout: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9925,12 +9925,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧One-Arm Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧One-Arm Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -9941,7 +9941,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Deload · Week 4 of 4",
+    "objective": "Phase 2 — Strength (65%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -9955,11 +9955,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+Bench Press: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -9979,11 +9979,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Bulgarian Split Squat: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10003,12 +10003,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -10019,7 +10019,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Week 1 of 4",
+    "objective": "Phase 3 — Power (75%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10031,11 +10031,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 3x10
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10053,11 +10053,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Hollow Body Hold: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10075,12 +10075,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧DB Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧DB Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -10091,7 +10091,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Deload · Week 4 of 4",
+    "objective": "Phase 3 — Power (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10105,11 +10105,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Lying Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Lying Leg Curl: 2x8
 ⟦SS2⟧Half-Kneeling Pallof Press: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10129,11 +10129,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Walking Lunge: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Ab Wheel Rollout: 1x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10153,12 +10153,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧One-Arm Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧One-Arm Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -10169,7 +10169,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Week 1 of 4",
+    "objective": "Phase 4 — Peak/Taper (82.5%×2) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10181,11 +10181,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10203,11 +10203,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Bulgarian Split Squat: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Bulgarian Split Squat: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10225,12 +10225,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -10241,7 +10241,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Deload · Week 4 of 4",
+    "objective": "Phase 4 — Peak/Taper (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10255,11 +10255,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10279,11 +10279,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Bulgarian Split Squat: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10303,12 +10303,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Conditioning — 10-yd Shuttle Sprints:
@@ -10324,7 +10324,7 @@ Conditioning — 10-yd Shuttle Sprints:
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals rugby/backs — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10336,11 +10336,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10357,11 +10357,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Bulgarian Split Squat: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Bulgarian Split Squat: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -10378,12 +10378,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10393,7 +10393,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Deload · Week 4 of 4",
+    "objective": "Phase 1 — Foundation (60%×5) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10407,11 +10407,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 2x8
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10430,11 +10430,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Step-Up: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Step-Up: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Hollow Body Hold: 1x5 each side
 
 Conditioning — Farmer Carry:
@@ -10453,12 +10453,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧DB Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧DB Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10468,7 +10468,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Week 1 of 4",
+    "objective": "Phase 2 — Strength (82.5%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10480,11 +10480,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Lying Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Lying Leg Curl: 3x10
 ⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10501,11 +10501,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Walking Lunge: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Walking Lunge: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Ab Wheel Rollout: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -10522,12 +10522,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧One-Arm Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧One-Arm Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10537,7 +10537,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Deload · Week 4 of 4",
+    "objective": "Phase 2 — Strength (65%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10551,11 +10551,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+Bench Press: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10574,11 +10574,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Bulgarian Split Squat: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -10597,12 +10597,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10612,7 +10612,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Week 1 of 4",
+    "objective": "Phase 3 — Power (75%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10624,11 +10624,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 3x10
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10645,11 +10645,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Hollow Body Hold: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -10666,12 +10666,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧DB Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧DB Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10681,7 +10681,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Deload · Week 4 of 4",
+    "objective": "Phase 3 — Power (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10695,11 +10695,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Lying Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Lying Leg Curl: 2x8
 ⟦SS2⟧Half-Kneeling Pallof Press: 2x6 each side
 
 Conditioning — Broad Jumps:
@@ -10718,11 +10718,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Walking Lunge: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Ab Wheel Rollout: 1x5 each side
 
 Conditioning — Farmer Carry:
@@ -10741,12 +10741,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧One-Arm Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧One-Arm Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10756,7 +10756,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Week 1 of 4",
+    "objective": "Phase 4 — Peak/Taper (82.5%×2) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10768,11 +10768,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10789,11 +10789,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Bulgarian Split Squat: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Bulgarian Split Squat: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -10810,12 +10810,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10825,7 +10825,7 @@ Conditioning — 10-yd Shuttle Sprints:
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Deload · Week 4 of 4",
+    "objective": "Phase 4 — Peak/Taper (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10839,11 +10839,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Conditioning — Broad Jumps:
@@ -10862,11 +10862,11 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Bulgarian Split Squat: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -10885,12 +10885,12 @@ Squat-to-Stand: x6
 World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Conditioning — 10-yd Shuttle Sprints:
 10-yd Shuttle Sprints: 4 reps (45 sec rest)",
@@ -10905,7 +10905,7 @@ Conditioning — 10-yd Shuttle Sprints:
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals rugby/forwards — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10917,11 +10917,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10939,11 +10939,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -10961,12 +10961,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -10977,7 +10977,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Deload · Week 4 of 4",
+    "objective": "Phase 1 — Foundation (60%×5) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -10991,11 +10991,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 2x8
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11015,11 +11015,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Walking Lunge: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Hollow Body Hold: 1x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11039,12 +11039,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧DB Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧DB Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11055,7 +11055,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Week 1 of 4",
+    "objective": "Phase 2 — Strength (82.5%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11067,11 +11067,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Lying Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Lying Leg Curl: 3x10
 ⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11089,11 +11089,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Bulgarian Split Squat: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Bulgarian Split Squat: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Ab Wheel Rollout: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11111,12 +11111,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧One-Arm Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧One-Arm Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11127,7 +11127,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Deload · Week 4 of 4",
+    "objective": "Phase 2 — Strength (65%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11141,11 +11141,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+Bench Press: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11165,11 +11165,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Step-Up: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Step-Up: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11189,12 +11189,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11205,7 +11205,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Week 1 of 4",
+    "objective": "Phase 3 — Power (75%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11217,11 +11217,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 3x10
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11239,11 +11239,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Walking Lunge: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Walking Lunge: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Hollow Body Hold: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11261,12 +11261,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧DB Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧DB Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11277,7 +11277,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Deload · Week 4 of 4",
+    "objective": "Phase 3 — Power (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11291,11 +11291,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Lying Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Lying Leg Curl: 2x8
 ⟦SS2⟧Half-Kneeling Pallof Press: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11315,11 +11315,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Bulgarian Split Squat: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Ab Wheel Rollout: 1x5 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11339,12 +11339,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧One-Arm Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧One-Arm Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11355,7 +11355,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Week 1 of 4",
+    "objective": "Phase 4 — Peak/Taper (82.5%×2) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11367,11 +11367,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11389,11 +11389,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11411,12 +11411,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11427,7 +11427,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Deload · Week 4 of 4",
+    "objective": "Phase 4 — Peak/Taper (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11441,11 +11441,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11465,11 +11465,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Step-Up: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Step-Up: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
@@ -11489,12 +11489,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 Muscle Gain additions: +1-2 sets on all compounds · Rep ranges 8-12 for compounds / 12-15 for accessories · Add Bicep Curls 3x12, Tricep Extensions 3x12, Lateral Raises 3x15, Calf Raises 3x15
 
 Neck — Extension:
@@ -11510,7 +11510,7 @@ Neck Extension: 2x15 sec isometric",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals rugby/forwards — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11522,11 +11522,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -11543,11 +11543,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -11564,12 +11564,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -11579,7 +11579,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Deload · Week 4 of 4",
+    "objective": "Phase 1 — Foundation (60%×5) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11593,11 +11593,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 2x8
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 
 Neck — Flexion:
@@ -11616,11 +11616,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Walking Lunge: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Walking Lunge: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Hollow Body Hold: 1x5 each side
 
 Conditioning — Farmer Carry:
@@ -11639,12 +11639,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧DB Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×5
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧DB Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -11654,7 +11654,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Week 1 of 4",
+    "objective": "Phase 2 — Strength (82.5%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11666,11 +11666,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Lying Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Lying Leg Curl: 3x10
 ⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -11687,11 +11687,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Bulgarian Split Squat: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Bulgarian Split Squat: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Ab Wheel Rollout: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -11708,12 +11708,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧One-Arm Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×3 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧One-Arm Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -11723,7 +11723,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Strength (4x4-6 @ RPE 8) · Deload · Week 4 of 4",
+    "objective": "Phase 2 — Strength (65%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11737,11 +11737,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 4x4-6 @ RPE 8
-Bench Press: 4x4-6 @ RPE 8
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+Bench Press: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -11760,11 +11760,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Step-Up: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Step-Up: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -11783,12 +11783,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 4x4-6 @ RPE 8
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 33%×10, 42%×8, 52%×6, 59%×5, 65%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -11798,7 +11798,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Week 1 of 4",
+    "objective": "Phase 3 — Power (75%×3) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11810,11 +11810,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Stability-Ball Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Stability-Ball Leg Curl: 3x10
 ⟦SS2⟧Cable Woodchop: 3x8 each side
 
 Neck — Flexion:
@@ -11831,11 +11831,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Walking Lunge: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Walking Lunge: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Hollow Body Hold: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -11852,12 +11852,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧DB Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×3
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧DB Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -11867,7 +11867,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Power (5x2-4 @ RPE 9) · Deload · Week 4 of 4",
+    "objective": "Phase 3 — Power (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11881,11 +11881,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 5x2-4 @ RPE 9
-Bench Press: 5x2-4 @ RPE 9
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Lying Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Lying Leg Curl: 2x8
 ⟦SS2⟧Half-Kneeling Pallof Press: 2x6 each side
 
 Neck — Flexion:
@@ -11904,11 +11904,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 4x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Bulgarian Split Squat: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Bulgarian Split Squat: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Ab Wheel Rollout: 1x5 each side
 
 Conditioning — Farmer Carry:
@@ -11927,12 +11927,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 5x2-4 @ RPE 9
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧One-Arm Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧One-Arm Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -11942,7 +11942,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Week 1 of 4",
+    "objective": "Phase 4 — Peak/Taper (82.5%×2) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -11954,11 +11954,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+Bench Press: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -11975,11 +11975,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -11996,12 +11996,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 3x6-8
-⟦SS1⟧Front Squat: 3x6-8
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧Hip Thrust: 3x8-10
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Trap Bar Deadlift: 41%×10, 54%×8, 66%×6, 74%×5, 82.5%×2
+DB Incline Press: 3x8
+⟦SS1⟧Front Squat: 3x6
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧Hip Thrust: 3x10
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -12011,7 +12011,7 @@ Neck Extension: 2x15 sec isometric",
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Peak/Taper (2x3-5 (fast, low fatigue)) · Deload · Week 4 of 4",
+    "objective": "Phase 4 — Peak/Taper (60%×4) · Deload · Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -12025,11 +12025,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 2x3-5 (fast, low fatigue)
-Bench Press: 2x3-5 (fast, low fatigue)
-⟦SS1⟧Chest-Supported DB Row: 2x6-10
-⟦SS1⟧Reverse Lunge: 2x5-8 each leg
-⟦SS2⟧Seated Leg Curl: 2x8-12
+Back Squat: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+Bench Press: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+⟦SS1⟧Chest-Supported DB Row: 2x6
+⟦SS1⟧Reverse Lunge: 2x6 each leg
+⟦SS2⟧Seated Leg Curl: 2x8
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -12048,11 +12048,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 2x4-8
+Hang Power Clean: 3x2 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 2x5
 ⟦SS1⟧Half-Kneeling Landmine Press: 2x6 each arm
-⟦SS1⟧Step-Up: 2x5-8 each leg
-⟦SS2⟧Face Pull: 1x9-15
+⟦SS1⟧Step-Up: 2x6 each leg
+⟦SS2⟧Face Pull: 1x11
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -12071,12 +12071,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 2x3-5 (fast, low fatigue)
-DB Incline Press: 2x5-8
-⟦SS1⟧Front Squat: 2x5-8
-⟦SS1⟧Seated Cable Row: 2x6-10
-⟦SS2⟧Hip Thrust: 2x6-10
-⟦SS2⟧Copenhagen Plank: 1x11-25 sec each side
+Trap Bar Deadlift: 30%×10, 39%×8, 48%×6, 54%×5, 60%×4
+DB Incline Press: 2x6
+⟦SS1⟧Front Squat: 2x5
+⟦SS1⟧Seated Cable Row: 2x8
+⟦SS2⟧Hip Thrust: 2x8
+⟦SS2⟧Copenhagen Plank: 1x15 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -19857,7 +19857,7 @@ Battle Rope: 2x15s",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Ankle] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -19869,11 +19869,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -19890,11 +19890,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -19911,12 +19911,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -19932,11 +19932,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -19952,7 +19952,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Back] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -19964,11 +19964,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -19985,11 +19985,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20006,12 +20006,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20027,11 +20027,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Romanian Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Romanian Deadlift: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20048,7 +20048,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Elbow] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20060,11 +20060,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7 (50% load)
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20082,11 +20082,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20104,12 +20104,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20125,11 +20125,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8 (50% load)
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6 (50% load)
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20146,7 +20146,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Hamstring] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20158,11 +20158,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20179,11 +20179,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20200,12 +20200,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Glute Bridge: 3x6-8 (light)
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Glute Bridge: 3x6 (light)
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20222,11 +20222,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20242,7 +20242,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Hip] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20254,11 +20254,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 2x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 2x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20276,11 +20276,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20297,12 +20297,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20318,11 +20318,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20338,7 +20338,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Knee] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20350,11 +20350,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Goblet Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Goblet Squat: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20372,11 +20372,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20393,12 +20393,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Goblet Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Goblet Squat: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20415,11 +20415,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20435,7 +20435,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[None] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20447,11 +20447,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20468,11 +20468,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20489,12 +20489,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20510,11 +20510,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20530,7 +20530,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Quadriceps] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20542,11 +20542,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Box Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Box Squat: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20564,11 +20564,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20585,12 +20585,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Goblet Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Goblet Squat: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20607,11 +20607,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20627,7 +20627,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Shoulder] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20641,11 +20641,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-DB Bench Press: 3x8-10 @ RPE 7 (use a controlled range of motion)
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set) (use a controlled range of motion)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20663,11 +20663,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Hang Power Clean: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Hang Power Clean: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20684,12 +20684,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Front Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20707,11 +20707,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
@@ -20728,7 +20728,7 @@ Neck Lateral Flexion: 2x15 sec each side isometric",
 exports[`Injury-substitution golden set — Rugby/Prop × every one of the 9 injury areas injury_areas=[Wrist] — week 1, all days 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (3x8-10 @ RPE 7) · Week 1 of 4",
+    "objective": "Phase 1 — Foundation (75%×5) · Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
@@ -20740,11 +20740,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Back Squat: 3x8-10 @ RPE 7
-Bench Press: 3x8-10 @ RPE 7
-⟦SS1⟧Chest-Supported DB Row: 3x8-10
-⟦SS1⟧Reverse Lunge: 3x6-8 each leg
-⟦SS2⟧Seated Leg Curl: 3x10-12
+Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+⟦SS1⟧Chest-Supported DB Row: 3x8
+⟦SS1⟧Reverse Lunge: 3x8 each leg
+⟦SS2⟧Seated Leg Curl: 3x10
 ⟦SS2⟧Pallof Press: 3x8 each side
 
 Neck — Flexion:
@@ -20761,11 +20761,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Clean Pull: 3-5x3-5
-Weighted/Assisted Pull-Up: 3x5-8
+Clean Pull: 4x3 (moderate load — fast and explosive, never a grind, never AMRAP)
+Weighted/Assisted Pull-Up: 3x6
 ⟦SS1⟧Half-Kneeling Landmine Press: 3x8 each arm
-⟦SS1⟧Step-Up: 3x6-8 each leg
-⟦SS2⟧Face Pull: 2x12-15
+⟦SS1⟧Step-Up: 3x8 each leg
+⟦SS2⟧Face Pull: 2x15
 ⟦SS2⟧Dead Bug: 2x6 each side
 
 Conditioning — Farmer Carry:
@@ -20783,12 +20783,12 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Cross-Arm Front Squat: 3x8-10 @ RPE 7
-DB Incline Press: 3x6-8
-⟦SS1⟧Romanian Deadlift: 3x6-8
-⟦SS1⟧Neutral-Grip Lat Pulldown: 3x8-10
-⟦SS2⟧DB Lateral Raise: 2x12-15
-⟦SS2⟧Copenhagen Plank: 2x15-25 sec each side
+Cross-Arm Front Squat: 19%×10, 25%×8, 30%×6, 34%×5, 38%×5 (AMRAP optional on the top set)
+DB Incline Press: 3x8
+⟦SS1⟧Romanian Deadlift: 3x6
+⟦SS1⟧Neutral-Grip Lat Pulldown: 3x10
+⟦SS2⟧DB Lateral Raise: 2x15
+⟦SS2⟧Copenhagen Plank: 2x20 sec each side
 
 Neck — Extension:
 Neck Extension: 2x15 sec isometric",
@@ -20805,11 +20805,11 @@ World's Greatest Stretch: 4 each side
 Band Pull-Aparts: x15
 4-Way Manual Neck Isometrics: 10 sec each side
 
-Trap Bar Deadlift: 3x8-10 @ RPE 7
-Close Grip Bench Press: 3x5-8
-⟦SS1⟧Hip Thrust: 3x8-10
-⟦SS1⟧Seated Cable Row: 3x8-10
-⟦SS2⟧DB Hammer Curl: 2x10-12
+Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×5 (AMRAP optional on the top set)
+Close Grip Bench Press: 3x6
+⟦SS1⟧Hip Thrust: 3x10
+⟦SS1⟧Seated Cable Row: 3x10
+⟦SS2⟧DB Hammer Curl: 2x12
 ⟦SS2⟧Band Pull-Apart: 2x15
 
 Neck — Lateral Flexion:
