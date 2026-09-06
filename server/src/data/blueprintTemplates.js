@@ -3865,22 +3865,14 @@ function baseballDay2(info, weekNum, isPitcher) {
 }
 
 // Day 3 - Plyometrics + Dynamic Lower.
-// DB Jumps and Box Jumps are both quad-dominant jump-family movements
-// (movementPatterns.js's PLYO_SQUAT) — the same primary pattern, so Day 3's
-// opener rotates weekly between the two (same offset-free rotation
-// convention as every other baseballFiller() pool in this file) rather than
-// pairing both together as a superset (which would bracket two competing
-// same-pattern moves — the exact thing Check 10 forbids for every sport).
-// Both exercises and their sets/reps are unchanged from the spec; only the
-// week-to-week presentation (one at a time, not both at once) is affected.
-const DAY3_PLYO_POOL = ['DB Jumps: 3x3 (15-30lb)', 'Box Jumps: 3x3']
-function baseballDay3PlyoOpener(weekNumber) {
-  const idx = (baseballRotationWeek(weekNumber) - 1) % DAY3_PLYO_POOL.length
-  return DAY3_PLYO_POOL[idx]
-}
-
+// DB Jumps + Box Jumps: a doc-locked plyometric complex, superset-paired 3x3
+// each. Both are movementPatterns.js's PLYO_SQUAT (same primary pattern),
+// but Check 10's same-pattern ban now specifically EXEMPTS two plyo/power
+// movements paired with each other (a real plyo-complex technique) while
+// still blocking two RESISTANCE movements of the same pattern — see
+// movementPatterns.js's STRICT_CATEGORIES comment for the exact rule.
 function baseballDay3(info, weekNum, isPitcher) {
-  const plyoOpener = baseballDay3PlyoOpener(weekNum)
+  const ssPlyo = superset(1, ['DB Jumps: 3x3 (15-30lb)', 'Box Jumps: 3x3'])
   const mainLift = baseballMainLift('Trap Bar Deadlift', weekNum)
   const ssSplit = superset(2, ['Barbell Split Squat: 4-5x5 each leg (light and fast)', baseballFiller(weekNum, 'lowerLeg', '2x20', 1)])
   const ssHip = superset(3, [baseballFiller(weekNum, 'posterior', '3x8-10'), baseballFiller(weekNum, 'lowerLeg', '3x20', 2)])
@@ -3890,7 +3882,7 @@ function baseballDay3(info, weekNum, isPitcher) {
   return {
     day: 'Day 3', focus: 'Plyometrics + Dynamic Lower',
     warmup: BASEBALL_WARMUP_LOWER_MOBILITY,
-    description: [plyoOpener, mainLift, ...ssSplit, ...ssHip, ...finisher].join('\n'),
+    description: [...ssPlyo, mainLift, ...ssSplit, ...ssHip, ...finisher].join('\n'),
   }
 }
 

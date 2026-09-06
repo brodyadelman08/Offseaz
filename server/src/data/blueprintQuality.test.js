@@ -315,9 +315,16 @@ describe('Check 10 — no superset ever pairs two same-primary-muscle/pattern mo
   // baseline check: this one asserts a bare `[]` across the FULL matrix,
   // every sport/position/day-count/goal/week, because the whole point is
   // that organizeSessionDescription's pairing must never reintroduce a
-  // same-pattern superset (Nordic Hamstring Curl + Single Leg RDL, Goblet
-  // Squat + Step-Ups, two presses, two rows, two quad-dominant jumps, ...)
-  // anywhere, with no allowance for "already-known" cases.
+  // same-pattern RESISTANCE superset (Nordic Hamstring Curl + Single Leg
+  // RDL, Goblet Squat + Step-Ups, two presses, two rows, ...) anywhere,
+  // with no allowance for "already-known" cases. feat/baseball-rebuild —
+  // two plyo/power movements paired with EACH OTHER (e.g. Baseball Day 3's
+  // DB Jumps + Box Jumps complex) are no longer in scope for this ban — see
+  // checkNoSamePatternSupersets' own exemption comment (scoped to the check
+  // itself, not movementPatterns.js's shared competes()/STRICT_CATEGORIES,
+  // so the generator's auto-pairing for every OTHER sport is unaffected) —
+  // so they no longer appear as violations here even though they still
+  // share a category and `competes()` itself still reports them as true.
   test('zero superset pairs two same-primary-muscle/pattern movements, anywhere in the matrix', () => {
     const { violations } = q.checkNoSamePatternSupersets()
     if (violations.length) {
@@ -340,18 +347,38 @@ describe('Check 10 — no superset ever pairs two same-primary-muscle/pattern mo
     expect(unclassifiedNames).toEqual([])
   })
 
-  // Sanity: proves the check actually flags a same-pattern pair (rather
-  // than being a structural no-op) and correctly exempts the one
-  // legitimate exception — a ramped main lift paired with a single plyo
-  // line — without depending on the real generator's current content.
-  test('sanity: flags a real same-pattern pair, exempts the ramped-main-lift + single-plyo contrast pairing, and never flags a genuinely different pattern', () => {
+  // Sanity: proves the CLASSIFIER's own competes() is untouched (it still
+  // reports two plyo/power movements as competing, same category) — the
+  // plyo+plyo exemption lives only in checkNoSamePatternSupersets' own
+  // audit logic, not here, so the shared generator's auto-pairing for
+  // every other sport never sees this rule change.
+  test('sanity: movementPatterns.competes() itself is untouched — still flags a same-pattern resistance pair AND a same-category plyo/power pair; only the check adds a plyo+plyo exemption on top', () => {
     const mp = require('./movementPatterns')
-    expect(mp.competes('Nordic Hamstring Curl', 'Single Leg RDL')).toBe(true)   // both HINGE
-    expect(mp.competes('Goblet Squat', 'Step-Ups')).toBe(true)                  // both SQUAT
-    expect(mp.competes('Back Squat', 'Box Jumps')).toBe(true)                   // SQUAT vs its own plyo sibling
+    expect(mp.competes('Nordic Hamstring Curl', 'Single Leg RDL')).toBe(true)   // both HINGE (resistance) — still blocked
+    expect(mp.competes('Goblet Squat', 'Step-Ups')).toBe(true)                  // both SQUAT (resistance) — still blocked
+    expect(mp.competes('Back Squat', 'Box Jumps')).toBe(true)                   // SQUAT vs its own plyo sibling — a resistance move competing with a matching power move, still blocked
+    expect(mp.competes('DB Jumps', 'Box Jumps')).toBe(true)                     // both PLYO_SQUAT — competes() itself is unchanged; Check 10 is what exempts this pairing, not the classifier
     expect(mp.competes('Single Leg RDL', 'Bulgarian Split Squat')).toBe(false)  // HINGE vs SQUAT — the good pairing
     expect(mp.competes('Gorilla Row', 'Lateral Raise')).toBe(false)             // pull vs isolation shoulder work
     expect(mp.competes('Sandbag Carry', 'Goblet Squat')).toBe(false)            // core/carry never competes
+  })
+
+
+  // feat/baseball-rebuild — end-to-end proof (not just the classifier unit
+  // test above) that Baseball's real, generated Day 3 renders DB Jumps +
+  // Box Jumps as one superset pair, and that Check 10 does not flag it.
+  test('Baseball Day 3 renders DB Jumps + Box Jumps as a real superset pair, and Check 10 raises zero violations for it', () => {
+    const { generateBlueprintForAthlete } = require('./blueprintTemplates')
+    const bp = generateBlueprintForAthlete({
+      sport: 'Baseball', position: 'Position Player', primary_goal: 'standard',
+      time_per_week: '4', experience_level: 'Intermediate', injury_areas: [],
+    })
+    const day3 = bp.weeks[0].sessions[2].description
+    expect(day3).toMatch(/⟦SS1⟧DB Jumps: 3x3/)
+    expect(day3).toMatch(/⟦SS1⟧Box Jumps: 3x3/)
+    const { violations } = q.checkNoSamePatternSupersets()
+    const day3Violations = violations.filter(v => v.sportId === 'baseball' && v.day === 'Day 3')
+    expect(day3Violations).toEqual([])
   })
 })
 

@@ -680,17 +680,37 @@ function checkNoBarbellOverheadPressOnThrowingSports() {
 // the generator actually avoids; it is a genuine regression guard, not a
 // second, independently-maintained opinion.
 //
-// One deliberate, pre-existing exception: the %-ramped MAIN lift paired
-// with a SINGLE plyo/jump line on a power-focus day (a real strength-
-// training technique — contrast/complex training, heavy lift potentiates
-// the jump — assembled by organizeSessionDescription's own `keepPlyo`
-// branch, structurally separate from and BEFORE the general pairing pass
-// this check's own target algorithm runs). Detected here the same way
-// parseDescription already distinguishes a main lift (isRamped) from
-// everything else — a pair where one line is ramped and the other
-// classifies into a PLYO_* category is exempt; every other combination,
-// including a same-category PLYO+PLYO or PLYO+its-strength-sibling pair
-// in the general accessory pool, is a genuine violation.
+// Two deliberate exceptions:
+//  1. Two plyo/power movements paired with EACH OTHER (e.g. Baseball Day
+//     3's DB Jumps + Box Jumps complex) — a real, deliberate plyo-complex
+//     training technique, not the same problem as two RESISTANCE movements
+//     sharing a pattern. This exemption lives HERE, in the check's own
+//     audit logic, scoped to "same category AND both plyo/power" — it
+//     deliberately does NOT touch movementPatterns.js's own
+//     STRICT_CATEGORIES/competes(), which the generator's shared
+//     auto-pairing algorithm (organizeSessionDescription/
+//     pairCompatibleSingles) also reads for every OTHER sport. Relaxing
+//     competes() itself would let that shared algorithm start
+//     auto-pairing plyo lines together for every sport, not just baseball's
+//     hand-authored ⟦SS⟧ complex — an unrelated, unwanted side effect this
+//     narrower, check-only exemption avoids. A RESISTANCE movement paired
+//     with its own matching plyo/power sibling (Back Squat + Box Jumps) is
+//     UNCHANGED and still a genuine violation — that's a cross-category
+//     pair (SQUAT vs. PLYO_SQUAT), not "same category", so it isn't
+//     touched by this exemption's `a === b` condition.
+//  2. The %-ramped MAIN lift paired with a SINGLE plyo/jump line on a
+//     power-focus day (a real strength-training technique — contrast/
+//     complex training, heavy lift potentiates the jump — assembled by
+//     organizeSessionDescription's own `keepPlyo` branch, structurally
+//     separate from and BEFORE the general pairing pass this check's own
+//     target algorithm runs). Detected here the same way parseDescription
+//     already distinguishes a main lift (isRamped) from everything else —
+//     a pair where one line is ramped and the other classifies into a
+//     PLYO_* category is exempt. This still matters even with (1) above:
+//     a ramped HINGE lift + a POWER_HINGE line cross-competes (same
+//     underlying pattern, not "two plyo movements together"), so it would
+//     otherwise still be flagged without this second exemption.
+const PLYO_POWER_CATS = new Set(['PLYO_SQUAT', 'PLYO_LATERAL', 'POWER_HINGE', 'POWER_PUSH'])
 function checkNoSamePatternSupersets() {
   const violations = []
   const unclassifiedNames = new Set()
@@ -703,16 +723,20 @@ function checkNoSamePatternSupersets() {
           for (let i = 0; i < group.length; i++) {
             for (let j = i + 1; j < group.length; j++) {
               const a = group[i], b = group[j]
-              if (!movementPatterns.classify(a)) unclassifiedNames.add(a)
-              if (!movementPatterns.classify(b)) unclassifiedNames.add(b)
+              const aCat = movementPatterns.classify(a)
+              const bCat = movementPatterns.classify(b)
+              if (!aCat) unclassifiedNames.add(a)
+              if (!bCat) unclassifiedNames.add(b)
               if (!movementPatterns.competes(a, b)) continue
-              // The ramped-main-lift + single-plyo contrast pairing.
-              const aPlyo = String(movementPatterns.classify(a)).startsWith('PLYO_')
-              const bPlyo = String(movementPatterns.classify(b)).startsWith('PLYO_')
+              // Exception 1 — two plyo/power movements paired together.
+              if (aCat === bCat && PLYO_POWER_CATS.has(aCat)) continue
+              // Exception 2 — the ramped-main-lift + single-plyo contrast pairing.
+              const aPlyo = String(aCat).startsWith('PLYO_')
+              const bPlyo = String(bCat).startsWith('PLYO_')
               if ((isRampedLikeName(a, s.description) && bPlyo) || (isRampedLikeName(b, s.description) && aPlyo)) continue
               violations.push({
                 check: 'no-same-pattern-supersets', ...entry, week: w.week_number, day: s.day,
-                detail: `"${a}" + "${b}" (${movementPatterns.classify(a)}) same-pattern superset on ${s.day}, week ${w.week_number}`,
+                detail: `"${a}" + "${b}" (${aCat}) same-pattern superset on ${s.day}, week ${w.week_number}`,
               })
             }
           }
