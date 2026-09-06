@@ -59,7 +59,15 @@ async function generateFromTemplate(req, res) {
     const capKey = resolveAccessoryCapKey(sport.id, position_id, goal)
     const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey(sport.id, position_id)] || {} // Change 4
     const organized = applySessionOrganization(sport.generateWeeks(position_id, goal, days), rotation, capKey)
-    const weeks = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation, phaseRotation))
+    // feat/baseball-rebuild - sport.id must reach both passes so
+    // Baseball/Softball's doc-locked accessory content is skipped here
+    // exactly the same way generateBlueprintForAthlete's own auto-assign
+    // path already skips it - otherwise a coach's "Build from Template"
+    // manual blueprint would silently drift from the doc's exact numbers
+    // while an athlete's own auto-assigned one wouldn't, a real parity bug
+    // (see blueprintTemplates.test.js's own auto-assign/manual-builder
+    // parity test).
+    const weeks = applyDeloadAdjustments(applyAccessoryProgression(organized, rotation, phaseRotation, sport.id), sport.id)
     res.json({ weeks })
   } catch (err) {
     res.status(500).json({ error: err.message })

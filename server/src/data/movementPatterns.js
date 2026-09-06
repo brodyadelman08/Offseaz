@@ -131,6 +131,31 @@ const NAME_TO_CAT = {
   // PLYO — lateral bound/hop family
   'lateral bound': CAT.PLYO_LATERAL, 'lateral bounds': CAT.PLYO_LATERAL,
   'single leg lateral hurdle hop': CAT.PLYO_LATERAL,
+  // feat/baseball-rebuild — the Offseaz Baseball Program Spec's own
+  // hand-authored exercise names. Single-Leg Barbell RDL is the doc's exact
+  // hyphenated/reordered wording for the same movement as "single leg rdl"
+  // above; DB Jumps is the same jump family as Box Jumps/Broad Jump; Barbell
+  // Split Squat is the same split-squat pattern as Bulgarian Split Squat;
+  // Wall Tibialis Raises/Calf Raises join the existing Tibialis/calf-raise
+  // family; DB Seated Shoulder Press is the same vertical-press pattern as
+  // DB Shoulder Press; Long-Lever Plank and Seated Straight-Leg Raise are
+  // core-anti-extension work (same low-competing CORE_CARRY bucket as Dead
+  // Bug/Ab Wheel Rollout above); Single-Arm DB Row is the same row pattern
+  // as "single arm db row" already above, just with the doc's own hyphen;
+  // Nordic Curl / Good Morning are the doc's un-suffixed names for the same
+  // hinge-pattern moves as Nordic Hamstring Curl / Good Mornings; DB Floor
+  // Press is a horizontal-press variant (bench-press family); Ab Wheel is
+  // the same core move as Ab Wheel Rollout; Cable External Rotation and
+  // Serratus Wall Slide are rotator-cuff/scap prehab, same SHOULDER_ACC
+  // bucket as Face Pull/Cable Rear-Delt Fly above.
+  'single-leg barbell rdl': CAT.HINGE, 'db jumps': CAT.PLYO_SQUAT,
+  'barbell split squat': CAT.SQUAT, 'wall tibialis raises': CAT.CALF, 'calf raises': CAT.CALF,
+  'db seated shoulder press': CAT.VERT_PUSH,
+  'long-lever plank': CAT.CORE_CARRY, 'seated straight-leg raise': CAT.CORE_CARRY,
+  'single-arm db row': CAT.HORIZ_PULL,
+  'nordic curl': CAT.HINGE, 'good morning': CAT.HINGE, 'db floor press': CAT.HORIZ_PUSH,
+  'ab wheel': CAT.CORE_CARRY,
+  'cable external rotation': CAT.SHOULDER_ACC, 'serratus wall slide': CAT.SHOULDER_ACC,
 }
 
 // Categories where TWO members of the SAME category is a genuine violation

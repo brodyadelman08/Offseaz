@@ -43,7 +43,7 @@ const INJURY_FLAGS = {
     'Leg Extension', 'Leg Press', 'Hack Squat',
   ],
   Hamstring: [
-    'Romanian Deadlift', 'RDL', 'Single Leg RDL', 'Stiff Leg Deadlift',
+    'Romanian Deadlift', 'RDL', 'Single Leg RDL', 'Single-Leg Barbell RDL', 'Stiff Leg Deadlift',
     'Trap Bar Deadlift', 'Hex Bar Deadlift', 'Good Mornings',
     'Nordic Hamstring Curl', 'Eccentric Nordic Curl', 'Hamstring Curls', 'Glute Bridge', 'Hip Thrust',
     'Broad Jump', 'Bounding',
@@ -51,7 +51,7 @@ const INJURY_FLAGS = {
   Ankle: [
     'Box Jump', 'Depth Jump', 'Broad Jump', 'Jump Squat', 'Tuck Jump', 'Squat Jump',
     'Calf Raises', 'Calf Raise', 'Single Leg Calf Raise', 'Tibialis Raises', 'KB Tibialis Raises',
-    'Single Leg RDL', 'Bulgarian Split Squat', 'Walking Lunge', 'Reverse Lunge', 'Sled Push',
+    'Single Leg RDL', 'Single-Leg Barbell RDL', 'Bulgarian Split Squat', 'Walking Lunge', 'Reverse Lunge', 'Sled Push',
   ],
   Back: [
     'Trap Bar Deadlift', 'Hex Bar Deadlift',
@@ -60,7 +60,7 @@ const INJURY_FLAGS = {
   ],
   Hip: [
     'Hip Thrust', 'Weighted Hip Thrust',
-    'Romanian Deadlift', 'RDL', 'Single Leg RDL',
+    'Romanian Deadlift', 'RDL', 'Single Leg RDL', 'Single-Leg Barbell RDL',
     'Bulgarian Split Squat', 'Copenhagen Adductor',
     'Reverse Lunge', 'Walking Lunge', 'Lateral Lunge',
   ],
@@ -397,8 +397,11 @@ function applyHipSubstitutions(description) {
     // Kept in sync with applyHipAdjustments in blueprintTemplates.js —
     // Hamstring Curls is a hip-injury-only swap for Single Leg RDL, unrelated
     // to and independent of the new dedicated Hamstring area below.
-    if (/^Single Leg RDL\b/.test(stripped)) {
-      return stripped.replace(/^Single Leg RDL/, 'Hamstring Curls')
+    // feat/baseball-rebuild — also matches "Single-Leg Barbell RDL" (that
+    // sport's own doc-locked exact name/word order), kept in sync with
+    // applyHipAdjustments' own matching update.
+    if (/^(?:Single-Leg Barbell RDL|Single Leg RDL)\b/.test(stripped)) {
+      return stripped.replace(/^(?:Single-Leg Barbell RDL|Single Leg RDL)/, 'Hamstring Curls')
     }
     return reduceInjuryVolume(stripped, /\bLunge\b/i)
   })).join('\n')
@@ -432,7 +435,8 @@ function applyQuadricepsSubstitutions(description) {
 // Hamstring Curls swap above. ────────────────────────────────────────────
 // feat/variety-engine — mirrors the same regex in server/src/data/blueprintTemplates.js
 const HAMSTRING_REMOVE_RE = /^(?:Good Mornings?|Eccentric Nordic Curl)\b/
-const HAMSTRING_RDL_RE = /^(?:Barbell )?(?:Single Leg )?RDL\b/
+// feat/baseball-rebuild — also matches "Single-Leg Barbell RDL".
+const HAMSTRING_RDL_RE = /^(?:Single-Leg Barbell RDL|(?:Barbell )?(?:Single Leg )?RDL)\b/
 const HAMSTRING_VOLUME_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled Sprint|Broad Jumps?|Bounding|Lateral Bounds?|Flying 20s|300 Yard Shuttle|Resistance Band Sprint)\b/i
 
 function applyHamstringSubstitutions(description) {
@@ -453,7 +457,8 @@ function applyHamstringSubstitutions(description) {
 
 // ─── Ankle ──────────────────────────────────────────────────────────────────
 const ANKLE_REMOVE_RE = /^Depth Jumps?\b/
-const ANKLE_SLRDL_RE = /^(?:Barbell )?Single Leg RDL\b/
+// feat/baseball-rebuild — also matches "Single-Leg Barbell RDL".
+const ANKLE_SLRDL_RE = /^(?:Single-Leg Barbell RDL|(?:Barbell )?Single Leg RDL)\b/
 // feat/variety-engine — mirrors the same regex in server/src/data/blueprintTemplates.js
 const ANKLE_CALF_RE = /^(?:Calf Raises?|Seated Calf Raise|Single Leg Calf Raise|(?:KB )?Tibialis Raises)\b/i
 const ANKLE_COD_RE = /^(Sprint(?: Work| Tempo Protocol| Ladder)?|(?:Easy )?Strides|Sled Sprint|Flying 20s|300 Yard Shuttle|V Drill|Star Drill|Lateral Shuffle|Defensive Slide(?: Sprint)?|Pro Agility Drill|T-Drill|Deceleration Drill|17s Drill|Resistance Band Sprint)\b/i

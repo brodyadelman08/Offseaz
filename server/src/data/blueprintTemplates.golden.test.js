@@ -111,7 +111,11 @@ function generateManualBuilder(tpl, posId, goal, days) {
   const capKey = resolveAccessoryCapKey(tpl.id, posId, goal)
   const phaseRotation = SPORT_PHASE_ACCESSORY_ROTATION[resolvePhaseRotationKey(tpl.id, posId)] || {}
   const organized = applySessionOrganization(tpl.generateWeeks(posId, goal, days), rotation, capKey)
-  return applyDeloadAdjustments(applyAccessoryProgression(organized, rotation, phaseRotation))
+  // feat/baseball-rebuild — tpl.id must reach both passes, mirroring
+  // blueprintController.js's own real call, so Baseball/Softball's golden
+  // snapshots capture the true, doc-locked content instead of the generic
+  // wave/deload-reduction these two sports are deliberately exempt from.
+  return applyDeloadAdjustments(applyAccessoryProgression(organized, rotation, phaseRotation, tpl.id), tpl.id)
 }
 
 // Last %×reps figure on a ramped line, e.g. "...80%×5, 89%×4" -> 4. Used by
@@ -306,14 +310,25 @@ describe('Phase-rep-arc regression — Change 1/3 coverage added on feat/bluepri
     expect(week1).not.toBe(week9)
   })
 
-  test('Softball needs no dedicated coverage — it already inherits the full Change 1/3/4 arc via its existing reuse of the baseball generator', () => {
+  test('Softball needs no dedicated coverage — it already inherits the full hand-authored Baseball ramp arc via its existing reuse of the baseball generator', () => {
     const bp = generateBlueprintForAthlete(mkSurvey({ sport: 'Softball', position: 'Pitcher' }))
-    // Day 1's squat (Front Squat/Back Squat, alternating weekly) is the
-    // reliably-ramped line — Day 2's Landmine Press is a fixed "4x8" with no
-    // % ramp at all (pitchers get no direct overhead pressing, by design).
-    const week1 = firstMatchingLine(bp.weeks[0].sessions[0].description, /^(Front Squat|Back Squat)\b/)
-    const week9 = firstMatchingLine(bp.weeks[8].sessions[0].description, /^(Front Squat|Back Squat)\b/)
-    expect(lastRampReps(week9)).toBeLessThan(lastRampReps(week1))
+    // feat/baseball-rebuild — baseball (and softball, which routes straight
+    // through the same generator) is now hand-authored to the Offseaz
+    // Baseball Program Spec: Day 1's Front Squat carries the doc-locked %
+    // ramp in ASCII "NN%xN" form (not the old engine's unicode "×"), with
+    // decimal percentages (e.g. "77.5%x5") the old `lastRampReps` helper
+    // can't parse. Top-set reps step down from week 1 (Phase 1 opener,
+    // 75%x5 AMRAP) to week 9 (Phase 3 opener, 75%x3, no AMRAP) per the spec.
+    const week1 = firstMatchingLine(bp.weeks[0].sessions[0].description, /^Front Squat\b/)
+    const week9 = firstMatchingLine(bp.weeks[8].sessions[0].description, /^Front Squat\b/)
+    expect(week1).toBeTruthy()
+    expect(week9).toBeTruthy()
+    const lastAsciiRampReps = (text) => {
+      const matches = [...text.matchAll(/(\d+(?:\.\d+)?)%x(\d+)/g)]
+      if (matches.length === 0) return null
+      return parseInt(matches[matches.length - 1][2], 10)
+    }
+    expect(lastAsciiRampReps(week9)).toBeLessThan(lastAsciiRampReps(week1))
   })
 })
 
