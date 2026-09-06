@@ -42,16 +42,19 @@ function archetypeFor(sportId, posId) {
       if (posId === 'linemen') return 'collision'
       if (posId === 'qb') return 'rotational'
       return 'speedpower' // skill, hybrid
-    case 'baseball': case 'softball': return 'rotational'
     case 'wrestling': return 'collision'
-    // feat/rugby-rebuild — Rugby (both positions) is now hand-authored
-    // directly (see blueprintTemplates.js's own Rugby section doc comment),
-    // not a dayLayoutEngine archetype-pack consumer — `null` correctly opts
-    // it out of every check below that uses dayLayoutEngine.getTemplate()
-    // as ground truth (Checks 4/5/6/11), since there is no longer a generic
-    // template to compare its output against. Checks 2/3/7/8/9/10 (text-only,
-    // no archetype lookup) still run against Rugby normally.
+    // feat/rugby-rebuild / feat/baseball-rebuild — Rugby and Baseball
+    // (softball routes through the same baseball generator — both
+    // positions) are now hand-authored directly to their own locked
+    // program specs (see blueprintTemplates.js's own Rugby/Baseball
+    // section doc comments), not dayLayoutEngine archetype-pack consumers
+    // — `null` correctly opts them out of every check below that uses
+    // dayLayoutEngine.getTemplate() as ground truth (Checks 4/5/6/11),
+    // since there is no longer a generic template to compare their output
+    // against. Checks 2/3/7/8/9/10 (text-only, no archetype lookup) still
+    // run against Rugby/Baseball/Softball normally.
     case 'rugby': return null
+    case 'baseball': case 'softball': return null
     case 'hockey': return posId === 'forwards' ? 'collision' : 'field' // defense, goalie
     case 'soccer': return 'field'
     case 'lacrosse': return 'field'
@@ -90,7 +93,9 @@ function parseDescription(description) {
     const line = stripMarker(raw)
     if (line.trim() === '') { inBlock = false; blockKind = null; continue }
     if (/^Deload Week\./.test(line)) { hasDeloadBanner = true; continue }
-    const headerMatch = line.match(/^(Core|Conditioning|Arm Care|Neck)\s*—/)
+    // feat/baseball-rebuild — also accepts a plain hyphen (baseball's own
+    // hand-authored headers never use an em/en dash, by design).
+    const headerMatch = line.match(/^(Core|Conditioning|Arm Care|Neck)\s*[—-]/)
     if (headerMatch) { inBlock = true; blockKind = headerMatch[1]; headers.push({ raw, kind: blockKind }); continue }
     const colonIdx = line.indexOf(':')
     if (colonIdx <= 0) continue
@@ -317,7 +322,11 @@ function checkDeloadReducesVolume() {
   for (const entry of matrix()) {
     let weeks
     try { weeks = generate(entry) } catch (e) { continue }
-    const deloaded = applyDeloadAdjustments(weeks)
+    // feat/baseball-rebuild — entry.sportId must reach this pass so the
+    // check reflects what generateBlueprintForAthlete actually does:
+    // Baseball/Softball are deliberately exempt from this pass entirely
+    // (see applyDeloadAdjustments' own comment) — checked separately below.
+    const deloaded = applyDeloadAdjustments(weeks, entry.sportId)
     for (const [deloadWn, prevWn] of [[4, 3], [8, 7], [12, 11], [16, 15]]) {
       const prevWeek = weeks[prevWn - 1]
       const deloadWeek = deloaded[deloadWn - 1]
@@ -764,7 +773,25 @@ function checkStandardDaysHaveTwoSupersets() {
       // "very light, no failure" fixed circuit — the spec doc never asks
       // for superset pairing on either.
       const isRugbyBonusDay = entry.sportId === 'rugby' && (s.focus === 'Rugby Speed & Conditioning' || s.focus === 'Recovery/Volume')
-      const isExempt = arch === 'endurance' || (dayTpl && (dayTpl.recoveryOnly || dayTpl.lowFatigue)) || isRugbyBonusDay
+      // feat/baseball-rebuild — same story as Rugby above: Baseball/Softball
+      // also have no dayLayoutEngine template (arch is null), and their own
+      // 5-day/6-day extra days are the doc's Day 5 (Speed/Conditioning —
+      // field work, no lifting) and Day 6 (Recovery/Volume, or the
+      // pitcher-only Recovery/Volume - Shoulder Capacity arm-care circuit)
+      // — the spec never asks for superset pairing on either, by design.
+      const isBaseballBonusDay = (entry.sportId === 'baseball' || entry.sportId === 'softball') &&
+        (s.focus === 'Speed/Conditioning' || s.focus === 'Recovery/Volume' || s.focus === 'Recovery/Volume - Shoulder Capacity')
+      // feat/baseball-rebuild — the pitcher-only Day 2 (Upper Strength)
+      // shoulder-menu slot is the doc's own fixed, named pair — Cable
+      // External Rotation + Serratus Wall Slide — and both are rotator-cuff/
+      // scap SHOULDER_ACC isolation work (the same primary pattern), so
+      // Check 10 correctly requires them to stand un-paired rather than
+      // bracketed together. That leaves this one day at 1 real superset
+      // (its own pressing+face-pull pairing) instead of 2 — an honest
+      // consequence of the doc's own named exercises, not a gap to paper
+      // over by inventing a substitute exercise the engine never chose.
+      const isPitcherDay2ShoulderMenu = entry.sportId === 'baseball' && entry.posId === 'pitcher' && s.day === 'Day 2'
+      const isExempt = arch === 'endurance' || (dayTpl && (dayTpl.recoveryOnly || dayTpl.lowFatigue)) || isRugbyBonusDay || isBaseballBonusDay || isPitcherDay2ShoulderMenu
       if (isExempt) continue
       const count = supersetGroups(s.description).length
       if (count < 2) {
@@ -839,6 +866,79 @@ function checkRugbyMaxFiveSets() {
   return violations
 }
 
+// ═══════════════════════════════════════════════════════════════════════
+// Check 13 — Baseball: doc-locked hard rules (Offseaz Baseball Program Spec)
+// ═══════════════════════════════════════════════════════════════════════
+// Permanent guardrail (feat/baseball-rebuild). Four of the spec's own
+// locked rules that have no codebase-wide equivalent check:
+//  - Max 5 sets on any resistance/loaded line (same "anything, ever" rule
+//    as Rugby's own Check 12 — reuses that check's leadingSetCount).
+//  - A carry only ever appears inside a day's own finisher block. Baseball
+//    currently authors zero carries anywhere (verified empirically across
+//    the full matrix), so this stays trivially true today — it exists to
+//    catch a FUTURE addition that forgets the rule, not a present gap.
+//  - No two consecutive days share the same closing finisher EXERCISE —
+//    not just the same header family. Day 5 and Day 6 both legitimately
+//    wrap their whole day in a "Conditioning —"/"Core —" header (needed so
+//    the shared pairing/deload passes leave their hand-authored order
+//    alone), but their actual finisher movements (Pallof Iso Hold vs. Band
+//    External Rotation, etc.) always differ — that's the real rule the doc
+//    asks for, and what this check verifies against the LAST authored line
+//    of each day's finisher block(s), not the header word.
+//  - Only "Single-Leg Barbell RDL" ever appears — never a bare "RDL" or any
+//    other hinge variant sharing that substring.
+// ("No barbell OHP" and "no duplicate exercise within a day" are already
+// covered for baseball/softball by Check 9's own THROWING_SPORTS_NO_OHP
+// entries and by Check 8/checkNoDuplicateLinesWithinDay respectively — no
+// separate baseball-scoped logic needed for those two.)
+const BASEBALL_CARRY_RE = /\bCarr(?:y|ies)\b/i
+function checkBaseballLockedRules() {
+  const violations = []
+  for (const entry of matrix({ goals: ['standard', 'muscle_gain'] })) {
+    if (entry.sportId !== 'baseball' && entry.sportId !== 'softball') continue
+    let weeks
+    try { weeks = generate(entry) } catch (e) { continue }
+    for (const w of weeks) {
+      let prevFinisherName = null
+      for (const s of w.sessions) {
+        const { lines } = parseDescription(s.description)
+        for (const l of lines) {
+          if (isConditioningLine(l.raw)) continue
+          const sets = leadingSetCount(l.raw)
+          if (sets != null && sets > 5) {
+            violations.push({
+              check: 'baseball-max-five-sets', ...entry, week: w.week_number, day: s.day,
+              detail: `"${l.raw.trim()}" prescribes ${sets} sets (> 5) on ${s.day}, week ${w.week_number}`,
+            })
+          }
+          if (BASEBALL_CARRY_RE.test(l.name) && !l.inBlock) {
+            violations.push({
+              check: 'baseball-carry-finisher-only', ...entry, week: w.week_number, day: s.day,
+              detail: `"${l.raw.trim()}" is a carry outside any finisher block on ${s.day}, week ${w.week_number}`,
+            })
+          }
+          if (/RDL/i.test(l.name) && l.name !== 'Single-Leg Barbell RDL') {
+            violations.push({
+              check: 'baseball-only-single-leg-barbell-rdl', ...entry, week: w.week_number, day: s.day,
+              detail: `"${l.name}" is an RDL variant other than "Single-Leg Barbell RDL" on ${s.day}, week ${w.week_number}`,
+            })
+          }
+        }
+        const inBlockLines = lines.filter(l => l.inBlock)
+        const finisherName = inBlockLines.length ? inBlockLines[inBlockLines.length - 1].name : null
+        if (finisherName && prevFinisherName && finisherName === prevFinisherName) {
+          violations.push({
+            check: 'baseball-no-same-finisher-back-to-back', ...entry, week: w.week_number, day: s.day,
+            detail: `"${finisherName}" repeats as the finisher on ${s.day} immediately after the prior day, week ${w.week_number}`,
+          })
+        }
+        if (finisherName) prevFinisherName = finisherName
+      }
+    }
+  }
+  return violations
+}
+
 module.exports = {
   archetypeFor,
   matrix,
@@ -854,5 +954,6 @@ module.exports = {
   checkNoSamePatternSupersets,
   checkStandardDaysHaveTwoSupersets,
   checkRugbyMaxFiveSets,
+  checkBaseballLockedRules,
   __parseDescriptionForTest: parseDescription,
 }

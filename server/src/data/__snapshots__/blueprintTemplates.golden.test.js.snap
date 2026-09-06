@@ -873,391 +873,537 @@ Suitcase Carry: 3x20 yds each side",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals baseball/baseball — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (68% working max) · Week 1 of 4",
+    "objective": "Phase 1 - Foundation - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Aerobic Base:
-Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-ups: 4xAMAP
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating V-Ups: 3x20s
-Penguins: 3x20s
-Alternating Supermans: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Step-Ups: 4x6 each leg
-⟦SS2⟧Med Ball Slam: 4x8
-⟦SS3⟧Cossack Squat: 3x10 each side
-⟦SS3⟧Med Ball Chest Pass: 4x8
-Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Half-Kneeling:
-Med Ball Rotational Throw: 3x6 each side (half-kneeling)
-Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 1 - Foundation - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Reverse Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Step-Behind Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Seated Cable Lat Pulldown: 2x9
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 40%x8, 50%x6, 60%x5 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 40%x8, 50%x6, 60%x5
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Development (75% working max) · Week 1 of 4",
+    "objective": "Phase 2 - Strength - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Interval Work:
-Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+MB Chop: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-Ups: 4x6
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating Supermans: 3x20s
-Flutter Kicks: 3x20s
-Mountain Climbers: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Standing:
-Med Ball Rotational Throw: 3x6 each side
-Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (64% working max) · Week 4 of 4",
+    "objective": "Phase 2 - Strength - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Side Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Pull-Ups: 2x5
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x6, 60%x5, 65%x4 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x6, 60%x5, 65%x4
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength (80% working max) · Week 1 of 4",
+    "objective": "Phase 3 - Power - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Quality Speed:
-Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Overhead Slam: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Weighted Pull-Ups: 4x5
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x5, 60%x4, 70%x3 fast, 75%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Conditioning — Maximal Velocity:
-Med Ball Rotational Throw: 4x6 each side (max intent)",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Box Squat: 4x6
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Repeat Effort:
-Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (68% working max) · Week 4 of 4",
+    "objective": "Phase 3 - Power - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Toss and Broad Jump: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Weighted Pull-Ups: 2x4
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x5, 60%x4, 60%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x5, 60%x4, 60%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Taper (68% working max) · Week 1 of 4",
+    "objective": "Phase 4 - Peak/Taper - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Walking Lunge: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Full-Recovery Reps:
-Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Lat Pulldown: 4x10
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 60%x3, 70%x3, 80%x2, 82.5%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Hollow Hold: 3x20s
-Cherry Pickers: 3x20s
-Decline Bench Iso: 3x30s hold",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x8
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Low Volume, Max Intent:
-Med Ball Rotational Throw: 2x6 each side (max intent)
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 4 - Peak/Taper - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x6 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Lat Pulldown: 2x8
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 60%x3, 60%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x6
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 60%x3, 60%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 16,
@@ -1268,391 +1414,537 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals baseball/baseball — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (68% working max) · Week 1 of 4",
+    "objective": "Phase 1 - Foundation - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Aerobic Base:
-Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-ups: 4xAMAP
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating V-Ups: 3x20s
-Penguins: 3x20s
-Alternating Supermans: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Step-Ups: 4x6 each leg
-⟦SS2⟧Med Ball Slam: 4x8
-⟦SS3⟧Cossack Squat: 3x10 each side
-⟦SS3⟧Med Ball Chest Pass: 4x8
-Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Half-Kneeling:
-Med Ball Rotational Throw: 3x6 each side (half-kneeling)
-Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 1 - Foundation - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Reverse Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat: 40%x8, 50%x6, 60%x5
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Step-Behind Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Seated Cable Lat Pulldown: 2x9
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 40%x8, 50%x6, 60%x5 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 40%x8, 50%x6, 60%x5
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Development (75% working max) · Week 1 of 4",
+    "objective": "Phase 2 - Strength - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Interval Work:
-Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+MB Chop: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-Ups: 4x6
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating Supermans: 3x20s
-Flutter Kicks: 3x20s
-Mountain Climbers: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Standing:
-Med Ball Rotational Throw: 3x6 each side
-Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (64% working max) · Week 4 of 4",
+    "objective": "Phase 2 - Strength - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat: 50%x6, 60%x5, 65%x4
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Side Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Pull-Ups: 2x5
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x6, 60%x5, 65%x4 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x6, 60%x5, 65%x4
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength (80% working max) · Week 1 of 4",
+    "objective": "Phase 3 - Power - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Quality Speed:
-Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Overhead Slam: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Weighted Pull-Ups: 4x5
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x5, 60%x4, 70%x3 fast, 75%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Conditioning — Maximal Velocity:
-Med Ball Rotational Throw: 4x6 each side (max intent)",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Box Squat: 4x6
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Repeat Effort:
-Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (68% working max) · Week 4 of 4",
+    "objective": "Phase 3 - Power - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x8
+Front Squat: 50%x5, 60%x4, 60%x3
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Toss and Broad Jump: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Weighted Pull-Ups: 2x4
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x5, 60%x4, 60%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x5, 60%x4, 60%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Taper (68% working max) · Week 1 of 4",
+    "objective": "Phase 4 - Peak/Taper - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Walking Lunge: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Full-Recovery Reps:
-Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Lat Pulldown: 4x10
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 60%x3, 70%x3, 80%x2, 82.5%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Hollow Hold: 3x20s
-Cherry Pickers: 3x20s
-Decline Bench Iso: 3x30s hold",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x8
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Low Volume, Max Intent:
-Med Ball Rotational Throw: 2x6 each side (max intent)
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 4 - Peak/Taper - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x6 each leg
-Hip Thrust: 2x8
+Front Squat: 60%x3, 60%x2
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Lat Pulldown: 2x8
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 60%x3, 60%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x6
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 60%x3, 60%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 16,
@@ -1663,380 +1955,521 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals baseball/pitcher — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (68% working max) · Week 1 of 4",
+    "objective": "Phase 1 - Foundation - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Acceleration Mechanics:
-Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-ups: 4xAMAP
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating V-Ups: 3x20s
-Penguins: 3x20s
-Alternating Supermans: 3x20s
-Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Step-Ups: 4x6 each leg
-⟦SS2⟧Anti-Rotation Press: 3x10 each side
-⟦SS3⟧Cossack Squat: 3x10 each side
-⟦SS3⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Aerobic Base:
-Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 1 - Foundation - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Reverse Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Seated Cable Lat Pulldown: 2x9
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 40%x8, 50%x6, 60%x5 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 40%x8, 50%x6, 60%x5
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Development (75% working max) · Week 1 of 4",
+    "objective": "Phase 2 - Strength - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Interval Work:
-Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-Ups: 4x6
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating Supermans: 3x20s
-Flutter Kicks: 3x20s
-Mountain Climbers: 3x20s",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
-⟦SS1⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Standing:
-Med Ball Rotational Throw: 3x6 each side
-Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (64% working max) · Week 4 of 4",
+    "objective": "Phase 2 - Strength - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Pull-Ups: 2x5
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x6, 60%x5, 65%x4 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 50%x6, 60%x5, 65%x4
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength (80% working max) · Week 1 of 4",
+    "objective": "Phase 3 - Power - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Quality Speed:
-Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Weighted Pull-Ups: 4x5
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x5, 60%x4, 70%x3 fast, 75%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Conditioning — Maximal Velocity:
-Med Ball Rotational Throw: 4x6 each side (max intent)",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Box Squat: 4x6
-⟦SS1⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Repeat Effort:
-Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (68% working max) · Week 4 of 4",
+    "objective": "Phase 3 - Power - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Weighted Pull-Ups: 2x4
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x5, 60%x4, 60%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 50%x5, 60%x4, 60%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Taper (68% working max) · Week 1 of 4",
+    "objective": "Phase 4 - Peak/Taper - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Walking Lunge: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Full-Recovery Reps:
-Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Lat Pulldown: 4x10
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 60%x3, 70%x3, 80%x2, 82.5%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Finisher (20s on/10s off unless noted):
-Hollow Hold: 3x20s
-Cherry Pickers: 3x20s
-Decline Bench Iso: 3x30s hold",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x8
-⟦SS1⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Low Volume, Max Intent:
-Med Ball Rotational Throw: 2x6 each side (max intent)
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 4 - Peak/Taper - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x6 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Lat Pulldown: 2x8
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 60%x3, 60%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x6
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 60%x3, 60%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 16,
@@ -2047,380 +2480,521 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals baseball/pitcher — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (68% working max) · Week 1 of 4",
+    "objective": "Phase 1 - Foundation - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Acceleration Mechanics:
-Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-ups: 4xAMAP
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating V-Ups: 3x20s
-Penguins: 3x20s
-Alternating Supermans: 3x20s
-Med Ball Rotational Throw: 3x6 each side (half-kneeling)",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Step-Ups: 4x6 each leg
-⟦SS2⟧Anti-Rotation Press: 3x10 each side
-⟦SS3⟧Cossack Squat: 3x10 each side
-⟦SS3⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Aerobic Base:
-Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 1 - Foundation - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Reverse Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat: 40%x8, 50%x6, 60%x5
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Seated Cable Lat Pulldown: 2x9
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 40%x8, 50%x6, 60%x5 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 40%x8, 50%x6, 60%x5
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Development (75% working max) · Week 1 of 4",
+    "objective": "Phase 2 - Strength - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Interval Work:
-Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-Ups: 4x6
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating Supermans: 3x20s
-Flutter Kicks: 3x20s
-Mountain Climbers: 3x20s",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
-⟦SS1⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Standing:
-Med Ball Rotational Throw: 3x6 each side
-Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (64% working max) · Week 4 of 4",
+    "objective": "Phase 2 - Strength - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat: 50%x6, 60%x5, 65%x4
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Pull-Ups: 2x5
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x6, 60%x5, 65%x4 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 50%x6, 60%x5, 65%x4
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength (80% working max) · Week 1 of 4",
+    "objective": "Phase 3 - Power - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Quality Speed:
-Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Weighted Pull-Ups: 4x5
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x5, 60%x4, 70%x3 fast, 75%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Conditioning — Maximal Velocity:
-Med Ball Rotational Throw: 4x6 each side (max intent)",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Box Squat: 4x6
-⟦SS1⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Repeat Effort:
-Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (68% working max) · Week 4 of 4",
+    "objective": "Phase 3 - Power - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x8
+Front Squat: 50%x5, 60%x4, 60%x3
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Weighted Pull-Ups: 2x4
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x5, 60%x4, 60%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 50%x5, 60%x4, 60%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Taper (68% working max) · Week 1 of 4",
+    "objective": "Phase 4 - Peak/Taper - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Walking Lunge: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Full-Recovery Reps:
-Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Lat Pulldown: 4x10
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 60%x3, 70%x3, 80%x2, 82.5%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Finisher (20s on/10s off unless noted):
-Hollow Hold: 3x20s
-Cherry Pickers: 3x20s
-Decline Bench Iso: 3x30s hold",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x8
-⟦SS1⟧Med Ball Slam: 4x8
+        "description": "Trap Bar Deadlift: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Low Volume, Max Intent:
-Med Ball Rotational Throw: 2x6 each side (max intent)
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 4 - Peak/Taper - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x6 each leg
-Hip Thrust: 2x8
+Front Squat: 60%x3, 60%x2
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Core - Finisher:
+Dead Bug: 2x6 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Lat Pulldown: 2x8
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 60%x3, 60%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+Cable External Rotation: 2x12-15
+Serratus Wall Slide: 2x10-12
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength, Arm Care & Rotational",
+Arm Care - Finisher:
+Side-Lying DB External Rotation: 2x12 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x6
-⟦SS1⟧Med Ball Slam: 2x6
+Trap Bar Deadlift: 60%x3, 60%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Conditioning - Med-Ball (Low Volume):
+Scoop Toss: 2x2 each side",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Band External Rotation: 3x12-15
+Serratus Wall Slide: 3x10-12
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 16,
@@ -15271,391 +15845,537 @@ MB Twist Throw: 2x5 each side",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals softball/softball — muscle_gain 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (68% working max) · Week 1 of 4",
+    "objective": "Phase 1 - Foundation - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Aerobic Base:
-Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-ups: 4xAMAP
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating V-Ups: 3x20s
-Penguins: 3x20s
-Alternating Supermans: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Step-Ups: 4x6 each leg
-⟦SS2⟧Med Ball Slam: 4x8
-⟦SS3⟧Cossack Squat: 3x10 each side
-⟦SS3⟧Med Ball Chest Pass: 4x8
-Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Half-Kneeling:
-Med Ball Rotational Throw: 3x6 each side (half-kneeling)
-Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 1 - Foundation - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Reverse Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Step-Behind Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Seated Cable Lat Pulldown: 2x9
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 40%x8, 50%x6, 60%x5 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 40%x8, 50%x6, 60%x5
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Development (75% working max) · Week 1 of 4",
+    "objective": "Phase 2 - Strength - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Interval Work:
-Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+MB Chop: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-Ups: 4x6
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating Supermans: 3x20s
-Flutter Kicks: 3x20s
-Mountain Climbers: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Standing:
-Med Ball Rotational Throw: 3x6 each side
-Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (64% working max) · Week 4 of 4",
+    "objective": "Phase 2 - Strength - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Side Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Pull-Ups: 2x5
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x6, 60%x5, 65%x4 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x6, 60%x5, 65%x4
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength (80% working max) · Week 1 of 4",
+    "objective": "Phase 3 - Power - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Quality Speed:
-Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Overhead Slam: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Weighted Pull-Ups: 4x5
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x5, 60%x4, 70%x3 fast, 75%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Conditioning — Maximal Velocity:
-Med Ball Rotational Throw: 4x6 each side (max intent)",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Box Squat: 4x6
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Repeat Effort:
-Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (68% working max) · Week 4 of 4",
+    "objective": "Phase 3 - Power - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Toss and Broad Jump: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Weighted Pull-Ups: 2x4
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x5, 60%x4, 60%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x5, 60%x4, 60%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Taper (68% working max) · Week 1 of 4",
+    "objective": "Phase 4 - Peak/Taper - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Walking Lunge: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat Cluster: ~65% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Full-Recovery Reps:
-Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Lat Pulldown: 4x10
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 60%x3, 70%x3, 80%x2, 82.5%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Hollow Hold: 3x20s
-Cherry Pickers: 3x20s
-Decline Bench Iso: 3x30s hold",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x8
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Low Volume, Max Intent:
-Med Ball Rotational Throw: 2x6 each side (max intent)
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 4 - Peak/Taper - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x6 each leg
-Hip Thrust: 2x8
+Front Squat Cluster: ~70% (hypertrophy option - weight bumps weekly within phase)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Lat Pulldown: 2x8
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 60%x3, 60%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x6
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 60%x3, 60%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 16,
@@ -15666,391 +16386,537 @@ Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
 exports[`Golden snapshots — every SPORT_TEMPLATES sport/position, both goals softball/softball — standard 1`] = `
 [
   {
-    "objective": "Phase 1 — Foundation (68% working max) · Week 1 of 4",
+    "objective": "Phase 1 - Foundation - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Aerobic Base:
-Bike Ladder: 3x1 — 10s on/20s off, 15s/15s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-ups: 4xAMAP
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating V-Ups: 3x20s
-Penguins: 3x20s
-Alternating Supermans: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×8
-⟦SS1⟧Goblet Squat: 4x10
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Step-Ups: 4x6 each leg
-⟦SS2⟧Med Ball Slam: 4x8
-⟦SS3⟧Cossack Squat: 3x10 each side
-⟦SS3⟧Med Ball Chest Pass: 4x8
-Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 40%x10, 50%x8, 60%x6, 70%x5, 75%x5 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Half-Kneeling:
-Med Ball Rotational Throw: 3x6 each side (half-kneeling)
-Sprint Tempo Protocol: 5x1 — 20 yds stride @ 75%, jog back @ 50%, 20 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 1,
   },
   {
-    "objective": "Phase 1 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 1 - Foundation - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Reverse Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat: 40%x8, 50%x6, 60%x5
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Step-Behind Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Seated Cable Lat Pulldown: 2x9
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 40%x8, 50%x6, 60%x5 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×8
-⟦SS1⟧Cossack Squat: 2x8 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 40%x8, 50%x6, 60%x5
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 4,
   },
   {
-    "objective": "Phase 2 — Development (75% working max) · Week 1 of 4",
+    "objective": "Phase 2 - Strength - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Interval Work:
-Bike Ladder: 4x1 — 10s on/20s off, 15s/15s, 20s/10s, 25s/5s, 20s/10s, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+MB Chop: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Pull-Ups: 4x6
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP) (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Alternating Supermans: 3x20s
-Flutter Kicks: 3x20s
-Mountain Climbers: 3x20s",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 38%×10, 49%×8, 60%×6, 68%×5, 75%×6
-⟦SS1⟧Bulgarian Split Squat: 4x8 each leg
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x8, 60%x6, 70%x5, 80%x3, 82.5%x3 (top set AMRAP)
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Standing:
-Med Ball Rotational Throw: 3x6 each side
-Sprint Tempo Protocol: 5x1 — 30 yds stride @ 75%, jog back @ 50%, 30 yds stride @ 75%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 5,
   },
   {
-    "objective": "Phase 2 — Deload (64% working max) · Week 4 of 4",
+    "objective": "Phase 2 - Strength - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x8 each leg
-Hip Thrust: 2x8
+Front Squat: 50%x6, 60%x5, 65%x4
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Side Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Pull-Ups: 2x5
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x6, 60%x5, 65%x4 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x3 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 32%×10, 42%×8, 51%×6, 58%×5, 64%×6
-⟦SS1⟧Cossack Squat: 2x6 each side
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x6, 60%x5, 65%x4
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 8,
   },
   {
-    "objective": "Phase 3 — Strength (80% working max) · Week 1 of 4",
+    "objective": "Phase 3 - Power - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Bulgarian Split Squat: 4x6 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Cable Woodchop: 3x8 each side
 
-Conditioning — Quality Speed:
-Sprint Tempo Protocol: 6x1 — 30 yds stride @ 85%, jog back @ 50%, 30 yds stride @ 85%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Overhead Slam: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Weighted Pull-Ups: 4x5
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 50%x5, 60%x4, 70%x3 fast, 75%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Cable Rear-Delt Fly: 3x12
+⟦SS2⟧Calf Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Conditioning — Maximal Velocity:
-Med Ball Rotational Throw: 4x6 each side (max intent)",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 40%×10, 52%×8, 64%×6, 72%×5, 80%×5
-⟦SS1⟧Box Squat: 4x6
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 50%x5, 60%x4, 70%x3 fast, 75%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧KB Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Wall Tibialis Raises: 3x20
 
-Conditioning — Repeat Effort:
-Bike Ladder: 3x1 — 20s on/10s off, 25s/5s, 20s/10s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 9,
   },
   {
-    "objective": "Phase 3 — Deload (68% working max) · Week 4 of 4",
+    "objective": "Phase 3 - Power - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Bulgarian Split Squat: 2x5 each leg
-Hip Thrust: 2x8
+Front Squat: 50%x5, 60%x4, 60%x3
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Half-Kneeling Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Toss and Broad Jump: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Weighted Pull-Ups: 2x4
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 50%x5, 60%x4, 60%x3 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 4x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Floor Press: 3x6-8
+⟦SS1⟧Band Pull-Apart: 3x12
+⟦SS2⟧Wall Tibialis Raises: 2x15-20
+⟦SS2⟧Hollow Body Hold: 2x6 each side
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×5
-⟦SS1⟧Bulgarian Split Squat: 2x5 each leg
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 50%x5, 60%x4, 60%x3
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Calf Raises: 2x20
+⟦SS2⟧Good Morning: 3x8-10
+⟦SS2⟧KB Tibialis Raises: 3x20
 
-Conditioning — Deload (Light):
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Ab Wheel: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 12,
   },
   {
-    "objective": "Phase 4 — Peak Taper (68% working max) · Week 1 of 4",
+    "objective": "Phase 4 - Peak/Taper - Week 1 of 4",
     "sessions": [
       {
         "day": "Day 1",
-        "description": "Back Squat: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Single Leg RDL: 4x8 each leg
-⟦SS1⟧Sandbag Carry: 4x20 yds
-⟦SS2⟧Nordic Hamstring Curl: 4x6
-⟦SS2⟧Walking Lunge: 4x8 each leg
-Hip Thrust: 4x10
+        "description": "Front Squat: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Full-Recovery Reps:
-Sprint Tempo Protocol: 4x1 — 30 yds stride @ 85%, full recovery, 30 yds stride @ 85%, full recovery = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
-        "description": "DB Bench Press: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Gorilla Row: 4x8
-⟦SS1⟧Lateral Raise: 3x12
-⟦SS2⟧Lat Pulldown: 4x10
-⟦SS2⟧Med Ball Slam: 4x8
-Med Ball Chest Pass: 4x8
+        "description": "Bench Press: 60%x3, 70%x3, 80%x2, 82.5%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Finisher (20s on/10s off unless noted):
-Hollow Hold: 3x20s
-Cherry Pickers: 3x20s
-Decline Bench Iso: 3x30s hold",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
-        "description": "Trap Bar Deadlift: 34%×10, 44%×8, 54%×6, 61%×5, 68%×4
-⟦SS1⟧Goblet Squat: 4x8
-⟦SS1⟧Med Ball Slam: 4x8
-⟦SS2⟧Med Ball Chest Pass: 4x8
-⟦SS2⟧Lateral Bounds: 4x5 each side
+        "description": "Trap Bar Deadlift: 60%x3, 70%x3, 80%x2, 82.5%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Low Volume, Max Intent:
-Med Ball Rotational Throw: 2x6 each side (max intent)
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 13,
   },
   {
-    "objective": "Phase 4 — Deload (59% working max) · Week 4 of 4",
+    "objective": "Phase 4 - Peak/Taper - Deload - Week 4 of 4",
     "sessions": [
       {
         "day": "Day 1",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Back Squat: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Single Leg RDL: 2x6 each leg
-⟦SS1⟧Sandbag Carry: 2x15 yds
-⟦SS2⟧Nordic Hamstring Curl: 2x5
-⟦SS2⟧Walking Lunge: 2x6 each leg
-Hip Thrust: 2x8
+Front Squat: 60%x3, 60%x2
+DB Incline Press: 3x6-8
+⟦SS1⟧Gorilla Row: 3x8-10
+⟦SS1⟧Reverse Lunge: 3x6-8 each leg
+⟦SS2⟧Single-Leg Barbell RDL: 3x6-8 each leg
+⟦SS2⟧Pallof Press: 3x8 each side
 
-Conditioning — Deload (Light):
-Sprint Tempo Protocol: 3x1 — 20 yds stride @ 70%, jog back @ 50%, 20 yds stride @ 70%, walk back = 1 rep",
-        "focus": "Lower Power",
+Conditioning - Rotational Power:
+Rotational Scoop Toss: 2-3x3 each side",
+        "focus": "Lower Power + Strength",
       },
       {
         "day": "Day 2",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-DB Bench Press: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Gorilla Row: 2x6
-⟦SS1⟧Lateral Raise: 2x9
-⟦SS2⟧Lat Pulldown: 2x8
-⟦SS2⟧Med Ball Slam: 2x6
-Med Ball Chest Pass: 2x6
+Bench Press: 60%x3, 60%x2 (bodyweight option: Weighted Push-Ups 3x5-10 + ISO Bulgarian Split Squat 3x:30 each leg, in place of Bench Press)
+Trap Bar Jump: 3x2 (velocity - fast and explosive, not a %-based lift)
+Choice-Grip Pull-Up: 3x5-8 (record reps and added weight)
+⟦SS1⟧DB Incline Press: 3x6-8
+⟦SS1⟧Face Pull: 3x12
+⟦SS2⟧KB Tibialis Raises: 2x15-20
+⟦SS2⟧Dead Bug: 2x6 each side
 
-Core — Deload (Light):
-Dead Bug: 2x8 each side
-Plank: 2x20 seconds",
-        "focus": "Upper Strength & Rotational",
+Arm Care - Finisher:
+Band External Rotation: 2x15 each side",
+        "focus": "Upper Strength",
       },
       {
         "day": "Day 3",
         "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
 
-Trap Bar Deadlift: 30%×10, 38%×8, 47%×6, 53%×5, 59%×4
-⟦SS1⟧Goblet Squat: 2x6
-⟦SS1⟧Med Ball Slam: 2x6
-⟦SS2⟧Med Ball Chest Pass: 2x6
+Trap Bar Deadlift: 60%x3, 60%x2
+DB Jumps: 3x3 (15-30lb)
+⟦SS1⟧Barbell Split Squat: 4-5x5 each leg (light and fast)
+⟦SS1⟧Wall Tibialis Raises: 2x20
+⟦SS2⟧Single-Leg Barbell RDL: 3x8-10
+⟦SS2⟧Calf Raises: 3x20
 
-Conditioning — Deload (Light):
-Med Ball Overhead Slam: 2x5 each side
-Bike Ladder: 2x1 — 10s on/20s off, 15s/15s, 10s/20s",
-        "focus": "Lower Strength",
+Core - Tabata (4 min 30 sec, 20 sec on/10 sec off):
+Sit-Ups
+Leg Lifts
+Russian Twists",
+        "focus": "Plyometrics + Dynamic Lower",
+      },
+      {
+        "day": "Day 4",
+        "description": "Deload Week. Reduce load and focus on movement quality and recovery. This week is intentional.
+
+⟦SS1⟧DB Seated Shoulder Press: 4x6
+⟦SS1⟧Long-Lever Plank: 3x:45 (isometric hold)
+⟦SS2⟧Single-Arm DB Row: 4x6 each arm
+⟦SS2⟧Seated Straight-Leg Raise: 4x6 (pause up, over, and down)
+
+Arm Care - Accessory (3 rounds x 10-15):
+Tricep Pushdown: 3x10-15
+Bicep Curl: 3x10-15
+
+Conditioning - 60-Yard Shuttles:
+60-Yard Shuttle: 4 reps (45 sec rest, aim under 13 sec)",
+        "focus": "Upper Hypertrophy + Conditioning",
       },
     ],
     "week": 16,

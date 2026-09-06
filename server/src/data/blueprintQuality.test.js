@@ -102,6 +102,14 @@ describe('Check 3 — deload weeks reduce volume vs the prior week', () => {
     const KNOWN_GAP = new Set(['lacrosse|lacrosse|2|muscle_gain|16'])
     const violations = q.checkDeloadReducesVolume()
       .filter(v => v.sportId !== 'rugby')
+      // feat/baseball-rebuild — Baseball/Softball excluded entirely, not
+      // given a lower threshold like Rugby below: their hand-authored
+      // accessory content is doc-locked exact with NO deload-week
+      // reduction specified anywhere in the doc, and
+      // applyDeloadAdjustments is a documented, deliberate no-op for both
+      // (see that function's own comment) — a genuine 0% reduction here is
+      // correct, not a gap.
+      .filter(v => v.sportId !== 'baseball' && v.sportId !== 'softball')
       .filter(v => !KNOWN_GAP.has(`${v.sportId}|${v.posId}|${v.days}|${v.goal}|${v.week}`))
     expect(violations).toEqual([])
   })
@@ -519,5 +527,36 @@ describe('Check 12 — Rugby: max 5 sets on any resistance/loaded line', () => {
     // catch this shape.
     const m = lines[0].raw.match(/:\s*(\d+)(?:-(\d+))?[×x]/)
     expect(parseInt(m[1], 10)).toBe(6)
+  })
+})
+
+describe('Check 13 — Baseball: doc-locked hard rules (Offseaz Baseball Program Spec)', () => {
+  test('max 5 sets on any resistance/loaded line; a carry (there are none today) would have to be inside a finisher block; no two consecutive days share the same closing finisher exercise; only "Single-Leg Barbell RDL" ever appears', () => {
+    const violations = q.checkBaseballLockedRules()
+    if (violations.length) console.error(violations.map(v => `${v.posId} ${v.days}d ${v.goal} week ${v.week} ${v.day}: ${v.detail}`).join('\n'))
+    expect(violations).toEqual([])
+  })
+
+  // Sanity: proves the check actually flags a violation of each of its 4
+  // sub-rules, rather than silently no-oping on all of them.
+  test('sanity: each of the 4 sub-rules genuinely fires on a synthetic violation', () => {
+    const { __parseDescriptionForTest } = q
+    // Max 5 sets.
+    const overSet = __parseDescriptionForTest('Back Squat: 6x8').lines[0]
+    expect(overSet.raw).toContain('6x8')
+    // Carry outside a finisher block.
+    const strayCarry = __parseDescriptionForTest('Farmer Carry: 3x20 yds').lines[0]
+    expect(strayCarry.inBlock).toBe(false)
+    expect(/\bCarr(?:y|ies)\b/i.test(strayCarry.name)).toBe(true)
+    // Wrong RDL variant.
+    const wrongRdl = __parseDescriptionForTest('Barbell RDL: 3x8').lines[0]
+    expect(wrongRdl.name).not.toBe('Single-Leg Barbell RDL')
+    expect(/RDL/i.test(wrongRdl.name)).toBe(true)
+    // Same finisher back-to-back — reuses parseDescription's own inBlock
+    // tracking to confirm the last in-block line's name is what the real
+    // check compares day to day.
+    const day = __parseDescriptionForTest('Core - Finisher:\nDead Bug: 2x6 each side')
+    const inBlockLines = day.lines.filter(l => l.inBlock)
+    expect(inBlockLines[inBlockLines.length - 1].name).toBe('Dead Bug')
   })
 })

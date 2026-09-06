@@ -1132,6 +1132,123 @@ const EXERCISE_LIBRARY = {
     description: 'Using your own hand (or a partner\'s) for resistance, press your head into the hand in each of 4 directions — forward, backward, and to each side — holding each for the prescribed time without letting your head actually move.',
     muscles: 'Neck (all directions, isometric)',
   },
+  // feat/baseball-rebuild - Offseaz Baseball Program Spec
+  '60-yard shuttle': {
+    description: 'Sprint 5 yards to one line and touch it, sprint 10 yards back to a line the opposite direction and touch it, then sprint 5 yards through the start line - 60 total yards of change-of-direction sprinting.',
+    muscles: 'Lower-body power, change of direction',
+  },
+  'acceleration takeoffs': {
+    description: 'From a two-point or three-point stance, drive out low and hard for the first few steps, emphasizing a strong first-step angle and full leg extension, then relax into an easy jog.',
+    muscles: 'Lower-body power, acceleration mechanics',
+  },
+  'barbell split squat': {
+    description: 'In a split stance with a barbell on your back, lower your rear knee toward the floor while keeping your front shin vertical, then drive back up through your front heel. Kept light and moved with intent, not grinding.',
+    muscles: 'Quads, glutes, hip flexors',
+  },
+  'cable external rotation': {
+    description: 'Elbow pinned to your side at 90 degrees, forearm across your body on a low cable, rotate your forearm outward against the resistance while keeping your elbow tucked, then return under control.',
+    muscles: 'Rotator cuff (external rotators)',
+  },
+  'choice-grip pull-up': {
+    description: 'Pick whichever grip (pronated, neutral, or supinated) feels best on your shoulder that day and pull your chin over the bar, then lower under control. Record which grip and how many reps (plus any added weight) you used.',
+    muscles: 'Lats, biceps, upper back',
+  },
+  'db floor press': {
+    description: 'Lying on your back with knees bent, press a pair of dumbbells up from the floor until your arms are extended, then lower until your upper arms touch the floor and pause before pressing again.',
+    muscles: 'Chest, triceps, front delts',
+  },
+  'db jumps': {
+    description: 'Holding a light dumbbell in each hand, perform a countermovement jump for maximum height, landing softly with bent knees before resetting for the next rep.',
+    muscles: 'Lower-body power (loaded jump)',
+  },
+  'db seated shoulder press': {
+    description: 'Seated with back support, press a pair of dumbbells overhead from shoulder height until your arms are extended, then lower under control back to your shoulders.',
+    muscles: 'Shoulders, triceps',
+  },
+  'good morning': {
+    description: 'Bar on your back, soft knees, hinge forward at the hips while keeping your back flat until you feel a stretch in your hamstrings, then drive your hips forward to stand back up.',
+    muscles: 'Hamstrings, glutes, lower back',
+  },
+  'lateral shuffle to sprint': {
+    description: 'Shuffle laterally for the prescribed distance staying low and athletic, then plant and drive into a forward sprint for the remaining distance.',
+    muscles: 'Lower-body power, change of direction',
+  },
+  'long-lever plank': {
+    description: 'In a forearm plank position, walk your elbows out slightly in front of your shoulders (a longer lever than a standard plank) and hold, keeping your hips level and core braced.',
+    muscles: 'Core (anti-extension)',
+  },
+  'mb chop': {
+    description: 'Holding a medicine ball with both hands, rotate and drive the ball diagonally from high on one side down to the opposite hip, then reset and repeat, keeping the movement controlled.',
+    muscles: 'Obliques, core rotation',
+  },
+  'nordic curl': {
+    description: 'Kneeling with your ankles anchored (a partner or a pad), lower your torso forward as slowly as possible under hamstring control, using your hands to help push back up once you can no longer resist.',
+    muscles: 'Hamstrings (eccentric)',
+  },
+  'overhead slam': {
+    description: 'Raise a medicine ball overhead with both hands, then explosively slam it into the ground as hard as possible, bending at the hips and knees to catch the bounce and reset.',
+    muscles: 'Full-body power, lats, core',
+  },
+  'pallof iso hold': {
+    description: 'Standing side-on to a cable or band anchor, hold the handle at your chest with both hands and press it straight out in front of you, resisting the pull that wants to rotate your torso toward the anchor.',
+    muscles: 'Core (anti-rotation)',
+  },
+  'prone y-t-a': {
+    description: 'Lying face-down on an incline bench or the floor, raise your arms to form a "Y," then a "T," then an "A" shape (thumbs up, squeezing your shoulder blades), holding each briefly before lowering.',
+    muscles: 'Rear delts, rotator cuff, scapular stabilizers',
+  },
+  'rotational scoop toss': {
+    description: 'Holding a medicine ball at one hip, rotate through your torso and hips to throw the ball across your body into a wall or to a partner, driving the power from your legs and core, not just your arms.',
+    muscles: 'Rotational power, core, hips',
+  },
+  'rotational slam': {
+    description: 'Holding a medicine ball, rotate to one side and raise it, then explosively rotate the other way and slam the ball down at an angle across your body.',
+    muscles: 'Rotational power, core',
+  },
+  'scoop toss': {
+    description: 'Holding a medicine ball at your hip in a slight squat, extend your legs and hips to "scoop" the ball upward and toss it forward or to a partner, driving the power from your lower body.',
+    muscles: 'Rotational/hip power, core',
+  },
+  'seated straight-leg raise': {
+    description: 'Sitting with legs extended, lean back slightly and raise both legs together, pausing at the top before lowering under control without letting your heels touch down.',
+    muscles: 'Core (lower abs, hip flexors)',
+  },
+  'serratus wall slide': {
+    description: 'Forearms against a wall with elbows and wrists in contact, slide your arms up overhead while keeping contact with the wall and actively protracting your shoulder blades, then slide back down.',
+    muscles: 'Serratus anterior, scapular control',
+  },
+  'side toss': {
+    description: 'Standing side-on to a wall or partner with a medicine ball at your hip, rotate through your core to toss the ball sideways, then catch the return and reset.',
+    muscles: 'Rotational power, obliques',
+  },
+  'side-lying db external rotation': {
+    description: 'Lying on your side with your top elbow tucked to your ribs and bent 90 degrees, holding a light dumbbell, rotate your forearm upward toward the ceiling, then lower under control.',
+    muscles: 'Rotator cuff (external rotators)',
+  },
+  'single-arm db row': {
+    description: 'One hand and knee braced on a bench, row a dumbbell up toward your hip, driving your elbow back and squeezing your shoulder blade, then lower under control.',
+    muscles: 'Lats, upper back, biceps',
+  },
+  'single-leg barbell rdl': {
+    description: 'Holding a barbell in front of your thighs, balance on one leg and hinge forward at the hip, letting your back leg extend behind you for counterbalance, until you feel a hamstring stretch, then return to standing.',
+    muscles: 'Hamstrings, glutes, balance',
+  },
+  'step-behind rotational scoop toss': {
+    description: 'Step your back foot behind and across your front foot to load your hips, then drive through that rotation to scoop-toss a medicine ball forward, mimicking a throwing/hitting turn.',
+    muscles: 'Rotational power, hips, core',
+  },
+  'toss and broad jump': {
+    description: 'Throw a medicine ball forward for distance, then immediately chain into a two-foot broad jump for maximum distance, landing balanced.',
+    muscles: 'Full-body power, lower-body explosiveness',
+  },
+  'vertical toss and jump': {
+    description: 'Toss a medicine ball straight up as high as possible, then immediately jump vertically as high as you can, catching or resetting the ball after landing.',
+    muscles: 'Full-body power, vertical explosiveness',
+  },
+  'wall tibialis raises': {
+    description: 'Standing with your heels a short distance from a wall and your body leaning back against it, raise your toes/forefoot up toward your shins as high as possible, then lower under control.',
+    muscles: 'Tibialis anterior (shin)',
+  },
 }
 
 // Case-insensitive lookup helper
