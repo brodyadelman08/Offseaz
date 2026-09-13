@@ -603,18 +603,17 @@ html {
 }
 
 /* ── Landing page — universal card hover for lp-card and lp-sport ──────────
-   Already have border-color from the inline <style> block in Landing.jsx;
-   add lift and shadow here for the full premium feel.                         */
+   White bg / black text (and border-color) come from the inline <style>
+   block in Landing.jsx; add lift and shadow here for the full premium feel.  */
 @media (hover: hover) {
   .lp-card,
   .lp-sport {
-    transition: transform var(--t-std), box-shadow var(--t-std), border-color var(--t-std) !important;
+    transition: transform var(--t-std), box-shadow var(--t-std), background var(--t-std), border-color var(--t-std) !important;
   }
   .lp-card:hover,
   .lp-sport:hover {
     transform: translateY(-2px);
     box-shadow: var(--shadow-card-hover) !important;
-    border-color: var(--orange) !important;
   }
 }
 

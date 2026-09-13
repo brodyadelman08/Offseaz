@@ -502,10 +502,14 @@ export default function Landing() {
   return (
     <div style={s.root}>
       <style>{`
-        .lp-card  { transition: border-color 0.2s ease; }
-        .lp-card:hover  { border-color: #F75709 !important; }
-        .lp-sport { transition: border-color 0.2s ease; }
-        .lp-sport:hover { border-color: #F75709 !important; }
+        .lp-nav-link { transition: background 0.2s ease, color 0.2s ease; }
+        .lp-nav-link:hover { background: #fff !important; color: #000 !important; }
+        .lp-card  { transition: background 0.2s ease, border-color 0.2s ease; }
+        .lp-card:hover  { background: #fff !important; border-color: #fff !important; }
+        .lp-card:hover h3, .lp-card:hover p { color: #000 !important; }
+        .lp-sport { transition: background 0.2s ease, border-color 0.2s ease; }
+        .lp-sport:hover { background: #fff !important; border-color: #fff !important; }
+        .lp-sport:hover span { color: #000 !important; }
       `}</style>
 
       {/* ── Beta banner ──────────────────────────────────────────────────────── */}
@@ -531,7 +535,7 @@ export default function Landing() {
       <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.4)' : 'none' }}>
         <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <Link to="/login" style={s.navLink}>Sign In</Link>
+          <Link to="/login" className="lp-nav-link" style={s.navLink}>Sign In</Link>
           <Link to="/register" style={s.navCta}>Get Started</Link>
         </div>
       </nav>
