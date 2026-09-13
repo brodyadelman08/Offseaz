@@ -9,7 +9,20 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/offseaz_circle_black.png",
+      "src": "/favicon_white_48.png",
+      "sizes": "48x48",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon_white_180.png",
+      "sizes": "180x180",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/favicon_white_512.png",
+      "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
     }
