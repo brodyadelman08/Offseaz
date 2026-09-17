@@ -602,20 +602,15 @@ html {
   pointer-events: none !important;
 }
 
-/* ── Landing page — universal card hover for lp-card and lp-sport ──────────
-   White bg / black text (and border-color) come from the inline <style>
-   block in Landing.jsx; add lift and shadow here for the full premium feel.  */
-@media (hover: hover) {
-  .lp-card,
-  .lp-sport {
-    transition: transform var(--t-std), box-shadow var(--t-std), background var(--t-std), border-color var(--t-std) !important;
-  }
-  .lp-card:hover,
-  .lp-sport:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card-hover) !important;
-  }
-}
+/* ── Landing page card hover (.lp-card / .lp-sport) — MOVED ─────────────────
+   This used to live here, sharing --shadow-card-hover with .lp-stat and
+   .feed-post-card. That variable's middle term, 0 0 0 1px rgba(247,87,9,0.32),
+   renders as a solid orange ring — removing just border-color (a prior fix)
+   left this box-shadow's own orange ring in place, so the ring survived.
+   The entire hover state (background/text/border/shadow/lift) now lives in
+   ONE place, Landing.jsx's own inline <style> block, so it can't drift out
+   of sync with itself again. --shadow-card-hover itself is untouched here
+   for .lp-stat / .feed-post-card, which still want it. */
 
 /* ── Feature card on landing ────────────────────────────────────────────────── */
 @media (hover: hover) {

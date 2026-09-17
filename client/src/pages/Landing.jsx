@@ -504,12 +504,28 @@ export default function Landing() {
       <style>{`
         .lp-nav-link { transition: background 0.2s ease, color 0.2s ease; }
         .lp-nav-link:hover { background: #fff !important; color: #000 !important; }
-        .lp-card  { transition: background 0.2s ease, border-color 0.2s ease; }
-        .lp-card:hover  { background: #fff !important; border-color: #fff !important; }
-        .lp-card:hover h3, .lp-card:hover p { color: #000 !important; }
-        .lp-sport { transition: background 0.2s ease, border-color 0.2s ease; }
-        .lp-sport:hover { background: #fff !important; border-color: #fff !important; }
-        .lp-sport:hover span { color: #000 !important; }
+
+        /* feat/landing-card-hover-fix — single source of truth for every
+           info/feature card AND sport tile's hover state (see index.css's
+           own comment on the now-removed duplicate block for why this was
+           split across two files before, and why that caused the orange
+           ring to survive a prior "fix"). Deliberately does NOT reference
+           --shadow-card-hover (index.css) — that variable's middle term,
+           0 0 0 1px rgba(247,87,9,0.32), is a zero-blur/1px-spread
+           box-shadow that renders as a solid orange ring; every other
+           consumer of that variable (.lp-stat, .feed-post-card) keeps it
+           unchanged, out of scope here. */
+        .lp-card, .lp-sport { transition: all 160ms ease; }
+        .lp-card:hover, .lp-sport:hover {
+          background: #FFFFFF !important;
+          border-color: #FFFFFF !important;
+          border-top: 3px solid #F75709 !important;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.18) !important;
+          transform: translateY(-2px);
+        }
+        .lp-card:hover h3, .lp-card:hover p, .lp-card:hover span,
+        .lp-sport:hover span { color: #111111 !important; }
+        .lp-card:hover svg { stroke: #111111 !important; }
       `}</style>
 
       {/* ── Beta banner ──────────────────────────────────────────────────────── */}
@@ -654,7 +670,7 @@ export default function Landing() {
               { color: BLUE,   title: 'Injury Flags Surface Instantly',     body: 'When an athlete flags an injury during logging, it appears immediately on your accountability dashboard.' },
               { color: YELLOW, title: 'Auto-Generated Weekly Reports',      body: 'See who trained, who skipped, and who improved — with the data to have accountability conversations that change behavior.' },
             ].map((item, i) => (
-              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
+              <div key={i} className="lp-card" style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
                 <h3 style={s.cardTitle}>{item.title}</h3>
                 <p style={s.cardBody}>{item.body}</p>
               </div>
@@ -688,7 +704,7 @@ export default function Landing() {
               { num: '02', color: BLUE,   title: 'Get a Personalized Blueprint',         body: 'Offseaz builds your program from your answers. Weights are auto-calculated from your logged one-rep maxes — no math required.' },
               { num: '03', color: YELLOW, title: 'Track Streaks and Progress',           body: 'Log every session, build your streak, and watch your PRs climb. Your coach sees every rep. Teammates see your work on the feed.' },
             ].map((step, i) => (
-              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
+              <div key={i} className="lp-card" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
                 <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Manrope', 'Inter', sans-serif" }}>{step.num}</span>
                 <h3 style={s.cardTitle}>{step.title}</h3>
                 <p style={s.cardBody}>{step.body}</p>
@@ -709,7 +725,7 @@ export default function Landing() {
               { color: ORANGE, title: 'Log Workouts from Anywhere',           body: 'Log every session from your phone. Effort scores, notes, and performance data all go straight to your coach.' },
               { color: YELLOW, title: 'Build a Documented Training History',  body: 'Every logged session is permanently recorded. Your coach can see your full offseason history at any time.' },
             ].map((item, i) => (
-              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
+              <div key={i} className="lp-card" style={{ ...s.card, borderTop: `2px solid ${item.color}` }}>
                 <h3 style={s.cardTitle}>{item.title}</h3>
                 <p style={s.cardBody}>{item.body}</p>
               </div>
@@ -809,7 +825,7 @@ export default function Landing() {
               { num: '02', color: BLUE,   title: 'Athletes and Assistant Coaches Join With Their Invite Code',           body: 'Athletes join, complete the needs analysis, and immediately receive a personalized program with exact weights calculated from their logged maxes.' },
               { num: '03', color: YELLOW, title: 'Everyone Trains, Logs Workouts, and the Coach Sees Everything',       body: 'Athletes log every session from their phone. Coaches see real-time compliance, flag injuries, send messages, and track progress across the roster all offseason.' },
             ].map((step, i) => (
-              <div key={i} data-card="" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
+              <div key={i} className="lp-card" style={{ ...s.card, borderTop: `2px solid ${step.color}` }}>
                 <span style={{ fontSize: 44, fontWeight: 900, color: step.color, display: 'block', lineHeight: 1, marginBottom: 16, letterSpacing: '-0.04em', fontFamily: "'Manrope', 'Inter', sans-serif" }}>{step.num}</span>
                 <h3 style={s.cardTitle}>{step.title}</h3>
                 <p style={s.cardBody}>{step.body}</p>
