@@ -533,7 +533,12 @@ export default function Landing() {
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
       <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.4)' : 'none' }}>
-        <img src={LOGO} alt="Offseaz" style={{ height: 32, display: 'block' }} />
+        <img
+          src="/offseaz_o_orange.png"
+          alt="Offseaz"
+          style={{ height: 40, width: 'auto', display: 'block', cursor: 'pointer' }}
+          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
+        />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
           <Link to="/login" className="lp-nav-link" style={s.navLink}>Sign In</Link>
           <Link to="/register" style={s.navCta}>Get Started</Link>
