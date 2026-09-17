@@ -9,22 +9,16 @@
   "orientation": "portrait-primary",
   "icons": [
     {
-      "src": "/favicon_black_48.png",
-      "sizes": "48x48",
+      "src": "/appicon_orange_192.png",
+      "sizes": "192x192",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     },
     {
-      "src": "/favicon_black_180.png",
-      "sizes": "180x180",
-      "type": "image/png",
-      "purpose": "any"
-    },
-    {
-      "src": "/favicon_black_512.png",
+      "src": "/appicon_orange_512.png",
       "sizes": "512x512",
       "type": "image/png",
-      "purpose": "any"
+      "purpose": "any maskable"
     }
   ]
 }
