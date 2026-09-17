@@ -143,7 +143,7 @@ function DesktopSidebar({ nav, profile, signOut }) {
       {/* Logo — links home */}
       <div style={styles.logoArea}>
         <img
-          src="/offseaz_o_orange.png"
+          src="/Offseaz-Logo-White-Letter-Dark.png"
           alt="Offseaz"
           style={styles.logo}
           onClick={() => navigate(nav[0].path)}
@@ -427,8 +427,10 @@ const styles = {
     borderBottom: '1px solid var(--border)',
   },
   logo: {
-    height: 36,
     width: 'auto',
+    maxWidth: '85%',
+    height: 'auto',
+    maxHeight: 36,
     display: 'block',
     cursor: 'pointer',
   },
