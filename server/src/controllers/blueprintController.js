@@ -9,6 +9,7 @@ const {
   assignBlueprint,
   bulkAssignBlueprint,
   getAthletePlan,
+  getTeamActivePlanAthleteIds,
   toggleLock,
   deleteBlueprint,
   getAthleteOverrides,
@@ -306,6 +307,27 @@ async function lock(req, res) {
   }
 }
 
+// Which athletes on the coach's team already have an active coach-assigned
+// plan (excludes auto-generated survey plans — see getTeamActivePlanAthleteIds).
+// Used by the client to warn before a reassignment silently replaces an
+// athlete's current plan and resets them to week 1.
+async function getActivePlanAthletes(req, res) {
+  try {
+    const profile = await getProfile(req.user.id)
+    if (profile.role !== 'coach') {
+      return res.status(403).json({ error: 'Only coaches can view plan assignments' })
+    }
+    const { team } = await resolveCoachTeamAndAccess(req.user.id, req.query.team_id || null)
+    if (!team) {
+      return res.status(403).json({ error: 'No team found' })
+    }
+    const athleteIds = await getTeamActivePlanAthleteIds(team.id)
+    res.json({ athlete_ids: athleteIds })
+  } catch (err) {
+    res.status(500).json({ error: err.message })
+  }
+}
+
 async function getOverrides(req, res) {
   const { athleteId } = req.params
   try {
@@ -437,4 +459,4 @@ async function remove(req, res) {
   }
 }
 
-module.exports = { listTemplates, generateFromTemplate, create, list, detail, assign, bulkAssign, myPlan, lock, remove, getOverrides, saveOverrides }
+module.exports = { listTemplates, generateFromTemplate, create, list, detail, assign, bulkAssign, myPlan, lock, remove, getOverrides, saveOverrides, getActivePlanAthletes }

@@ -35,6 +35,15 @@ export default function BlueprintDetail() {
   const [assignSuccess, setAssignSuccess]     = useState('')
   const [locking, setLocking]                 = useState(false)
 
+  // Athletes on this blueprint's team who already have an active
+  // coach-assigned plan (any blueprint, not just this one) — reassigning
+  // one replaces their current plan and resets them to week 1, so checking
+  // any of these athletes and assigning needs a warning gate first. See
+  // getTeamActivePlanAthleteIds() in blueprintService.js.
+  const [activePlanIds, setActivePlanIds]     = useState(new Set())
+  // True while the reassign-warning modal is up, gating handleBulkAssign.
+  const [showReassignWarning, setShowReassignWarning] = useState(false)
+
   useEffect(() => {
     // Wait for CoachAccessContext to resolve the active team before ever
     // fetching — firing early with no team_id would let the server fall
@@ -67,6 +76,9 @@ export default function BlueprintDetail() {
     api.get(`/api/survey/team?team_id=${blueprint.team_id}`)
       .then(teamRes => setAthletes(teamRes.data.athletes || []))
       .catch(() => setAthletes([]))
+    api.get(`/api/blueprints/active-plan-athletes?team_id=${blueprint.team_id}`)
+      .then(res => setActivePlanIds(new Set(res.data.athlete_ids || [])))
+      .catch(() => setActivePlanIds(new Set()))
   }, [blueprint?.team_id])
 
   // Athletes already individually assigned this blueprint
@@ -74,6 +86,14 @@ export default function BlueprintDetail() {
     () => new Set(assignments.filter(a => a.athlete_id).map(a => a.athlete_id)),
     [assignments]
   )
+
+  // How many of the currently-checked athletes already have an active
+  // coach-assigned plan — drives the reassign-warning gate below.
+  const reassignAffectedCount = useMemo(() => {
+    let n = 0
+    for (const id of checked) if (activePlanIds.has(id)) n++
+    return n
+  }, [checked, activePlanIds])
 
   // Unique positions from athlete surveys (preserves insertion order)
   const uniquePositions = useMemo(() => {
@@ -145,11 +165,38 @@ export default function BlueprintDetail() {
       setChecked(new Set())
       const res = await api.get(`/api/blueprints/${id}?team_id=${team?.id || ''}`)
       setAssignments(res.data.assignments || [])
+      // Re-fetch: everyone just checked is now on this plan, and this
+      // blueprint itself may have just become someone's "active plan" for
+      // the next reassignment they're part of.
+      if (blueprint?.team_id) {
+        api.get(`/api/blueprints/active-plan-athletes?team_id=${blueprint.team_id}`)
+          .then(r => setActivePlanIds(new Set(r.data.athlete_ids || [])))
+          .catch(() => {})
+      }
     } catch (err) {
       setAssignError(err.response?.data?.error || 'Assignment failed.')
     } finally {
       setAssigning(false)
     }
+  }
+
+  // Entry point for the "Assign to N athletes" button — gates the real
+  // assign call behind a warning whenever any checked athlete already has
+  // an active coach-assigned plan, since assigning replaces that plan and
+  // resets their week progress to 1 (see getTeamActivePlanAthleteIds).
+  // Athletes with no existing plan skip straight to the normal assign.
+  function handleAssignClick() {
+    if (checked.size === 0 || assigning) return
+    if (reassignAffectedCount > 0) {
+      setShowReassignWarning(true)
+    } else {
+      handleBulkAssign()
+    }
+  }
+
+  function confirmReassign() {
+    setShowReassignWarning(false)
+    handleBulkAssign()
   }
 
   if (loading) return (
@@ -350,7 +397,7 @@ export default function BlueprintDetail() {
                 opacity: checked.size === 0 || assigning ? 0.5 : 1,
                 cursor:  checked.size === 0 || assigning ? 'not-allowed' : 'pointer',
               }}
-              onClick={handleBulkAssign}
+              onClick={handleAssignClick}
               disabled={checked.size === 0 || assigning}
             >
               {assigning
@@ -381,6 +428,27 @@ export default function BlueprintDetail() {
           </div>
         )}
       </div>
+
+      {/* ── Reassignment warning ── */}
+      {showReassignWarning && (
+        <div style={s.modalOverlay} onClick={() => setShowReassignWarning(false)}>
+          <div style={s.modalCard} onClick={e => e.stopPropagation()}>
+            <h3 style={s.modalHeadline}>Reassign this plan?</h3>
+            <p style={s.modalBody}>
+              {reassignAffectedCount} of these athlete{reassignAffectedCount === 1 ? '' : 's'} already {reassignAffectedCount === 1 ? 'has' : 'have'} an active plan.
+              Assigning this will replace their current plan and reset them to week 1.
+            </p>
+            <div style={s.modalBtnRow}>
+              <button style={s.modalCancelBtn} onClick={() => setShowReassignWarning(false)}>
+                Cancel
+              </button>
+              <button style={s.modalConfirmBtn} onClick={confirmReassign}>
+                Continue
+              </button>
+            </div>
+          </div>
+        </div>
+      )}
     </div>
   )
 }
@@ -524,4 +592,35 @@ const s = {
   assignmentWho:  { fontWeight: 600, color: 'var(--text)' },
   assignmentType: { fontWeight: 400, color: 'var(--text-3)' },
   assignmentDate: { color: 'var(--text-3)', fontSize: 13 },
+
+  // Reassignment warning modal
+  modalOverlay: {
+    position: 'fixed', inset: 0, zIndex: 9500,
+    background: 'rgba(0,0,0,0.6)',
+    display: 'flex', alignItems: 'center', justifyContent: 'center',
+    padding: 16,
+  },
+  modalCard: {
+    background: 'var(--card)', border: '1px solid var(--border)', borderRadius: 16,
+    padding: '28px 26px', maxWidth: 380, width: '100%',
+    boxShadow: '0 8px 32px rgba(0,0,0,0.5)',
+  },
+  modalHeadline: {
+    fontSize: 18, fontWeight: 700, color: 'var(--text)',
+    margin: '0 0 12px', textAlign: 'center',
+  },
+  modalBody: {
+    fontSize: 14, color: 'var(--text-2)', textAlign: 'center',
+    margin: '0 0 22px', lineHeight: 1.55,
+  },
+  modalBtnRow: { display: 'flex', gap: 10 },
+  modalCancelBtn: {
+    flex: 1, padding: '11px 0', background: 'transparent',
+    border: '1.5px solid var(--border)', borderRadius: 8,
+    color: 'var(--text)', fontWeight: 600, fontSize: 14, cursor: 'pointer',
+  },
+  modalConfirmBtn: {
+    flex: 1, padding: '11px 0', background: ORANGE, border: 'none',
+    borderRadius: 8, color: '#fff', fontWeight: 700, fontSize: 14, cursor: 'pointer',
+  },
 }
