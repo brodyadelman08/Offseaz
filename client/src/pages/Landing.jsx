@@ -185,18 +185,20 @@ function DualDashboardMockup() {
             </div>
             <div style={mk.sectionTag}>MONDAY — LOWER BODY</div>
             {[
+              // Only the main lift is percentage-driven in the product; accessories are rep-based
+              // (sets x reps only, no % badge, no calculated weight).
               { ex: 'Back Squat',            sets: '4×5', pct: '75%', lbs: '225 lbs' },
-              { ex: 'Romanian Deadlift',     sets: '3×8', pct: '65%', lbs: '185 lbs' },
-              { ex: 'Bulgarian Split Squat', sets: '3×6', pct: '60%', lbs: '80 lbs'  },
+              { ex: 'Romanian Deadlift',     sets: '3×8' },
+              { ex: 'Bulgarian Split Squat', sets: '3×6' },
             ].map((w, i) => (
               <div key={i} style={mk.workoutCard}>
                 <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center' }}>
                   <span style={{ fontSize: 8, fontWeight: 700, color: '#DDD' }}>{w.ex}</span>
-                  <span style={{ fontSize: 7, fontWeight: 800, color: BLUE, background: BLUE + '18', border: `1px solid ${BLUE}33`, padding: '2px 5px', borderRadius: 6 }}>{w.pct}</span>
+                  {w.pct && <span style={{ fontSize: 7, fontWeight: 800, color: BLUE, background: BLUE + '18', border: `1px solid ${BLUE}33`, padding: '2px 5px', borderRadius: 6 }}>{w.pct}</span>}
                 </div>
                 <div style={{ display: 'flex', justifyContent: 'space-between', marginTop: 3 }}>
                   <span style={{ fontSize: 7, color: '#555' }}>{w.sets}</span>
-                  <span style={{ fontSize: 9, fontWeight: 800, color: ORANGE }}>{w.lbs}</span>
+                  {w.lbs && <span style={{ fontSize: 9, fontWeight: 800, color: ORANGE }}>{w.lbs}</span>}
                 </div>
               </div>
             ))}
