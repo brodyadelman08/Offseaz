@@ -505,24 +505,43 @@ export default function Landing() {
         .lp-nav-link { transition: background 0.2s ease, color 0.2s ease; }
         .lp-nav-link:hover { background: #fff !important; color: #000 !important; }
 
-        /* feat/landing-card-hover-fix — single source of truth for every
-           info/feature card AND sport tile's hover state (see index.css's
-           own comment on the now-removed duplicate block for why this was
-           split across two files before, and why that caused the orange
-           ring to survive a prior "fix"). Deliberately does NOT reference
-           --shadow-card-hover (index.css) — that variable's middle term,
-           0 0 0 1px rgba(247,87,9,0.32), is a zero-blur/1px-spread
-           box-shadow that renders as a solid orange ring; every other
-           consumer of that variable (.lp-stat, .feed-post-card) keeps it
-           unchanged, out of scope here. */
-        .lp-card, .lp-sport { transition: all 160ms ease; }
-        .lp-card:hover, .lp-sport:hover {
-          background: #FFFFFF !important;
-          border-color: #FFFFFF !important;
-          border-top: 3px solid #F75709 !important;
-          box-shadow: 0 8px 24px rgba(0,0,0,0.18) !important;
-          transform: translateY(-2px);
+        /* Single source of truth for every info/feature card AND sport tile's
+           hover state (feat/landing-card-hover-fix, refined in
+           fix/landing-card-hover-refine). Deliberately does NOT reference
+           --shadow-card-hover (index.css): its middle term,
+           0 0 0 1px rgba(247,87,9,0.32), renders as an orange ring.
+           - No transform: a translateY lift moved the card out from under a
+             cursor resting on its edge, un-hovering it and looping (flicker).
+             Elevation is the box-shadow alone; the element never moves.
+           - The top accent bar (each info card's own inline
+             borderTop: 2px solid <ORANGE|BLUE|YELLOW>) is never restyled on
+             hover, so hover does not touch border-top-color/width at all,
+             except on cards that have NO accent bar by default (.lp-card-plain
+             Four Pillars cards, .lp-sport tiles), whose uniform 1px border
+             goes white like the other three sides.
+           - !important on transitions: s.card / s.sportChip carry an inline
+             "transition: border-color 0.2s ease" that would otherwise win and
+             leave the background snapping with no fade at all.
+           - Transitions live on the base (non-hover) rules so hover-in and
+             hover-out are identical; text color lives on the child elements,
+             so the color transition is declared on them too. */
+        .lp-card, .lp-sport {
+          transition: background-color 240ms cubic-bezier(0.4, 0, 0.2, 1),
+                      border-color 240ms cubic-bezier(0.4, 0, 0.2, 1),
+                      box-shadow 240ms cubic-bezier(0.4, 0, 0.2, 1) !important;
         }
+        .lp-card h3, .lp-card p, .lp-card span, .lp-sport span {
+          transition: color 240ms cubic-bezier(0.4, 0, 0.2, 1) !important;
+        }
+        .lp-card svg { transition: stroke 240ms cubic-bezier(0.4, 0, 0.2, 1); }
+        .lp-card:hover, .lp-sport:hover {
+          background-color: #FFFFFF !important;
+          border-right-color: #FFFFFF !important;
+          border-bottom-color: #FFFFFF !important;
+          border-left-color: #FFFFFF !important;
+          box-shadow: 0 8px 24px rgba(0,0,0,0.18) !important;
+        }
+        .lp-card-plain:hover, .lp-sport:hover { border-top-color: #FFFFFF !important; }
         .lp-card:hover h3, .lp-card:hover p, .lp-card:hover span,
         .lp-sport:hover span { color: #111111 !important; }
         .lp-card:hover svg { stroke: #111111 !important; }
@@ -552,7 +571,7 @@ export default function Landing() {
         <img
           src="/offseaz_o_orange.png"
           alt="Offseaz"
-          style={{ height: 40, width: 'auto', display: 'block', cursor: 'pointer' }}
+          style={{ height: 54, width: 'auto', display: 'block', cursor: 'pointer' }}
           onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
         />
         <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
@@ -754,7 +773,7 @@ export default function Landing() {
 
           <div style={s.fourGrid}>
             {PILLARS.map(p => (
-              <div key={p.num} className="lp-card" style={s.card}>
+              <div key={p.num} className="lp-card lp-card-plain" style={s.card}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 18 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: p.color + '18', border: `1px solid ${p.color}33`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <p.Icon size={20} color={p.color} />
