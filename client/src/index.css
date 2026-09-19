@@ -628,11 +628,15 @@ html {
 /* ── Stat card on landing ───────────────────────────────────────────────────── */
 @media (hover: hover) {
   .lp-stat {
-    transition: transform var(--t-std), box-shadow var(--t-std);
+    transition: box-shadow var(--t-std);
   }
+  /* Same dark elevation as --shadow-card-hover minus its middle term
+     (0 0 0 1px rgba(247,87,9,0.32)), which renders as an orange ring. The
+     variable itself is unchanged; .feed-post-card still uses it. No
+     translateY lift: it moved the card out from under a cursor resting on
+     its edge, un-hovering it in a loop (flicker). Elevation is shadow only. */
   .lp-stat:hover {
-    transform: translateY(-2px);
-    box-shadow: var(--shadow-card-hover) !important;
+    box-shadow: 0 8px 32px rgba(0,0,0,0.40), inset 0 1px 0 rgba(255,255,255,0.05) !important;
   }
 }
 

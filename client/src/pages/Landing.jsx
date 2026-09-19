@@ -112,7 +112,7 @@ function DualDashboardMockup() {
             <span key={i} style={{ width: 9, height: 9, borderRadius: '50%', background: c, display: 'block' }} />
           ))}
         </div>
-        <div style={mk.urlBar}>offseaz.app / dashboard</div>
+        <div style={mk.urlBar}>offseaz.com / dashboard</div>
         <div style={{ width: 54 }} />
       </div>
 
@@ -271,7 +271,7 @@ function CoachRosterMockup() {
             <span key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: c, display: 'block' }} />
           ))}
         </div>
-        <div style={cr.urlBar}>offseaz.app / coach / roster</div>
+        <div style={cr.urlBar}>offseaz.com / coach / roster</div>
         <div style={{ width: 54 }} />
       </div>
       <div style={cr.body}>
@@ -370,7 +370,7 @@ function FeedMockup() {
             <span key={i} style={{ width: 8, height: 8, borderRadius: '50%', background: c, display: 'block' }} />
           ))}
         </div>
-        <div style={fd.urlBar}>offseaz.app / feed</div>
+        <div style={fd.urlBar}>offseaz.com / feed</div>
         <div style={{ width: 54 }} />
       </div>
       <div style={fd.body}>
