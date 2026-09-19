@@ -13,6 +13,8 @@ const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
 const YELLOW = '#F0BE24'
 const LOGO   = '/Offseaz-Logo-White-Letter-Dark.png'
+// Sport-tile top bars cycle orange, blue, yellow across the 14 cards.
+const SPORT_BAR_COLORS = [ORANGE, BLUE, YELLOW]
 
 // ── Data ─────────────────────────────────────────────────────────────────────
 
@@ -502,6 +504,14 @@ export default function Landing() {
   return (
     <div style={s.root}>
       <style>{`
+        /* Sport tiles: 7 over 7 on desktop, both rows centered. Flex-wrap
+           with justify-content:center (not auto-fill grid) so incomplete rows
+           at narrower widths stay centered too. --cols drives the tile width. */
+        .lp-sport-grid { display: flex; flex-wrap: wrap; justify-content: center; gap: 10px; margin-bottom: 40px; --cols: 3; }
+        .lp-sport-grid > .lp-sport { flex: 0 0 calc((100% - (var(--cols) - 1) * 10px) / var(--cols)); min-width: 0; }
+        @media (min-width: 520px) { .lp-sport-grid { --cols: 4; } }
+        @media (min-width: 720px) { .lp-sport-grid { --cols: 5; } }
+        @media (min-width: 900px) { .lp-sport-grid { --cols: 7; } }
         .lp-nav-link { transition: background 0.2s ease, color 0.2s ease; }
         .lp-nav-link:hover { background: #fff !important; color: #000 !important; }
 
@@ -513,12 +523,10 @@ export default function Landing() {
            - No transform: a translateY lift moved the card out from under a
              cursor resting on its edge, un-hovering it and looping (flicker).
              Elevation is the box-shadow alone; the element never moves.
-           - The top accent bar (each info card's own inline
-             borderTop: 2px solid <ORANGE|BLUE|YELLOW>) is never restyled on
-             hover, so hover does not touch border-top-color/width at all,
-             except on cards that have NO accent bar by default (.lp-card-plain
-             Four Pillars cards, .lp-sport tiles), whose uniform 1px border
-             goes white like the other three sides.
+           - The top accent bar (every .lp-card / .lp-sport carries its own
+             inline borderTop: 2px solid <ORANGE|BLUE|YELLOW>) is never
+             restyled on hover, so hover does not touch border-top-color or
+             width at all.
            - !important on transitions: s.card / s.sportChip carry an inline
              "transition: border-color 0.2s ease" that would otherwise win and
              leave the background snapping with no fade at all.
@@ -541,7 +549,6 @@ export default function Landing() {
           border-left-color: #FFFFFF !important;
           box-shadow: 0 8px 24px rgba(0,0,0,0.18) !important;
         }
-        .lp-card-plain:hover, .lp-sport:hover { border-top-color: #FFFFFF !important; }
         .lp-card:hover h3, .lp-card:hover p, .lp-card:hover span,
         .lp-sport:hover span { color: #111111 !important; }
         .lp-card:hover svg { stroke: #111111 !important; }
@@ -773,7 +780,7 @@ export default function Landing() {
 
           <div style={s.fourGrid}>
             {PILLARS.map(p => (
-              <div key={p.num} className="lp-card lp-card-plain" style={s.card}>
+              <div key={p.num} className="lp-card" style={{ ...s.card, borderTop: `2px solid ${p.color}` }}>
                 <div style={{ display: 'flex', alignItems: 'flex-start', justifyContent: 'space-between', marginBottom: 18 }}>
                   <div style={{ width: 44, height: 44, borderRadius: 12, background: p.color + '18', border: `1px solid ${p.color}33`, display: 'flex', alignItems: 'center', justifyContent: 'center' }}>
                     <p.Icon size={20} color={p.color} />
@@ -791,12 +798,12 @@ export default function Landing() {
 
           <div style={{ textAlign: 'center', marginBottom: 36 }}>
             <span style={s.eyebrow}>Sport-Specific Training</span>
-            <h3 style={{ ...s.h2, fontSize: 'clamp(24px, 3.5vw, 40px)', marginBottom: 0 }}>Built for 14 Sports</h3>
+            <h3 style={{ ...s.h2, fontSize: 'clamp(24px, 3.5vw, 40px)', marginBottom: 0 }}>14 Sports, 30 Positions</h3>
           </div>
 
-          <div style={s.sportGrid}>
+          <div className="lp-sport-grid">
             {SPORTS.map((sport, i) => (
-              <div key={i} className="lp-sport" style={s.sportChip}>
+              <div key={i} className="lp-sport" style={{ ...s.sportChip, borderTop: `2px solid ${SPORT_BAR_COLORS[i % 3]}` }}>
                 <sport.Icon size={28} />
                 <span style={{ fontSize: 12, fontWeight: 600, color: '#666', textAlign: 'center', lineHeight: 1.3 }}>{sport.name}</span>
               </div>
@@ -1123,11 +1130,6 @@ const s = {
     display: 'grid',
     gridTemplateColumns: 'repeat(auto-fit, minmax(min(250px,100%), 1fr))',
     gap: 16, marginBottom: 72,
-  },
-  sportGrid: {
-    display: 'grid',
-    gridTemplateColumns: 'repeat(auto-fill, minmax(min(120px,100%), 1fr))',
-    gap: 10, marginBottom: 40,
   },
   statsGrid: {
     display: 'grid',
