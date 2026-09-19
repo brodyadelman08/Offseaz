@@ -817,7 +817,7 @@ export default function Landing() {
             {[
               { value: '14',    label: 'Sports Supported',                color: ORANGE },
               { value: '16 Wk', label: 'Programs',                        color: BLUE   },
-              { value: '250+',  label: 'Exercises Explained',             color: YELLOW },
+              { value: '200+',  label: 'Exercises Explained',             color: YELLOW },
               { value: '%',     label: 'Weights Calculated Automatically', color: ORANGE },
             ].map((stat, i) => (
               <div key={i} className="lp-stat" style={{ ...s.statItem, borderTop: `2px solid ${stat.color}` }}>
