@@ -3,16 +3,25 @@ const { sendError } = require('../utils/errorResponse')
 
 const TO_EMAIL = 'brody@offseaz.com'
 const ROLE_LABELS = { coach: 'Coach', athlete: 'Athlete', other: 'Other' }
+const USES_LABELS = { yes: 'Yes', no: 'No' }
 
 function escapeHtml(str) {
   return String(str).replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;')
 }
 
 async function submitContactForm(req, res) {
-  const { name, email, role, message } = req.body || {}
+  const { name, email, role, roleOther, usesOffseaz, message } = req.body || {}
 
   if (!name?.trim() || !email?.trim() || !role || !message?.trim()) {
     return res.status(400).json({ error: 'All fields are required.' })
+  }
+  if (!Object.prototype.hasOwnProperty.call(USES_LABELS, usesOffseaz)) {
+    return res.status(400).json({ error: 'Please tell us whether you already use Offseaz.' })
+  }
+  // Required only when role is "other"; ignored for every other role.
+  const otherText = role === 'other' ? String(roleOther || '').trim().slice(0, 100) : ''
+  if (role === 'other' && !otherText) {
+    return res.status(400).json({ error: 'Please tell us your role.' })
   }
 
   const key = process.env.RESEND_API_KEY
@@ -24,6 +33,8 @@ async function submitContactForm(req, res) {
   const resend    = new Resend(key)
   const from      = 'Offseaz <brody@offseaz.com>'
   const roleLabel = ROLE_LABELS[role] || role
+  const roleDisplay = role === 'other' ? `Other: ${escapeHtml(otherText)}` : escapeHtml(roleLabel)
+  const usesLabel = USES_LABELS[usesOffseaz]
   const safeName  = escapeHtml(name)
   const safeEmail = escapeHtml(email)
   const safeMsg   = escapeHtml(message).replace(/\n/g, '<br>')
@@ -54,7 +65,11 @@ async function submitContactForm(req, res) {
             </tr>
             <tr>
               <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px;color:#888;vertical-align:top;">Role</td>
-              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px;color:#111;">${roleLabel}</td>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px;color:#111;">${roleDisplay}</td>
+            </tr>
+            <tr>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:13px;color:#888;vertical-align:top;">Uses Offseaz</td>
+              <td style="padding:10px 0;border-bottom:1px solid #f0f0f0;font-size:15px;color:#111;">${usesLabel}</td>
             </tr>
             <tr>
               <td style="padding:14px 0 0;font-size:13px;color:#888;vertical-align:top;">Message</td>

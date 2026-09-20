@@ -53,25 +53,38 @@ const SOCIALS = [
 // ── Component ─────────────────────────────────────────────────────────────────
 
 export default function Contact() {
-  const [form, setForm]           = useState({ name: '', email: '', role: '', message: '' })
+  const [form, setForm]           = useState({ name: '', email: '', role: '', roleOther: '', usesOffseaz: '', message: '' })
   const [submitted, setSubmitted] = useState(false)
   const [sending, setSending]     = useState(false)
   const [error, setError]         = useState('')
   function handleChange(e) {
-    setForm(prev => ({ ...prev, [e.target.name]: e.target.value }))
+    const { name, value } = e.target
+    setForm(prev => {
+      const next = { ...prev, [name]: value }
+      // The "Tell us your role" text only belongs to role === 'other'; drop it
+      // if they switch away so a stale value can never be submitted.
+      if (name === 'role' && value !== 'other') next.roleOther = ''
+      return next
+    })
     setError('')
   }
 
   async function handleSubmit(e) {
     e.preventDefault()
-    if (!form.name.trim() || !form.email.trim() || !form.role || !form.message.trim()) {
+    if (!form.name.trim() || !form.email.trim() || !form.role || !form.usesOffseaz || !form.message.trim()) {
       setError('Please fill in all fields.')
+      return
+    }
+    // Conditionally required: only when "Other" is selected.
+    if (form.role === 'other' && !form.roleOther.trim()) {
+      setError('Please tell us your role.')
       return
     }
     setSending(true)
     setError('')
     try {
-      await api.post('/api/contact', form)
+      const payload = { ...form, roleOther: form.role === 'other' ? form.roleOther.trim() : '' }
+      await api.post('/api/contact', payload)
       setSubmitted(true)
     } catch (err) {
       setError(err.response?.data?.error || 'Failed to send message. Please try again.')
@@ -163,6 +176,24 @@ export default function Contact() {
                     <option value="coach"   style={{ color: '#fff', background: '#111' }}>Coach</option>
                     <option value="athlete" style={{ color: '#fff', background: '#111' }}>Athlete</option>
                     <option value="other"   style={{ color: '#fff', background: '#111' }}>Other</option>
+                  </select>
+                </div>
+
+                {form.role === 'other' && (
+                  <div style={s.field}>
+                    <label style={s.label}>Tell us your role</label>
+                    <input style={s.input} type="text" name="roleOther" placeholder="e.g. Parent, trainer, athletic director"
+                      value={form.roleOther} onChange={handleChange} maxLength={100} aria-required="true" />
+                  </div>
+                )}
+
+                <div style={s.field}>
+                  <label style={s.label}>Do you already use Offseaz?</label>
+                  <select style={{ ...s.input, color: form.usesOffseaz ? '#fff' : '#555' }}
+                    name="usesOffseaz" value={form.usesOffseaz} onChange={handleChange}>
+                    <option value="" disabled style={{ color: '#555', background: '#111' }}>Select one</option>
+                    <option value="yes" style={{ color: '#fff', background: '#111' }}>Yes</option>
+                    <option value="no"  style={{ color: '#fff', background: '#111' }}>No</option>
                   </select>
                 </div>
 
