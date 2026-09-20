@@ -86,7 +86,7 @@ export default function Contact() {
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
       <nav style={s.nav}>
         <Link to="/" style={s.navLogo}>
-          <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" className="logo-nav" />
+          <img src="/offseaz_o_orange.png" alt="Offseaz" style={{ height: 54, width: 'auto', display: 'block' }} />
         </Link>
         <div style={s.navLinks}>
           <Link to="/about" style={s.navLink}>About</Link>
