@@ -72,18 +72,15 @@ async function submit(req, res) {
       )
     }
 
-    // Auto-assign a blueprint only when the athlete is on a team.
-    // Without a team there is no coach_id, so the blueprints insert would fail
-    // (coach_id NOT NULL).  Teamless athletes see a locked preview once they
-    // join a team — no blueprint record is needed yet.
-    if (team?.id && team?.coach_id) {
-      console.log('[survey/submit] team found — running autoAssignBlueprint', { teamId: team.id, coachId: team.coach_id })
-      autoAssignBlueprint(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
-        console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
-      )
-    } else {
-      console.log('[survey/submit] no team — skipping autoAssignBlueprint for teamless athlete')
-    }
+    // Auto-assign a blueprint whether or not the athlete is on a team —
+    // blueprints.coach_id/team_id are nullable (confirmed against the live
+    // DB), so a teamless athlete gets a real, persisted blueprint they can
+    // view immediately. If they join a team later, teamsController.join()
+    // claims this same blueprint for the new coach/team.
+    console.log('[survey/submit] running autoAssignBlueprint', { teamId: team?.id || null, coachId: team?.coach_id || null })
+    autoAssignBlueprint(req.user.id, team?.id || null, team?.coach_id || null, survey, athleteName).catch(e =>
+      console.error('[survey/submit] autoAssignBlueprint failed:', e?.message || e)
+    )
 
     res.status(201).json({ survey })
   } catch (err) {
@@ -151,23 +148,19 @@ async function update(req, res) {
       )
     }
 
-    // Retaking the survey only touches the plan if the athlete is on a team
-    // (same rule as first-time submit — no coach_id, nothing to assign) AND
-    // an answer that actually feeds blueprint generation changed. If nothing
-    // programming-relevant changed, the plan resumes exactly as-is.
-    if (team?.id && team?.coach_id) {
-      if (programmingFieldsChanged(oldSurvey, survey)) {
-        console.log('[survey/update] programming-relevant answers changed — regenerating upcoming weeks', {
-          athleteId: req.user.id, teamId: team.id, coachId: team.coach_id,
-        })
-        regenerateUpcomingWeeks(req.user.id, team.id, team.coach_id, survey, athleteName).catch(e =>
-          console.error('[survey/update] regenerateUpcomingWeeks failed:', e?.message || e)
-        )
-      } else {
-        console.log('[survey/update] no programming-relevant changes — plan resumes unchanged', { athleteId: req.user.id })
-      }
+    // Retaking the survey touches the plan whether or not the athlete is on
+    // a team (see submit() above — blueprints.coach_id/team_id are nullable)
+    // AND only if an answer that actually feeds blueprint generation changed.
+    // If nothing programming-relevant changed, the plan resumes exactly as-is.
+    if (programmingFieldsChanged(oldSurvey, survey)) {
+      console.log('[survey/update] programming-relevant answers changed — regenerating upcoming weeks', {
+        athleteId: req.user.id, teamId: team?.id || null, coachId: team?.coach_id || null,
+      })
+      regenerateUpcomingWeeks(req.user.id, team?.id || null, team?.coach_id || null, survey, athleteName).catch(e =>
+        console.error('[survey/update] regenerateUpcomingWeeks failed:', e?.message || e)
+      )
     } else {
-      console.log('[survey/update] no team — skipping plan regeneration for teamless athlete')
+      console.log('[survey/update] no programming-relevant changes — plan resumes unchanged', { athleteId: req.user.id })
     }
 
     res.json({ survey })

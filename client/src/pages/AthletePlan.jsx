@@ -559,6 +559,9 @@ export default function AthletePlan() {
 
   const [coachPlan, setCoachPlan]  = useState(undefined)
   const [autoPlan,  setAutoPlan]   = useState(undefined)
+  // Default false — matches current real env state (BILLING_ENABLED unset).
+  // Set from GET /api/blueprints/my-plan below once it resolves.
+  const [billingEnabled, setBillingEnabled] = useState(false)
   const [logs,      setLogs]       = useState([])
   const [maxes,     setMaxes]      = useState({})
   const [injuryAreas, setInjuryAreas] = useState([])
@@ -586,14 +589,15 @@ export default function AthletePlan() {
   useEffect(() => {
     Promise.all([
       api.get('/api/blueprints/my-plan')
-        .then(r => ({ auto: r.data.auto_plan || null, coach: r.data.coach_plan || null }))
-        .catch(() => ({ auto: null, coach: null })),
+        .then(r => ({ auto: r.data.auto_plan || null, coach: r.data.coach_plan || null, billingEnabled: Boolean(r.data.billing_enabled) }))
+        .catch(() => ({ auto: null, coach: null, billingEnabled: false })),
       api.get('/api/workouts/mine').then(r => r.data.logs).catch(() => []),
       api.get('/api/maxes').then(r => r.data.maxes || {}).catch(() => ({})),
       api.get('/api/survey/my').then(r => r.data.survey?.injury_areas || []).catch(() => []),
     ]).then(([plans, logsData, maxesData, injuryData]) => {
       setCoachPlan(plans.coach)
       setAutoPlan(plans.auto)
+      setBillingEnabled(plans.billingEnabled)
       setLogs(logsData)
       setMaxes(maxesData)
       setInjuryAreas(injuryData)
@@ -630,7 +634,7 @@ export default function AthletePlan() {
   if (!hasAny && !hasTeam) {
     return (
       <div style={styles.container}>
-        <PreviewBanner noun="training plan" />
+        <PreviewBanner noun="training plan" generated={false} />
         <div style={styles.emptyState}>
           <div style={styles.emptyIcon}><DumbbellIcon size={36} color="var(--text-3)" /></div>
           <h2 style={styles.emptyTitle}>Complete your survey to preview your plan</h2>
@@ -654,7 +658,11 @@ export default function AthletePlan() {
     )
   }
 
-  const previewMode      = !hasTeam && Boolean(autoPlan)
+  // Weight-locking a teamless athlete's auto-generated plan is a paywall —
+  // only meaningful once billing actually exists. While BILLING_ENABLED is
+  // off (current state), teamless athletes see their full plan with real
+  // weights; this flips back on automatically once billing launches.
+  const previewMode      = billingEnabled && !hasTeam && Boolean(autoPlan)
   const activePlan       = coachPlan || autoPlan
   const activeCurrentWeek = coachPlan ? currentWeekCoach : currentWeekAuto
   const showCompletion   = !previewMode && activePlan && activeCurrentWeek >= activePlan.num_weeks

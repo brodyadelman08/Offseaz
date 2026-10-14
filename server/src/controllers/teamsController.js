@@ -15,7 +15,8 @@ const {
   transferTeamOwnership,
 } = require('../services/teamsService')
 const { getProfile } = require('../services/authService')
-const { createCoachJoinNotification } = require('../services/notificationService')
+const { createCoachJoinNotification, createBlueprintNotification } = require('../services/notificationService')
+const { claimTeamlessAutoBlueprint } = require('../services/blueprintService')
 const { deleteTeamData } = require('../services/accountDeletionService')
 const { sendError } = require('../utils/errorResponse')
 
@@ -69,6 +70,21 @@ async function join(req, res) {
 
     const team = await getTeamByInviteCode(invite_code)
     const membership = await joinTeam(team.id, req.user.id)
+
+    // If this athlete already completed the survey teamless (and so already
+    // has a teamless auto-generated blueprint), claim it for this team/coach
+    // now — otherwise it stays permanently invisible in the coach's team
+    // view. Fire-and-forget: must never block or fail the join itself.
+    claimTeamlessAutoBlueprint(req.user.id, team.id, team.coach_id)
+      .then(claimed => {
+        if (claimed) {
+          createBlueprintNotification(team.coach_id, req.user.id, profile.full_name || 'An athlete', claimed.title).catch(e =>
+            console.error('[teams/join] blueprint notification failed:', e?.message)
+          )
+        }
+      })
+      .catch(e => console.error('[teams/join] claimTeamlessAutoBlueprint failed:', e?.message))
+
     res.status(201).json({ team, membership })
   } catch (err) {
     if (err.code === '23505') {

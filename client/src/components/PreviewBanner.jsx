@@ -6,10 +6,14 @@ const BLUE   = '#308EBD'
 
 /**
  * Shown on any page/section that requires a team when the athlete has none.
- * noun  — describes what's locked, e.g. "plan", "feed", "messages"
- * compact — tighter layout for inline use (roster, etc.)
+ * noun      — describes what's locked, e.g. "plan", "feed", "messages"
+ * compact   — tighter layout for inline use (roster, etc.)
+ * generated — true when a real {noun} already exists and is just waiting to
+ *   be unlocked (e.g. a teamless athlete's auto-generated plan). false when
+ *   nothing exists yet (e.g. survey not completed) — copy must not claim
+ *   something's "already generated" when it isn't.
  */
-export default function PreviewBanner({ noun = 'plan', compact = false }) {
+export default function PreviewBanner({ noun = 'plan', compact = false, generated = true }) {
   const navigate = useNavigate()
 
   if (compact) {
@@ -39,8 +43,12 @@ export default function PreviewBanner({ noun = 'plan', compact = false }) {
         Join your coach's team to unlock your full personalized {noun}
       </h2>
       <p style={styles.sub}>
-        Your {noun} is already generated — you're one invite code away from seeing
-        the full plan with personalized weights and coaching notes.
+        {generated
+          ? <>Your {noun} is already generated — you're one invite code away from seeing
+              the full plan with personalized weights and coaching notes.</>
+          : <>Complete your survey and you're one invite code away from a full personalized {noun}
+              with real weights and coaching notes.</>
+        }
       </p>
 
       {/* CTA */}

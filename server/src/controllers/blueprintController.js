@@ -274,7 +274,10 @@ async function myPlan(req, res) {
     }
 
     const { auto_plan, coach_plan } = await getAthletePlan(req.user.id)
-    res.json({ auto_plan, coach_plan })
+    // Teamless-preview weight-locking (AthletePlan.jsx) is contingent on
+    // billing actually being enabled — while it's off, a teamless athlete's
+    // auto-generated plan shows real weights instead of a blurred paywall.
+    res.json({ auto_plan, coach_plan, billing_enabled: process.env.BILLING_ENABLED === 'true' })
   } catch (err) {
     res.status(500).json({ error: err.message })
   }

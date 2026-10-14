@@ -295,6 +295,31 @@ async function getAthleteAutoAssignment(athleteId) {
   return { assignment: match, blueprint: match.blueprints }
 }
 
+// Called when a teamless athlete (who already completed the needs-analysis
+// survey and has a teamless auto-generated blueprint — coach_id/team_id both
+// null) joins a team. Without this, that blueprint would stay permanently
+// invisible to the coach's team view (getBlueprintsByTeam filters on
+// team_id). Content/weeks are untouched — this only claims ownership.
+// Returns the claimed blueprint, or null if there's nothing to claim
+// (no auto blueprint yet, or it's already claimed by a team).
+async function claimTeamlessAutoBlueprint(athleteId, teamId, coachId) {
+  const existing = await getAthleteAutoAssignment(athleteId)
+  if (!existing) return null
+
+  const { blueprint } = existing
+  if (blueprint.coach_id || blueprint.team_id) return null
+
+  const { data, error } = await supabaseAdmin
+    .from('blueprints')
+    .update({ coach_id: coachId, team_id: teamId })
+    .eq('id', blueprint.id)
+    .select()
+    .single()
+
+  if (error) throw error
+  return data
+}
+
 // Overwrites a blueprint's title/description and the content of only the
 // given weeks (each { week_number, objective, sessions }) — every other week
 // row is left completely untouched, so completed history and the
@@ -453,6 +478,7 @@ module.exports = {
   getAthletePlan,
   getTeamActivePlanAthleteIds,
   getAthleteAutoAssignment,
+  claimTeamlessAutoBlueprint,
   updateBlueprintUpcomingWeeks,
   toggleLock,
   deleteBlueprint,
