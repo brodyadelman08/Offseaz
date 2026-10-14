@@ -415,4 +415,30 @@ CREATE TABLE IF NOT EXISTS program_completions (
 );
 
 CREATE INDEX IF NOT EXISTS idx_program_completions_athlete_id ON program_completions(athlete_id);
+
+-- ── feedback_responses ───────────────────────────────────────────────────────
+-- Public feedback survey (client route /feedback) — anonymous, no auth
+-- required to submit. Unrelated to survey_responses (the authenticated
+-- athlete needs-analysis intake that feeds blueprint generation). Readable
+-- only via GET /api/feedback, which itself is restricted server-side to a
+-- single hardcoded admin email (see feedbackController.js) — there is no
+-- admin role in this app.
+CREATE TABLE IF NOT EXISTS feedback_responses (
+  id                 UUID PRIMARY KEY DEFAULT gen_random_uuid(),
+  role               TEXT NOT NULL,
+  role_other         TEXT,
+  sport              TEXT,
+  level              TEXT,
+  level_other        TEXT,
+  offseason          TEXT,
+  offseason_other    TEXT,
+  has_coach          TEXT,
+  feedback           TEXT,
+  heard_about        TEXT,
+  heard_about_other  TEXT,
+  email              TEXT,
+  created_at         TIMESTAMPTZ NOT NULL DEFAULT now()
+);
+
+CREATE INDEX IF NOT EXISTS idx_feedback_responses_created_at ON feedback_responses(created_at DESC);
 CREATE INDEX IF NOT EXISTS idx_program_completions_team_id    ON program_completions(team_id);

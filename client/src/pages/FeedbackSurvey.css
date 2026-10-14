@@ -1,0 +1,115 @@
+/* Public feedback survey (/feedback) — deliberately its own light-theme,
+   Carlito/Calibri visual system, isolated from the rest of the dark-themed
+   app. Every class is prefixed `survey-` so nothing here can collide with
+   or be affected by index.css. Built to match Offseaz Survey.html exactly. */
+
+@font-face {
+  font-family: 'Carlito';
+  font-style: normal;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/carlito-regular.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Carlito';
+  font-style: italic;
+  font-weight: 400;
+  font-display: swap;
+  src: url('/fonts/carlito-italic.woff2') format('woff2');
+}
+@font-face {
+  font-family: 'Carlito';
+  font-style: normal;
+  font-weight: 700;
+  font-display: swap;
+  src: url('/fonts/carlito-bold.woff2') format('woff2');
+}
+
+.survey-page {
+  --survey-orange: #F75709;
+  --survey-blue: #308EBD;
+  --survey-yellow: #F0BE24;
+  --survey-ink: #141414;
+  --survey-muted: #6b6b6b;
+  --survey-line: #e4e4e4;
+  --survey-bg: #f4f5f6;
+  --survey-card: #ffffff;
+
+  background: var(--survey-bg);
+  color: var(--survey-ink);
+  font-family: 'Carlito', 'Calibri', Arial, sans-serif;
+  line-height: 1.5;
+  -webkit-font-smoothing: antialiased;
+  min-height: 100vh;
+  padding: 0 16px;
+  box-sizing: border-box;
+}
+.survey-page *, .survey-page *::before, .survey-page *::after {
+  box-sizing: border-box;
+}
+
+.survey-wrap { max-width: 640px; margin: 0 auto; padding: 34px 0 60px; }
+
+.survey-head { text-align: center; margin-bottom: 22px; }
+.survey-head img { height: 40px; width: auto; }
+.survey-head h1 { font-size: 27px; font-weight: 700; margin-top: 18px; letter-spacing: -0.01em; }
+.survey-head h1 .survey-d { color: var(--survey-orange); }
+.survey-head p { color: var(--survey-muted); font-size: 15px; margin-top: 8px; }
+
+.survey-bar { width: 52px; height: 4px; background: var(--survey-orange); border-radius: 3px; margin: 16px auto 0; }
+
+.survey-q {
+  background: var(--survey-card); border: 1px solid var(--survey-line); border-radius: 14px;
+  padding: 18px 18px 16px; margin-top: 14px;
+}
+.survey-q > label.survey-lab { display: block; font-weight: 700; font-size: 15.5px; margin-bottom: 12px; }
+.survey-q .survey-req { color: var(--survey-orange); }
+.survey-q .survey-hint { font-weight: 400; color: var(--survey-muted); font-size: 13px; margin-top: 2px; }
+
+.survey-opts { display: flex; flex-direction: column; gap: 8px; }
+.survey-opt {
+  display: flex; align-items: center; gap: 11px; border: 1px solid var(--survey-line);
+  border-radius: 10px; padding: 11px 13px; cursor: pointer; transition: 0.12s; font-size: 15px;
+}
+.survey-opt:hover { border-color: #c9c9c9; background: #fafafa; }
+.survey-opt input { accent-color: var(--survey-orange); width: 17px; height: 17px; flex: none; cursor: pointer; }
+.survey-opt.survey-sel { border-color: var(--survey-orange); background: #fff6f1; }
+
+.survey-other-wrap { margin-top: 8px; display: none; }
+.survey-other-wrap.survey-show { display: block; }
+
+.survey-page input[type=text],
+.survey-page input[type=email],
+.survey-page textarea {
+  width: 100%; font-family: inherit; font-size: 15px; color: var(--survey-ink);
+  border: 1px solid var(--survey-line); border-radius: 10px; padding: 11px 13px; background: #fff;
+}
+.survey-page input:focus,
+.survey-page textarea:focus {
+  outline: none; border-color: var(--survey-blue);
+  box-shadow: 0 0 0 3px rgba(48, 142, 189, 0.15);
+}
+.survey-page textarea { min-height: 96px; resize: vertical; }
+
+.survey-submit {
+  width: 100%; margin-top: 22px; background: var(--survey-orange); color: #fff; border: none;
+  border-radius: 12px; padding: 16px; font-family: inherit; font-size: 17px; font-weight: 700;
+  cursor: pointer; transition: 0.12s;
+}
+.survey-submit:hover { background: #e14f06; }
+.survey-submit:disabled { opacity: 0.6; cursor: default; }
+
+.survey-foot { text-align: center; color: var(--survey-muted); font-size: 13px; margin-top: 22px; }
+.survey-foot b { color: var(--survey-ink); }
+
+.survey-err { color: var(--survey-orange); font-size: 13px; margin-top: 8px; display: none; }
+.survey-err.survey-show { display: block; }
+
+.survey-thanks {
+  display: none; text-align: center; background: var(--survey-card); border: 1px solid var(--survey-line);
+  border-radius: 16px; padding: 48px 24px; margin-top: 20px;
+}
+.survey-thanks.survey-show { display: block; }
+.survey-thanks .survey-big { font-size: 40px; font-weight: 700; }
+.survey-thanks .survey-big .survey-d { color: var(--survey-orange); }
+.survey-thanks p { color: var(--survey-muted); font-size: 16px; margin-top: 10px; }

@@ -1,4 +1,7 @@
 import { Link } from 'react-router-dom'
+import SiteNav from '../components/SiteNav'
+import SiteFooter from '../components/SiteFooter'
+import SEO from '../components/SEO'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -34,17 +37,14 @@ export default function About() {
 
   return (
     <div style={s.page}>
+      <SEO
+        title="About Offseaz — Built by an Athlete, Built for Athletes"
+        description="Meet the founder behind Offseaz and the mission driving the platform: sport-specific training blueprints and real accountability for coaches and athletes."
+        path="/about"
+      />
 
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
-      <nav style={s.nav}>
-        <Link to="/" style={s.navLogo}>
-          <img src="/offseaz_o_orange.png" alt="Offseaz" style={{ height: 54, width: 'auto', display: 'block' }} />
-        </Link>
-        <div style={s.navLinks}>
-          <Link to="/contact" style={s.navLink}>Contact</Link>
-          <Link to="/login"   style={s.navBtn}>Sign In</Link>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* ── Hero — deadlift background (bg/overlay hidden on desktop via CSS) ── */}
       <section style={s.hero}>
@@ -195,23 +195,7 @@ export default function About() {
       </section>
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer style={s.footer}>
-        <img src="/Offseaz-Logo-White-Letter-Dark.png" alt="Offseaz" style={{ height: 26, opacity: 0.65 }} />
-        <div style={s.footerLinks}>
-          <Link to="/"        style={s.footerLink}>Home</Link>
-          <span style={s.dot}>·</span>
-          <Link to="/about"   style={s.footerLink}>About</Link>
-          <span style={s.dot}>·</span>
-          <Link to="/contact" style={s.footerLink}>Contact</Link>
-          <span style={s.dot}>·</span>
-          <Link to="/privacy" style={s.footerLink}>Privacy</Link>
-          <span style={s.dot}>·</span>
-          <Link to="/terms"   style={s.footerLink}>Terms</Link>
-          <span style={s.dot}>·</span>
-          <a href="mailto:brody@offseaz.com" style={s.footerLink}>brody@offseaz.com</a>
-        </div>
-        <p style={s.copy}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
-      </footer>
+      <SiteFooter />
 
     </div>
   )
@@ -220,19 +204,6 @@ export default function About() {
 // ── Styles ────────────────────────────────────────────────────────────────────
 const s = {
   page: { minHeight: '100vh', background: '#0A0A0A', color: '#EFEFEF', fontFamily: "Inter, system-ui, -apple-system, sans-serif", overflowX: 'hidden', paddingTop: 64 },
-
-  nav: {
-    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    padding: '0 clamp(20px, 5vw, 64px)', height: 64,
-    background: 'rgba(10,10,10,0.90)',
-    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
-  },
-  navLogo:  { display: 'flex', alignItems: 'center', textDecoration: 'none' },
-  navLinks: { display: 'flex', alignItems: 'center', gap: 24 },
-  navLink:  { fontSize: 14, fontWeight: 600, color: '#888', textDecoration: 'none' },
-  navBtn:   { fontSize: 14, fontWeight: 700, color: '#fff', textDecoration: 'none', background: ORANGE, padding: '8px 20px', borderRadius: 10, boxShadow: '0 2px 12px rgba(247,87,9,0.30)' },
 
   /* Hero */
   hero: { position: 'relative', minHeight: 'clamp(480px, 75vh, 720px)', display: 'flex', alignItems: 'center', justifyContent: 'center', overflow: 'hidden', borderBottom: '1px solid rgba(255,255,255,0.08)' },
@@ -302,12 +273,6 @@ const s = {
   ctaBtn: { display: 'inline-block', textDecoration: 'none', padding: 'clamp(12px, 1.3vw, 15px) clamp(22px, 2.8vw, 36px)', borderRadius: 13, fontSize: 'clamp(14px, 1.4vw, 16px)', fontWeight: 700, color: '#fff', transition: 'opacity 0.18s' },
 
   /* Footer */
-  footer: { padding: '40px 24px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexDirection: 'column', alignItems: 'center', gap: 14 },
-  footerLinks: { display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 8 },
-  footerLink: { fontSize: 13, color: '#555', textDecoration: 'none' },
-  dot:  { color: '#333', fontSize: 13 },
-  copy: { fontSize: 12, color: '#333', margin: 0 },
-
   /* Shared */
   sectionTag: { display: 'inline-block', fontSize: 11, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase', color: ORANGE, background: 'rgba(247,87,9,0.10)', border: '1px solid rgba(247,87,9,0.25)', padding: '4px 12px', borderRadius: 20, marginBottom: 14 },
   bodyText: { fontSize: 'clamp(14px, 1.6vw, 16px)', color: '#AAAAAA', lineHeight: 1.8, margin: '0 0 15px' },

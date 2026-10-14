@@ -35,6 +35,17 @@ const contactLimiter = rateLimit({
   handler: jsonHandler('You can submit one message every 20 minutes.'),
 })
 
+// POST /api/feedback — max 5 submissions per IP per hour. Public, unauthenticated,
+// one-time survey rather than a recurring contact form, so slightly more
+// generous than contactLimiter.
+const feedbackLimiter = rateLimit({
+  windowMs: 60 * 60 * 1000,
+  max: 5,
+  standardHeaders: true,
+  legacyHeaders: false,
+  handler: jsonHandler('Too many submissions, please try again later.'),
+})
+
 // POST /api/teams/join and POST /api/teams/join-as-coach — max 10 attempts
 // per IP per 15 minutes. Guards against brute-forcing the 8-char hex
 // athlete invite_code or coach_code.
@@ -57,4 +68,4 @@ const ageCheckLimiter = rateLimit({
   handler: jsonHandler('Too many attempts, please try again in 15 minutes.'),
 })
 
-module.exports = { registrationLimiter, contactLimiter, inviteCodeLimiter, ageCheckLimiter }
+module.exports = { registrationLimiter, contactLimiter, inviteCodeLimiter, ageCheckLimiter, feedbackLimiter }

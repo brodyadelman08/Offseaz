@@ -602,6 +602,11 @@ html {
   pointer-events: none !important;
 }
 
+/* ── Shared site nav "Sign In" link hover (SiteNav.jsx, used on every
+   marketing page) ────────────────────────────────────────────────────────── */
+.site-nav-link { transition: background 0.2s ease, color 0.2s ease; }
+.site-nav-link:hover { background: #fff !important; color: #000 !important; }
+
 /* ── Landing page card hover (.lp-card / .lp-sport) — MOVED ─────────────────
    This used to live here, sharing --shadow-card-hover with .lp-stat and
    .feed-post-card. That variable's middle term, 0 0 0 1px rgba(247,87,9,0.32),

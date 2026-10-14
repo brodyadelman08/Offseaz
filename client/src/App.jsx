@@ -125,6 +125,8 @@ import Login from './pages/Login'
 import Register from './pages/Register'
 import JoinTeam from './pages/JoinTeam'
 import Survey from './pages/Survey'
+import FeedbackSurvey from './pages/FeedbackSurvey'
+import AdminFeedback from './pages/AdminFeedback'
 import { Privacy, Terms, Refund, Accessibility } from './pages/Legal'
 
 import CoachDashboard from './pages/CoachDashboard'
@@ -179,6 +181,19 @@ export default function App() {
             <Route path="/accessibility" element={<Accessibility />} />
             <Route path="/about"         element={<About />} />
             <Route path="/contact"       element={<Contact />} />
+            <Route path="/feedback"      element={<FeedbackSurvey />} />
+
+            {/* Admin-only (any logged-in session passes here; the server
+                restricts the actual data to a single hardcoded admin email —
+                see server/src/controllers/feedbackController.js) */}
+            <Route
+              path="/admin/feedback"
+              element={
+                <ProtectedRoute>
+                  <AdminFeedback />
+                </ProtectedRoute>
+              }
+            />
 
             {/* Athlete-only standalone (no sidebar) */}
             <Route

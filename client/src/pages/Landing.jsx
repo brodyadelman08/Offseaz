@@ -1,6 +1,9 @@
 import { useEffect, useLayoutEffect, useRef, useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
 import { useAuth } from '../context/AuthContext'
+import SiteNav from '../components/SiteNav'
+import SiteFooter from '../components/SiteFooter'
+import SEO from '../components/SEO'
 import {
   ArrowRightIcon, FlameIcon, HeartIcon, HeartFilledIcon, MessageIcon as ChatBubbleIcon,
   CalendarIcon, StatusInjuryIcon,
@@ -503,10 +506,12 @@ export default function Landing() {
 
   return (
     <div style={s.root}>
+      <SEO
+        title="Offseaz — The Weight Room in an App"
+        description="Offseaz is the coach-first offseason training platform. Build sport-specific blueprints, track athlete accountability, and keep your whole team connected all offseason."
+        path="/"
+      />
       <style>{`
-        .lp-nav-link { transition: background 0.2s ease, color 0.2s ease; }
-        .lp-nav-link:hover { background: #fff !important; color: #000 !important; }
-
         /* Single source of truth for every info/feature card AND sport tile's
            hover state (feat/landing-card-hover-fix, refined in
            fix/landing-card-hover-refine). Deliberately does NOT reference
@@ -569,18 +574,7 @@ export default function Landing() {
       <div style={{ height: betaDismissed ? 0 : bannerH, transition: 'height 0.22s ease', overflow: 'hidden' }} />
 
       {/* ── Fixed nav (fades in on scroll) ──────────────────────────────────── */}
-      <nav style={{ ...s.nav, top: betaDismissed ? 0 : bannerH, boxShadow: scrolled ? '0 2px 20px rgba(0,0,0,0.4)' : 'none' }}>
-        <img
-          src="/offseaz_o_orange.png"
-          alt="Offseaz"
-          style={{ height: 54, width: 'auto', display: 'block', cursor: 'pointer' }}
-          onClick={() => window.scrollTo({ top: 0, behavior: 'smooth' })}
-        />
-        <div style={{ display: 'flex', gap: 8, alignItems: 'center' }}>
-          <Link to="/login" className="lp-nav-link" style={s.navLink}>Sign In</Link>
-          <Link to="/register" style={s.navCta}>Get Started</Link>
-        </div>
-      </nav>
+      <SiteNav top={betaDismissed ? 0 : bannerH} elevated={scrolled} />
 
       {/* ══════════════════════════════════════════════════════════════════════
           HERO
@@ -598,6 +592,8 @@ export default function Landing() {
             </span>
           </div>
 
+          <p style={s.heroTagline}>Champions are made in the Offseaz...</p>
+
           <h1 style={s.headline}>
             The Weight Room<br />
             <span style={s.headlineOrange}>in an App.</span>
@@ -613,9 +609,11 @@ export default function Landing() {
             <Link to="/register" style={s.btnBlue}>Get Started as Athlete</Link>
           </div>
 
-          <p style={{ fontSize: 12, color: '#444', letterSpacing: 0.3, marginBottom: 52 }}>
+          <p style={{ fontSize: 12, color: '#444', letterSpacing: 0.3, marginBottom: 14 }}>
             Free to start · No credit card required
           </p>
+
+          <Link to="/feedback" style={s.feedbackLink}>Got feedback? Tell us what you think →</Link>
 
           <div style={{ width: 1, height: 44, background: 'linear-gradient(to bottom, rgba(247,87,9,0.5), transparent)' }} />
 
@@ -911,46 +909,7 @@ export default function Landing() {
       {/* ══════════════════════════════════════════════════════════════════════
           FOOTER
       ══════════════════════════════════════════════════════════════════════ */}
-      <footer style={s.footer}>
-        <div style={{ textAlign: 'center' }}>
-          <img src={LOGO} alt="Offseaz" className="logo-footer" style={{ margin: '0 auto 14px' }} />
-          <p style={{ fontSize: 13, color: '#EEE', margin: '0 0 20px' }}>
-            Built for coaches and athletes who take the offseason seriously.
-          </p>
-          <div style={s.footerLinks}>
-            {[
-              ['/about',         'About'             ],
-              ['/contact',       'Contact'           ],
-              ['/privacy',       'Privacy Policy'    ],
-              ['/terms',         'Terms & Conditions'],
-              ['/refund',        'Refund Policy'     ],
-              ['/accessibility', 'Accessibility'     ],
-            ].map(([to, label], i, arr) => (
-              <span key={to} style={{ display: 'inline-flex', alignItems: 'center', gap: 8 }}>
-                <Link to={to} style={{ fontSize: 13, color: BLUE, textDecoration: 'none', fontWeight: 500 }}>{label}</Link>
-                {i < arr.length - 1 && <span style={{ fontSize: 13, color: YELLOW }}>·</span>}
-              </span>
-            ))}
-          </div>
-          <div style={s.footerSocials}>
-            {[
-              { href: 'https://x.com/Offseaz',        label: '@Offseaz',  color: '#fff',   icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="#fff"><path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-4.714-6.231-5.401 6.231H2.746l7.73-8.835L1.254 2.25H8.08l4.259 5.63 5.905-5.63zm-1.161 17.52h1.833L7.084 4.126H5.117z"/></svg> },
-              { href: 'https://instagram.com/0ffseaz', label: '@0ffseaz',  color: ORANGE,   icon: <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke={ORANGE} strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><rect x="2" y="2" width="20" height="20" rx="5"/><circle cx="12" cy="12" r="4.5"/><circle cx="17.5" cy="6.5" r="1" fill={ORANGE} stroke="none"/></svg> },
-              { href: 'https://facebook.com/Offseaz',  label: 'Offseaz',   color: BLUE,     icon: <svg width="14" height="14" viewBox="0 0 24 24" fill={BLUE}><path d="M24 12.073c0-6.627-5.373-12-12-12s-12 5.373-12 12c0 5.99 4.388 10.954 10.125 11.854v-8.385H7.078v-3.47h3.047V9.43c0-3.007 1.792-4.669 4.533-4.669 1.312 0 2.686.235 2.686.235v2.953H15.83c-1.491 0-1.956.925-1.956 1.874v2.25h3.328l-.532 3.47h-2.796v8.385C19.612 23.027 24 18.062 24 12.073z"/></svg> },
-              { href: 'https://tiktok.com/@0ffseaz',   label: '@0ffseaz',  color: YELLOW,   icon: <svg width="14" height="14" viewBox="0 0 24 24" fill={YELLOW}><path d="M19.59 6.69a4.83 4.83 0 01-3.77-4.25V2h-3.45v13.67a2.89 2.89 0 01-2.88 2.5 2.89 2.89 0 01-2.89-2.89 2.89 2.89 0 012.89-2.89c.28 0 .54.04.79.1V9.01a6.35 6.35 0 00-.79-.05 6.34 6.34 0 00-6.34 6.34 6.34 6.34 0 006.34 6.34 6.34 6.34 0 006.33-6.34V9.15a8.24 8.24 0 004.83 1.55V7.28a4.85 4.85 0 01-1.06-.59z"/></svg> },
-            ].map(({ href, label, color, icon }) => (
-              <a key={href} href={href} target="_blank" rel="noopener noreferrer"
-                style={{ display: 'inline-flex', alignItems: 'center', gap: 6, textDecoration: 'none', fontSize: 13, fontWeight: 600, color, opacity: 0.8 }}>
-                {icon}<span>{label}</span>
-              </a>
-            ))}
-          </div>
-          <p style={{ fontSize: 13, color: '#555', margin: 0 }}>
-            <a href="mailto:brody@offseaz.com" style={{ color: BLUE, textDecoration: 'none', fontWeight: 500 }}>brody@offseaz.com</a>
-          </p>
-          <p style={{ fontSize: 12, color: '#888', margin: 0 }}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
-        </div>
-      </footer>
+      <SiteFooter />
 
     </div>
   )
@@ -990,22 +949,6 @@ const s = {
   },
 
   // Fixed nav
-  nav: {
-    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100, height: 64,
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    padding: '0 clamp(20px,5vw,56px)',
-    background: 'rgba(10,10,10,0.94)',
-    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
-    transition: 'top 0.22s ease, box-shadow 0.22s ease',
-  },
-  navLink: { color: '#888', fontWeight: 500, fontSize: 14, textDecoration: 'none', padding: '8px 14px', borderRadius: 8 },
-  navCta: {
-    display: 'inline-flex', alignItems: 'center', color: '#fff', fontWeight: 700, fontSize: 14,
-    textDecoration: 'none', padding: '9px 20px', borderRadius: 9,
-    background: ORANGE, boxShadow: '0 2px 14px rgba(247,87,9,0.32)',
-  },
-
   // Anchor nav — centered on desktop, horizontally scrollable on mobile
   anchorNav: {
     position: 'sticky', top: 0, zIndex: 90,
@@ -1064,6 +1007,10 @@ const s = {
     display: 'block', width: 7, height: 7, borderRadius: '50%',
     background: ORANGE, boxShadow: `0 0 8px ${ORANGE}`,
   },
+  heroTagline: {
+    fontSize: 'clamp(13px,1.4vw,15px)', fontStyle: 'italic', fontWeight: 500,
+    color: BLUE, letterSpacing: 0.2, marginBottom: 18,
+  },
   headline: {
     fontSize: 'clamp(38px,7vw,80px)', fontWeight: 900, lineHeight: 1.06,
     letterSpacing: '-0.03em', color: '#EFEFEF', marginBottom: 28,
@@ -1075,6 +1022,7 @@ const s = {
   },
   heroSub:  { fontSize: 'clamp(15px,2vw,18px)', color: '#777', lineHeight: 1.8, maxWidth: 580, marginBottom: 40 },
   heroCtas: { display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 },
+  feedbackLink: { fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: 'none', marginBottom: 40, display: 'inline-block' },
   mockupWrap: {
     position: 'relative', width: '100%', overflow: 'hidden',
     display: 'flex', justifyContent: 'center',
@@ -1214,16 +1162,4 @@ const s = {
   },
 
   // Footer
-  footer: {
-    padding: 'clamp(40px,5vw,64px) clamp(20px,5vw,56px) clamp(28px,3vw,40px)',
-    background: '#080808', borderTop: '1px solid #1A1A1A',
-  },
-  footerLinks: {
-    display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-    alignItems: 'center', gap: '6px 4px', marginBottom: 16,
-  },
-  footerSocials: {
-    display: 'flex', flexWrap: 'wrap', justifyContent: 'center',
-    gap: '10px 22px', margin: '14px 0',
-  },
 }

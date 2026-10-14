@@ -2,6 +2,9 @@ import { useState } from 'react'
 import { Link } from 'react-router-dom'
 import { CheckIcon } from '../components/Icons'
 import api from '../services/api'
+import SiteNav from '../components/SiteNav'
+import SiteFooter from '../components/SiteFooter'
+import SEO from '../components/SEO'
 
 const ORANGE = '#F75709'
 const BLUE   = '#308EBD'
@@ -95,17 +98,14 @@ export default function Contact() {
 
   return (
     <div style={s.page}>
+      <SEO
+        title="Contact Offseaz"
+        description="Get in touch with the Offseaz team — questions, feedback, and feature ideas welcome."
+        path="/contact"
+      />
 
       {/* ── Nav ──────────────────────────────────────────────────────────── */}
-      <nav style={s.nav}>
-        <Link to="/" style={s.navLogo}>
-          <img src="/offseaz_o_orange.png" alt="Offseaz" style={{ height: 54, width: 'auto', display: 'block' }} />
-        </Link>
-        <div style={s.navLinks}>
-          <Link to="/about" style={s.navLink}>About</Link>
-          <Link to="/login" style={s.navBtn}>Sign In</Link>
-        </div>
-      </nav>
+      <SiteNav />
 
       {/* ── Follow Us ────────────────────────────────────────────────────── */}
       <section style={s.socialSection}>
@@ -216,18 +216,7 @@ export default function Contact() {
       </section>
 
       {/* ── Footer ───────────────────────────────────────────────────────── */}
-      <footer style={s.footer}>
-        <Link to="/"        style={s.footerLink}>Home</Link>
-        <span style={s.dot}>·</span>
-        <Link to="/about"   style={s.footerLink}>About</Link>
-        <span style={s.dot}>·</span>
-        <Link to="/privacy" style={s.footerLink}>Privacy</Link>
-        <span style={s.dot}>·</span>
-        <Link to="/terms"   style={s.footerLink}>Terms</Link>
-        <span style={s.dot}>·</span>
-        <a href="mailto:brody@offseaz.com" style={s.footerLink}>brody@offseaz.com</a>
-        <p style={s.copy}>© {new Date().getFullYear()} Offseaz. All rights reserved.</p>
-      </footer>
+      <SiteFooter />
 
     </div>
   )
@@ -237,18 +226,6 @@ export default function Contact() {
 const s = {
   page: { minHeight: '100vh', background: '#0A0A0A', color: '#EFEFEF', fontFamily: "Inter, system-ui, -apple-system, sans-serif", paddingTop: 64 },
 
-  nav: {
-    position: 'fixed', top: 0, left: 0, right: 0, zIndex: 100,
-    display: 'flex', alignItems: 'center', justifyContent: 'space-between',
-    padding: '0 clamp(20px, 5vw, 56px)', height: 64,
-    background: 'rgba(10,10,10,0.92)',
-    backdropFilter: 'blur(20px)', WebkitBackdropFilter: 'blur(20px)',
-    borderBottom: '1px solid rgba(255,255,255,0.06)',
-  },
-  navLogo:  { display: 'flex', alignItems: 'center', textDecoration: 'none' },
-  navLinks: { display: 'flex', alignItems: 'center', gap: 20 },
-  navLink:  { fontSize: 14, fontWeight: 600, color: '#aaa', textDecoration: 'none' },
-  navBtn:   { fontSize: 14, fontWeight: 700, color: '#fff', textDecoration: 'none', background: ORANGE, padding: '7px 18px', borderRadius: 10, boxShadow: '0 2px 10px rgba(247,87,9,0.3)' },
 
   sectionTag: { display: 'inline-block', fontSize: 11, fontWeight: 800, letterSpacing: 1.4, textTransform: 'uppercase', color: ORANGE, background: 'rgba(247,87,9,0.10)', border: '1px solid rgba(247,87,9,0.25)', padding: '4px 12px', borderRadius: 20, marginBottom: 14 },
   sectionInner:   { maxWidth: 720, margin: '0 auto' },
@@ -286,10 +263,4 @@ const s = {
   successTitle: { fontSize: 24, fontWeight: 700, color: '#fff', margin: '0 0 10px' },
   successBody:  { fontSize: 15, color: '#aaa', lineHeight: 1.6, margin: '0 0 24px' },
   backLink:     { fontSize: 14, color: BLUE, textDecoration: 'none', fontWeight: 600 },
-
-  /* Footer */
-  footer: { padding: '36px 24px', textAlign: 'center', borderTop: '1px solid rgba(255,255,255,0.07)', display: 'flex', flexWrap: 'wrap', justifyContent: 'center', alignItems: 'center', gap: 8 },
-  footerLink: { fontSize: 13, color: '#555', textDecoration: 'none' },
-  dot:  { color: '#333', fontSize: 13 },
-  copy: { width: '100%', fontSize: 12, color: '#333', margin: '8px 0 0' },
 }
