@@ -1,4 +1,5 @@
 import { useRef, useState } from 'react'
+import { Link } from 'react-router-dom'
 import api from '../services/api'
 import SEO from '../components/SEO'
 import './FeedbackSurvey.css'
@@ -137,7 +138,9 @@ export default function FeedbackSurvey() {
       />
       <div className="survey-wrap">
         <div className="survey-head">
-          <img src="/offseaz_o_orange.png" alt="Offseaz" />
+          <Link to="/">
+            <img src="/offseaz_o_orange.png" alt="Offseaz" />
+          </Link>
           <h1>Help shape Offseaz<span className="survey-d">.</span></h1>
           <p>Two minutes. Tell us what you'd want to see and anything that's confusing. Anyone can fill this out.</p>
           <div className="survey-bar" />
@@ -246,6 +249,7 @@ export default function FeedbackSurvey() {
           <div className="survey-thanks survey-show">
             <div className="survey-big">Thanks<span className="survey-d">.</span></div>
             <p>Your feedback goes straight to the team. Now go get after it.</p>
+            <Link to="/" className="survey-back-link">← Back to offseaz.com</Link>
             <div className="survey-foot" style={{ marginTop: 20 }}><b>offseaz.com</b></div>
           </div>
         )}

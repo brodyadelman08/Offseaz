@@ -1022,7 +1022,12 @@ const s = {
   },
   heroSub:  { fontSize: 'clamp(15px,2vw,18px)', color: '#777', lineHeight: 1.8, maxWidth: 580, marginBottom: 40 },
   heroCtas: { display: 'flex', gap: 12, justifyContent: 'center', flexWrap: 'wrap', marginBottom: 20 },
-  feedbackLink: { fontSize: 13, fontWeight: 600, color: BLUE, textDecoration: 'none', marginBottom: 40, display: 'inline-block' },
+  feedbackLink: {
+    display: 'inline-flex', alignItems: 'center', gap: 6,
+    padding: '9px 20px', fontSize: 13, fontWeight: 600, borderRadius: 10,
+    background: YELLOW, color: '#141414', textDecoration: 'none',
+    marginBottom: 40,
+  },
   mockupWrap: {
     position: 'relative', width: '100%', overflow: 'hidden',
     display: 'flex', justifyContent: 'center',

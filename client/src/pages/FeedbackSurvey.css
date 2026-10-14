@@ -105,6 +105,12 @@
 .survey-err { color: var(--survey-orange); font-size: 13px; margin-top: 8px; display: none; }
 .survey-err.survey-show { display: block; }
 
+.survey-back-link {
+  display: inline-block; margin-top: 18px; font-size: 13px; font-weight: 600;
+  color: var(--survey-blue); text-decoration: none;
+}
+.survey-back-link:hover { text-decoration: underline; }
+
 .survey-thanks {
   display: none; text-align: center; background: var(--survey-card); border: 1px solid var(--survey-line);
   border-radius: 16px; padding: 48px 24px; margin-top: 20px;
