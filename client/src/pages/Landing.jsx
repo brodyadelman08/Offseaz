@@ -592,6 +592,7 @@ export default function Landing() {
             </span>
           </div>
 
+          <div style={s.heroTaglineBar} />
           <p style={s.heroTagline}>Champions are made in the Offseaz...</p>
 
           <h1 style={s.headline}>
@@ -1007,9 +1008,10 @@ const s = {
     display: 'block', width: 7, height: 7, borderRadius: '50%',
     background: ORANGE, boxShadow: `0 0 8px ${ORANGE}`,
   },
+  heroTaglineBar: { width: 40, height: 3, background: ORANGE, borderRadius: 2, marginBottom: 14 },
   heroTagline: {
-    fontSize: 'clamp(13px,1.4vw,15px)', fontStyle: 'italic', fontWeight: 500,
-    color: BLUE, letterSpacing: 0.2, marginBottom: 18,
+    fontSize: 'clamp(18px,2vw,20px)', fontStyle: 'italic', fontWeight: 700,
+    color: '#4FB0DD', letterSpacing: 0.6, marginBottom: 32,
   },
   headline: {
     fontSize: 'clamp(38px,7vw,80px)', fontWeight: 900, lineHeight: 1.06,
