@@ -355,7 +355,7 @@ const styles = {
     padding: '28px 32px 24px',
   },
   headerLeft: { display: 'flex', flexDirection: 'column', gap: 6 },
-  headerLogo: { height: 40, width: 'auto', objectFit: 'contain', flexShrink: 0, flex: 'none', alignSelf: 'flex-start', display: 'block' },
+  headerLogo: { height: 60, width: 'auto', objectFit: 'contain', flexShrink: 0, flex: 'none', alignSelf: 'flex-start', display: 'block' },
   reportTitle: { fontSize: 12, fontWeight: 700, color: ORANGE, textTransform: 'uppercase', letterSpacing: 1, margin: 0 },
 
   headerRight: { display: 'flex', alignItems: 'center', gap: 16 },
